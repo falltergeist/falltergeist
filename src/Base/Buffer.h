@@ -52,6 +52,9 @@ public:
     // Move-assigns buffer pointer from another Buffer object
     Buffer<T>& operator= (Buffer<T>&& other)
     {
+        if (_buf != nullptr) {
+            delete[] _buf;
+        }
         _buf = other._buf;
         _size = other._size;
         other._buf = nullptr;
@@ -63,7 +66,7 @@ public:
 
     ~Buffer<T>()
     {
-        if (_buf) {
+        if (_buf != nullptr) {
             delete[] _buf;
         }
     }
@@ -72,7 +75,7 @@ public:
     // All data in buffer will be discarded
     void resize(size_t newSize)
     {
-        if (_buf) {
+        if (_buf != nullptr) {
             delete[] _buf;
         }
         if (newSize > 0) {

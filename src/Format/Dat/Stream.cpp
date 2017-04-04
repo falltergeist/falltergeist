@@ -42,6 +42,24 @@ namespace Format
 namespace Dat
 {
 
+Stream::Stream(Stream&& other) :
+        _buffer(std::move(other._buffer)),
+        _size(other._size),
+        _endianness(other._endianness) 
+{
+    auto cBuf = _rawBuffer();
+    setg(cBuf, cBuf, cBuf + _size);
+}
+
+Stream& Stream::operator= (Stream&& other)
+{
+    _buffer = std::move(other._buffer);
+    _size = other._size;
+    _endianness = other._endianness;
+    auto cBuf = _rawBuffer();
+    setg(cBuf, cBuf, cBuf + _size);
+}
+
 Stream::Stream(std::ifstream& stream)
 {
     stream.seekg(0, std::ios::end);

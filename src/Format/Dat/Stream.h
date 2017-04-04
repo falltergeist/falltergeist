@@ -52,13 +52,9 @@ public:
     Stream(std::ifstream& stream);
     Stream(Dat::Entry& datFileEntry);
 
-    Stream(Stream&& other) : 
-        std::streambuf(std::move(other)),
-        _buffer(std::move(other._buffer)),
-        _size(other._size), 
-        _endianness(other._endianness) { }
+    Stream(Stream&& other);
     Stream(const Stream&) = delete;
-    Stream& operator= (Stream&& other) = default;
+    Stream& operator= (Stream&& other);
     Stream& operator= (const Stream&) = delete;
 
     virtual std::streambuf::int_type underflow();
@@ -92,6 +88,7 @@ private:
     Base::Buffer<uint8_t> _buffer;
     int32_t _size;
     ENDIANNESS _endianness = ENDIANNESS::BIG;
+
     char* _rawBuffer();
 };
 

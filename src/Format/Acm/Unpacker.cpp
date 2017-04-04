@@ -32,7 +32,7 @@
 #include <cstdlib>
 
 // Falltergeist includes
-#include "..\..\Format\Dat\Stream.h"
+#include "../../Format/Dat/Stream.h"
 #include "Unpacker.h"
 
 // Third party includes
