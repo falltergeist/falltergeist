@@ -44,7 +44,7 @@ class Message
 
 public:
     Message();
-	Message(std::string &s, std::string &t);
+	Message(const std::string &s,const std::string &t);
     ~Message();
 
     std::string _sound;
