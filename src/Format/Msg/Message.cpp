@@ -40,7 +40,7 @@ Message::Message()
 {
 }
 
-Message(std::string &s, std::string &t) :sound(s), text(t)
+Message(std::string &s, std::string &t) :_sound(s), _text(t)
 {
 }
 
