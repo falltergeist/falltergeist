@@ -75,14 +75,14 @@ Size Sprite::size() const
      return _texture->size();		
 }		
  		
-unsigned int Sprite::width() const		
+unsigned int Sprite::width() const	
 {
-    return _texture->width();		
-}		
+    return _texture->width();
+}
  		
-unsigned int Sprite::height() const		
+unsigned int Sprite::height() const
 {
-   return _texture->height();		
+   return _texture->height();
 }
 
 // render, optionally scaled
