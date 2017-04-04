@@ -50,11 +50,11 @@ public:
     File(std::ifstream* stream);
     ~File();
 
-    std::vector<Message*>* messages();
     Message* message(unsigned int number);
 
-protected:
+
     std::map<uint32_t,Message*> _messages;
+protected:
     virtual void _initialize();
 
 };

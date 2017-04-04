@@ -133,11 +133,6 @@ void File::_initialize()
     }
 }
 
-std::vector<Message*>* File::messages()
-{
-    return &_messages;
-}
-
 Message* File::message(unsigned int number)
 {
 	auto found = _messages.find(number);
