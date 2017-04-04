@@ -58,6 +58,7 @@ Stream& Stream::operator= (Stream&& other)
     _endianness = other._endianness;
     auto cBuf = _rawBuffer();
     setg(cBuf, cBuf, cBuf + _size);
+    return *this;
 }
 
 Stream::Stream(std::ifstream& stream)

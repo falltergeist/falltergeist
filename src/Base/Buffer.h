@@ -43,10 +43,10 @@ public:
     }
 
     // Constructs by moving buffer pointer from another Buffer object
-    Buffer<T>(Buffer<T>&& other) : _buf(other._buf), _size(other._size)
+    Buffer<T>(Buffer<T>&& other) : _size(other._size), _buf(other._buf)
     {
-        other._buf = nullptr;
         other._size = 0;
+        other._buf = nullptr;
     }
 
     // Move-assigns buffer pointer from another Buffer object
@@ -55,10 +55,11 @@ public:
         if (_buf != nullptr) {
             delete[] _buf;
         }
-        _buf = other._buf;
         _size = other._size;
-        other._buf = nullptr;
+        _buf = other._buf;
         other._size = 0;
+        other._buf = nullptr;
+        return *this;
     }
 
     Buffer<T>(const Buffer<T>&) = delete;
@@ -78,12 +79,12 @@ public:
         if (_buf != nullptr) {
             delete[] _buf;
         }
+        _size = newSize;
         if (newSize > 0) {
             _buf = new T[newSize];
         } else {
             _buf = nullptr;
         }
-        _size = newSize;
     }
 
     // The current size of data in buffer
@@ -111,8 +112,8 @@ public:
     }
 
 private:
-    T* _buf;
     size_t _size;
+    T* _buf;
 };
 
 }
