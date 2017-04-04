@@ -135,8 +135,9 @@ Object* ObjectFactory::createObject(unsigned int PID)
             auto msg = ResourceManager::getInstance()->msgFileType("text/english/game/pro_item.msg");
             try
             {
-                object->setName(msg->message(proto->messageId())->text());
-                object->setDescription(msg->message(proto->messageId() + 1)->text());
+				auto o = msg->message(proto->messageId());
+                object->setName(o->_text);
+                object->setDescription(o->_desc);
             }
             catch (const Exception&) {}
             break;
@@ -147,8 +148,9 @@ Object* ObjectFactory::createObject(unsigned int PID)
             auto msg = ResourceManager::getInstance()->msgFileType("text/english/game/pro_crit.msg");
             try
             {
-                object->setName(msg->message(proto->messageId())->text());
-                object->setDescription(msg->message(proto->messageId() + 1)->text());
+				auto o = msg->message(proto->messageId());
+				object->setName(o->_text);
+				object->setDescription(o->_desc);
             }
             catch (const Exception&) {}
 
@@ -213,8 +215,9 @@ Object* ObjectFactory::createObject(unsigned int PID)
             auto msg = ResourceManager::getInstance()->msgFileType("text/english/game/pro_scen.msg");
             try
             {
-                object->setName(msg->message(proto->messageId())->text());
-                object->setDescription(msg->message(proto->messageId() + 1)->text());
+				auto o = msg->message(proto->messageId());
+				object->setName(o->_text);
+				object->setDescription(o->_desc);
             }
             catch (const Exception&) {}
 
@@ -251,8 +254,9 @@ Object* ObjectFactory::createObject(unsigned int PID)
             auto msg = ResourceManager::getInstance()->msgFileType("text/english/game/pro_wall.msg");
             try
             {
-                object->setName(msg->message(proto->messageId())->text());
-                object->setDescription(msg->message(proto->messageId() + 1)->text());
+				auto o = msg->message(proto->messageId());
+				object->setName(o->_text);
+				object->setDescription(o->_desc);
             }
             catch (const Exception&) {}
 
@@ -308,8 +312,9 @@ Object* ObjectFactory::createObject(unsigned int PID)
             auto msg = ResourceManager::getInstance()->msgFileType("text/english/game/pro_misc.msg");
             try
             {
-                object->setName(msg->message(proto->messageId())->text());
-                object->setDescription(msg->message(proto->messageId() + 1)->text());
+				auto o = msg->message(proto->messageId());
+				object->setName(o->_text);
+				object->setDescription(o->_desc);
             }
             catch (const Exception&) {}
             break;

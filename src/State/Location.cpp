@@ -348,7 +348,7 @@ namespace Falltergeist
                     auto msg = ResourceManager::getInstance()->msgFileType("text/english/game/scrname.msg");
                     try
                     {
-                        object->setScrName(msg->message(object->SID()+101)->text());
+                        object->setScrName(msg->message(object->SID()+101)->_text);
                     }
                     catch (const Exception&) {}
                 }

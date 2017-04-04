@@ -26,7 +26,7 @@
 #define FALLTERGEIST_FORMAT_MSG_FILE_H
 
 // C++ standard includes
-#include <vector>
+#include <map>
 
 // Falltergeist includes
 #include "../../Format/Dat/Item.h"
@@ -50,11 +50,11 @@ public:
     File(std::ifstream* stream);
     ~File();
 
-    std::vector<Message*>* messages();
     Message* message(unsigned int number);
 
+
+    std::map<uint32_t,Message*> _messages;
 protected:
-    std::vector<Message*> _messages;
     virtual void _initialize();
 
 };

@@ -23,7 +23,7 @@
  */
 
 // C++ standard includes
-
+#include <string>
 // Falltergeist includes
 #include "../../Format/Msg/Message.h"
 
@@ -40,48 +40,12 @@ Message::Message()
 {
 }
 
+Message::Message(const std::string &s, const std::string &t) :_sound(s), _text(t)
+{
+}
+
 Message::~Message()
 {
-}
-
-void Message::setNumber(unsigned int number)
-{
-    _number = number;
-}
-
-unsigned int Message::number()
-{
-    return _number;
-}
-
-void Message::setSound(std::string sound)
-{
-    _sound = sound;
-}
-
-std::string Message::sound()
-{
-    return _sound;
-}
-
-void Message::setText(std::string text)
-{
-    _text = text;
-}
-
-std::string Message::text()
-{
-    return _text;
-}
-
-std::string* Message::textPointer()
-{
-    return &_text;
-}
-
-Message::operator std::string ()
-{
-    return _text;
 }
 
 }

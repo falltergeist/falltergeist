@@ -124,7 +124,7 @@ std::string Script::msgMessage(int msg_file_num, int msg_num) {
         Logger::debug("SCRIPT") << "Script::msgMessage(file, num) not found. file: " + std::to_string(msg_file_num) + " num: " + std::to_string(msg_num) << std::endl;
         return "";
     }
-    return msg->message(msg_num)->text();
+    return msg->message(msg_num)->_text;
 }
 
 std::string Script::msgSpeech(int msg_file_num, int msg_num) {
@@ -135,7 +135,7 @@ std::string Script::msgSpeech(int msg_file_num, int msg_num) {
         Logger::debug("SCRIPT") << "Script::msgSpeech(file, num) not found. file: " + std::to_string(msg_file_num) + " num: " + std::to_string(msg_num) << std::endl;
         return "";
     }
-    return msg->message(msg_num)->sound();
+    return msg->message(msg_num)->_sound;
 }
 
 Format::Int::File* Script::script() {
