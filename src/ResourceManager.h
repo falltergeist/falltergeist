@@ -22,6 +22,7 @@
 
 // C++ standard includes
 #include <fstream>
+#include <functional>
 #include <string>
 #include <map>
 #include <memory>
@@ -112,7 +113,6 @@ public:
     Format::Aaf::File* aafFileType(const std::string& filename);
     Format::Acm::File* acmFileType(const std::string& filename);
     Format::Bio::File* bioFileType(const std::string& filename);
-    Format::Dat::Item* datFileItem(std::string filename);
     Format::Frm::File* frmFileType(const std::string& filename);
     Format::Frm::File* frmFileType(unsigned int FID);
     Format::Fon::File* fonFileType(const std::string& filename);
@@ -149,7 +149,7 @@ public:
     std::string FIDtoFrmName(unsigned int FID);
     void shutdown();
 
-protected:
+private:
     friend class Base::Singleton<ResourceManager>;
 
     std::vector<std::unique_ptr<Format::Dat::File>> _datFiles;
@@ -159,9 +159,16 @@ protected:
     std::unordered_map<std::string, std::unique_ptr<Graphics::Shader>> _shaders;
 
     ResourceManager();
-    ~ResourceManager();
     ResourceManager(const ResourceManager&) = delete;
     ResourceManager& operator=(const ResourceManager&) = delete;
+
+    // Retrieves given file item from "virtual file system".
+    // All items are cached after being requested for the first time.
+    template <class T>
+    T* _datFileItem(std::string filename);
+
+    // Searches for a given file within virtual "file system" and calls the given callback with Dat::Stream created from that file.
+    void _loadStreamForFile(std::string filename, std::function<void(Format::Dat::Stream&&)> callback);
 };
 
 }
