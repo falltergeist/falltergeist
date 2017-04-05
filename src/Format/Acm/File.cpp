@@ -45,6 +45,8 @@ namespace Format
 namespace Acm
 {
 
+constexpr int HEADER_SIZE = 14;
+
 File::File(Dat::Stream&& stream) : _stream(std::move(stream))
 {
     _stream.setPosition(0);
@@ -95,7 +97,7 @@ File::~File() {
 
 void File::rewind()
 {
-    _stream.setPosition(0);
+    _stream.setPosition(HEADER_SIZE);
     _samplesReady = 0;
 }
 
