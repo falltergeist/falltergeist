@@ -28,6 +28,7 @@
 #include <cctype>
 
 // Falltergeist includes
+#include "../Dat/Stream.h"
 #include "../Lst/File.h"
 
 // Third party includes
@@ -39,31 +40,15 @@ namespace Format
 namespace Lst
 {
 
-File::File(Dat::Entry* datFileEntry) : Dat::Item(datFileEntry)
+File::File(Dat::Stream&& stream)
 {
-    _initialize();
-}
-
-File::File(std::ifstream* stream) : Dat::Item(stream)
-{
-    _initialize();
-}
-
-File::~File()
-{
-}
-
-void File::_initialize()
-{
-    if (_initialized) return;
-    Dat::Item::_initialize();
-    Dat::Item::setPosition(0);
+    stream.setPosition(0);
 
     std::string line;
     unsigned char ch;
-    for(unsigned int i = 0; i != this->size(); ++i)
+    for (unsigned int i = 0; i != stream.size(); ++i)
     {
-        *this >> ch;
+        stream >> ch;
         if (ch == 0x0D) // \r
         {
             // do nothing
@@ -103,7 +88,6 @@ void File::_addString(std::string line)
 
 std::vector<std::string>* File::strings()
 {
-    _initialize();
     return &_strings;
 }
 

@@ -25,6 +25,7 @@
 // C++ standard includes
 
 // Falltergeist includes
+#include "../Dat/Stream.h"
 #include "../Pro/File.h"
 
 // Third party includes
@@ -36,32 +37,16 @@ namespace Format
 namespace Pro
 {
 
-File::File(Dat::Entry* datFileEntry) : Dat::Item(datFileEntry)
+File::File(Dat::Stream&& stream)
 {
-    _initialize();
-}
+    stream.setPosition(0);
 
-File::File(std::ifstream* stream) : Dat::Item(stream)
-{
-    _initialize();
-}
-
-File::~File()
-{
-}
-
-void File::_initialize()
-{
-    if (_initialized) return;
-    Dat::Item::_initialize();
-    Dat::Item::setPosition(0);
-
-    _PID            = int32();
-    _messageId      = uint32();
-    _FID            = int32();
-    _lightDistance  = uint32();
-    _lightIntencity = uint32();
-    _flags          = uint32();
+    _PID            = stream.int32();
+    _messageId      = stream.uint32();
+    _FID            = stream.int32();
+    _lightDistance  = stream.uint32();
+    _lightIntencity = stream.uint32();
+    _flags          = stream.uint32();
 
     switch ((OBJECT_TYPE)typeId())
     {
@@ -69,7 +54,7 @@ void File::_initialize()
         case OBJECT_TYPE::MISC:
             break;
         default:
-            _flagsExt = uint32();
+            _flagsExt = stream.uint32();
             break;
     }
 
@@ -79,7 +64,7 @@ void File::_initialize()
         case OBJECT_TYPE::CRITTER:
         case OBJECT_TYPE::SCENERY:
         case OBJECT_TYPE::WALL:
-            _SID = int32();
+            _SID = stream.int32();
             break;
         case OBJECT_TYPE::TILE:
         case OBJECT_TYPE::MISC:
@@ -90,81 +75,81 @@ void File::_initialize()
     {
         case OBJECT_TYPE::ITEM:
         {
-            _subtypeId     = uint32();
-            _materialId    = uint32();
-            _containerSize = uint32();
-            _weight        = uint32();
-            _basePrice     = uint32();
-            _inventoryFID  = int32();
-            _soundId       = uint8();
+            _subtypeId     = stream.uint32();
+            _materialId    = stream.uint32();
+            _containerSize = stream.uint32();
+            _weight        = stream.uint32();
+            _basePrice     = stream.uint32();
+            _inventoryFID  = stream.int32();
+            _soundId       = stream.uint8();
 
             switch ((ITEM_TYPE)subtypeId())
             {
                 case ITEM_TYPE::ARMOR:
                 {
-                    _armorClass = uint32();
+                    _armorClass = stream.uint32();
                     // Damage resist
                     for (unsigned int i = 0; i != 7; ++i)
                     {
-                        _damageResist.at(i) = uint32();
+                        _damageResist.at(i) = stream.uint32();
                     }
                     // Damage threshold
                     for (unsigned int i = 0; i != 7; ++i)
                     {
-                        _damageThreshold.at(i) = uint32();
+                        _damageThreshold.at(i) = stream.uint32();
                     }
-                    _perk           = int32();
-                    _armorMaleFID   = int32();
-                    _armorFemaleFID = int32();
+                    _perk           = stream.int32();
+                    _armorMaleFID   = stream.int32();
+                    _armorFemaleFID = stream.int32();
                     break;
                 }
                 case ITEM_TYPE::CONTAINER:
                 {
-                    uint32(); // max size
-                    uint32(); // containter flags
+                    stream.uint32(); // max size
+                    stream.uint32(); // containter flags
                     break;
                 }
                 case ITEM_TYPE::DRUG:
                 {
-                    uint32(); // Stat0
-                    uint32(); // Stat1
-                    uint32(); // Stat2
-                    uint32(); // Stat0 ammount
-                    uint32(); // Stat1 ammount
-                    uint32(); // Stat2 ammount
-                    // first delayed effest
-                    uint32(); // delay in game minutes
-                    uint32(); // Stat0 ammount
-                    uint32(); // Stat1 ammount
-                    uint32(); // Stat2 ammount
-                    // second delayed effest
-                    uint32(); // delay in game minutes
-                    uint32(); // Stat0 ammount
-                    uint32(); // Stat1 ammount
-                    uint32(); // Stat2 ammount
-                    uint32(); // addiction chance
-                    uint32(); // addiction perk
-                    uint32(); // addiction delay
+                    stream.uint32(); // Stat0
+                    stream.uint32(); // Stat1
+                    stream.uint32(); // Stat2
+                    stream.uint32(); // Stat0 ammount
+                    stream.uint32(); // Stat1 ammount
+                    stream.uint32(); // Stat2 ammount
+                    // first delayed effect
+                    stream.uint32(); // delay in game minutes
+                    stream.uint32(); // Stat0 ammount
+                    stream.uint32(); // Stat1 ammount
+                    stream.uint32(); // Stat2 ammount
+                    // second delayed effect
+                    stream.uint32(); // delay in game minutes
+                    stream.uint32(); // Stat0 ammount
+                    stream.uint32(); // Stat1 ammount
+                    stream.uint32(); // Stat2 ammount
+                    stream.uint32(); // addiction chance
+                    stream.uint32(); // addiction perk
+                    stream.uint32(); // addiction delay
                     break;
                 }
                 case ITEM_TYPE::WEAPON:
-                    _weaponAnimationCode  = uint32();
-                    _weaponDamageMin      = uint32();
-                    _weaponDamageMax      = uint32();
-                    _weaponDamageType     = uint32();
-                    _weaponRangePrimary   = uint32();
-                    _weaponRangeSecondary = uint32();
-                    uint32(); // Proj PID
-                    _weaponMinimumStrenght     = uint32();
-                    _weaponActionCostPrimary   = uint32();
-                    _weaponActionCostSecondary = uint32();
-                    uint32(); // Crit Fail
-                    _perk = int32();
-                    _weaponBurstRounds  = uint32();
-                    _weaponAmmoType     = uint32();
-                    _weaponAmmoPID      = uint32();
-                    _weaponAmmoCapacity = uint32();
-                    _soundId = uint8();
+                    _weaponAnimationCode  = stream.uint32();
+                    _weaponDamageMin      = stream.uint32();
+                    _weaponDamageMax      = stream.uint32();
+                    _weaponDamageType     = stream.uint32();
+                    _weaponRangePrimary   = stream.uint32();
+                    _weaponRangeSecondary = stream.uint32();
+                    stream.uint32(); // Proj PID
+                    _weaponMinimumStrenght     = stream.uint32();
+                    _weaponActionCostPrimary   = stream.uint32();
+                    _weaponActionCostSecondary = stream.uint32();
+                    stream.uint32(); // Crit Fail
+                    _perk = stream.int32();
+                    _weaponBurstRounds  = stream.uint32();
+                    _weaponAmmoType     = stream.uint32();
+                    _weaponAmmoPID      = stream.uint32();
+                    _weaponAmmoCapacity = stream.uint32();
+                    _soundId = stream.uint8();
                     break;
                 case ITEM_TYPE::AMMO:
                     break;
@@ -177,125 +162,125 @@ void File::_initialize()
         }
         case OBJECT_TYPE::CRITTER:
         {
-            _critterHeadFID = int32();
+            _critterHeadFID = stream.int32();
 
-            uint32(); // ai packet number
-            uint32(); // team number
-            uint32(); // flags
+            stream.uint32(); // ai packet number
+            stream.uint32(); // team number
+            stream.uint32(); // flags
 
             for (unsigned int i = 0; i != 7; ++i)
             {
-                _critterStats.at(i) = uint32();
+                _critterStats.at(i) = stream.uint32();
             }
-            _critterHitPointsMax = uint32();
-            _critterActionPoints = uint32();
-            _critterArmorClass   = uint32();
-            uint32(); // Unused
-            _critterMeleeDamage    = uint32();
-            _critterCarryWeightMax = uint32();
-            _critterSequence       = uint32();
-            _critterHealingRate    = uint32();
-            _critterCriticalChance = uint32();
-            uint32(); // Better criticals
+            _critterHitPointsMax = stream.uint32();
+            _critterActionPoints = stream.uint32();
+            _critterArmorClass   = stream.uint32();
+            stream.uint32(); // Unused
+            _critterMeleeDamage    = stream.uint32();
+            _critterCarryWeightMax = stream.uint32();
+            _critterSequence       = stream.uint32();
+            _critterHealingRate    = stream.uint32();
+            _critterCriticalChance = stream.uint32();
+            stream.uint32(); // Better criticals
 
             // Damage threshold
             for (unsigned int i = 0; i != 7; ++i)
             {
-                _damageThreshold.at(i) = uint32();
+                _damageThreshold.at(i) = stream.uint32();
             }
             // Damage resist
             for (unsigned int i = 0; i != 9; ++i)
             {
-                _damageResist.at(i) = uint32();
+                _damageResist.at(i) = stream.uint32();
             }
 
-            _critterAge=uint32(); // age
-            _critterGender=uint32(); // sex
+            _critterAge = stream.uint32(); // age
+            _critterGender = stream.uint32(); // sex
 
             for (unsigned int i = 0; i != 7; ++i)
             {
-                _critterStatsBonus.at(i) = uint32();
+                _critterStatsBonus.at(i) = stream.uint32();
             }
 
-            uint32(); // Bonus Health points
-            uint32(); // Bonus Action points
-            uint32(); // Bonus Armor class
-            uint32(); // Bonus Unused
-            uint32(); // Bonus Melee damage
-            uint32(); // Bonus Carry weight
-            uint32(); // Bonus Sequence
-            uint32(); // Bonus Healing rate
-            uint32(); // Bonus Critical chance
-            uint32(); // Bonus Better criticals
+            stream.uint32(); // Bonus Health points
+            stream.uint32(); // Bonus Action points
+            stream.uint32(); // Bonus Armor class
+            stream.uint32(); // Bonus Unused
+            stream.uint32(); // Bonus Melee damage
+            stream.uint32(); // Bonus Carry weight
+            stream.uint32(); // Bonus Sequence
+            stream.uint32(); // Bonus Healing rate
+            stream.uint32(); // Bonus Critical chance
+            stream.uint32(); // Bonus Better criticals
 
             // Bonus Damage threshold
-            uint32();
-            uint32();
-            uint32();
-            uint32();
-            uint32();
-            uint32();
-            uint32();
-            uint32();
+            stream.uint32();
+            stream.uint32();
+            stream.uint32();
+            stream.uint32();
+            stream.uint32();
+            stream.uint32();
+            stream.uint32();
+            stream.uint32();
 
             // Bonus Damage resistance
-            uint32();
-            uint32();
-            uint32();
-            uint32();
-            uint32();
-            uint32();
-            uint32();
-            uint32();
+            stream.uint32();
+            stream.uint32();
+            stream.uint32();
+            stream.uint32();
+            stream.uint32();
+            stream.uint32();
+            stream.uint32();
+            stream.uint32();
 
-            uint32(); // Bonus age
-            uint32(); // Bonus sex
+            stream.uint32(); // Bonus age
+            stream.uint32(); // Bonus sex
 
             for (unsigned int i = 0; i != 18; ++i)
             {
-                _critterSkills.at(i) = uint32();
+                _critterSkills.at(i) = stream.uint32();
             }
 
-            uint32(); // body type
-            uint32(); // experience for kill
-            uint32(); // kill type
-            uint32(); // damage type
+            stream.uint32(); // body type
+            stream.uint32(); // experience for kill
+            stream.uint32(); // kill type
+            stream.uint32(); // damage type
             break;
         }
         case OBJECT_TYPE::SCENERY:
         {
-            _subtypeId  = uint32();
-            _materialId = uint32();
-            _soundId    = uint8();
+            _subtypeId  = stream.uint32();
+            _materialId = stream.uint32();
+            _soundId    = stream.uint8();
             switch((SCENERY_TYPE)subtypeId())
             {
                 case SCENERY_TYPE::DOOR:
                 {
-                    uint32(); // walk thru flag
-                    uint32(); // unknown
+                    stream.uint32(); // walk thru flag
+                    stream.uint32(); // unknown
                     break;
                 }
                 case SCENERY_TYPE::STAIRS:
                 {
-                    uint32(); // DestTile && DestElevation
-                    uint32(); // DestElevation
+                    stream.uint32(); // DestTile && DestElevation
+                    stream.uint32(); // DestElevation
                     break;
                 }
                 case SCENERY_TYPE::ELEVATOR:
                 {
-                    uint32(); // Elevator type
-                    uint32(); // Elevator level
+                    stream.uint32(); // Elevator type
+                    stream.uint32(); // Elevator level
                     break;
                 }
                 case SCENERY_TYPE::LADDER_BOTTOM:
                 case SCENERY_TYPE::LADDER_TOP:
                 {
-                    uint32(); // DestTile && DestElevation
+                    stream.uint32(); // DestTile && DestElevation
                     break;
                 }
                 case SCENERY_TYPE::GENERIC:
                 {
-                    uint32(); // unknown
+                    stream.uint32(); // unknown
                 }
             }
 
@@ -303,17 +288,17 @@ void File::_initialize()
         }
         case OBJECT_TYPE::WALL:
         {
-            _materialId = uint32();
+            _materialId = stream.uint32();
             break;
         }
         case OBJECT_TYPE::TILE:
         {
-            _materialId = uint32();
+            _materialId = stream.uint32();
             break;
         }
         case OBJECT_TYPE::MISC:
         {
-            uint32(); // unknown
+            stream.uint32(); // unknown
             break;
         }
     }

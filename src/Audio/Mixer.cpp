@@ -105,7 +105,6 @@ namespace Falltergeist
                 }
             }
 
-
             // music is stereo. just fetch
             uint16_t* tmp = new uint16_t[len/2];
             pacm->readSamples((short int*)tmp, len/2);
@@ -122,7 +121,6 @@ namespace Falltergeist
             _lastMusic = filename;
             _loop = loop;
             musicCallback = std::bind(&Mixer::_musicCallback, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
-            acm->init();
             acm->rewind();
             Mix_HookMusic(myMusicPlayer, (void *)acm);
         }
@@ -155,7 +153,6 @@ namespace Falltergeist
             auto acm = ResourceManager::getInstance()->acmFileType("sound/speech/"+filename);
             if (!acm) return;
             musicCallback = std::bind(&Mixer::_speechCallback, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
-            acm->init();
             acm->rewind();
             Mix_HookMusic(myMusicPlayer, (void *)acm);
         }
@@ -194,7 +191,6 @@ namespace Falltergeist
 
             if (!chunk)
             {
-                acm->init();
                 auto samples = acm->samples();
 
                 uint8_t* memory = new uint8_t[samples * 2];
@@ -206,7 +202,7 @@ namespace Falltergeist
                 cvt.buf = (Uint8*)malloc(cnt*cvt.len_mult);
                 memcpy(cvt.buf, (uint8_t*)memory, cnt);
                 delete[] memory;
-                cvt.len = cnt;
+                cvt.len = static_cast<int>(cnt);
                 SDL_ConvertAudio(&cvt);
 
                 // make SDL_mixer chunk

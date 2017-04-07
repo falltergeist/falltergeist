@@ -37,6 +37,11 @@ namespace Falltergeist
 {
 namespace Format
 {
+namespace Dat
+{
+class Stream;
+}
+
 namespace Pal
 {
 
@@ -46,17 +51,17 @@ class File : public Dat::Item
 {
 
 public:
-    File(Dat::Entry* datFileEntry);
-    File(std::ifstream* stream);
+    File(Dat::Stream&& stream);
     ~File();
 
+    // TODO: return by reference
     std::vector<Color*>* colors();
 
     Color* color(unsigned index) const;
 
 protected:
+    // TODO: vector of objects
     std::vector<Color*> _colors;
-    virtual void _initialize();
 
 };
 

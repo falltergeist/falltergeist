@@ -27,6 +27,7 @@
 
 // Falltergeist includes
 #include "../Enums.h"
+#include "../Dat/Stream.h"
 #include "../Frm/Direction.h"
 #include "../Frm/File.h"
 #include "../Frm/Frame.h"
@@ -42,44 +43,23 @@ namespace Format
 namespace Frm
 {
 
-File::File(Dat::Entry* datFileEntry) : Dat::Item(datFileEntry)
+File::File(Dat::Stream&& stream)
 {
-    _initialize();
-}
+    stream.setPosition(0);
 
-File::File(std::ifstream * stream) : Dat::Item(stream)
-{
-    _initialize();
-}
-
-File::~File()
-{
-    for (auto direction : _directions)
-    {
-        delete direction;
-    }
-    delete [] _rgba;
-}
-
-void File::_initialize()
-{
-    if (_initialized) return;
-    Dat::Item::_initialize();
-    Dat::Item::setPosition(0);
-
-    _version = uint32();
-    _framesPerSecond = uint16();
-    _actionFrame = uint16();
-    _framesPerDirection = uint16();
+    _version = stream.uint32();
+    _framesPerSecond = stream.uint16();
+    _actionFrame = stream.uint16();
+    _framesPerDirection = stream.uint16();
 
     uint16_t shiftX[6];
     uint16_t shiftY[6];
     uint32_t dataOffset[6];
-    for (unsigned int i = 0; i != 6; ++i) shiftX[i] = uint16();
-    for (unsigned int i = 0; i != 6; ++i) shiftY[i] = uint16();
+    for (unsigned int i = 0; i != 6; ++i) shiftX[i] = stream.uint16();
+    for (unsigned int i = 0; i != 6; ++i) shiftY[i] = stream.uint16();
     for (unsigned int i = 0; i != 6; ++i)
     {
-        dataOffset[i] = uint32();
+        dataOffset[i] = stream.uint32();
         if (i > 0 && dataOffset[i-1] == dataOffset[i])
         {
             continue;
@@ -96,33 +76,41 @@ void File::_initialize()
     for (auto direction : _directions)
     {
         // jump to frames data at frames area
-        Dat::Item::setPosition(direction->dataOffset() + 62);
+        stream.setPosition(direction->dataOffset() + 62);
 
         // read all frames
         for (unsigned i = 0; i != _framesPerDirection; ++i)
         {            
-            uint16_t width = uint16();
-            uint16_t height = uint16();
+            uint16_t width = stream.uint16();
+            uint16_t height = stream.uint16();
             auto frame = new Frame(width, height);
 
             // Number of pixels for this frame
             // We don't need this, because we already have width*height
-            uint32();
+            stream.uint32();
 
-            frame->setOffsetX(int16());
-            frame->setOffsetY(int16());
+            frame->setOffsetX(stream.int16());
+            frame->setOffsetY(stream.int16());
 
             // Pixels data
+            // TODO: more efficient way to copy texture?
             for (unsigned y = 0; y != frame->height(); ++y)
             {
                 for (unsigned x = 0; x != frame->width(); ++x)
                 {
-                    frame->setIndex(x, y, uint8());
+                    frame->setIndex(x, y, stream.uint8());
                 }
             }
             direction->frames()->push_back(frame);
         }
     }
+}
+
+File::~File() {
+    for (auto direction : _directions) {
+        delete direction;
+    }
+    delete[] _rgba;
 }
 
 uint32_t File::version() const
@@ -184,6 +172,7 @@ uint32_t* File::rgba(Pal::File* palFile)
         unsigned positionX = 1;
         for (auto frame : *direction->frames())
         {
+            // TODO: more efficient way to generate texture?
             for (unsigned y = 0; y != frame->height(); ++y)
             {
                 for (unsigned x = 0; x != frame->width(); ++x)

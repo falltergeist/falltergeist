@@ -29,8 +29,9 @@
 #include <functional>
 
 // Falltergeist includes
-#include "../../Format/Gam/File.h"
 #include "../../Exception.h"
+#include "../../Format/Dat/Stream.h"
+#include "../../Format/Gam/File.h"
 
 // Third party includes
 
@@ -41,39 +42,24 @@ namespace Format
 namespace Gam
 {
 
-File::File(Dat::Entry* datFileEntry) : Dat::Item(datFileEntry)
-{
-    _initialize();
-}
-
-File::File(std::ifstream* stream) : Dat::Item(stream)
-{
-    _initialize();
-}
-
-File::~File()
-{
-}
-
-void File::_initialize()
-{
-    if (_initialized) return;
-    Dat::Item::_initialize();
-    Dat::Item::setPosition(0);
+File::File(Dat::Stream&& stream) {
+    stream.setPosition(0);
 
     unsigned int i = 0;
     unsigned char ch;
     std::string line;
-    while (i != this->size())
+    while (i != stream.size())
     {
-        *this >> ch; i++;
+        stream >> ch;
+        i++;
         if (ch != 0x0D) // \r
         {
             line += ch;
         }
         else
         {
-            this->skipBytes(1); i++;// 0x0A \n
+            stream.skipBytes(1);
+            i++; // 0x0A \n
             _parseLine(line);
             line.clear();
         }
@@ -82,13 +68,12 @@ void File::_initialize()
     {
         _parseLine(line);
     }
-
 }
 
 void File::_parseLine(std::string line)
 {
-    // отрезаем всё что после комментариев
-    if(line.find("//") != std::string::npos)
+    // cut everything after comment
+    if (line.find("//") != std::string::npos)
     {
         line = line.substr(0, line.find("//"));
     }
@@ -126,19 +111,17 @@ void File::_parseLine(std::string line)
     }
     else
     {
-        throw Exception("File::_initialize() - unknown mode");
+        throw Exception("File::_parseLine() - unknown mode");
     }
 }
 
 std::map<std::string, int>* File::GVARS()
 {
-    _initialize();
     return &_GVARS;
 }
 
 std::map<std::string, int>* File::MVARS()
 {
-    _initialize();
     return &_MVARS;
 }
 

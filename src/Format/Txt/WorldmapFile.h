@@ -31,8 +31,8 @@
 #include <vector>
 
 // Falltergeist includes
+#include "../Dat/Item.h"
 #include "../Ini/Value.h"
-#include "../Txt/BaseFile.h"
 
 // Third party includes
 
@@ -40,6 +40,11 @@ namespace Falltergeist
 {
 namespace Format
 {
+namespace Dat
+{
+class Stream;
+}
+
 namespace Txt
 {
 
@@ -242,11 +247,10 @@ struct WorldmapTile
 /**
  * @brief WORLDMAP.TXT
  */
-class WorldmapFile : public BaseFile
+class WorldmapFile : public Dat::Item
 {
 public:
-    WorldmapFile(std::ifstream* stream);
-    WorldmapFile(Dat::Entry* datFileEntry);
+    WorldmapFile(Dat::Stream&& stream);
 
     int numHorizontalTiles;
 
@@ -258,7 +262,7 @@ public:
 
 protected:
 
-    virtual void _parseText(std::istream& istr) override;
+    void _parseText(std::istream& istr);
 
     EncounterObject _parseEncounterObject(const Ini::Value&);
     InventoryItem _parseInventoryItem(const std::string&);

@@ -28,12 +28,12 @@
 // C++ standard includes
 #include <cstdint>
 #include <fstream>
-#include <map>
 #include <memory>
 #include <string>
-#include <vector>
+#include <unordered_map>
 
 // Falltergeist includes
+#include "Entry.h"
 
 // Third party includes
 
@@ -44,21 +44,17 @@ namespace Format
 namespace Dat
 {
 
-class Item;
-class Entry;
-
 class File
 {
-
 public:
     File();
-    File(std::string pathToFile);
-    virtual ~File();
+    File(const std::string& pathToFile);
 
-    std::string filename();
-    File* setFilename(std::string filename);
+    std::string filename() const;
+    File* setFilename(const std::string& filename);
 
-    Item* item(std::string filename);
+    // an pointer to an entry with given name or nullptr if no such entry exists
+    Entry* entry(const std::string& filename);
 
     File* readBytes(char* destination, unsigned int numberOfBytes);
     File* skipBytes(unsigned int numberOfBytes);
@@ -75,13 +71,10 @@ public:
     File& operator>>(Entry &entry);
 
 protected:
-    std::map<std::string, Item*> _items;
-    std::vector<Entry*> _entries;
-    std::ifstream* _stream = nullptr;
+    std::unordered_map<std::string, Dat::Entry> _entries;
+    std::ifstream _stream;
     std::string _filename;
-    bool _initialized = false;
     void _initialize();
-
 };
 
 }

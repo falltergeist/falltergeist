@@ -40,28 +40,27 @@ namespace Format
 {
 namespace Dat
 {
+
 class File;
 
 class Entry
 {
-
 public:
     Entry(File* datFile);
-    ~Entry();
 
-    std::string filename();
+    std::string filename() const;
     void setFilename(std::string value);
 
-    uint32_t packedSize();
+    uint32_t packedSize() const;
     void setPackedSize(uint32_t value);
 
-    uint32_t unpackedSize();
+    uint32_t unpackedSize() const;
     void setUnpackedSize(uint32_t value);
 
-    uint32_t dataOffset();
+    uint32_t dataOffset() const;
     void setDataOffset(uint32_t value);
 
-    bool compressed();
+    bool compressed() const;
     void setCompressed(bool value);
 
     File* datFile();
@@ -73,7 +72,6 @@ protected:
     uint32_t _unpackedSize;
     uint32_t _dataOffset;
     bool _compressed;
-
 
 };
 

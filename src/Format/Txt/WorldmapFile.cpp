@@ -26,6 +26,7 @@
 #include <sstream>
 
 // Falltergeist includes
+#include "../Dat/Stream.h"
 #include "../Ini/File.h"
 #include "../Ini/Parser.h"
 #include "../Txt/Lexer.h"
@@ -45,17 +46,6 @@ const char* NumericExpression::PLAYER      = "Player";         // a value of pla
 const char* NumericExpression::TIME_OF_DAY = "time_of_day";    // returns current hour (0 - 23)
 const char* NumericExpression::GLOBAL      = "Global";         // game global variable value
 const char* NumericExpression::RAND        = "Rand";           // a random value between 0 and 99
-
-
-WorldmapFile::WorldmapFile(std::ifstream* stream) : BaseFile(stream)
-{
-    _initialize();
-}
-
-WorldmapFile::WorldmapFile(Dat::Entry* datFileEntry) : BaseFile(datFileEntry)
-{
-    _initialize();
-}
 
 void WorldmapFile::_parseText(std::istream& stream)
 {
@@ -467,6 +457,12 @@ LogicalExpression::Operator WorldmapFile::_operatorByLexem(int lexem)
         default:
             return LogicalExpression::Operator::NONE;
     }
+}
+
+WorldmapFile::WorldmapFile(Dat::Stream&& stream)
+{
+    std::istream istr(&stream);
+    _parseText(istr);
 }
 
 }

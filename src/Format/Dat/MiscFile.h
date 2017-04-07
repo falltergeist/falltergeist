@@ -22,14 +22,17 @@
  * SOFTWARE.
  */
 
-#ifndef FALLTERGEIST_FORMAT_TXT_BASEFILE_H
-#define FALLTERGEIST_FORMAT_TXT_BASEFILE_H
+#ifndef FALLTERGEIST_FORMAT_DAT_MISC_FILE_H
+#define FALLTERGEIST_FORMAT_DAT_MISC_FILE_H
 
 // C++ standard includes
-#include <list>
+#include <fstream>
+#include <string>
+#include <memory>
 
 // Falltergeist includes
 #include "../../Format/Dat/Item.h"
+#include "../../Format/Dat/Stream.h"
 
 // Third party includes
 
@@ -37,29 +40,22 @@ namespace Falltergeist
 {
 namespace Format
 {
-namespace Txt
+namespace Dat
 {
 
-/**
- * @brief Base class for all TXT file types.
- */
-class BaseFile : public Dat::Item
+// A simple file
+class MiscFile : public Item
 {
-
 public:
-    BaseFile(std::ifstream* stream);
-    BaseFile(Dat::Entry* datFileEntry);
+    MiscFile(Stream&& stream);
+
+    Stream& stream();
 
 protected:
-    virtual void _initialize() override;
-
-    /**
-     * Called when initializing file.
-     */
-    virtual void _parseText(std::istream& istr) = 0;
+    Stream _stream;
 };
 
 }
 }
 }
-#endif //FALLTERGEIST_FORMAT_TXT_BASEFILE_H
+#endif //FALLTERGEIST_FORMAT_DAT_MISC_FILE_H

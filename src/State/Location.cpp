@@ -245,7 +245,7 @@ namespace Falltergeist
                 mapFile = ResourceManager::getInstance()->mapFileType("maps/" + defaultSettings->initialLocation() + ".map");
             }
 
-            _location = std::make_shared<Falltergeist::Game::Location>();           
+            _location = std::make_shared<Falltergeist::Game::Location>();
             _location->loadFromMapFile(mapFile);
 
             _currentElevation = _location->defaultElevationIndex();

@@ -23,9 +23,11 @@
  */
 
 // C++ standard includes
+#include <string.h> // for memcpy
+#include <algorithm>
 
 // Falltergeist includes
-#include "../../Format/Txt/BaseFile.h"
+#include "../../Format/Dat/MiscFile.h"
 
 // Third party includes
 
@@ -33,25 +35,14 @@ namespace Falltergeist
 {
 namespace Format
 {
-namespace Txt
+namespace Dat
 {
 
-BaseFile::BaseFile(std::ifstream* stream) : Item(stream)
-{
-}
+MiscFile::MiscFile(Stream&& stream) : _stream(std::move(stream)) {}
 
-BaseFile::BaseFile(Dat::Entry* datFileEntry) : Item(datFileEntry)
+Stream& MiscFile::stream()
 {
-}
-
-void BaseFile::_initialize()
-{
-    if (_initialized) return;
-    Dat::Item::_initialize();
-    Dat::Item::setPosition(0);
-
-    std::istream istr(this);
-    _parseText(istr);
+    return _stream;
 }
 
 }

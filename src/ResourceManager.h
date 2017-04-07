@@ -21,12 +21,13 @@
 #define FALLTERGEIST_RESOURCEMANAGER_H
 
 // C++ standard includes
+#include <fstream>
+#include <functional>
 #include <string>
 #include <map>
 #include <memory>
 #include <unordered_map>
 #include <vector>
-
 
 // Falltergeist includes
 #include "Base/Singleton.h"
@@ -45,6 +46,8 @@ namespace Dat
 {
 class File;
 class Item;
+class MiscFile;
+class Stream;
 }
 namespace Frm { class File; }
 namespace Fon { class File; }
@@ -110,7 +113,6 @@ public:
     Format::Aaf::File* aafFileType(const std::string& filename);
     Format::Acm::File* acmFileType(const std::string& filename);
     Format::Bio::File* bioFileType(const std::string& filename);
-    Format::Dat::Item* datFileItem(std::string filename);
     Format::Frm::File* frmFileType(const std::string& filename);
     Format::Frm::File* frmFileType(unsigned int FID);
     Format::Fon::File* fonFileType(const std::string& filename);
@@ -128,6 +130,7 @@ public:
     Format::Pro::File* proFileType(unsigned int PID);
     Format::Rix::File* rixFileType(const std::string& filename);
     Format::Sve::File* sveFileType(const std::string& filename);
+    Format::Dat::MiscFile* miscFileType(const std::string& filename);
 
     Format::Txt::CityFile* cityTxt();
     Format::Txt::MapsFile* mapsTxt();
@@ -144,25 +147,28 @@ public:
     Graphics::Shader* shader(const std::string& filename);
     void unloadResources();
     std::string FIDtoFrmName(unsigned int FID);
-    Game::Location* gameLocation(unsigned int number);
     void shutdown();
 
-protected:
+private:
     friend class Base::Singleton<ResourceManager>;
 
     std::vector<std::unique_ptr<Format::Dat::File>> _datFiles;
-    std::vector<std::unique_ptr<Format::Dat::Item>> _datItems;
-    std::unordered_map<std::string, Format::Dat::Item*> _datItemMap;
+    std::unordered_map<std::string, std::unique_ptr<Format::Dat::Item>> _datItems;
     std::unordered_map<std::string, std::unique_ptr<Graphics::Texture>> _textures;
     std::unordered_map<std::string, std::unique_ptr<Graphics::Font>> _fonts;
     std::unordered_map<std::string, std::unique_ptr<Graphics::Shader>> _shaders;
 
     ResourceManager();
-    ~ResourceManager();
     ResourceManager(const ResourceManager&) = delete;
     ResourceManager& operator=(const ResourceManager&) = delete;
 
-    Format::Dat::Item* _createItemByName(const std::string& filename, std::ifstream* stream);
+    // Retrieves given file item from "virtual file system".
+    // All items are cached after being requested for the first time.
+    template <class T>
+    T* _datFileItem(std::string filename);
+
+    // Searches for a given file within virtual "file system" and calls the given callback with Dat::Stream created from that file.
+    void _loadStreamForFile(std::string filename, std::function<void(Format::Dat::Stream&&)> callback);
 };
 
 }

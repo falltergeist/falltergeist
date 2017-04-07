@@ -25,6 +25,7 @@
 // C++ standard includes
 
 // Falltergeist includes
+#include "../Dat/Stream.h"
 #include "../Rix/File.h"
 
 // Third party includes
@@ -36,56 +37,43 @@ namespace Format
 namespace Rix
 {
 
-File::File(Dat::Entry* datFileEntry) : Dat::Item(datFileEntry)
+File::File(Dat::Stream&& stream)
 {
-    _initialize();
-}
-
-File::File(std::ifstream* stream) : Dat::Item(stream)
-{
-    _initialize();
-}
-
-File::~File()
-{
-    delete [] _rgba;
-}
-
-void File::_initialize()
-{
-    if (_initialized) return;
-    Dat::Item::_initialize();
-    Dat::Item::setPosition(0);
+    stream.setPosition(0);
 
     // Signature
-    uint32();
+    stream.uint32();
 
-    this->setEndianness(ENDIANNESS::LITTLE);
-    _width = uint16();
-    _height = uint16();
-    this->setEndianness(ENDIANNESS::BIG);
+    stream.setEndianness(ENDIANNESS::LITTLE);
+    _width = stream.uint16();
+    _height = stream.uint16();
+    stream.setEndianness(ENDIANNESS::BIG);
 
     // Unknown 1
-    uint16();
+    stream.uint16();
 
     uint32_t palette[256];
 
     // Palette
     for (unsigned i = 0; i != 256; ++i)
     {
-        uint8_t r = uint8();
-        uint8_t g = uint8();
-        uint8_t b = uint8();
+        uint8_t r = stream.uint8();
+        uint8_t g = stream.uint8();
+        uint8_t b = stream.uint8();
         palette[i] = (r << 26 | g << 18 | b << 10 | 0x000000FF);  // RGBA
     }
 
-    _rgba = new uint32_t[_width*_height];
+    _rgba = new uint32_t[_width * _height];
 
     // Data
-    for (unsigned i = 0; i != (unsigned)_width*_height; ++i)
+    for (unsigned i = 0; i != (unsigned)_width * _height; ++i)
     {
-        _rgba[i] = palette[uint8()];
+        _rgba[i] = palette[stream.uint8()];
     }
+}
+
+File::~File() {
+    delete[] _rgba;
 }
 
 uint16_t File::width() const

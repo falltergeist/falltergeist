@@ -38,16 +38,18 @@ namespace Falltergeist
 {
 namespace Format
 {
+namespace Dat
+{
+class Stream;
+}
+
 namespace Gam
 {
 
 class File : public Dat::Item
 {
-
 public:
-    File(Dat::Entry* datFileEntry);
-    File(std::ifstream* stream);
-    virtual ~File();
+    File(Dat::Stream&& stream);
     std::map<std::string, int>* GVARS();
     std::map<std::string, int>* MVARS();
     int GVAR(std::string name);
@@ -58,11 +60,9 @@ public:
 protected:
     std::map<std::string, int> _GVARS;
     std::map<std::string, int> _MVARS;
-    virtual void _initialize();
     bool _GVARmode = false;
     bool _MVARmode = false;
     void _parseLine(std::string line);
-
 };
 
 }

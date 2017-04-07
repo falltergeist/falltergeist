@@ -45,42 +45,22 @@ namespace Format
 namespace Acm
 {
 
-File::File(Dat::Entry* datFileEntry) : Dat::Item(datFileEntry)
-{
-    _initialize();
-}
+constexpr int HEADER_SIZE = 14;
 
-File::File(std::ifstream* stream) : Dat::Item(stream)
+File::File(Dat::Stream&& stream) : _stream(std::move(stream))
 {
-    _initialize();
-}
-
-File::~File()
-{
-    if (_block != nullptr)
-    {
-        free(_block);
-        _block = nullptr;
-    }
-}
-
-void File::_initialize()
-{
-    if (_initialized) return;
-    Dat::Item::_initialize();
-    Dat::Item::setPosition(0);
-
-    this->setEndianness(ENDIANNESS::LITTLE);
-    _samplesReady=0;
+    _stream.setPosition(0);
+    _stream.setEndianness(ENDIANNESS::LITTLE);
+    _samplesReady = 0;
 
     Header hdr;
-    *this >> hdr.signature;
-    *this >> hdr.samples;
-    *this >> hdr.channels;
-    *this >> hdr.rate;
+    _stream >> hdr.signature;
+    _stream >> hdr.samples;
+    _stream >> hdr.channels;
+    _stream >> hdr.rate;
 
     int16_t tmpword;
-    readBytes((uint8_t*)&tmpword, 2);
+    _stream.readBytes((uint8_t*)&tmpword, 2);
     _subblocks = (int32_t) (tmpword >> 4);
     _levels = (int32_t) (tmpword&15);
 
@@ -89,76 +69,37 @@ void File::_initialize()
         throw Exception("Not an ACM file - invalid signature");
     }
 
-    _samplesLeft = ( _samples = hdr.samples );
+    _samplesLeft = _samples = hdr.samples;
     _channels = hdr.channels;
     _bitrate = hdr.rate;
     _blockSize = ( 1 << _levels) * _subblocks;
 
     _block = (int32_t *) malloc(sizeof(int32_t)* _blockSize);
 
-    _unpacker = std::shared_ptr<ValueUnpacker>(new ValueUnpacker(_levels, _subblocks, this));
+    _unpacker = std::make_unique<ValueUnpacker>(_levels, _subblocks, &_stream);
     if (!_unpacker || !_unpacker->init())
     {
         throw Exception("Cannot create or init unpacker");
     }
-    _decoder = std::shared_ptr<Decoder>(new Decoder(_levels));
+    _decoder = std::make_unique<Decoder>(_levels);
     if (!_decoder || !_decoder->init())
     {
         throw Exception("Cannot create or init decoder");
     }
 }
 
-void File::init()
-{
-    _initialize();
+File::~File() {
+    if (_block != nullptr) {
+        free(_block);
+        _block = nullptr;
+    }
 }
 
 void File::rewind()
 {
-    Dat::Item::setPosition(0);
-    _samplesReady=0;
-
-    Header hdr;
-    *this >> hdr.signature;
-    *this >> hdr.samples;
-    *this >> hdr.channels;
-    *this >> hdr.rate;
-
-    int16_t tmpword;
-    readBytes((uint8_t*)&tmpword, 2);
-    _subblocks = (int32_t) (tmpword >> 4);
-    _levels = (int32_t) (tmpword&15);
-
-    if (hdr.signature != IP_ACM_SIG)
-    {
-        throw Exception("Not an ACM file - invalid signature");
-    }
-
-    _samplesLeft = ( _samples = hdr.samples );
-    _channels = hdr.channels;
-    _bitrate = hdr.rate;
-    _blockSize = ( 1 << _levels) * _subblocks;
-
-    if (_block != nullptr)
-    {
-        free(_block);
-        _block = nullptr;
-    }
-    _block = (int32_t *) malloc(sizeof(int32_t)* _blockSize);
-
-
-    _unpacker = std::shared_ptr<ValueUnpacker>(new ValueUnpacker(_levels, _subblocks, this));
-    if (!_unpacker || !_unpacker->init())
-    {
-        throw Exception("Cannot create or init unpacker");
-    }
-    _decoder = std::shared_ptr<Decoder>(new Decoder(_levels));
-    if (!_decoder || !_decoder->init())
-    {
-        throw Exception("Cannot create or init decoder");
-    }
+    _stream.setPosition(HEADER_SIZE);
+    _samplesReady = 0;
 }
-
 
 int32_t File::_makeNewSamples()
 {
@@ -174,9 +115,9 @@ int32_t File::_makeNewSamples()
     return 1;
 }
 
-int32_t File::readSamples(short* buffer, int32_t count)
+size_t File::readSamples(short* buffer, size_t count)
 {
-    int32_t res = 0;
+    size_t res = 0;
     while (res < count) {
         if (_samplesReady == 0) {
             if (_samplesLeft == 0)

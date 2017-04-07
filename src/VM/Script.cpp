@@ -99,8 +99,7 @@ void Script::run() {
         if (_programCounter == 0 && _initialized) return;
         auto offset = _programCounter;
         _script->setPosition(_programCounter);
-        unsigned short opcode;
-        *_script >> opcode;
+        unsigned short opcode = _script->readOpcode();
 
         std::unique_ptr<OpcodeHandler> opcodeHandler(OpcodeFactory::createOpcode(opcode, this));
         try {

@@ -25,6 +25,7 @@
 // C++ standard includes
 
 // Falltergeist includes
+#include "../Dat/Stream.h"
 #include "../Ini/File.h"
 #include "../Ini/Parser.h"
 #include "../Txt/MapsFile.h"
@@ -38,15 +39,10 @@ namespace Format
 namespace Txt
 {
 
-
-MapsFile::MapsFile(std::ifstream* stream) : BaseFile(stream)
+MapsFile::MapsFile(Dat::Stream&& stream)
 {
-    _initialize();
-}
-
-MapsFile::MapsFile(Dat::Entry* datFileEntry) : BaseFile(datFileEntry)
-{
-    _initialize();
+    std::istream istr(&stream);
+    _parseText(istr);
 }
 
 const std::vector<Map>& MapsFile::maps() const

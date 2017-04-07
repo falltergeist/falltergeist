@@ -40,17 +40,20 @@ namespace Falltergeist
 {
 namespace Format
 {
+namespace Dat
+{
+class Stream;
+}
+
 namespace Aaf
 {
 
 class Glyph;
 
-class File : public Format::Dat::Item
+class File : public Dat::Item
 {
-
 public:
-    File(Dat::Entry* datFileEntry);
-    File(std::ifstream* stream);
+    File(Dat::Stream&& stream);
     ~File();
 
     uint32_t* rgba();
@@ -72,8 +75,8 @@ protected:
     uint16_t _spaceWidth = 0;
     uint16_t _verticalGap = 0;
     uint32_t* _rgba = 0;
-    virtual void _initialize();
 
+    void _loadRgba(Dat::Stream& stream);
 };
 
 }

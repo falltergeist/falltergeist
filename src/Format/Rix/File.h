@@ -37,16 +37,19 @@ namespace Falltergeist
 {
 namespace Format
 {
+namespace Dat
+{
+class Stream;
+}
+
 namespace Rix
 {
 
 class File : public Dat::Item
 {
-
 public:
-    File(Dat::Entry* datFileEntry);
-    File(std::ifstream* stream);
-    virtual ~File();
+    File(Dat::Stream&& stream);
+    ~File() override;
 
     uint16_t width() const;
     uint16_t height() const;
@@ -57,7 +60,6 @@ protected:
     uint16_t _width = 0;
     uint16_t _height = 0;
     uint32_t* _rgba = nullptr;
-    virtual void _initialize();
 
 };
 

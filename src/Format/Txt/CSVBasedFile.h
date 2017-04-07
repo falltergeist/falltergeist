@@ -30,7 +30,7 @@
 #include <vector>
 
 // Falltergeist includes
-#include "../Txt/BaseFile.h"
+#include "../Dat/Item.h"
 
 // Third party includes
 
@@ -38,6 +38,11 @@ namespace Falltergeist
 {
 namespace Format
 {
+
+namespace Dat
+{
+class Stream;
+}
 
 namespace Ini
 {
@@ -200,16 +205,15 @@ struct Quest
 };
 
 template <typename ItemType>
-class CSVBasedFile : public BaseFile
+class CSVBasedFile : public Dat::Item
 {
 public:
-    CSVBasedFile(std::ifstream* stream);
-    CSVBasedFile(Dat::Entry* datFileEntry);
+    CSVBasedFile(Dat::Stream&& stream);
 
     const std::list<ItemType>& items() const;
 
 protected:
-    virtual void _parseText(std::istream& istr) override;
+    void _parseText(std::istream& istr);
 
     /**
      * Parses next item

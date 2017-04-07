@@ -30,9 +30,9 @@
 #include "../../Format/Aaf/File.h"
 #include "../../Format/Acm/File.h"
 #include "../../Format/Bio/File.h"
-#include "../../Format/Dat/Entry.h"
-#include "../../Format/Dat/File.h"
 #include "../../Format/Dat/Item.h"
+#include "../../Format/Dat/MiscFile.h"
+#include "../../Format/Dat/Stream.h"
 #include "../../Format/Fon/File.h"
 #include "../../Format/Frm/File.h"
 #include "../../Format/Gam/File.h"
@@ -52,6 +52,8 @@
 #include "../../Format/Txt/MapsFile.h"
 #include "../Txt/WorldmapFile.h"
 
+#include "../../Format/Dat/File.h"
+
 // Third party includes
 
 namespace Falltergeist
@@ -66,32 +68,18 @@ File::File()
     _initialize();
 }
 
-File::File(std::string filename)
+File::File(const std::string& filename)
 {
     setFilename(filename);
     _initialize();
 }
 
-File::~File()
-{
-    for (auto item : _items)
-    {
-        delete item.second;
-    }
-
-    for (auto entry : _entries)
-    {
-        delete entry;
-    }
-    delete _stream;
-}
-
-std::string File::filename()
+std::string File::filename() const
 {
     return _filename;
 }
 
-File* File::setFilename(std::string filename)
+File* File::setFilename(const std::string& filename)
 {
     _filename = filename;
     return this;
@@ -99,12 +87,8 @@ File* File::setFilename(std::string filename)
 
 void File::_initialize()
 {
-    if (_initialized) return;
-    _initialized = true;
-
-    _stream = new std::ifstream();
-    _stream->open(filename(), std::ios_base::binary);
-    if (!_stream->is_open())
+    _stream.open(filename(), std::ios_base::binary);
+    if (!_stream.is_open())
     {
         throw Exception("File::_initialize() - can't open stream: " + filename());
     }
@@ -131,31 +115,29 @@ void File::_initialize()
     //reading files data one by one
     for (unsigned int i = 0; i != filesTotalNumber; ++i)
     {
-        auto entry = new Entry(this);
-
-        *this >> *entry;
-
-        _entries.push_back(entry);
+        Entry entry(this);
+        *this >> entry;
+        _entries.emplace(entry.filename(), std::move(entry));
     }
 }
 
 File* File::setPosition(unsigned int position)
 {
-    _stream->seekg(position, std::ios::beg);
+    _stream.seekg(position, std::ios::beg);
     return this;
 }
 
 unsigned int File::position()
 {
-    return static_cast<unsigned>(_stream->tellg());
+    return static_cast<unsigned>(_stream.tellg());
 }
 
 unsigned int File::size(void)
 {
-    auto oldPosition = _stream->tellg();
-    _stream->seekg(0,std::ios::end);
-    auto currentPosition = _stream->tellg();
-    _stream->seekg(oldPosition, std::ios::beg);
+    auto oldPosition = _stream.tellg();
+    _stream.seekg(0,std::ios::end);
+    auto currentPosition = _stream.tellg();
+    _stream.seekg(oldPosition, std::ios::beg);
     return static_cast<unsigned>(currentPosition);
 }
 
@@ -165,60 +147,20 @@ File* File::skipBytes(unsigned int numberOfBytes)
     return this;
 }
 
-File* File::readBytes(char * destination, unsigned int numberOfBytes)
+File* File::readBytes(char* destination, unsigned int numberOfBytes)
 {
     unsigned int position = this->position();
-    _stream->read(destination, numberOfBytes);
+    _stream.read(destination, numberOfBytes);
     setPosition(position + numberOfBytes);
     return this;
 }
 
-Item* File::item(const std::string filename)
+Entry* File::entry(const std::string& filename)
 {
-    if (_items.find(filename) != _items.end())
-    {
-        return _items.at(filename);
+    auto entryIt = _entries.find(filename);
+    if (entryIt != _entries.end()) {
+        return &entryIt->second;
     }
-
-    for (auto entry : _entries)
-    {
-        if (entry->filename() != filename) continue;
-
-        std::string extension = filename.substr(filename.length() - 3, 3);
-
-        Item* item = nullptr;
-        if      (extension == "aaf") item = new Aaf::File(entry);
-        else if (extension == "acm") item = new Acm::File(entry);
-        else if (extension == "bio") item = new Bio::File(entry);
-        else if (extension == "fon") item = new Fon::File(entry);
-        else if (extension == "frm") item = new Frm::File(entry);
-        else if (extension == "gam") item = new Gam::File(entry);
-        else if (extension == "gcd") item = new Gcd::File(entry);
-        else if (extension == "int") item = new Int::File(entry);
-        else if (extension == "lip") item = new Lip::File(entry);
-        else if (extension == "lst") item = new Lst::File(entry);
-        else if (extension == "map") item = new Map::File(entry);
-        else if (extension == "msg") item = new Msg::File(entry);
-        else if (extension == "mve") item = new Mve::File(entry);
-        else if (extension == "pal") item = new Pal::File(entry);
-        else if (extension == "pro") item = new Pro::File(entry);
-        else if (extension == "rix") item = new Rix::File(entry);
-        else if (extension == "sve") item = new Sve::File(entry);
-        else if (filename == "data/city.txt") item = new Txt::CityFile(entry);
-        else if (filename == "data/enddeath.txt") item = new Txt::EndDeathFile(entry);
-        else if (filename == "data/endgame.txt") item = new Txt::EndGameFile(entry);
-        else if (filename == "data/genrep.txt") item = new Txt::GenRepFile(entry);
-        else if (filename == "data/holodisk.txt") item = new Txt::HolodiskFile(entry);
-        else if (filename == "data/karmavar.txt") item = new Txt::KarmaVarFile(entry);
-        else if (filename == "data/maps.txt") item = new Txt::MapsFile(entry);
-        else if (filename == "data/quests.txt") item = new Txt::QuestsFile(entry);
-        else if (filename == "data/worldmap.txt") item = new Txt::WorldmapFile(entry);
-        else item = new Item(entry);
-
-        _items.insert(std::make_pair(filename, item));
-        return item;
-    }
-
     return nullptr;
 }
 

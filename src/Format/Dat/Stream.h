@@ -22,8 +22,8 @@
  * SOFTWARE.
  */
 
-#ifndef FALLTERGEIST_FORMAT_DAT_ITEM_H
-#define FALLTERGEIST_FORMAT_DAT_ITEM_H
+#ifndef FALLTERGEIST_FORMAT_DAT_STREAM_H
+#define FALLTERGEIST_FORMAT_DAT_STREAM_H
 
 // C++ standard includes
 #include <fstream>
@@ -31,6 +31,7 @@
 #include <memory>
 
 // Falltergeist includes
+#include "../../Base/Buffer.h"
 #include "../../Format/Enums.h"
 
 // Third party includes
@@ -42,20 +43,56 @@ namespace Format
 namespace Dat
 {
 
-// A base class for all game resource files
-class Item
+class Entry;
+
+// An abstract data stream for binary resource files loaded from either Dat file or a file system
+class Stream: public std::streambuf
 {
 public:
-    virtual ~Item() {}
+    Stream(std::ifstream& stream);
+    Stream(Dat::Entry& datFileEntry);
 
-    Item& setFilename(const std::string& filename);
-    std::string filename();
+    Stream(Stream&& other);
+    Stream(const Stream&) = delete;
+    Stream& operator= (Stream&& other);
+    Stream& operator= (const Stream&) = delete;
 
-protected:
-    std::string _filename;
+    virtual std::streambuf::int_type underflow();
+
+    Stream& readBytes(uint8_t* destination, uint32_t size);
+    Stream& skipBytes(unsigned int numberOfBytes);
+    Stream& setPosition(unsigned int position);
+    uint32_t position();
+    uint32_t size();
+
+    unsigned int bytesRemains();
+
+    ENDIANNESS endianness();
+    void setEndianness(ENDIANNESS value);
+
+    uint32_t uint32();
+    int32_t int32();
+    uint16_t uint16();
+    int16_t int16();
+    uint8_t uint8();
+    int8_t int8();
+
+    Stream& operator>>(uint32_t &value);
+    Stream& operator>>(int32_t &value);
+    Stream& operator>>(uint16_t &value);
+    Stream& operator>>(int16_t &value);
+    Stream& operator>>(uint8_t &value);
+    Stream& operator>>(int8_t &value);
+
+private:
+    Base::Buffer<uint8_t> _buffer;
+    int32_t _size;
+    ENDIANNESS _endianness = ENDIANNESS::BIG;
+
+    char* _rawBuffer();
 };
 
 }
 }
 }
-#endif //FALLTERGEIST_FORMAT_DAT_ITEM_H
+#endif //FALLTERGEIST_FORMAT_DAT_STREAM_H
