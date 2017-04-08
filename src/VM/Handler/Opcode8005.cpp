@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright 2012-2016 Falltergeist Developers.
  *
  * This file is part of Falltergeist.
@@ -32,27 +32,29 @@
 
 namespace Falltergeist
 {
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode8005::Opcode8005(VM::Script* script) : OpcodeHandler(script)
-            {
-            }
+namespace VM
+{
+namespace Handler
+{
 
-            void Opcode8005::_run()
-            {
-                auto functionIndex = _script->dataStack()->popInteger();
-                // @TODO: pass arguments and call external procedures
-                /*auto argumentCount = _script->dataStack()->popInteger();
-                std::vector<int> args;
-                for (int i = 0; i < argumentCount; i++)
-                {
-                    args.push_back(_script->dataStack()->popInteger());
-                }*/
-                _script->setProgramCounter(_script->script()->procedures()->at(functionIndex)->bodyOffset());
-                Logger::debug("SCRIPT") << "[8005] [*] op_call(0x" << std::hex << functionIndex << ") = 0x" << _script->programCounter() << std::endl;
-            }
-        }
-    }
+Opcode8005::Opcode8005(VM::Script* script) : OpcodeHandler(script)
+{
+}
+
+void Opcode8005::_run()
+{
+    auto functionIndex = _script->dataStack()->popInteger();
+    // @TODO: pass arguments and call external procedures
+    /*auto argumentCount = _script->dataStack()->popInteger();
+    std::vector<int> args;
+    for (int i = 0; i < argumentCount; i++)
+    {
+        args.push_back(_script->dataStack()->popInteger());
+    }*/
+    _script->setProgramCounter(_script->script()->procedures().at(functionIndex).bodyOffset());
+    Logger::debug("SCRIPT") << "[8005] [*] op_call(0x" << std::hex << functionIndex << ") = 0x" << _script->programCounter() << std::endl;
+}
+
+}
+}
 }

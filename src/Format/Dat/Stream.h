@@ -1,4 +1,4 @@
-/*
+﻿/*
  * The MIT License (MIT)
  *
  * Copyright (c) 2012-2015 Falltergeist developers
@@ -59,13 +59,13 @@ public:
 
     virtual std::streambuf::int_type underflow();
 
-    Stream& readBytes(uint8_t* destination, uint32_t size);
-    Stream& skipBytes(unsigned int numberOfBytes);
-    Stream& setPosition(unsigned int position);
-    uint32_t position();
-    uint32_t size();
+    Stream& readBytes(uint8_t* destination, size_t size);
+    Stream& skipBytes(size_t numberOfBytes);
+    Stream& setPosition(size_t position);
+    size_t position() const;
+    size_t size() const;
 
-    unsigned int bytesRemains();
+    size_t bytesRemains();
 
     ENDIANNESS endianness();
     void setEndianness(ENDIANNESS value);
@@ -85,11 +85,8 @@ public:
     Stream& operator>>(int8_t &value);
 
 private:
-    Base::Buffer<uint8_t> _buffer;
-    int32_t _size;
+    Base::Buffer<char> _buffer;
     ENDIANNESS _endianness = ENDIANNESS::BIG;
-
-    char* _rawBuffer();
 };
 
 }

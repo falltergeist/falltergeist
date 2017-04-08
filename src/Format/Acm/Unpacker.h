@@ -1,4 +1,4 @@
-/*
+﻿/*
  * The MIT License (MIT)
  *
  * Copyright (c) 2012-2015 Falltergeist developers
@@ -85,7 +85,7 @@ protected:
     unsigned int _nextBits; // new bits
     int _availBits; // count of new bits
     unsigned char _bitsBuffer[UNPACKER_BUFFER_SIZE];
-    unsigned int _bufferBitOffset;
+    size_t _bufferBitOffset;
 
     int _sbSize;
     short *_ampBuffer, *_buffMiddle;

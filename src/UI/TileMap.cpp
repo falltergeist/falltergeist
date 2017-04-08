@@ -50,6 +50,10 @@ TileMap::TileMap()
 {
 }
 
+TileMap::~TileMap()
+{
+}
+
 void TileMap::init()
 {
     auto ticks = SDL_GetTicks();
@@ -67,8 +71,6 @@ void TileMap::init()
     for (auto& it : _tiles)
     {
         auto& tile = it.second;
-
-
 
         auto position = std::find(numbers.begin(), numbers.end(), tile->number());
         if (position == numbers.end())
@@ -156,10 +158,6 @@ void TileMap::init()
     }
 
     Logger::info("GAME") << "Tilemap generated in " << (SDL_GetTicks() - ticks) << std::endl;
-}
-
-TileMap::~TileMap()
-{
 }
 
 void TileMap::render()
