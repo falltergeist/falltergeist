@@ -61,25 +61,18 @@ File::File(Dat::Stream&& stream)
             _maximumWidth = width;
         }
 
-        _glyphs.push_back(new Glyph(width, height));
-        _glyphs.back()->setDataOffset(offset);
+        _glyphs.push_back(Glyph(width, height));
+        _glyphs.back().setDataOffset(offset);
     }
 
     _loadRgba(stream);
-}
-
-File::~File() {
-    for (auto glyph : _glyphs) {
-        delete glyph;
-    }
-    delete[] _rgba;
 }
 
 void File::_loadRgba(Dat::Stream& stream)
 {
     //_rgba = new uint32_t[_maximumWidth * _maximumHeight * 256]();
     // leave 1 px around glyph
-    _rgba = new uint32_t[((_maximumWidth+2)*16) * ((_maximumHeight+2) * 16)]();
+    _rgba.resize((_maximumWidth + 2) * 16 * (_maximumHeight + 2) * 16);
 
     for (unsigned i = 0; i != 256; ++i)
     {
@@ -87,13 +80,13 @@ void File::_loadRgba(Dat::Stream& stream)
         uint32_t glyphX = (i%16) * _maximumWidth+(i%16)*2+1;
 
         // Move glyph to bottom
-        glyphY += _maximumHeight - _glyphs.at(i)->height();
+        glyphY += _maximumHeight - _glyphs.at(i).height();
 
-        stream.setPosition(0x080C + _glyphs.at(i)->dataOffset());
+        stream.setPosition(0x080C + _glyphs.at(i).dataOffset());
 
-        for (uint16_t y = 0; y != _glyphs.at(i)->height(); ++y)
+        for (uint16_t y = 0; y != _glyphs.at(i).height(); ++y)
         {
-            for (uint16_t x = 0; x != _glyphs.at(i)->width(); ++x)
+            for (uint16_t x = 0; x != _glyphs.at(i).width(); ++x)
             {
                 uint8_t byte = stream.uint8();
                 if (byte != 0)
@@ -132,13 +125,14 @@ void File::_loadRgba(Dat::Stream& stream)
     }
 }
 
-uint32_t* File::rgba() {
-    return _rgba;
+uint32_t* File::rgba()
+{
+    return _rgba.data();
 }
 
-std::vector<Glyph*>* File::glyphs()
+const std::vector<Glyph>& File::glyphs() const
 {
-    return &_glyphs;
+    return _glyphs;
 }
 
 uint16_t File::horizontalGap() const

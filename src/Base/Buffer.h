@@ -27,9 +27,10 @@ namespace Base
 
 // A thin wrapper over plain C-array.
 // Handles allocation and deallocation of the underlying buffer.
-// Does not perform any kind of initialization allocated of data.
+// Does not perform any kind of initialization of allocated memory.
 template <typename T>
-class Buffer {
+class Buffer
+{
 public:
     // Creates new empty buffer
     Buffer<T>() : _size(0), _buf(nullptr)
@@ -52,9 +53,7 @@ public:
     // Move-assigns buffer pointer from another Buffer object
     Buffer<T>& operator= (Buffer<T>&& other)
     {
-        if (_buf != nullptr) {
-            delete[] _buf;
-        }
+        _cleanUpBuffer();
         _size = other._size;
         _buf = other._buf;
         other._size = 0;
@@ -67,22 +66,42 @@ public:
 
     ~Buffer<T>()
     {
-        if (_buf != nullptr) {
-            delete[] _buf;
-        }
+        _cleanUpBuffer();
+    }
+
+    // Access element at a given index. No bounds checking is performed.
+    T& operator[] (size_t index)
+    {
+        return _buf[index];
+    }
+
+    // Access element at a given index. No bounds checking is performed.
+    const T& operator[] (size_t index) const
+    {
+        return _buf[index];
+    }
+
+    T* begin()
+    {
+        return &_buf[0];
+    }
+
+    T* end() {
+        return &_buf[_size];
     }
 
     // Reallocate the underlying buffer to the specified size
     // All data in buffer will be discarded
     void resize(size_t newSize)
     {
-        if (_buf != nullptr) {
-            delete[] _buf;
-        }
+        _cleanUpBuffer();
         _size = newSize;
-        if (newSize > 0) {
+        if (newSize > 0)
+        {
             _buf = new T[newSize];
-        } else {
+        }
+        else
+        {
             _buf = nullptr;
         }
     }
@@ -114,6 +133,14 @@ public:
 private:
     size_t _size;
     T* _buf;
+
+    void _cleanUpBuffer()
+    {
+        if (_buf != nullptr)
+        {
+            delete[] _buf;
+        }
+    }
 };
 
 }

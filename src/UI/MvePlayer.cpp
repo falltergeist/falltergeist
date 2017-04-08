@@ -615,7 +615,7 @@ void MvePlayer::_decodeFrame(uint8_t* data, uint32_t len)
     }
 }
 
-void MvePlayer::_decodeVideo(uint8_t* data, uint32_t len)
+void MvePlayer::_decodeVideo( uint8_t* data, uint32_t len )
 {
 /*
     int16_t nFrameHot, nFrameCold;
@@ -761,7 +761,7 @@ uint32_t MvePlayer::getAudio(uint8_t* data, uint32_t len)
     }
     uint32_t res = 0;
     int16_t *buf = (int16_t*)data;
-    while (res < len/2)
+    while (res < len / 2)
     {
         if (_samplesReady <= 0) break;
         *buf = _audioBuf[_audioBufHead];

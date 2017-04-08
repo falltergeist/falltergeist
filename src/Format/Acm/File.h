@@ -26,6 +26,7 @@
 #define FALLTERGEIST_FORMAT_ACM_FILE_H
 
 // C++ standard includes
+#include <cstdint>
 
 // Falltergeist includes
 #include "../Dat/Item.h"
@@ -53,7 +54,7 @@ public:
     int channels() const;
     int bitrate() const;
 
-    size_t readSamples(short* buffer, size_t count);
+    size_t readSamples(uint16_t* buffer, size_t count);
 
     int samplesLeft() const;
 

@@ -24,6 +24,7 @@
 #include <string>
 
 // Falltergeist includes
+#include "../Base/Buffer.h"
 #include "../Exception.h"
 #include "../Format/Acm/File.h"
 #include "../Game/Game.h"
@@ -80,11 +81,11 @@ namespace Falltergeist
             Mix_HookMusic(NULL, NULL);
         }
 
-        std::function<void(void*, uint8_t*, int)> musicCallback;
+        std::function<void(void*, uint8_t*, uint32_t)> musicCallback;
 
         void myMusicPlayer(void *udata, uint8_t *stream, int len)
         {
-            musicCallback(udata,stream,len);
+            musicCallback(udata, stream, len);
         }
 
         void Mixer::_musicCallback(void *udata, uint8_t *stream, uint32_t len)
@@ -106,11 +107,10 @@ namespace Falltergeist
             }
 
             // music is stereo. just fetch
-            uint16_t* tmp = new uint16_t[len/2];
-            pacm->readSamples((short int*)tmp, len/2);
+            Base::Buffer<uint16_t> tmp(len / 2);
+            pacm->readSamples(tmp.data(), len / 2);
             SDL_memset(stream, 0, len);
-            SDL_MixAudioFormat(stream, (uint8_t*)tmp, _format, len, static_cast<int>(SDL_MIX_MAXVOLUME * _musicVolume));
-            delete[] tmp;
+            SDL_MixAudioFormat(stream, (uint8_t*)tmp.data(), _format, len, static_cast<int>(SDL_MIX_MAXVOLUME * _musicVolume));
         }
 
         void Mixer::playACMMusic(const std::string& filename, bool loop)
@@ -136,15 +136,14 @@ namespace Falltergeist
                 return;
             }
 
-            uint16_t* tmp = new uint16_t[len/2];
+            Base::Buffer<uint16_t> tmp(len / 2);
             uint16_t* sstr = (uint16_t*)stream;
-            pacm->readSamples((short int*)tmp, len/4);
-            for (uint32_t i = 0; i < len/4; i++)
+            pacm->readSamples(tmp.data(), len / 4);
+            for (size_t i = 0; i < len / 4; i++)
             {
                 sstr[i*2] = tmp[i];
-                sstr[i*2+1] = tmp[i];
+                sstr[i*2 + 1] = tmp[i];
             }
-            delete[] tmp;
         }
 
         void Mixer::playACMSpeech(const std::string& filename)
@@ -193,15 +192,14 @@ namespace Falltergeist
             {
                 auto samples = acm->samples();
 
-                uint8_t* memory = new uint8_t[samples * 2];
-                auto cnt = acm->readSamples((short*)memory, samples)*2;
+                Base::Buffer<uint16_t> tmpSamples(samples);
+                auto cnt = acm->readSamples(tmpSamples.data(), samples) * 2;
 
                 SDL_AudioCVT cvt;
                 SDL_BuildAudioCVT(&cvt, AUDIO_S16LSB, 1, 22050, AUDIO_S16LSB, 2, 22050); //convert from mono to stereo
 
-                cvt.buf = (Uint8*)malloc(cnt*cvt.len_mult);
-                memcpy(cvt.buf, (uint8_t*)memory, cnt);
-                delete[] memory;
+                cvt.buf = (Uint8*)malloc(cnt * cvt.len_mult);
+                memcpy(cvt.buf, tmpSamples.data(), cnt);
                 cvt.len = static_cast<int>(cnt);
                 SDL_ConvertAudio(&cvt);
 

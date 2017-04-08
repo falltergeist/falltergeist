@@ -115,7 +115,7 @@ int32_t File::_makeNewSamples()
     return 1;
 }
 
-size_t File::readSamples(short* buffer, size_t count)
+size_t File::readSamples(uint16_t* buffer, size_t count)
 {
     size_t res = 0;
     while (res < count) {

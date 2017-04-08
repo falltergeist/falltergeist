@@ -29,6 +29,7 @@
 #include <vector>
 
 // Falltergeist includes
+#include "../../Base/Buffer.h"
 #include "../Dat/Item.h"
 
 // Third party includes
@@ -52,11 +53,9 @@ class File : public Dat::Item
 
 public:
     File(Dat::Stream&& stream);
-    ~File() override;
     uint32_t* rgba();
 
-    // TODO: return by reference
-    std::vector<Glyph*>* glyphs();
+    const std::vector<Glyph>& glyphs() const;
 
     uint32_t maximumHeight() const;
     uint32_t maximumWidth() const;
@@ -64,17 +63,16 @@ public:
     uint32_t verticalGap() const;
     uint32_t spaceWidth() const;
 
-
 protected:
-    // TODO: replace with vector of objects
-    std::vector<Glyph*> _glyphs;
+    std::vector<Glyph> _glyphs;
     uint32_t _maximumHeight = 0;
     uint32_t _maximumWidth = 0;
     uint32_t _horizontalGap = 0;
     uint32_t _spaceWidth = 0;
     uint32_t _verticalGap = 0;
-    uint32_t* _rgba = 0;
+    Base::Buffer<uint32_t> _rgba;
     uint32_t _numchars;
+
     void _loadRgba(Dat::Stream& stream);
 };
 
