@@ -36,20 +36,13 @@ namespace Format
 namespace Mve
 {
 
-Opcode::Opcode(uint16_t length)
+Opcode::Opcode(uint16_t length) : _data(length)
 {
-    _length = length;
-    _data = new uint8_t[_length];
-}
-
-Opcode::~Opcode()
-{
-    delete [] _data;
 }
 
 uint16_t Opcode::length() const
 {
-    return _length;
+    return static_cast<uint16_t>(_data.size());
 }
 
 uint8_t Opcode::type() const
@@ -72,9 +65,9 @@ void Opcode::setVersion(uint8_t value)
     _version = value;
 }
 
-uint8_t* Opcode::data() const
+uint8_t* Opcode::data()
 {
-    return _data;
+    return _data.data();
 }
 
 }

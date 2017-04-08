@@ -36,18 +36,6 @@ namespace Format
 namespace Mve
 {
 
-Chunk::Chunk()
-{
-}
-
-Chunk::~Chunk()
-{
-    for (auto opcode : _opcodes)
-    {
-        delete opcode;
-    }
-}
-
 uint16_t Chunk::length() const
 {
     return _length;
@@ -68,9 +56,14 @@ void Chunk::setType(uint16_t value)
     _type = value;
 }
 
-std::vector<Opcode*>* Chunk::opcodes()
+std::vector<Opcode>& Chunk::opcodes()
 {
-    return &_opcodes;
+    return _opcodes;
+}
+
+const std::vector<Opcode>& Chunk::opcodes() const
+{
+    return _opcodes;
 }
 
 }

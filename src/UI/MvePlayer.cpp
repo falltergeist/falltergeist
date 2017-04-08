@@ -819,16 +819,16 @@ void MvePlayer::_processChunk()
         return;
     }
 
-    const auto opcodes = *_chunk->opcodes();
-    for (const auto opcode : opcodes)
+    auto& opcodes = _chunk->opcodes();
+    for (auto& opcode : opcodes)
     {
-        switch (static_cast<Opcode>(opcode->type()))
+        switch (static_cast<Opcode>(opcode.type()))
         {
             case Opcode::END_CHUNK:
               _chunk = _mve->getNextChunk();
               break;
             case Opcode::CREATE_TIMER:
-              _delay = get_int(opcode->data()) * get_short(opcode->data() + 4);
+              _delay = get_int(opcode.data()) * get_short(opcode.data() + 4);
               _timerStarted = true;
               _lastts=CrossPlatform::microtime();
               break;
@@ -837,21 +837,21 @@ void MvePlayer::_processChunk()
                 return;
                 break;
             case Opcode::INIT_AUDIO_BUF:
-                _initAudioBuffer(opcode->version(), opcode->data());
+                _initAudioBuffer(opcode.version(), opcode.data());
                 break;
             case Opcode::START_AUDIO:
                 _playAudio();
                 break;
             case Opcode::INIT_VIDIO_BUF:
                 //can be called multiple times (intro and tanker)
-                _initVideoBuffer(opcode->data());
+                _initVideoBuffer(opcode.data());
                 break;
             case Opcode::SEND_BUFFER:
-                _sendVideoBuffer(opcode->data());
+                _sendVideoBuffer(opcode.data());
                 //copy buffer to texture (with pallete)
                 break;
             case Opcode::AUDIO_DATA:
-                _decodeAudio(opcode->data(), opcode->length());
+                _decodeAudio(opcode.data(), opcode.length());
                 break;
             case Opcode::AUDIO_SILENCE:
                 break;
@@ -862,15 +862,15 @@ void MvePlayer::_processChunk()
                 break;
             case Opcode::SET_PALETTE:
                 //can be called several times (intro and tanker)
-                _setPalette(opcode->data());
+                _setPalette(opcode.data());
                 break;
             case Opcode::SET_PALETTE_COMPRESSED:
                 break;
             case Opcode::SET_DECODING_MAP:
-                _setDecodingMap(opcode->data());
+                _setDecodingMap(opcode.data());
                 break;
             case Opcode::VIDEO_DATA:
-                _decodeVideo(opcode->data(), opcode->length());
+                _decodeVideo(opcode.data(), opcode.length());
                 //set (buffer) texture
                 break;
             case Opcode::UNKNOWN_0x06:

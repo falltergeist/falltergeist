@@ -72,21 +72,22 @@ std::unique_ptr<Chunk> File::getNextChunk()
         auto chunk = std::make_unique<Chunk>();
         chunk->setLength(_stream.uint16());
         chunk->setType(_stream.uint16());
-        for (unsigned i = 0; i < chunk->length();)
+        for (size_t i = 0; i < chunk->length();)
         {
-            auto opcode = new Opcode(_stream.uint16());
-            opcode->setType(_stream.uint8());
-            opcode->setVersion(_stream.uint8());
-            _stream.readBytes((uint8_t*)opcode->data(), opcode->length());
-            chunk->opcodes()->push_back(opcode);
-            i += opcode->length() + 4;
+            chunk->opcodes().emplace_back(_stream.uint16());
+            auto& opcode = chunk->opcodes().back();
+            opcode.setType(_stream.uint8());
+            opcode.setVersion(_stream.uint8());
+            _stream.readBytes(opcode.data(), opcode.length());
+            i += opcode.length() + 4;
         }
         return chunk;
     }
     return nullptr;
 }
 
-void File::setPosition(unsigned int position) {
+void File::setPosition(unsigned int position)
+{
     _stream.setPosition(position);
 }
 

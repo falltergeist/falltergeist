@@ -29,6 +29,7 @@
 #include <cstdint>
 
 // Falltergeist includes
+#include "../../Base/Buffer.h"
 #include "../Dat/Item.h"
 #include "../Dat/Stream.h"
 
@@ -46,7 +47,7 @@ class File : public Dat::Item
 {
 public:
     File(Dat::Stream&& stream);
-    ~File();
+
     void init();
     void rewind();
 
@@ -58,19 +59,20 @@ public:
 
     int samplesLeft() const;
 
-protected:
+private:
     Dat::Stream _stream;
     int _samplesLeft; // count of unread samples
     int _levels, _subblocks;
     int _blockSize;
-    int* _block = nullptr;
-    int* _values = nullptr;
+    Base::Buffer<uint32_t> _block;
+    uint32_t* _values;
     int _samplesReady;
     std::unique_ptr<ValueUnpacker> _unpacker; // ACM-stream unpacker
     std::unique_ptr<Decoder> _decoder; // IP's subband decoder
     int _samples; // total count of sound samples
     int _channels;
     int _bitrate;
+
     int _makeNewSamples();
 };
 
