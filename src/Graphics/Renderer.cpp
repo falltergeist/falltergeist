@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright 2012-2016 Falltergeist Developers.
  *
  * This file is part of Falltergeist.
@@ -26,6 +26,7 @@
 #include <memory>
 
 // Falltergeist includes
+#include "../Base/Buffer.h"
 #include "../CrossPlatform.h"
 #include "../Event/State.h"
 #include "../Exception.h"
@@ -382,17 +383,17 @@ void Renderer::screenshot()
 
     output = SDL_CreateRGBSurface(0, width(), height(), 32, rmask, gmask, bmask, amask);
     uint8_t *destPixels = (uint8_t*)output->pixels;
-    uint8_t *srcPixels = new uint8_t[width() * height() * 4];
+    Base::Buffer<uint8_t> srcPixels(width() * height() * 4);
 
     glReadBuffer(GL_BACK);
-    glReadPixels(0, 0, width(), height(), GL_RGBA, GL_UNSIGNED_BYTE, srcPixels);
+    glReadPixels(0, 0, width(), height(), GL_RGBA, GL_UNSIGNED_BYTE, srcPixels.data());
 
-    for(int y=0; y<height(); ++y)
+    for (int y = 0; y < height(); ++y)
     {
-        for(int x=0; x<width(); ++x)
+        for (int x = 0; x < width(); ++x)
         {
             uint8_t* pDestPix = &destPixels[((width() * y) + x) * 4];
-            uint8_t* pSrcPix = &srcPixels[((width() * ((height()-1) - y)) + x) * 4];
+            uint8_t* pSrcPix = &srcPixels[((width() * ((height() - 1) - y)) + x) * 4];
             pDestPix[0] = pSrcPix[0];
             pDestPix[1] = pSrcPix[1];
             pDestPix[2] = pSrcPix[2];
@@ -401,7 +402,6 @@ void Renderer::screenshot()
     }
 
     IMG_SavePNG(output,filename.c_str());
-    delete[] srcPixels;
     SDL_FreeSurface(output);
     Logger::info("GAME") << "Screenshot saved to " + filename << std::endl;
 

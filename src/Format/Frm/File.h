@@ -1,4 +1,4 @@
-/*
+﻿/*
  * The MIT License (MIT)
  *
  * Copyright (c) 2012-2015 Falltergeist developers
@@ -30,7 +30,9 @@
 #include <vector>
 
 // Falltergeist includes
+#include "../../Base/Buffer.h"
 #include "../Dat/Item.h"
+#include "../Frm/Direction.h"
 #include "../Enums.h"
 
 // Third party includes
@@ -55,7 +57,6 @@ class File : public Dat::Item
 {
 public:
     File(Dat::Stream&& stream);
-    ~File();
 
     uint32_t version() const;
     uint16_t framesPerSecond() const;
@@ -70,20 +71,19 @@ public:
     int16_t offsetY(unsigned int direction = 0, unsigned int frame = 0) const;
 
     uint32_t* rgba(Pal::File* palFile);
-    std::vector<bool>* mask(Pal::File* palFile);
+    std::vector<bool>& mask(Pal::File* palFile);
 
-    std::vector<Direction*>* directions();
+    const std::vector<Direction>& directions() const;
 
 protected:
-    // TODO: use vector
-    uint32_t* _rgba = 0;
+    Base::Buffer<uint32_t> _rgba;
     uint32_t _version = 0;
     uint16_t _framesPerSecond = 0;
     uint16_t _framesPerDirection = 0;
     uint16_t _actionFrame = 0;
     bool _animatedPalette = false;
-    // TODO: replace with vector of objects
-    std::vector<Direction*> _directions;
+
+    std::vector<Direction> _directions;
     std::vector<bool> _mask;
 };
 

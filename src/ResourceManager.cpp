@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright 2012-2016 Falltergeist Developers.
  *
  * This file is part of Falltergeist.
@@ -341,7 +341,7 @@ Graphics::Texture* ResourceManager::texture(const string& filename)
         if (!frm) return nullptr;
         texture = new Graphics::Texture(frm->width(), frm->height());
         texture->loadFromRGBA(frm->rgba(palFileType("color.pal")));
-        texture->setMask(*frm->mask(palFileType("color.pal")));
+        texture->setMask(frm->mask(palFileType("color.pal")));
     }
     else
     {

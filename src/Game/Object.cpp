@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright 2012-2016 Falltergeist Developers.
  *
  * This file is part of Falltergeist.
@@ -202,7 +202,7 @@ void Object::_generateUi()
     auto frm = ResourceManager::getInstance()->frmFileType(FID());
     if (frm)
     {
-        if (frm->framesPerDirection() > 1 || frm->directions()->size() > 1)
+        if (frm->framesPerDirection() > 1 || frm->directions().size() > 1)
         {
             auto queue = std::make_unique<UI::AnimationQueue>();
             queue->animations().push_back(std::make_unique<UI::Animation>(ResourceManager::getInstance()->FIDtoFrmName(FID()), orientation()));

@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright 2012-2016 Falltergeist Developers.
  *
  * This file is part of Falltergeist.
@@ -227,7 +227,7 @@ bool Texture::opaque(unsigned int x, unsigned int y)
 
 void Texture::setMask(std::vector<bool> mask)
 {
-    _mask=mask;
+    _mask = mask;
 }
 
 }

@@ -1,4 +1,4 @@
-/*
+﻿/*
  * The MIT License (MIT)
  *
  * Copyright (c) 2012-2015 Falltergeist developers
@@ -28,6 +28,7 @@
 // C++ standard includes
 
 // Falltergeist includes
+#include "../../Base/Buffer.h"
 #include "../Dat/Item.h"
 #include "../Enums.h"
 
@@ -49,17 +50,16 @@ class File : public Dat::Item
 {
 public:
     File(Dat::Stream&& stream);
-    ~File() override;
 
     uint16_t width() const;
     uint16_t height() const;
 
-    uint32_t* rgba() const;
+    uint32_t* rgba();
 
 protected:
     uint16_t _width = 0;
     uint16_t _height = 0;
-    uint32_t* _rgba = nullptr;
+    Base::Buffer<uint32_t> _rgba;
 
 };
 

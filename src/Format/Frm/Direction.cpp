@@ -1,4 +1,4 @@
-/*
+﻿/*
  * The MIT License (MIT)
  *
  * Copyright (c) 2012-2015 Falltergeist developers
@@ -38,18 +38,6 @@ namespace Format
 namespace Frm
 {
 
-Direction::Direction()
-{
-}
-
-Direction::~Direction()
-{
-    for (auto frame : _frames)
-    {
-        delete frame;
-    }
-}
-
 int16_t Direction::shiftX() const
 {
     return _shiftX;
@@ -77,22 +65,20 @@ uint32_t Direction::dataOffset() const
 
 uint16_t Direction::width() const
 {
-    std::vector<uint16_t> widths;
-    for (auto frame : _frames)
-    {
-        widths.push_back(frame->width()+2);
-    }
-    return static_cast<uint16_t>((*std::max_element(widths.begin(), widths.end())) * _frames.size());
+    auto widest = std::max_element(_frames.begin(), _frames.end(), [](const Frame& a, const Frame& b) {
+        return a.width() < b.width();
+    });
+
+    return static_cast<uint16_t>((widest->width() + 2) * _frames.size());
 }
 
 uint16_t Direction::height() const
 {
-    std::vector<uint16_t> heights;
-    for (auto frame : _frames)
+    auto tallest = std::max_element(_frames.begin(), _frames.end(), [](const Frame& a, const Frame& b)
     {
-        heights.push_back(frame->height()+2);
-    }
-    return *std::max_element(heights.begin(), heights.end());
+        return a.height() < b.height();
+    });
+    return tallest->height() + 2;
 }
 
 void Direction::setDataOffset(uint32_t value)
@@ -100,9 +86,14 @@ void Direction::setDataOffset(uint32_t value)
     _dataOffset = value;
 }
 
-std::vector<Frame*>* Direction::frames()
+std::vector<Frame>& Direction::frames()
 {
-    return &_frames;
+    return _frames;
+}
+
+const std::vector<Frame>& Direction::frames() const
+{
+    return _frames;
 }
 
 }

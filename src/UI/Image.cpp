@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright 2012-2016 Falltergeist Developers.
  *
  * This file is part of Falltergeist.
@@ -54,14 +54,14 @@ void Image::render(bool eggTransparency)
 
 Image::Image(Format::Frm::File *frm, unsigned int direction) : Falltergeist::UI::Base(), _sprite(frm)
 {
-    if (direction >= frm->directions()->size())
+    if (direction >= frm->directions().size())
     {
         //throw Exception("Image::Image(frm, direction) - direction not found: " + std::to_string(direction));
         direction = 0;
     }
-    auto dir = frm->directions()->at(direction);
-    setOffset(frm->offsetX(direction) + dir->shiftX(),
-      frm->offsetY(direction) + dir->shiftY());
+    auto& dir = frm->directions().at(direction);
+    setOffset(frm->offsetX(direction) + dir.shiftX(),
+      frm->offsetY(direction) + dir.shiftY());
 }
 
 Size Image::size() const

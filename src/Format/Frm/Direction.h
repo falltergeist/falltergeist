@@ -1,4 +1,4 @@
-/*
+﻿/*
  * The MIT License (MIT)
  *
  * Copyright (c) 2012-2015 Falltergeist developers
@@ -41,13 +41,10 @@ namespace Frm
 {
 class Frame;
 
-class Direction      
+class Direction
 {
 
 public:
-    Direction();
-    ~Direction();
-
     int16_t shiftX() const;
     void setShiftX(int16_t value);
 
@@ -60,13 +57,14 @@ public:
     uint16_t width() const;
     uint16_t height() const;
 
-    std::vector<Frame*>* frames();
+    std::vector<Frame>& frames();
+    const std::vector<Frame>& frames() const;
 
 protected:
     int16_t _shiftX = 0;
     int16_t _shiftY = 0;
     uint32_t _dataOffset = 0;
-    std::vector<Frame*> _frames;
+    std::vector<Frame> _frames;
 
 };
 
