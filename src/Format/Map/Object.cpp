@@ -1,4 +1,4 @@
-/*
+﻿/*
  * The MIT License (MIT)
  *
  * Copyright (c) 2012-2015 Falltergeist developers
@@ -42,15 +42,11 @@ Object::Object()
 
 Object::~Object()
 {
-    for (auto child : _children)
-    {
-        delete child;
-    }
 }
 
-std::vector<Object*>* Object::children()
+std::vector<std::unique_ptr<Object>>& Object::children()
 {
-    return &_children;
+    return _children;
 }
 
 unsigned int Object::OID()

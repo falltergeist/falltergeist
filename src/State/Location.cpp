@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright 2012-2016 Falltergeist Developers.
  *
  * This file is part of Falltergeist.
@@ -258,11 +258,11 @@ namespace Falltergeist
                 _MVARS.push_back(mvar);
             }
 
-            auto mapObjects = mapFile->elevations()->at(_currentElevation)->objects();
+            auto& mapObjects = mapFile->elevations().at(_currentElevation).objects();
 
             auto ticks = SDL_GetTicks();
             // @todo remove old objects from hexagonal grid
-            for (auto mapObject : *mapObjects)
+            for (auto& mapObject : mapObjects)
             {
                 auto object = Game::ObjectFactory::getInstance()->createObject(mapObject->PID());
                 if (!object)
@@ -295,7 +295,7 @@ namespace Falltergeist
 
                 if (auto container = dynamic_cast<Game::ContainerItemObject*>(object))
                 {
-                    for (auto child : *mapObject->children())
+                    for (auto& child : mapObject->children())
                     {
                         auto item = dynamic_cast<Game::ItemObject*>(Game::ObjectFactory::getInstance()->createObject(child->PID()));
                         if (!item)
@@ -311,7 +311,7 @@ namespace Falltergeist
                 // TODO: use common interface...
                 if (auto critter = dynamic_cast<Game::CritterObject*>(object))
                 {
-                    for (auto child : *mapObject->children())
+                    for (auto& child : mapObject->children())
                     {
                         auto item = dynamic_cast<Game::ItemObject*>(Game::ObjectFactory::getInstance()->createObject(child->PID()));
                         if (!item)
@@ -402,23 +402,23 @@ namespace Falltergeist
                 _locationScript = std::make_unique<VM::Script>(ResourceManager::getInstance()->intFileType(mapFile->scriptId()-1), nullptr);
             }
 
-            // Spatials
-            for (auto script: *mapFile->scripts())
+            // Spatial Scripts
+            for (auto& script: mapFile->scripts())
             {
-                if (script->type() == Format::Map::Script::Type::SPATIAL)
+                if (script.type() == Format::Map::Script::Type::SPATIAL)
                 {
-                    auto tile = script->spatialTile();
+                    auto tile = script.spatialTile();
                     auto hex = tile & 0xFFFF;
                     auto elev = ((tile >> 28) & 0xf) >> 1;
                     if (elev == _currentElevation)
                     {
-                        auto spatial = new Game::SpatialObject(script->spatialRadius());
+                        auto spatial = std::make_unique<Game::SpatialObject>(script.spatialRadius());
                         spatial->setElevation(elev);
                         spatial->setHexagon(_hexagonGrid->at(hex));
-                        auto intFile = ResourceManager::getInstance()->intFileType(script->scriptId());
-                        if (intFile) spatial->setScript(new VM::Script(intFile, spatial));
+                        auto intFile = ResourceManager::getInstance()->intFileType(script.scriptId());
+                        if (intFile) spatial->setScript(new VM::Script(intFile, spatial.get()));
 
-                        _spatials.emplace_back(spatial);
+                        _spatials.emplace_back(std::move(spatial));
                     }
 
                 }
@@ -433,13 +433,13 @@ namespace Falltergeist
                     unsigned int x = (100 - tileY - 1)*48 + 32*(tileX - 1);
                     unsigned int y = tileX*24 +(tileY - 1)*12 + 1;
 
-                    unsigned int tileNum = mapFile->elevations()->at(_currentElevation)->floorTiles()->at(i);
+                    unsigned int tileNum = mapFile->elevations().at(_currentElevation).floorTiles().at(i);
                     if (tileNum > 1)
                     {
                         _floor->tiles()[i] = std::make_unique<UI::Tile>(tileNum, Point(x, y));
                     }
 
-                    tileNum = mapFile->elevations()->at(_currentElevation)->roofTiles()->at(i);
+                    tileNum = mapFile->elevations().at(_currentElevation).roofTiles().at(i);
                     if (tileNum > 1)
                     {
                         _roof->tiles()[i] = std::make_unique<UI::Tile>(tileNum, Point(x, y - 96));
