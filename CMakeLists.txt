@@ -28,7 +28,10 @@ set(falltergeist_VERSION  0.3.0)
 
 include_directories(src)
 
-set(USE_CONAN EXISTS ${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
+if(EXISTS ${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
+	set(USE_CONAN TRUE)
+endif()
+
 if (USE_CONAN)
 	include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
 	conan_basic_setup()
