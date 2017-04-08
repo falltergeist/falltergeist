@@ -45,7 +45,8 @@ class Object
 
 public:
     Object();
-    ~Object();
+    Object(const Object&) = delete;
+    Object& operator= (const Object&) = delete;
 
     unsigned int ammount();
     void setAmmount(unsigned int value);

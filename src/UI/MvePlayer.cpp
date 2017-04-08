@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright 2012-2016 Falltergeist Developers.
  *
  * This file is part of Falltergeist.
@@ -824,14 +824,11 @@ void MvePlayer::_processChunk()
     {
         switch (static_cast<Opcode>(opcode.type()))
         {
-            case Opcode::END_CHUNK:
-              _chunk = _mve->getNextChunk();
-              break;
             case Opcode::CREATE_TIMER:
-              _delay = get_int(opcode.data()) * get_short(opcode.data() + 4);
-              _timerStarted = true;
-              _lastts=CrossPlatform::microtime();
-              break;
+                _delay = get_int(opcode.data()) * get_short(opcode.data() + 4);
+                _timerStarted = true;
+                _lastts = CrossPlatform::microtime();
+                break;
             case Opcode::END_STREAM:
                 _finished = true;
                 return;
@@ -848,7 +845,7 @@ void MvePlayer::_processChunk()
                 break;
             case Opcode::SEND_BUFFER:
                 _sendVideoBuffer(opcode.data());
-                //copy buffer to texture (with pallete)
+                //copy buffer to texture (with palette)
                 break;
             case Opcode::AUDIO_DATA:
                 _decodeAudio(opcode.data(), opcode.length());
@@ -884,6 +881,7 @@ void MvePlayer::_processChunk()
                 break;
         }
     }
+    _chunk = _mve->getNextChunk();
 }
 
 void MvePlayer::think()

@@ -1,4 +1,4 @@
-/*
+﻿/*
  * The MIT License (MIT)
  *
  * Copyright (c) 2012-2015 Falltergeist developers
@@ -32,7 +32,6 @@
 #include <vector>
 
 // Falltergeist includes
-#include "../../Base/Buffer.h"
 #include "../../Format/Dat/Item.h"
 
 // Third party includes
@@ -74,7 +73,7 @@ protected:
     uint16_t _horizontalGap = 0;
     uint16_t _spaceWidth = 0;
     uint16_t _verticalGap = 0;
-    Base::Buffer<uint32_t> _rgba;
+    std::vector<uint32_t> _rgba;
 
     void _loadRgba(Dat::Stream& stream);
 };

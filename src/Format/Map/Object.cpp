@@ -40,10 +40,6 @@ Object::Object()
 {
 }
 
-Object::~Object()
-{
-}
-
 std::vector<std::unique_ptr<Object>>& Object::children()
 {
     return _children;

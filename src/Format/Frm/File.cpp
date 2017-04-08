@@ -72,7 +72,7 @@ File::File(Dat::Stream&& stream)
     }
 
     // for each direction
-    for (auto direction : _directions)
+    for (auto& direction : _directions)
     {
         // jump to frames data at frames area
         stream.setPosition(direction.dataOffset() + 62);

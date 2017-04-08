@@ -1,4 +1,4 @@
-/*
+﻿/*
  * The MIT License (MIT)
  *
  * Copyright (c) 2012-2015 Falltergeist developers
@@ -103,33 +103,22 @@ File::File(Dat::Stream&& stream)
                 text.replace(text.find("\r"), 1, "");
             }
 
-            auto message = new Message();
-            message->setNumber(std::stoi(number));
-            message->setSound(sound);
-            message->setText(text);
+            Message message;
+            message.setNumber(std::stoi(number));
+            message.setSound(sound);
+            message.setText(text);
             _messages.push_back(message);
         }
     }
 }
 
-File::~File() {
-    for (auto message : _messages) {
-        delete message;
-    }
-}
-
-std::vector<Message*>* File::messages()
-{
-    return &_messages;
-}
-
 Message* File::message(unsigned int number)
 {
-    for (auto message : _messages)
+    for (auto& message : _messages)
     {
-        if (message->number() == number)
+        if (message.number() == number)
         {
-            return message;
+            return &message;
         }
     }
     throw Exception("File::message() - number is out of range: " + std::to_string(number));

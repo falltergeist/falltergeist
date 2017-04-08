@@ -1,4 +1,4 @@
-/*
+﻿/*
  * The MIT License (MIT)
  *
  * Copyright (c) 2012-2015 Falltergeist developers
@@ -42,10 +42,10 @@ namespace Frm
 
 class Frame
 {
-
 public:
     Frame(uint16_t width, uint16_t height);
     Frame(const Frame& other) = default;
+    Frame& operator= (const Frame&) = delete;
 
     uint16_t width() const;
     uint16_t height() const;

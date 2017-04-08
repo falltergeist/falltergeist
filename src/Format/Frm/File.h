@@ -30,7 +30,6 @@
 #include <vector>
 
 // Falltergeist includes
-#include "../../Base/Buffer.h"
 #include "../Dat/Item.h"
 #include "../Frm/Direction.h"
 #include "../Enums.h"
@@ -76,7 +75,7 @@ public:
     const std::vector<Direction>& directions() const;
 
 protected:
-    Base::Buffer<uint32_t> _rgba;
+    std::vector<uint32_t> _rgba;
     uint32_t _version = 0;
     uint16_t _framesPerSecond = 0;
     uint16_t _framesPerDirection = 0;

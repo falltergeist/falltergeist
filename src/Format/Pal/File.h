@@ -1,4 +1,4 @@
-/*
+﻿/*
  * The MIT License (MIT)
  *
  * Copyright (c) 2012-2015 Falltergeist developers
@@ -30,6 +30,7 @@
 
 // Falltergeist includes
 #include "../Dat/Item.h"
+#include "../Pal/Color.h"
 
 // Third party includes
 
@@ -45,23 +46,16 @@ class Stream;
 namespace Pal
 {
 
-class Color;
-
 class File : public Dat::Item
 {
 
 public:
     File(Dat::Stream&& stream);
-    ~File();
 
-    // TODO: return by reference
-    std::vector<Color*>* colors();
-
-    Color* color(unsigned index) const;
+    const Color* color(unsigned index) const;
 
 protected:
-    // TODO: vector of objects
-    std::vector<Color*> _colors;
+    std::vector<Color> _colors;
 
 };
 
