@@ -1,4 +1,4 @@
-/*
+﻿/*
  * The MIT License (MIT)
  *
  * Copyright (c) 2012-2015 Falltergeist developers
@@ -99,6 +99,8 @@ void File::rewind()
 {
     _stream.setPosition(HEADER_SIZE);
     _samplesReady = 0;
+    _samplesLeft = _samples;
+    _unpacker->reset();
 }
 
 int32_t File::_makeNewSamples()
