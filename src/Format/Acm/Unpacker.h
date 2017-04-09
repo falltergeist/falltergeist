@@ -75,6 +75,7 @@ public:
     int t3_7bits(int pass, int ind);
 
     int init();
+    void reset();
     int getOneBlock(int *block);
 
 protected:

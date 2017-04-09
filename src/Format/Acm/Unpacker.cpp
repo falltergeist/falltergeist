@@ -566,6 +566,15 @@ ValueUnpacker::~ValueUnpacker()
     }
 }
 
+void ValueUnpacker::reset()
+{
+    _nextBits = 0;
+    _availBits = 0;
+    _bufferBitOffset = UNPACKER_BUFFER_SIZE;
+    _buffMiddle = _ampBuffer + 0x8000;
+    _blockPtr = nullptr;
+}
+
 }
 }
 }
