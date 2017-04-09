@@ -20,6 +20,9 @@
 #ifndef FALLTERGEIST_BASE_BUFFER_H
 #define FALLTERGEIST_BASE_BUFFER_H
 
+// C++ standard includes
+#include <cstddef>
+
 namespace Falltergeist
 {
 namespace Base

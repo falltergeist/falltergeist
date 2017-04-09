@@ -43,9 +43,13 @@ namespace Frm
 class Frame
 {
 public:
+    Frame() = default;
     Frame(uint16_t width, uint16_t height);
-    Frame(const Frame& other) = default;
+    Frame(const Frame& other) = delete;
+    Frame(Frame&& other) = default;
     Frame& operator= (const Frame&) = delete;
+    Frame& operator= (Frame&&) = default;
+    ~Frame() = default;
 
     uint16_t width() const;
     uint16_t height() const;

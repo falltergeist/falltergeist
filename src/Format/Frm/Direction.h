@@ -30,6 +30,7 @@
 #include <vector>
 
 // Falltergeist includes
+#include "../Frm/Frame.h"
 
 // Third party includes
 
@@ -39,7 +40,6 @@ namespace Format
 {
 namespace Frm
 {
-class Frame;
 
 class Direction
 {
@@ -49,6 +49,7 @@ public:
     Direction(const Direction&) = delete;
     Direction& operator= (const Direction&) = delete;
     Direction& operator= (Direction&&) = default;
+    ~Direction() = default;
 
     int16_t shiftX() const;
     void setShiftX(int16_t value);

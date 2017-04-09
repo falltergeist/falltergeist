@@ -824,6 +824,8 @@ void MvePlayer::_processChunk()
     {
         switch (static_cast<Opcode>(opcode.type()))
         {
+            case Opcode::END_CHUNK:
+                break;
             case Opcode::CREATE_TIMER:
                 _delay = get_int(opcode.data()) * get_short(opcode.data() + 4);
                 _timerStarted = true;

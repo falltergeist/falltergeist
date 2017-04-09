@@ -40,13 +40,14 @@ namespace Format
 namespace Acm
 {
 
-class ValueUnpacker;
 class Decoder;
+class ValueUnpacker;
 
 class File : public Dat::Item
 {
 public:
     File(Dat::Stream&& stream);
+    ~File();
 
     void init();
     void rewind();

@@ -359,7 +359,7 @@ std::unique_ptr<Object> File::_readObject(Dat::Stream& stream, ProFileTypeLoader
         default:
             throw Exception("File::_readObject() - unknown type");
     }
-    return std::move(object);
+    return object;
 }
 
 const std::vector<Elevation>& File::elevations() const

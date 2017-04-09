@@ -30,6 +30,7 @@
 
 // Falltergeist includes
 #include "../Dat/Item.h"
+#include "../Fon/Glyph.h"
 
 // Third party includes
 
@@ -44,8 +45,6 @@ class Stream;
 
 namespace Fon
 {
-
-class Glyph;
 
 class File : public Dat::Item
 {

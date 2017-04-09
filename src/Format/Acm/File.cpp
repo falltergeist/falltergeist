@@ -88,6 +88,10 @@ File::File(Dat::Stream&& stream) : _stream(std::move(stream))
     }
 }
 
+File::~File()
+{
+}
+
 void File::rewind()
 {
     _stream.setPosition(HEADER_SIZE);

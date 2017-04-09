@@ -32,6 +32,7 @@
 #include <vector>
 
 // Falltergeist includes
+#include "../../Format/Aaf/Glyph.h"
 #include "../../Format/Dat/Item.h"
 
 // Third party includes
@@ -47,8 +48,6 @@ class Stream;
 
 namespace Aaf
 {
-
-class Glyph;
 
 class File : public Dat::Item
 {

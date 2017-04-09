@@ -33,6 +33,7 @@
 // Falltergeist includes
 #include "../../Format/Dat/Item.h"
 #include "../../Format/Dat/Stream.h"
+#include "../../Format/Int/Procedure.h"
 
 // Third party includes
 
@@ -42,7 +43,6 @@ namespace Format
 {
 namespace Int
 {
-class Procedure;
 
 class File : public Dat::Item
 {

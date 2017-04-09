@@ -74,23 +74,9 @@ public:
 private:
     int32_t _PID = 0;
     int32_t _scriptId = -1;
-    int32_t _unknown1 = 0;
     uint32_t _spatialTile = 0;
     uint32_t _spatialRadius = 0;
     uint32_t _timerTime = 0;
-    int32_t _unknown4 = 0;
-    int32_t _unknown5 = 0;
-    int32_t _unknown6 = 0;
-    int32_t _unknown7 = 0;
-    int32_t _unknown8 = 0;
-    int32_t _unknown9 = 0;
-    int32_t _unknown10 = 0;
-    int32_t _unknown11 = 0;
-    int32_t _unknown12 = 0;
-    int32_t _unknown13 = 0;
-    int32_t _unknown14 = 0;
-    int32_t _unknown15 = 0;
-    int32_t _unknown16 = 0;
 
     Type _type;
 };
