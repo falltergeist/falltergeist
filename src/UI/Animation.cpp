@@ -82,7 +82,7 @@ Animation::Animation(const std::string& frmName, unsigned int direction) : Fallt
         auto frame = std::make_unique<AnimationFrame>();
         auto srcFrame = frm->directions()->at(direction)->frames()->at(f);
         frame->setSize(Size(srcFrame->width(), srcFrame->height()));
-        frame->setOffset({xOffset, yOffset});
+        frame->setOffset({xOffset-2, yOffset-4});
         frame->setPosition(Point(x, y));
 
         auto fps = frm->framesPerSecond();
