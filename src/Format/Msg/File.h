@@ -1,4 +1,4 @@
-/*
+﻿/*
  * The MIT License (MIT)
  *
  * Copyright (c) 2012-2015 Falltergeist developers
@@ -30,6 +30,7 @@
 
 // Falltergeist includes
 #include "../../Format/Dat/Item.h"
+#include "../../Format/Msg/Message.h"
 
 // Third party includes
 
@@ -45,21 +46,15 @@ class Stream;
 namespace Msg
 {
 
-class Message;
-
 class File : public Dat::Item
 {
 public:
     File(Dat::Stream&& stream);
-    ~File();
 
-    // TODO: return by reference
-    std::vector<Message*>* messages();
     Message* message(unsigned int number);
 
-protected:
-    // TODO: use vector of objects
-    std::vector<Message*> _messages;
+private:
+    std::vector<Message> _messages;
 
 };
 

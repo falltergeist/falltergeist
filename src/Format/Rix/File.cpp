@@ -1,4 +1,4 @@
-/*
+﻿/*
  * The MIT License (MIT)
  *
  * Copyright (c) 2012-2015 Falltergeist developers
@@ -63,17 +63,13 @@ File::File(Dat::Stream&& stream)
         palette[i] = (r << 26 | g << 18 | b << 10 | 0x000000FF);  // RGBA
     }
 
-    _rgba = new uint32_t[_width * _height];
+    _rgba.resize(_width * _height);
 
     // Data
     for (unsigned i = 0; i != (unsigned)_width * _height; ++i)
     {
         _rgba[i] = palette[stream.uint8()];
     }
-}
-
-File::~File() {
-    delete[] _rgba;
 }
 
 uint16_t File::width() const
@@ -86,9 +82,9 @@ uint16_t File::height() const
     return _height;
 }
 
-uint32_t* File::rgba() const
+uint32_t* File::rgba()
 {
-    return _rgba;
+    return _rgba.data();
 }
 
 }

@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright 2012-2016 Falltergeist Developers.
  *
  * This file is part of Falltergeist.
@@ -60,16 +60,16 @@ Animation::Animation(const std::string& frmName, unsigned int direction) : Fallt
     _animation = std::make_unique<Graphics::Animation>(frmName);
 
     _actionFrame = frm->actionFrame();
-    auto dir = frm->directions()->at(direction);
-    _shift = Point(dir->shiftX(), dir->shiftY());
+    auto& dir = frm->directions().at(direction);
+    _shift = Point(dir.shiftX(), dir.shiftY());
 
     // Frame offset in texture's animation
-    unsigned int x = 0;
-    unsigned int y = 0;
+    int x = 0;
+    int y = 0;
 
     for (unsigned int d = 0; d != direction; ++d)
     {
-        y += frm->directions()->at(d)->height(); //? может i - 1
+        y += frm->directions().at(d).height(); //? может i - 1
     }
 
     int xOffset = 1;
@@ -80,10 +80,10 @@ Animation::Animation(const std::string& frmName, unsigned int direction) : Fallt
         yOffset += frm->offsetY(direction, f);
 
         auto frame = std::make_unique<AnimationFrame>();
-        auto srcFrame = frm->directions()->at(direction)->frames()->at(f);
-        frame->setSize(Size(srcFrame->width(), srcFrame->height()));
-        frame->setOffset({xOffset, yOffset});
-        frame->setPosition(Point(x, y));
+        auto& srcFrame = frm->directions().at(direction).frames().at(f);
+        frame->setSize({ srcFrame.width(), srcFrame.height() });
+        frame->setOffset({ xOffset, yOffset });
+        frame->setPosition({ x, y });
 
         auto fps = frm->framesPerSecond();
         if (fps == 0)

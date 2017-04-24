@@ -1,4 +1,4 @@
-/*
+﻿/*
  * The MIT License (MIT)
  *
  * Copyright (c) 2012-2016 Falltergeist developers
@@ -30,6 +30,7 @@
 
 // Falltergeist includes
 #include "../Dat/Item.h"
+#include "../Fon/Glyph.h"
 
 // Third party includes
 
@@ -45,18 +46,14 @@ class Stream;
 namespace Fon
 {
 
-class Glyph;
-
 class File : public Dat::Item
 {
 
 public:
     File(Dat::Stream&& stream);
-    ~File() override;
     uint32_t* rgba();
 
-    // TODO: return by reference
-    std::vector<Glyph*>* glyphs();
+    const std::vector<Glyph>& glyphs() const;
 
     uint32_t maximumHeight() const;
     uint32_t maximumWidth() const;
@@ -64,17 +61,16 @@ public:
     uint32_t verticalGap() const;
     uint32_t spaceWidth() const;
 
-
 protected:
-    // TODO: replace with vector of objects
-    std::vector<Glyph*> _glyphs;
+    std::vector<Glyph> _glyphs;
     uint32_t _maximumHeight = 0;
     uint32_t _maximumWidth = 0;
     uint32_t _horizontalGap = 0;
     uint32_t _spaceWidth = 0;
     uint32_t _verticalGap = 0;
-    uint32_t* _rgba = 0;
+    std::vector<uint32_t> _rgba;
     uint32_t _numchars;
+
     void _loadRgba(Dat::Stream& stream);
 };
 

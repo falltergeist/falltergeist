@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright 2012-2016 Falltergeist Developers.
  *
  * This file is part of Falltergeist.
@@ -50,7 +50,7 @@ namespace Falltergeist
             setDefaultOrientation(mapFile->defaultOrientation());
             
             // Initialize MAP vars
-            if (mapFile->MVARS()->size() > 0)
+            if (mapFile->MVARS().size() > 0)
             {
                 auto gam = ResourceManager::getInstance()->gamFileType("maps/" + name() + ".gam");
                 if (gam)

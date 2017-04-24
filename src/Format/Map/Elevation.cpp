@@ -1,4 +1,4 @@
-/*
+﻿/*
  * The MIT License (MIT)
  *
  * Copyright (c) 2012-2015 Falltergeist developers
@@ -41,27 +41,34 @@ Elevation::Elevation()
 {
 }
 
-Elevation::~Elevation()
+std::vector<std::unique_ptr<Object>>& Elevation::objects()
 {
-    for(auto object : _objects)
-    {
-        delete object;
-    }
+    return _objects;
 }
 
-std::vector<Object*>* Elevation::objects()
+const std::vector<std::unique_ptr<Object>>& Elevation::objects() const
 {
-    return &_objects;
+    return _objects;
 }
 
-std::vector<uint16_t>* Elevation::floorTiles()
+std::vector<uint16_t>& Elevation::floorTiles()
 {
-    return &_floorTiles;
+    return _floorTiles;
 }
 
-std::vector<uint16_t>* Elevation::roofTiles()
+const std::vector<uint16_t>& Elevation::floorTiles() const
 {
-    return &_roofTiles;
+    return _floorTiles;
+}
+
+std::vector<uint16_t>& Elevation::roofTiles()
+{
+    return _roofTiles;
+}
+
+const std::vector<uint16_t>& Elevation::roofTiles() const
+{
+    return _roofTiles;
 }
 
 }

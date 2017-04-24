@@ -79,7 +79,7 @@ unsigned short FON::height()
 
 unsigned short FON::glyphWidth(uint8_t ch)
 {
-    return _fon->glyphs()->at(ch)->width();
+    return _fon->glyphs().at(ch).width();
 }
 
 }

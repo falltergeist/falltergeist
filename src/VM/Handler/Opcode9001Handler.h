@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright 2012-2014 Falltergeist Developers.
  *
  * This file is part of Falltergeist.
@@ -29,19 +29,21 @@
 
 namespace Falltergeist
 {
-    namespace VM
-    {
-        namespace Handler
-        {
-            class Opcode9001 : public OpcodeHandler
-            {
-                public:
-                    Opcode9001(VM::Script* script);
+namespace VM
+{
+namespace Handler
+{
 
-                private:
-                    void _run() override;
-            };
-        }
-    }
+class Opcode9001 : public OpcodeHandler
+{
+public:
+    Opcode9001(VM::Script* script);
+
+private:
+    void _run() override;
+};
+}
+
+}
 }
 #endif // FALLTERGEIST_VM_HANDLER_OPCODE9001_H

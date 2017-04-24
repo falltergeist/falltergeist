@@ -28,7 +28,8 @@
 // C++ standard includes
 #include <cstdint>
 
-// libfallteregeist includes
+// Falltergeist includes
+#include "../../Base/Buffer.h"
 
 // Third party includes
 
@@ -44,7 +45,6 @@ class Opcode
 
 public:
     Opcode(uint16_t length);
-    ~Opcode();
 
     uint16_t length() const;
 
@@ -54,13 +54,13 @@ public:
     uint8_t version() const;
     void setVersion(uint8_t value);
 
-    uint8_t* data() const;
+    uint8_t* data();
 
 protected:
     uint16_t _length = 0;
     uint8_t _type = 0;
     uint8_t _version = 0;
-    uint8_t* _data = nullptr;
+    Base::Buffer<uint8_t> _data;
 
 };
 

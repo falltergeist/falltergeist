@@ -1,4 +1,4 @@
-/*
+﻿/*
  * The MIT License (MIT)
  *
  * Copyright (c) 2012-2015 Falltergeist developers
@@ -42,14 +42,14 @@ File::File(Dat::Stream&& stream)
 {
     stream.setPosition(3);
 
-    _colors.push_back(new Color(0, 0, 0, 0)); // zero color (transparent)
+    _colors.emplace_back(0, 0, 0, 0); // zero color (transparent)
 
     for (unsigned i = 1; i != 256; ++i)
     {
         uint8_t r = stream.uint8();
         uint8_t g = stream.uint8();
         uint8_t b = stream.uint8();
-        _colors.push_back(new Color(r,g,b));
+        _colors.emplace_back(r, g, b);
     }
 
     // I guess this section requires a little explanation
@@ -71,65 +71,54 @@ File::File(Dat::Stream&& stream)
     for (unsigned i = 229; i<=254; ++i)
     {
         // magic, sorry
-        _colors.at(i)->setAlpha(51);
-        _colors.at(i)->setRed(153);
-        _colors.at(i)->nomod();
+        _colors.at(i).setAlpha(51);
+        _colors.at(i).setRed(153);
+        _colors.at(i).nomod();
     }
 
     // SLIME
     for (unsigned int i=229; i<=232; i++)
     {
-        _colors.at(i)->setGreen(0); //
-        _colors.at(i)->setBlue((i-229)*51);
+        _colors.at(i).setGreen(0); //
+        _colors.at(i).setBlue((i-229)*51);
     }
 
     // MONITORS
     for (unsigned int i=233; i<=237; i++)
     {
-        _colors.at(i)->setGreen(51); //
-        _colors.at(i)->setBlue((i-233)*51);
+        _colors.at(i).setGreen(51); //
+        _colors.at(i).setBlue((i-233)*51);
     }
 
     // SLOW FIRE
     for (unsigned int i=238; i<=242; i++)
     {
-        _colors.at(i)->setGreen(102); //
-        _colors.at(i)->setBlue((i-238)*51);
+        _colors.at(i).setGreen(102); //
+        _colors.at(i).setBlue((i-238)*51);
     }
 
     // FAST FIRE
     for (unsigned int i=243; i<=247; i++)
     {
-        _colors.at(i)->setGreen(153); //
-        _colors.at(i)->setBlue((i-243)*51);
+        _colors.at(i).setGreen(153); //
+        _colors.at(i).setBlue((i-243)*51);
     }
 
     // SHORE
     for (unsigned int i=248; i<=253; i++)
     {
-        _colors.at(i)->setGreen(204); //
-        _colors.at(i)->setBlue((i-248)*51);
+        _colors.at(i).setGreen(204); //
+        _colors.at(i).setBlue((i-248)*51);
     }
 
     // ALARM
-    _colors.at(254)->setGreen(255); //
-    _colors.at(254)->setBlue(0);
+    _colors.at(254).setGreen(255); //
+    _colors.at(254).setBlue(0);
 }
 
-File::~File() {
-    for (auto color : _colors) {
-        delete color;
-    }
-}
-
-std::vector<Color*>* File::colors()
+const Color* File::color(unsigned index) const
 {
-    return &_colors;
-}
-
-Color* File::color(unsigned index) const
-{
-    return _colors.at(index);
+    return &_colors.at(index);
 }
 
 }

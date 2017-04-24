@@ -1,4 +1,4 @@
-/*
+﻿/*
  * The MIT License (MIT)
  *
  * Copyright (c) 2012-2015 Falltergeist developers
@@ -107,7 +107,7 @@ inline void ValueUnpacker::_prepareBits(int bits)
         unsigned char one_byte;
         if (_bufferBitOffset == UNPACKER_BUFFER_SIZE)
         {
-            unsigned long remains = stream->bytesRemains();
+            auto remains = stream->bytesRemains();
             if (remains > UNPACKER_BUFFER_SIZE)
                 remains = UNPACKER_BUFFER_SIZE;
             _bufferBitOffset = UNPACKER_BUFFER_SIZE - remains;

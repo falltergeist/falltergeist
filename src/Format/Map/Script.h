@@ -1,4 +1,4 @@
-/*
+﻿/*
  * The MIT License (MIT)
  *
  * Copyright (c) 2012-2015 Falltergeist developers
@@ -39,9 +39,9 @@ namespace Format
 namespace Map
 {
 
+// TODO: replace with struct
 class Script
 {
-
 public:
     enum class Type
     {
@@ -52,8 +52,6 @@ public:
         CRITTER
 
     };
-    Script();
-    ~Script();
 
     int32_t PID() const;
     void setPID(int32_t PID);
@@ -61,37 +59,24 @@ public:
     int32_t scriptId() const;
     void setScriptId(int32_t value);
 
-    Type type();
+    Type type() const;
     void setType(Type type);
 
     void setSpatialTile(uint32_t tile);
-    uint32_t spatialTile();
+    uint32_t spatialTile() const;
 
     void setSpatialRadius(uint32_t radius);
-    uint32_t spatialRadius();
+    uint32_t spatialRadius() const;
 
     void setTimerTime(uint32_t time);
-    uint32_t timerTime();
-protected:
+    uint32_t timerTime() const;
+
+private:
     int32_t _PID = 0;
     int32_t _scriptId = -1;
-    int32_t _unknown1 = 0;
     uint32_t _spatialTile = 0;
     uint32_t _spatialRadius = 0;
     uint32_t _timerTime = 0;
-    int32_t _unknown4 = 0;
-    int32_t _unknown5 = 0;
-    int32_t _unknown6 = 0;
-    int32_t _unknown7 = 0;
-    int32_t _unknown8 = 0;
-    int32_t _unknown9 = 0;
-    int32_t _unknown10 = 0;
-    int32_t _unknown11 = 0;
-    int32_t _unknown12 = 0;
-    int32_t _unknown13 = 0;
-    int32_t _unknown14 = 0;
-    int32_t _unknown15 = 0;
-    int32_t _unknown16 = 0;
 
     Type _type;
 };

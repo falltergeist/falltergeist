@@ -1,4 +1,4 @@
-/*
+﻿/*
  * The MIT License (MIT)
  *
  * Copyright (c) 2012-2015 Falltergeist developers
@@ -45,7 +45,8 @@ class Object
 
 public:
     Object();
-    ~Object();
+    Object(const Object&) = delete;
+    Object& operator= (const Object&) = delete;
 
     unsigned int ammount();
     void setAmmount(unsigned int value);
@@ -164,9 +165,9 @@ public:
     int ammoPID();
     void setAmmoPID(int PID);
 
-    std::vector<Object*>* children();
+    std::vector<std::unique_ptr<Object>>& children();
 
-protected:
+private:
     unsigned int _ammount = 0;
     unsigned int _unknown1;
     unsigned int _unknown2;
@@ -208,7 +209,7 @@ protected:
     int _mapScriptId = -1;
     int _scriptId = -1;
     int _hexPosition = -1;
-    std::vector<Object*> _children;
+    std::vector<std::unique_ptr<Object>> _children;
 
 };
 

@@ -1,4 +1,4 @@
-/*
+﻿/*
  * The MIT License (MIT)
  *
  * Copyright (c) 2012-2015 Falltergeist developers
@@ -30,6 +30,7 @@
 #include <memory>
 
 // Falltergeist includes
+#include "../Map/Object.h"
 
 // Third party includes
 
@@ -39,22 +40,23 @@ namespace Format
 {
 namespace Map
 {
-class Object;
 
 class Elevation
 {
 
 public:
     Elevation();
-    ~Elevation();
-    std::vector<Object*>* objects();
-    std::vector<uint16_t>* floorTiles();
-    std::vector<uint16_t>* roofTiles();
+    std::vector<std::unique_ptr<Object>>& objects();
+    const std::vector<std::unique_ptr<Object>>& objects() const;
+    std::vector<uint16_t>& floorTiles();
+    const std::vector<uint16_t>& floorTiles() const;
+    std::vector<uint16_t>& roofTiles();
+    const std::vector<uint16_t>& roofTiles() const;
 
 protected:
     std::vector<uint16_t> _floorTiles;
     std::vector<uint16_t> _roofTiles;
-    std::vector<Object*> _objects;
+    std::vector<std::unique_ptr<Object>> _objects;
 
 };
 

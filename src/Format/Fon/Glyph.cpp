@@ -36,13 +36,7 @@ namespace Format
 namespace Fon
 {
 
-
-Glyph::Glyph(uint32_t width, uint32_t height)
-{
-
-}
-
-Glyph::~Glyph()
+Glyph::Glyph(uint32_t width, uint32_t height) : _width(width), _height(height)
 {
 }
 

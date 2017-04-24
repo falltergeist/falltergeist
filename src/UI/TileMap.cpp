@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright 2012-2016 Falltergeist Developers.
  *
  * This file is part of Falltergeist.
@@ -50,6 +50,10 @@ TileMap::TileMap()
 {
 }
 
+TileMap::~TileMap()
+{
+}
+
 void TileMap::init()
 {
     auto ticks = SDL_GetTicks();
@@ -68,10 +72,8 @@ void TileMap::init()
     {
         auto& tile = it.second;
 
-
-
         auto position = std::find(numbers.begin(), numbers.end(), tile->number());
-        if ( position == numbers.end())
+        if (position == numbers.end())
         {
             tile->setIndex(static_cast<unsigned>(numbers.size()));
             numbers.push_back(tile->number());
@@ -100,7 +102,7 @@ void TileMap::init()
         float vh = static_cast<float>(vy + 36.0);
 
         vertices.push_back(glm::vec2(vx, vy));
-        vertices.push_back( glm::vec2(vw, vy) );
+        vertices.push_back(glm::vec2(vw, vy));
         vertices.push_back(glm::vec2(vx, vh));
         vertices.push_back(glm::vec2(vw, vh));
 
@@ -116,10 +118,10 @@ void TileMap::init()
         float w = static_cast<float>(x + 80.0) / Game::getInstance()->renderer()->maxTextureSize();
         float h = static_cast<float>(y + 36.0) / Game::getInstance()->renderer()->maxTextureSize();
 
-        UV.push_back(glm::vec2(fx,fy));
-        UV.push_back(glm::vec2(w,fy));
-        UV.push_back(glm::vec2(fx,h));
-        UV.push_back(glm::vec2(w,h));
+        UV.push_back(glm::vec2(fx, fy));
+        UV.push_back(glm::vec2(w, fy));
+        UV.push_back(glm::vec2(fx, h));
+        UV.push_back(glm::vec2(w, h));
 
     }
 
@@ -127,26 +129,26 @@ void TileMap::init()
 
     Logger::info("GAME") << "Tilemap uniq tiles " << numbers.size() << std::endl;
 
-    _atlases = (uint32_t)std::ceil((float)numbers.size()/(float)_tilesPerAtlas);
+    _atlases = (uint32_t)std::ceil((float)numbers.size() / (float)_tilesPerAtlas);
     Logger::info("GAME") << "Tilemap atlases " << _atlases << std::endl;
 
     auto tilesLst = ResourceManager::getInstance()->lstFileType("art/tiles/tiles.lst");
 
-    for (uint8_t i=0;i<_atlases;i++)
+    for (uint8_t i = 0; i < _atlases; i++)
     {
-        SDL_Surface* tmp = SDL_CreateRGBSurface(0,Game::getInstance()->renderer()->maxTextureSize(), Game::getInstance()->renderer()->maxTextureSize(), 32, 0xff000000,0x00ff0000,0x0000ff00,0x000000ff);
+        SDL_Surface* tmp = SDL_CreateRGBSurface(0, Game::getInstance()->renderer()->maxTextureSize(), Game::getInstance()->renderer()->maxTextureSize(), 32, 0xff000000, 0x00ff0000, 0x0000ff00, 0x000000ff);
         SDL_SetSurfaceBlendMode(tmp, SDL_BLENDMODE_NONE);
-        for (unsigned int j = _tilesPerAtlas*i; j < std::min((uint32_t)numbers.size(), (uint32_t)_tilesPerAtlas*(i+1)); ++j)
+        for (unsigned int j = _tilesPerAtlas*i; j < std::min((uint32_t)numbers.size(), (uint32_t)_tilesPerAtlas*(i + 1)); ++j)
         {
             auto frm = ResourceManager::getInstance()->frmFileType("art/tiles/" + tilesLst->strings()->at(numbers.at(j)));
 
-            SDL_Surface* tileSurf = SDL_CreateRGBSurfaceFrom(frm->rgba(ResourceManager::getInstance()->palFileType("color.pal")), 82, 38, 32, 82*4, 0xff000000, 0x00ff0000, 0x0000ff00, 0x000000ff);
+            SDL_Surface* tileSurf = SDL_CreateRGBSurfaceFrom(frm->rgba(ResourceManager::getInstance()->palFileType("color.pal")), 82, 38, 32, 82 * 4, 0xff000000, 0x00ff0000, 0x0000ff00, 0x000000ff);
             SDL_SetSurfaceBlendMode(tileSurf, SDL_BLENDMODE_NONE);
             int x = (j % maxW) * 80;
             int y = (j / maxW) * 36;
-            SDL_Rect srcrect = {1,1,80,36};
-            SDL_Rect rect = {x,y,80,36};
-            SDL_BlitSurface(tileSurf,&srcrect,tmp,&rect);
+            SDL_Rect srcrect = { 1,1,80,36 };
+            SDL_Rect rect = { x,y,80,36 };
+            SDL_BlitSurface(tileSurf, &srcrect, tmp, &rect);
             SDL_FreeSurface(tileSurf);
         }
         //push new atlas
@@ -158,19 +160,15 @@ void TileMap::init()
     Logger::info("GAME") << "Tilemap generated in " << (SDL_GetTicks() - ticks) << std::endl;
 }
 
-TileMap::~TileMap()
-{
-}
-
 void TileMap::render()
 {
     auto camera = Game::getInstance()->locationState()->camera();
     std::vector<std::vector<GLuint>> indexes;
-    for (uint8_t i =0; i<_atlases;i++)
+    for (uint8_t i = 0; i < _atlases; i++)
     {
         indexes.push_back(std::vector<GLuint>());
     }
-    int cnt=0;
+    int cnt = 0;
 
     auto topLeft = camera->topLeft();
     auto size = camera->size();
@@ -181,17 +179,17 @@ void TileMap::render()
         if (tile->enabled() && Rect::intersects(tile->position(), tileSize, topLeft, size))
         {
             uint32_t aIndex = tile->index() / _tilesPerAtlas;
-            indexes.at(aIndex).push_back(cnt*4);
-            indexes.at(aIndex).push_back(cnt*4+1);
-            indexes.at(aIndex).push_back(cnt*4+2);
-            indexes.at(aIndex).push_back(cnt*4+3);
-            indexes.at(aIndex).push_back(cnt*4+2);
-            indexes.at(aIndex).push_back(cnt*4+1);
+            indexes.at(aIndex).push_back(cnt * 4);
+            indexes.at(aIndex).push_back(cnt * 4 + 1);
+            indexes.at(aIndex).push_back(cnt * 4 + 2);
+            indexes.at(aIndex).push_back(cnt * 4 + 3);
+            indexes.at(aIndex).push_back(cnt * 4 + 2);
+            indexes.at(aIndex).push_back(cnt * 4 + 1);
         }
         cnt++;
     }
 
-    for (uint32_t i = 0; i< _atlases; i++)
+    for (uint32_t i = 0; i < _atlases; i++)
     {
         //render atlas with indexes->at(atlasIndex)
         _tilemap.get()->render(topLeft, indexes.at(i), i);
@@ -212,14 +210,15 @@ bool TileMap::inside()
 
 void TileMap::enableAll()
 {
-    for (auto& tile: _tiles)
+    for (auto& tile : _tiles)
     {
         tile.second->enable();
     }
 
 }
 
-std::map<unsigned int, std::unique_ptr<Tile>> &TileMap::tiles() {
+std::map<unsigned int, std::unique_ptr<Tile>> &TileMap::tiles()
+{
     return _tiles;
 }
 
@@ -227,21 +226,21 @@ void TileMap::disable(unsigned int num)
 {
     int x = num % 100;
     int y = num / 100;
-    _floodDisable(x,y);
+    _floodDisable(x, y);
 }
 
 void TileMap::_floodDisable(int x, int y)
 {
     // TODO: this is basic 4-way floodfill
     // maybe better replace it with scanlines or QuickFill
-    int num = y*100+x;
+    int num = y * 100 + x;
     if (_tiles.count(num) && _tiles.at(num)->enabled())
     {
         _tiles.at(num)->disable();
-        _floodDisable(x+1,y);
-        _floodDisable(x-1,y);
-        _floodDisable(x,y+1);
-        _floodDisable(x,y-1);
+        _floodDisable(x + 1, y);
+        _floodDisable(x - 1, y);
+        _floodDisable(x, y + 1);
+        _floodDisable(x, y - 1);
     }
 }
 
@@ -249,20 +248,23 @@ bool TileMap::opaque(const Point &pos)
 {
     auto camera = Game::getInstance()->locationState()->camera();
 
-
     auto tilesLst = ResourceManager::getInstance()->lstFileType("art/tiles/tiles.lst");
     for (auto& it : _tiles)
     {
         auto& tile = it.second;
         const Size tileSize = Size(80, 36);
-        if (tile->enabled() && Rect::inRect(pos+camera->topLeft(), tile->position(),tileSize))
+        if (tile->enabled() && Rect::inRect(pos + camera->topLeft(), tile->position(), tileSize))
         {
             auto frm = ResourceManager::getInstance()->frmFileType("art/tiles/" + tilesLst->strings()->at(tile->number()));
-            auto mask = frm->mask(ResourceManager::getInstance()->palFileType("color.pal"));
-            auto position = pos-tile->position()+camera->topLeft()+Point(1,1);
+            auto& mask = frm->mask(ResourceManager::getInstance()->palFileType("color.pal"));
+            auto position = pos - tile->position() + camera->topLeft() + Point(1, 1);
 
-            if ((position.y()*82+position.x()) > 0 &&  ((unsigned)(position.y()*82+position.x()) < mask->size())) {
-                if (mask->at(position.y()*82+position.x())) return true;
+            if ((position.y() * 82 + position.x()) > 0 && ((unsigned)(position.y() * 82 + position.x()) < mask.size()))
+            {
+                if (mask.at(position.y() * 82 + position.x()))
+                {
+                    return true;
+                }
             }
         }
     }

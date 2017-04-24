@@ -74,7 +74,7 @@ File::File(Dat::Stream&& stream) : _stream(std::move(stream))
     _bitrate = hdr.rate;
     _blockSize = ( 1 << _levels) * _subblocks;
 
-    _block = (int32_t *) malloc(sizeof(int32_t)* _blockSize);
+    _block.resize(_blockSize);
 
     _unpacker = std::make_unique<ValueUnpacker>(_levels, _subblocks, &_stream);
     if (!_unpacker || !_unpacker->init())
@@ -88,11 +88,8 @@ File::File(Dat::Stream&& stream) : _stream(std::move(stream))
     }
 }
 
-File::~File() {
-    if (_block != nullptr) {
-        free(_block);
-        _block = nullptr;
-    }
+File::~File()
+{
 }
 
 void File::rewind()
@@ -105,19 +102,21 @@ void File::rewind()
 
 int32_t File::_makeNewSamples()
 {
-    if (!_unpacker->getOneBlock(_block))
+    // TODO: maybe use fixed-size ints in Unpacker?
+    if (!_unpacker->getOneBlock(reinterpret_cast<int*>(_block.data())))
     {
         // FIXME: is it an error or the end of the stream?
         return 0;
     }
-    _decoder->decodeData(_block, _subblocks);
-    _values = _block;
+    // TODO: maybe use fixed-size ints in Decoder?
+    _decoder->decodeData(reinterpret_cast<int*>(_block.data()), _subblocks);
+    _values = _block.data();
     _samplesReady = ( _blockSize > _samplesLeft) ? _samplesLeft : _blockSize;
     _samplesLeft -= _samplesReady;
     return 1;
 }
 
-size_t File::readSamples(short* buffer, size_t count)
+size_t File::readSamples(uint16_t* buffer, size_t count)
 {
     size_t res = 0;
     while (res < count) {
@@ -127,7 +126,7 @@ size_t File::readSamples(short* buffer, size_t count)
             if (!_makeNewSamples())
                 break;
         }
-        *buffer = ( short ) ( ( *_values) >> _levels);
+        *buffer = ( short ) ( (*_values) >> _levels);
         _values++;
         buffer++;
         res += 1;

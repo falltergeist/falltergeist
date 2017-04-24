@@ -1,4 +1,4 @@
-/*
+﻿/*
  * The MIT License (MIT)
  *
  * Copyright (c) 2012-2015 Falltergeist developers
@@ -44,40 +44,38 @@ namespace Dat
 
 Stream::Stream(Stream&& other) :
         _buffer(std::move(other._buffer)),
-        _size(other._size),
         _endianness(other._endianness) 
 {
-    auto cBuf = _rawBuffer();
-    setg(cBuf, cBuf, cBuf + _size);
+    auto cBuf = _buffer.data();
+    setg(cBuf, cBuf, cBuf + _buffer.size());
 }
 
 Stream& Stream::operator= (Stream&& other)
 {
     _buffer = std::move(other._buffer);
-    _size = other._size;
     _endianness = other._endianness;
-    auto cBuf = _rawBuffer();
-    setg(cBuf, cBuf, cBuf + _size);
+    auto cBuf = _buffer.data();
+    setg(cBuf, cBuf, cBuf + _buffer.size());
     return *this;
 }
 
 Stream::Stream(std::ifstream& stream)
 {
     stream.seekg(0, std::ios::end);
-    _size = static_cast<int32_t>(stream.tellg());
+    auto size = static_cast<size_t>(stream.tellg());
     stream.seekg(0, std::ios::beg);
 
-    _buffer.resize(_size);
-    auto cBuf = _rawBuffer();
-    stream.read(cBuf, _size);
-    setg(cBuf, cBuf, cBuf + _size);
+    _buffer.resize(size);
+    auto cBuf = _buffer.data();
+    stream.read(cBuf, size);
+    setg(cBuf, cBuf, cBuf + size);
 }
 
 Stream::Stream(Entry& datFileEntry)
 {
-    _size = datFileEntry.unpackedSize();
-    _buffer.resize(_size);
-    auto cBuf = _rawBuffer();
+    auto size = datFileEntry.unpackedSize();
+    _buffer.resize(size);
+    auto cBuf = _buffer.data();
 
     auto datFile = datFileEntry.datFile();
     unsigned int oldPos = datFile->position();
@@ -92,7 +90,7 @@ Stream::Stream(Entry& datFileEntry)
         zStream.total_in = datFileEntry.packedSize();
         zStream.avail_in = datFileEntry.packedSize();
         zStream.next_in = reinterpret_cast<unsigned char*>(packedData.data());
-        zStream.total_out = zStream.avail_out = _size;
+        zStream.total_out = zStream.avail_out = static_cast<uint32_t>(_buffer.size());
         zStream.next_out = reinterpret_cast<unsigned char*>(_buffer.data());
         zStream.zalloc = Z_NULL;
         zStream.zfree = Z_NULL;
@@ -101,16 +99,16 @@ Stream::Stream(Entry& datFileEntry)
         inflate(&zStream, Z_FINISH);      // zlib function
         inflateEnd(&zStream);             // zlib function
     } else {
-        datFile->readBytes(cBuf, _size);
+        datFile->readBytes(cBuf, size);
     }
 
     datFile->setPosition(oldPos);
-    setg(cBuf, cBuf, cBuf + _size);
+    setg(cBuf, cBuf, cBuf + size);
 }
 
-uint32_t Stream::size()
+size_t Stream::size() const
 {
-    return _size;
+    return _buffer.size();
 }
 
 std::streambuf::int_type Stream::underflow()
@@ -122,41 +120,39 @@ std::streambuf::int_type Stream::underflow()
     return traits_type::to_int_type(*gptr());
 }
 
-Stream& Stream::setPosition(unsigned int pos)
+Stream& Stream::setPosition(size_t pos)
 {
-    auto cBuf = _rawBuffer();
-    setg(cBuf, cBuf + pos, cBuf + _size);
+    auto cBuf = _buffer.data();
+    setg(cBuf, cBuf + pos, cBuf + _buffer.size());
     return *this;
 }
 
-uint32_t Stream::position()
+size_t Stream::position() const
 {
-    return static_cast<uint32_t>(gptr() - eback());
+    return gptr() - eback();
 }
 
-Stream& Stream::skipBytes(unsigned int numberOfBytes)
+Stream& Stream::skipBytes(size_t numberOfBytes)
 {
-    auto cBuf = _rawBuffer();
-    setg(cBuf, gptr() + numberOfBytes, cBuf + _size);
+    auto cBuf = _buffer.data();
+    setg(cBuf, gptr() + numberOfBytes, cBuf + _buffer.size());
     return *this;
 }
 
-Stream& Stream::readBytes(uint8_t* destination, uint32_t size)
+Stream& Stream::readBytes(uint8_t* destination, size_t size)
 {
     sgetn((char*)destination, size);
     return *this;
-}
-
-char* Stream::_rawBuffer()
-{
-    return reinterpret_cast<char*>(_buffer.data());
 }
 
 Stream& Stream::operator>>(uint32_t &value)
 {
     char* buff = reinterpret_cast<char*>(&value);
     sgetn(buff, sizeof(value));
-    if (endianness() == ENDIANNESS::BIG) std::reverse(buff, buff + sizeof(value));
+    if (endianness() == ENDIANNESS::BIG)
+    {
+        std::reverse(buff, buff + sizeof(value));
+    }
     return *this;
 }
 
@@ -169,7 +165,10 @@ Stream& Stream::operator>>(uint16_t &value)
 {
     char* buff = reinterpret_cast<char*>(&value);
     sgetn(buff, sizeof(value));
-    if (endianness() == ENDIANNESS::BIG) std::reverse(buff, buff + sizeof(value));
+    if (endianness() == ENDIANNESS::BIG)
+    {
+        std::reverse(buff, buff + sizeof(value));
+    }
     return *this;
 }
 
@@ -199,7 +198,7 @@ void Stream::setEndianness(ENDIANNESS value)
     _endianness = value;
 }
 
-unsigned int Stream::bytesRemains()
+size_t Stream::bytesRemains()
 {
     return size() - position();
 }

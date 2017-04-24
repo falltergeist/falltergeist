@@ -81,7 +81,7 @@ unsigned short AAF::height()
 
 unsigned short AAF::glyphWidth(uint8_t ch)
 {
-    return _aaf->glyphs()->at(ch)->width();
+    return _aaf->glyphs().at(ch).width();
 }
 
 }

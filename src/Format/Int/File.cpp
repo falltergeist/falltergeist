@@ -1,4 +1,4 @@
-/*
+﻿/*
  * The MIT License (MIT)
  *
  * Copyright (c) 2012-2015 Falltergeist developers
@@ -39,7 +39,8 @@ namespace Format
 namespace Int
 {
 
-File::File(Dat::Stream&& stream) : _stream(std::move(stream)) {
+File::File(Dat::Stream&& stream) : _stream(std::move(stream))
+{
     _stream.setPosition(0);
 
     // Initialization code goes here
@@ -52,19 +53,18 @@ File::File(Dat::Stream&& stream) : _stream(std::move(stream)) {
 
     for (unsigned i = 0; i != proceduresCount; ++i)
     {
-        auto procedure = new Procedure();
+        _procedures.emplace_back();
+        auto& procedure = _procedures.back();
 
         procedureNameOffsets.push_back(_stream.uint32());
-        procedure->setFlags(_stream.uint32());
-        procedure->setDelay(_stream.uint32());
-        procedure->setConditionOffset(_stream.uint32());
-        procedure->setBodyOffset(_stream.uint32());
-        procedure->setArgumentsCounter(_stream.uint32());
-
-        _procedures.push_back(procedure);
+        procedure.setFlags(_stream.uint32());
+        procedure.setDelay(_stream.uint32());
+        procedure.setConditionOffset(_stream.uint32());
+        procedure.setBodyOffset(_stream.uint32());
+        procedure.setArgumentsCounter(_stream.uint32());
     }
 
-    // Identificators table
+    // Identifiers table
     uint32_t tableSize = _stream.uint32();
     unsigned j = 0;
     while (j < tableSize)
@@ -87,7 +87,7 @@ File::File(Dat::Stream&& stream) : _stream(std::move(stream)) {
 
     for (unsigned i = 0; i != procedureNameOffsets.size(); ++i)
     {
-        _procedures.at(i)->setName(_identifiers.at(procedureNameOffsets.at(i)));
+        _procedures.at(i).setName(_identifiers.at(procedureNameOffsets.at(i)));
     }
 
     // STRINGS TABLE
@@ -112,33 +112,27 @@ File::File(Dat::Stream&& stream) : _stream(std::move(stream)) {
     }
 }
 
-File::~File() {
-    for (auto procedure : _procedures) {
-        delete procedure;
-    }
-}
-
-std::map<unsigned int, std::string>* File::identifiers()
+const std::map<unsigned int, std::string>& File::identifiers() const
 {
-    return &_identifiers;
+    return _identifiers;
 }
 
-std::map<unsigned int, std::string>* File::strings()
+const std::map<unsigned int, std::string>& File::strings() const
 {
-    return &_strings;
+    return _strings;
 }
 
-unsigned int File::position()
+size_t File::position() const
 {
     return _stream.position();
 }
 
-void File::setPosition(unsigned int pos)
+void File::setPosition(size_t pos)
 {
     _stream.setPosition(pos);
 }
 
-uint32_t File::size()
+size_t File::size() const
 {
     return _stream.size();
 }
@@ -153,21 +147,21 @@ uint32_t File::readValue()
     return _stream.uint32();
 }
 
-std::vector<Procedure*>* File::procedures()
+const std::vector<Procedure>& File::procedures() const
 {
-    return &_procedures;
+    return _procedures;
 }
 
-Procedure* File::procedure(std::string name)
+const Procedure* File::procedure(const std::string& name) const
 {
-    for (auto procedure : _procedures)
+    for (auto& procedure : _procedures)
     {
-        if (procedure->name() == name)
+        if (procedure.name() == name)
         {
-            return procedure;
+            return &procedure;
         }
     }
-    return 0;
+    return nullptr;
 }
 
 }

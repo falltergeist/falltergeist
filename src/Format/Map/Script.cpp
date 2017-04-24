@@ -1,4 +1,4 @@
-/*
+﻿/*
  * The MIT License (MIT)
  *
  * Copyright (c) 2012-2015 Falltergeist developers
@@ -36,14 +36,6 @@ namespace Format
 namespace Map
 {
 
-Script::Script()
-{
-}
-
-Script::~Script()
-{
-}
-
 int32_t Script::PID() const
 {
     return _PID;
@@ -64,7 +56,7 @@ void Script::setScriptId(int32_t value)
     _scriptId = value;
 }
 
-Script::Type Script::type()
+Script::Type Script::type() const
 {
     return _type;
 }
@@ -79,7 +71,7 @@ void Script::setSpatialTile(uint32_t tile)
     _spatialTile = tile;
 }
 
-uint32_t Script::spatialTile()
+uint32_t Script::spatialTile() const
 {
     return _spatialTile;
 }
@@ -89,7 +81,7 @@ void Script::setSpatialRadius(uint32_t radius)
     _spatialRadius = radius;
 }
 
-uint32_t Script::spatialRadius()
+uint32_t Script::spatialRadius() const
 {
     return _spatialRadius;
 }
@@ -99,7 +91,7 @@ void Script::setTimerTime(uint32_t time)
     _timerTime = time;
 }
 
-uint32_t Script::timerTime()
+uint32_t Script::timerTime() const
 {
     return _timerTime;
 }

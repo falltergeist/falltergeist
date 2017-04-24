@@ -1,4 +1,4 @@
-/*
+﻿/*
  * The MIT License (MIT)
  *
  * Copyright (c) 2012-2015 Falltergeist developers
@@ -78,11 +78,13 @@ void File::init(ProFileTypeLoaderCallback callback)
     stream.skipBytes(4*44); // unkonwn
 
     // MVAR AND SVAR SECTION
+    _MVARS.reserve(_MVARsize);
     for (unsigned int i = 0; i != _MVARsize; ++i)
     {
         _MVARS.push_back(stream.int32());
     }
 
+    _LVARS.reserve(_LVARsize);
     for (unsigned int i = 0; i != _LVARsize; ++i)
     {
         _LVARS.push_back(stream.int32());
@@ -91,12 +93,12 @@ void File::init(ProFileTypeLoaderCallback callback)
     // TILES SECTION
     for (unsigned int i = 0; i < elevations; i++)
     {
-        _elevations.push_back(new Elevation);
+        _elevations.emplace_back();
 
         for (unsigned i = 0; i < 10000; i++)
         {
-            _elevations.back()->roofTiles()->push_back(stream.uint16());
-            _elevations.back()->floorTiles()->push_back(stream.uint16());
+            _elevations.back().roofTiles().push_back(stream.uint16());
+            _elevations.back().floorTiles().push_back(stream.uint16());
         }
     }
 
@@ -115,36 +117,36 @@ void File::init(ProFileTypeLoaderCallback callback)
             uint32_t check = 0;
             for (unsigned j = 0; j < loop; j++)
             {
-                auto script = new Script();
-                script->setPID(stream.int32());
+                Script script;
+                script.setPID(stream.int32());
 
                 stream.uint32(); // next script. unused
 
-                switch ((script->PID() & 0xFF000000) >> 24)
+                switch ((script.PID() & 0xFF000000) >> 24)
                 {
                     case 0:
-                        script->setType(Script::Type::SYSTEM);
+                        script.setType(Script::Type::SYSTEM);
                         break;
                     case 1:
-                        script->setType(Script::Type::SPATIAL);
-                        script->setSpatialTile(stream.uint32());
-                        script->setSpatialRadius(stream.uint32());
+                        script.setType(Script::Type::SPATIAL);
+                        script.setSpatialTile(stream.uint32());
+                        script.setSpatialRadius(stream.uint32());
                         break;
                     case 2:
-                        script->setType(Script::Type::TIMER);
-                        script->setTimerTime(stream.uint32());
+                        script.setType(Script::Type::TIMER);
+                        script.setTimerTime(stream.uint32());
                         break;
                     case 3:
-                        script->setType(Script::Type::ITEM);
+                        script.setType(Script::Type::ITEM);
                         break;
                     case 4:
-                        script->setType(Script::Type::CRITTER);
+                        script.setType(Script::Type::CRITTER);
                         break;
                     default:
                         break;
                 }
                 stream.uint32(); //flags
-                script->setScriptId(stream.int32());
+                script.setScriptId(stream.int32());
                 stream.uint32(); //unknown 5
                 stream.uint32(); //oid == object->OID
                 stream.uint32(); //local var offset
@@ -162,11 +164,6 @@ void File::init(ProFileTypeLoaderCallback callback)
                 {
                     _scripts.push_back(script);
                 }
-                else
-                {
-                    // TODO: use RAII
-                    delete script;
-                }
 
                 if ((j % 16) == 15)
                 {
@@ -183,42 +180,30 @@ void File::init(ProFileTypeLoaderCallback callback)
 
     //OBJECTS SECTION
     stream.uint32(); // objects total
-    for (unsigned i = 0; i != elevations; ++i)
+    for (auto& elev : _elevations)
     {
-        unsigned objectsOnElevation = stream.uint32();
-        for (unsigned j = 0; j != objectsOnElevation; ++j)
+        auto objectsOnElevation = stream.uint32();
+        for (size_t j = 0; j != objectsOnElevation; ++j)
         {
             auto object = _readObject(stream, callback);
-            _elevations.at(i)->objects()->push_back(object);
-
             if (object->inventorySize() > 0)
             {
-                for (unsigned int i = 0; i != object->inventorySize(); ++i)
+                for (size_t i = 0; i < object->inventorySize(); ++i)
                 {
-                    uint32_t ammount = stream.uint32();
+                    uint32_t amount = stream.uint32();
                     auto subobject = _readObject(stream, callback);
-                    subobject->setAmmount(ammount);
-                    object->children()->push_back(subobject);
+                    subobject->setAmmount(amount);
+                    object->children().emplace_back(std::move(subobject));
                 }
             }
+            elev.objects().emplace_back(std::move(object));
         }
     }
 }
 
-File::~File() {
-    for (auto elevation : _elevations) {
-        delete elevation;
-    }
-
-    for (auto script : _scripts) {
-        delete script;
-    }
-}
-
-Object* File::_readObject(Dat::Stream& stream, ProFileTypeLoaderCallback callback)
+std::unique_ptr<Object> File::_readObject(Dat::Stream& stream, ProFileTypeLoaderCallback callback)
 {
-    auto object = new Object();
-
+    auto object = std::make_unique<Object>();
     object->setOID(stream.uint32());
     object->setHexPosition(stream.int32());
     object->setX(stream.uint32());
@@ -243,11 +228,12 @@ Object* File::_readObject(Dat::Stream& stream, ProFileTypeLoaderCallback callbac
     int32_t SID = stream.int32();
     if (SID != -1)
     {
-        for (auto it = _scripts.begin(); it != _scripts.end(); ++it)
+        for (auto& script : _scripts)
         {
-            if ((*it)->PID() == SID)
+            // TODO: comparing PID to SID? If this is not bug, need better name for PID
+            if (script.PID() == SID)
             {
-                object->setMapScriptId((*it)->scriptId());
+                object->setMapScriptId(script.scriptId());
             }
         }
     }
@@ -376,9 +362,9 @@ Object* File::_readObject(Dat::Stream& stream, ProFileTypeLoaderCallback callbac
     return object;
 }
 
-std::vector<Elevation*>* File::elevations()
+const std::vector<Elevation>& File::elevations() const
 {
-    return &_elevations;
+    return _elevations;
 }
 
 unsigned int File::version() const
@@ -431,19 +417,19 @@ unsigned int File::timeSinceEpoch() const
     return _timeSinceEpoch;
 }
 
-std::vector<int>* File::LVARS()
+const std::vector<int>& File::LVARS() const
 {
-    return &_LVARS;
+    return _LVARS;
 }
 
-std::vector<int>* File::MVARS()
+const std::vector<int>& File::MVARS() const
 {
-    return &_MVARS;
+    return _MVARS;
 }
 
-std::vector<Script*>* File::scripts()
+const std::vector<Script>& File::scripts() const
 {
-    return &_scripts;
+    return _scripts;
 }
 
 }

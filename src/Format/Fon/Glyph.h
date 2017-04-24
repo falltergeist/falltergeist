@@ -28,10 +28,10 @@
 // C++ standard includes
 #include <vector>
 #include <cstdint>
+
 // Falltergeist includes
 
 // Third party includes
-
 
 
 namespace Falltergeist
@@ -45,7 +45,6 @@ class Glyph
 {
 public:
     Glyph(uint32_t width, uint32_t height);
-    ~Glyph();
 
     uint32_t width() const;
     void setWidth(uint32_t width);

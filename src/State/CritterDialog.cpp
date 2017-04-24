@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright 2012-2016 Falltergeist Developers.
  *
  * This file is part of Falltergeist.
@@ -242,7 +242,7 @@ namespace Falltergeist
 
             // @todo optimize
             auto script = dialog->script();
-            int newOffset = script->script()->procedures()->at(_functions.at(i))->bodyOffset();
+            int newOffset = script->script()->procedures().at(_functions.at(i)).bodyOffset();
             int oldOffset = script->programCounter() - 2;
             int reaction = 50;
             if (i < _reactions.size())

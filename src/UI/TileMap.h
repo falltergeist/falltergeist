@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright 2012-2016 Falltergeist Developers.
  *
  * This file is part of Falltergeist.
@@ -52,13 +52,15 @@ public:
     TileMap();
     ~TileMap();
 
-    std::map<unsigned int, std::unique_ptr<Tile>>&tiles();
+    std::map<unsigned int, std::unique_ptr<Tile>>& tiles();
     void render();
     void init();
     void setInside(bool inside);
     bool inside();
     void enableAll();
     void disable(unsigned int num);
+
+    // Tests if there is a non-transparent pixel at the given point.
     bool opaque(const Point& pos);
 
 protected:

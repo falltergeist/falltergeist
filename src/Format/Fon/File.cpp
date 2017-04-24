@@ -40,7 +40,8 @@ namespace Format
 namespace Fon
 {
 
-File::File(Dat::Stream&& stream) {
+File::File(Dat::Stream&& stream)
+{
     stream.setPosition(0);
 
     _numchars = stream.uint32();
@@ -58,25 +59,18 @@ File::File(Dat::Stream&& stream) {
         {
             _maximumWidth = width;
         }
-        _glyphs.push_back(new Glyph(width, _maximumHeight));
-        _glyphs.back()->setDataOffset(offset);
+        _glyphs.push_back(Glyph(width, _maximumHeight));
+        _glyphs.back().setDataOffset(offset);
     }
 
-    _spaceWidth = _glyphs.at(0x20)->width();
+    _spaceWidth = _glyphs.at(0x20).width();
 
     _loadRgba(stream);
 }
 
-File::~File() {
-    for (auto glyph : _glyphs) {
-        delete glyph;
-    }
-    delete[] _rgba;
-}
-
 void File::_loadRgba(Dat::Stream& stream)
 {
-    _rgba = new uint32_t[(_maximumWidth+2)*16 * (_maximumHeight+2) * 16]();
+    _rgba.resize((_maximumWidth + 2) * 16 * (_maximumHeight + 2) * 16);
 
     for (unsigned int i=0; i < _numchars; i++)
     {
@@ -84,15 +78,15 @@ void File::_loadRgba(Dat::Stream& stream)
         uint32_t glyphX = (i%16) * _maximumWidth+(i%16)*2+1;
 
         // Move glyph to bottom
-        glyphY += _maximumHeight - _glyphs.at(i)->height();
+        glyphY += _maximumHeight - _glyphs.at(i).height();
 
-        if (_maximumHeight * _glyphs.at(i)->width() != 0)
+        if (_maximumHeight * _glyphs.at(i).width() != 0)
         {
-            uint32_t offset = _glyphs.at(i)->dataOffset();
-            uint32_t bytesPerLine = (_glyphs.at(i)->width() + 7) / 8;
+            uint32_t offset = _glyphs.at(i).dataOffset();
+            uint32_t bytesPerLine = (_glyphs.at(i).width() + 7) / 8;
             for (unsigned int y = 0; y < _maximumHeight; y++)
             {
-                for (unsigned int x = 0; x < _glyphs.at(i)->width(); x++)
+                for (unsigned int x = 0; x < _glyphs.at(i).width(); x++)
                 {
                     // [offset + y * bytesPerLine + (x / 8)]
                     stream.setPosition(0x0414+offset + y * bytesPerLine + (x / 8));
@@ -113,13 +107,14 @@ void File::_loadRgba(Dat::Stream& stream)
     }
 }
 
-uint32_t* File::rgba() {
-    return _rgba;
+uint32_t* File::rgba()
+{
+    return _rgba.data();
 }
 
-std::vector<Glyph *>* File::glyphs()
+const std::vector<Glyph>& File::glyphs() const
 {
-    return &_glyphs;
+    return _glyphs;
 }
 
 uint32_t File::maximumHeight() const

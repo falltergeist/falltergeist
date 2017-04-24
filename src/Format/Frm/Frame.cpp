@@ -1,4 +1,4 @@
-/*
+﻿/*
  * The MIT License (MIT)
  *
  * Copyright (c) 2012-2015 Falltergeist developers
@@ -36,28 +36,10 @@ namespace Format
 namespace Frm
 {
 
-Frame::Frame(uint16_t width, uint16_t height)
+Frame::Frame(uint16_t width, uint16_t height) : _indexes(width * height, 0)
 {
     _width = width;
     _height = height;
-
-    for (unsigned i = 0; i != (unsigned)_width*_height; ++i)
-    {
-        _indexes.push_back(0);
-    }
-}
-
-Frame::Frame(const Frame& other)
-{
-    _width = other._width;
-    _height = other._height;
-    _offsetX = other._offsetX;
-    _offsetY = other._offsetY;
-    _indexes = other._indexes;
-}
-
-Frame::~Frame()
-{
 }
 
 uint16_t Frame::width() const
@@ -90,11 +72,6 @@ void Frame::setOffsetY(int16_t value)
     _offsetY = value;
 }
 
-const std::vector<uint8_t>* Frame::indexes() const
-{
-    return &_indexes;
-}
-
 uint8_t Frame::index(uint16_t x, uint16_t y) const
 {
     if (x >= _width || y >= _height) return 0;
@@ -102,11 +79,9 @@ uint8_t Frame::index(uint16_t x, uint16_t y) const
     return _indexes.at(_width*y + x);
 }
 
-void Frame::setIndex(uint16_t x, uint16_t y, uint8_t index)
+uint8_t* Frame::data()
 {
-    if (x >= _width || y >= _height) return;
-
-    _indexes.at(_width*y + x) = index;
+    return _indexes.data();
 }
 
 }

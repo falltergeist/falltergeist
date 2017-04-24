@@ -1,4 +1,4 @@
-/*
+﻿/*
  * The MIT License (MIT)
  *
  * Copyright (c) 2012-2015 Falltergeist developers
@@ -45,7 +45,7 @@ class Procedure
 {
 
 public:
-    Procedure();       
+    Procedure();
 
     uint32_t flags() const;
     void setFlags(uint32_t flags);

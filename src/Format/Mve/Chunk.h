@@ -45,21 +45,19 @@ class Chunk
 {
 
 public:
-    Chunk();
-    ~Chunk();
-
     uint16_t length() const;
     void setLength(uint16_t value);
 
     uint16_t type() const;
     void setType(uint16_t value);
 
-    std::vector<Opcode*>* opcodes();
+    std::vector<Opcode>& opcodes();
+    const std::vector<Opcode>& opcodes() const;
 
 protected:
     uint16_t _length;
     uint16_t _type;
-    std::vector<Opcode*> _opcodes;
+    std::vector<Opcode> _opcodes;
 
 };
 

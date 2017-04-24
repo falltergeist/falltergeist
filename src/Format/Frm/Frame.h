@@ -1,4 +1,4 @@
-/*
+﻿/*
  * The MIT License (MIT)
  *
  * Copyright (c) 2012-2015 Falltergeist developers
@@ -42,11 +42,14 @@ namespace Frm
 
 class Frame
 {
-
 public:
+    Frame() = default;
     Frame(uint16_t width, uint16_t height);
-    Frame(const Frame& other);
-    ~Frame();
+    Frame(const Frame& other) = delete;
+    Frame(Frame&& other) = default;
+    Frame& operator= (const Frame&) = delete;
+    Frame& operator= (Frame&&) = default;
+    ~Frame() = default;
 
     uint16_t width() const;
     uint16_t height() const;
@@ -57,10 +60,9 @@ public:
     int16_t offsetY() const;
     void setOffsetY(int16_t value);
 
-    const std::vector<uint8_t>* indexes() const;
-
     uint8_t index(uint16_t x, uint16_t y) const;
-    void setIndex(uint16_t x, uint16_t y, uint8_t index);
+
+    uint8_t* data();
 
 protected:
     uint16_t _width = 0;
