@@ -336,7 +336,7 @@ void Object::render()
 bool Object::_isIntersectsWithEgg()
 {
     //only walls and scenery are affected by egg
-    if (_type != Type::WALL && _type !=Type::SCENERY)
+    if (_type != Type::WALL || _type !=Type::SCENERY)
     {
         return false;
     }
