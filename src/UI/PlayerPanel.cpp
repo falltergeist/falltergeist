@@ -62,8 +62,8 @@ PlayerPanel::PlayerPanel() : UI::Base()
     _background = std::make_shared<Image>("art/intrface/iface.frm");
     _ui.push_back(_background);
 
-    setX((renderer->width() - 640) / 2);
-    setY(renderer->height() - _background->height());
+    setX((renderer->width() - 640) / 2-1);
+    setY(renderer->height() - _background->height()+1);
 
     _background->setPosition(this->position());
 
