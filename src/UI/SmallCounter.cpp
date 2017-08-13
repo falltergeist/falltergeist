@@ -38,15 +38,15 @@ SmallCounter::SmallCounter(const Point& pos) : Falltergeist::UI::Base(pos)
 {
     _sprite = std::make_shared<Graphics::Sprite>("art/intrface/numbers.frm");
 
-    for (int cl = 0; cl<3; cl++) //colors
+    for (int cl = 0; cl < 3; cl++) //colors
     {
         for (int i = 0; i < 12; i++) // numbers
         {
-            _rects.push_back({120*cl+i * 9, 0, 9, 17});
+            _rects.push_back({120*cl + i*9, 0, 9, 17});
         }
-        // signs are 6 px wide
-        _rects.push_back({120*cl+108 + 0 * 6, 0, 6, 17});
-        _rects.push_back({120*cl+108 + 1 * 6, 0, 6, 17});
+        // signs are 7 px wide
+        _rects.push_back({120*cl + 108 + 0*7, 0, 7, 17});
+        _rects.push_back({120*cl + 108 + 1*7, 0, 7, 17});
     }
 }
 
@@ -123,23 +123,23 @@ void SmallCounter::render(bool eggTransparency)
         }
         pad = 6;
     }
-    for (unsigned int i=0; i<_length;i++)
+    for (unsigned int i = 0; i < _length; i++)
     {
-        int num = _numberText.at(i)-'0';
+        int num = _numberText.at(i) - '0';
         switch (_color)
         {
             case Color::YELLOW:
-                num+=14;
+                num += 14;
                 break;
             case Color::RED:
-                num+=28;
+                num += 28;
                 break;
             case Color::WHITE:
             default:
                 break;
         }
         SDL_Rect rect = _rects.at(num);
-        _sprite->renderCropped(position().x() + pad + i * 9, position().y(), rect.x, rect.y, rect.w, rect.h);
+        _sprite->renderCropped(position().x() + pad + i*9, position().y(), rect.x, rect.y, rect.w, rect.h);
     }
 }
 

@@ -17,3 +17,4 @@ ext
 .vs/
 build/
 CMakeSettings.json
+/cmake-build-debug
