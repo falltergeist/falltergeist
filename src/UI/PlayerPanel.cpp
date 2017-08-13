@@ -124,7 +124,7 @@ PlayerPanel::PlayerPanel() : UI::Base()
     _ui.push_back(_hitPoints);
 
     // Armor class
-    _armorClass = std::make_shared<SmallCounter>(position() + Point(473, 74g));
+    _armorClass = std::make_shared<SmallCounter>(position() + Point(473, 74));
     _armorClass->setType(SmallCounter::Type::SIGNED);
     _armorClass->setNumber(game->player()->armorClass());
     _ui.push_back(_armorClass);
