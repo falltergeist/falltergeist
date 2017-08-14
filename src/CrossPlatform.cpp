@@ -436,7 +436,7 @@ std::vector<std::string> CrossPlatform::getDataPaths()
     if (maybeDataHome == nullptr || *maybeDataHome == '\0')
         _dataPaths.push_back(getHomeDirectory() + "/.local/share/falltergeist");
     else
-        _dataPaths.push_back(std::string(maybeDataHome) + "/falltergiest");
+        _dataPaths.push_back(std::string(maybeDataHome) + "/falltergeist");
 
     std::string sharedir = getExecutableDirectory()+"/../share/falltergeist";
 

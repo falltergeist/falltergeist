@@ -29,7 +29,7 @@ cmake . && make
 
 Put master.dat and critter.dat files into the falltergeist data directory, that is
 
-* `~/.local/share/falltergeist/`  or `/usr/local/share/falltergiest` (for global installs) on Linux,
+* `~/.local/share/falltergeist/`  or `/usr/local/share/falltergeist` (for global installs) on Linux,
 *  `~/Library/Application Support/falltergeist` on OS X,
 * `%APPDATA%/falltergeist` on Windows,
 
