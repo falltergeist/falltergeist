@@ -57,8 +57,11 @@ Animation::Animation(const std::string& frmName, unsigned int direction) : Fallt
 {
     _direction = direction;
     auto frm = ResourceManager::getInstance()->frmFileType(frmName);
-    _animation = std::make_unique<Graphics::Animation>(frmName);
+    if (frm == nullptr) {
+        return;
+    }
 
+    _animation = std::make_unique<Graphics::Animation>(frmName);
     _actionFrame = frm->actionFrame();
     auto& dir = frm->directions().at(direction);
     _shift = Point(dir.shiftX(), dir.shiftY());
@@ -151,6 +154,10 @@ void Animation::render(bool eggTransparency)
 
 Size Animation::size() const
 {
+    if (!_animation) {
+        Size size;
+        return size;
+    }
     return _animationFrames.at(_currentFrame)->size();
 }
 
