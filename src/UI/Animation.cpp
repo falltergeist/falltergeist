@@ -116,15 +116,19 @@ std::vector<std::unique_ptr<AnimationFrame>>& Animation::frames()
 
 void Animation::think()
 {
-    if (!_playing) return;
+    if (!_animation) {
+        return;
+    }
+    if (!_playing) {
+        return;
+    }
 
     // TODO: handle cases when main loop FPS is lower than animation FPS
-    if (SDL_GetTicks() - _frameTicks >= _animationFrames.at(_currentFrame)->duration())
-    {
+    if (SDL_GetTicks() - _frameTicks >= _animationFrames.at(_currentFrame)->duration()) {
         _frameTicks = SDL_GetTicks();
 
         _progress += 1;
-        
+
         if (_progress < _animationFrames.size())
         {
             _currentFrame = _reverse ? static_cast<unsigned>(_animationFrames.size()) - _progress - 1 : _progress;
@@ -145,6 +149,9 @@ void Animation::think()
 
 void Animation::render(bool eggTransparency)
 {
+    if (!_animation) {
+        return;
+    }
     auto& frame = _animationFrames.at(_currentFrame);
     Point offsetPosition = position() + shift() + frame->offset();
     _animation->trans(_trans);
@@ -173,8 +180,7 @@ void Animation::setShift(const Point& value)
 
 void Animation::play()
 {
-    if (!_playing)
-    {
+    if (!_playing) {
         _playing = true;
         _ended = false;
         _frameTicks = SDL_GetTicks();
@@ -260,8 +266,7 @@ bool Animation::opaque(const Point &pos) {
     const auto& frame = _animationFrames.at(_currentFrame);
 
     Point offsetPos = pos - offset();
-    if (!Rect::inRect(offsetPos, frame->size()))
-    {
+    if (!Rect::inRect(offsetPos, frame->size())) {
         return 0;
     }
     offsetPos +=frame->position();
@@ -269,4 +274,4 @@ bool Animation::opaque(const Point &pos) {
 }
 
 }
-}
+}  // namespace Falltergeist
