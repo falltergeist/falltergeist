@@ -263,6 +263,9 @@ Event::Handler& Animation::animationEndedHandler()
 }
 
 bool Animation::opaque(const Point &pos) {
+    if (!_animation) {
+        return true;
+    }
     const auto& frame = _animationFrames.at(_currentFrame);
 
     Point offsetPos = pos - offset();
