@@ -538,6 +538,7 @@ namespace Falltergeist {
             renderCursor();
             renderObjects();
             _roof->render();
+            renderObjectsText();
             renderCursorOutline();
             renderTestingOutline();
             if (active()) {
@@ -575,6 +576,9 @@ namespace Falltergeist {
                 object->render();
                 object->hexagon()->setInRender(object->inRender());
             }
+        }
+
+        void Location::renderObjectsText() const {
             for (auto &object: _objects) {
                 object->renderText();
             }
