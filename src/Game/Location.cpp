@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2012-2016 Falltergeist Developers.
+ * Copyright 2012-2018 Falltergeist Developers.
  *
  * This file is part of Falltergeist.
  *
@@ -48,7 +48,7 @@ namespace Falltergeist
             setDefaultElevationIndex(mapFile->defaultElevation());
             setDefaultPosition(mapFile->defaultPosition());
             setDefaultOrientation(mapFile->defaultOrientation());
-            
+
             // Initialize MAP vars
             if (mapFile->MVARS().size() > 0)
             {
@@ -62,12 +62,12 @@ namespace Falltergeist
                 }
             }
         }
-        
+
         std::vector<int32_t>* Location::MVARS()
         {
             return &_MVARS;
         }
-        
+
         /**
          * @brief Returns location name
          * @return Location name
@@ -206,7 +206,7 @@ namespace Falltergeist
         {
             return _defaultElevationIndex;
         }
-        
+
         /**
          * Sets index of default elevation
          * @param value
@@ -215,16 +215,16 @@ namespace Falltergeist
         {
             _defaultElevationIndex = value;
         }
-        
+
         /**
          * @brief Returns default position on default elevation
-         * @return Default position on default elevation 
+         * @return Default position on default elevation
          */
         unsigned int Location::defaultPosition() const
         {
             return _defaultPosition;
         }
-        
+
         /**
          * Sets default position on default elevation
          * @param value
@@ -233,7 +233,7 @@ namespace Falltergeist
         {
             _defaultPosition = value;
         }
-        
+
         /**
          * @brief Returns default orientation on default elevation
          * @return Default orientation on default elevation
@@ -242,7 +242,7 @@ namespace Falltergeist
         {
             return _defaultOrientation;
         }
-        
+
         /**
          * Sets default orientation on default elevation
          * @param value
@@ -250,8 +250,8 @@ namespace Falltergeist
         void Location::setDefaultOrientation(unsigned int value)
         {
             _defaultOrientation = value;
-        }        
-        
+        }
+
         /**
          * @brief Returns location elevations
          * @return Elevations

@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2016 Falltergeist Developers.
+ * Copyright 2012-2018 Falltergeist Developers.
  *
  * This file is part of Falltergeist.
  *
@@ -96,7 +96,7 @@ protected:
     unsigned int _minState = 0;
     std::string _downSound;
     std::string _upSound;
-    
+
     void _onMouseClick(Event::Mouse* event);
     void _onMouseUp(Event::Mouse* event);
 

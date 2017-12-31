@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2016 Falltergeist Developers.
+ * Copyright 2012-2018 Falltergeist Developers.
  *
  * This file is part of Falltergeist.
  *
@@ -525,9 +525,9 @@ bool isOutsideOfHexForDirection(Point offset, Orientation orient)
 }
 
 // TODO: refactor
-// I suggest processing all frames beforehand - adjusting positions to remain within hex boundaries 
-// and defining "action frames" (multiple frames per animation). This will allow to re-use Animation object 
-// for different animation cycles. 
+// I suggest processing all frames beforehand - adjusting positions to remain within hex boundaries
+// and defining "action frames" (multiple frames per animation). This will allow to re-use Animation object
+// for different animation cycles.
 void CritterObject::onMovementAnimationFrame(Event::Event* event)
 {
     auto animation = dynamic_cast<UI::Animation*>(ui());
@@ -565,7 +565,7 @@ void CritterObject::onMovementAnimationFrame(Event::Event* event)
                 animation = newAnimation.get();
                 _ui = move(newAnimation);
                 curFrameOfs = animation->frameOffset();
-                            
+
                 // on turns, center frames on current hex
                 ofs -= curFrameOfs;
             }

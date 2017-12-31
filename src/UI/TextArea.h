@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2016 Falltergeist Developers.
+ * Copyright 2012-2018 Falltergeist Developers.
  *
  * This file is part of Falltergeist.
  *
@@ -269,10 +269,10 @@ protected:
         // line width in pixels
         int width = 0;
         std::vector<Graphics::TextSymbol> symbols;
-        
+
         bool operator < (const Line& rhs) const
-        { 
-            return width < rhs.width; 
+        {
+            return width < rhs.width;
         }
     };
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2016 Falltergeist Developers.
+ * Copyright 2012-2018 Falltergeist Developers.
  *
  * This file is part of Falltergeist.
  *
@@ -57,7 +57,7 @@ public:
 
     unsigned short width();
     unsigned short height();
-    
+
     std::string filename() const;
 
     Graphics::Texture* texture();

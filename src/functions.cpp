@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2016 Falltergeist Developers.
+ * Copyright 2012-2018 Falltergeist Developers.
  *
  * This file is part of Falltergeist.
  *
@@ -64,10 +64,10 @@ std::string _t(MSG_TYPE type, unsigned int number)
 
 std::string path_basename(const std::string& path, bool removeExtension)
 {
-    auto filename = std::string( 
+    auto filename = std::string(
         std::find_if(path.rbegin(), path.rend(), [](char c) { return c == '/' || c == '\\'; }).base(),
         path.end());
-        
+
     if (removeExtension)
     {
         auto pivot = std::find(filename.rbegin(), filename.rend(), '.');

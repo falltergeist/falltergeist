@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2016 Falltergeist Developers.
+ * Copyright 2012-2018 Falltergeist Developers.
  *
  * This file is part of Falltergeist.
  *
@@ -31,7 +31,7 @@ namespace Falltergeist
 {
 namespace Game
 {
-    
+
 /**
  * Item. Can be placed inside other object inventories (critters and containers)
  */

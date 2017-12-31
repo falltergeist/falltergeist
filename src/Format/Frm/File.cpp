@@ -1,7 +1,7 @@
 ﻿/*
  * The MIT License (MIT)
  *
- * Copyright (c) 2012-2015 Falltergeist developers
+ * Copyright (c) 2012-2018 Falltergeist Developers
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -79,7 +79,7 @@ File::File(Dat::Stream&& stream)
 
         // read all frames
         for (unsigned i = 0; i != _framesPerDirection; ++i)
-        {            
+        {
             uint16_t width = stream.uint16();
             uint16_t height = stream.uint16();
 
@@ -128,7 +128,7 @@ uint16_t File::width() const
 {
     return std::max_element(_directions.begin(), _directions.end(), [](const Direction& a, const Direction& b)
     {
-        return a.width() < b.width(); 
+        return a.width() < b.width();
     })->width();
 }
 

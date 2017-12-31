@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2016 Falltergeist Developers.
+ * Copyright 2012-2018 Falltergeist Developers.
  *
  * This file is part of Falltergeist.
  *
@@ -54,11 +54,11 @@ namespace Falltergeist
             public:
                 Location();
                 ~Location();
-                
+
                 void loadFromMapFile(Falltergeist::Format::Map::File *file);
-                
+
                 std::vector<int32_t>* MVARS();
-                
+
                 std::string name() const;
                 void setName(const std::string& value);
 
@@ -83,13 +83,13 @@ namespace Falltergeist
 
                 unsigned int defaultElevationIndex() const;
                 void setDefaultElevationIndex(unsigned int value);
-                
+
                 unsigned int defaultPosition() const;
                 void setDefaultPosition(unsigned int value);
-                
+
                 unsigned int defaultOrientation() const;
                 void setDefaultOrientation(unsigned int value);
-                
+
                 std::vector<LocationElevation*>* elevations();
 
             protected:
@@ -151,7 +151,7 @@ namespace Falltergeist
                  * @brief Index of default elevation
                  */
                 unsigned int _defaultElevationIndex = 0;
-                
+
                 /**
                  * @brief Default position on default elevation
                  */
@@ -159,14 +159,14 @@ namespace Falltergeist
 
                 /**
                  * @brief Default orientation on default elevation
-                 */                
+                 */
                 unsigned int _defaultOrientation = 0;
-                
+
                 /**
                  * @brief Location variables. Used in scripting
                  */
                 std::vector<int32_t> _MVARS;
-                
+
                 /**
                  * @brief Map elevations
                  */

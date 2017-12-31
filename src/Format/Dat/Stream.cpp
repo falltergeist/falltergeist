@@ -1,7 +1,7 @@
 ﻿/*
  * The MIT License (MIT)
  *
- * Copyright (c) 2012-2015 Falltergeist developers
+ * Copyright (c) 2012-2018 Falltergeist Developers
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -44,7 +44,7 @@ namespace Dat
 
 Stream::Stream(Stream&& other) :
         _buffer(std::move(other._buffer)),
-        _endianness(other._endianness) 
+        _endianness(other._endianness)
 {
     auto cBuf = _buffer.data();
     setg(cBuf, cBuf, cBuf + _buffer.size());

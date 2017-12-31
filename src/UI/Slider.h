@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2016 Falltergeist Developers.
+ * Copyright 2012-2018 Falltergeist Developers.
  *
  * This file is part of Falltergeist.
  *
@@ -62,7 +62,7 @@ public:
 
     double value() const;
     void setValue(double value);
-    
+
     Event::Handler& changeHandler();
 
 protected:
@@ -73,7 +73,7 @@ protected:
     std::string _downSound;
     std::string _upSound;
     Event::Handler _changeHandler;
-    
+
     void _onDrag(Event::Mouse* event);
     void _onLeftButtonDown(Event::Mouse* event);
     void _onLeftButtonUp(Event::Mouse* event);

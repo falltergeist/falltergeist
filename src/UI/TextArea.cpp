@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2016 Falltergeist Developers.
+ * Copyright 2012-2018 Falltergeist Developers.
  *
  * This file is part of Falltergeist.
  *
@@ -345,7 +345,7 @@ void TextArea::_updateLines()
         y = 0,
         wordWidth = 0,
         maxWidth = _size.width() ? (_size.width() - _paddingBottomRight.width()) : 0;
-    
+
     // Parsing lines of text
     // Cutting lines when it is needed (\n or when exceeding _width)
     std::istringstream istream(_text);

@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2016 Falltergeist Developers.
+ * Copyright 2012-2018 Falltergeist Developers.
  *
  * This file is part of Falltergeist.
  *
@@ -59,7 +59,7 @@ void DudeObject::loadFromGCDFile(Format::Gcd::File* gcd)
     {
         setStat((STAT)i, gcd->stat((STAT)i));
         setStatBonus((STAT)i, gcd->statBonus((STAT)i));
-    }    
+    }
 
     _statsPoints = gcd->characterPoints();
     _name = gcd->name();

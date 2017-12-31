@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2012-2015 Falltergeist developers
+ * Copyright (c) 2012-2018 Falltergeist Developers
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -82,7 +82,7 @@ void File::_addString(std::string line)
 std::pair<int,std::string> File::getSubLine(int frame)
 {
     auto it = _subs.lower_bound(frame);
-    if (it != _subs.end()) 
+    if (it != _subs.end())
     {
         return *it;
     }

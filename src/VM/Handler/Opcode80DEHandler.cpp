@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2016 Falltergeist Developers.
+ * Copyright 2012-2018 Falltergeist Developers.
  *
  * This file is part of Falltergeist.
  *
@@ -41,17 +41,17 @@ namespace Falltergeist
             Opcode80DE::Opcode80DE(VM::Script* script) : OpcodeHandler(script)
             {
             }
-            
+
             void Opcode80DE::_run()
             {
                 Logger::debug("SCRIPT") << "[80DE] [*] void start_gdialog(int msgFileID, GameCritterObject* critter, int mood, int headID, int backgroundID)" << std::endl;
                 int backgroundID = _script->dataStack()->popInteger();
                 int headID = _script->dataStack()->popInteger();
                 State::CritterInteract::Mood mood = static_cast<State::CritterInteract::Mood>(_script->dataStack()->popInteger());
-            
+
                 auto critter = dynamic_cast<Game::CritterObject*>(_script->dataStack()->popObject());
                 if (!critter) _error("start_gdialog - wrong critter pointer");
-            
+
                 int msgFileID = _script->dataStack()->popInteger();
                 if (headID > -1)
                 {
