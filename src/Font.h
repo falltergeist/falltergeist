@@ -33,44 +33,42 @@
 
 namespace Falltergeist
 {
-namespace Format
-{
-namespace Aaf
-{
-    class File;
-}
-}
+    namespace Format
+    {
+        namespace Aaf
+        {
+            class File;
+        }
+    }
 
-class Font
-{
-public:
-    Font(const std::string& filename, unsigned int color);
-    ~Font();
+    class Font
+    {
+        public:
+            Font(const std::string& filename, unsigned int color);
+            ~Font();
 
-    unsigned int color();
+            unsigned int color();
 
-    unsigned short horizontalGap();
+            unsigned short horizontalGap();
 
-    unsigned short verticalGap();
+            unsigned short verticalGap();
 
-    unsigned short spaceWidth();
+            unsigned short spaceWidth();
 
-    unsigned short width();
-    unsigned short height();
+            unsigned short width();
+            unsigned short height();
 
-    std::string filename() const;
+            std::string filename() const;
 
-    Graphics::Texture* texture();
+            Graphics::Texture* texture();
 
-    Format::Aaf::File* aaf();
+            Format::Aaf::File* aaf();
 
-protected:
-    unsigned int _color = 0;
-    Format::Aaf::File* _aaf = nullptr;
-    std::unique_ptr<Graphics::Texture> _texture = nullptr;
-    std::string _filename;
-
-};
-
+        protected:
+            unsigned int _color = 0;
+            Format::Aaf::File* _aaf = nullptr;
+            std::unique_ptr<Graphics::Texture> _texture = nullptr;
+            std::string _filename;
+    };
 }
 #endif // FALLTERGEIST_FONT_H

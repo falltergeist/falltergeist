@@ -30,28 +30,26 @@
 
 namespace Falltergeist
 {
+    using Graphics::Point;
+    using Graphics::Size;
 
-using Graphics::Point;
-using Graphics::Size;
+    class LocationCamera
+    {
+        protected:
+            Point _center;
+            Size _size;
 
-class LocationCamera
-{
-protected:
-    Point _center;
-    Size _size;
+        public:
+            LocationCamera(const Size& size, const Point& center);
+            ~LocationCamera();
 
-public:
-    LocationCamera(const Size& size, const Point& center);
-    ~LocationCamera();
+            Point topLeft() const;
 
-    Point topLeft() const;
+            const Point& center() const;
+            void setCenter(const Point& pos);
 
-    const Point& center() const;
-    void setCenter(const Point& pos);
-
-    const Size& size() const;
-    void setSize(const Size& size);
-};
-
+            const Size& size() const;
+            void setSize(const Size& size);
+    };
 }
 #endif // FALLTERGEIST_LOCATIONCAMERA_H
