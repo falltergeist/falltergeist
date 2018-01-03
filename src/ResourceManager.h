@@ -113,6 +113,7 @@ public:
     Format::Aaf::File* aafFileType(const std::string& filename);
     Format::Acm::File* acmFileType(const std::string& filename);
     Format::Bio::File* bioFileType(const std::string& filename);
+    Format::Dat::Item* datFileItem(const std::string& filename);
     Format::Frm::File* frmFileType(const std::string& filename);
     Format::Frm::File* frmFileType(unsigned int FID);
     Format::Fon::File* fonFileType(const std::string& filename);
@@ -147,9 +148,13 @@ public:
     Graphics::Shader* shader(const std::string& filename);
     void unloadResources();
     std::string FIDtoFrmName(unsigned int FID);
+    Game::Location* gameLocation(unsigned int number);
     void shutdown();
 
 private:
+    std::string FIDtoFrmName(unsigned int FID);
+
+protected:
     friend class Base::Singleton<ResourceManager>;
 
     std::vector<std::unique_ptr<Format::Dat::File>> _datFiles;
