@@ -83,9 +83,11 @@ CrossPlatform::~CrossPlatform()
 
 std::string CrossPlatform::getVersion()
 {
-    if (_version.length() > 0) return _version;
+    if (_version.length() > 0) {
+        return _version;
+    }
 
-    _version = "Falltergeist 0.3.0";
+    _version = "Falltergeist 0.4.0";
 #if defined(_WIN32) || defined(WIN32)
     _version += " (Windows)";
 #elif defined(__linux__)
@@ -94,6 +96,8 @@ std::string CrossPlatform::getVersion()
     _version += " (Apple)";
 #elif defined(BSD)
     _version += " (BSD)";
+#else
+    _version += " (unknown)";
 #endif
     return _version;
 }
@@ -114,8 +118,7 @@ std::string CrossPlatform::getHomeDirectory()
 std::string CrossPlatform::getExecutableDirectory()
 {
     char* buffer=SDL_GetBasePath();
-    if (buffer == NULL)
-    {
+    if (buffer == NULL) {
         Logger::warning() << "SDL_GetBasePath() not able to obtain a path on this platform" << std::endl;
         return "./";
     }
@@ -132,10 +135,8 @@ std::vector<std::string> CrossPlatform::getCdDrivePaths()
     char buf[256];
     GetLogicalDriveStringsA(sizeof(buf), buf);
 
-    for(char * s = buf; *s; s += strlen(s) + 1)
-    {
-        if (GetDriveTypeA(s) == DRIVE_CDROM)
-        {
+    for(char * s = buf; *s; s += strlen(s) + 1) {
+        if (GetDriveTypeA(s) == DRIVE_CDROM) {
             result.push_back(std::string(s));
         }
     }
@@ -145,12 +146,10 @@ std::vector<std::string> CrossPlatform::getCdDrivePaths()
     struct mntent *m;
     struct mntent mnt;
     char strings[4096];
-    while ((m = getmntent_r(mtab, &mnt, strings, sizeof(strings))))
-    {
+    while ((m = getmntent_r(mtab, &mnt, strings, sizeof(strings)))) {
         std::string directory = mnt.mnt_dir;
         std::string type = mnt.mnt_type;
-        if (type == "iso9660")
-        {
+        if (type == "iso9660") {
             result.push_back(directory);
         }
     }
@@ -158,12 +157,10 @@ std::vector<std::string> CrossPlatform::getCdDrivePaths()
 #elif defined (BSD)
     struct statfs *mntbuf;
     int mntsize = getmntinfo(&mntbuf, MNT_NOWAIT);
-    for ( int i = 0; i < mntsize; i++ )
-    {
+    for ( int i = 0; i < mntsize; i++ ) {
         std::string directory = ((struct statfs *)&mntbuf[i])->f_mntonname;
         std::string type = ((struct statfs *)&mntbuf[i])->f_fstypename;
-        if (type == "cd9660")
-        {
+        if (type == "cd9660") {
             result.push_back(directory);
         }
     }
@@ -176,46 +173,39 @@ std::vector<std::string> CrossPlatform::getCdDrivePaths()
 // This method is trying to find out where are the DAT files located
 std::string CrossPlatform::findFalloutDataPath()
 {
-    if (_falloutDataPath.length() > 0)
+    if (_falloutDataPath.length() > 0) {
         return _falloutDataPath;
+    }
     Logger::info() << "Looking for Fallout data files" << std::endl;
     std::vector<std::string> directories;
     directories.push_back(getExecutableDirectory());
 
-    for (auto &directory : getDataPaths())
-    {
+    for (auto &directory : getDataPaths()) {
         directories.push_back(directory);
     }
 
-    try
-    {
+    try {
         std::vector<std::string> cdDrives = getCdDrivePaths();
         directories.insert(directories.end(), cdDrives.begin(), cdDrives.end());
-    }
-    catch (const Exception& e)
-    {
+    } catch (const Exception& e) {
         Logger::error() << e.what() << std::endl;
     }
 
-    for (auto &directory : directories)
-    {
+    for (auto &directory : directories) {
         if (std::all_of(
-                _necessaryDatFiles.begin(),
-                _necessaryDatFiles.end(),
-                [directory](const std::string& file) {
-                    std::ifstream stream(directory + "/" + file);
-                    if (stream)
-                    {
-                        Logger::info() << "Searching in directory: " << directory << " " << file << " [FOUND]" << std::endl;
-                        return true;
-                    }
-                    else
-                    {
-                        Logger::info() << "Searching in directory: " << directory << " " << file << " [NOT FOUND]" << std::endl;
-                        return false;
-                    }
-                })
-                )
+            _necessaryDatFiles.begin(),
+            _necessaryDatFiles.end(),
+            [directory](const std::string& file) {
+                std::ifstream stream(directory + "/" + file);
+                if (stream) {
+                    Logger::info() << "Searching in directory: " << directory << " " << file << " [FOUND]" << std::endl;
+                    return true;
+                } else {
+                    Logger::info() << "Searching in directory: " << directory << " " << file << " [NOT FOUND]" << std::endl;
+                    return false;
+                }
+            })
+            )
         {
             _falloutDataPath = directory;
             return _falloutDataPath;
@@ -227,29 +217,25 @@ std::string CrossPlatform::findFalloutDataPath()
 
 std::string CrossPlatform::findFalltergeistDataPath()
 {
-    if (_falltergeistDataPath.length() > 0)
+    if (_falltergeistDataPath.length() > 0) {
         return _falltergeistDataPath;
+    }
     Logger::info() << "Looking for Falltergeist data files" << std::endl;
     std::vector<std::string> directories;
     directories.push_back(getExecutableDirectory());
 
-    for (auto &directory : getDataPaths())
-    {
+    for (auto &directory : getDataPaths()) {
         directories.push_back(directory);
     }
 
-    for (auto &directory : directories)
-    {
+    for (auto &directory : directories) {
         std::ifstream stream(directory + "/data/movies.lst");
-        if (stream)
-        {
-            Logger::info() << "Searching in directory: " << directory << "data/movies.lst [FOUND]" << std::endl;
+        if (stream) {
+            Logger::info() << "Searching in directory: " << directory << "/data/movies.lst [FOUND]" << std::endl;
             _falltergeistDataPath = directory;
             return _falltergeistDataPath;
-        }
-        else
-        {
-            Logger::info() << "Searching in directory: " << directory << "data/movies.lst [NOT FOUND]" << std::endl;
+        } else {
+            Logger::info() << "Searching in directory: " << directory << "/data/movies.lst [NOT FOUND]" << std::endl;
         }
     }
 
@@ -259,7 +245,9 @@ std::string CrossPlatform::findFalltergeistDataPath()
 // this method looks for available dat files
 std::vector<std::string> CrossPlatform::findFalloutDataFiles()
 {
-    if (_dataFiles.size()) return _dataFiles;
+    if (_dataFiles.size()) {
+        return _dataFiles;
+    }
 
 #if defined(_WIN32) || defined(WIN32) // Windows
     HANDLE hFind = INVALID_HANDLE_VALUE;
@@ -268,18 +256,14 @@ std::vector<std::string> CrossPlatform::findFalloutDataFiles()
     _dataFiles = _necessaryDatFiles;
     hFind = FindFirstFile(path.c_str(), &ffd);
 
-    if (INVALID_HANDLE_VALUE == hFind)
-    {
-      return _dataFiles;
+    if (INVALID_HANDLE_VALUE == hFind) {
+        return _dataFiles;
     }
 
     do {
-        if (ffd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
-        {
+        if (ffd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
             continue;
-        }
-        else
-        {
+        } else {
             std::string filename(ffd.cFileName);
             std::transform(filename.begin(), filename.end(), filename.begin(), ::tolower);
             if (filename.length() > 4) // exclude . and ..
@@ -433,16 +417,16 @@ std::vector<std::string> CrossPlatform::getDataPaths()
     std::vector<std::string> _dataPaths;
 #if defined(__unix__)
     char *maybeDataHome = getenv("XDG_DATA_HOME");
-    if (maybeDataHome == nullptr || *maybeDataHome == '\0')
+    if (maybeDataHome == nullptr || *maybeDataHome == '\0') {
         _dataPaths.push_back(getHomeDirectory() + "/.local/share/falltergeist");
-    else
+    } else {
         _dataPaths.push_back(std::string(maybeDataHome) + "/falltergeist");
+    }
 
     std::string sharedir = getExecutableDirectory()+"/../share/falltergeist";
 
     DIR *pxDir = opendir(sharedir.c_str());
-    if(pxDir)
-    {
+    if(pxDir) {
         _dataPaths.push_back(sharedir.c_str());
         closedir(pxDir);
     }
