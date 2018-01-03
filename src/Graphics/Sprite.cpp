@@ -67,22 +67,21 @@ Sprite::Sprite(const std::string& fname)
 
 Sprite::Sprite(Format::Frm::File *frm) : Sprite(frm->filename())
 {
-
 }
 
 Size Sprite::size() const
-{		
-     return _texture->size();		
-}		
- 		
-unsigned int Sprite::width() const	
+{
+    return _texture->size();
+}
+
+unsigned int Sprite::width() const
 {
     return _texture->width();
 }
- 		
+
 unsigned int Sprite::height() const
 {
-   return _texture->height();
+    return _texture->height();
 }
 
 // render, optionally scaled
@@ -231,8 +230,7 @@ void Sprite::renderCropped(int x, int y, int dx, int dy, unsigned int width, uns
         auto dude = Game::getInstance()->player();
         if (!dude || !Game::getInstance()->locationState()) {
             transparency = false;
-        }
-        else {
+        } else {
             auto camera = Game::getInstance()->locationState()->camera();
             Point eggPos = dude->hexagon()->position() - camera->topLeft() + dude->eggOffset();
 
@@ -284,18 +282,15 @@ void Sprite::renderCropped(int x, int y, int dx, int dy, unsigned int width, uns
 
     GL_CHECK(_shader->setUniform(_uniformOutline, false));
 
-    if (Game::getInstance()->renderer()->renderPath() == Renderer::RenderPath::OGL21)
-    {
+    if (Game::getInstance()->renderer()->renderPath() == Renderer::RenderPath::OGL21) {
         GL_CHECK(_shader->setUniform(_uniformTexSize, glm::vec2((float)_texture->textureWidth(), (float)_texture->textureHeight() )));
     }
 
-    if (Game::getInstance()->renderer()->renderPath() == Renderer::RenderPath::OGL32)
-    {
+    if (Game::getInstance()->renderer()->renderPath() == Renderer::RenderPath::OGL32) {
         GLint curvao;
         glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &curvao);
         GLint vao = Game::getInstance()->renderer()->getVAO();
-        if (curvao != vao)
-        {
+        if (curvao != vao) {
             GL_CHECK(glBindVertexArray(vao));
         }
     }
@@ -306,10 +301,9 @@ void Sprite::renderCropped(int x, int y, int dx, int dy, unsigned int width, uns
 
     GL_CHECK(glVertexAttribPointer(_attribPos, 2, GL_FLOAT, GL_FALSE, 0, (void*)0 ));
 
-
     GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, Game::getInstance()->renderer()->getTVBO()));
 
-	GL_CHECK(glBufferData(GL_ARRAY_BUFFER, sizeof(UV), &UV[0], GL_DYNAMIC_DRAW));
+    GL_CHECK(glBufferData(GL_ARRAY_BUFFER, sizeof(UV), &UV[0], GL_DYNAMIC_DRAW));
 
     GL_CHECK(glVertexAttribPointer(_attribTex, 2, GL_FLOAT, GL_FALSE, 0, (void*)0 ));
 
