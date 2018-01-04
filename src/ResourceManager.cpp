@@ -58,6 +58,7 @@
 #include "Graphics/Font/FON.h"
 #include "Graphics/Texture.h"
 #include "Graphics/Shader.h"
+#include "Helpers/CritterAnimationHelper.h"
 #include "Logger.h"
 #include "ResourceManager.h"
 #include "Ini/File.h"
@@ -67,83 +68,17 @@
 
 namespace Falltergeist
 {
+    using namespace std;
+    using namespace Format;
+    using Helpers::CritterAnimationHelper;
 
-using namespace std;
-using namespace Format;
-
-namespace
-{
-Pro::File* fetchProFileType(unsigned int PID)
-{
-    return ResourceManager::getInstance()->proFileType(PID);
-}
-
-using CritterFRMSuffix = std::pair<char, char>;
-
-CritterFRMSuffix CritterFRMSuffixForAnimation(unsigned int animId, unsigned int weaponId)
-{
-    const char weaponCode = weaponId + 0x63;
-    if (animId >= 0x26 && animId <= 0x2F)
+    namespace
     {
-        if (weaponId >= 0x0B || weaponId == 0) throw Exception("Critter weaponId unsupported value");
-        return { weaponCode, static_cast<char>(animId + 0x3D) };
-    }
-    else if (animId == 0x24)
-    {
-        return { 'c', 'h' };
-    }
-    else if (animId == 0x25)
-    {
-        return { 'c', 'j' };
-    }
-    else if (animId == 0x40)
-    {
-        return { 'n', 'a' };
-    }
-    else if (animId >= 0x30)
-    {
-        return { 'r', static_cast<char>(animId + 0x31) };
-    }
-    else if (animId >= 0x14)
-    {
-        return { 'b', static_cast<char>(animId + 0x4d) };
-    }
-    else if (animId == 0x12)
-    {
-        if (weaponId == 0x01)
+        Pro::File* fetchProFileType(unsigned int PID)
         {
-            return { 'd', 'm' };
-        }
-        else if (weaponId == 0x04)
-        {
-            return { 'g', 'm' };
-        }
-        else
-        {
-            return { 'a', 's' };
+            return ResourceManager::getInstance()->proFileType(PID);
         }
     }
-    else if (animId == 0x0D)
-    {
-        if (weaponId > 0)
-        {
-            return { weaponCode, 'e' };
-        }
-        else
-        {
-            return { 'a', 'n' };
-        }
-    }
-    else if (animId <= 0x01 && weaponId > 0)
-    {
-        return { weaponCode, static_cast<char>(animId + 0x61) };
-    }
-    else
-    {
-        return { 'a', static_cast<char>(animId + 0x61) };
-    }
-}
-}
 
 ResourceManager::ResourceManager()
 {
@@ -589,11 +524,12 @@ string ResourceManager::FIDtoFrmName(unsigned int FID)
 
         unsigned int weaponId = (FID & 0x0000F000) >> 12;
         unsigned int animId = (FID & 0x00FF0000) >> 16;
-        unsigned int ID3 = (FID & 0xF0000000) >> 28;
+        unsigned int ID3 = (FID & 0xF0000000) >> 28; // orientation
         frmName.erase(6);
 
-        const auto& suffix = CritterFRMSuffixForAnimation(animId, weaponId);
-        frmName.append({ suffix.first, suffix.second, '.' });
+        CritterAnimationHelper critterAnimationHelper;
+        frmName += critterAnimationHelper.getSuffix(animId, weaponId);
+        frmName += ".";
         frmName += extensions[ID3];
     }
     return typeArtDescription.prefixPath + frmName;

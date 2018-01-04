@@ -151,9 +151,6 @@ public:
     Game::Location* gameLocation(unsigned int number);
     void shutdown();
 
-private:
-    std::string FIDtoFrmName(unsigned int FID);
-
 protected:
     friend class Base::Singleton<ResourceManager>;
 

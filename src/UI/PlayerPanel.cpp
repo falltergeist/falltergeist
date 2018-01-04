@@ -26,9 +26,10 @@
 #include "../Audio/Mixer.h"
 #include "../Event/Event.h"
 #include "../Event/Keyboard.h"
-#include "../Game/ItemObject.h"
-#include "../Game/Game.h"
+#include "../Game/Defines.h"
 #include "../Game/DudeObject.h"
+#include "../Game/Game.h"
+#include "../Game/ItemObject.h"
 #include "../Graphics/Renderer.h"
 #include "../Input/Mouse.h"
 #include "../State/ExitConfirm.h"
@@ -309,13 +310,13 @@ void PlayerPanel::changeHand()
         {
             if (player->currentHandSlot())
             {
-                player->setWeaponAnimation('C'); // takeout
+                player->setWeaponAnimation(ANIM_TAKE_OUT);
             }
         };
     if (lastSlot)
     {
         // put away
-        auto anim = player->setWeaponAnimation('D');
+        auto anim = player->setWeaponAnimation(ANIM_PUT_AWAY);
         Event::Handler origHandler = anim->animationEndedHandler();
         anim->animationEndedHandler().clear();
         anim->animationEndedHandler().add(takeOut);
