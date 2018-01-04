@@ -480,6 +480,10 @@ string ResourceManager::FIDtoFrmName(unsigned int FID)
     const auto baseId = FID & 0x00000FFF;
     const auto type = static_cast<FRM_TYPE>(FID >> 24);
 
+    if (type == FRM_TYPE::CRITTER) {
+        throw Exception("use CritterAnimationHelpers instead");
+    }
+
     if (type == FRM_TYPE::MISC && baseId == 1)
     {
         static const std::string SCROLL_BLOCKERS_PATH("art/misc/scrblk.frm");
@@ -503,8 +507,9 @@ string ResourceManager::FIDtoFrmName(unsigned int FID)
         { "art/inven/", "art/inven/inven.lst" },
     };
 
-    if (type > FRM_TYPE::INVENTORY)
+    if (type > FRM_TYPE::INVENTORY) {
         throw Exception("ResourceManager::FIDtoFrmName - wrong type");
+    }
 
     const auto& typeArtDescription = frmTypeDescription[static_cast<size_t>(type)];
     auto lst = lstFileType(typeArtDescription.lstFilePath);
@@ -515,23 +520,6 @@ string ResourceManager::FIDtoFrmName(unsigned int FID)
     }
 
     string frmName = lst->strings()->at(baseId);
-    if (type == FRM_TYPE::CRITTER)
-    {
-        static const char* extensions[] =
-        {
-            "frm", "frm0", "frm1", "frm2", "fr3", "frm4", "frm5", "frm6"
-        };
-
-        unsigned int weaponId = (FID & 0x0000F000) >> 12;
-        unsigned int animId = (FID & 0x00FF0000) >> 16;
-        unsigned int ID3 = (FID & 0xF0000000) >> 28; // orientation
-        frmName.erase(6);
-
-        CritterAnimationHelper critterAnimationHelper;
-        frmName += critterAnimationHelper.getSuffix(animId, weaponId);
-        frmName += ".";
-        frmName += extensions[ID3];
-    }
     return typeArtDescription.prefixPath + frmName;
 }
 

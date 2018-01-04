@@ -21,8 +21,11 @@
 
 // Falltergeist includes
 #include "../Exception.h"
+#include "../Format/Lst/File.h"
 #include "../Game/Defines.h"
 #include "../Helpers/CritterAnimationHelper.h"
+#include "../Logger.h"
+#include "../ResourceManager.h"
 
 // Third party includes
 
@@ -30,6 +33,18 @@ namespace Falltergeist
 {
     namespace Helpers
     {
+        std::string CritterAnimationHelper::getPrefix(unsigned int FID) const
+        {
+            const auto baseId = FID & 0x00000FFF;
+            auto lst = ResourceManager::getInstance()->lstFileType("art/critters/critters.lst");
+            if (baseId >= lst->strings()->size()) {
+                Logger::error() << "CritterAnimationHelper::getPrefix - LST size: " << lst->strings()->size() << " <= baseId: " << baseId << " frmType: " << std::endl;
+                return "";
+            }
+            return lst->strings()->at(baseId).erase(6);
+        }
+
+
         std::string CritterAnimationHelper::getSuffix(unsigned int animationId, unsigned int weaponId) const
         {
             const char weaponCode = 'c' + weaponId;

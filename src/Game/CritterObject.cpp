@@ -666,22 +666,17 @@ namespace Falltergeist
 
         string CritterObject::_generateArmorFrmString()
         {
-            if (!armorSlot())
-            {
-                return ResourceManager::getInstance()->FIDtoFrmName(FID()).substr(13,6);
+            CritterAnimationHelper critterAnimationHelper;
+
+            if (!armorSlot()) {
+                return critterAnimationHelper.getPrefix(FID());
             }
 
-            switch (gender())
-            {
-                case GENDER::FEMALE:
-                {
-                    return ResourceManager::getInstance()->FIDtoFrmName(armorSlot()->femaleFID()).substr(13, 6);
-                }
-                default: // MALE
-                {
-                    return ResourceManager::getInstance()->FIDtoFrmName(armorSlot()->maleFID()).substr(13, 6);
-                }
+            if (gender() == GENDER::FEMALE) {
+                return critterAnimationHelper.getPrefix(armorSlot()->femaleFID());
             }
+
+            return critterAnimationHelper.getPrefix(armorSlot()->maleFID());
         }
 
         int CritterObject::poisonLevel() const
