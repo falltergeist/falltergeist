@@ -221,6 +221,7 @@ namespace Falltergeist
             void renderCursor() const;
 
             void renderObjects() const;
+            void renderObjectsText() const;
 
             void renderCursorOutline() const;
 

@@ -67,10 +67,10 @@ Sprite::Sprite(const std::string& fname)
 
 Sprite::Sprite(Format::Frm::File *frm) : Sprite(frm->filename())
 {
-
 }
 
-Size Sprite::size() const {
+Size Sprite::size() const
+{
     return _texture->size();
 }
 
@@ -87,33 +87,21 @@ unsigned int Sprite::height() const
 // render, optionally scaled
 void Sprite::renderScaled(int x, int y, unsigned int width, unsigned int height, bool transparency, bool light, int outline, unsigned int lightValue)
 {
-    std::vector<glm::vec2> vertices;
-    std::vector<glm::vec2> UV;
-
-    vertices.reserve(4);
-    UV.reserve(4);
+    glm::vec2 vertices[4] = {
+        glm::vec2((float)x, (float)y),
+        glm::vec2((float)x, (float)(y + height)),
+        glm::vec2((float)(x + width), (float)y),
+        glm::vec2((float)(x + width), (float)(y + height))
+    };
+    glm::vec2 UV[4] = {
+        glm::vec2(0.0, 0.0),
+        glm::vec2(0.0, (float)_texture->height() / (float)_texture->textureHeight()),
+        glm::vec2((float)_texture->width() / (float)_texture->textureWidth(), 0.0),
+        glm::vec2((float)_texture->width() / (float)_texture->textureWidth(), (float)_texture->height() / (float)_texture->textureHeight())
+    };
 
     x--;
     y--;
-    glm::vec2 vertex_up_left    = glm::vec2( (float)x, (float)y);
-    glm::vec2 vertex_up_right   = glm::vec2( (float)(x+width), (float)y);
-    glm::vec2 vertex_down_right = glm::vec2( (float)(x+width), (float)(y+height));
-    glm::vec2 vertex_down_left  = glm::vec2( (float)x, (float)(y+height));
-
-    vertices.push_back(vertex_up_left   );
-    vertices.push_back(vertex_down_left );
-    vertices.push_back(vertex_up_right  );
-    vertices.push_back(vertex_down_right);
-
-    glm::vec2 uv_up_left    = glm::vec2( 0.0, 0.0 );
-    glm::vec2 uv_up_right   = glm::vec2( (float)_texture->width()/(float)_texture->textureWidth(), 0.0 );
-    glm::vec2 uv_down_right = glm::vec2( (float)_texture->width()/(float)_texture->textureWidth(), (float)_texture->height()/(float)_texture->textureHeight() );
-    glm::vec2 uv_down_left  = glm::vec2( 0.0, (float)_texture->height()/(float)_texture->textureHeight() );
-
-    UV.push_back(uv_up_left   );
-    UV.push_back(uv_down_left );
-    UV.push_back(uv_up_right  );
-    UV.push_back(uv_down_right);
 
     glm::vec2 eggVec;
     if (transparency)
@@ -190,14 +178,14 @@ void Sprite::renderScaled(int x, int y, unsigned int width, unsigned int height,
 
     GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, Game::getInstance()->renderer()->getVVBO()));
 
-    GL_CHECK(glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glm::vec2), &vertices[0], GL_DYNAMIC_DRAW));
+    GL_CHECK(glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), &vertices[0], GL_DYNAMIC_DRAW));
 
     GL_CHECK(glVertexAttribPointer(_attribPos, 2, GL_FLOAT, GL_FALSE, 0, (void*)0 ));
 
 
     GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, Game::getInstance()->renderer()->getTVBO()));
 
-    GL_CHECK(glBufferData(GL_ARRAY_BUFFER, UV.size() * sizeof(glm::vec2), &UV[0], GL_DYNAMIC_DRAW));
+    GL_CHECK(glBufferData(GL_ARRAY_BUFFER, sizeof(UV), &UV[0], GL_DYNAMIC_DRAW));
 
     GL_CHECK(glVertexAttribPointer(_attribTex, 2, GL_FLOAT, GL_FALSE, 0, (void*)0 ));
 
@@ -223,28 +211,18 @@ void Sprite::render(int x, int y, bool transparency, bool light, int outline, un
 void Sprite::renderCropped(int x, int y, int dx, int dy, unsigned int width, unsigned int height, bool transparency,
                            bool light, unsigned int lightValue)
 {
-    std::vector<glm::vec2> vertices;
-    std::vector<glm::vec2> UV;
-
-    glm::vec2 vertex_up_left    = glm::vec2( (float)x, (float)y);
-    glm::vec2 vertex_up_right   = glm::vec2( (float)(x+width), (float)y);
-    glm::vec2 vertex_down_right = glm::vec2( (float)(x+width), (float)(y+height));
-    glm::vec2 vertex_down_left  = glm::vec2( (float)x, (float)(y+height));
-
-    vertices.push_back(vertex_up_left   );
-    vertices.push_back(vertex_down_left );
-    vertices.push_back(vertex_up_right  );
-    vertices.push_back(vertex_down_right);
-
-    glm::vec2 uv_up_left    = glm::vec2( (float)dx/(float)_texture->textureWidth(), (float)dy/(float)_texture->textureHeight() );
-    glm::vec2 uv_up_right   = glm::vec2( (float)(dx+width)/(float)_texture->textureWidth(), (float)dy/(float)_texture->textureHeight() );
-    glm::vec2 uv_down_right = glm::vec2( (float)(dx+width)/(float)_texture->textureWidth(), (float)(dy+height)/(float)_texture->textureHeight() );
-    glm::vec2 uv_down_left  = glm::vec2( (float)dx/(float)_texture->textureWidth(), (float)(dy+height)/(float)_texture->textureHeight() );
-
-    UV.push_back(uv_up_left   );
-    UV.push_back(uv_down_left );
-    UV.push_back(uv_up_right  );
-    UV.push_back(uv_down_right);
+    glm::vec2 vertices[4] = {
+        glm::vec2((float)x, (float)y),
+        glm::vec2((float)x, (float)(y + height)),
+        glm::vec2((float)(x + width), (float)y),
+        glm::vec2((float)(x + width), (float)(y + height))
+    };
+    glm::vec2 UV[4] = {
+        glm::vec2((float)dx / (float)_texture->textureWidth(), (float)dy / (float)_texture->textureHeight()),
+        glm::vec2((float)dx / (float)_texture->textureWidth(), (float)(dy + height) / (float)_texture->textureHeight()),
+        glm::vec2((float)(dx + width) / (float)_texture->textureWidth(), (float)dy / (float)_texture->textureHeight()),
+        glm::vec2((float)(dx + width) / (float)_texture->textureWidth(), (float)(dy + height) / (float)_texture->textureHeight())
+    };
 
     glm::vec2 eggVec;
     if (transparency)
@@ -252,8 +230,7 @@ void Sprite::renderCropped(int x, int y, int dx, int dy, unsigned int width, uns
         auto dude = Game::getInstance()->player();
         if (!dude || !Game::getInstance()->locationState()) {
             transparency = false;
-        }
-        else {
+        } else {
             auto camera = Game::getInstance()->locationState()->camera();
             Point eggPos = dude->hexagon()->position() - camera->topLeft() + dude->eggOffset();
 
@@ -305,32 +282,28 @@ void Sprite::renderCropped(int x, int y, int dx, int dy, unsigned int width, uns
 
     GL_CHECK(_shader->setUniform(_uniformOutline, false));
 
-    if (Game::getInstance()->renderer()->renderPath() == Renderer::RenderPath::OGL21)
-    {
+    if (Game::getInstance()->renderer()->renderPath() == Renderer::RenderPath::OGL21) {
         GL_CHECK(_shader->setUniform(_uniformTexSize, glm::vec2((float)_texture->textureWidth(), (float)_texture->textureHeight() )));
     }
 
-    if (Game::getInstance()->renderer()->renderPath() == Renderer::RenderPath::OGL32)
-    {
+    if (Game::getInstance()->renderer()->renderPath() == Renderer::RenderPath::OGL32) {
         GLint curvao;
         glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &curvao);
         GLint vao = Game::getInstance()->renderer()->getVAO();
-        if (curvao != vao)
-        {
+        if (curvao != vao) {
             GL_CHECK(glBindVertexArray(vao));
         }
     }
 
     GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, Game::getInstance()->renderer()->getVVBO()));
 
-    GL_CHECK(glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glm::vec2), &vertices[0], GL_DYNAMIC_DRAW));
+	GL_CHECK(glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), &vertices[0], GL_DYNAMIC_DRAW));
 
     GL_CHECK(glVertexAttribPointer(_attribPos, 2, GL_FLOAT, GL_FALSE, 0, (void*)0 ));
 
-
     GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, Game::getInstance()->renderer()->getTVBO()));
 
-    GL_CHECK(glBufferData(GL_ARRAY_BUFFER, UV.size() * sizeof(glm::vec2), &UV[0], GL_DYNAMIC_DRAW));
+    GL_CHECK(glBufferData(GL_ARRAY_BUFFER, sizeof(UV), &UV[0], GL_DYNAMIC_DRAW));
 
     GL_CHECK(glVertexAttribPointer(_attribTex, 2, GL_FLOAT, GL_FALSE, 0, (void*)0 ));
 
