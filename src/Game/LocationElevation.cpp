@@ -23,6 +23,7 @@
 // C++ standard includes
 
 // Falltergeist includes
+#include "../UI/TileMap.h"
 
 // Third party includes
 
@@ -32,6 +33,8 @@ namespace Falltergeist
     {
         LocationElevation::LocationElevation()
         {
+            _roof = std::make_shared<UI::TileMap>();
+            _floor = std::make_shared<UI::TileMap>();
         }
 
         LocationElevation::~LocationElevation()
@@ -56,29 +59,21 @@ namespace Falltergeist
             _canRestHere = value;
         }
 
-        /**
-         * @brief Returns array of ids of floor tiles
-         * @return Floor tiles
-         */
-        std::vector<unsigned>* LocationElevation::floorTiles()
+        std::shared_ptr<UI::TileMap> LocationElevation::floor()
         {
-            return &_floorTiles;
+            return _floor;
         }
 
-        /**
-         * @brief Returns array of ids of roof tiles
-         * @return Roof tiles
-         */
-        std::vector<unsigned>* LocationElevation::roofTiles()
+        std::shared_ptr<UI::TileMap> LocationElevation::roof()
         {
-            return &_roofTiles;
+            return _roof;
         }
 
         /**
          * @brief Returns array of game objects
          * @return Game objects
          */
-        std::vector<Game::Object*>* LocationElevation::objects()
+        std::vector<Object*>* LocationElevation::objects()
         {
             return &_objects;
         }

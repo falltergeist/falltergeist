@@ -16,12 +16,11 @@
  * You should have received a copy of the GNU General Public License
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-#ifndef FALLTERGEIST_HELPERS_CRITTERANIMATIONHELPER_H
-#define FALLTERGEIST_HELPERS_CRITTERANIMATIONHELPER_H
+#ifndef FALLTERGEIST_HELPERS_GAMEOBJECTHELPER_H
+#define FALLTERGEIST_HELPERS_GAMEOBJECTHELPER_H
 
 // C++ standard includes
-#include <string>
+#include <memory>
 
 // Falltergeist includes
 
@@ -29,16 +28,28 @@
 
 namespace Falltergeist
 {
+    namespace Format
+    {
+        namespace Map
+        {
+            class Object;
+            class Script;
+        }
+    }
+    namespace Game
+    {
+        class Object;
+    }
     namespace Helpers
     {
-        class CritterAnimationHelper
+        class GameObjectHelper
         {
             public:
-                CritterAnimationHelper() = default;
-                std::string getSuffix(unsigned int animationId, unsigned int weaponId) const;
-                std::string getPrefix(unsigned int FID) const;
+                GameObjectHelper() = default;
+                Game::Object* createFromMapObject(const std::unique_ptr<Format::Map::Object> &mapObject) const;
+                Game::Object* createFromMapSpatialScript(const Format::Map::Script& mapScript) const;
         };
     }
 }
 
-#endif //FALLTERGEIST_HELPERS_CRITTERANIMATIONHELPER_H
+#endif //FALLTERGEIST_HELPERS_GAMEOBJECTHELPER_H

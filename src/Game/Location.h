@@ -21,6 +21,7 @@
 #define FALLTERGEIST_GAME_LOCATION_H
 
 // C++ standard includes
+#include <memory>
 #include <map>
 #include <string>
 #include <vector>
@@ -37,6 +38,10 @@ namespace Falltergeist
         {
             class File;
         }
+    }
+    namespace VM
+    {
+        class Script;
     }
     namespace Game
     {
@@ -90,7 +95,9 @@ namespace Falltergeist
                 unsigned int defaultOrientation() const;
                 void setDefaultOrientation(unsigned int value);
 
-                std::vector<LocationElevation*>* elevations();
+                std::vector<std::shared_ptr<LocationElevation>>* elevations();
+
+                std::shared_ptr<VM::Script> script() const;
 
             protected:
                 /**
@@ -170,7 +177,9 @@ namespace Falltergeist
                 /**
                  * @brief Map elevations
                  */
-                std::vector<LocationElevation*> _elevations;
+                std::vector<std::shared_ptr<LocationElevation>> _elevations;
+
+                std::shared_ptr<VM::Script> _script;
         };
     }
 }

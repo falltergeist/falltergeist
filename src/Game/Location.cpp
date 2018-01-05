@@ -21,17 +21,27 @@
 #include "../Game/Location.h"
 
 // C++ standard includes
+#include <cmath>
 
 // Falltergeist includes
 #include "../Format/Gam/File.h"
 #include "../Format/Map/File.h"
 #include "../Game/LocationElevation.h"
+#include "../Game/SpatialObject.h"
+#include "../Graphics/Point.h"
+#include "../Helpers/GameObjectHelper.h"
 #include "../ResourceManager.h"
+#include "../UI/Tile.h"
+#include "../UI/TileMap.h"
+#include "../VM/Script.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
+    using Graphics::Point;
+    using Helpers::GameObjectHelper;
+
     namespace Game
     {
         Location::Location()
@@ -50,15 +60,65 @@ namespace Falltergeist
             setDefaultOrientation(mapFile->defaultOrientation());
 
             // Initialize MAP vars
-            if (mapFile->MVARS().size() > 0)
-            {
+            if (!mapFile->MVARS().empty()) {
                 auto gam = ResourceManager::getInstance()->gamFileType("maps/" + name() + ".gam");
-                if (gam)
-                {
-                    for (auto mvar : *gam->MVARS())
-                    {
+                if (gam) {
+                    for (auto mvar : *gam->MVARS()) {
                         _MVARS.push_back(mvar.second);
                     }
+                }
+            }
+
+            if (mapFile->scriptId() > 0) {
+                _script = std::make_shared<VM::Script>(
+                    ResourceManager::getInstance()->intFileType((unsigned)mapFile->scriptId() - 1),
+                    nullptr
+                );
+            }
+
+            GameObjectHelper gameObjectHelper;
+
+            for (auto &mapElevation : mapFile->elevations()) {
+                auto elevation = std::make_shared<LocationElevation>();
+
+                // load objects
+                for (auto &mapObject : mapElevation.objects()) {
+
+                    auto object = gameObjectHelper.createFromMapObject(mapObject);
+                    if (!object) {
+                        // TODO: add some logging
+                        continue;
+                    }
+
+                    elevation->objects()->push_back(object);
+                }
+
+                // load tiles
+                for (unsigned int i = 0; i != 100 * 100; ++i) {
+                    auto tileX = static_cast<unsigned>(ceil(((double) i) / 100));
+                    unsigned int tileY = i % 100;
+                    unsigned int x = (100 - tileY - 1) * 48 + 32 * (tileX - 1);
+                    unsigned int y = tileX * 24 + (tileY - 1) * 12 + 1;
+
+                    unsigned int tileNum = mapElevation.floorTiles().at(i);
+                    if (tileNum > 1) {
+                        elevation->floor()->tiles()[i] = std::make_unique<UI::Tile>(tileNum, Point(x, y));
+                    }
+
+                    tileNum = mapElevation.roofTiles().at(i);
+                    if (tileNum > 1) {
+                        elevation->roof()->tiles()[i] = std::make_unique<UI::Tile>(tileNum, Point(x, y - 96));
+                    }
+                }
+
+                elevations()->push_back(elevation);
+            }
+
+            // load spatial objects(scripts)
+            for (auto &script: mapFile->scripts()) {
+                if (script.type() == Format::Map::Script::Type::SPATIAL) {
+                    auto object = gameObjectHelper.createFromMapSpatialScript(script);
+                    elevations()->at(object->elevation())->objects()->push_back(object);
                 }
             }
         }
@@ -256,9 +316,14 @@ namespace Falltergeist
          * @brief Returns location elevations
          * @return Elevations
          */
-        std::vector<LocationElevation*>* Location::elevations()
+        std::vector<std::shared_ptr<LocationElevation>>* Location::elevations()
         {
             return &_elevations;
+        }
+
+        std::shared_ptr<VM::Script> Location::script() const
+        {
+            return _script;
         }
     }
 }

@@ -21,14 +21,20 @@
 #define FALLTERGEIST_GAME_LOCATIONELEVATION_H
 
 // C++ standard includes
+#include <memory>
 #include <vector>
 
 // Falltergeist includes
+
 
 // Third party includes
 
 namespace Falltergeist
 {
+    namespace UI
+    {
+        class TileMap;
+    }
     namespace Game
     {
         class Object;
@@ -48,9 +54,10 @@ namespace Falltergeist
                 bool canRestHere() const;
                 void setCanRestHere(bool value);
 
-                std::vector<unsigned>* floorTiles();
-                std::vector<unsigned>* roofTiles();
-                std::vector<Game::Object*>* objects();
+                std::shared_ptr<UI::TileMap> floor();
+                std::shared_ptr<UI::TileMap> roof();
+
+                std::vector<Object*>* objects();
 
             protected:
                 /**
@@ -59,20 +66,14 @@ namespace Falltergeist
                  */
                 bool _canRestHere = true;
 
-                /**
-                 * @brief Array of ids of floor tiles
-                 */
-                std::vector<unsigned> _floorTiles;
+                std::shared_ptr<UI::TileMap> _floor;
 
-                /**
-                 * @brief Array of ids of roof tiles
-                 */
-                std::vector<unsigned> _roofTiles;
+                std::shared_ptr<UI::TileMap> _roof;
 
                 /**
                  * @brief Array of game objects
                  */
-                std::vector<Game::Object*> _objects;
+                std::vector<Object*> _objects;
         };
     }
 }

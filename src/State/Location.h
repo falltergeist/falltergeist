@@ -164,10 +164,6 @@ namespace Falltergeist
 
                 std::unique_ptr<HexagonGrid> _hexagonGrid;
                 std::unique_ptr<LocationCamera> _camera;
-                std::unique_ptr<UI::TileMap> _floor;
-                std::unique_ptr<UI::TileMap> _roof ;
-                std::unique_ptr<VM::Script> _locationScript;
-                std::vector<int> _MVARS;
                 std::map<std::string, VM::StackValue> _EVARS;
                 std::vector<UI::Base*> _floatMessages;
 
@@ -176,8 +172,8 @@ namespace Falltergeist
                 unsigned int _currentElevation = 0;
                 unsigned int _currentMap = 0;
                 unsigned int _lastClickedTile = 0;
-                Game::Object* _objectUnderCursor = NULL;
-                Game::Object* _actionCursorLastObject = NULL;
+                Game::Object* _objectUnderCursor = nullptr;
+                Game::Object* _actionCursorLastObject = nullptr;
                 bool _actionCursorButtonPressed = false;
                 UI::PlayerPanel* _playerPanel;
 
@@ -198,44 +194,32 @@ namespace Falltergeist
                 unsigned int _lightLevel = 0x10000;
                 Falltergeist::Graphics::Lightmap* _lightmap;
 
-                std::vector<std::unique_ptr<Game::SpatialObject>> _spatials;
+                std::vector<Game::SpatialObject*> _spatials;
 
-            void initializePlayerTestAppareance(Falltergeist::Game::DudeObject *player) const;
+                void initializePlayerTestAppareance(Falltergeist::Game::DudeObject *player) const;
 
-            void initializeLightmap();
+                void initializeLightmap();
 
-            Game::Object* createObjectFromMapObject(const std::unique_ptr<Falltergeist::Format::Map::Object> &mapObject) const;
+                void loadAmbient(const std::string &name);
 
-            void loadSpatialScripts(const Falltergeist::Format::Map::File *mapFile);
+                void renderCursor() const;
 
-            void loadFloorAndRoof(const Format::Map::File *mapFile);
+                void renderObjects() const;
+                void renderObjectsText() const;
 
-            void loadLocationScript(const Format::Map::File *mapFile);
+                void renderCursorOutline() const;
 
-            void loadAmbient(const std::string &name);
+                void renderTestingOutline() const;
 
-            void loadDude(const Format::Map::File *mapFile);
+                void thinkObjects() const;
 
-            void loadObjects(const Format::Map::File *mapFile);
+                void performScrolling();
 
-            void renderCursor() const;
+                void firstLocationEnter() const;
 
-            void renderObjects() const;
-            void renderObjectsText() const;
+                void updateLocation();
 
-            void renderCursorOutline() const;
-
-            void renderTestingOutline() const;
-
-            void thinkObjects() const;
-
-            void performScrolling();
-
-            void firstLocationEnter() const;
-
-            void updateLocation();
-
-            void processTimers();
+                void processTimers();
         };
     }
 }
