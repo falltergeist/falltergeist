@@ -194,14 +194,14 @@ namespace Falltergeist
             _quit = true;
         }
 
-        void Game::setPlayer(std::unique_ptr<DudeObject> player)
+        void Game::setPlayer(std::shared_ptr<DudeObject> player)
         {
             _player = std::move(player);
         }
 
-        DudeObject* Game::player()
+        std::shared_ptr<DudeObject> Game::player()
         {
-            return _player.get();
+            return _player;
         }
 
         Input::Mouse* Game::mouse() const
@@ -217,7 +217,7 @@ namespace Falltergeist
                     return location;
                 }
             }
-            return 0;
+            return nullptr;
         }
 
         void Game::setGVAR(unsigned int number, int value)

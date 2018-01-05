@@ -17,37 +17,32 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Related headers
-#include "../../VM/Handler/Opcode80BFHandler.h"
+#ifndef FALLTERGEIST_HELPERS_GAMELOCATIONHELPER_H
+#define FALLTERGEIST_HELPERS_GAMELOCATIONHELPER_H
 
 // C++ standard includes
+#include <memory>
+#include <string>
 
 // Falltergeist includes
-#include "../../Game/DudeObject.h"
-#include "../../Game/Game.h"
-#include "../../Logger.h"
-#include "../../VM/Script.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
-    namespace VM
+    namespace Game
     {
-        namespace Handler
+        class Location;
+    }
+    namespace Helpers
+    {
+        class GameLocationHelper
         {
-            Opcode80BF::Opcode80BF(VM::Script* script) : OpcodeHandler(script)
-            {
-            }
-
-            void Opcode80BF::_run()
-            {
-                Logger::debug("SCRIPT") << "[80BF] [+] GameDudeObject* dude_obj()" << std::endl;
-                auto game = Game::getInstance();
-                _script->dataStack()->push(game->player().get());
-            }
-        }
+            public:
+                GameLocationHelper() = default;
+                std::shared_ptr<Game::Location> getByName(const std::string& name) const;
+                std::shared_ptr<Game::Location> getInitialLocation() const;
+        };
     }
 }
-
-
+#endif //FALLTERGEIST_HELPERS_GAMELOCATIONHELPER_H

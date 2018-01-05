@@ -29,6 +29,7 @@
 #include "../Game/DudeObject.h"
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
+#include "../Helpers/StateLocationHelper.h"
 #include "../ResourceManager.h"
 #include "../State/Location.h"
 #include "../State/PlayerEditAge.h"
@@ -46,6 +47,8 @@
 
 namespace Falltergeist
 {
+    using Helpers::StateLocationHelper;
+
     namespace State
     {
         PlayerCreate::PlayerCreate() : State()
@@ -647,7 +650,9 @@ namespace Falltergeist
         {
             auto player = Game::getInstance()->player();
             player->setHitPoints(player->hitPointsMax());
-            Game::getInstance()->setState(new Location());
+
+            StateLocationHelper stateLocationHelper;
+            Game::getInstance()->setState(stateLocationHelper.getInitialLocationState());
         }
 
         void PlayerCreate::doGender()

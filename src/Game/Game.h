@@ -112,8 +112,9 @@ namespace Falltergeist
                  */
                 void render();
 
-                void setPlayer(std::unique_ptr<DudeObject> player);
-                DudeObject* player();
+                void setPlayer(std::shared_ptr<DudeObject> player);
+                std::shared_ptr<DudeObject> player();
+
                 Input::Mouse* mouse() const;
                 Graphics::Renderer* renderer();
                 Time* gameTime();
@@ -149,7 +150,7 @@ namespace Falltergeist
                 std::unique_ptr<UI::FpsCounter> _fpsCounter;
                 std::unique_ptr<UI::TextArea> _mousePosition, _currentTime, _falltergeistVersion;
 
-                std::unique_ptr<DudeObject> _player;
+                std::shared_ptr<DudeObject> _player;
 
                 bool _quit = false;
                 bool _initialized = false;

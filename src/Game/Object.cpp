@@ -361,7 +361,7 @@ namespace Falltergeist {
             bool useDefault = true;
             if (script() && script()->hasFunction("description_p_proc")) {
                 script()
-                        ->setSourceObject(Game::getInstance()->player())
+                        ->setSourceObject(Game::getInstance()->player().get())
                         ->call("description_p_proc");
                 if (script()->overrides()) {
                     useDefault = false;
@@ -387,7 +387,7 @@ namespace Falltergeist {
         void Object::destroy_p_proc() {
             if (script() && script()->hasFunction("destroy_p_proc")) {
                 script()
-                        ->setSourceObject(Game::getInstance()->player())
+                        ->setSourceObject(Game::getInstance()->player().get())
                         ->call("destroy_p_proc");
             }
         }
@@ -396,7 +396,7 @@ namespace Falltergeist {
             bool useDefault = true;
             if (script() && script()->hasFunction("look_at_p_proc")) {
                 script()
-                        ->setSourceObject(Game::getInstance()->player())
+                        ->setSourceObject(Game::getInstance()->player().get())
                         ->call("look_at_p_proc");
                 if (script()->overrides()) {
                     useDefault = false;

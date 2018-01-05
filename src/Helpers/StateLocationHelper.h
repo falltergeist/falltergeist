@@ -16,38 +16,30 @@
  * You should have received a copy of the GNU General Public License
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-// Related headers
-#include "../../VM/Handler/Opcode80BFHandler.h"
+#ifndef FALLTERGEIST_HELPERS_STATELOCATIONHELPER_H
+#define FALLTERGEIST_HELPERS_STATELOCATIONHELPER_H
 
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../Game/DudeObject.h"
-#include "../../Game/Game.h"
-#include "../../Logger.h"
-#include "../../VM/Script.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
-    namespace VM
+    namespace State
     {
-        namespace Handler
+        class Location;
+    }
+    namespace Helpers
+    {
+        class StateLocationHelper
         {
-            Opcode80BF::Opcode80BF(VM::Script* script) : OpcodeHandler(script)
-            {
-            }
-
-            void Opcode80BF::_run()
-            {
-                Logger::debug("SCRIPT") << "[80BF] [+] GameDudeObject* dude_obj()" << std::endl;
-                auto game = Game::getInstance();
-                _script->dataStack()->push(game->player().get());
-            }
-        }
+            public:
+                StateLocationHelper() = default;
+                State::Location* getInitialLocationState() const;
+        };
     }
 }
 
-
+#endif //FALLTERGEIST_HELPERS_STATELOCATIONHELPER_H

@@ -47,6 +47,7 @@ namespace Falltergeist
     }
     namespace Game
     {
+        class DudeObject;
         class Location;
         class Object;
         class SpatialObject;
@@ -83,8 +84,6 @@ namespace Falltergeist
                 Location();
                 ~Location() override;
 
-                void setLocation(const std::string& name);
-
                 void init() override;
                 void think() override;
                 void handle(Event::Event* event) override;
@@ -95,8 +94,11 @@ namespace Falltergeist
                 HexagonGrid* hexagonGrid();
                 LocationCamera* camera();
 
-                std::shared_ptr<Falltergeist::Game::Location> location();
-                void setLocation(std::shared_ptr<Falltergeist::Game::Location> location);
+                std::shared_ptr<Game::Location> location();
+                void setLocation(std::shared_ptr<Game::Location> location);
+
+                unsigned int elevation() const;
+                void setElevation(unsigned int elevation);
 
                 void setMVAR(unsigned int number, int value);
                 int MVAR(unsigned int number);
@@ -164,12 +166,15 @@ namespace Falltergeist
 
                 std::unique_ptr<HexagonGrid> _hexagonGrid;
                 std::unique_ptr<LocationCamera> _camera;
+                std::unique_ptr<UI::TileMap> _floor;
+                std::unique_ptr<UI::TileMap> _roof;
                 std::map<std::string, VM::StackValue> _EVARS;
                 std::vector<UI::Base*> _floatMessages;
 
                 std::shared_ptr<Falltergeist::Game::Location> _location;
+                unsigned int _elevation = 0;
+
                 bool _locationEnter = true;
-                unsigned int _currentElevation = 0;
                 unsigned int _currentMap = 0;
                 unsigned int _lastClickedTile = 0;
                 Game::Object* _objectUnderCursor = nullptr;
@@ -182,8 +187,8 @@ namespace Falltergeist
                 bool _scrollTop = false;
                 bool _scrollBottom = false;
 
-                std::list<std::unique_ptr<Game::Object>> _objects;
-                std::list<std::unique_ptr<Game::Object>> _flatObjects;
+                std::list<std::shared_ptr<Game::Object>> _objects;
+                std::list<std::shared_ptr<Game::Object>> _flatObjects;
 
                 std::unique_ptr<UI::TextArea> _hexagonInfo;
 
@@ -196,7 +201,7 @@ namespace Falltergeist
 
                 std::vector<Game::SpatialObject*> _spatials;
 
-                void initializePlayerTestAppareance(Falltergeist::Game::DudeObject *player) const;
+                void initializePlayerTestAppareance(std::shared_ptr<Game::DudeObject> player) const;
 
                 void initializeLightmap();
 
