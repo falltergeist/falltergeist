@@ -29,16 +29,14 @@
 
 namespace Falltergeist
 {
-namespace Game
-{
-
-class MiscObject : public Object
-{
-public:
-    MiscObject();
-    ~MiscObject() override;
-};
-
-}
+    namespace Game
+    {
+        class MiscObject : public Object
+        {
+            public:
+                MiscObject();
+                ~MiscObject() override = default;
+        };
+    }
 }
 #endif // FALLTERGEIST_GAME_MISCOBJECT_H

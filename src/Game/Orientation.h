@@ -16,14 +16,12 @@
  * You should have received a copy of the GNU General Public License
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-#ifndef FALLTERGEIST_GAME_MISCITEMOBJECT_H
-#define FALLTERGEIST_GAME_MISCITEMOBJECT_H
+#ifndef FALLTERGEIST_GAME_ORIENTATION_H
+#define FALLTERGEIST_GAME_ORIENTATION_H
 
 // C++ standard includes
 
 // Falltergeist includes
-#include "../Game/ItemObject.h"
 
 // Third party includes
 
@@ -31,13 +29,25 @@ namespace Falltergeist
 {
     namespace Game
     {
-        class MiscItemObject : public ItemObject
+        /**
+         * represents orientation in hexagonal space
+         */
+        class Orientation
         {
             public:
-                MiscItemObject();
-                ~MiscItemObject() override = default;
+                enum
+                {
+                    NS = 0, EW, NC, SC, EC, WC
+                };
+
+                Orientation(unsigned char value = NS);
+                Orientation& operator =(unsigned char value);
+                operator unsigned char() const;
+
+            private:
+                unsigned char _dir;
         };
     }
 }
 
-#endif // FALLTERGEIST_GAME_MISCITEMOBJECT_H
+#endif //FALLTERGEIST_GAME_ORIENTATION_H

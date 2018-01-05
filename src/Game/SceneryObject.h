@@ -29,35 +29,34 @@
 
 namespace Falltergeist
 {
-namespace Game
-{
-
-/**
- * Stationary object used as scenery.
- */
-class SceneryObject : public Object
-{
-public:
-    enum class Subtype
+    namespace Game
     {
-        DOOR = 0,
-        STAIRS,
-        ELEVATOR,
-        LADDER,
-        GENERIC
-    };
+        /**
+         * Stationary object used as scenery.
+         */
+        class SceneryObject : public Object
+        {
+            public:
+                enum class Subtype
+                {
+                    DOOR = 0,
+                    STAIRS,
+                    ELEVATOR,
+                    LADDER,
+                    GENERIC
+                };
 
-    SceneryObject();
-    ~SceneryObject() override;
+                SceneryObject();
+                ~SceneryObject() override = default;
 
-    char soundId() const;
-    void setSoundId(char soundId);
+                char soundId() const;
+                void setSoundId(char soundId);
 
-protected:
-    char _soundId = 0;
-    Subtype _subtype;
-};
-
+            protected:
+                char _soundId = 0;
+                Subtype _subtype;
+        };
+    }
 }
-}
+
 #endif // FALLTERGEIST_GAME_SCENERYOBJECT_H

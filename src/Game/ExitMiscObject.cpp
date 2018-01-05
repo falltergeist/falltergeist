@@ -28,56 +28,50 @@
 
 namespace Falltergeist
 {
-namespace Game
-{
+    namespace Game
+    {
+        ExitMiscObject::ExitMiscObject()
+        {
+        }
 
-ExitMiscObject::ExitMiscObject()
-{
-}
+        int ExitMiscObject::exitMapNumber() const
+        {
+            return _exitMapNumber;
+        }
 
-ExitMiscObject::~ExitMiscObject()
-{
-}
+        void ExitMiscObject::setExitMapNumber(int value)
+        {
+            _exitMapNumber = value;
+        }
 
-int ExitMiscObject::exitMapNumber() const
-{
-    return _exitMapNumber;
-}
+        int ExitMiscObject::exitElevationNumber() const
+        {
+            return _exitElevationNumber;
+        }
 
-void ExitMiscObject::setExitMapNumber(int value)
-{
-    _exitMapNumber = value;
-}
+        void ExitMiscObject::setExitElevationNumber(int value)
+        {
+            _exitElevationNumber = value;
+        }
 
-int ExitMiscObject::exitElevationNumber() const
-{
-    return _exitElevationNumber;
-}
+        int ExitMiscObject::exitHexagonNumber() const
+        {
+            return _exitHexagonNumber;
+        }
 
-void ExitMiscObject::setExitElevationNumber(int value)
-{
-    _exitElevationNumber = value;
-}
+        void ExitMiscObject::setExitHexagonNumber(int value)
+        {
+            _exitHexagonNumber = value;
+        }
 
-int ExitMiscObject::exitHexagonNumber() const
-{
-    return _exitHexagonNumber;
-}
+        int ExitMiscObject::exitDirection() const
+        {
+            return _exitDirection;
+        }
 
-void ExitMiscObject::setExitHexagonNumber(int value)
-{
-    _exitHexagonNumber = value;
-}
-
-int ExitMiscObject::exitDirection() const
-{
-    return _exitDirection;
-}
-
-void ExitMiscObject::setExitDirection(int value)
-{
-    _exitDirection = value;
-}
-
-}
+        void ExitMiscObject::setExitDirection(int value)
+        {
+            _exitDirection = value;
+        }
+    }
 }

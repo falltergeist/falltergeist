@@ -21,6 +21,7 @@
 #define FALLTERGEIST_EXCEPTION_H
 
 // C++ standard includes
+#include <stdexcept>
 #include <exception>
 #include <string>
 
@@ -32,13 +33,14 @@ namespace Falltergeist
 {
     class Exception : public std::exception
     {
-        private:
-            std::string _message;
         public:
             explicit Exception(const char* message);
             explicit Exception(const std::string& message);
-            virtual ~Exception() throw();
-            virtual const char* what() const throw();
+            const char* what() const noexcept override;
+
+        private:
+            std::runtime_error _error;
     };
 }
+
 #endif // FALLTERGEIST_EXCEPTION_H

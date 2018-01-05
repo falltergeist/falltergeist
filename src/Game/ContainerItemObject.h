@@ -30,35 +30,33 @@
 
 namespace Falltergeist
 {
-namespace Game
-{
+    namespace Game
+    {
+        /**
+         * Items able to hold other items in their inventory.
+         */
+        class ContainerItemObject : public ItemObject
+        {
+            public:
+                ContainerItemObject();
+                ~ContainerItemObject() override = default;
 
-/**
- * Items able to hold other items in their inventory.
- */
-class ContainerItemObject : public ItemObject
-{
-public:
-    ContainerItemObject();
-    ~ContainerItemObject() override;
+                std::vector<ItemObject*>* inventory();
 
-    std::vector<ItemObject*>* inventory();
+                void use_p_proc(CritterObject* usedBy) override;
 
-    void use_p_proc(CritterObject* usedBy) override;
+                bool locked() const;
+                void setLocked(bool locked);
 
-    bool locked() const;
-    void setLocked(bool locked);
+                bool opened() const;
+                void setOpened(bool opened);
 
-    bool opened() const;
-    void setOpened(bool opened);
-
-protected:
-    std::vector<ItemObject*> _inventory;
-    bool _opened = false;
-    bool _locked = false;
-};
-
-}
+            protected:
+                std::vector<ItemObject*> _inventory;
+                bool _opened = false;
+                bool _locked = false;
+        };
+    }
 }
 
 #endif // FALLTERGEIST_GAME_CONTAINERITEMOBJECT_H

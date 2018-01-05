@@ -29,16 +29,15 @@
 
 namespace Falltergeist
 {
-namespace Game
-{
-
-class LadderSceneryObject : public SceneryObject
-{
-public:
-    LadderSceneryObject();
-    ~LadderSceneryObject() override;
-};
-
+    namespace Game
+    {
+        class LadderSceneryObject : public SceneryObject
+        {
+            public:
+                LadderSceneryObject();
+                ~LadderSceneryObject() override = default;
+        };
+    }
 }
-}
+
 #endif // FALLTERGEIST_GAME_LADDERSCENERYOBJECT_H

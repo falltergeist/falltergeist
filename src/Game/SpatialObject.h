@@ -29,21 +29,20 @@
 
 namespace Falltergeist
 {
-namespace Game
-{
+    namespace Game
+    {
+        class SpatialObject : public Object
+        {
+            public:
+                explicit SpatialObject(unsigned int radius);
+                ~SpatialObject() override = default;
+                void spatial_p_proc(Object* source);
+                unsigned int radius();
 
-class SpatialObject : public Object
-{
-
-public:
-    SpatialObject(unsigned int radius);
-    void spatial_p_proc(Object* source);
-    unsigned int radius();
-
-private:
-    unsigned int _radius;
-};
-
+            private:
+                unsigned int _radius;
+        };
+    }
 }
-}
+
 #endif //FALLTERGEIST_GAME_SPATIALOBJECT_H

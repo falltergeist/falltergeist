@@ -5,6 +5,7 @@
 - [bugfix][#535] Typo in CrossPlatform.cpp is fixed (alexeevdv)
 - [bugfix][#468] Check for animation if it actually has frm file (alexeevdv)
 - Sprites rendering improvement (Zervox)
+- [feature][#444] CritterAnimationHelper added. Code refactoring (alexeevdv)(dreamer-dead)
 
 0.3.0 (2016-03-16)
 =======================

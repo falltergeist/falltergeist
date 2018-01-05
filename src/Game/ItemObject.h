@@ -29,62 +29,60 @@
 
 namespace Falltergeist
 {
-namespace Game
-{
-
-/**
- * Item. Can be placed inside other object inventories (critters and containers)
- */
-class ItemObject : public Object
-{
-public:
-    enum class Subtype
+    namespace Game
     {
-        ARMOR = 0,
-        CONTAINER,
-        DRUG,
-        WEAPON,
-        AMMO,
-        MISC,
-        KEY
-    };
+        /**
+         * Item. Can be placed inside other object inventories (critters and containers)
+         */
+        class ItemObject : public Object
+        {
+            public:
+                enum class Subtype
+                {
+                    ARMOR = 0,
+                    CONTAINER,
+                    DRUG,
+                    WEAPON,
+                    AMMO,
+                    MISC,
+                    KEY
+                };
 
-    ItemObject();
-    ~ItemObject() override;
+                ItemObject();
+                ~ItemObject() override;
 
-    Subtype subtype() const;
+                Subtype subtype() const;
 
-    // item stack size in inventory or on the ground
-    unsigned int amount() const;
-    void setAmount(unsigned int value);
+                // item stack size in inventory or on the ground
+                unsigned int amount() const;
+                void setAmount(unsigned int value);
 
-    // item weight, in pounds
-    unsigned int weight() const;
-    void setWeight(unsigned int value);
+                // item weight, in pounds
+                unsigned int weight() const;
+                void setWeight(unsigned int value);
 
-    // item volume
-    unsigned int volume() const;
-    void setVolume(unsigned int volume);
+                // item volume
+                unsigned int volume() const;
+                void setVolume(unsigned int volume);
 
-    // item inventory frame ID
-    int inventoryFID() const;
-    void setInventoryFID(int value);
+                // item inventory frame ID
+                int inventoryFID() const;
+                void setInventoryFID(int value);
 
-    UI::Image* inventoryUi() const;
-    UI::Image* inventorySlotUi() const;
-    UI::Image* inventoryDragUi() const;
+                UI::Image* inventoryUi() const;
+                UI::Image* inventorySlotUi() const;
+                UI::Image* inventoryDragUi() const;
 
-protected:
-    Subtype _subtype;
-    unsigned int _amount = 1;
-    unsigned int _weight = 0;
-    unsigned int _volume = 0;
-    int _inventoryFID = -1;
-    std::unique_ptr<UI::Image> _inventoryUi, _inventorySlotUi, _inventoryDragUi;
-    void _generateUi() override;
-};
-
-}
+            protected:
+                Subtype _subtype;
+                unsigned int _amount = 1;
+                unsigned int _weight = 0;
+                unsigned int _volume = 0;
+                int _inventoryFID = -1;
+                std::unique_ptr<UI::Image> _inventoryUi, _inventorySlotUi, _inventoryDragUi;
+                void _generateUi() override;
+        };
+    }
 }
 
 #endif // FALLTERGEIST_GAME_ITEMOBJECT_H

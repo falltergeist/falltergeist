@@ -29,17 +29,15 @@
 
 namespace Falltergeist
 {
-namespace Game
-{
-
-class AmmoItemObject : public ItemObject
-{
-public:
-    AmmoItemObject();
-    ~AmmoItemObject() override;
-};
-
-}
+    namespace Game
+    {
+        class AmmoItemObject : public ItemObject
+        {
+            public:
+                AmmoItemObject();
+                ~AmmoItemObject() override = default;
+        };
+    }
 }
 
 #endif // FALLTERGEIST_GAME_AMMOITEMOBJECT_H

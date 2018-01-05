@@ -26,21 +26,16 @@
 
 namespace Falltergeist
 {
-    Exception::Exception(const char* message) : _message(message)
+    Exception::Exception(const char* message) : _error(message)
     {
     }
 
-    Exception::Exception(const std::string& message) : _message(message)
+    Exception::Exception(const std::string& message) : _error(message.c_str())
     {
     }
 
-    Exception::~Exception() throw()
+    const char* Exception::what() const noexcept
     {
-    }
-
-    const char* Exception::what() const throw()
-    {
-        return _message.c_str();
+        return _error.what();
     }
 }
-

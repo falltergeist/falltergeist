@@ -17,27 +17,28 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_GAME_MISCITEMOBJECT_H
-#define FALLTERGEIST_GAME_MISCITEMOBJECT_H
+#ifndef FALLTERGEIST_CRITTERANIMATIONHELPER_H
+#define FALLTERGEIST_CRITTERANIMATIONHELPER_H
 
 // C++ standard includes
+#include <string>
 
 // Falltergeist includes
-#include "../Game/ItemObject.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
-    namespace Game
+    namespace Helpers
     {
-        class MiscItemObject : public ItemObject
+        class CritterAnimationHelper
         {
             public:
-                MiscItemObject();
-                ~MiscItemObject() override = default;
+                CritterAnimationHelper() = default;
+                std::string getSuffix(unsigned int animationId, unsigned int weaponId) const;
+                std::string getPrefix(unsigned int FID) const;
         };
     }
 }
 
-#endif // FALLTERGEIST_GAME_MISCITEMOBJECT_H
+#endif //FALLTERGEIST_CRITTERANIMATIONHELPER_H
