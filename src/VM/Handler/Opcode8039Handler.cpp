@@ -89,10 +89,12 @@ namespace Falltergeist
                             case StackValue::Type::FLOAT: // FLOAT + STRING
                             {
                                 _error("op_add - FLOAT+STRING not allowed");
+                                break;
                             }
                             case StackValue::Type::INTEGER: // INTEGER + STRING
                             {
                                 _error("op_add - INTEGER+STRING not allowed");
+                                break;
                             }
                             default:
                             {

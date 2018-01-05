@@ -204,10 +204,11 @@ int ValueUnpacker::zeroFill(int pass, int /*ind*/)
 int ValueUnpacker::linearFill(int pass, int ind)
 {
     int mask = (1 << ind) - 1;
-    short *lb_ptr = _buffMiddle + ((-1l) << (ind - 1));
+    short *lb_ptr = _buffMiddle + ((-1l) << (unsigned)(ind - 1));
 
-    for (int i = 0; i < _subblocks; i++)
+    for (int i = 0; i < _subblocks; i++) {
         _blockPtr[i * _sbSize + pass] = lb_ptr[_getBits(ind) & mask];
+    }
     return 1;
 }
 
