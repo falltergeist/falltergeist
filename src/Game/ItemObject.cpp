@@ -33,91 +33,91 @@
 
 namespace Falltergeist
 {
-namespace Game
-{
+    namespace Game
+    {
+        using namespace Base;
 
-using namespace Base;
+        ItemObject::ItemObject() : Object()
+        {
+            _type = Type::ITEM;
+        }
 
-ItemObject::ItemObject() : Object()
-{
-    _type = Type::ITEM;
-}
+        ItemObject::~ItemObject()
+        {
+        }
 
-ItemObject::~ItemObject()
-{
-}
+        unsigned int ItemObject::amount() const
+        {
+            return _amount;
+        }
 
-unsigned int ItemObject::amount() const
-{
-    return _amount;
-}
+        void ItemObject::setAmount(unsigned int value)
+        {
+            _amount = value;
+        }
 
-void ItemObject::setAmount(unsigned int value)
-{
-    _amount = value;
-}
+        unsigned int ItemObject::weight() const
+        {
+            return _weight;
+        }
 
-unsigned int ItemObject::weight() const
-{
-    return _weight;
-}
+        void ItemObject::setWeight(unsigned int value)
+        {
+            _weight = value;
+        }
 
-void ItemObject::setWeight(unsigned int value)
-{
-    _weight = value;
-}
+        int ItemObject::inventoryFID() const
+        {
+            return _inventoryFID;
+        }
 
-int ItemObject::inventoryFID() const
-{
-    return _inventoryFID;
-}
+        void ItemObject::setInventoryFID(int value)
+        {
+            _inventoryFID = value;
+        }
 
-void ItemObject::setInventoryFID(int value)
-{
-    _inventoryFID = value;
-}
+        UI::Image* ItemObject::inventoryDragUi() const
+        {
+            return _inventoryDragUi.get();
+        }
 
-UI::Image* ItemObject::inventoryDragUi() const
-{
-    return _inventoryDragUi.get();
-}
+        void ItemObject::setVolume(unsigned int volume)
+        {
+            _volume = volume;
+        }
 
-void ItemObject::setVolume(unsigned int volume)
-{
-    _volume = volume;
-}
+        unsigned int ItemObject::volume() const
+        {
+            return _volume;
+        }
 
-unsigned int ItemObject::volume() const
-{
-    return _volume;
-}
+        UI::Image* ItemObject::inventoryUi() const
+        {
+            return _inventoryUi.get();
+        }
 
-UI::Image* ItemObject::inventoryUi() const
-{
-    return _inventoryUi.get();
-}
+        UI::Image* ItemObject::inventorySlotUi() const
+        {
+            return _inventorySlotUi.get();
+        }
 
-UI::Image* ItemObject::inventorySlotUi() const
-{
-    return _inventorySlotUi.get();
-}
+        void ItemObject::_generateUi()
+        {
+            Object::_generateUi();
 
-void ItemObject::_generateUi()
-{
-    Object::_generateUi();
+            if (inventoryFID() == -1) {
+                return;
+            }
 
-    if (inventoryFID() == -1) return;
+            // Big unscaled image of item
+            _inventoryDragUi = std::make_unique<UI::Image>(ResourceManager::getInstance()->FIDtoFrmName(inventoryFID()));
+            _inventoryUi = std::make_unique<UI::Image>(ResourceManager::getInstance()->FIDtoFrmName(inventoryFID()));
+            _inventorySlotUi = std::make_unique<UI::Image>(ResourceManager::getInstance()->FIDtoFrmName(inventoryFID()));
+        }
 
-    // Big unscaled image of item
-    _inventoryDragUi = std::make_unique<UI::Image>(ResourceManager::getInstance()->FIDtoFrmName(inventoryFID()));
-    _inventoryUi = std::make_unique<UI::Image>(ResourceManager::getInstance()->FIDtoFrmName(inventoryFID()));
-    _inventorySlotUi = std::make_unique<UI::Image>(ResourceManager::getInstance()->FIDtoFrmName(inventoryFID()));
-}
-
-ItemObject::Subtype ItemObject::subtype() const
-{
-    return _subtype;
-}
-
-}
+        ItemObject::Subtype ItemObject::subtype() const
+        {
+            return _subtype;
+        }
+    }
 }

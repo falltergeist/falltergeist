@@ -49,10 +49,10 @@ namespace Falltergeist
             public:
 
                 CritterObject();
-                ~CritterObject() override;
+                ~CritterObject() override = default;
 
                 std::vector<ItemObject*>* inventory(); // critter's own inventory
-                virtual void setOrientation(Orientation value) override;
+                void setOrientation(Orientation value) override;
 
                 std::vector<Hexagon*>* movementQueue();
 
@@ -146,7 +146,7 @@ namespace Falltergeist
                 virtual void use_skill_on_p_proc();
                 virtual void is_dropping_p_proc();
 
-                virtual void think() override;
+                void think() override;
                 virtual void onMovementAnimationEnded(Event::Event* event);
                 virtual void onMovementAnimationFrame(Event::Event* event);
 
@@ -200,7 +200,7 @@ namespace Falltergeist
                 virtual std::unique_ptr<UI::Animation> _generateMovementAnimation();
                 virtual std::string _generateArmorFrmString();
                 void _setupNextIdleAnim();
-                virtual void _generateUi() override;
+                void _generateUi() override;
         };
     }
 }

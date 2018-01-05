@@ -29,20 +29,19 @@
 
 namespace Falltergeist
 {
-namespace Game
-{
-
-/**
- * Item that can be consumed as drug (drugs, alcohol, food, etc.).
- * Applies temporary effect to a target critter.
- */
-class DrugItemObject : public ItemObject
-{
-public:
-    DrugItemObject();
-    ~DrugItemObject() override;
-};
-
+    namespace Game
+    {
+        /**
+         * Item that can be consumed as drug (drugs, alcohol, food, etc.).
+         * Applies temporary effect to a target critter.
+         */
+        class DrugItemObject : public ItemObject
+        {
+            public:
+                DrugItemObject();
+                ~DrugItemObject() override = default;
+        };
+    }
 }
-}
+
 #endif // FALLTERGEIST_GAME_DRUGITEMOBJECT_H

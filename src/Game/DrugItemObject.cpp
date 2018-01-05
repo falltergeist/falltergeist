@@ -28,17 +28,11 @@
 
 namespace Falltergeist
 {
-namespace Game
-{
-
-DrugItemObject::DrugItemObject() : ItemObject()
-{
-    _subtype = Subtype::DRUG;
-}
-
-DrugItemObject::~DrugItemObject()
-{
-}
-
-}
+    namespace Game
+    {
+        DrugItemObject::DrugItemObject() : ItemObject()
+        {
+            _subtype = Subtype::DRUG;
+        }
+    }
 }

@@ -28,17 +28,11 @@
 
 namespace Falltergeist
 {
-namespace Game
-{
-
-StairsSceneryObject::StairsSceneryObject() : SceneryObject()
-{
-    _subtype = Subtype::STAIRS;
-}
-
-StairsSceneryObject::~StairsSceneryObject()
-{
-}
-
-}
+    namespace Game
+    {
+        StairsSceneryObject::StairsSceneryObject() : SceneryObject()
+        {
+            _subtype = Subtype::STAIRS;
+        }
+    }
 }

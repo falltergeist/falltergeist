@@ -30,49 +30,43 @@
 
 namespace Falltergeist
 {
-namespace Game
-{
+    namespace Game
+    {
+        ContainerItemObject::ContainerItemObject() : ItemObject()
+        {
+            _subtype = Subtype::CONTAINER;
+        }
 
-ContainerItemObject::ContainerItemObject() : ItemObject()
-{
-    _subtype = Subtype::CONTAINER;
-}
+        std::vector<ItemObject*>* ContainerItemObject::inventory()
+        {
+            return &_inventory;
+        }
 
-ContainerItemObject::~ContainerItemObject()
-{
-}
+        void ContainerItemObject::use_p_proc(CritterObject* usedBy)
+        {
+            auto state = new State::Container();
+            state->setObject(this);
+            Game::getInstance()->pushState(state);
+        }
 
-std::vector<ItemObject*>* ContainerItemObject::inventory()
-{
-    return &_inventory;
-}
+        void ContainerItemObject::setLocked(bool locked)
+        {
+            this->_locked = locked;
+        }
 
-void ContainerItemObject::use_p_proc(CritterObject* usedBy)
-{
-    auto state = new State::Container();
-    state->setObject(this);
-    Game::getInstance()->pushState(state);
-}
+        bool ContainerItemObject::locked() const
+        {
+            return _locked;
+        }
 
-void ContainerItemObject::setLocked(bool locked)
-{
-    this->_locked = locked;
-}
+        void ContainerItemObject::setOpened(bool opened)
+        {
+            this->_opened = opened;
+        }
 
-bool ContainerItemObject::locked() const
-{
-    return _locked;
-}
-
-void ContainerItemObject::setOpened(bool opened)
-{
-    this->_opened = opened;
-}
-
-bool ContainerItemObject::opened() const
-{
-    return _opened;
-}
-
-}
+        bool ContainerItemObject::opened() const
+        {
+            return _opened;
+        }
+    }
 }

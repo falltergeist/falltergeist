@@ -20,22 +20,23 @@
 #ifndef FALLTERGEIST_GRAPHICS_TRANSFLAGS_H
 #define FALLTERGEIST_GRAPHICS_TRANSFLAGS_H
 
-namespace Falltergeist {
-namespace Graphics {
-
-class TransFlags {
-public:
-    enum Trans {
-        DEFAULT = 0,
-        NONE,
-        WALL,
-        GLASS,
-        STEAM,
-        ENERGY,
-        RED
-    };
-};
-
-}
+namespace Falltergeist
+{
+    namespace Graphics
+    {
+        class TransFlags
+        {
+            public:
+                enum Trans {
+                    DEFAULT = 0,
+                    NONE,
+                    WALL,
+                    GLASS,
+                    STEAM,
+                    ENERGY,
+                    RED
+                };
+        };
+    }
 }
 #endif //FALLTERGEIST_GRAPHICS_TRANSFLAGS_H

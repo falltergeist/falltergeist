@@ -28,46 +28,43 @@
 
 namespace Falltergeist
 {
-namespace Game
-{
+    namespace Game
+    {
+        class Time
+        {
+            public:
+                Time() = default;
+                ~Time() = default;
 
-class Time
-{
+                void think();
 
-public:
-    Time();
-    ~Time();
+                void increaseTicks();
+                unsigned int ticks();
+                unsigned int seconds();
+                unsigned int minutes();
+                unsigned int hours();
+                unsigned int day();
+                unsigned int month();
+                unsigned int year();
 
-    void think();
+            protected:
+                unsigned int _timer = 0;
+                unsigned int _ticks = 300000;
+                unsigned int _seconds = 0;
+                unsigned int _minutes = 30;
+                unsigned int _hours = 8;
+                unsigned int _day = 25;
+                unsigned int _month = 7;
+                unsigned int _year = 2241;
 
-    void increaseTicks();
-    unsigned int ticks();
-    unsigned int seconds();
-    unsigned int minutes();
-    unsigned int hours();
-    unsigned int day();
-    unsigned int month();
-    unsigned int year();
-
-protected:
-    unsigned int _timer = 0;
-    unsigned int _ticks = 300000;
-    unsigned int _seconds = 0;
-    unsigned int _minutes = 30;
-    unsigned int _hours = 8;
-    unsigned int _day = 25;
-    unsigned int _month = 7;
-    unsigned int _year = 2241;
-
-    void _increaseSeconds();
-    void _increaseMinutes();
-    void _increaseHours();
-    void _increaseDay();
-    void _increaseMonth();
-    void _increaseYear();
-
-};
-
+                void _increaseSeconds();
+                void _increaseMinutes();
+                void _increaseHours();
+                void _increaseDay();
+                void _increaseMonth();
+                void _increaseYear();
+        };
+    }
 }
-}
+
 #endif // FALLTERGEIST_GAME_TIME_H

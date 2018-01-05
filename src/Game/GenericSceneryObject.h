@@ -29,20 +29,17 @@
 
 namespace Falltergeist
 {
-namespace Game
-{
+    namespace Game
+    {
+        class GenericSceneryObject : public SceneryObject
+        {
+            public:
+                GenericSceneryObject();
+                ~GenericSceneryObject() override = default;
 
-class GenericSceneryObject : public SceneryObject
-{
-
-public:
-    GenericSceneryObject();
-    ~GenericSceneryObject() override;
-
-protected:
-    bool _useEggTransparency() override;
-};
-
-}
+            protected:
+                bool _useEggTransparency() override;
+        };
+    }
 }
 #endif // FALLTERGEIST_GAME_GENERICSCENERYOBJECT_H

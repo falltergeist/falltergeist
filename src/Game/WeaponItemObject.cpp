@@ -28,157 +28,151 @@
 
 namespace Falltergeist
 {
-namespace Game
-{
+    namespace Game
+    {
+        WeaponItemObject::WeaponItemObject() : ItemObject()
+        {
+            _subtype = Subtype::WEAPON;
+        }
 
-WeaponItemObject::WeaponItemObject() : ItemObject()
-{
-    _subtype = Subtype::WEAPON;
-}
+        unsigned int WeaponItemObject::animationCode() const
+        {
+            return _animationCode;
+        }
 
-WeaponItemObject::~WeaponItemObject()
-{
-}
+        void WeaponItemObject::setAnimationCode(unsigned int value)
+        {
+            _animationCode = value;
+        }
 
-unsigned int WeaponItemObject::animationCode() const
-{
-    return _animationCode;
-}
+        unsigned int WeaponItemObject::damageMin() const
+        {
+            return _damageMin;
+        }
 
-void WeaponItemObject::setAnimationCode(unsigned int value)
-{
-    _animationCode = value;
-}
+        void WeaponItemObject::setDamageMin(unsigned int value)
+        {
+            _damageMin = value;
+        }
 
-unsigned int WeaponItemObject::damageMin() const
-{
-    return _damageMin;
-}
+        unsigned int WeaponItemObject::damageMax() const
+        {
+            return _damageMax;
+        }
 
-void WeaponItemObject::setDamageMin(unsigned int value)
-{
-    _damageMin = value;
-}
+        void WeaponItemObject::setDamageMax(unsigned int value)
+        {
+            _damageMax = value;
+        }
 
-unsigned int WeaponItemObject::damageMax() const
-{
-    return _damageMax;
-}
+        unsigned int WeaponItemObject::damageType() const
+        {
+            return _damageType;
+        }
 
-void WeaponItemObject::setDamageMax(unsigned int value)
-{
-    _damageMax = value;
-}
+        void WeaponItemObject::setDamageType(unsigned int value)
+        {
+            _damageType = value;
+        }
 
-unsigned int WeaponItemObject::damageType() const
-{
-    return _damageType;
-}
+        unsigned int WeaponItemObject::rangePrimary() const
+        {
+            return _rangePrimary;
+        }
 
-void WeaponItemObject::setDamageType(unsigned int value)
-{
-    _damageType = value;
-}
+        void WeaponItemObject::setRangePrimary(unsigned int value)
+        {
+            _rangePrimary = value;
+        }
 
-unsigned int WeaponItemObject::rangePrimary() const
-{
-    return _rangePrimary;
-}
+        unsigned int WeaponItemObject::rangeSecondary() const
+        {
+            return _rangeSecondary;
+        }
 
-void WeaponItemObject::setRangePrimary(unsigned int value)
-{
-    _rangePrimary = value;
-}
+        void WeaponItemObject::setRangeSecondary(unsigned int value)
+        {
+            _rangeSecondary = value;
+        }
 
-unsigned int WeaponItemObject::rangeSecondary() const
-{
-    return _rangeSecondary;
-}
+        unsigned int WeaponItemObject::minimumStrength() const
+        {
+            return _minimumStrength;
+        }
 
-void WeaponItemObject::setRangeSecondary(unsigned int value)
-{
-    _rangeSecondary = value;
-}
+        void WeaponItemObject::setMinimumStrength(unsigned int value)
+        {
+            _minimumStrength = value;
+        }
 
-unsigned int WeaponItemObject::minimumStrength() const
-{
-    return _minimumStrength;
-}
+        unsigned int WeaponItemObject::actionCostPrimary() const
+        {
+            return _actionCostPrimary;
+        }
 
-void WeaponItemObject::setMinimumStrength(unsigned int value)
-{
-    _minimumStrength = value;
-}
+        void WeaponItemObject::setActionCostPrimary(unsigned int value)
+        {
+            _actionCostPrimary = value;
+        }
 
-unsigned int WeaponItemObject::actionCostPrimary() const
-{
-    return _actionCostPrimary;
-}
+        unsigned int WeaponItemObject::actionCostSecondary() const
+        {
+            return _actionCostSecondary;
+        }
 
-void WeaponItemObject::setActionCostPrimary(unsigned int value)
-{
-    _actionCostPrimary = value;
-}
+        void WeaponItemObject::setActionCostSecondary(unsigned int value)
+        {
+            _actionCostSecondary = value;
+        }
 
-unsigned int WeaponItemObject::actionCostSecondary() const
-{
-    return _actionCostSecondary;
-}
+        unsigned int WeaponItemObject::burstRounds() const
+        {
+            return _burstRounds;
+        }
 
-void WeaponItemObject::setActionCostSecondary(unsigned int value)
-{
-    _actionCostSecondary = value;
-}
+        void WeaponItemObject::setBurstRounds(unsigned int value)
+        {
+            _burstRounds = value;
+        }
 
-unsigned int WeaponItemObject::burstRounds() const
-{
-    return _burstRounds;
-}
+        unsigned int WeaponItemObject::ammoType() const
+        {
+            return _ammoType;
+        }
 
-void WeaponItemObject::setBurstRounds(unsigned int value)
-{
-    _burstRounds = value;
-}
+        void WeaponItemObject::setAmmoType(unsigned int value)
+        {
+            _ammoType = value;
+        }
 
-unsigned int WeaponItemObject::ammoType() const
-{
-    return _ammoType;
-}
+        unsigned int WeaponItemObject::ammoPID() const
+        {
+            return _ammoPID;
+        }
 
-void WeaponItemObject::setAmmoType(unsigned int value)
-{
-    _ammoType = value;
-}
+        void WeaponItemObject::setAmmoPID(unsigned int value)
+        {
+            _ammoPID = value;
+        }
 
-unsigned int WeaponItemObject::ammoPID() const
-{
-    return _ammoPID;
-}
+        unsigned int WeaponItemObject::ammoCapacity() const
+        {
+            return _ammoCapacity;
+        }
 
-void WeaponItemObject::setAmmoPID(unsigned int value)
-{
-    _ammoPID = value;
-}
+        void WeaponItemObject::setAmmoCapacity(unsigned int value)
+        {
+            _ammoCapacity = value;
+        }
 
-unsigned int WeaponItemObject::ammoCapacity() const
-{
-    return _ammoCapacity;
-}
+        int WeaponItemObject::perk() const
+        {
+            return _perk;
+        }
 
-void WeaponItemObject::setAmmoCapacity(unsigned int value)
-{
-    _ammoCapacity = value;
-}
-
-int WeaponItemObject::perk() const
-{
-    return _perk;
-}
-
-void WeaponItemObject::setPerk(int value)
-{
-    _perk = value;
-}
-
-}
+        void WeaponItemObject::setPerk(int value)
+        {
+            _perk = value;
+        }
+    }
 }

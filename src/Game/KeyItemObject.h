@@ -29,17 +29,15 @@
 
 namespace Falltergeist
 {
-namespace Game
-{
-
-class KeyItemObject : public ItemObject
-{
-public:
-    KeyItemObject();
-    ~KeyItemObject() override;
-};
-
-}
+    namespace Game
+    {
+        class KeyItemObject : public ItemObject
+        {
+            public:
+                KeyItemObject();
+                ~KeyItemObject() override = default;
+        };
+    }
 }
 
 #endif // FALLTERGEIST_GAME_KEYITEMOBJECT_H

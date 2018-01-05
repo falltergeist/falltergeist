@@ -29,23 +29,21 @@
 
 namespace Falltergeist
 {
-namespace Game
-{
+    namespace Game
+    {
+        /**
+         * Walls
+         */
+        class WallObject : public Object
+        {
+            public:
+                WallObject();
+                ~WallObject() override = default;
 
-/**
- * Walls
- */
-class WallObject : public Object
-{
-public:
-    WallObject();
-    ~WallObject() override;
-
-protected:
-    bool _useEggTransparency() override;
-};
-
-}
+            protected:
+                bool _useEggTransparency() override;
+        };
+    }
 }
 
 #endif // FALLTERGEIST_GAME_WALLOBJECT_H

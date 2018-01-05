@@ -29,22 +29,16 @@
 
 namespace Falltergeist
 {
-namespace Game
-{
+    namespace Game
+    {
+        WallObject::WallObject() : Object()
+        {
+            _type = Type::WALL;
+        }
 
-WallObject::WallObject() : Object()
-{
-    _type = Type::WALL;
-}
-
-WallObject::~WallObject()
-{
-}
-
-bool WallObject::_useEggTransparency()
-{
-    return (_trans == Graphics::TransFlags::Trans::DEFAULT);
-}
-
-}
+        bool WallObject::_useEggTransparency()
+        {
+            return (_trans == Graphics::TransFlags::Trans::DEFAULT);
+        }
+    }
 }

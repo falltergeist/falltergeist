@@ -28,17 +28,11 @@
 
 namespace Falltergeist
 {
-namespace Game
-{
-
-MiscObject::MiscObject() : Object()
-{
-    _type = Type::MISC;
-}
-
-MiscObject::~MiscObject()
-{
-}
-
-}
+    namespace Game
+    {
+        MiscObject::MiscObject() : Object()
+        {
+            _type = Type::MISC;
+        }
+    }
 }

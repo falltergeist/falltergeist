@@ -29,21 +29,16 @@
 
 namespace Falltergeist
 {
-namespace Game
-{
+    namespace Game
+    {
+        GenericSceneryObject::GenericSceneryObject() : SceneryObject()
+        {
+            _subtype = Subtype::GENERIC;
+        }
 
-GenericSceneryObject::GenericSceneryObject() : SceneryObject()
-{
-    _subtype = Subtype::GENERIC;
-}
-
-GenericSceneryObject::~GenericSceneryObject()
-{
-}
-
-bool GenericSceneryObject::_useEggTransparency()
-{
-    return (_trans == Graphics::TransFlags::Trans::DEFAULT);
-}
-}
+        bool GenericSceneryObject::_useEggTransparency()
+        {
+            return (_trans == Graphics::TransFlags::Trans::DEFAULT);
+        }
+    }
 }

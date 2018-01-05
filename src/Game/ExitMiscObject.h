@@ -29,34 +29,32 @@
 
 namespace Falltergeist
 {
-namespace Game
-{
+    namespace Game
+    {
+        class ExitMiscObject : public MiscObject
+        {
+            public:
+                ExitMiscObject();
+                ~ExitMiscObject() override = default;
 
-class ExitMiscObject : public MiscObject
-{
-public:
-    ExitMiscObject();
-    ~ExitMiscObject() override;
+                int exitHexagonNumber() const;
+                void setExitHexagonNumber(int value);
 
-    int exitHexagonNumber() const;
-    void setExitHexagonNumber(int value);
+                int exitElevationNumber() const;
+                void setExitElevationNumber(int value);
 
-    int exitElevationNumber() const;
-    void setExitElevationNumber(int value);
+                int exitDirection() const;
+                void setExitDirection(int value);
 
-    int exitDirection() const;
-    void setExitDirection(int value);
+                int exitMapNumber() const;
+                void setExitMapNumber(int value);
 
-    int exitMapNumber() const;
-    void setExitMapNumber(int value);
-
-protected:
-    int _exitHexagonNumber = 0;
-    int _exitElevationNumber = 0;
-    int _exitDirection = 0;
-    int _exitMapNumber = 0;
-};
-
-}
+            protected:
+                int _exitHexagonNumber = 0;
+                int _exitElevationNumber = 0;
+                int _exitDirection = 0;
+                int _exitMapNumber = 0;
+        };
+    }
 }
 #endif // FALLTERGEIST_GAME_EXITMISCOBJECT_H

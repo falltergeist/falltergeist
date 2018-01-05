@@ -28,17 +28,11 @@
 
 namespace Falltergeist
 {
-namespace Game
-{
-
-ElevatorSceneryObject::ElevatorSceneryObject() : SceneryObject()
-{
-    _subtype = Subtype::ELEVATOR;
-}
-
-ElevatorSceneryObject::~ElevatorSceneryObject()
-{
-}
-
-}
+    namespace Game
+    {
+        ElevatorSceneryObject::ElevatorSceneryObject() : SceneryObject()
+        {
+            _subtype = Subtype::ELEVATOR;
+        }
+    }
 }

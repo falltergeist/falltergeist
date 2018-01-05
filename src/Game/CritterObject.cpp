@@ -57,10 +57,6 @@ namespace Falltergeist
             _setupNextIdleAnim();
         }
 
-        CritterObject::~CritterObject()
-        {
-        }
-
         vector<ItemObject*>* CritterObject::inventory()
         {
             return &_inventory;
@@ -78,12 +74,9 @@ namespace Falltergeist
 
         void CritterObject::setArmorSlot(ArmorItemObject* object)
         {
-            if (object)
-            {
+            if (object) {
                 setFID((_gender == GENDER::FEMALE) ? object->femaleFID() : object->maleFID());
-            }
-            else
-            {
+            } else {
                 setFID((_gender == GENDER::FEMALE) ? FID_HFJMPS : FID_HMJMPS);
             }
             _armorSlot = object;
@@ -116,33 +109,45 @@ namespace Falltergeist
 
         void CritterObject::setGender(GENDER value)
         {
-            if (value > GENDER::FEMALE) throw Exception("CritterObject::setGender(value) - value out of range:" + std::to_string((unsigned)value));
+            if (value > GENDER::FEMALE) {
+                throw Exception("CritterObject::setGender(value) - value out of range:" + std::to_string((unsigned)value));
+            }
             _gender = value;
         }
 
         int CritterObject::stat(STAT num) const
         {
-            if (num > STAT::LUCK) throw Exception("CritterObject::stat(num) - num out of range:" + std::to_string((unsigned)num));
+            if (num > STAT::LUCK) {
+                throw Exception("CritterObject::stat(num) - num out of range:" + std::to_string((unsigned)num));
+            }
             return _stats.at((unsigned)num);
         }
 
         void CritterObject::setStat(STAT num, int value)
         {
-            if (num > STAT::LUCK) throw Exception("CritterObject::setStat(num, value) - num out of range:" + std::to_string((unsigned)num));
+            if (num > STAT::LUCK) {
+                throw Exception("CritterObject::setStat(num, value) - num out of range:" + std::to_string((unsigned)num));
+            }
             _stats.at((unsigned)num) = value;
         }
 
         int CritterObject::statTotal(STAT num) const
         {
-            if (num > STAT::LUCK) throw Exception("CritterObject::statTotal(num) - num out of range:" + std::to_string((unsigned)num));
+            if (num > STAT::LUCK) {
+                throw Exception("CritterObject::statTotal(num) - num out of range:" + std::to_string((unsigned)num));
+            }
             return stat(num) + statBonus(num);
         }
 
         int CritterObject::statBonus(STAT num) const
         {
-            if (num > STAT::LUCK) throw Exception("CritterObject::statBonus(num) - num out of range:" + std::to_string((unsigned)num));
+            if (num > STAT::LUCK) {
+                throw Exception("CritterObject::statBonus(num) - num out of range:" + std::to_string((unsigned)num));
+            }
             int bonus = 0;
-            if (traitTagged(TRAIT::GIFTED)) bonus += 1;
+            if (traitTagged(TRAIT::GIFTED)) {
+                bonus += 1;
+            }
             switch(num)
             {
                 case STAT::STRENGTH:
@@ -159,25 +164,33 @@ namespace Falltergeist
 
         void CritterObject::setStatBonus(STAT num, int value)
         {
-            if (num > STAT::LUCK) throw Exception("CritterObject::setStatBonus(num, value) - num out of range:" + std::to_string((unsigned)num));
+            if (num > STAT::LUCK) {
+                throw Exception("CritterObject::setStatBonus(num, value) - num out of range:" + std::to_string((unsigned)num));
+            }
             _statsBonus.at((unsigned)num) = value;
         }
 
         int CritterObject::skillTagged(SKILL num) const
         {
-            if (num > SKILL::OUTDOORSMAN) throw Exception("CritterObject::skillTagged(num) - num out of range:" + std::to_string((unsigned)num));
+            if (num > SKILL::OUTDOORSMAN) {
+                throw Exception("CritterObject::skillTagged(num) - num out of range:" + std::to_string((unsigned)num));
+            }
             return _skillsTagged.at((unsigned)num);
         }
 
         void CritterObject::setSkillTagged(SKILL num, int value)
         {
-            if (num > SKILL::OUTDOORSMAN) throw Exception("CritterObject::setSkillTagged(num, value) - num out of range:" + std::to_string((unsigned)num));
+            if (num > SKILL::OUTDOORSMAN) {
+                throw Exception("CritterObject::setSkillTagged(num, value) - num out of range:" + std::to_string((unsigned)num));
+            }
             _skillsTagged.at((unsigned)num) = value;
         }
 
         int CritterObject::skillBaseValue(SKILL skill) const
         {
-            if (skill > SKILL::OUTDOORSMAN) throw Exception("CritterObject::skillBaseValue(num) - num out of range:" + std::to_string((unsigned)skill));
+            if (skill > SKILL::OUTDOORSMAN) {
+                throw Exception("CritterObject::skillBaseValue(num) - num out of range:" + std::to_string((unsigned)skill));
+            }
             int value = 0;
             switch(skill)
             {
@@ -249,13 +262,11 @@ namespace Falltergeist
                     break;
             }
 
-            if (traitTagged(TRAIT::GIFTED))
-            {
+            if (traitTagged(TRAIT::GIFTED)) {
                 value -= 10;
             }
 
-            if (skillTagged(skill))
-            {
+            if (skillTagged(skill)) {
                 value += 20;
             }
 
@@ -264,13 +275,17 @@ namespace Falltergeist
 
         int CritterObject::traitTagged(TRAIT num) const
         {
-            if (num > TRAIT::GIFTED) throw Exception("CritterObject::traitTagged(num) - num out of range:" + std::to_string((unsigned)num));
+            if (num > TRAIT::GIFTED) {
+                throw Exception("CritterObject::traitTagged(num) - num out of range:" + std::to_string((unsigned)num));
+            }
             return _traitsTagged.at((unsigned)num);
         }
 
         void CritterObject::setTraitTagged(TRAIT num, int value)
         {
-            if (num > TRAIT::GIFTED) throw Exception("CritterObject::setTraitTagged(num, value) - num out of range:" + std::to_string((unsigned)num));
+            if (num > TRAIT::GIFTED) {
+                throw Exception("CritterObject::setTraitTagged(num, value) - num out of range:" + std::to_string((unsigned)num));
+            }
             _traitsTagged.at((unsigned)num) = value;
         }
 
@@ -327,23 +342,19 @@ namespace Falltergeist
         unsigned int CritterObject::carryWeight() const
         {
             unsigned int weight = 0;
-            for (auto item : _inventory)
-            {
+            for (auto item : _inventory) {
                 weight += item->weight();
             }
 
-            if (auto armor = dynamic_cast<ItemObject*>(armorSlot()))
-            {
+            if (auto armor = dynamic_cast<ItemObject*>(armorSlot())) {
                 weight += armor->weight();
             }
 
-            if (auto leftHand = dynamic_cast<ItemObject*>(leftHandSlot()))
-            {
+            if (auto leftHand = dynamic_cast<ItemObject*>(leftHandSlot())) {
                 weight += leftHand->weight();
             }
 
-            if (auto rightHand = dynamic_cast<ItemObject*>(rightHandSlot()))
-            {
+            if (auto rightHand = dynamic_cast<ItemObject*>(rightHandSlot())) {
                 weight += rightHand->weight();
             }
 
@@ -402,25 +413,33 @@ namespace Falltergeist
 
         int CritterObject::damageResist(DAMAGE type) const
         {
-            if (type > DAMAGE::POISON) throw Exception("CritterObject::damageResist(type) - type out of range: " + std::to_string((unsigned)type));
+            if (type > DAMAGE::POISON) {
+                throw Exception("CritterObject::damageResist(type) - type out of range: " + std::to_string((unsigned)type));
+            }
             return _damageResist.at((unsigned)type);
         }
 
         void CritterObject::setDamageResist(DAMAGE type, int value)
         {
-            if (type > DAMAGE::POISON) throw Exception("CritterObject::setDamageResist(type, value) - type out of range: " + std::to_string((unsigned)type));
+            if (type > DAMAGE::POISON) {
+                throw Exception("CritterObject::setDamageResist(type, value) - type out of range: " + std::to_string((unsigned)type));
+            }
             _damageResist.at((unsigned)type) = value;
         }
 
         int CritterObject::damageThreshold(DAMAGE type) const
         {
-            if ( type > DAMAGE::POISON) throw Exception("CritterObject::damageThreshold(type) - type out of range: " + std::to_string((unsigned)type));
+            if ( type > DAMAGE::POISON) {
+                throw Exception("CritterObject::damageThreshold(type) - type out of range: " + std::to_string((unsigned)type));
+            }
             return _damageThreshold.at((unsigned)type);
         }
 
         void CritterObject::setDamageThreshold(DAMAGE type, int value)
         {
-            if ( type > DAMAGE::POISON) throw Exception("CritterObject::setDamageThreshold(type, value) - type out of range: " + std::to_string((unsigned)type));
+            if ( type > DAMAGE::POISON) {
+                throw Exception("CritterObject::setDamageThreshold(type, value) - type out of range: " + std::to_string((unsigned)type));
+            }
             _damageThreshold.at((unsigned)type) = value;
         }
 
@@ -431,7 +450,9 @@ namespace Falltergeist
 
         void CritterObject::setCurrentHand(HAND value)
         {
-            if (value > HAND::LEFT) throw Exception("CritterObject::setCurrentHand(value) - value out of range: " + std::to_string((unsigned)value));
+            if (value > HAND::LEFT) {
+                throw Exception("CritterObject::setCurrentHand(value) - value out of range: " + std::to_string((unsigned)value));
+            }
             _currentHand = value;
         }
 
@@ -442,11 +463,11 @@ namespace Falltergeist
 
         void CritterObject::talk_p_proc()
         {
-            if (_script && _script->hasFunction("talk_p_proc"))
-            {
+            if (_script && _script->hasFunction("talk_p_proc")) {
                 _script
                     ->setSourceObject(Game::getInstance()->player())
-                    ->call("talk_p_proc");
+                    ->call("talk_p_proc")
+                ;
             }
         }
 
@@ -460,8 +481,7 @@ namespace Falltergeist
 
         void CritterObject::critter_p_proc()
         {
-            if (_script && _script->hasFunction("critter_p_proc"))
-            {
+            if (_script && _script->hasFunction("critter_p_proc")) {
                 _script->call("critter_p_proc");
             }
         }
@@ -482,10 +502,8 @@ namespace Falltergeist
 
         void CritterObject::think()
         {
-            if (movementQueue()->size() > 0)
-            {
-                if (!_moving)
-                {
+            if (!movementQueue()->empty()) {
+                if (!_moving) {
                     _moving = true;
 
                     _orientation = hexagon()->orientationTo(movementQueue()->back());
@@ -495,14 +513,10 @@ namespace Falltergeist
                     animation->play();
                     _ui = move(animation);
                 }
-            }
-            else
-            {
+            } else {
                 auto anim = (UI::Animation*)ui();
-                if (!_moving && (!anim || !anim->playing()))
-                {
-                    if (SDL_GetTicks() > _nextIdleAnim)
-                    {
+                if (!_moving && (!anim || !anim->playing())) {
+                    if (SDL_GetTicks() > _nextIdleAnim) {
                         setActionAnimation("aa");
                         _setupNextIdleAnim();
                     }
@@ -533,30 +547,24 @@ namespace Falltergeist
         {
             auto animation = dynamic_cast<UI::Animation*>(ui());
             auto curFrameOfs = animation->frameOffset();
-            if (isOutsideOfHexForDirection(curFrameOfs, _orientation))
-            {
+            if (isOutsideOfHexForDirection(curFrameOfs, _orientation)) {
                 // if we stepped too much away from current hex center, switch to the next hex
                 auto moveQueue = movementQueue();
-                if (!moveQueue->empty())
-                {
+                if (!moveQueue->empty()) {
                     auto hexagon = moveQueue->back();
                     moveQueue->pop_back();
                     Game::getInstance()->locationState()->moveObjectToHexagon(this, hexagon);
                 }
-                if (moveQueue->empty())
-                {
+                if (moveQueue->empty()) {
                     _moving = false;
                     animation->stop();
                     setActionAnimation("aa")->stop();
                     _setupNextIdleAnim();
-                }
-                else
-                {
+                } else {
                     auto nextHexagon = moveQueue->back();
                     auto nextOrientation = this->hexagon()->orientationTo(nextHexagon);
                     Point ofs;
-                    if (nextOrientation != _orientation)
-                    {
+                    if (nextOrientation != _orientation) {
                         _orientation = nextOrientation;
                         auto newAnimation = _generateMovementAnimation();
                         newAnimation->setCurrentFrame(animation->currentFrame());
@@ -569,9 +577,7 @@ namespace Falltergeist
 
                         // on turns, center frames on current hex
                         ofs -= curFrameOfs;
-                    }
-                    else
-                    {
+                    } else {
                         ofs -= Point(xTileOffsets[_orientation], yTileOffsets[_orientation]);
                     }
                     animation->setOffset(animation->offset() + ofs);
@@ -625,8 +631,7 @@ namespace Falltergeist
             }
 
             UI::Animation* animation = new UI::Animation("art/critters/" + animName + ".frm", orientation());
-            animation->animationEndedHandler().add([animation](Event::Event* event)
-            {
+            animation->animationEndedHandler().add([animation](Event::Event* event) {
                 animation->setCurrentFrame(0);
             });
             animation->play();
@@ -691,19 +696,25 @@ namespace Falltergeist
 
         int CritterObject::skillValue(SKILL skill) const
         {
-            if (skill > SKILL::OUTDOORSMAN) throw Exception("CritterObject::skillValue(skill) - skill out of range:" + std::to_string((unsigned)skill));
+            if (skill > SKILL::OUTDOORSMAN) {
+                throw Exception("CritterObject::skillValue(skill) - skill out of range:" + std::to_string((unsigned)skill));
+            }
             return skillBaseValue(skill) + skillGainedValue(skill);
         }
 
         int CritterObject::skillGainedValue(SKILL skill) const
         {
-            if (skill > SKILL::OUTDOORSMAN) throw Exception("CritterObject::skillGainedValue(skill) - skill out of range:" + std::to_string((unsigned)skill));
+            if (skill > SKILL::OUTDOORSMAN) {
+                throw Exception("CritterObject::skillGainedValue(skill) - skill out of range:" + std::to_string((unsigned)skill));
+            }
             return _skillsGainedValue.at((unsigned)skill);
         }
 
         void CritterObject::setSkillGainedValue(SKILL skill, int value)
         {
-            if (skill > SKILL::OUTDOORSMAN) throw Exception("CritterObject::setSkillGainedCalue(skill) - skill out of range:" + std::to_string((unsigned)skill));
+            if (skill > SKILL::OUTDOORSMAN) {
+                throw Exception("CritterObject::setSkillGainedCalue(skill) - skill out of range:" + std::to_string((unsigned)skill));
+            }
             _skillsGainedValue.at((unsigned)skill) = value;
         }
 
@@ -720,8 +731,7 @@ namespace Falltergeist
         void CritterObject::stopMovement()
         {
             _movementQueue.clear();
-            if (auto animation = dynamic_cast<UI::Animation*>(_ui.get()))
-            {
+            if (auto animation = dynamic_cast<UI::Animation*>(_ui.get())) {
                 animation->stop();
             }
             _moving = false;
