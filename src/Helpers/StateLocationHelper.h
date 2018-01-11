@@ -16,12 +16,10 @@
  * You should have received a copy of the GNU General Public License
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-#ifndef FALLTERGEIST_HELPERS_CRITTERANIMATIONHELPER_H
-#define FALLTERGEIST_HELPERS_CRITTERANIMATIONHELPER_H
+#ifndef FALLTERGEIST_HELPERS_STATELOCATIONHELPER_H
+#define FALLTERGEIST_HELPERS_STATELOCATIONHELPER_H
 
 // C++ standard includes
-#include <string>
 
 // Falltergeist includes
 
@@ -29,16 +27,19 @@
 
 namespace Falltergeist
 {
+    namespace State
+    {
+        class Location;
+    }
     namespace Helpers
     {
-        class CritterAnimationHelper
+        class StateLocationHelper
         {
             public:
-                CritterAnimationHelper() = default;
-                std::string getSuffix(unsigned int animationId, unsigned int weaponId) const;
-                std::string getPrefix(unsigned int FID) const;
+                StateLocationHelper() = default;
+                State::Location* getInitialLocationState() const;
         };
     }
 }
 
-#endif //FALLTERGEIST_HELPERS_CRITTERANIMATIONHELPER_H
+#endif //FALLTERGEIST_HELPERS_STATELOCATIONHELPER_H

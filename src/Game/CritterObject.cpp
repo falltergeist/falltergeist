@@ -465,7 +465,7 @@ namespace Falltergeist
         {
             if (_script && _script->hasFunction("talk_p_proc")) {
                 _script
-                    ->setSourceObject(Game::getInstance()->player())
+                    ->setSourceObject(Game::getInstance()->player().get())
                     ->call("talk_p_proc")
                 ;
             }

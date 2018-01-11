@@ -31,6 +31,7 @@
 #include "../Game/DudeObject.h"
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
+#include "../Helpers/StateLocationHelper.h"
 #include "../ResourceManager.h"
 #include "../State/Location.h"
 #include "../State/PlayerCreate.h"
@@ -43,6 +44,8 @@
 
 namespace Falltergeist
 {
+    using Helpers::StateLocationHelper;
+
     namespace State
     {
 
@@ -117,7 +120,9 @@ namespace Falltergeist
         {
             Game::getInstance()->setPlayer(std::move(_characters.at(_selectedCharacter)));
             _characters.clear();
-            Game::getInstance()->setState(new Location());
+
+            StateLocationHelper stateLocationHelper;
+            Game::getInstance()->setState(stateLocationHelper.getInitialLocationState());
         }
 
         void NewGame::doEdit()

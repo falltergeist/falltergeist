@@ -40,10 +40,15 @@ namespace Falltergeist
     {
         State::State() : Event::EventTarget(Game::getInstance()->eventDispatcher())
         {
-            activateHandler().add([this](Event::State* event){ this->onStateActivate(event); });
-            deactivateHandler().add([this](Event::State* event){ this->onStateDeactivate(event); });
-
-            keyDownHandler().add([this](Event::Keyboard* event) { this->onKeyDown(event); });
+            activateHandler().add([this](Event::State* event) {
+                this->onStateActivate(event);
+            });
+            deactivateHandler().add([this](Event::State* event) {
+                this->onStateDeactivate(event);
+            });
+            keyDownHandler().add([this](Event::Keyboard* event) {
+                this->onKeyDown(event);
+            });
         }
 
         State::~State()
@@ -57,8 +62,7 @@ namespace Falltergeist
 
         void State::think()
         {
-            for (auto& ui : _ui)
-            {
+            for (auto& ui : _ui) {
                 ui->think();
             }
         }
@@ -137,8 +141,7 @@ namespace Falltergeist
 
         void State::addUI(const std::vector<UI::Base*>& uis)
         {
-            for (auto ui : uis)
-            {
+            for (auto ui : uis) {
                 addUI(ui);
             }
         }
@@ -160,8 +163,7 @@ namespace Falltergeist
 
         UI::Base* State::getUI(const std::string& name)
         {
-            if (_labeledUI.find(name) != _labeledUI.end())
-            {
+            if (_labeledUI.find(name) != _labeledUI.end()) {
                 return _labeledUI.at(name);
             }
             return nullptr;
@@ -169,37 +171,31 @@ namespace Falltergeist
 
         void State::handle(Event::Event* event)
         {
-            if (event->handled()) return;
+            if (event->handled()) {
+                return;
+            }
             // TODO: maybe make handle() a template function to get rid of dynamic_casts?
-            if (auto keyboardEvent = dynamic_cast<Event::Keyboard*>(event))
-            {
-                switch (keyboardEvent->originalType())
-                {
-                    case Event::Keyboard::Type::KEY_UP:
-                    {
-                        emitEvent(std::make_unique<Event::Keyboard>(*keyboardEvent), keyUpHandler());
-                        break;
-                    }
-                    case Event::Keyboard::Type::KEY_DOWN:
-                    {
-                        emitEvent(std::make_unique<Event::Keyboard>(*keyboardEvent), keyDownHandler());
-                        break;
-                    }
+            if (auto keyboardEvent = dynamic_cast<Event::Keyboard*>(event)) {
+                if (keyboardEvent->originalType() == Event::Keyboard::Type::KEY_UP) {
+                    emitEvent(std::make_unique<Event::Keyboard>(*keyboardEvent), keyUpHandler());
+                }
+                if (keyboardEvent->originalType() == Event::Keyboard::Type::KEY_DOWN) {
+                    emitEvent(std::make_unique<Event::Keyboard>(*keyboardEvent), keyDownHandler());
                 }
             }
-            for (auto it = _ui.rbegin(); it != _ui.rend(); ++it)
-            {
-                if (event->handled()) return;
+
+            for (auto it = _ui.rbegin(); it != _ui.rend(); ++it) {
+                if (event->handled()) {
+                    return;
+                }
                 (*it)->handle(event);
             }
         }
 
         void State::render()
         {
-            for (auto& ui : _ui)
-            {
-                if (ui->visible())
-                {
+            for (auto& ui : _ui) {
+                if (ui->visible()) {
                     ui->render(false);
                 }
             }
@@ -208,7 +204,9 @@ namespace Falltergeist
 
         void State::popUI()
         {
-            if (_ui.size() == 0) return;
+            if (_ui.size() == 0) {
+                return;
+            }
             _uiToDelete.emplace_back(std::move(_ui.back()));
             _ui.pop_back();
         }
@@ -270,17 +268,17 @@ namespace Falltergeist
             return _keyUpHandler;
         }
 
-
         void State::scriptFade(VM::Script *script, bool in)
         {
             fadeDoneHandler().clear();
-            fadeDoneHandler().add([this, script](Event::Event* event){ fadeDoneHandler().clear(); script->run();});
-            if (in)
-            {
+            fadeDoneHandler().add([this, script](Event::Event* event) {
+                fadeDoneHandler().clear();
+                script->run();
+            });
+
+            if (in) {
                 Game::getInstance()->renderer()->fadeIn(0, 0, 0, 1000);
-            }
-            else
-            {
+            } else {
                 Game::getInstance()->renderer()->fadeOut(0, 0, 0, 1000);
             }
         }

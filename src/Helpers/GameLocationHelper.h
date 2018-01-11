@@ -17,10 +17,11 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_HELPERS_CRITTERANIMATIONHELPER_H
-#define FALLTERGEIST_HELPERS_CRITTERANIMATIONHELPER_H
+#ifndef FALLTERGEIST_HELPERS_GAMELOCATIONHELPER_H
+#define FALLTERGEIST_HELPERS_GAMELOCATIONHELPER_H
 
 // C++ standard includes
+#include <memory>
 #include <string>
 
 // Falltergeist includes
@@ -29,16 +30,19 @@
 
 namespace Falltergeist
 {
+    namespace Game
+    {
+        class Location;
+    }
     namespace Helpers
     {
-        class CritterAnimationHelper
+        class GameLocationHelper
         {
             public:
-                CritterAnimationHelper() = default;
-                std::string getSuffix(unsigned int animationId, unsigned int weaponId) const;
-                std::string getPrefix(unsigned int FID) const;
+                GameLocationHelper() = default;
+                std::shared_ptr<Game::Location> getByName(const std::string& name) const;
+                std::shared_ptr<Game::Location> getInitialLocation() const;
         };
     }
 }
-
-#endif //FALLTERGEIST_HELPERS_CRITTERANIMATIONHELPER_H
+#endif //FALLTERGEIST_HELPERS_GAMELOCATIONHELPER_H

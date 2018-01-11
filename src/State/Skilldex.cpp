@@ -29,6 +29,7 @@
 #include "../Graphics/Point.h"
 #include "../Graphics/Renderer.h"
 #include "../Input/Mouse.h"
+#include "../Logger.h"
 #include "../ResourceManager.h"
 #include "../State/ExitConfirm.h"
 #include "../State/Location.h"
@@ -70,37 +71,56 @@ namespace Falltergeist
 
             // buttons
             auto sneakButton    = new UI::ImageButton(UI::ImageButton::Type::SKILLDEX_BUTTON, backgroundX+14, backgroundY+44);
+            sneakButton->mouseClickHandler().add(std::bind(&Skilldex::onSkillButtonClick, this, std::placeholders::_1, SKILL::SNEAK));
+
             auto lockpickButton = new UI::ImageButton(UI::ImageButton::Type::SKILLDEX_BUTTON, backgroundX+14, backgroundY+44+36);
+            lockpickButton->mouseClickHandler().add(std::bind(&Skilldex::onSkillButtonClick, this, std::placeholders::_1, SKILL::LOCKPICK));
+
             auto stealButton    = new UI::ImageButton(UI::ImageButton::Type::SKILLDEX_BUTTON, backgroundX+14, backgroundY+44+36*2);
+            stealButton->mouseClickHandler().add(std::bind(&Skilldex::onSkillButtonClick, this, std::placeholders::_1, SKILL::STEAL));
+
             auto trapsButton    = new UI::ImageButton(UI::ImageButton::Type::SKILLDEX_BUTTON, backgroundX+14, backgroundY+44+36*3);
+            trapsButton->mouseClickHandler().add(std::bind(&Skilldex::onSkillButtonClick, this, std::placeholders::_1, SKILL::TRAPS));
+
             auto firstAidButton = new UI::ImageButton(UI::ImageButton::Type::SKILLDEX_BUTTON, backgroundX+14, backgroundY+44+36*4);
+            firstAidButton->mouseClickHandler().add(std::bind(&Skilldex::onSkillButtonClick, this, std::placeholders::_1, SKILL::FIRST_AID));
+
             auto doctorButton   = new UI::ImageButton(UI::ImageButton::Type::SKILLDEX_BUTTON, backgroundX+14, backgroundY+44+36*5);
+            doctorButton->mouseClickHandler().add(std::bind(&Skilldex::onSkillButtonClick, this, std::placeholders::_1, SKILL::DOCTOR));
+
             auto scienceButton  = new UI::ImageButton(UI::ImageButton::Type::SKILLDEX_BUTTON, backgroundX+14, backgroundY+44+36*6);
+            scienceButton->mouseClickHandler().add(std::bind(&Skilldex::onSkillButtonClick, this, std::placeholders::_1, SKILL::SCIENCE));
+
             auto repairButton   = new UI::ImageButton(UI::ImageButton::Type::SKILLDEX_BUTTON, backgroundX+14, backgroundY+44+36*7);
+            repairButton->mouseClickHandler().add(std::bind(&Skilldex::onSkillButtonClick, this, std::placeholders::_1, SKILL::REPAIR));
+
             auto cancelButton   = new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, backgroundX+48, backgroundY+338);
+            cancelButton->mouseClickHandler().add(std::bind(&Skilldex::onCancelButtonClick, this, std::placeholders::_1));
 
             // counters
             auto sneakCounter    = new UI::BigCounter(backgroundX + 111, backgroundY + 48, 3);
-            auto lockpickCounter = new UI::BigCounter(backgroundX + 111, backgroundY + 48 + 36, 3);
-            auto stealCounter    = new UI::BigCounter(backgroundX + 111, backgroundY + 48 + 36 * 2, 3);
-            auto trapsCounter    = new UI::BigCounter(backgroundX + 111, backgroundY + 48 + 36 * 3, 3);
-            auto firstAidCounter = new UI::BigCounter(backgroundX + 111, backgroundY + 48 + 36 * 4, 3);
-            auto doctorCounter   = new UI::BigCounter(backgroundX + 111, backgroundY + 48 + 36 * 5, 3);
-            auto scienceCounter  = new UI::BigCounter(backgroundX + 111, backgroundY + 48 + 36 * 6, 3);
-            auto repairCounter   = new UI::BigCounter(backgroundX + 111, backgroundY + 48 + 36 * 7, 3);
-
-            //set counters with player's current skill values
             sneakCounter->setNumber(Game::getInstance()->player()->skillValue(SKILL::SNEAK));
-            lockpickCounter->setNumber(Game::getInstance()->player()->skillValue(SKILL::LOCKPICK));
-            stealCounter->setNumber(Game::getInstance()->player()->skillValue(SKILL::STEAL));
-            trapsCounter->setNumber(Game::getInstance()->player()->skillValue(SKILL::TRAPS));
-            firstAidCounter->setNumber(Game::getInstance()->player()->skillValue(SKILL::FIRST_AID));
-            doctorCounter->setNumber(Game::getInstance()->player()->skillValue(SKILL::DOCTOR));
-            scienceCounter->setNumber(Game::getInstance()->player()->skillValue(SKILL::SCIENCE));
-            repairCounter->setNumber(Game::getInstance()->player()->skillValue(SKILL::REPAIR));
 
-            // events
-            cancelButton->mouseClickHandler().add(std::bind(&Skilldex::onCancelButtonClick, this, std::placeholders::_1));
+            auto lockpickCounter = new UI::BigCounter(backgroundX + 111, backgroundY + 48 + 36, 3);
+            lockpickCounter->setNumber(Game::getInstance()->player()->skillValue(SKILL::LOCKPICK));
+
+            auto stealCounter    = new UI::BigCounter(backgroundX + 111, backgroundY + 48 + 36 * 2, 3);
+            stealCounter->setNumber(Game::getInstance()->player()->skillValue(SKILL::STEAL));
+
+            auto trapsCounter    = new UI::BigCounter(backgroundX + 111, backgroundY + 48 + 36 * 3, 3);
+            trapsCounter->setNumber(Game::getInstance()->player()->skillValue(SKILL::TRAPS));
+
+            auto firstAidCounter = new UI::BigCounter(backgroundX + 111, backgroundY + 48 + 36 * 4, 3);
+            firstAidCounter->setNumber(Game::getInstance()->player()->skillValue(SKILL::FIRST_AID));
+
+            auto doctorCounter   = new UI::BigCounter(backgroundX + 111, backgroundY + 48 + 36 * 5, 3);
+            doctorCounter->setNumber(Game::getInstance()->player()->skillValue(SKILL::DOCTOR));
+
+            auto scienceCounter  = new UI::BigCounter(backgroundX + 111, backgroundY + 48 + 36 * 6, 3);
+            scienceCounter->setNumber(Game::getInstance()->player()->skillValue(SKILL::SCIENCE));
+
+            auto repairCounter   = new UI::BigCounter(backgroundX + 111, backgroundY + 48 + 36 * 7, 3);
+            repairCounter->setNumber(Game::getInstance()->player()->skillValue(SKILL::REPAIR));
 
             // LABELS
             std::string font = "font3.aaf";
@@ -193,7 +213,6 @@ namespace Falltergeist
             addUI(doctorCounter);
             addUI(scienceCounter);
             addUI(repairCounter);
-
         }
 
         void Skilldex::onCancelButtonClick(Event::Mouse* event)
@@ -203,8 +222,7 @@ namespace Falltergeist
 
         void Skilldex::onKeyDown(Event::Keyboard* event)
         {
-            if (event->keyCode() == SDLK_ESCAPE)
-            {
+            if (event->keyCode() == SDLK_ESCAPE) {
                 Game::getInstance()->popState();
             }
         }
@@ -217,6 +235,16 @@ namespace Falltergeist
         void Skilldex::onStateDeactivate(Event::State* event)
         {
             Game::getInstance()->mouse()->popState();
+        }
+
+        void Skilldex::onSkillButtonClick(Event::Mouse* event, SKILL skill)
+        {
+            auto mouse = Game::getInstance()->mouse();
+            if (mouse->state() != Input::Mouse::Cursor::USE) {
+                mouse->pushState(Input::Mouse::Cursor::USE);
+            }
+            Logger::info() << "Skill use call: " << std::to_string((unsigned)skill) << std::endl;
+
         }
     }
 }

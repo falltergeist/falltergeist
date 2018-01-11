@@ -30,7 +30,9 @@
 #include "../Game/DudeObject.h"
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
+#include "../Helpers/StateLocationHelper.h"
 #include "../Input/Mouse.h"
+#include "../Logger.h"
 #include "../ResourceManager.h"
 #include "../Settings.h"
 #include "../State/CritterDialog.h"
@@ -44,6 +46,8 @@
 
 namespace Falltergeist
 {
+    using Helpers::StateLocationHelper;
+
     namespace State
     {
         Start::Start() : State()
@@ -84,7 +88,9 @@ namespace Falltergeist
                 auto player = std::make_unique<Game::DudeObject>();
                 player->loadFromGCDFile(ResourceManager::getInstance()->gcdFileType("premade/combat.gcd"));
                 game->setPlayer(std::move(player));
-                game->setState(new Location());
+
+                StateLocationHelper stateLocationHelper;
+                game->setState(stateLocationHelper.getInitialLocationState());
                 return;
             }
             if (_splashTicks + 3000 < SDL_GetTicks())

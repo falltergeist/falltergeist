@@ -17,13 +17,13 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_HELPERS_CRITTERANIMATIONHELPER_H
-#define FALLTERGEIST_HELPERS_CRITTERANIMATIONHELPER_H
-
 // C++ standard includes
-#include <string>
 
 // Falltergeist includes
+#include "../Game/Location.h"
+#include "../Helpers/GameLocationHelper.h"
+#include "../Helpers/StateLocationHelper.h"
+#include "../State/Location.h"
 
 // Third party includes
 
@@ -31,14 +31,15 @@ namespace Falltergeist
 {
     namespace Helpers
     {
-        class CritterAnimationHelper
+        State::Location* StateLocationHelper::getInitialLocationState() const
         {
-            public:
-                CritterAnimationHelper() = default;
-                std::string getSuffix(unsigned int animationId, unsigned int weaponId) const;
-                std::string getPrefix(unsigned int FID) const;
-        };
+            GameLocationHelper gameLocationHelper;
+            auto initialLocation = gameLocationHelper.getInitialLocation();
+
+            auto locationState = new State::Location();
+            locationState->setElevation(initialLocation->defaultElevationIndex());
+            locationState->setLocation(initialLocation);
+            return locationState;
+        }
     }
 }
-
-#endif //FALLTERGEIST_HELPERS_CRITTERANIMATIONHELPER_H

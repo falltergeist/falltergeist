@@ -50,35 +50,27 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace Game
-    {
-        Object::Object() : Event::EventTarget(Game::getInstance()->eventDispatcher())
-        {
+namespace Falltergeist {
+    namespace Game {
+        Object::Object() : Event::EventTarget(Game::getInstance()->eventDispatcher()) {
         }
 
-        Object::~Object()
-        {
+        Object::~Object() {
         }
 
-        Object::Type Object::type() const
-        {
+        Object::Type Object::type() const {
             return _type;
         }
 
-        int Object::PID() const
-        {
+        int Object::PID() const {
             return _PID;
         }
 
-        void Object::setPID(int value)
-        {
+        void Object::setPID(int value) {
             _PID = value;
         }
 
-        int Object::FID() const
-        {
+        int Object::FID() const {
             return _FID;
         }
 
@@ -135,7 +127,7 @@ namespace Falltergeist
             return _name;
         }
 
-        void Object::setName(const std::string& value)
+        void Object::setName(const std::string &value)
         {
             _name = value;
         }
@@ -145,7 +137,7 @@ namespace Falltergeist
             return _scrName;
         }
 
-        void Object::setScrName(const std::string& value)
+        void Object::setScrName(const std::string &value)
         {
             _scrName = value;
         }
@@ -155,62 +147,50 @@ namespace Falltergeist
             return _description;
         }
 
-        void Object::setDescription(const std::string& value)
+        void Object::setDescription(const std::string &value)
         {
             _description = value;
         }
 
-        VM::Script* Object::script() const
+        VM::Script *Object::script() const
         {
             return _script.get();
         }
 
-        void Object::setScript(VM::Script* script)
+        void Object::setScript(VM::Script *script)
         {
             _script.reset(script);
         }
 
-        UI::Base* Object::ui() const
+        UI::Base *Object::ui() const
         {
             return _ui.get();
         }
 
-        void Object::setUI(UI::Base* ui)
+        void Object::setUI(UI::Base *ui)
         {
             _ui.reset(ui);
-            addUIEventHandlers();
         }
-
-        void Object::addUIEventHandlers()
-        {
-            if (_ui) {
-                // TODO: these event handlers probably need to be set in State::Location
-                _ui->mouseDownHandler().add(std::bind(&State::Location::onObjectMouseEvent, Game::getInstance()->locationState(), std::placeholders::_1, this));
-                _ui->mouseClickHandler().add(std::bind(&State::Location::onObjectMouseEvent, Game::getInstance()->locationState(), std::placeholders::_1, this));
-                _ui->mouseInHandler().add(std::bind(&State::Location::onObjectHover, Game::getInstance()->locationState(), std::placeholders::_1, this));
-                // TODO: get rid of mousemove handler?
-                _ui->mouseMoveHandler().add(std::bind(&State::Location::onObjectHover, Game::getInstance()->locationState(), std::placeholders::_1, this));
-                _ui->mouseOutHandler().add(std::bind(&State::Location::onObjectHover, Game::getInstance()->locationState(), std::placeholders::_1, this));
-            }
-        }
-
 
         void Object::_generateUi()
         {
             _ui.reset();
             auto frm = ResourceManager::getInstance()->frmFileType(FID());
-            if (frm) {
-                if (frm->framesPerDirection() > 1 || frm->directions().size() > 1) {
-                    auto queue = std::make_unique<UI::AnimationQueue>();
-                    queue->animations().push_back(std::make_unique<UI::Animation>(ResourceManager::getInstance()->FIDtoFrmName(FID()), orientation()));
-                    _ui = std::move(queue);
-                } else {
-                    _ui =  std::make_unique<UI::Image>(frm, orientation());
-
-                }
+            if (!frm) {
+                return;
             }
-
-            addUIEventHandlers();
+            if (frm->framesPerDirection() > 1 || frm->directions().size() > 1) {
+                auto queue = std::make_unique<UI::AnimationQueue>();
+                queue->animations().push_back(
+                    std::make_unique<UI::Animation>(
+                        ResourceManager::getInstance()->FIDtoFrmName(FID()),
+                        orientation()
+                    )
+                );
+                _ui = std::move(queue);
+            } else {
+                _ui = std::make_unique<UI::Image>(frm, orientation());
+            }
         }
 
         bool Object::canWalkThru() const
@@ -253,17 +233,17 @@ namespace Falltergeist
             _wallTransEnd = value;
         }
 
-        Hexagon* Object::hexagon() const
+        Hexagon *Object::hexagon() const
         {
             return _hexagon;
         }
 
-        void Object::setHexagon(Hexagon* hexagon)
+        void Object::setHexagon(Hexagon *hexagon)
         {
             _hexagon = hexagon;
         }
 
-        UI::TextArea* Object::floatMessage() const
+        UI::TextArea *Object::floatMessage() const
         {
             return _floatMessage.get();
         }
@@ -273,34 +253,35 @@ namespace Falltergeist
             _floatMessage = std::move(message);
         }
 
-        static bool to_right_of(const Point& p1, const Point& p2)
+        static bool to_right_of(const Point &p1, const Point &p2)
         {
-            return (double)(p2.x() - p1.x()) <= ((double)(p2.y() - p1.y()) * (4.0/3.0));
+            return (double) (p2.x() - p1.x()) <= ((double) (p2.y() - p1.y()) * (4.0 / 3.0));
         }
 
-        static bool in_front_of(const Point& p1, const Point& p2)
+        static bool in_front_of(const Point &p1, const Point &p2)
         {
-          return (double)(p2.x() - p1.x()) <= ((double)(p2.y() - p1.y()) * -4.0);
+            return (double) (p2.x() - p1.x()) <= ((double) (p2.y() - p1.y()) * -4.0);
         }
 
         void Object::renderText()
         {
-            if (auto message = floatMessage()) {
-                if (SDL_GetTicks() - message->timestampCreated() >= 7000) {
-                    setFloatMessage(nullptr);
-                } else {
-                    message->setPosition(_ui->position() + Point(
+            auto message = floatMessage();
+            if (!message) {
+                return;
+            }
+            if (SDL_GetTicks() - message->timestampCreated() >= 7000) {
+                setFloatMessage(nullptr);
+            } else {
+                message->setPosition(_ui->position() + Point(
                         _ui->size().width() / 2 - message->size().width() / 2,
                         -4 - message->textSize().height()
-                    ));
-                    message->render();
-                }
+                ));
+                message->render();
             }
         }
 
         void Object::render()
         {
-
             if (!_ui || !_hexagon) {
                 return;
             }
@@ -328,11 +309,11 @@ namespace Falltergeist
         bool Object::_isIntersectsWithEgg()
         {
             //only walls and scenery are affected by egg
-            if (_type != Type::WALL && _type !=Type::SCENERY) {
+            if (_type != Type::WALL && _type != Type::SCENERY) {
                 return false;
             }
             auto dude = Game::getInstance()->player();
-            Hexagon * dudeHex;
+            Hexagon *dudeHex;
 
             if (dude->movementQueue()->size()) {
                 dudeHex = dude->movementQueue()->back();
@@ -346,8 +327,7 @@ namespace Falltergeist
             bool noBlockTrans = false;
             bool transparent;
 
-            switch (_lightOrientation)
-            {
+            switch (_lightOrientation) {
                 case Orientation::EW:
                 case Orientation::WC:
                     transparent = in_front_of(objPos, dudePos);
@@ -366,8 +346,8 @@ namespace Falltergeist
             }
 
             return (noBlockTrans && wallTransEnd())
-                ? false
-                : transparent;
+                   ? false
+                   : transparent;
         }
 
         void Object::think()
@@ -375,7 +355,7 @@ namespace Falltergeist
             if (_ui) _ui->think();
         }
 
-        void Object::handle(Event::Event* event)
+        void Object::handle(Event::Event *event)
         {
             if (_ui) {
                 _ui->handle(event);
@@ -394,12 +374,13 @@ namespace Falltergeist
 
         void Object::description_p_proc()
         {
-            Logger::info("SCRIPT") << "description_p_proc() - 0x" << std::hex << PID() << " " << name() << " " << (script() ? script()->filename() : "") << std::endl;
+            Logger::info("SCRIPT") << "description_p_proc() - 0x" << std::hex << PID() << " " << name() << " "
+                                   << (script() ? script()->filename() : "") << std::endl;
             bool useDefault = true;
             if (script() && script()->hasFunction("description_p_proc")) {
                 script()
-                    ->setSourceObject(Game::getInstance()->player())
-                    ->call("description_p_proc");
+                        ->setSourceObject(Game::getInstance()->player().get())
+                        ->call("description_p_proc");
                 if (script()->overrides()) {
                     useDefault = false;
                 }
@@ -413,12 +394,12 @@ namespace Falltergeist
             }
         }
 
-        void Object::use_p_proc(CritterObject* usedBy)
+        void Object::use_p_proc(CritterObject *usedBy)
         {
             if (script() && script()->hasFunction("use_p_proc")) {
                 script()
-                    ->setSourceObject(usedBy)
-                    ->call("use_p_proc");
+                        ->setSourceObject(usedBy)
+                        ->call("use_p_proc");
             }
         }
 
@@ -426,8 +407,8 @@ namespace Falltergeist
         {
             if (script() && script()->hasFunction("destroy_p_proc")) {
                 script()
-                    ->setSourceObject(Game::getInstance()->player())
-                    ->call("destroy_p_proc");
+                        ->setSourceObject(Game::getInstance()->player().get())
+                        ->call("destroy_p_proc");
             }
         }
 
@@ -436,8 +417,8 @@ namespace Falltergeist
             bool useDefault = true;
             if (script() && script()->hasFunction("look_at_p_proc")) {
                 script()
-                    ->setSourceObject(Game::getInstance()->player())
-                    ->call("look_at_p_proc");
+                        ->setSourceObject(Game::getInstance()->player().get())
+                        ->call("look_at_p_proc");
                 if (script()->overrides()) {
                     useDefault = false;
                 }
@@ -471,34 +452,34 @@ namespace Falltergeist
             }
         }
 
-        void Object::pickup_p_proc(CritterObject* pickedUpBy)
+        void Object::pickup_p_proc(CritterObject *pickedUpBy)
         {
             if (script() && script()->hasFunction("pickup_p_proc")) {
                 script()
-                    ->setSourceObject(pickedUpBy)
-                    ->call("pickup_p_proc");
+                        ->setSourceObject(pickedUpBy)
+                        ->call("pickup_p_proc");
             }
             // @TODO: standard handler
         }
 
-        void Object::use_obj_on_p_proc(Object* objectUsed, CritterObject* usedBy)
+        void Object::use_obj_on_p_proc(Object *objectUsed, CritterObject *usedBy)
         {
             if (script() && script()->hasFunction("use_obj_on_p_proc")) {
                 script()
-                    ->setSourceObject(usedBy)
-                    ->setTargetObject(objectUsed)
-                    ->call("use_obj_on_p_proc");
+                        ->setSourceObject(usedBy)
+                        ->setTargetObject(objectUsed)
+                        ->call("use_obj_on_p_proc");
             }
             // @TODO: standard handlers for drugs, etc.
         }
 
-        void Object::onUseAnimationActionFrame(Event::Event* event, CritterObject* critter)
+        void Object::onUseAnimationActionFrame(Event::Event *event, CritterObject *critter)
         {
             use_p_proc(critter);
-            auto animation = dynamic_cast<UI::Animation*>(critter->ui());
+            auto animation = dynamic_cast<UI::Animation *>(critter->ui());
             if (animation) {
                 animation->actionFrameHandler().clear();
-                animation->animationEndedHandler().add([this, critter](Event::Event* event){
+                animation->animationEndedHandler().add([this, critter](Event::Event *event) {
                     this->onUseAnimationEnd(event, critter);
                 });
             } else {
@@ -506,7 +487,7 @@ namespace Falltergeist
             }
         }
 
-        void Object::onUseAnimationEnd(Event::Event* event, CritterObject* critter)
+        void Object::onUseAnimationEnd(Event::Event *event, CritterObject *critter)
         {
             critter->setActionAnimation("aa")->stop();
         }
@@ -603,7 +584,7 @@ namespace Falltergeist
         {
             _defaultFrame = frame;
             if (_ui) {
-                if (auto anim = dynamic_cast<UI::AnimationQueue*>(_ui.get())) {
+                if (auto anim = dynamic_cast<UI::AnimationQueue *>(_ui.get())) {
                     anim->currentAnimation()->setCurrentFrame(_defaultFrame);
                 }
             }
@@ -622,9 +603,9 @@ namespace Falltergeist
 
             auto camera = Game::getInstance()->locationState()->camera();
             _ui->setPosition(
-                hexagon()->position()
-                - camera->topLeft()
-                - Point(_ui->size().width() / 2, _ui->size().height())
+                    hexagon()->position()
+                    - camera->topLeft()
+                    - Point(_ui->size().width() / 2, _ui->size().height())
             );
 
             // don't draw if outside of screen
@@ -636,6 +617,16 @@ namespace Falltergeist
             _ui->setOutline(type);
             _ui->render(false);
             _ui->setOutline(0);
+        }
+
+        int Object::position() const
+        {
+            return _position;
+        }
+
+        void Object::setPosition(int position)
+        {
+            _position = position;
         }
     }
 }

@@ -223,6 +223,9 @@ namespace Falltergeist
                 unsigned int defaultFrame();
                 virtual void setDefaultFrame(unsigned int frame);
 
+                int position() const;
+                void setPosition(int position);
+
             protected:
                 bool _canWalkThru = true;
                 bool _canLightThru = false;
@@ -235,6 +238,7 @@ namespace Falltergeist
                 int _SID = -1;
                 int _elevation = 0;
                 Orientation _orientation;
+                int _position = -1;
                 std::string _name;
                 std::string _scrName;
                 std::string _description;
@@ -242,7 +246,6 @@ namespace Falltergeist
                 std::unique_ptr<UI::Base> _ui;
                 Hexagon* _hexagon = nullptr;
                 virtual void _generateUi();
-                void addUIEventHandlers();
                 std::unique_ptr<UI::TextArea> _floatMessage;
                 bool _inRender = false;
                 Graphics::TransFlags::Trans _trans = Graphics::TransFlags::Trans::DEFAULT;

@@ -44,7 +44,7 @@ namespace Falltergeist
             {
                 Logger::debug("SCRIPT") << "[80BF] [+] GameDudeObject* dude_obj()" << std::endl;
                 auto game = Game::getInstance();
-                _script->dataStack()->push(game->player());
+                _script->dataStack()->push(game->player().get());
             }
         }
     }
