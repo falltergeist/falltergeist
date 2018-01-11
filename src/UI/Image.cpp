@@ -80,7 +80,10 @@ bool Image::opaque(unsigned int x, unsigned int y)
 
 bool Image::opaque(const Point &pos)
 {
-    return opaque(pos.x(), pos.y());
+    if (pos.x() < 0 || pos.y() < 0) {
+        return false;
+    }
+    return opaque((unsigned)pos.x(), (unsigned)pos.y());
 }
 
 void Image::render(const Size &size, bool eggTransparency)

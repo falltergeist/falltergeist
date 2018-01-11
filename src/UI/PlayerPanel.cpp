@@ -68,24 +68,21 @@ PlayerPanel::PlayerPanel() : UI::Base()
 
     _background->setPosition(this->position());
 
-    mouseInHandler().add([this, mouse](Event::Event* event)
-    {
+    mouseInHandler().add([this, mouse](Event::Event* event) {
         mouse->pushState(Input::Mouse::Cursor::BIG_ARROW);
     });
 
-    mouseOutHandler().add([this, mouse](Event::Event* event)
-    {
-        if (mouse->scrollState())
-        {
+    mouseOutHandler().add([this, mouse](Event::Event* event) {
+        if (mouse->scrollState()) {
             // this trick is needed for correct cursor type returning on scrolling
             auto state = mouse->state();
             mouse->popState();
             mouse->popState();
             mouse->pushState(state);
-        }
-        else
-        {
-            mouse->popState();
+        } else {
+            if (mouse->state() != Input::Mouse::Cursor::USE) {
+                mouse->popState();
+            }
         }
     });
 

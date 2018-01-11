@@ -48,6 +48,11 @@ File::File(Dat::Stream&& stream) : _stream(std::move(stream))
 
 void File::init(ProFileTypeLoaderCallback callback)
 {
+    if (_initialized) {
+        return;
+    }
+    _initialized = true;
+
     auto& stream = _stream;
     stream.setPosition(0);
 
@@ -357,7 +362,7 @@ std::unique_ptr<Object> File::_readObject(Dat::Stream& stream, ProFileTypeLoader
             }
             break;
         default:
-            throw Exception("File::_readObject() - unknown type");
+            throw Exception("File::_readObject() - unknown type: " + std::to_string(object->objectTypeId()));
     }
     return object;
 }

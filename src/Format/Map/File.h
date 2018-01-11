@@ -86,6 +86,8 @@ public:
 private:
     Dat::Stream _stream;
 
+    bool _initialized = false;
+
     std::vector<Elevation> _elevations;
     std::vector<Script> _scripts;
     std::vector<int32_t> _MVARS;

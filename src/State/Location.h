@@ -141,6 +141,9 @@ namespace Falltergeist
 
                 Game::Object* addObject(unsigned int PID, unsigned int position, unsigned int elevation);
 
+                SKILL skillInUse() const;
+                void setSkillInUse(SKILL skill);
+
             protected:
                 struct TimerEvent
                 {
@@ -181,6 +184,8 @@ namespace Falltergeist
                 Game::Object* _actionCursorLastObject = nullptr;
                 bool _actionCursorButtonPressed = false;
                 UI::PlayerPanel* _playerPanel;
+
+                SKILL _skillInUse = SKILL::NONE;
 
                 bool _scrollLeft = false;
                 bool _scrollRight = false;
@@ -225,6 +230,8 @@ namespace Falltergeist
                 void updateLocation();
 
                 void processTimers();
+
+                Game::Object* getGameObjectUnderCursor();
         };
     }
 }
