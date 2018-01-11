@@ -23,6 +23,7 @@
 // C++ standard includes
 
 // Falltergeist includes
+#include "../Format/Enums.h"
 #include "../State/State.h"
 
 // Third party includes
@@ -44,6 +45,8 @@ namespace Falltergeist
                 void onKeyDown(Event::Keyboard* event) override;
                 void onStateActivate(Event::State* event) override;
                 void onStateDeactivate(Event::State* event) override;
+
+                void onSkillButtonClick(Event::Mouse* event, SKILL skill);
         };
     }
 }

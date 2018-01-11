@@ -6,6 +6,7 @@
 - [bugfix][#468] Check for animation if it actually has frm file (alexeevdv)
 - Sprites rendering improvement (Zervox)
 - [feature][#444] CritterAnimationHelper added. Code refactoring (alexeevdv)(dreamer-dead)
+- [feature] Ability to move between locations and go to world map (alexeevdv)
 
 0.3.0 (2016-03-16)
 =======================

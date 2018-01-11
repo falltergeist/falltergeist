@@ -67,6 +67,7 @@
 #include "../State/CursorDropdown.h"
 #include "../State/ExitConfirm.h"
 #include "../State/MainMenu.h"
+#include "../State/WorldMap.h"
 #include "../UI/Animation.h"
 #include "../UI/AnimationFrame.h"
 #include "../UI/AnimationQueue.h"
@@ -138,6 +139,50 @@ namespace Falltergeist
 
                 auto hexagon = hexagonGrid()->at(object->position());
                 moveObjectToHexagon(object, hexagon, false);
+
+                if (object->ui()) {
+                    object->ui()->mouseDownHandler().add(
+                        std::bind(
+                            &Location::onObjectMouseEvent,
+                            this,
+                            std::placeholders::_1,
+                            object
+                        )
+                    );
+                    object->ui()->mouseClickHandler().add(
+                        std::bind(
+                            &Location::onObjectMouseEvent,
+                            this,
+                            std::placeholders::_1,
+                            object
+                        )
+                    );
+                    object->ui()->mouseInHandler().add(
+                        std::bind(
+                            &Location::onObjectHover,
+                            this,
+                            std::placeholders::_1,
+                            object
+                        )
+                    );
+                    // TODO: get rid of mousemove handler?
+                    object->ui()->mouseMoveHandler().add(
+                        std::bind(
+                            &Location::onObjectHover,
+                            this,
+                            std::placeholders::_1,
+                            object
+                        )
+                    );
+                    object->ui()->mouseOutHandler().add(
+                        std::bind(
+                            &Location::onObjectHover,
+                            this,
+                            std::placeholders::_1,
+                            object
+                        )
+                    );
+                }
 
                 if (auto spatial = dynamic_cast<Game::SpatialObject*>(object)) {
                     _spatials.push_back(spatial);
@@ -367,11 +412,6 @@ namespace Falltergeist
 
         void Location::onObjectMouseEvent(Event::Mouse *event, Game::Object *object)
         {
-            // TODO: dafaq?
-            if (!this) {
-                return;
-            }
-
             if (!object) {
                 return;
             }
@@ -402,7 +442,6 @@ namespace Falltergeist
                     _actionCursorButtonPressed = false;
                 }
 
-                // TODO: dafaq?
                 _actionCursorTimer.start();
             }
         }
@@ -579,23 +618,37 @@ namespace Falltergeist
                 // if scrolling is active
                 if (this->_scrollLeft || this->_scrollRight || this->_scrollTop || this->_scrollBottom) {
                     Input::Mouse::Cursor state;
-                    if (this->_scrollLeft) state = Input::Mouse::Cursor::SCROLL_W;
-                    if (this->_scrollRight) state = Input::Mouse::Cursor::SCROLL_E;
-                    if (this->_scrollTop) state = Input::Mouse::Cursor::SCROLL_N;
-                    if (this->_scrollBottom) state = Input::Mouse::Cursor::SCROLL_S;
-                    if (this->_scrollLeft && this->_scrollTop) state = Input::Mouse::Cursor::SCROLL_NW;
-                    if (this->_scrollLeft && this->_scrollBottom) state = Input::Mouse::Cursor::SCROLL_SW;
-                    if (this->_scrollRight && this->_scrollTop) state = Input::Mouse::Cursor::SCROLL_NE;
-                    if (this->_scrollRight && this->_scrollBottom) state = Input::Mouse::Cursor::SCROLL_SE;
+                    if (this->_scrollLeft) {
+                        state = Input::Mouse::Cursor::SCROLL_W;
+                    }
+                    if (this->_scrollRight) {
+                        state = Input::Mouse::Cursor::SCROLL_E;
+                    }
+                    if (this->_scrollTop) {
+                        state = Input::Mouse::Cursor::SCROLL_N;
+                    }
+                    if (this->_scrollBottom) {
+                        state = Input::Mouse::Cursor::SCROLL_S;
+                    }
+                    if (this->_scrollLeft && this->_scrollTop) {
+                        state = Input::Mouse::Cursor::SCROLL_NW;
+                    }
+                    if (this->_scrollLeft && this->_scrollBottom) {
+                        state = Input::Mouse::Cursor::SCROLL_SW;
+                    }
+                    if (this->_scrollRight && this->_scrollTop) {
+                        state = Input::Mouse::Cursor::SCROLL_NE;
+                    }
+                    if (this->_scrollRight && this->_scrollBottom) {
+                        state = Input::Mouse::Cursor::SCROLL_SE;
+                    }
                     if (mouse->state() != state) {
                         if (mouse->scrollState()) {
                             mouse->popState();
                         }
                         mouse->pushState(state);
                     }
-                }
-                    // scrolling is not active
-                else {
+                } else {
                     if (mouse->scrollState()) {
                         mouse->popState();
                     }
@@ -894,16 +947,23 @@ namespace Falltergeist
                         debug << " exitHexagonNumber: " << exitGrid->exitHexagonNumber() << std::endl;
                         debug << " exitDirection: " << exitGrid->exitDirection() << std::endl << std::endl;
 
+                        if (exitGrid->exitMapNumber() < 0) {
+                            auto worldMapState = new WorldMap;
+                            Game::getInstance()->setState(worldMapState);
+                            return;
+                        }
+
                         auto mapsFile = ResourceManager::getInstance()->mapsTxt();
                         std::string mapName = mapsFile->maps().at(exitGrid->exitMapNumber()).name;
 
                         GameLocationHelper gameLocationHelper;
                         auto location = gameLocationHelper.getByName(mapName);
+                        location->setDefaultPosition(exitGrid->exitHexagonNumber());
+                        location->setDefaultOrientation(exitGrid->exitDirection());
+                        location->setDefaultElevationIndex(exitGrid->exitElevationNumber());
 
                         auto state = new Location();
                         state->setLocation(location);
-                        state->setElevation(exitGrid->exitElevationNumber());
-
 
                         Game::getInstance()->popState();
                         Game::getInstance()->pushState(state);

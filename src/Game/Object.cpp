@@ -50,35 +50,27 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace Game
-    {
-        Object::Object() : Event::EventTarget(Game::getInstance()->eventDispatcher())
-        {
+namespace Falltergeist {
+    namespace Game {
+        Object::Object() : Event::EventTarget(Game::getInstance()->eventDispatcher()) {
         }
 
-        Object::~Object()
-        {
+        Object::~Object() {
         }
 
-        Object::Type Object::type() const
-        {
+        Object::Type Object::type() const {
             return _type;
         }
 
-        int Object::PID() const
-        {
+        int Object::PID() const {
             return _PID;
         }
 
-        void Object::setPID(int value)
-        {
+        void Object::setPID(int value) {
             _PID = value;
         }
 
-        int Object::FID() const
-        {
+        int Object::FID() const {
             return _FID;
         }
 
@@ -178,55 +170,6 @@ namespace Falltergeist
         void Object::setUI(UI::Base *ui)
         {
             _ui.reset(ui);
-            addUIEventHandlers();
-        }
-
-        void Object::addUIEventHandlers()
-        {
-            if (_ui) {
-                // TODO: these event handlers probably need to be set in State::Location
-                _ui->mouseDownHandler().add(
-                    std::bind(
-                        &State::Location::onObjectMouseEvent,
-                        Game::getInstance()->locationState(),
-                        std::placeholders::_1,
-                        this
-                    )
-                );
-                _ui->mouseClickHandler().add(
-                    std::bind(
-                        &State::Location::onObjectMouseEvent,
-                        Game::getInstance()->locationState(),
-                        std::placeholders::_1,
-                        this
-                    )
-                );
-                _ui->mouseInHandler().add(
-                    std::bind(
-                        &State::Location::onObjectHover,
-                        Game::getInstance()->locationState(),
-                        std::placeholders::_1,
-                        this
-                    )
-                );
-                // TODO: get rid of mousemove handler?
-                _ui->mouseMoveHandler().add(
-                    std::bind(
-                        &State::Location::onObjectHover,
-                        Game::getInstance()->locationState(),
-                        std::placeholders::_1,
-                        this
-                    )
-                );
-                _ui->mouseOutHandler().add(
-                    std::bind(
-                        &State::Location::onObjectHover,
-                        Game::getInstance()->locationState(),
-                        std::placeholders::_1,
-                        this
-                    )
-                );
-            }
         }
 
         void Object::_generateUi()
@@ -247,10 +190,7 @@ namespace Falltergeist
                 _ui = std::move(queue);
             } else {
                 _ui = std::make_unique<UI::Image>(frm, orientation());
-
             }
-
-            addUIEventHandlers();
         }
 
         bool Object::canWalkThru() const

@@ -246,7 +246,6 @@ namespace Falltergeist
                 std::unique_ptr<UI::Base> _ui;
                 Hexagon* _hexagon = nullptr;
                 virtual void _generateUi();
-                void addUIEventHandlers();
                 std::unique_ptr<UI::TextArea> _floatMessage;
                 bool _inRender = false;
                 Graphics::TransFlags::Trans _trans = Graphics::TransFlags::Trans::DEFAULT;
