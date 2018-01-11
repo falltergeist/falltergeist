@@ -350,20 +350,13 @@ namespace Falltergeist
                 icons.push_back(Input::Mouse::Icon::USE);
             }
 
-            switch (object->type()) {
-                case Game::Object::Type::ITEM:
-                    break;
-                case Game::Object::Type::DUDE:
-                    icons.push_back(Input::Mouse::Icon::ROTATE);
-                    break;
-                case Game::Object::Type::SCENERY:
-                    break;
-                case Game::Object::Type::CRITTER:
-                    icons.push_back(Input::Mouse::Icon::TALK);
-                    break;
-                default:
-                    break;
+            if (object->type() == Game::Object::Type::DUDE) {
+                icons.push_back(Input::Mouse::Icon::ROTATE);
             }
+            if (object->type() == Game::Object::Type::CRITTER) {
+                icons.push_back(Input::Mouse::Icon::TALK);
+            }
+
             icons.push_back(Input::Mouse::Icon::LOOK);
             icons.push_back(Input::Mouse::Icon::INVENTORY);
             icons.push_back(Input::Mouse::Icon::SKILL);
@@ -399,11 +392,6 @@ namespace Falltergeist
 
         void Location::onObjectHover(Event::Mouse *event, Game::Object *object)
         {
-            // TODO: dafaq?
-            if (!this) {
-                return;
-            }
-
             if (event->name() == "mouseout") {
                 if (_objectUnderCursor == object) {
                     _objectUnderCursor = nullptr;
@@ -415,7 +403,7 @@ namespace Falltergeist
                 }
 
                 // TODO: dafaq?
-                //_actionCursorTimer.start();
+                _actionCursorTimer.start();
             }
         }
 
@@ -627,65 +615,63 @@ namespace Falltergeist
         {
             auto game = Game::getInstance();
             auto mouse = game->mouse();
-            switch (mouse->state()) {
-                case Input::Mouse::Cursor::NONE: // just for testing
-                {
-                    mouse->pushState(Input::Mouse::Cursor::ACTION);
-                    break;
+
+            if (mouse->state() == Input::Mouse::Cursor::NONE) {
+                mouse->pushState(Input::Mouse::Cursor::ACTION);
+                return;
+            }
+
+            if (mouse->state() == Input::Mouse::Cursor::ACTION) {
+                auto hexagon = hexagonGrid()->hexagonAt(mouse->position() + _camera->topLeft());
+                if (!hexagon) {
+                    return;
                 }
-                case Input::Mouse::Cursor::ACTION: {
-                    auto hexagon = hexagonGrid()->hexagonAt(mouse->position() + _camera->topLeft());
-                    if (!hexagon) {
-                        break;
-                    }
-                    mouse->pushState(Input::Mouse::Cursor::HEXAGON_RED);
-                    mouse->ui()->setPosition(hexagon->position() - _camera->topLeft());
-                    _objectUnderCursor = nullptr;
-                    break;
-                }
-                case Input::Mouse::Cursor::HEXAGON_RED: {
-                    mouse->popState();
-                    break;
-                }
-                default:
-                    break;
+                mouse->pushState(Input::Mouse::Cursor::HEXAGON_RED);
+                mouse->ui()->setPosition(hexagon->position() - _camera->topLeft());
+                _objectUnderCursor = nullptr;
+                return;
+            }
+
+            if (mouse->state() == Input::Mouse::Cursor::HEXAGON_RED) {
+                mouse->popState();
+                return;
             }
         }
 
         void Location::handle(Event::Event *event)
         {
             State::handle(event);
-            if (event->handled()) return;
+            if (event->handled()) {
+                return;
+            }
 
             if (auto mouseEvent = dynamic_cast<Event::Mouse *>(event)) {
                 using Mouse = Event::Mouse;
                 auto mouse = Game::getInstance()->mouse();
 
-                switch (mouseEvent->originalType()) {
-                    case Mouse::Type::BUTTON_DOWN: {
-                        emitEvent(std::make_unique<Event::Mouse>(*mouseEvent), _mouseDownHandler);
-                        break;
-                    }
-                    case Mouse::Type::BUTTON_UP: {
-                        emitEvent(std::make_unique<Event::Mouse>(*mouseEvent), _mouseUpHandler);
-                        break;
-                    }
-                    case Mouse::Type::MOVE: {
-                        emitEvent(std::make_unique<Event::Mouse>(*mouseEvent), _mouseMoveHandler);
+                if (mouseEvent->originalType() == Mouse::Type::BUTTON_DOWN) {
+                    emitEvent(std::make_unique<Event::Mouse>(*mouseEvent), _mouseDownHandler);
+                }
 
-                        if (mouse->state() == Input::Mouse::Cursor::ACTION) {
-                            // optimization to prevent FPS drops on mouse move
-                            // TODO: replace with a Timer?
-                            auto ticks = SDL_GetTicks();
-                            if (ticks - _mouseMoveTicks < 50) {
-                                event->setHandled(true);
-                            } else {
-                                _mouseMoveTicks = ticks;
-                            }
+                if (mouseEvent->originalType() == Mouse::Type::BUTTON_UP) {
+                    emitEvent(std::make_unique<Event::Mouse>(*mouseEvent), _mouseUpHandler);
+                }
+
+                if (mouseEvent->originalType() == Mouse::Type::MOVE) {
+                    emitEvent(std::make_unique<Event::Mouse>(*mouseEvent), _mouseMoveHandler);
+
+                    if (mouse->state() == Input::Mouse::Cursor::ACTION) {
+                        // optimization to prevent FPS drops on mouse move
+                        // TODO: replace with a Timer?
+                        auto ticks = SDL_GetTicks();
+                        if (ticks - _mouseMoveTicks < 50) {
+                            event->setHandled(true);
+                        } else {
+                            _mouseMoveTicks = ticks;
                         }
-                        break;
                     }
                 }
+
                 // let event fall down to all objects when using action cursor and within active view
                 if (!mouseEvent->handled() &&
                     (mouse->state() == Input::Mouse::Cursor::ACTION || mouse->state() == Input::Mouse::Cursor::NONE)) {
@@ -804,70 +790,53 @@ namespace Falltergeist
 
         void Location::onKeyDown(Event::Keyboard *event)
         {
-            switch (event->keyCode()) {
-                case SDLK_m:
-                    toggleCursorMode();
-                    break;
-                case SDLK_COMMA: {
-                    auto player = Game::getInstance()->player();
-                    player->setOrientation(player->orientation() + 5); // rotate left
-                    break;
-                }
-                case SDLK_PERIOD: {
-                    auto player = Game::getInstance()->player();
-                    player->setOrientation(player->orientation() + 1); // rotate right
-                    break;
-                }
-                case SDLK_HOME:
-                    centerCameraAtHexagon(Game::getInstance()->player()->hexagon());
-                    break;
-                case SDLK_PLUS:
-                case SDLK_KP_PLUS:
-                    // @TODO: increase brightness
-                    break;
-                case SDLK_MINUS:
-                case SDLK_KP_MINUS:
-                    // @TODO: decrease brightness
-                    break;
-                case SDLK_1:
-                    // @TODO: use skill: sneak
-                    break;
-                case SDLK_2:
-                    // @TODO: use skill: lockpick
-                    break;
-                case SDLK_3:
-                    // @TODO: use skill: steal
-                    break;
-                case SDLK_4:
-                    // @TODO: use skill: traps
-                    break;
-                case SDLK_5:
-                    // @TODO: use skill: first aid
-                    break;
-                case SDLK_6:
-                    // @TODO: use skill: doctor
-                    break;
-                case SDLK_7:
-                    // @TODO: use skill: science
-                    break;
-                case SDLK_8:
-                    // @TODO: use skill: repair
-                    break;
-                case SDLK_LEFT:
-                    _camera->setCenter(_camera->center() + Point(-KEYBOARD_SCROLL_STEP, 0));
-                    break;
-                case SDLK_RIGHT:
-                    _camera->setCenter(_camera->center() + Point(KEYBOARD_SCROLL_STEP, 0));
-                    break;
-                case SDLK_UP:
-                    _camera->setCenter(_camera->center() + Point(0, -KEYBOARD_SCROLL_STEP));
-                    break;
-                case SDLK_DOWN:
-                    _camera->setCenter(_camera->center() + Point(0, KEYBOARD_SCROLL_STEP));
-                    break;
+            if (event->keyCode() == SDLK_m) {
+                toggleCursorMode();
+            }
+
+            if (event->keyCode() == SDLK_COMMA) {
+                auto player = Game::getInstance()->player();
+                // rotate left
+                player->setOrientation(player->orientation() + 5);
+            }
+
+            if (event->keyCode() == SDLK_PERIOD) {
+                auto player = Game::getInstance()->player();
+                // rotate right
+                player->setOrientation(player->orientation() + 1);
+            }
+
+            if (event->keyCode() == SDLK_HOME) {
+                centerCameraAtHexagon(Game::getInstance()->player()->hexagon());
+            }
+
+            // @TODO: SDLK_PLUS || SDLK_KP_PLUS - increase brightness
+            // @TODO: SDLK_MINUS || SDLK_KP_MINUS - decrease brightness
+            // @TODO: SDLK_1 - use skill: sneak
+            // @TODO: SDLK_2 - use skill: lockpick
+            // @TODO: SDLK_3 - use skill: steal
+            // @TODO: SDLK_4 - use skill: traps
+            // @TODO: SDLK_5 - use skill: first aid
+            // @TODO: SDLK_6 - use skill: doctor
+            // @TODO: SDLK_7 - use skill: science
+            // @TODO: SDLK_8 - use skill: repair
+
+            if (event->keyCode() == SDLK_LEFT) {
+                _camera->setCenter(_camera->center() + Point(-KEYBOARD_SCROLL_STEP, 0));
+            }
+
+            if (event->keyCode() == SDLK_RIGHT) {
+                _camera->setCenter(_camera->center() + Point(KEYBOARD_SCROLL_STEP, 0));
+            }
+
+            if (event->keyCode() == SDLK_UP) {
+                _camera->setCenter(_camera->center() + Point(0, -KEYBOARD_SCROLL_STEP));
+            }
+
+            if (event->keyCode() == SDLK_DOWN) {
+                _camera->setCenter(_camera->center() + Point(0, KEYBOARD_SCROLL_STEP));
             }
         }
-
 
         LocationCamera *Location::camera()
         {
@@ -1052,38 +1021,37 @@ namespace Falltergeist
 
         void Location::handleAction(Game::Object *object, Input::Mouse::Icon action)
         {
-            switch (action) {
-                case Input::Mouse::Icon::LOOK: {
-                    object->description_p_proc();
-                    break;
-                }
-                case Input::Mouse::Icon::USE: {
-                    auto player = Game::getInstance()->player();
-                    auto animation = player->setActionAnimation("al");
-                    animation->actionFrameHandler().add([object, player](Event::Event *event) {
-                        object->onUseAnimationActionFrame(event, player.get());
-                    });
-                    break;
-                }
-                case Input::Mouse::Icon::ROTATE: {
-                    auto dude = dynamic_cast<Game::DudeObject *>(object);
-                    if (!dude) throw Exception("Location::handleAction() - only Dude can be rotated");
+            if (action == Input::Mouse::Icon::LOOK) {
+                object->description_p_proc();
+                return;
+            }
 
-                    auto orientation = dude->orientation() + 1;
-                    if (orientation > 5) orientation = 0;
-                    dude->setOrientation(orientation);
+            if (action == Input::Mouse::Icon::USE) {
+                auto player = Game::getInstance()->player();
+                auto animation = player->setActionAnimation("al");
+                animation->actionFrameHandler().add([object, player](Event::Event *event) {
+                    object->onUseAnimationActionFrame(event, player.get());
+                });
+                return;
+            }
 
-                    break;
+            if (action == Input::Mouse::Icon::ROTATE) {
+                auto dude = dynamic_cast<Game::DudeObject *>(object);
+                if (!dude) throw Exception("Location::handleAction() - only Dude can be rotated");
+
+                auto orientation = dude->orientation() + 1;
+                if (orientation > 5) orientation = 0;
+                dude->setOrientation(orientation);
+                return;
+            }
+
+            if (action == Input::Mouse::Icon::TALK) {
+                if (auto critter = dynamic_cast<Game::CritterObject *>(object)) {
+                    critter->talk_p_proc();
+                } else {
+                    throw Exception("Location::handleAction() - can talk only with critters!");
                 }
-                case Input::Mouse::Icon::TALK: {
-                    if (auto critter = dynamic_cast<Game::CritterObject *>(object)) {
-                        critter->talk_p_proc();
-                    } else {
-                        throw Exception("Location::handleAction() - can talk only with critters!");
-                    }
-                }
-                default: {
-                }
+                return;
             }
         }
 
@@ -1109,11 +1077,12 @@ namespace Falltergeist
             Game::GameTimer timer((unsigned) delay);
             timer.start();
             timer.tickHandler().add([this, obj, fixedParam](Event::Event *) {
-                if (obj)
+                if (obj) {
                     if (auto vm = obj->script()) {
                         vm->setFixedParam(fixedParam);
                         vm->call("timed_event_p_proc");
                     }
+                }
             });
             _timerEvents.emplace_back(TimerEvent {obj, std::move(timer), fixedParam});
         }
@@ -1126,7 +1095,10 @@ namespace Falltergeist
         void Location::removeTimerEvent(Game::Object *obj, int fixedParam)
         {
             _timerEvents.remove_if(
-                    [=](Location::TimerEvent &item) { return item.object == obj && item.fixedParam == fixedParam; });
+                [=](Location::TimerEvent &item) {
+                    return item.object == obj && item.fixedParam == fixedParam;
+                }
+            );
         }
 
         unsigned int Location::lightLevel()
