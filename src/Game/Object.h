@@ -26,6 +26,7 @@
 
 // Falltergeist includes
 #include "../Event/EventTarget.h"
+#include "../Format/Enums.h"
 #include "../Game/Orientation.h"
 #include "../Graphics/TransFlags.h"
 #include "../UI/Base.h"
@@ -202,6 +203,10 @@ namespace Falltergeist
                 virtual void use_p_proc(CritterObject* usedBy);
                 // perform "use object on" action, may call "use_obj_on_p_proc" procedure
                 virtual void use_obj_on_p_proc(Object* objectUsed, CritterObject* usedBy);
+                // perform "use skill on" action, may call "use_skill_on_p_proc" procedure
+                virtual void use_skill_on_p_proc(SKILL skill, Object* objectUsed, CritterObject* usedBy);
+
+
 
                 virtual void onUseAnimationActionFrame(Event::Event* event, CritterObject* critter);
                 virtual void onUseAnimationEnd(Event::Event* event, CritterObject* critter);
@@ -244,7 +249,6 @@ namespace Falltergeist
                 std::string _description;
                 std::unique_ptr<VM::Script> _script;
                 std::unique_ptr<UI::Base> _ui;
-                Hexagon* _hexagon = nullptr;
                 virtual void _generateUi();
                 std::unique_ptr<UI::TextArea> _floatMessage;
                 bool _inRender = false;

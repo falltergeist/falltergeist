@@ -172,12 +172,19 @@ Size Base::size() const
     return Size(0, 0);
 }
 
+bool Base::opaque(const Point &pos)
+{
+    return false;
+}
+
 void Base::handle(Event::Event* event)
 {
-    if (event->handled()) return;
+    if (event->handled()) {
+        return;
+    }
+
     // TODO: get rid of dynamic_casts by using template member function?
-    if (auto mouseEvent = dynamic_cast<Event::Mouse*>(event))
-    {
+    if (auto mouseEvent = dynamic_cast<Event::Mouse*>(event)) {
         handle(mouseEvent);
     }
 
@@ -201,7 +208,9 @@ void Base::handle(Event::Event* event)
 
 void Base::handle(Event::Mouse* mouseEvent)
 {
-    if(!_visible) return;
+    if (!_visible) {
+        return;
+    }
     using Mouse = Event::Mouse;
     Point relPos = mouseEvent->position() - this->position();
 

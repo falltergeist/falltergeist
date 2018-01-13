@@ -71,31 +71,31 @@ namespace Falltergeist
 
             // buttons
             auto sneakButton    = new UI::ImageButton(UI::ImageButton::Type::SKILLDEX_BUTTON, backgroundX+14, backgroundY+44);
-            sneakButton->mouseClickHandler().add(std::bind(&Skilldex::onSkillButtonClick, this, std::placeholders::_1, SKILL::SNEAK));
+            sneakButton->mouseClickHandler().add(std::bind(&Skilldex::onSkillButtonClick, this, SKILL::SNEAK));
 
             auto lockpickButton = new UI::ImageButton(UI::ImageButton::Type::SKILLDEX_BUTTON, backgroundX+14, backgroundY+44+36);
-            lockpickButton->mouseClickHandler().add(std::bind(&Skilldex::onSkillButtonClick, this, std::placeholders::_1, SKILL::LOCKPICK));
+            lockpickButton->mouseClickHandler().add(std::bind(&Skilldex::onSkillButtonClick, this, SKILL::LOCKPICK));
 
             auto stealButton    = new UI::ImageButton(UI::ImageButton::Type::SKILLDEX_BUTTON, backgroundX+14, backgroundY+44+36*2);
-            stealButton->mouseClickHandler().add(std::bind(&Skilldex::onSkillButtonClick, this, std::placeholders::_1, SKILL::STEAL));
+            stealButton->mouseClickHandler().add(std::bind(&Skilldex::onSkillButtonClick, this, SKILL::STEAL));
 
             auto trapsButton    = new UI::ImageButton(UI::ImageButton::Type::SKILLDEX_BUTTON, backgroundX+14, backgroundY+44+36*3);
-            trapsButton->mouseClickHandler().add(std::bind(&Skilldex::onSkillButtonClick, this, std::placeholders::_1, SKILL::TRAPS));
+            trapsButton->mouseClickHandler().add(std::bind(&Skilldex::onSkillButtonClick, this, SKILL::TRAPS));
 
             auto firstAidButton = new UI::ImageButton(UI::ImageButton::Type::SKILLDEX_BUTTON, backgroundX+14, backgroundY+44+36*4);
-            firstAidButton->mouseClickHandler().add(std::bind(&Skilldex::onSkillButtonClick, this, std::placeholders::_1, SKILL::FIRST_AID));
+            firstAidButton->mouseClickHandler().add(std::bind(&Skilldex::onSkillButtonClick, this, SKILL::FIRST_AID));
 
             auto doctorButton   = new UI::ImageButton(UI::ImageButton::Type::SKILLDEX_BUTTON, backgroundX+14, backgroundY+44+36*5);
-            doctorButton->mouseClickHandler().add(std::bind(&Skilldex::onSkillButtonClick, this, std::placeholders::_1, SKILL::DOCTOR));
+            doctorButton->mouseClickHandler().add(std::bind(&Skilldex::onSkillButtonClick, this, SKILL::DOCTOR));
 
             auto scienceButton  = new UI::ImageButton(UI::ImageButton::Type::SKILLDEX_BUTTON, backgroundX+14, backgroundY+44+36*6);
-            scienceButton->mouseClickHandler().add(std::bind(&Skilldex::onSkillButtonClick, this, std::placeholders::_1, SKILL::SCIENCE));
+            scienceButton->mouseClickHandler().add(std::bind(&Skilldex::onSkillButtonClick, this, SKILL::SCIENCE));
 
             auto repairButton   = new UI::ImageButton(UI::ImageButton::Type::SKILLDEX_BUTTON, backgroundX+14, backgroundY+44+36*7);
-            repairButton->mouseClickHandler().add(std::bind(&Skilldex::onSkillButtonClick, this, std::placeholders::_1, SKILL::REPAIR));
+            repairButton->mouseClickHandler().add(std::bind(&Skilldex::onSkillButtonClick, this, SKILL::REPAIR));
 
             auto cancelButton   = new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, backgroundX+48, backgroundY+338);
-            cancelButton->mouseClickHandler().add(std::bind(&Skilldex::onCancelButtonClick, this, std::placeholders::_1));
+            cancelButton->mouseClickHandler().add(std::bind(&Skilldex::onCancelButtonClick, this));
 
             // counters
             auto sneakCounter    = new UI::BigCounter(backgroundX + 111, backgroundY + 48, 3);
@@ -215,15 +215,16 @@ namespace Falltergeist
             addUI(repairCounter);
         }
 
-        void Skilldex::onCancelButtonClick(Event::Mouse* event)
+        void Skilldex::onCancelButtonClick()
         {
+            Game::getInstance()->mouse()->popState();
             Game::getInstance()->popState();
         }
 
         void Skilldex::onKeyDown(Event::Keyboard* event)
         {
             if (event->keyCode() == SDLK_ESCAPE) {
-                Game::getInstance()->popState();
+                onCancelButtonClick();
             }
         }
 
@@ -232,19 +233,13 @@ namespace Falltergeist
             Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::BIG_ARROW);
         }
 
-        void Skilldex::onStateDeactivate(Event::State* event)
+        void Skilldex::onSkillButtonClick(SKILL skill)
         {
-            Game::getInstance()->mouse()->popState();
-        }
-
-        void Skilldex::onSkillButtonClick(Event::Mouse* event, SKILL skill)
-        {
+            Game::getInstance()->locationState()->setSkillInUse(skill);
             auto mouse = Game::getInstance()->mouse();
-            if (mouse->state() != Input::Mouse::Cursor::USE) {
-                mouse->pushState(Input::Mouse::Cursor::USE);
-            }
-            Logger::info() << "Skill use call: " << std::to_string((unsigned)skill) << std::endl;
-
+            mouse->popState();
+            mouse->setState(Input::Mouse::Cursor::USE);
+            Game::getInstance()->popState();
         }
     }
 }

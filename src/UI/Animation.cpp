@@ -270,7 +270,7 @@ bool Animation::opaque(const Point &pos) {
 
     Point offsetPos = pos - offset();
     if (!Rect::inRect(offsetPos, frame->size())) {
-        return 0;
+        return false;
     }
     offsetPos +=frame->position();
     return _animation->opaque(offsetPos.x(),offsetPos.y());

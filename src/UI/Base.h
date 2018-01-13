@@ -97,7 +97,7 @@ public:
 
     virtual Size size() const;
 
-    virtual bool opaque(const Point &pos) { return false; }
+    virtual bool opaque(const Point &pos);
 
     Event::KeyboardHandler& keyDownHandler();
     Event::KeyboardHandler& keyUpHandler();

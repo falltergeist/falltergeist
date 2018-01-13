@@ -37,6 +37,7 @@
 #include "../Game/Defines.h"
 #include "../Game/DudeObject.h"
 #include "../Game/Game.h"
+#include "../PathFinding/HexagonGrid.h"
 #include "../LocationCamera.h"
 #include "../Logger.h"
 #include "../PathFinding/Hexagon.h"
@@ -235,12 +236,16 @@ namespace Falltergeist {
 
         Hexagon *Object::hexagon() const
         {
-            return _hexagon;
+            if (this->position() < 0) {
+                return nullptr;
+            }
+
+            return Game::getInstance()->locationState()->hexagonGrid()->at(this->position());
         }
 
         void Object::setHexagon(Hexagon *hexagon)
         {
-            _hexagon = hexagon;
+            setPosition(hexagon->number());
         }
 
         UI::TextArea *Object::floatMessage() const
@@ -282,7 +287,7 @@ namespace Falltergeist {
 
         void Object::render()
         {
-            if (!_ui || !_hexagon) {
+            if (!_ui || !hexagon()) {
                 return;
             }
 
@@ -473,6 +478,18 @@ namespace Falltergeist {
             // @TODO: standard handlers for drugs, etc.
         }
 
+        void Object::use_skill_on_p_proc(SKILL skill, Object *objectUsed, CritterObject *usedBy)
+        {
+            if (script() && script()->hasFunction("use_skill_on_p_proc")) {
+                script()
+                        ->setSourceObject(usedBy)
+                        ->setTargetObject(objectUsed)
+                        ->setUsedSkill(skill)
+                        ->call("use_skill_on_p_proc");
+            }
+            // @TODO: standard handlers
+        }
+
         void Object::onUseAnimationActionFrame(Event::Event *event, CritterObject *critter)
         {
             use_p_proc(critter);
@@ -597,7 +614,7 @@ namespace Falltergeist {
 
         void Object::renderOutline(int type)
         {
-            if (!_ui || !_hexagon) {
+            if (!_ui || !hexagon()) {
                 return;
             }
 
