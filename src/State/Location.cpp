@@ -935,44 +935,43 @@ namespace Falltergeist
                 }
 
                 /* JUST FOR EXIT GRIDS TESTING*/
-                for (auto obj : *hexagon->objects())
-                {
-                    if (auto exitGrid = dynamic_cast<Game::ExitMiscObject*>(obj))
-                    {
-                        auto &debug = Logger::critical("LOCATION");
-                        debug << " PID: 0x" << std::hex << exitGrid->PID() << std::dec << std::endl;
-                        debug << " name: " << exitGrid->name() << std::endl;
-                        debug << " exitMapNumber: " << exitGrid->exitMapNumber() << std::endl;
-                        debug << " exitElevationNumber: " << exitGrid->exitElevationNumber() << std::endl;
-                        debug << " exitHexagonNumber: " << exitGrid->exitHexagonNumber() << std::endl;
-                        debug << " exitDirection: " << exitGrid->exitDirection() << std::endl << std::endl;
+                if (object->type() == Game::Object::Type::DUDE) {
+                    for (auto obj : *hexagon->objects()) {
+                        if (auto exitGrid = dynamic_cast<Game::ExitMiscObject *>(obj)) {
+                            auto &debug = Logger::critical("LOCATION");
+                            debug << " PID: 0x" << std::hex << exitGrid->PID() << std::dec << std::endl;
+                            debug << " name: " << exitGrid->name() << std::endl;
+                            debug << " exitMapNumber: " << exitGrid->exitMapNumber() << std::endl;
+                            debug << " exitElevationNumber: " << exitGrid->exitElevationNumber() << std::endl;
+                            debug << " exitHexagonNumber: " << exitGrid->exitHexagonNumber() << std::endl;
+                            debug << " exitDirection: " << exitGrid->exitDirection() << std::endl << std::endl;
 
-                        if (exitGrid->exitMapNumber() < 0) {
-                            auto worldMapState = new WorldMap;
-                            Game::getInstance()->setState(worldMapState);
+                            if (exitGrid->exitMapNumber() < 0) {
+                                auto worldMapState = new WorldMap;
+                                Game::getInstance()->setState(worldMapState);
+                                return;
+                            }
+
+                            auto mapsFile = ResourceManager::getInstance()->mapsTxt();
+                            std::string mapName = mapsFile->maps().at(exitGrid->exitMapNumber()).name;
+
+                            GameLocationHelper gameLocationHelper;
+                            auto location = gameLocationHelper.getByName(mapName);
+                            location->setDefaultPosition(exitGrid->exitHexagonNumber());
+                            location->setDefaultOrientation(exitGrid->exitDirection());
+                            location->setDefaultElevationIndex(exitGrid->exitElevationNumber());
+
+                            auto state = new Location();
+                            state->setLocation(location);
+
+                            Game::getInstance()->popState();
+                            Game::getInstance()->pushState(state);
+
+                            //setLocation(mapName);
                             return;
                         }
-
-                        auto mapsFile = ResourceManager::getInstance()->mapsTxt();
-                        std::string mapName = mapsFile->maps().at(exitGrid->exitMapNumber()).name;
-
-                        GameLocationHelper gameLocationHelper;
-                        auto location = gameLocationHelper.getByName(mapName);
-                        location->setDefaultPosition(exitGrid->exitHexagonNumber());
-                        location->setDefaultOrientation(exitGrid->exitDirection());
-                        location->setDefaultElevationIndex(exitGrid->exitElevationNumber());
-
-                        auto state = new Location();
-                        state->setLocation(location);
-
-                        Game::getInstance()->popState();
-                        Game::getInstance()->pushState(state);
-
-                        //setLocation(mapName);
-                        return;
                     }
                 }
-
             }
 
             object->setHexagon(hexagon);

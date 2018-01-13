@@ -30,6 +30,7 @@
 #include "../Game/ArmorItemObject.h"
 #include "../Game/Defines.h"
 #include "../Game/DudeObject.h"
+#include "../Game/ExitMiscObject.h"
 #include "../Game/Game.h"
 #include "../Game/WeaponItemObject.h"
 #include "../Helpers/CritterAnimationHelper.h"
@@ -554,6 +555,15 @@ namespace Falltergeist
                     auto hexagon = moveQueue->back();
                     moveQueue->pop_back();
                     Game::getInstance()->locationState()->moveObjectToHexagon(this, hexagon);
+
+                    // This hack is needed for prevent game crash when player goes to the
+                    // exit tile and location is changed but movement is not finished
+                    for (auto object : *hexagon->objects()) {
+                        if (dynamic_cast<ExitMiscObject*>(object)) {
+                            moveQueue->clear();
+                            break;
+                        }
+                    }
                 }
                 if (moveQueue->empty()) {
                     _moving = false;
