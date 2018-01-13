@@ -92,13 +92,12 @@ namespace Falltergeist
 
         void Mouse::popState()
         {
-            if (_states.size() == 0) return;
-            if (_states.size() == 1)
-            {
-                _setType(Cursor::NONE);
+            if (_states.size() == 0) {
+                return;
             }
-            else
-            {
+            if (_states.size() == 1) {
+                _setType(Cursor::NONE);
+            } else {
                 _setType(_states.at(_states.size() - 2));
             }
             _states.pop_back();
@@ -112,8 +111,7 @@ namespace Falltergeist
 
         Mouse::Cursor Mouse::state() const
         {
-            if (_states.empty())
-            {
+            if (_states.empty()) {
                 return Cursor::NONE;
             }
             return _states.back();

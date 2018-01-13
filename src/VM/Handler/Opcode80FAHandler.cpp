@@ -40,8 +40,8 @@ namespace Falltergeist
 
             void Opcode80FA::_run()
             {
-                Logger::debug("SCRIPT") << "[80FA] [=] int action_being_used()" << std::endl;
-                _script->dataStack()->push(_script->actionUsed());
+                Logger::debug("SCRIPT") << "[80FA] [+] int action_being_used()" << std::endl;
+                _script->dataStack()->push((signed)_script->usedSkill());
             }
         }
     }

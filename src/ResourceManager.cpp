@@ -229,8 +229,7 @@ Bio::File* ResourceManager::bioFileType(const string& filename)
 Map::File* ResourceManager::mapFileType(const string& filename)
 {
     auto item = _datFileItem<Map::File>(filename);
-    if (item)
-    {
+    if (item) {
         item->init(&fetchProFileType);
     }
     return item;

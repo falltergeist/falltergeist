@@ -669,6 +669,7 @@ namespace Falltergeist
             auto game = Game::getInstance();
             auto mouse = game->mouse();
 
+            // Just for testing. This case should never happen in real life
             if (mouse->state() == Input::Mouse::Cursor::NONE) {
                 mouse->pushState(Input::Mouse::Cursor::ACTION);
                 return;
@@ -687,6 +688,11 @@ namespace Falltergeist
 
             if (mouse->state() == Input::Mouse::Cursor::HEXAGON_RED) {
                 mouse->popState();
+                return;
+            }
+
+            if (mouse->state() == Input::Mouse::Cursor::USE) {
+                mouse->setState(Input::Mouse::Cursor::ACTION);
                 return;
             }
         }
@@ -740,16 +746,24 @@ namespace Falltergeist
         {
             for (auto it = _objects.rbegin(); it != _objects.rend(); ++it) {
                 auto object = (*it).get();
-                if (event->handled()) return;
-                if (!object->inRender()) continue;
+                if (event->handled()) {
+                    return;
+                }
+                if (!object->inRender()) {
+                    continue;
+                }
                 object->handle(event);
             }
 
             // sadly, flat objects do handle events.
             for (auto it = _flatObjects.rbegin(); it != _flatObjects.rend(); ++it) {
                 auto object = (*it).get();
-                if (event->handled()) return;
-                if (!object->inRender()) continue;
+                if (event->handled()) {
+                    return;
+                }
+                if (!object->inRender()) {
+                    continue;
+                }
                 object->handle(event);
             }
             /*
@@ -800,6 +814,16 @@ namespace Falltergeist
                         event->setHandled(true);
                         _lastClickedTile = hexagon->number();
                     }
+                }
+
+                if (mouse->state() == Input::Mouse::Cursor::USE) {
+                    auto object = getGameObjectUnderCursor();
+                    if (!object) {
+                        return;
+                    }
+                    // TODO "use" animation
+                    object->use_skill_on_p_proc(skillInUse(), object, Game::getInstance()->player().get());
+                    mouse->setState(Input::Mouse::Cursor::ACTION);
                 }
             }
         }
@@ -963,11 +987,8 @@ namespace Falltergeist
 
                             auto state = new Location();
                             state->setLocation(location);
+                            Game::getInstance()->setState(state);
 
-                            Game::getInstance()->popState();
-                            Game::getInstance()->pushState(state);
-
-                            //setLocation(mapName);
                             return;
                         }
                     }
@@ -1057,7 +1078,6 @@ namespace Falltergeist
             }
         }
 
-
         void Location::destroyObject(Game::Object *object)
         {
             object->destroy_p_proc();
@@ -1129,7 +1149,6 @@ namespace Falltergeist
         {
             return _playerPanel;
         }
-
 
         void Location::addTimerEvent(Game::Object *obj, int delay, int fixedParam)
         {
@@ -1233,6 +1252,35 @@ namespace Falltergeist
         void Location::setElevation(unsigned int elevation)
         {
             _elevation = elevation;
+        }
+
+        Game::Object* Location::getGameObjectUnderCursor()
+        {
+            auto mouse = Game::getInstance()->mouse();
+
+            for (auto it = _objects.rbegin(); it != _objects.rend(); ++it) {
+                auto object = (*it).get();
+                if (!object->inRender()) {
+                    continue;
+                }
+
+                Point position = mouse->position() - object->ui()->position() + object->ui()->offset();
+                if (object->ui()->opaque(position)) {
+                    return object;
+                }
+            }
+
+            return nullptr;
+        }
+
+        SKILL Location::skillInUse() const
+        {
+            return _skillInUse;
+        }
+
+        void Location::setSkillInUse(SKILL skill)
+        {
+            _skillInUse = skill;
         }
     }
 }
