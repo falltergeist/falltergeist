@@ -1,10 +1,8 @@
-Falltergeist [![Build Status](https://travis-ci.org/falltergeist/falltergeist.svg?branch=develop)](https://travis-ci.org/falltergeist/falltergeist)
+Falltergeist [![Build Status](https://travis-ci.org/falltergeist/falltergeist.svg?branch=develop)](https://travis-ci.org/falltergeist/falltergeist) ![Version](https://img.shields.io/github/release/falltergeist/falltergeist.svg)
 ============
 
 Opensource crossplatform Fallout 2™ engine writen in C++ and SDL.
 https://falltergeist.org/
-
-Current version: 0.3.0
 
 IRC channel: #falltergeist on [freenode.net](http://webchat.freenode.net/?channels=falltergeist)
 
