@@ -172,4 +172,10 @@ enum class GENDER : char
     FEMALE
 };
 
+enum class ITEM_PID : int32_t
+{
+    PID_BOTTLE_CAPS = 41,
+    PID_REAL_BOTTLE_CAPS = 519
+};
+
 #endif // FALLTERGEIST_FORMAT_ENUMS_H

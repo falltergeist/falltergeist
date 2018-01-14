@@ -21,8 +21,10 @@
 #define FALLTERGEIST_VM_HANDLER_OPCODE8138_H
 
 // C++ standard includes
+#include <vector>
 
 // Falltergeist includes
+#include "../../Game/ItemObject.h"
 #include "../../VM/OpcodeHandler.h"
 
 // Third party includes
@@ -40,6 +42,7 @@ namespace Falltergeist
 
                 private:
                     void _run() override;
+                    unsigned int countBottlecaps(std::vector<Game::ItemObject*>* inventory, unsigned int bottlecaps);
             };
         }
     }
