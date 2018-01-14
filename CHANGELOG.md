@@ -1,4 +1,7 @@
-0.3.1 Under development
+0.3.2 Under development
+=======================
+
+0.3.1 (2018-01-14)
 =======================
 - [bugfix][#540] Roof sprites are overlapping object's floating text (JanSimek)
 - [bugfix][#527] Artifacts in health/AC number displays (alexeevdv)

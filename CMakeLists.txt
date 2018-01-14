@@ -24,7 +24,7 @@ cmake_minimum_required(VERSION 3.1)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake/modules)
 
 project(falltergeist)
-set(falltergeist_VERSION  0.3.0)
+set(falltergeist_VERSION  0.3.1)
 
 include_directories(src)
 
