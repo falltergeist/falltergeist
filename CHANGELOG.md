@@ -8,6 +8,7 @@
 - [feature][#444] CritterAnimationHelper added. Code refactoring (alexeevdv)(dreamer-dead)
 - [feature] Ability to move between locations and go to world map (alexeevdv)
 - [bugfix][#532] Missing break statements are added in Opcode8039 switch cases (alexeevdv)
+- [bugfix][#547] segafult when move between locations (alexeevdv)
 - [feature] Ability to use skills on objects (alexeevdv)
 
 0.3.0 (2016-03-16)
