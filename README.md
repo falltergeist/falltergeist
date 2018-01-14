@@ -1,4 +1,4 @@
-Falltergeist [![Build Status](https://travis-ci.org/falltergeist/falltergeist.svg?branch=develop)](https://travis-ci.org/falltergeist/falltergeist) ![Version](https://img.shields.io/github/release/falltergeist/falltergeist.svg) [![Discord](https://img.shields.io/discord/401990446747877376.svg)](https://discord.gg/jxs6WRq)
+Falltergeist [![Build Status](https://travis-ci.org/falltergeist/falltergeist.svg?branch=develop)](https://travis-ci.org/falltergeist/falltergeist) [![Version](https://img.shields.io/github/release/falltergeist/falltergeist.svg)](https://github.com/falltergeist/falltergeist/releases/latest) [![Discord](https://img.shields.io/discord/401990446747877376.svg)](https://discord.gg/jxs6WRq)
 ============
 
 Opensource crossplatform Fallout 2™ engine writen in C++ and SDL.
