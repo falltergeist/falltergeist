@@ -12,7 +12,7 @@ apps:
   command: falltergeist.launcher
   desktop: share/applications/falltergeist.desktop
   plugs:
-  - a1sa
+  - alsa
   - pulseaudio
   - x11
   - opengl
