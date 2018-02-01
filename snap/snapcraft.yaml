@@ -43,7 +43,6 @@ parts:
     - libsdl2-mixer-2.0-0 
     - libsdl2-image-2.0-0
     - libglew1.13 
-    - libglm-dev 
     - zlib1g
     
     prime:
