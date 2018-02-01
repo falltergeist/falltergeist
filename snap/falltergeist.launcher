@@ -1,0 +1,22 @@
+#!/bin/bash
+
+#export SDL_DEBUG=1
+#export LIBGL_DEBUG=verbose
+
+if [ "$SNAP_ARCH" == "amd64" ]; then
+  ARCH="x86_64-linux-gnu"
+elif [ "$SNAP_ARCH" == "armhf" ]; then
+  ARCH="arm-linux-gnueabihf"
+elif [ "$SNAP_ARCH" == "arm64" ]; then
+  ARCH="aarch64-linux-gnu"
+else
+  ARCH="$SNAP_ARCH-linux-gnu"
+fi
+
+export LIBGL_DRIVERS_PATH="$SNAP/usr/lib/$ARCH/dri"
+
+export XLOCALEDIR="$SNAP/usr/share/X11/locale"
+
+export LOCPATH="$SNAP/usr/lib/locale"
+
+exec "$SNAP/bin/falltergeist" "$@"

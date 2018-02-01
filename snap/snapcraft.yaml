@@ -9,15 +9,24 @@ confinement: devmode # use 'strict' once you have the right plugs and slots
 
 apps:
  falltergeist:
-  command: falltergeist
+  command: falltergeist.launcher
+  desktop: share/applications/falltergeist.desktop
   plugs:
   - a1sa
-  - pulsadio
+  - pulseaudio
   - x11
   - opengl
   
 parts:
-  falltergiest:
+  falltergeist.launcher:
+   source: snap
+   plugin: dump
+   install: |
+       chmod +x falltergeist.launcher
+   organize:
+    falltergeist.launcher: bin/falltergeist.launcher
+  
+  falltergeist:
     # See 'snapcraft plugins'
     plugin: cmake
     source: https://github.com/falltergeist/falltergeist/archive/0.3.1.tar.gz
@@ -29,3 +38,18 @@ parts:
     - libglew-dev 
     - libglm-dev 
     - zlib1g-dev
+    stage-packages:
+    - libsdl2-2.0-0
+    - libsdl2-mixer-2.0-0 
+    - libsdl2-image-2.0-0
+    - libglew1.13 
+    - libglm-dev 
+    - zlib1g
+    
+    prime:
+      - bin/falltergeist
+      - usr/lib
+      - share/applications
+      - share/falltergeist
+      
+      

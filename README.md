@@ -18,6 +18,11 @@ https://falltergeist.org/
 ```
 cmake . && make
 ```
+To build the Snap version:
+
+* checkout the `snap` branch in git
+* `sudo apt install snapcraft` (this command may vary according to your distro)
+* Execute the `snapcraft` command
 
 ## Running under linux
 
@@ -26,6 +31,8 @@ Put master.dat and critter.dat files into the falltergeist data directory, that 
 * `~/.local/share/falltergeist/`  or `/usr/local/share/falltergeist` (for global installs) on Linux,
 *  `~/Library/Application Support/falltergeist` on OS X,
 * `%APPDATA%/falltergeist` on Windows,
+* For Snap packages, the data must be stored locally in `~/snap/falltergeist/current/.local/share/falltergeist/` at the moment
+* To install a freshly built snap version, type `snap install --devmode --dangerous ./falltergeist_0.3.1_amd64.snap`, press enter and type your password when prompted
 
 or mount CD-ROM with original game, then run
 
