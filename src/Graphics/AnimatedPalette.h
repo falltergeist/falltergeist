@@ -20,16 +20,12 @@
 #ifndef FALLTERGEIST_GRAPHICS_ANIMATEDPALETTE_H
 #define FALLTERGEIST_GRAPHICS_ANIMATEDPALETTE_H
 
-// C++ standard includes
-#include <array>
-#include <vector>
-
-// Falltergeist includes
 #include "../Format/Enums.h"
 #include "../Graphics/Renderer.h"
 
-// Third party includes
+#include <array>
 #include <glm/glm.hpp>
+#include <vector>
 
 namespace Falltergeist
 {

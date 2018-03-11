@@ -20,13 +20,9 @@
 #ifndef FALLTERGEIST_GRAPHICS_MOVIE_H
 #define FALLTERGEIST_GRAPHICS_MOVIE_H
 
-// C++ standard includes
-#include <string>
-
-// Falltergeist includes
 #include "../Graphics/Texture.h"
 
-// Third party includes
+#include <string>
 
 namespace Falltergeist
 {

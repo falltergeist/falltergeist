@@ -21,9 +21,6 @@
 #include "../Graphics/Renderer.h"
 
 // C++ standard includes
-#include <cmath>
-#include <sys/stat.h>
-#include <memory>
 
 // Falltergeist includes
 #include "../Base/Buffer.h"
@@ -31,7 +28,6 @@
 #include "../Event/State.h"
 #include "../Exception.h"
 #include "../Game/Game.h"
-#include "../Graphics/Point.h"
 #include "../Graphics/Shader.h"
 #include "../Graphics/Texture.h"
 #include "../Input/Mouse.h"

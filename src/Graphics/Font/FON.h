@@ -20,13 +20,8 @@
 #ifndef FALLTERGEIST_GRAPHICS_FONT_FON_H
 #define FALLTERGEIST_GRAPHICS_FONT_FON_H
 
-// C++ standard includes
-
-// Falltergeist includes
 #include "../../Format/Fon/File.h"
 #include "../../Graphics/Font.h"
-
-// Third party includes
 
 namespace Falltergeist
 {

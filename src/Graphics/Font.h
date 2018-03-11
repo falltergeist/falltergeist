@@ -20,16 +20,12 @@
 #ifndef FALLTERGEIST_GRAPHICS_FONT_H
 #define FALLTERGEIST_GRAPHICS_FONT_H
 
-// C++ standard includes
-#include <memory>
-#include <vector>
-#include <string>
-
-// Falltergeist includes
 #include "../Graphics/Point.h"
 #include "../Graphics/Texture.h"
 
-// Third party includes
+#include <memory>
+#include <string>
+#include <vector>
 
 namespace Falltergeist {
 namespace Graphics {

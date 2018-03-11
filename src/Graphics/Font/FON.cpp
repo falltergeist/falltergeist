@@ -17,17 +17,9 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Related headers
 #include "../../Graphics/Font/FON.h"
 
-// C++ standard includes
-#include <memory>
-
-// Falltergeist includes
-#include "../../Format/Fon/Glyph.h"
 #include "../../ResourceManager.h"
-
-// Third party includes
 
 namespace Falltergeist
 {

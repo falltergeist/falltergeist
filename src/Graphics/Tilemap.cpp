@@ -17,20 +17,13 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// C++ standard includes
-#include <memory>
-
-// Falltergeist includes
+#include "../Graphics/Tilemap.h"
 
 #include "../Game/Game.h"
 #include "../Graphics/AnimatedPalette.h"
-#include "../Graphics/Shader.h"
 #include "../Graphics/Sprite.h"
-#include "../Graphics/Tilemap.h"
 #include "../ResourceManager.h"
 #include "../State/Location.h"
-
-// Third party includes
 
 namespace Falltergeist
 {

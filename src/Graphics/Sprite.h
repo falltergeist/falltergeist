@@ -20,17 +20,13 @@
 #ifndef FALLTERGEIST_GRAPHICS_SPRITE_H
 #define FALLTERGEIST_GRAPHICS_SPRITE_H
 
-// C++ standard includes
-#include <string>
-
-// Falltergeist includes
+#include "../Format/Frm/File.h"
 #include "../Graphics/Point.h"
 #include "../Graphics/Shader.h"
 #include "../Graphics/Texture.h"
 #include "../Graphics/TransFlags.h"
-#include "../Format/Frm/File.h"
 
-// Third party includes
+#include <string>
 
 namespace Falltergeist
 {

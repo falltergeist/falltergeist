@@ -17,24 +17,15 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Related headers
 #include "../Graphics/Sprite.h"
 
-// C++ standard headers
-
-// Falltergeist headers
 #include "../Game/DudeObject.h"
 #include "../Game/Game.h"
 #include "../Graphics/AnimatedPalette.h"
-#include "../Graphics/Renderer.h"
-#include "../Graphics/Shader.h"
-#include "../Graphics/TransFlags.h"
 #include "../LocationCamera.h"
 #include "../PathFinding/Hexagon.h"
 #include "../ResourceManager.h"
 #include "../State/Location.h"
-
-// Third-party includes
 
 namespace Falltergeist
 {

@@ -17,15 +17,9 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Related headers
 #include "../Graphics/Rect.h"
 
-// C++ standard includes
 #include <algorithm>
-
-// Falltergeist includes
-
-// Third party includes
 
 namespace Falltergeist
 {

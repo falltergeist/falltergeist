@@ -17,26 +17,14 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Related headers
 #include "../Graphics/Animation.h"
 
-// C++ standart includes
-
-// Falltergeist includes
-#include "../Format/Frm/File.h"
 #include "../Format/Frm/Direction.h"
-#include "../Format/Frm/Frame.h"
+#include "../Format/Frm/File.h"
 #include "../Game/Game.h"
 #include "../Graphics/AnimatedPalette.h"
-#include "../Graphics/Point.h"
-#include "../Graphics/Renderer.h"
-#include "../Graphics/Shader.h"
-#include "../Graphics/TransFlags.h"
 #include "../ResourceManager.h"
 #include "../State/Location.h"
-
-// Third-party includes
-#include <SDL_image.h>
 
 namespace Falltergeist
 {
