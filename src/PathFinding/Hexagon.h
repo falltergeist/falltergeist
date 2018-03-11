@@ -20,15 +20,11 @@
 #ifndef FALLTERGEIST_HEXAGON_H
 #define FALLTERGEIST_HEXAGON_H
 
-// C++ standard includes
-#include <vector>
-#include <list>
-
-// Falltergeist includes
 #include "../Game/Object.h"
 #include "../Graphics/Point.h"
 
-// Third party includes
+#include <list>
+#include <vector>
 
 namespace Falltergeist
 {

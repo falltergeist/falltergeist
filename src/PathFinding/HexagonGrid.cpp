@@ -17,19 +17,12 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// C++ standard includes
-#include <array>
-#include <cstdlib>
-#include <functional>
-#include <queue>
-#include <memory>
-
-// Falltergeist includes
-#include "../Game/WallObject.h"
-#include "../PathFinding/Hexagon.h"
 #include "../PathFinding/HexagonGrid.h"
 
-// Third party includes
+#include "../Game/WallObject.h"
+#include "../PathFinding/Hexagon.h"
+
+#include <queue>
 
 namespace Falltergeist
 {

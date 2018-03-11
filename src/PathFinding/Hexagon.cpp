@@ -17,17 +17,11 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// C++ standard includes
-#include <cmath>
-
-// Falltergeist includes
-#include "../Game/DoorSceneryObject.h"
-#include "../Game/Game.h"
-#include "../Game/Object.h"
-#include "../Logger.h"
 #include "../PathFinding/Hexagon.h"
 
-// Third party includes
+#include "../Game/DoorSceneryObject.h"
+#include "../Game/Game.h"
+#include "../Logger.h"
 
 namespace Falltergeist
 {
