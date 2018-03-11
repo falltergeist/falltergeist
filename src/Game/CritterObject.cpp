@@ -34,6 +34,8 @@
 #include "../UI/Animation.h"
 #include "../UI/AnimationFrame.h"
 
+#include <array>
+
 namespace Falltergeist
 {
     namespace Game
