@@ -20,15 +20,11 @@
 #ifndef FALLTERGEIST_INPUT_MOUSE_H
 #define FALLTERGEIST_INPUT_MOUSE_H
 
-// C++ standard includes
-#include <memory>
-#include <vector>
-
-// Falltergeist includes
 #include "../Graphics/Point.h"
 #include "../UI/Image.h"
 
-// Third party includes
+#include <memory>
+#include <vector>
 
 namespace Falltergeist
 {
