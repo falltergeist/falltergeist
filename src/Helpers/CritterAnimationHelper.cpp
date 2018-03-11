@@ -17,17 +17,13 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// C++ standard includes
+#include "../Helpers/CritterAnimationHelper.h"
 
-// Falltergeist includes
 #include "../Exception.h"
 #include "../Format/Lst/File.h"
 #include "../Game/Defines.h"
-#include "../Helpers/CritterAnimationHelper.h"
 #include "../Logger.h"
 #include "../ResourceManager.h"
-
-// Third party includes
 
 namespace Falltergeist
 {

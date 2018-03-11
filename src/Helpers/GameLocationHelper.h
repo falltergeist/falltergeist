@@ -20,13 +20,8 @@
 #ifndef FALLTERGEIST_HELPERS_GAMELOCATIONHELPER_H
 #define FALLTERGEIST_HELPERS_GAMELOCATIONHELPER_H
 
-// C++ standard includes
 #include <memory>
 #include <string>
-
-// Falltergeist includes
-
-// Third party includes
 
 namespace Falltergeist
 {
