@@ -20,15 +20,11 @@
 #ifndef FALLTERGEIST_INI_SECTION_H
 #define FALLTERGEIST_INI_SECTION_H
 
-// C++ standard includes
+#include "../Ini/Value.h"
+
 #include <map>
 #include <string>
 #include <vector>
-
-// Falltergeist includes
-#include "../Ini/Value.h"
-
-// Third party includes
 
 namespace Falltergeist
 {

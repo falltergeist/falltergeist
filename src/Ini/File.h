@@ -20,19 +20,15 @@
 #ifndef FALLTERGEIST_INI_FILE_H
 #define	FALLTERGEIST_INI_FILE_H
 
-// C++ standard includes
-#include <fstream>
-#include <string>
-#include <map>
-#include <memory>
-#include <sstream>
-#include <algorithm>
-
-// Falltergeist includes
 #include "../Ini/Parser.h"
 #include "../Ini/Section.h"
 
-// Third party includes
+#include <algorithm>
+#include <fstream>
+#include <map>
+#include <memory>
+#include <sstream>
+#include <string>
 
 namespace Falltergeist
 {
