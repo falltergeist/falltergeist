@@ -24,8 +24,6 @@
 
 #include "../Map/Elevation.h"
 
-#include "../Map/Object.h"
-
 namespace Falltergeist
 {
 namespace Format

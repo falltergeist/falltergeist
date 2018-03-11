@@ -25,7 +25,6 @@
 #include "../Mve/File.h"
 
 #include "../../Exception.h"
-#include "../Dat/Stream.h"
 #include "../Mve/Chunk.h"
 
 #include <cstring>

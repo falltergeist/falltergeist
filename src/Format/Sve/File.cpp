@@ -24,7 +24,6 @@
 
 #include "../Sve/File.h"
 
-#include "../../Exception.h"
 #include "../Dat/Stream.h"
 
 namespace Falltergeist

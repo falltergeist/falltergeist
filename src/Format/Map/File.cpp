@@ -26,9 +26,6 @@
 #include "../Pro/File.h"
 
 #include "../../Exception.h"
-#include "../Map/Elevation.h"
-#include "../Map/Object.h"
-#include "../Map/Script.h"
 
 #include <algorithm>
 

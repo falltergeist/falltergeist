@@ -25,7 +25,6 @@
 #include "../Pal/File.h"
 
 #include "../Dat/Stream.h"
-#include "../Pal/Color.h"
 
 namespace Falltergeist
 {

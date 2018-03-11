@@ -24,9 +24,6 @@
 
 #include "Lexer.h"
 
-#include <cctype>
-#include <clocale>
-
 namespace Falltergeist
 {
 namespace Format

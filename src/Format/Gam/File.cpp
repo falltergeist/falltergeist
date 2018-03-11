@@ -28,8 +28,6 @@
 #include "../../Format/Dat/Stream.h"
 
 #include <algorithm>
-#include <cctype>
-#include <functional>
 #include <vector>
 
 namespace Falltergeist

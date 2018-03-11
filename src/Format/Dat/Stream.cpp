@@ -24,12 +24,10 @@
 
 #include "../../Format/Dat/Stream.h"
 
-#include "../../Format/Dat/Entry.h"
 #include "../../Format/Dat/File.h"
 #include "zlib.h"
 
 #include <algorithm>
-#include <string.h> // for memcpy
 
 namespace Falltergeist
 {

@@ -26,9 +26,6 @@
 #include "../Pal/File.h"
 
 #include "../Dat/Stream.h"
-#include "../Enums.h"
-#include "../Frm/Frame.h"
-#include "../Pal/Color.h"
 
 #include <algorithm>
 

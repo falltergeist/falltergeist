@@ -26,10 +26,6 @@
 
 #include "../../Exception.h"
 #include "../../Format/Dat/Stream.h"
-#include "../../Format/Msg/Message.h"
-
-#include <cstdlib>
-#include <string>
 
 namespace Falltergeist
 {

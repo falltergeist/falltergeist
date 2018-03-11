@@ -24,10 +24,6 @@
 
 #include "../../Format/Int/File.h"
 
-#include "../../Exception.h"
-#include "../../Format/Dat/Stream.h"
-#include "../../Format/Int/Procedure.h"
-
 namespace Falltergeist
 {
 namespace Format

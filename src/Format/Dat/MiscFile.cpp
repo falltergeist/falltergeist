@@ -25,7 +25,6 @@
 #include "../../Format/Dat/MiscFile.h"
 
 #include <algorithm>
-#include <string.h> // for memcpy
 
 namespace Falltergeist
 {

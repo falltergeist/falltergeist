@@ -26,7 +26,6 @@
 
 #include "../Dat/Stream.h"
 #include "../Ini/File.h"
-#include "../Ini/Parser.h"
 
 namespace Falltergeist
 {

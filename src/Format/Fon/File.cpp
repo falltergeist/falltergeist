@@ -25,7 +25,6 @@
 #include "../Fon/File.h"
 
 #include "../Dat/Stream.h"
-#include "../Fon/Glyph.h"
 
 namespace Falltergeist
 {

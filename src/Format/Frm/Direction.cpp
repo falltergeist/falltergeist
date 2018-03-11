@@ -24,8 +24,6 @@
 
 #include "../Frm/Direction.h"
 
-#include "../Frm/Frame.h"
-
 #include <algorithm>
 
 namespace Falltergeist

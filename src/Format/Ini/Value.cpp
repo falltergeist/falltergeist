@@ -24,7 +24,6 @@
 
 #include "../Ini/Value.h"
 
-#include "../../Exception.h"
 #include "../Ini/Parser.h"
 
 #include <algorithm>
