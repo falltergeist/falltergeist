@@ -17,39 +17,26 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Related headers
 #include "../Game/Object.h"
 
-// C++ standard includes
-#include <cmath>
-#include <cstdio>
-#include <memory>
-
-// Falltergeist includes
 #include "../Exception.h"
 #include "../Format/Frm/File.h"
 #include "../Format/Msg/File.h"
-#include "../Format/Msg/Message.h"
-#include "../functions.h"
-#include "../Graphics/Rect.h"
-#include "../Graphics/Renderer.h"
 #include "../Game/CritterObject.h"
-#include "../Game/Defines.h"
 #include "../Game/DudeObject.h"
 #include "../Game/Game.h"
-#include "../PathFinding/HexagonGrid.h"
+#include "../Graphics/Rect.h"
+#include "../Graphics/Renderer.h"
 #include "../LocationCamera.h"
 #include "../Logger.h"
 #include "../PathFinding/Hexagon.h"
+#include "../PathFinding/HexagonGrid.h"
 #include "../ResourceManager.h"
 #include "../State/Location.h"
 #include "../UI/Animation.h"
 #include "../UI/AnimationQueue.h"
-#include "../UI/Image.h"
 #include "../UI/TextArea.h"
-#include "../VM/Script.h"
-
-// Third party includes
+#include "../functions.h"
 
 namespace Falltergeist {
     namespace Game {

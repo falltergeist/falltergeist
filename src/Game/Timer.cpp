@@ -17,17 +17,10 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// C++ standard includes
-
-// Falltergeist includes
-#include "../Event/Event.h"
 #include "../Game/Timer.h"
+
+#include "../Event/Event.h"
 #include "../Game/Game.h"
-#include "../Game/Time.h"
-
-// Third party includes
-#include <SDL.h>
-
 
 namespace Falltergeist
 {

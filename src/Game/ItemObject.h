@@ -20,12 +20,7 @@
 #ifndef FALLTERGEIST_GAME_ITEMOBJECT_H
 #define FALLTERGEIST_GAME_ITEMOBJECT_H
 
-// C++ standard includes
-
-// Falltergeist includes
 #include "../Game/Object.h"
-
-// Third party includes
 
 namespace Falltergeist
 {

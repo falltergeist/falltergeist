@@ -20,12 +20,7 @@
 #ifndef FALLTERGEIST_TIMER_H
 #define FALLTERGEIST_TIMER_H
 
-// C++ standard includes
-
-// Falltergeist includes
 #include "../Event/Handler.h"
-
-// Third party includes
 
 namespace Falltergeist
 {

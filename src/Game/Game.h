@@ -20,16 +20,12 @@
 #ifndef FALLTERGEIST_GAME_GAME_H
 #define FALLTERGEIST_GAME_GAME_H
 
-// C++ standard includes
+#include "../Game/Time.h"
+
+#include <SDL.h>
 #include <memory>
 #include <string>
 #include <vector>
-
-// Falltergeist includes
-#include "../Game/Time.h"
-
-// Third party includes
-#include <SDL.h>
 
 namespace Falltergeist
 {

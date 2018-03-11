@@ -17,15 +17,9 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Related headers
 #include "../Game/LocationElevation.h"
 
-// C++ standard includes
-
-// Falltergeist includes
 #include "../UI/TileMap.h"
-
-// Third party includes
 
 namespace Falltergeist
 {

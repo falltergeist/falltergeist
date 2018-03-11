@@ -17,16 +17,8 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Related headers
 #include "../Game/Game.h"
 
-// C++ standard includes
-#include <algorithm>
-#include <sstream>
-#include <ctime>
-#include <memory>
-
-// Falltergeist includes
 #include "../Audio/Mixer.h"
 #include "../CrossPlatform.h"
 #include "../Event/Dispatcher.h"
@@ -34,21 +26,19 @@
 #include "../Exception.h"
 #include "../Format/Gam/File.h"
 #include "../Game/DudeObject.h"
-#include "../Game/Time.h"
 #include "../Graphics/AnimatedPalette.h"
-#include "../Graphics/Renderer.h"
 #include "../Input/Mouse.h"
 #include "../Logger.h"
 #include "../ResourceManager.h"
 #include "../Settings.h"
-#include "../State/State.h"
 #include "../State/Location.h"
 #include "../UI/FpsCounter.h"
-#include "../UI/TextArea.h"
 #include "../VFS/VFS.h"
 
-// Third patry includes
 #include <SDL_image.h>
+#include <algorithm>
+#include <ctime>
+#include <sstream>
 
 namespace Falltergeist
 {

@@ -20,13 +20,8 @@
 #ifndef FALLTERGEIST_GAME_DUDEOBJECT_H
 #define FALLTERGEIST_GAME_DUDEOBJECT_H
 
-// C++ standard includes
-
-// Falltergeist includes
 #include "../Game/CritterObject.h"
 #include "../Graphics/Point.h"
-
-// Third party includes
 
 namespace Falltergeist
 {

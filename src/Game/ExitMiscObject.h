@@ -20,12 +20,7 @@
 #ifndef FALLTERGEIST_GAME_EXITMISCOBJECT_H
 #define FALLTERGEIST_GAME_EXITMISCOBJECT_H
 
-// C++ standard includes
-
-// Falltergeist includes
 #include "../Game/MiscObject.h"
-
-// Third party includes
 
 namespace Falltergeist
 {

@@ -20,14 +20,10 @@
 #ifndef FALLTERGEIST_GAMECRITTEROBJECT_H
 #define FALLTERGEIST_GAMECRITTEROBJECT_H
 
-// C++ standard includes
-#include <vector>
-
-// Falltergeist includes
 #include "../Format/Enums.h"
 #include "../Game/Object.h"
 
-// Third party includes
+#include <vector>
 
 namespace Falltergeist
 {
