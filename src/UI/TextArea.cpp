@@ -39,7 +39,6 @@ using Graphics::Rect;
 TextArea::TextArea(const Point& pos) : Base(pos)
 {
     _timestampCreated = SDL_GetTicks();
-
 }
 
 TextArea::TextArea(int x, int y) : TextArea(Point(x, y))
@@ -70,9 +69,7 @@ TextArea::TextArea(const TextArea& textArea, Point pos) : Base(pos)
     _wordWrap = textArea._wordWrap;
 }
 
-TextArea::~TextArea()
-{
-}
+TextArea::~TextArea() = default;
 
 void TextArea::_needUpdate(bool lines)
 {

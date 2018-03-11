@@ -48,8 +48,7 @@ InventoryItem::InventoryItem(Game::ItemObject *item, const Point& pos) : Fallter
 }
 
 InventoryItem::~InventoryItem()
-{
-}
+= default;
 
 InventoryItem::Type InventoryItem::type() const
 {

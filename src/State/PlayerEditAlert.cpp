@@ -35,9 +35,7 @@ namespace Falltergeist
         {
         }
 
-        PlayerEditAlert::~PlayerEditAlert()
-        {
-        }
+        PlayerEditAlert::~PlayerEditAlert() = default;
 
         void PlayerEditAlert::setMessage(const std::string& message)
         {

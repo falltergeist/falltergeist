@@ -38,9 +38,7 @@ namespace Falltergeist
         {
         }
 
-        SaveGame::~SaveGame()
-        {
-        }
+        SaveGame::~SaveGame() = default;
 
         void SaveGame::init()
         {

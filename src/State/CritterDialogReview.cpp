@@ -37,9 +37,7 @@ using Graphics::Size;
         {
         }
 
-        CritterDialogReview::~CritterDialogReview()
-        {
-        }
+        CritterDialogReview::~CritterDialogReview() = default;
 
         void CritterDialogReview::init()
         {

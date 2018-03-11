@@ -39,9 +39,7 @@ namespace Falltergeist
         {
         }
 
-        Credits::~Credits()
-        {
-        }
+        Credits::~Credits() = default;
 
         void Credits::init()
         {

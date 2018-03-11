@@ -308,7 +308,7 @@ Graphics::Texture* ResourceManager::texture(const string& filename)
     {
         // @fixme: this section looks quite ugly. we should try to do something with it someday
         SDL_Surface* tempSurface = IMG_Load(string(CrossPlatform::findFalltergeistDataPath() + "/" +filename).c_str());
-        if (tempSurface == NULL)
+        if (tempSurface == nullptr)
         {
             throw Exception("ResourceManager::texture(name) - cannot load texture from file " + filename + ": " + IMG_GetError());
         }

@@ -43,7 +43,7 @@ namespace Falltergeist
             {
                 Mix_FreeChunk(x.second);
             }
-            Mix_HookMusic(NULL,NULL);
+            Mix_HookMusic(nullptr,nullptr);
             Mix_CloseAudio();
         }
 
@@ -70,7 +70,7 @@ namespace Falltergeist
 
         void Mixer::stopMusic()
         {
-            Mix_HookMusic(NULL, NULL);
+            Mix_HookMusic(nullptr, nullptr);
         }
 
         std::function<void(void*, uint8_t*, uint32_t)> musicCallback;
@@ -93,7 +93,7 @@ namespace Falltergeist
                 }
                 else
                 {
-                    Mix_HookMusic(NULL,NULL);
+                    Mix_HookMusic(nullptr,nullptr);
                     return;
                 }
             }
@@ -107,7 +107,7 @@ namespace Falltergeist
 
         void Mixer::playACMMusic(const std::string& filename, bool loop)
         {
-            Mix_HookMusic(NULL, NULL);
+            Mix_HookMusic(nullptr, nullptr);
             auto acm = ResourceManager::getInstance()->acmFileType(Game::getInstance()->settings()->musicPath()+filename);
             if (!acm) return;
             _lastMusic = filename;
@@ -124,7 +124,7 @@ namespace Falltergeist
             auto pacm = (Format::Acm::File*)(udata);
             if (pacm->samplesLeft() <= 0)
             {
-                Mix_HookMusic(NULL,NULL);
+                Mix_HookMusic(nullptr,nullptr);
                 return;
             }
 
@@ -140,7 +140,7 @@ namespace Falltergeist
 
         void Mixer::playACMSpeech(const std::string& filename)
         {
-            Mix_HookMusic(NULL, NULL);
+            Mix_HookMusic(nullptr, nullptr);
             auto acm = ResourceManager::getInstance()->acmFileType("sound/speech/"+filename);
             if (!acm) return;
             musicCallback = std::bind(&Mixer::_speechCallback, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
@@ -154,7 +154,7 @@ namespace Falltergeist
             if (pmve->samplesLeft() <= 0)
             {
                 Logger::debug("AUDIO") << "buffer underrun?" << std::endl;
-                Mix_HookMusic(NULL, NULL);
+                Mix_HookMusic(nullptr, nullptr);
                 return;
             }
 
@@ -172,7 +172,7 @@ namespace Falltergeist
             auto acm = ResourceManager::getInstance()->acmFileType(filename);
             if (!acm) return;
             Logger::debug("Mixer") << "playing: " << acm->filename() << std::endl;
-            Mix_Chunk *chunk = NULL;
+            Mix_Chunk *chunk = nullptr;
 
             auto it = _sfx.find(acm->filename());
             if (it != _sfx.end())

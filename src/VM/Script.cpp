@@ -52,9 +52,7 @@ namespace Falltergeist
             if (!_script) throw Exception("Script::VM() - script is null: " + filename);
         }
 
-        Script::~Script()
-        {
-        }
+        Script::~Script() = default;
 
         std::string Script::filename()
         {

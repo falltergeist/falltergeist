@@ -37,9 +37,7 @@ namespace Falltergeist
         {
         }
 
-        PlayerEditGender::~PlayerEditGender()
-        {
-        }
+        PlayerEditGender::~PlayerEditGender() = default;
 
         void PlayerEditGender::init()
         {

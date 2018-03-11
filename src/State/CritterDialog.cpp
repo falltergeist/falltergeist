@@ -43,9 +43,7 @@ namespace Falltergeist
         {
         }
 
-        CritterDialog::~CritterDialog()
-        {
-        }
+        CritterDialog::~CritterDialog() = default;
 
         void CritterDialog::init()
         {

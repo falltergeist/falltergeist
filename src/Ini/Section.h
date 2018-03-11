@@ -39,7 +39,7 @@ public:
     using iterator = PropertyMap::iterator;
     using const_iterator = PropertyMap::const_iterator;
 
-    Section(const std::string &name);
+    Section(std::string name);
     ~Section();
 
     iterator begin();

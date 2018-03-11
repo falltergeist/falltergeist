@@ -483,13 +483,13 @@ void Renderer::drawRect(int x, int y, int w, int h, SDL_Color color)
 
     GL_CHECK(glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glm::vec2), &vertices[0], GL_DYNAMIC_DRAW));
 
-    GL_CHECK(glVertexAttribPointer(ResourceManager::getInstance()->shader("default")->getAttrib("Position"), 2, GL_FLOAT, GL_FALSE, 0, (void*)0 ));
+    GL_CHECK(glVertexAttribPointer(ResourceManager::getInstance()->shader("default")->getAttrib("Position"), 2, GL_FLOAT, GL_FALSE, 0, (void*)nullptr ));
 
     GL_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, Game::getInstance()->renderer()->getEBO()));
 
     GL_CHECK(glEnableVertexAttribArray(ResourceManager::getInstance()->shader("default")->getAttrib("Position")));
 
-    GL_CHECK(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, 0 ));
+    GL_CHECK(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, nullptr ));
 
     GL_CHECK(glDisableVertexAttribArray(ResourceManager::getInstance()->shader("default")->getAttrib("Position")));
 

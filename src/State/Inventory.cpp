@@ -61,10 +61,7 @@ namespace Falltergeist
                 });
         }
 
-        Inventory::~Inventory()
-        {
-
-        }
+        Inventory::~Inventory() = default;
 
         void Inventory::init()
         {

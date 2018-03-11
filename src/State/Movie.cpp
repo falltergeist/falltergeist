@@ -41,9 +41,7 @@ namespace Falltergeist
             _id = id;
         }
 
-        Movie::~Movie()
-        {
-        }
+        Movie::~Movie() = default;
 
         void Movie::init()
         {

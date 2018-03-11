@@ -41,9 +41,7 @@ FpsCounter::FpsCounter(int x, int y) : FpsCounter(Point(x, y))
 {
 }
 
-FpsCounter::~FpsCounter()
-{
-}
+FpsCounter::~FpsCounter() = default;
 
 void FpsCounter::think()
 {

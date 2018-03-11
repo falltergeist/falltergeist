@@ -37,9 +37,7 @@ namespace Falltergeist
         {
         }
 
-        ExitConfirm::~ExitConfirm()
-        {
-        }
+        ExitConfirm::~ExitConfirm() = default;
 
         void ExitConfirm::init()
         {

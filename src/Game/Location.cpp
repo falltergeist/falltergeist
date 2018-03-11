@@ -41,9 +41,7 @@ namespace Falltergeist
         {
         }
 
-        Location::~Location()
-        {
-        }
+        Location::~Location() = default;
 
         void Location::loadFromMapFile(Falltergeist::Format::Map::File* mapFile)
         {

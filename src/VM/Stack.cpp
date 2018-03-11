@@ -30,9 +30,7 @@ namespace Falltergeist
         {
         }
 
-        Stack::~Stack()
-        {
-        }
+        Stack::~Stack() = default;
 
         void Stack::push(const StackValue& value)
         {

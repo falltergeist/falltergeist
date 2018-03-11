@@ -109,7 +109,7 @@ unsigned int File::position()
     return static_cast<unsigned>(_stream.tellg());
 }
 
-unsigned int File::size(void)
+unsigned int File::size()
 {
     auto oldPosition = _stream.tellg();
     _stream.seekg(0,std::ios::end);

@@ -34,10 +34,7 @@ TextAreaList::TextAreaList(const Point &pos) : Falltergeist::UI::Base(pos)
 
 }
 
-TextAreaList::~TextAreaList()
-{
-
-}
+TextAreaList::~TextAreaList() = default;
 
 
 void  TextAreaList::setSize(Size size)

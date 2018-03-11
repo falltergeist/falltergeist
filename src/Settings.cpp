@@ -34,9 +34,7 @@ namespace Falltergeist
         }
     }
 
-    Settings::~Settings()
-    {
-    }
+    Settings::~Settings() = default;
 
     bool Settings::save()
     {

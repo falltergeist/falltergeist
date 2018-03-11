@@ -97,9 +97,7 @@ HexagonGrid::HexagonGrid()
     }
 }
 
-HexagonGrid::~HexagonGrid()
-{
-}
+HexagonGrid::~HexagonGrid() = default;
 
 Hexagon* HexagonGrid::at(size_t index)
 {
@@ -274,9 +272,8 @@ void HexagonGrid::initLight(Hexagon *hex, bool add)
 
 
     auto objectsAtHex = hex->objects();
-    for (auto it = objectsAtHex->begin(); it != objectsAtHex->end(); ++it)
+    for (auto object : *objectsAtHex)
     {
-        auto object = *it;
         if (object->lightIntensity()>0 && object->lightRadius()>0)
         {
             // 36 hexes per direction
@@ -576,9 +573,8 @@ void HexagonGrid::initLight(Hexagon *hex, bool add)
                     {
                         // find objs/walls
                         bool lightHex = true;
-                        for (auto it2 = ringhex->objects()->begin(); it2 != ringhex->objects()->end(); ++it2)
+                        for (auto curObject : *ringhex->objects())
                         {
-                            auto curObject = *it2;
                             // dead objects block nothing
                             //if (curObject->dead()) continue;
                             // flat objects block nothing

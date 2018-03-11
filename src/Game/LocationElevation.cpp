@@ -31,9 +31,7 @@ namespace Falltergeist
             _floor = std::make_shared<UI::TileMap>();
         }
 
-        LocationElevation::~LocationElevation()
-        {
-        }
+        LocationElevation::~LocationElevation() = default;
 
         /**
          * @brief Returns if player can rest on this elevation

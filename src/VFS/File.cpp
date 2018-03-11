@@ -28,9 +28,7 @@ File::File()
 {
 }
 
-File::~File()
-{
-}
+File::~File() = default;
 
 }
 }

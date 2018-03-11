@@ -40,9 +40,7 @@ Parser::Parser(std::istream &stream) : _stream(stream), _section("")
 {
 }
 
-Parser::~Parser()
-{
-}
+Parser::~Parser() = default;
 
 Array Parser::parseArray(const std::string& str)
 {
@@ -84,7 +82,7 @@ void Parser::_stripComments(std::string& line)
 
 std::unique_ptr<File> Parser::parse()
 {
-    auto ini = std::unique_ptr<File>(new File());
+    auto ini = std::make_unique<File>();
     std::string line;
 
     while (std::getline(_stream, line))

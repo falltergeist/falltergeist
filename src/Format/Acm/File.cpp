@@ -84,9 +84,7 @@ File::File(Dat::Stream&& stream) : _stream(std::move(stream))
     }
 }
 
-File::~File()
-{
-}
+File::~File() = default;
 
 void File::rewind()
 {

@@ -41,9 +41,7 @@ BigCounter::BigCounter(const Point& pos, unsigned int length) : Base(pos)
     }
 }
 
-BigCounter::~BigCounter()
-{
-}
+BigCounter::~BigCounter() = default;
 
 void BigCounter::setNumber(unsigned int number)
 {

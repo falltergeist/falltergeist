@@ -59,9 +59,7 @@ namespace Falltergeist
             _objectValue = value;
         }
 
-        StackValue::~StackValue()
-        {
-        }
+        StackValue::~StackValue() = default;
 
         StackValue::Type StackValue::type() const
         {

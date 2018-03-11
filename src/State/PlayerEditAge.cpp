@@ -37,9 +37,7 @@ namespace Falltergeist
         {
         }
 
-        PlayerEditAge::~PlayerEditAge()
-        {
-        }
+        PlayerEditAge::~PlayerEditAge() = default;
 
         void PlayerEditAge::init()
         {

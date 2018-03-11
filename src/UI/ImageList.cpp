@@ -36,9 +36,7 @@ ImageList::ImageList(std::vector<std::string> imageList, int x, int y) : ImageLi
     for (auto& frmName : imageList) addImage(std::make_unique<Image>(frmName));
 }
 
-ImageList::~ImageList()
-{
-}
+ImageList::~ImageList() = default;
 
 unsigned int ImageList::currentImage() const
 {

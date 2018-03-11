@@ -79,9 +79,7 @@ namespace Falltergeist
             _hexagonInfo->setHorizontalAlign(UI::TextArea::HorizontalAlign::RIGHT);
         }
 
-        Location::~Location()
-        {
-        }
+        Location::~Location() = default;
 
         void Location::init()
         {

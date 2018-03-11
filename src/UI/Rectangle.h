@@ -34,7 +34,7 @@ class Rectangle : public Base
 {
 public:
 
-    Rectangle(const Point& pos, const Size& size, SDL_Color color);
+    Rectangle(const Point& pos, Size  size, SDL_Color color);
     virtual void render(bool eggTransparency = false) override;
 
     bool opaque(unsigned int x, unsigned int y);

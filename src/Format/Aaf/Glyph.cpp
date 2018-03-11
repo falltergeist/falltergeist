@@ -35,9 +35,7 @@ Glyph::Glyph(uint16_t width, uint16_t height) : _width(width), _height(height)
 {
 }
 
-Glyph::~Glyph()
-{
-}
+Glyph::~Glyph() = default;
 
 uint16_t Glyph::height() const
 {

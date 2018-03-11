@@ -47,7 +47,7 @@ typedef std::vector<std::pair<std::string, Value>> Array;
 class Value
 {
 public:
-    Value(const std::string &value = "");
+    Value(std::string value = "");
 
     void operator =(const std::string&);
 

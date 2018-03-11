@@ -45,9 +45,7 @@ Base::Base(const Point& pos) : Event::EventTarget(Game::getInstance()->eventDisp
     _position = pos;
 }
 
-Base::~Base()
-{
-}
+Base::~Base() = default;
 
 int Base::x() const
 {

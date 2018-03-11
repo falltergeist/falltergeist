@@ -46,14 +46,14 @@ Shader::Shader(std::string fname)
 
 Shader::~Shader()
 {
-    for (auto it = _shaders.begin(); it != _shaders.end(); ++it)
+    for (unsigned int & _shader : _shaders)
     {
-        glDetachShader(_progId, *it);
+        glDetachShader(_progId, _shader);
     }
 
-    for (auto it = _shaders.begin(); it != _shaders.end(); ++it)
+    for (unsigned int & _shader : _shaders)
     {
-        glDeleteShader(*it);
+        glDeleteShader(_shader);
     }
 
     if (_progId)
@@ -66,7 +66,7 @@ GLuint Shader::_loadShader(const char *src, unsigned int type)
 {
     GLuint shader = glCreateShader(type);
 
-    glShaderSource(shader, 1, &src, NULL);
+    glShaderSource(shader, 1, &src, nullptr);
     glCompileShader(shader);
 
     GLint status;
@@ -76,7 +76,7 @@ GLuint Shader::_loadShader(const char *src, unsigned int type)
         GLint len;
         glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &len);
         GLchar *log = (GLchar *) malloc(len);
-        glGetShaderInfoLog(shader, len, NULL, log);
+        glGetShaderInfoLog(shader, len, nullptr, log);
         Logger::error("RENDERER") << "Failed to compile shader: '" << log << std::endl;
         free(log);
         shader = 0;
@@ -147,9 +147,9 @@ bool Shader::_load(std::string fname)
     _progId = glCreateProgram();
 
         //attach
-        for (auto it = _shaders.begin(); it != _shaders.end(); ++it)
+        for (unsigned int & _shader : _shaders)
         {
-            glAttachShader(_progId, *it);
+            glAttachShader(_progId, _shader);
         }
         glLinkProgram(_progId);
 
@@ -161,17 +161,17 @@ bool Shader::_load(std::string fname)
             GLint len;
             glGetProgramiv(_progId, GL_INFO_LOG_LENGTH, &len);
             GLchar *log = (GLchar *) malloc(len);
-            glGetProgramInfoLog(_progId, len, NULL, log);
+            glGetProgramInfoLog(_progId, len, nullptr, log);
             Logger::error("RENDERER") << "Can't link program " << fname << ": " << log << std::endl;
             free(log);
-            for (auto it = _shaders.begin(); it != _shaders.end(); ++it)
+            for (unsigned int & _shader : _shaders)
             {
-                glDetachShader(_progId, *it);
+                glDetachShader(_progId, _shader);
             }
 
-            for (auto it = _shaders.begin(); it != _shaders.end(); ++it)
+            for (unsigned int & _shader : _shaders)
             {
-                glDeleteShader(*it);
+                glDeleteShader(_shader);
             }
             glDeleteProgram(_progId);
             _progId = 0;

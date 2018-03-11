@@ -41,9 +41,7 @@ AAF::AAF(const std::string& filename) : Font()
 
 }
 
-AAF::~AAF()
-{
-}
+AAF::~AAF() = default;
 
 unsigned short AAF::horizontalGap()
 {

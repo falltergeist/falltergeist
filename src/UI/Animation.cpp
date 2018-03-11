@@ -94,9 +94,7 @@ Animation::Animation(const std::string& frmName, unsigned int direction) : Fallt
 
 }
 
-Animation::~Animation()
-{
-}
+Animation::~Animation() = default;
 
 std::vector<std::unique_ptr<AnimationFrame>>& Animation::frames()
 {

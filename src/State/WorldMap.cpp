@@ -36,9 +36,7 @@ namespace Falltergeist
         {
         }
 
-        WorldMap::~WorldMap()
-        {
-        }
+        WorldMap::~WorldMap() = default;
 
         void WorldMap::init()
         {

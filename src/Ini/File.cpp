@@ -28,9 +28,7 @@ File::File()
 {
 }
 
-File::~File()
-{
-}
+File::~File() = default;
 
 std::shared_ptr<Section> File::section(const std::string &name)
 {

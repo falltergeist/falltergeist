@@ -34,9 +34,7 @@ namespace Falltergeist
         {
         }
 
-        CritterBarter::~CritterBarter()
-        {
-        }
+        CritterBarter::~CritterBarter() = default;
 
         void CritterBarter::init()
         {

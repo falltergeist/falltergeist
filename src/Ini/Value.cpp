@@ -26,9 +26,7 @@ namespace Falltergeist
 namespace Ini
 {
 
-Value::Value()
-{
-}
+Value::Value() {}
 
 Value::~Value()
 {

@@ -205,9 +205,7 @@ PlayerPanel::PlayerPanel() : UI::Base()
     });
 }
 
-PlayerPanel::~PlayerPanel()
-{
-}
+PlayerPanel::~PlayerPanel() = default;
 
 Size PlayerPanel::size() const
 {
@@ -227,9 +225,9 @@ void PlayerPanel::renderHandSlot()
 
 void PlayerPanel::render(bool eggTransparency)
 {
-    for (auto it = _ui.begin(); it != _ui.end(); ++it)
+    for (auto & it : _ui)
     {
-        (*it)->render();
+        it->render();
     }
 
     // object in hand
@@ -265,9 +263,9 @@ void PlayerPanel::think()
 
     auto game = Game::getInstance();
 
-    for (auto it = _ui.begin(); it != _ui.end(); ++it)
+    for (auto & it : _ui)
     {
-        (*it)->think();
+        it->think();
     }
 
     // object in hand

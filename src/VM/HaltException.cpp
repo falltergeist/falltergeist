@@ -23,8 +23,6 @@ namespace Falltergeist
 {
     namespace VM
     {
-        HaltException::HaltException()
-        {
-        }
+        HaltException::HaltException() = default;
     }
 }

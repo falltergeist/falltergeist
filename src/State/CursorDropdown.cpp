@@ -46,9 +46,7 @@ namespace Falltergeist
             }
         }
 
-        CursorDropdown::~CursorDropdown()
-        {
-        }
+        CursorDropdown::~CursorDropdown()= default;
 
         void CursorDropdown::init()
         {

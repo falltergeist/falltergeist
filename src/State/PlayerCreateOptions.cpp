@@ -38,9 +38,7 @@ namespace Falltergeist
         {
         }
 
-        PlayerCreateOptions::~PlayerCreateOptions()
-        {
-        }
+        PlayerCreateOptions::~PlayerCreateOptions() = default;
 
         void PlayerCreateOptions::init()
         {

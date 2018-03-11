@@ -30,9 +30,7 @@ Image::Image(const std::string& filename) : Falltergeist::UI::Base(), _sprite(fi
 {
 }
 
-Image::~Image()
-{
-}
+Image::~Image() = default;
 
 void Image::render(bool eggTransparency)
 {

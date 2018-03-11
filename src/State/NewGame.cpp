@@ -45,9 +45,7 @@ namespace Falltergeist
         {
         }
 
-        NewGame::~NewGame()
-        {
-        }
+        NewGame::~NewGame() = default;
 
         void NewGame::init()
         {

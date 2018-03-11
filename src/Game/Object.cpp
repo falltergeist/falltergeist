@@ -43,8 +43,7 @@ namespace Falltergeist {
         Object::Object() : Event::EventTarget(Game::getInstance()->eventDispatcher()) {
         }
 
-        Object::~Object() {
-        }
+        Object::~Object() = default;
 
         Object::Type Object::type() const {
             return _type;

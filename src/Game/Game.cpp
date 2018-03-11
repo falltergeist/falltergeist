@@ -111,7 +111,7 @@ namespace Falltergeist
 
             IMG_Init(IMG_INIT_JPG | IMG_INIT_PNG);
 
-            srand(static_cast<unsigned>(time(0))); /// randomization
+            srand(static_cast<unsigned>(time(nullptr))); /// randomization
 
             atexit(SDL_Quit);
         }

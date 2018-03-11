@@ -31,9 +31,7 @@ HiddenMask::HiddenMask(unsigned int width, unsigned int height, int x, int y)// 
     setPosition({x, y});
 }
 
-HiddenMask::~HiddenMask()
-{
-}
+HiddenMask::~HiddenMask() = default;
 
 void HiddenMask::render(bool eggTransparency)
 {

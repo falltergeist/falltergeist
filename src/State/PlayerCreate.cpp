@@ -49,9 +49,7 @@ namespace Falltergeist
         {
         }
 
-        PlayerCreate::~PlayerCreate()
-        {
-        }
+        PlayerCreate::~PlayerCreate() = default;
 
         void PlayerCreate::init()
         {
@@ -207,10 +205,10 @@ namespace Falltergeist
             _addButton("gender", new UI::ImageButton(UI::ImageButton::Type::PLAYER_GENDER, backgroundX+236, backgroundY+0));
 
             // add buttons to the state
-            for(auto it = _buttons.begin(); it != _buttons.end(); ++it)
+            for(auto & _button : _buttons)
             {
-                it->second->mouseClickHandler().add(std::bind(&PlayerCreate::onButtonClick, this, std::placeholders::_1));
-                addUI(it->second);
+                _button.second->mouseClickHandler().add(std::bind(&PlayerCreate::onButtonClick, this, std::placeholders::_1));
+                addUI(_button.second);
             }
 
             // add labels to the state
@@ -222,16 +220,16 @@ namespace Falltergeist
             }
 
             // add counters to the state
-            for(auto it = _counters.begin(); it != _counters.end(); ++it)
+            for(auto & _counter : _counters)
             {
-                addUI(it->second);
+                addUI(_counter.second);
             }
 
             // add hidden masks
-            for(auto it = _masks.begin(); it != _masks.end(); ++it)
+            for(auto & _mask : _masks)
             {
-                it->second->mouseDownHandler().add(std::bind(&PlayerCreate::onMaskClick, this, std::placeholders::_1));
-                addUI(it->second);
+                _mask.second->mouseDownHandler().add(std::bind(&PlayerCreate::onMaskClick, this, std::placeholders::_1));
+                addUI(_mask.second);
             }
 
             _selectedImage = _images.at("stats_1");
@@ -352,9 +350,9 @@ namespace Falltergeist
             }
 
             // Default labels colors
-            for(auto it = _labels.begin(); it != _labels.end(); ++it)
+            for(auto & _label : _labels)
             {
-                std::string name = it->first;
+                std::string name = _label.first;
 
                 SDL_Color font1_3ff800ff = {0x3f, 0xf8, 0x00, 0xff};
                 SDL_Color font1_a0a0a0ff = {0xa0, 0xa0, 0xa0, 0xff};
@@ -362,24 +360,24 @@ namespace Falltergeist
 
                 if (name.find("stats_") == 0 || name.find("params_") == 0)
                 {
-                    it->second->setColor(font1_3ff800ff);
+                    _label.second->setColor(font1_3ff800ff);
                 }
 
                 if (name.find("traits_") == 0)
                 {
                     unsigned number = atoi(name.substr(7).c_str()) - 1;
-                    it->second->setColor(player->traitTagged((TRAIT)number) ? font1_a0a0a0ff : font1_3ff800ff);
+                    _label.second->setColor(player->traitTagged((TRAIT)number) ? font1_a0a0a0ff : font1_3ff800ff);
                 }
 
                 if (name.find("skills_") == 0)
                 {
                     unsigned number = atoi(name.substr(7).c_str()) - 1;
-                    it->second->setColor(player->skillTagged((SKILL)number) ? font1_a0a0a0ff : font1_3ff800ff);
+                    _label.second->setColor(player->skillTagged((SKILL)number) ? font1_a0a0a0ff : font1_3ff800ff);
                 }
 
                 if (name.find("health_") == 0)
                 {
-                    it->second->setColor(name.compare("health_1") == 0 ? font1_3ff800ff : font1_183018ff);
+                    _label.second->setColor(name.compare("health_1") == 0 ? font1_3ff800ff : font1_183018ff);
                 }
             }
 
@@ -502,11 +500,11 @@ namespace Falltergeist
         {
             auto sender = dynamic_cast<UI::ImageButton*>(event->target());
 
-            for(auto it = _buttons.begin(); it != _buttons.end(); ++it)
+            for(auto & _button : _buttons)
             {
-                if (it->second == sender)
+                if (_button.second == sender)
                 {
-                    std::string name = it->first;
+                    std::string name = _button.first;
 
                     if (name == "name") return onNameButtonClick(event);
                     if (name == "age")  return onAgeButtonClick(event);
@@ -585,11 +583,11 @@ namespace Falltergeist
 
         void PlayerCreate::onMaskClick(Event::Mouse* event)
         {
-            for(auto it = _masks.begin(); it != _masks.end(); ++it)
+            for(auto & _mask : _masks)
             {
-                if (it->second == event->target())
+                if (_mask.second == event->target())
                 {
-                    std::string name = it->first;
+                    std::string name = _mask.first;
                     if (name.find("stats_") == 0)
                     {
                         _selectedLabel = _labels.at(name);

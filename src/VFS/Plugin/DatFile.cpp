@@ -32,9 +32,7 @@ DatFile::DatFile(const std::string& filename) : IPlugin()
 {
 }
 
-DatFile::~DatFile()
-{
-}
+DatFile::~DatFile() = default;
 
 Falltergeist::VFS::File* DatFile::open(std::string filename)
 {

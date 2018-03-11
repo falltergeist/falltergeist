@@ -63,7 +63,7 @@ void ItemsList::update()
 
     for (unsigned int i = _slotOffset; i < items()->size() && i != _slotOffset + _slotsNumber; i++)
     {
-        _inventoryItems.push_back(std::unique_ptr<InventoryItem>(new InventoryItem(items()->at(i))));
+        _inventoryItems.push_back(std::make_unique<InventoryItem>(items()->at(i)));
     }
 }
 
@@ -159,7 +159,7 @@ void ItemsList::onItemDragStop(Event::Mouse* event)
         {
             Game::getInstance()->player()->setArmorSlot(nullptr);
         }
-        inventoryItem->setItem(0);
+        inventoryItem->setItem(nullptr);
     }
 
     //Logger::critical() << "IN!" << std::endl;
@@ -181,7 +181,7 @@ void ItemsList::onItemDragStop(Event::Mouse* event, HAND hand)
             {
                 Game::getInstance()->player()->setRightHandSlot(nullptr);
             }
-            inventoryItem->setItem(0);
+            inventoryItem->setItem(nullptr);
         }
     }
 }

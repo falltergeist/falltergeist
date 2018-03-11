@@ -43,9 +43,7 @@ SmallCounter::SmallCounter(const Point& pos) : Falltergeist::UI::Base(pos)
     }
 }
 
-SmallCounter::~SmallCounter()
-{
-}
+SmallCounter::~SmallCounter() = default;
 
 void SmallCounter::setLength(unsigned int length)
 {

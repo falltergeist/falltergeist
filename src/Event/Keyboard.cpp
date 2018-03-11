@@ -40,9 +40,7 @@ namespace Falltergeist
         {
         }
 
-        Keyboard::~Keyboard()
-        {
-        }
+        Keyboard::~Keyboard() = default;
 
         const char* Keyboard::typeToString(Keyboard::Type type)
         {

@@ -75,9 +75,7 @@ MultistateImageButton::MultistateImageButton(Type type, int x, int y) : Fallterg
     }
 }
 
-MultistateImageButton::~MultistateImageButton()
-{
-}
+MultistateImageButton::~MultistateImageButton() = default;
 
 unsigned int MultistateImageButton::state() const
 {

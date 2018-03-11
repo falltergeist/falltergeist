@@ -33,9 +33,7 @@ namespace Falltergeist
             _offset = script->programCounter();
         }
 
-        OpcodeHandler::~OpcodeHandler()
-        {
-        }
+        OpcodeHandler::~OpcodeHandler() = default;
 
         void OpcodeHandler::run()
         {

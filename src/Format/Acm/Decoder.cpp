@@ -234,7 +234,7 @@ void Decoder::_sub4d420c(int *memory, int *buffer, int sbSize,
     }
 }
 
-Decoder::Decoder(int lev_cnt) : _levels(lev_cnt), _blockSize(1 << lev_cnt), _memoryBuffer(NULL)
+Decoder::Decoder(int lev_cnt) : _levels(lev_cnt), _blockSize(1 << lev_cnt), _memoryBuffer(nullptr)
 {
 }
 

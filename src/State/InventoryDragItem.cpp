@@ -41,9 +41,7 @@ namespace Falltergeist
             _itemUi = itemUi;
         }
 
-        InventoryDragItem::~InventoryDragItem()
-        {
-        }
+        InventoryDragItem::~InventoryDragItem() = default;
 
         void InventoryDragItem::init()
         {

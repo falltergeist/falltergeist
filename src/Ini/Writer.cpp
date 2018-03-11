@@ -30,9 +30,7 @@ Writer::Writer(const File &ini) : _ini(ini)
 {
 }
 
-Writer::~Writer()
-{
-}
+Writer::~Writer()= default;
 
 void Writer::write(std::ostream &stream)
 {

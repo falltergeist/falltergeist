@@ -57,7 +57,7 @@ namespace Falltergeist
         Object* ObjectFactory::createObject(unsigned int PID)
         {
             auto proto = ResourceManager::getInstance()->proFileType(PID);
-            Object* object = 0;
+            Object* object = nullptr;
             switch ((OBJECT_TYPE)proto->typeId())
             {
                 case OBJECT_TYPE::ITEM:

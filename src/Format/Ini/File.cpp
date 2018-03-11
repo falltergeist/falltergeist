@@ -35,9 +35,7 @@ File::File()
 {
 }
 
-File::~File()
-{
-}
+File::~File() = default;
 
 Section& File::section(const std::string &name)
 {

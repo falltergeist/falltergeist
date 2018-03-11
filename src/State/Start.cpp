@@ -54,9 +54,7 @@ namespace Falltergeist
         {
         }
 
-        Start::~Start()
-        {
-        }
+        Start::~Start() = default;
 
         void Start::init()
         {

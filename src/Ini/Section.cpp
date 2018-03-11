@@ -17,6 +17,8 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <utility>
+
 #include "../Ini/Section.h"
 
 #include "../Logger.h"
@@ -26,13 +28,11 @@ namespace Falltergeist
 namespace Ini
 {
 
-Section::Section(const std::string &name) : _name(name)
+Section::Section(std::string name) : _name(std::move(name))
 {
 }
 
-Section::~Section()
-{
-}
+Section::~Section() = default;
 
 std::string Section::name()
 {

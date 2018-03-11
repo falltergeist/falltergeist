@@ -43,9 +43,7 @@ ImageButton::ImageButton(Type type, int x, int y) : ImageButton(type, Point(x, y
 {
 }
 
-ImageButton::~ImageButton()
-{
-}
+ImageButton::~ImageButton() = default;
 
 void ImageButton::_init(Type type)
 {

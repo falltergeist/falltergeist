@@ -89,10 +89,10 @@ Size Texture::size() const
 
 void Texture::loadFromSurface(SDL_Surface* surface)
 {
-    SDL_Surface* resizedSurface = NULL;
+    SDL_Surface* resizedSurface = nullptr;
     SDL_Rect area;
 
-    if (surface == NULL)
+    if (surface == nullptr)
     {
         return;
     }
@@ -135,7 +135,7 @@ void Texture::loadFromSurface(SDL_Surface* surface)
 
 void Texture::loadFromRGB(unsigned int* data)
 {
-    SDL_Surface* tempSurf = NULL;
+    SDL_Surface* tempSurf = nullptr;
     Uint32 rmask, gmask, bmask, amask;
     rmask = 0xff0000;
     gmask = 0x00ff00;

@@ -31,9 +31,7 @@ Parser::Parser(std::istream &stream) : _stream(stream), _section("")
 {
 }
 
-Parser::~Parser()
-{
-}
+Parser::~Parser() = default;
 
 void Parser::_trim(std::string &line)
 {

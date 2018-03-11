@@ -35,9 +35,7 @@ namespace Falltergeist
             _type = Type::ITEM;
         }
 
-        ItemObject::~ItemObject()
-        {
-        }
+        ItemObject::~ItemObject() = default;
 
         unsigned int ItemObject::amount() const
         {

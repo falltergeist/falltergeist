@@ -45,9 +45,7 @@ namespace Falltergeist
             });
         }
 
-        State::~State()
-        {
-        }
+        State::~State() = default;
 
         void State::init()
         {

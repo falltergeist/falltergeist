@@ -36,9 +36,7 @@ namespace Falltergeist
         {
         }
 
-        Container::~Container()
-        {
-        }
+        Container::~Container()= default;
 
         void Container::init()
         {

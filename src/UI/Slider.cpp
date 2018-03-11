@@ -46,9 +46,7 @@ Slider::Slider(int x, int y) : Falltergeist::UI::Base(Point(x, y))
     _upSound = "sound/sfx/ib1lu1x1.acm";
 }
 
-Slider::~Slider()
-{
-}
+Slider::~Slider() = default;
 
 void Slider::handle(Event::Event* event)
 {

@@ -40,9 +40,7 @@ namespace Falltergeist
         {
         }
 
-        Skilldex::~Skilldex()
-        {
-        }
+        Skilldex::~Skilldex() = default;
 
         void Skilldex::init()
         {

@@ -28,9 +28,7 @@ AnimatedPalette::AnimatedPalette()
 {
 }
 
-AnimatedPalette::~AnimatedPalette()
-{
-}
+AnimatedPalette::~AnimatedPalette() = default;
 
 void AnimatedPalette::think()
 {

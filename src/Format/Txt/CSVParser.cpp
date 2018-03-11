@@ -38,9 +38,7 @@ CSVParser::CSVParser(std::istream &stream) : _stream(stream)
 {
 }
 
-CSVParser::~CSVParser()
-{
-}
+CSVParser::~CSVParser() = default;
 
 
 void CSVParser::_stripComments(std::string& line)
@@ -65,7 +63,7 @@ void CSVParser::_stripComments(std::string& line)
 
 std::unique_ptr<CSVFile> CSVParser::parse()
 {
-    auto csv = std::unique_ptr<CSVFile>(new CSVFile());
+    auto csv = std::make_unique<CSVFile>();
     std::string line;
 
     while (std::getline(_stream, line))

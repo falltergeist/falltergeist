@@ -39,9 +39,7 @@ namespace Falltergeist
         {
         }
 
-        LoadGame::~LoadGame()
-        {
-        }
+        LoadGame::~LoadGame() = default;
 
         void LoadGame::init()
         {

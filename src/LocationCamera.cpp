@@ -29,9 +29,7 @@ namespace Falltergeist
         setCenter(center);
     }
 
-    LocationCamera::~LocationCamera()
-    {
-    }
+    LocationCamera::~LocationCamera() = default;
 
     Point LocationCamera::topLeft() const
     {

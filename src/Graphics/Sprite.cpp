@@ -171,14 +171,14 @@ void Sprite::renderScaled(int x, int y, unsigned int width, unsigned int height,
 
     GL_CHECK(glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), &vertices[0], GL_DYNAMIC_DRAW));
 
-    GL_CHECK(glVertexAttribPointer(_attribPos, 2, GL_FLOAT, GL_FALSE, 0, (void*)0 ));
+    GL_CHECK(glVertexAttribPointer(_attribPos, 2, GL_FLOAT, GL_FALSE, 0, (void*)nullptr ));
 
 
     GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, Game::getInstance()->renderer()->getTVBO()));
 
     GL_CHECK(glBufferData(GL_ARRAY_BUFFER, sizeof(UV), &UV[0], GL_DYNAMIC_DRAW));
 
-    GL_CHECK(glVertexAttribPointer(_attribTex, 2, GL_FLOAT, GL_FALSE, 0, (void*)0 ));
+    GL_CHECK(glVertexAttribPointer(_attribTex, 2, GL_FLOAT, GL_FALSE, 0, (void*)nullptr ));
 
     GL_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, Game::getInstance()->renderer()->getEBO()));
 
@@ -186,7 +186,7 @@ void Sprite::renderScaled(int x, int y, unsigned int width, unsigned int height,
 
     GL_CHECK(glEnableVertexAttribArray(_attribTex));
 
-    GL_CHECK(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, 0 ));
+    GL_CHECK(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, nullptr ));
 
     GL_CHECK(glDisableVertexAttribArray(_attribPos));
 
@@ -290,13 +290,13 @@ void Sprite::renderCropped(int x, int y, int dx, int dy, unsigned int width, uns
 
 	GL_CHECK(glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), &vertices[0], GL_DYNAMIC_DRAW));
 
-    GL_CHECK(glVertexAttribPointer(_attribPos, 2, GL_FLOAT, GL_FALSE, 0, (void*)0 ));
+    GL_CHECK(glVertexAttribPointer(_attribPos, 2, GL_FLOAT, GL_FALSE, 0, (void*)nullptr ));
 
     GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, Game::getInstance()->renderer()->getTVBO()));
 
     GL_CHECK(glBufferData(GL_ARRAY_BUFFER, sizeof(UV), &UV[0], GL_DYNAMIC_DRAW));
 
-    GL_CHECK(glVertexAttribPointer(_attribTex, 2, GL_FLOAT, GL_FALSE, 0, (void*)0 ));
+    GL_CHECK(glVertexAttribPointer(_attribTex, 2, GL_FLOAT, GL_FALSE, 0, (void*)nullptr ));
 
     GL_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, Game::getInstance()->renderer()->getEBO()));
 
@@ -304,7 +304,7 @@ void Sprite::renderCropped(int x, int y, int dx, int dy, unsigned int width, uns
 
     GL_CHECK(glEnableVertexAttribArray(_attribTex));
 
-    GL_CHECK(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, 0 ));
+    GL_CHECK(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, nullptr ));
 
     GL_CHECK(glDisableVertexAttribArray(_attribPos));
 

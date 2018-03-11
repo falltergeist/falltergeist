@@ -32,9 +32,7 @@ System::System() : IPlugin()
 {
 }
 
-System::~System()
-{
-}
+System::~System() = default;
 
 Falltergeist::VFS::File* System::open(std::string filename)
 {

@@ -40,9 +40,7 @@ FON::FON(const std::string& filename) : Font()
     _texture->loadFromRGBA(_fon->rgba());
 }
 
-FON::~FON()
-{
-}
+FON::~FON() = default;
 
 unsigned short FON::horizontalGap()
 {

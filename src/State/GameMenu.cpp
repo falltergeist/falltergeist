@@ -41,9 +41,7 @@ namespace Falltergeist
         {
         }
 
-        GameMenu::~GameMenu()
-        {
-        }
+        GameMenu::~GameMenu() = default;
 
         void GameMenu::init()
         {

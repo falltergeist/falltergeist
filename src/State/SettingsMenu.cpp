@@ -40,9 +40,7 @@ namespace Falltergeist
         {
         }
 
-        SettingsMenu::~SettingsMenu()
-        {
-        }
+        SettingsMenu::~SettingsMenu() = default;
 
         void SettingsMenu::init()
         {

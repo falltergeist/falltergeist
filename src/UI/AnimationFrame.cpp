@@ -28,9 +28,7 @@ AnimationFrame::AnimationFrame()
 {
 }
 
-AnimationFrame::~AnimationFrame()
-{
-}
+AnimationFrame::~AnimationFrame() = default;
 
 Point AnimationFrame::position() const
 {

@@ -37,9 +37,7 @@ namespace Falltergeist
         {
         }
 
-        PlayerEditName::~PlayerEditName()
-        {
-        }
+        PlayerEditName::~PlayerEditName() = default;
 
         void PlayerEditName::init()
         {

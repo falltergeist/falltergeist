@@ -42,9 +42,7 @@ namespace Falltergeist
         {
         }
 
-        Mouse::~Mouse()
-        {
-        }
+        Mouse::~Mouse() = default;
 
         const char* Mouse::typeToString(Mouse::Type type)
         {

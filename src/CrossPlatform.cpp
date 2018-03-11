@@ -65,13 +65,9 @@ std::vector<std::string> CrossPlatform::_dataFiles;
 const std::vector<std::string> CrossPlatform::_necessaryDatFiles = {"master.dat", "critter.dat"};
 
 
-CrossPlatform::CrossPlatform()
-{
-}
+CrossPlatform::CrossPlatform() = default;
 
-CrossPlatform::~CrossPlatform()
-{
-}
+CrossPlatform::~CrossPlatform() = default;
 
 std::string CrossPlatform::getVersion()
 {
@@ -110,7 +106,7 @@ std::string CrossPlatform::getHomeDirectory()
 std::string CrossPlatform::getExecutableDirectory()
 {
     char* buffer=SDL_GetBasePath();
-    if (buffer == NULL) {
+    if (buffer == nullptr) {
         Logger::warning() << "SDL_GetBasePath() not able to obtain a path on this platform" << std::endl;
         return "./";
     }
@@ -277,7 +273,7 @@ std::vector<std::string> CrossPlatform::findFalloutDataFiles()
         throw Exception("Can't open data directory: " + CrossPlatform::findFalloutDataPath());
     }
     _dataFiles = _necessaryDatFiles;
-    struct dirent *pxItem = 0;
+    struct dirent *pxItem = nullptr;
     while ((pxItem = readdir(pxDir)))
     {
         std::string filename(pxItem->d_name);

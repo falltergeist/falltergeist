@@ -51,7 +51,7 @@ public:
     using const_iterator = PropertyMap::const_iterator;
     using PropertyRefs = std::vector<std::reference_wrapper<const Value>>;
 
-    Section(const std::string &name = "");
+    Section(std::string name = "");
     ~Section();
 
     PropertyMap& properties();

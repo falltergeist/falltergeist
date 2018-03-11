@@ -39,9 +39,7 @@ TileMap::TileMap()
 {
 }
 
-TileMap::~TileMap()
-{
-}
+TileMap::~TileMap() = default;
 
 void TileMap::init()
 {

@@ -28,6 +28,7 @@
 
 #include <algorithm>
 #include <sstream>
+#include <utility>
 
 namespace Falltergeist
 {
@@ -36,7 +37,7 @@ namespace Format
 namespace Ini
 {
 
-Value::Value(const std::string& value) : _value(value)
+Value::Value(std::string  value) : _value(std::move(value))
 {
 }
 
