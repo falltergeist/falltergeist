@@ -23,7 +23,6 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../Base/Singleton.h"
 
 // Third party includes
 
@@ -40,12 +39,11 @@ namespace Falltergeist
                 Object* createObject(unsigned int PID);
 
             private:
-                friend class Base::Singleton<ObjectFactory>;
-
                 ObjectFactory() = default;
                 ~ObjectFactory() = default;
                 ObjectFactory(ObjectFactory const&) = delete;
                 void operator=(ObjectFactory const&) = delete;
+                static ObjectFactory* _instance;
         };
     }
 }

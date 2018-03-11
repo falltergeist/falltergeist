@@ -20,9 +20,6 @@
 #ifndef FALLTERGEIST_EVENT_HANDLER_H
 #define FALLTERGEIST_EVENT_HANDLER_H
 
-// C++ standard includes
-
-// Falltergeist includes
 #include "../Base/Delegate.h"
 
 namespace Falltergeist

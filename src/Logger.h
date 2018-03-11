@@ -20,15 +20,11 @@
 #ifndef FALLTERGEIST_LOGGER_H
 #define FALLTERGEIST_LOGGER_H
 
-// C++ standard includes
-#include <iosfwd>
-#include <iostream>
-
-// Falltergeist includes
 #include "Graphics/Point.h"
 #include "Graphics/Size.h"
 
-// Third party includes
+#include <iosfwd>
+#include <iostream>
 
 namespace Falltergeist
 {

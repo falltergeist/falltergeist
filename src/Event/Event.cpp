@@ -22,14 +22,7 @@
  * THE SOFTWARE.
  */
 
-// Related headers
 #include "../Event/Event.h"
-
-// C++ standard includes
-
-// Falltergeist includes
-
-// Third party includes
 
 namespace Falltergeist
 {

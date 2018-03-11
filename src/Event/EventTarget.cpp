@@ -17,20 +17,12 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Related headers
 #include "../Event/EventTarget.h"
 
-// C++ standard includes
-#include <type_traits>
-
-// Falltergeist includes
 #include "../Event/Dispatcher.h"
-#include "../Event/Event.h"
 #include "../Event/Keyboard.h"
 #include "../Event/Mouse.h"
 #include "../Event/State.h"
-
-// Third party includes
 
 namespace Falltergeist
 {

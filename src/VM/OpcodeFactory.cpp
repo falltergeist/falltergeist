@@ -20,11 +20,6 @@
 // Related headers
 #include "../VM/OpcodeFactory.h"
 
-// C++ standard includes
-#include <sstream>
-#include <memory>
-
-// Falltergeist includes
 #include "../Exception.h"
 #include "../VM/Handler/Opcode8002.h"
 #include "../VM/Handler/Opcode8003.h"
@@ -203,7 +198,8 @@
 #include "../VM/Handler/OpcodeA001Handler.h"
 #include "../VM/Script.h"
 
-// Third party includes
+#include <sstream>
+#include <memory>
 
 namespace Falltergeist
 {

@@ -20,13 +20,9 @@
 #ifndef FALLTERGEIST_VFS_PLUGIN_DATFILE_H
 #define FALLTERGEIST_VFS_PLUGIN_DATFILE_H
 
-// C++ standard includes
-#include <string>
-
-// Falltergeist includes
 #include "../../VFS/Plugin/IPlugin.h"
 
-// Third party includes
+#include <string>
 
 namespace Falltergeist
 {

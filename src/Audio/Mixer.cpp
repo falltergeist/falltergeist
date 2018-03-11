@@ -17,13 +17,8 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Related headers
 #include "../Audio/Mixer.h"
 
-// C++ standard includes
-#include <string>
-
-// Falltergeist includes
 #include "../Base/Buffer.h"
 #include "../Exception.h"
 #include "../Format/Acm/File.h"
@@ -33,8 +28,8 @@
 #include "../Settings.h"
 #include "../UI/MvePlayer.h"
 
-// Third party includes
 #include <SDL.h>
+#include <string>
 
 namespace Falltergeist
 {

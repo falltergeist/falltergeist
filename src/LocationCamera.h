@@ -20,13 +20,8 @@
 #ifndef FALLTERGEIST_LOCATIONCAMERA_H
 #define FALLTERGEIST_LOCATIONCAMERA_H
 
-// C++ standard includes
-
-// Falltergeist includes
 #include "Graphics/Point.h"
 #include "Graphics/Size.h"
-
-// Third party includes
 
 namespace Falltergeist
 {

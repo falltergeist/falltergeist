@@ -20,12 +20,7 @@
 #ifndef FALLTERGEIST_VM_STACKVALUE_H
 #define FALLTERGEIST_VM_STACKVALUE_H
 
-// C++ standard includes
 #include <string>
-
-// Falltergeist includes
-
-// Third party includes
 
 namespace Falltergeist
 {

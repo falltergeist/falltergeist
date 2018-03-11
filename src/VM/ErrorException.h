@@ -20,12 +20,7 @@
 #ifndef FALLTERGEIST_VM_ERROREXCEPTION_H
 #define FALLTERGEIST_VM_ERROREXCEPTION_H
 
-// C++ standard includes
-
-// Falltergeist includes
 #include "../Exception.h"
-
-// Third party includes
 
 namespace Falltergeist
 {

@@ -22,15 +22,11 @@
  * SOFTWARE.
  */
 
-// C++ standard inludes
-#include <cmath>
-
-// Falltergeist includes
-#include "../../Format/Dat/Stream.h"
 #include "../../Format/Aaf/File.h"
-#include "../../Format/Aaf/Glyph.h"
 
-// Third party includes
+#include "../../Format/Dat/Stream.h"
+
+#include <cmath>
 
 namespace Falltergeist
 {

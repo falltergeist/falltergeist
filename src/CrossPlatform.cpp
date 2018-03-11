@@ -17,18 +17,19 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// C++ standard includes
+#include "CrossPlatform.h"
+
+#include "Exception.h"
+#include "Logger.h"
+
+#include <SDL.h>
+
 #include <algorithm>
-#include <cerrno>
-#include <cstdlib>
 #include <cstring>
 #include <fstream>
-#include <stdexcept>
-#include <cctype>
 #include <chrono>
 
 #if defined(__unix__) || defined(__APPLE__)
-    #include <sys/param.h>
     #include <dirent.h>
 #endif
 
@@ -46,21 +47,12 @@
     #include <windows.h>
 #elif defined(__unix__) || defined(__APPLE__)
     #include <sys/stat.h>
-    #include <sys/types.h>
-    #include <unistd.h>
+
 #endif
 
 #if defined(__MACH__)
     #include <mach/mach_time.h>
 #endif
-
-// Falltergeist includes
-#include "CrossPlatform.h"
-#include "Exception.h"
-#include "Logger.h"
-
-// Third party includes
-#include <SDL.h>
 
 namespace Falltergeist
 {

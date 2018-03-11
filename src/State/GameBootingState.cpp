@@ -18,7 +18,7 @@
  */
 
 // Related headers
-#include "../State/Start.h"
+#include "GameBootingState.h"
 
 // C++ standard includes
 #include <ctime>
@@ -50,15 +50,15 @@ namespace Falltergeist
 
     namespace State
     {
-        Start::Start() : State()
+        GameBootingState::GameBootingState() : State()
         {
         }
 
-        Start::~Start()
+        GameBootingState::~GameBootingState()
         {
         }
 
-        void Start::init()
+        void GameBootingState::init()
         {
             if (_initialized) return;
             State::init();
@@ -79,7 +79,7 @@ namespace Falltergeist
             Game::getInstance()->mouse()->setState(Input::Mouse::Cursor::WAIT);
         }
 
-        void Start::think()
+        void GameBootingState::think()
         {
             auto game = Game::getInstance();
             State::think();

@@ -17,20 +17,12 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Related headers
 #include "../VFS/VFS.h"
 
-// C++ standard includes
-#include <string>
-#include <vector>
-
-// Falltergeist includes
 #include "../CrossPlatform.h"
 #include "../VFS/File.h"
 #include "../VFS/Plugin/DatFile.h"
 #include "../VFS/Plugin/System.h"
-
-// Third party includes
 
 namespace Falltergeist
 {

@@ -20,15 +20,10 @@
 #ifndef FALLTERGEIST_AUDIO_MIXER_H
 #define FALLTERGEIST_AUDIO_MIXER_H
 
-// C++ standard includes
+#include <SDL_mixer.h>
 #include <cstdint>
 #include <string>
 #include <unordered_map>
-
-// Falltergeist includes
-
-// Third party includes
-#include <SDL_mixer.h>
 
 namespace Falltergeist
 {

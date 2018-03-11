@@ -54,6 +54,8 @@ namespace Falltergeist
 {
     namespace Game
     {
+        Game* Game::_instance = nullptr;
+
         using namespace Base;
 
         Game* getInstance()
@@ -67,7 +69,9 @@ namespace Falltergeist
 
         Game* Game::getInstance()
         {
-            return Base::Singleton<Game>::get();
+            if (_instance == nullptr)
+                _instance = new Game();
+            return _instance;
         }
 
         void Game::init(std::unique_ptr<Settings> settings)

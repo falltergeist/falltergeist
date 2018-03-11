@@ -20,12 +20,7 @@
 #ifndef FALLTERGEIST_FUNCTIONS_H
 #define FALLTERGEIST_FUNCTIONS_H
 
-// C++ standard includes
 #include <string>
-
-// Falltergeist includes
-
-// Third party includes
 
 namespace Falltergeist
 {

@@ -22,7 +22,6 @@
 
 // C++ standard includes
 #include <algorithm>
-#include <memory>
 
 // Falltergeist includes
 #include "../Event/State.h"

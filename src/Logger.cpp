@@ -17,13 +17,9 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// C++ standard includes
-#include <sstream>
-
-// Falltergeist includes
 #include "Logger.h"
 
-// Third party includes
+#include <sstream>
 
 namespace Falltergeist
 {

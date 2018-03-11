@@ -31,11 +31,11 @@ namespace Falltergeist
 {
     namespace State
     {
-        class Start : public State
+        class GameBootingState : public State
         {
             public:
-                Start();
-                ~Start() override;
+                GameBootingState();
+                ~GameBootingState() override;
 
                 void think() override;
                 void init() override;

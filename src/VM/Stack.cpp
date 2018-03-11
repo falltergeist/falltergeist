@@ -17,17 +17,10 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Related headers
 #include "../VM/Stack.h"
 
-// C++ standard includes
-#include <string>
-
-// Falltergeist includes
 #include "../Exception.h"
 #include "../VM/StackValue.h"
-
-// Third party includes
 
 namespace Falltergeist
 {

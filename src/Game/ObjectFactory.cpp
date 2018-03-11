@@ -53,9 +53,13 @@ namespace Falltergeist
 {
     namespace Game
     {
+        ObjectFactory* ObjectFactory::_instance = nullptr;
+
         ObjectFactory* ObjectFactory::getInstance()
         {
-            return Base::Singleton<ObjectFactory>::get();
+            if (_instance == nullptr)
+                _instance = new ObjectFactory();
+            return _instance;
         }
 
         Object* ObjectFactory::createObject(unsigned int PID)

@@ -20,7 +20,6 @@
 #ifndef FALLTERGEIST_RESOURCEMANAGER_H
 #define FALLTERGEIST_RESOURCEMANAGER_H
 
-// C++ standard includes
 #include <fstream>
 #include <functional>
 #include <string>
@@ -28,11 +27,6 @@
 #include <memory>
 #include <unordered_map>
 #include <vector>
-
-// Falltergeist includes
-#include "Base/Singleton.h"
-
-// Third party includes
 
 namespace Falltergeist
 {
@@ -152,8 +146,6 @@ public:
     void shutdown();
 
 protected:
-    friend class Base::Singleton<ResourceManager>;
-
     std::vector<std::unique_ptr<Format::Dat::File>> _datFiles;
     std::unordered_map<std::string, std::unique_ptr<Format::Dat::Item>> _datItems;
     std::unordered_map<std::string, std::unique_ptr<Graphics::Texture>> _textures;
@@ -171,6 +163,9 @@ protected:
 
     // Searches for a given file within virtual "file system" and calls the given callback with Dat::Stream created from that file.
     void _loadStreamForFile(std::string filename, std::function<void(Format::Dat::Stream&&)> callback);
+
+private:
+    static ResourceManager* _instance;
 };
 
 }

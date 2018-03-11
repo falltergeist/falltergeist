@@ -38,9 +38,9 @@ namespace Falltergeist
             auto game = Game::getInstance();
             auto initialLocation = getByName(game->settings()->initialLocation());
             if (!initialLocation) {
-                auto defaultSettings = new Settings;
+                Settings defaultSettings;
                 Logger::warning() << "No such map: `" << game->settings()->initialLocation() << "`; using default map" << std::endl;
-                initialLocation = getByName(defaultSettings->initialLocation());
+                initialLocation = getByName(defaultSettings.initialLocation());
             }
             return initialLocation;
         }

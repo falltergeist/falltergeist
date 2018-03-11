@@ -25,12 +25,7 @@
 #ifndef FALLTERGEIST_EVENT_EVENT_H
 #define FALLTERGEIST_EVENT_EVENT_H
 
-// C++ standard includes
 #include <string>
-
-// Falltergeist includes
-
-// Third party includes
 
 namespace Falltergeist
 {

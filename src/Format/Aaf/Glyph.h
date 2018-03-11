@@ -25,13 +25,8 @@
 #ifndef FALLTERGEIST_FORMAT_AAF_GLYPH_H
 #define FALLTERGEIST_FORMAT_AAF_GLYPH_H
 
-// C++ standard includes
 #include <cstdint>
 #include <vector>
-
-// Falltergeist includes
-
-// Third party includes
 
 namespace Falltergeist
 {
