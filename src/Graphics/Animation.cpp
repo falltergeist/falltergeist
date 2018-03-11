@@ -17,26 +17,14 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Related headers
 #include "../Graphics/Animation.h"
 
-// C++ standart includes
-
-// Falltergeist includes
-#include "../Format/Frm/File.h"
 #include "../Format/Frm/Direction.h"
-#include "../Format/Frm/Frame.h"
+#include "../Format/Frm/File.h"
 #include "../Game/Game.h"
 #include "../Graphics/AnimatedPalette.h"
-#include "../Graphics/Point.h"
-#include "../Graphics/Renderer.h"
-#include "../Graphics/Shader.h"
-#include "../Graphics/TransFlags.h"
 #include "../ResourceManager.h"
 #include "../State/Location.h"
-
-// Third-party includes
-#include <SDL_image.h>
 
 namespace Falltergeist
 {
@@ -198,11 +186,11 @@ void Animation::render(int x, int y, unsigned int direction, unsigned int frame,
     }
 
     GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, _coordsVBO));
-    GL_CHECK(glVertexAttribPointer(_attribPos, 2, GL_FLOAT, GL_FALSE, 0, (void*)0 ));
+    GL_CHECK(glVertexAttribPointer(_attribPos, 2, GL_FLOAT, GL_FALSE, 0, (void*)nullptr ));
 
 
     GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, _texCoordsVBO));
-    GL_CHECK(glVertexAttribPointer(_attribTex, 2, GL_FLOAT, GL_FALSE, 0, (void*)0 ));
+    GL_CHECK(glVertexAttribPointer(_attribTex, 2, GL_FLOAT, GL_FALSE, 0, (void*)nullptr ));
 
     GL_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ebo));
 
@@ -214,7 +202,7 @@ void Animation::render(int x, int y, unsigned int direction, unsigned int frame,
     GL_CHECK(glEnableVertexAttribArray(_attribPos));
     GL_CHECK(glEnableVertexAttribArray(_attribTex));
 
-    GL_CHECK(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, 0 ));
+    GL_CHECK(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, nullptr ));
 
     GL_CHECK(glDisableVertexAttribArray(_attribPos));
 

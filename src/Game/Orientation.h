@@ -19,12 +19,6 @@
 #ifndef FALLTERGEIST_GAME_ORIENTATION_H
 #define FALLTERGEIST_GAME_ORIENTATION_H
 
-// C++ standard includes
-
-// Falltergeist includes
-
-// Third party includes
-
 namespace Falltergeist
 {
     namespace Game

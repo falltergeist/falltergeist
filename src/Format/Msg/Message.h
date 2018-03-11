@@ -25,12 +25,7 @@
 #ifndef FALLTERGEIST_FORMAT_MSG_MESSAGE_H
 #define FALLTERGEIST_FORMAT_MSG_MESSAGE_H
 
-// C++ standard includes
 #include <string>
-
-// Falltergeist includes
-
-// Third party includes
 
 namespace Falltergeist
 {

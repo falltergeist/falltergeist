@@ -20,12 +20,7 @@
 #ifndef FALLTERGEIST_INI_WRITER_H
 #define FALLTERGEIST_INI_WRITER_H
 
-// C++ standard includes
 #include <ostream>
-
-// Falltergeist includes
-
-// Third party includes
 
 namespace Falltergeist
 {

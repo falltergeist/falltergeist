@@ -17,18 +17,19 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// C++ standard includes
+#include "CrossPlatform.h"
+
+#include "Exception.h"
+#include "Logger.h"
+
+#include <SDL.h>
+
 #include <algorithm>
-#include <cerrno>
-#include <cstdlib>
 #include <cstring>
 #include <fstream>
-#include <stdexcept>
-#include <cctype>
 #include <chrono>
 
 #if defined(__unix__) || defined(__APPLE__)
-    #include <sys/param.h>
     #include <dirent.h>
 #endif
 
@@ -46,21 +47,12 @@
     #include <windows.h>
 #elif defined(__unix__) || defined(__APPLE__)
     #include <sys/stat.h>
-    #include <sys/types.h>
-    #include <unistd.h>
+
 #endif
 
 #if defined(__MACH__)
     #include <mach/mach_time.h>
 #endif
-
-// Falltergeist includes
-#include "CrossPlatform.h"
-#include "Exception.h"
-#include "Logger.h"
-
-// Third party includes
-#include <SDL.h>
 
 namespace Falltergeist
 {
@@ -73,13 +65,9 @@ std::vector<std::string> CrossPlatform::_dataFiles;
 const std::vector<std::string> CrossPlatform::_necessaryDatFiles = {"master.dat", "critter.dat"};
 
 
-CrossPlatform::CrossPlatform()
-{
-}
+CrossPlatform::CrossPlatform() = default;
 
-CrossPlatform::~CrossPlatform()
-{
-}
+CrossPlatform::~CrossPlatform() = default;
 
 std::string CrossPlatform::getVersion()
 {
@@ -118,7 +106,7 @@ std::string CrossPlatform::getHomeDirectory()
 std::string CrossPlatform::getExecutableDirectory()
 {
     char* buffer=SDL_GetBasePath();
-    if (buffer == NULL) {
+    if (buffer == nullptr) {
         Logger::warning() << "SDL_GetBasePath() not able to obtain a path on this platform" << std::endl;
         return "./";
     }
@@ -285,7 +273,7 @@ std::vector<std::string> CrossPlatform::findFalloutDataFiles()
         throw Exception("Can't open data directory: " + CrossPlatform::findFalloutDataPath());
     }
     _dataFiles = _necessaryDatFiles;
-    struct dirent *pxItem = 0;
+    struct dirent *pxItem = nullptr;
     while ((pxItem = readdir(pxDir)))
     {
         std::string filename(pxItem->d_name);

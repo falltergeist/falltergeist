@@ -20,16 +20,12 @@
 #ifndef FALLTERGEIST_UI_MULTISTATEIMAGEBUTTON_H
 #define	FALLTERGEIST_UI_MULTISTATEIMAGEBUTTON_H
 
-// C++ standard includes
-#include <string>
-#include <vector>
-
-// Falltergeist includes
 #include "../Graphics/Sprite.h"
 #include "../UI/Base.h"
 #include "../UI/ImageList.h"
 
-// Third party includes
+#include <string>
+#include <vector>
 
 namespace Falltergeist
 {

@@ -17,15 +17,9 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Related headers
 #include "../../VFS/Plugin/DatFile.h"
 
-// C++ standard includes
-
-// Falltergeist includes
 #include "../../VFS/File.h"
-
-// Third party includes
 
 namespace Falltergeist
 {
@@ -38,9 +32,7 @@ DatFile::DatFile(const std::string& filename) : IPlugin()
 {
 }
 
-DatFile::~DatFile()
-{
-}
+DatFile::~DatFile() = default;
 
 Falltergeist::VFS::File* DatFile::open(std::string filename)
 {

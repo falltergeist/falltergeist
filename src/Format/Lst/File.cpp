@@ -23,15 +23,11 @@
  */
 
 // C++ standard includes
-#include <algorithm>
-#include <functional>
-#include <cctype>
-
-// Falltergeist includes
-#include "../Dat/Stream.h"
 #include "../Lst/File.h"
 
-// Third party includes
+#include "../Dat/Stream.h"
+
+#include <algorithm>
 
 namespace Falltergeist
 {

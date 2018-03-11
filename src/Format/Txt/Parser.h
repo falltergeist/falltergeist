@@ -25,13 +25,8 @@
 #ifndef FALLTERGEIST_FORMAT_TXT_PARSER_H
 #define FALLTERGEIST_FORMAT_TXT_PARSER_H
 
-// C++ standard includes
 #include <string>
 #include <vector>
-
-// Falltergeist includes
-
-// Third party includes
 
 namespace Falltergeist
 {

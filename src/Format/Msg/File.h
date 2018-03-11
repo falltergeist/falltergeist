@@ -25,14 +25,10 @@
 #ifndef FALLTERGEIST_FORMAT_MSG_FILE_H
 #define FALLTERGEIST_FORMAT_MSG_FILE_H
 
-// C++ standard includes
-#include <vector>
-
-// Falltergeist includes
 #include "../../Format/Dat/Item.h"
 #include "../../Format/Msg/Message.h"
 
-// Third party includes
+#include <vector>
 
 namespace Falltergeist
 {

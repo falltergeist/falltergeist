@@ -17,24 +17,17 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Related headers
 #include "../UI/TextArea.h"
 
-// C++ standard includes
-#include <algorithm>
-#include <sstream>
-
-// Falltergeist includes
 #include "../CrossPlatform.h"
 #include "../Event/Mouse.h"
 #include "../Game/Game.h"
-#include "../Graphics/Font.h"
 #include "../Graphics/Rect.h"
-#include "../ResourceManager.h"
 #include "../Logger.h"
+#include "../ResourceManager.h"
 
-// Third party includes
-#include <SDL.h>
+#include <algorithm>
+#include <sstream>
 
 namespace Falltergeist
 {
@@ -46,7 +39,6 @@ using Graphics::Rect;
 TextArea::TextArea(const Point& pos) : Base(pos)
 {
     _timestampCreated = SDL_GetTicks();
-
 }
 
 TextArea::TextArea(int x, int y) : TextArea(Point(x, y))
@@ -77,9 +69,7 @@ TextArea::TextArea(const TextArea& textArea, Point pos) : Base(pos)
     _wordWrap = textArea._wordWrap;
 }
 
-TextArea::~TextArea()
-{
-}
+TextArea::~TextArea() = default;
 
 void TextArea::_needUpdate(bool lines)
 {

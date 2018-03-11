@@ -17,24 +17,16 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Related headers
 #include "../Ini/Value.h"
 
-// C++ standard includes
 #include <sstream>
-
-// Falltergeist includes
-
-// Third party includes
 
 namespace Falltergeist
 {
 namespace Ini
 {
 
-Value::Value()
-{
-}
+Value::Value() {}
 
 Value::~Value()
 {

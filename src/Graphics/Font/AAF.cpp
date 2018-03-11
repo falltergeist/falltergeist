@@ -17,18 +17,9 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Related headers
 #include "../../Graphics/Font/AAF.h"
 
-// C++ standard includes
-#include <memory>
-
-// Falltergeist includes
-#include "../../Format/Aaf/Glyph.h"
 #include "../../ResourceManager.h"
-
-// Third party includes
-#include <SDL_image.h>
 
 namespace Falltergeist
 {
@@ -50,9 +41,7 @@ AAF::AAF(const std::string& filename) : Font()
 
 }
 
-AAF::~AAF()
-{
-}
+AAF::~AAF() = default;
 
 unsigned short AAF::horizontalGap()
 {

@@ -25,13 +25,9 @@
 #ifndef FALLTERGEIST_FORMAT_BIO_FILE_H
 #define FALLTERGEIST_FORMAT_BIO_FILE_H
 
-// C++ standard includes
-#include <string>
-
-// Falltergeist includes
 #include "../../Format/Dat/Item.h"
 
-// Third party includes
+#include <string>
 
 namespace Falltergeist
 {

@@ -20,13 +20,8 @@
 #ifndef FALLTERGEIST_STATE_PLAYEREDITGENDER_H
 #define FALLTERGEIST_STATE_PLAYEREDITGENDER_H
 
-// C++ standard includes
-
-// Falltergeist includes
 #include "../Format/Enums.h"
 #include "../State/State.h"
-
-// Third party includes
 
 namespace Falltergeist
 {

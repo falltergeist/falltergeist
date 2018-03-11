@@ -20,16 +20,12 @@
 #ifndef FALLTERGEIST_UI_TILEMAP_H
 #define FALLTERGEIST_UI_TILEMAP_H
 
-// C++ standard includes
-#include <map>
-#include <memory>
-
-// Falltergeist includes
 #include "../Graphics/Point.h"
 #include "../Graphics/Rect.h"
 #include "../Graphics/Renderer.h"
 
-// Third party includes
+#include <map>
+#include <memory>
 
 namespace Falltergeist
 {

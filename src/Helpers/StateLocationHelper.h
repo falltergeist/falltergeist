@@ -19,12 +19,6 @@
 #ifndef FALLTERGEIST_HELPERS_STATELOCATIONHELPER_H
 #define FALLTERGEIST_HELPERS_STATELOCATIONHELPER_H
 
-// C++ standard includes
-
-// Falltergeist includes
-
-// Third party includes
-
 namespace Falltergeist
 {
     namespace State

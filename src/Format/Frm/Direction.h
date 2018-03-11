@@ -25,14 +25,10 @@
 #ifndef FALLTERGEIST_FORMAT_FRM_DIRECTION_H
 #define FALLTERGEIST_FORMAT_FRM_DIRECTION_H
 
-// C++ standard includes
-#include <cstdint>
-#include <vector>
-
-// Falltergeist includes
 #include "../Frm/Frame.h"
 
-// Third party includes
+#include <cstdint>
+#include <vector>
 
 namespace Falltergeist
 {

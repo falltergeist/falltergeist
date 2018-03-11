@@ -20,17 +20,13 @@
 #ifndef FALLTERGEIST_GRAPHICS_TEXTAREA_H
 #define FALLTERGEIST_GRAPHICS_TEXTAREA_H
 
-// C++ standard includes
-#include <cstdint>
-#include <string>
-#include <vector>
-
-// Falltergeist includes
 #include "../Graphics/Font.h"
 #include "../Graphics/Renderer.h"
 #include "../Graphics/Shader.h"
 
-// Third party includes
+#include <cstdint>
+#include <string>
+#include <vector>
 
 namespace Falltergeist
 {

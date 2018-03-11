@@ -17,21 +17,12 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Related headers
 #include "../VM/HaltException.h"
-
-// C++ standard includes
-
-// Falltergeist includes
-
-// Third party includes
 
 namespace Falltergeist
 {
     namespace VM
     {
-        HaltException::HaltException()
-        {
-        }
+        HaltException::HaltException() = default;
     }
 }

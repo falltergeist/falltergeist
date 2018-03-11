@@ -20,22 +20,15 @@
 // Related headers
 #include "../Game/Location.h"
 
-// C++ standard includes
-#include <cmath>
-
-// Falltergeist includes
 #include "../Format/Gam/File.h"
 #include "../Format/Map/File.h"
 #include "../Game/LocationElevation.h"
 #include "../Game/SpatialObject.h"
-#include "../Graphics/Point.h"
 #include "../Helpers/GameObjectHelper.h"
 #include "../ResourceManager.h"
 #include "../UI/Tile.h"
 #include "../UI/TileMap.h"
 #include "../VM/Script.h"
-
-// Third party includes
 
 namespace Falltergeist
 {
@@ -48,9 +41,7 @@ namespace Falltergeist
         {
         }
 
-        Location::~Location()
-        {
-        }
+        Location::~Location() = default;
 
         void Location::loadFromMapFile(Falltergeist::Format::Map::File* mapFile)
         {

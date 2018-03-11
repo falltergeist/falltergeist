@@ -20,13 +20,8 @@
 #ifndef FALLTERGEIST_UI_MONTHCOUNTER_H
 #define FALLTERGEIST_UI_MONTHCOUNTER_H
 
-// C++ standard includes
-
-// Falltergeist includes
 #include "../Graphics/Sprite.h"
 #include "Base.h"
-
-// Third party includes
 
 namespace Falltergeist
 {

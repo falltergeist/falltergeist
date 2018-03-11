@@ -25,15 +25,11 @@
 #ifndef FALLTERGEIST_FORMAT_INI_SECTION_H
 #define FALLTERGEIST_FORMAT_INI_SECTION_H
 
-// C++ standard includes
+#include "../Ini/Value.h"
+
 #include <map>
 #include <string>
 #include <vector>
-
-// Falltergeist includes
-#include "../Ini/Value.h"
-
-// Third party includes
 
 namespace Falltergeist
 {
@@ -55,7 +51,7 @@ public:
     using const_iterator = PropertyMap::const_iterator;
     using PropertyRefs = std::vector<std::reference_wrapper<const Value>>;
 
-    Section(const std::string &name = "");
+    Section(std::string name = "");
     ~Section();
 
     PropertyMap& properties();

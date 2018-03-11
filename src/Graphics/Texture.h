@@ -20,18 +20,14 @@
 #ifndef FALLTERGEIST_GRAPHICS_TEXTURE_H
 #define FALLTERGEIST_GRAPHICS_TEXTURE_H
 
-// C++ standard includes
-#include <memory>
-#include <vector>
-
-// Falltergeist includes
 #include "../Graphics/Point.h"
 #include "../Graphics/Size.h"
-
-// Third party includes
 #include "GL/glew.h"
 #include "SDL.h"
 #include "SDL_opengl.h"
+
+#include <memory>
+#include <vector>
 
 namespace Falltergeist
 {

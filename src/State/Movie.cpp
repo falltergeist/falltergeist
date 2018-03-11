@@ -17,30 +17,20 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Related headers
 #include "../State/Movie.h"
 
-// C++ standard includes
-
-// Falltergeist includes
 #include "../Audio/Mixer.h"
 #include "../CrossPlatform.h"
-#include "../Event/Keyboard.h"
-#include "../Event/Mouse.h"
 #include "../Format/Dat/MiscFile.h"
 #include "../Format/Lst/File.h"
 #include "../Format/Sve/File.h"
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
 #include "../Ini/File.h"
-#include "../Ini/Parser.h"
 #include "../Input/Mouse.h"
 #include "../ResourceManager.h"
-#include "../State/MainMenu.h"
 #include "../UI/MvePlayer.h"
 #include "../UI/TextArea.h"
-
-// Third party includes
 
 namespace Falltergeist
 {
@@ -51,9 +41,7 @@ namespace Falltergeist
             _id = id;
         }
 
-        Movie::~Movie()
-        {
-        }
+        Movie::~Movie() = default;
 
         void Movie::init()
         {

@@ -20,14 +20,10 @@
 #ifndef FALLTERGEIST_UI_SMALLCOUNTER_H
 #define FALLTERGEIST_UI_SMALLCOUNTER_H
 
-// C++ standard includes
-#include <memory>
-
-// Falltergeist includes
 #include "../Graphics/Sprite.h"
 #include "../UI/Base.h"
 
-// Third party includes
+#include <memory>
 
 namespace Falltergeist
 {

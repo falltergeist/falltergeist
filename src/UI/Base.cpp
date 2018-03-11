@@ -17,26 +17,17 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Related headers
 #include "../UI/Base.h"
 
-// C++ standard includes
-#include <algorithm>
-#include <memory>
-
-// Falltergeist includes
-#include "../Game/Game.h"
 #include "../Game/DudeObject.h"
+#include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
-#include "../Graphics/Texture.h"
-#include "../Graphics/TransFlags.h"
 #include "../LocationCamera.h"
 #include "../PathFinding/Hexagon.h"
 #include "../ResourceManager.h"
 #include "../State/Location.h"
-#include "../UI/Animation.h"
 
-// Third party includes
+#include <algorithm>
 
 namespace Falltergeist
 {
@@ -54,9 +45,7 @@ Base::Base(const Point& pos) : Event::EventTarget(Game::getInstance()->eventDisp
     _position = pos;
 }
 
-Base::~Base()
-{
-}
+Base::~Base() = default;
 
 int Base::x() const
 {

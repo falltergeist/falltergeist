@@ -20,12 +20,7 @@
 #ifndef FALLTERGEIST_GAME_DOORSCENERYOBJECT_H
 #define FALLTERGEIST_GAME_DOORSCENERYOBJECT_H
 
-// C++ standard includes
-
-// Falltergeist includes
 #include "../Game/SceneryObject.h"
-
-// Third party includes
 
 namespace Falltergeist
 {

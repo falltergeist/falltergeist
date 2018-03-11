@@ -17,15 +17,11 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Related headers
 #include "../Game/ObjectFactory.h"
 
-// C++ standard includes
-
-// Falltergeist includes
+#include "../Exception.h"
 #include "../Format/Int/File.h"
 #include "../Format/Msg/File.h"
-#include "../Format/Msg/Message.h"
 #include "../Format/Pro/File.h"
 #include "../Game/AmmoItemObject.h"
 #include "../Game/ArmorItemObject.h"
@@ -39,29 +35,29 @@
 #include "../Game/KeyItemObject.h"
 #include "../Game/LadderSceneryObject.h"
 #include "../Game/MiscItemObject.h"
-#include "../Game/MiscObject.h"
 #include "../Game/StairsSceneryObject.h"
 #include "../Game/WallObject.h"
 #include "../Game/WeaponItemObject.h"
-#include "../Exception.h"
 #include "../ResourceManager.h"
 #include "../VM/Script.h"
-
-// Third party includes
 
 namespace Falltergeist
 {
     namespace Game
     {
+        ObjectFactory* ObjectFactory::_instance = nullptr;
+
         ObjectFactory* ObjectFactory::getInstance()
         {
-            return Base::Singleton<ObjectFactory>::get();
+            if (_instance == nullptr)
+                _instance = new ObjectFactory();
+            return _instance;
         }
 
         Object* ObjectFactory::createObject(unsigned int PID)
         {
             auto proto = ResourceManager::getInstance()->proFileType(PID);
-            Object* object = 0;
+            Object* object = nullptr;
             switch ((OBJECT_TYPE)proto->typeId())
             {
                 case OBJECT_TYPE::ITEM:

@@ -17,15 +17,9 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Related headers
 #include "../../VFS/Plugin/System.h"
 
-// C++ standard includes
-
-// Falltergeist includes
 #include "../../VFS/File.h"
-
-// Third party includes
 
 namespace Falltergeist
 {
@@ -38,9 +32,7 @@ System::System() : IPlugin()
 {
 }
 
-System::~System()
-{
-}
+System::~System() = default;
 
 Falltergeist::VFS::File* System::open(std::string filename)
 {

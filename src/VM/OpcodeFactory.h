@@ -20,13 +20,9 @@
 #ifndef FALLTERGEIST_VM_OPCODEFACTORY_H
 #define FALLTERGEIST_VM_OPCODEFACTORY_H
 
-// C++ standard includes
-#include <memory>
-
-// Falltergeist include
 #include "../VM/OpcodeHandler.h"
 
-// Third party includes
+#include <memory>
 
 namespace Falltergeist
 {

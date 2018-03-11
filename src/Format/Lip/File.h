@@ -25,14 +25,10 @@
 #ifndef FALLTERGEIST_FORMAT_LIP_FILE_H
 #define FALLTERGEIST_FORMAT_LIP_FILE_H
 
-// C++ standard includes
-#include <string>
-#include <vector>
-
-// Falltergeist includes
 #include "../Dat/Item.h"
 
-// Third party includes
+#include <string>
+#include <vector>
 
 namespace Falltergeist
 {

@@ -17,15 +17,9 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Related headers
 #include "../Game/ArmorItemObject.h"
 
-// C++ standard includes
-
-// Falltergeist includes
 #include "../Exception.h"
-
-// Third party includes
 
 namespace Falltergeist
 {

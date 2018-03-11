@@ -17,16 +17,12 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// C++ standard includes
-#include <iosfwd>
-
-// Falltergeist includes
 #include "../Graphics/Renderer.h"
 #include "../Graphics/Shader.h"
 #include "../Graphics/Texture.h"
 #include "../Graphics/TransFlags.h"
 
-// Thirdparty includes
+#include <iosfwd>
 
 namespace Falltergeist
 {

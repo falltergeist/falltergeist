@@ -22,12 +22,7 @@
  * SOFTWARE.
  */
 
-// C++ standard includes
-
-// Falltergeist includes
 #include "../../Format/Msg/Message.h"
-
-// Third party includes
 
 namespace Falltergeist
 {
@@ -40,9 +35,7 @@ Message::Message()
 {
 }
 
-Message::~Message()
-{
-}
+Message::~Message() = default;
 
 void Message::setNumber(unsigned int number)
 {

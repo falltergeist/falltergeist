@@ -17,17 +17,11 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// C++ standard includes
-#include <memory>
-
-// Falltergeist includes
 #include "src/Exception.h"
 #include "src/Game/Game.h"
 #include "src/Logger.h"
 #include "src/Settings.h"
 #include "src/State/Start.h"
-
-// Third party includes
 
 using namespace Falltergeist;
 

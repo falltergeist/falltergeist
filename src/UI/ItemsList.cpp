@@ -17,29 +17,19 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Related headers
 #include "../UI/ItemsList.h"
 
-// C++ standard includes
-#include <memory>
-
-// Falltergeist includes
 #include "../Audio/Mixer.h"
 #include "../Event/Event.h"
 #include "../Event/Mouse.h"
 #include "../Game/ArmorItemObject.h"
 #include "../Game/DudeObject.h"
 #include "../Game/Game.h"
-#include "../Game/ItemObject.h"
-#include "../Graphics/Point.h"
 #include "../Graphics/Rect.h"
 #include "../Graphics/Renderer.h"
 #include "../Graphics/Texture.h"
 #include "../Input/Mouse.h"
 #include "../Logger.h"
-#include "../UI/InventoryItem.h"
-
-// Third party includes
 
 namespace Falltergeist
 {
@@ -73,7 +63,7 @@ void ItemsList::update()
 
     for (unsigned int i = _slotOffset; i < items()->size() && i != _slotOffset + _slotsNumber; i++)
     {
-        _inventoryItems.push_back(std::unique_ptr<InventoryItem>(new InventoryItem(items()->at(i))));
+        _inventoryItems.push_back(std::make_unique<InventoryItem>(items()->at(i)));
     }
 }
 
@@ -169,7 +159,7 @@ void ItemsList::onItemDragStop(Event::Mouse* event)
         {
             Game::getInstance()->player()->setArmorSlot(nullptr);
         }
-        inventoryItem->setItem(0);
+        inventoryItem->setItem(nullptr);
     }
 
     //Logger::critical() << "IN!" << std::endl;
@@ -191,7 +181,7 @@ void ItemsList::onItemDragStop(Event::Mouse* event, HAND hand)
             {
                 Game::getInstance()->player()->setRightHandSlot(nullptr);
             }
-            inventoryItem->setItem(0);
+            inventoryItem->setItem(nullptr);
         }
     }
 }

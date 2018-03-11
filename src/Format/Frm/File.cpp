@@ -22,18 +22,12 @@
  * SOFTWARE.
  */
 
-// C++ standard includes
-#include <algorithm>
-
-// Falltergeist includes
-#include "../Enums.h"
-#include "../Dat/Stream.h"
 #include "../Frm/File.h"
-#include "../Frm/Frame.h"
 #include "../Pal/File.h"
-#include "../Pal/Color.h"
 
-// Third party includes
+#include "../Dat/Stream.h"
+
+#include <algorithm>
 
 namespace Falltergeist
 {

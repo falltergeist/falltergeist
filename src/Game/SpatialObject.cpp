@@ -17,19 +17,10 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Related headers
 #include "../Game/SpatialObject.h"
 
-// C++ standard includes
-
-// Falltergeist includes
-#include "../Exception.h"
-#include "../Game/Game.h"
-#include "../Logger.h"
 #include "../PathFinding/Hexagon.h"
 #include "../VM/Script.h"
-
-// Third party includes
 
 namespace Falltergeist
 {

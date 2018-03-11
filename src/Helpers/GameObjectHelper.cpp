@@ -17,9 +17,8 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// C++ standard includes
+#include "../Helpers/GameObjectHelper.h"
 
-// Falltergeist includes
 #include "../Exception.h"
 #include "../Format/Map/Object.h"
 #include "../Format/Map/Script.h"
@@ -28,15 +27,11 @@
 #include "../Game/CritterObject.h"
 #include "../Game/DoorSceneryObject.h"
 #include "../Game/ExitMiscObject.h"
-#include "../Game/Object.h"
 #include "../Game/ObjectFactory.h"
 #include "../Game/SpatialObject.h"
-#include "../Helpers/GameObjectHelper.h"
 #include "../Logger.h"
 #include "../ResourceManager.h"
 #include "../VM/Script.h"
-
-// Third party includes
 
 namespace Falltergeist
 {

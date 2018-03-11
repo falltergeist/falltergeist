@@ -20,13 +20,8 @@
 #ifndef FALLTERGEIST_GAME_ARMORITEMOBJECT_H
 #define FALLTERGEIST_GAME_ARMORITEMOBJECT_H
 
-// C++ standard includes
-
-// Falltergeist includes
 #include "../Format/Enums.h"
 #include "../Game/ItemObject.h"
-
-// Third party includes
 
 namespace Falltergeist
 {

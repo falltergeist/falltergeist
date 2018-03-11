@@ -27,7 +27,6 @@
 #include "../../Game/Game.h"
 #include "../../Logger.h"
 #include "../../VM/Script.h"
-#include "../../VM/StackValue.h"
 
 // Third party includes
 

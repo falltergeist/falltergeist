@@ -27,16 +27,12 @@
 // and then adapted for Falltergeist. All credit goes to the original authors.
 // Link to the plugin: https://github.com/gemrb/gemrb/tree/8e759bc6874a80d4a8d73bf79603624465b3aeb0/gemrb/plugins/ACMReader
 
-// C++ standard includes
-
-// Falltergeist includes
 #include "../Acm/File.h"
+
+#include "../../Exception.h"
 #include "../Acm/Decoder.h"
 #include "../Acm/General.h"
 #include "../Acm/Unpacker.h"
-#include "../../Exception.h"
-
-// Third party includes
 
 namespace Falltergeist
 {
@@ -88,9 +84,7 @@ File::File(Dat::Stream&& stream) : _stream(std::move(stream))
     }
 }
 
-File::~File()
-{
-}
+File::~File() = default;
 
 void File::rewind()
 {

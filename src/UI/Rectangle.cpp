@@ -17,23 +17,19 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Related headers
+#include <utility>
+
 #include "../UI/Rectangle.h"
 
-// C++ standard includes
-
-// Falltergeist includes
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
-
-// Third party includes
 
 namespace Falltergeist
 {
 namespace UI
 {
 
-Rectangle::Rectangle(const Point &pos, const Size &size, SDL_Color color) : Base(pos), _size(size), _color(color)
+Rectangle::Rectangle(const Point &pos, Size size, SDL_Color color) : Base(pos), _size(std::move(size)), _color(std::move(color))
 {
 }
 

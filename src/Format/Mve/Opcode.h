@@ -25,13 +25,9 @@
 #ifndef FALLTERGEIST_FORMAT_MVE_OPCODE_H
 #define FALLTERGEIST_FORMAT_MVE_OPCODE_H
 
-// C++ standard includes
-#include <cstdint>
-
-// Falltergeist includes
 #include "../../Base/Buffer.h"
 
-// Third party includes
+#include <cstdint>
 
 namespace Falltergeist
 {

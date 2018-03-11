@@ -21,13 +21,11 @@
 #include "../../VM/Handler/Opcode80B8Handler.h"
 
 // C++ standard includes
-#include <string>
 
 // Falltergeist includes
 #include "../../Game/Game.h"
 #include "../../Logger.h"
 #include "../../State/Location.h"
-#include "../../VM/Script.h"
 
 // Third party includes
 

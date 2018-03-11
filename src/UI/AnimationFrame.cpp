@@ -17,14 +17,7 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Related headers
 #include "../UI/AnimationFrame.h"
-
-// C++ standard includes
-
-// Falltergeist includes
-
-// Third party includes
 
 namespace Falltergeist
 {
@@ -35,9 +28,7 @@ AnimationFrame::AnimationFrame()
 {
 }
 
-AnimationFrame::~AnimationFrame()
-{
-}
+AnimationFrame::~AnimationFrame() = default;
 
 Point AnimationFrame::position() const
 {

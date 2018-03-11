@@ -27,13 +27,9 @@
 // and then adapted for Falltergeist. All credit goes to the original authors.
 // Link to the plugin: https://github.com/gemrb/gemrb/tree/8e759bc6874a80d4a8d73bf79603624465b3aeb0/gemrb/plugins/ACMReader
 
-// C++ standard includes
-#include <cstdlib>
-
-// Falltergeist includes
 #include "../Acm/Decoder.h"
 
-// Third party includes
+#include <cstdlib>
 
 namespace Falltergeist
 {
@@ -238,7 +234,7 @@ void Decoder::_sub4d420c(int *memory, int *buffer, int sbSize,
     }
 }
 
-Decoder::Decoder(int lev_cnt) : _levels(lev_cnt), _blockSize(1 << lev_cnt), _memoryBuffer(NULL)
+Decoder::Decoder(int lev_cnt) : _levels(lev_cnt), _blockSize(1 << lev_cnt), _memoryBuffer(nullptr)
 {
 }
 

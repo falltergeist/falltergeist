@@ -20,13 +20,8 @@
 #ifndef FALLTERGEIST_GRAPHICS_FONT_AAF_H
 #define FALLTERGEIST_GRAPHICS_FONT_AAF_H
 
-// C++ standard includes
-
-// Falltergeist includes
 #include "../../Format/Aaf/File.h"
 #include "../../Graphics/Font.h"
-
-// Third party includes
 
 namespace Falltergeist
 {

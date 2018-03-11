@@ -20,12 +20,7 @@
 #ifndef FALLTERGEIST_EVENT_STATE_H
 #define FALLTERGEIST_EVENT_STATE_H
 
-// C++ standard includes
-
-// Falltergeist includes
 #include "../Event/Event.h"
-
-// Third party includes
 
 namespace Falltergeist
 {

@@ -25,12 +25,7 @@
 #ifndef FALLTERGEIST_FORMAT_ENUMS_H
 #define FALLTERGEIST_FORMAT_ENUMS_H
 
-// C++ standard includes
 #include <stdint.h>
-
-// Falltergeist includes
-
-// Third party includes
 
 enum class STAT : uint32_t
 {

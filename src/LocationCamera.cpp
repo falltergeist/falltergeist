@@ -17,13 +17,9 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// C++ includes
-
-// Falltergeist includes
 #include "LocationCamera.h"
-#include "Logger.h"
 
-// Third party includes
+#include "Logger.h"
 
 namespace Falltergeist
 {
@@ -33,9 +29,7 @@ namespace Falltergeist
         setCenter(center);
     }
 
-    LocationCamera::~LocationCamera()
-    {
-    }
+    LocationCamera::~LocationCamera() = default;
 
     Point LocationCamera::topLeft() const
     {

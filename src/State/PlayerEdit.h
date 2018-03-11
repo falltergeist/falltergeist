@@ -20,14 +20,10 @@
 #ifndef FALLTERGEIST_STATE_PLAYEREDIT_H
 #define	FALLTERGEIST_STATE_PLAYEREDIT_H
 
-// C++ standard includes
-#include <map>
-#include <vector>
-
-// Falltergeist includes
 #include "../State/State.h"
 
-// Third party includes
+#include <map>
+#include <vector>
 
 namespace Falltergeist
 {

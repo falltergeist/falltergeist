@@ -17,14 +17,7 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Related headers
 #include "../VFS/File.h"
-
-// C++ standard includes
-
-// Falltergeist includes
-
-// Third party includes
 
 namespace Falltergeist
 {
@@ -35,9 +28,7 @@ File::File()
 {
 }
 
-File::~File()
-{
-}
+File::~File() = default;
 
 }
 }

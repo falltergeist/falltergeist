@@ -20,12 +20,6 @@
 #ifndef FALLTERGEIST_GAME_ENTITY_CONTAINER_H
 #define FALLTERGEIST_GAME_ENTITY_CONTAINER_H
 
-// C++ standard includes
-
-// Falltergeist includes
-
-// Third party includes
-
 class Container {
 
 };

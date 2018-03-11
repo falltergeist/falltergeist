@@ -20,16 +20,12 @@
 #ifndef FALLTERGEIST_FONT_H
 #define FALLTERGEIST_FONT_H
 
-// C++ standard includes
-#include <memory>
-#include <vector>
-#include <string>
-
-// Falltergeist includes
-#include "Graphics/Texture.h"
 #include "Format/Aaf/File.h"
+#include "Graphics/Texture.h"
 
-// Third party includes
+#include <memory>
+#include <string>
+#include <vector>
 
 namespace Falltergeist
 {

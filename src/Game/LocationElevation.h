@@ -20,14 +20,8 @@
 #ifndef FALLTERGEIST_GAME_LOCATIONELEVATION_H
 #define FALLTERGEIST_GAME_LOCATIONELEVATION_H
 
-// C++ standard includes
 #include <memory>
 #include <vector>
-
-// Falltergeist includes
-
-
-// Third party includes
 
 namespace Falltergeist
 {

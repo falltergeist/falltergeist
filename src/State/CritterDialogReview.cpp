@@ -17,23 +17,16 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Related headers
 #include "../State/CritterDialogReview.h"
 
-// C++ standard includes
-
-// Falltergeist includes
-#include "../Game/Game.h"
 #include "../Game/DudeObject.h"
+#include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
-#include "../Graphics/Size.h"
 #include "../State/CritterInteract.h"
 #include "../UI/Image.h"
 #include "../UI/ImageButton.h"
 #include "../UI/TextArea.h"
 #include "../UI/TextAreaList.h"
-
-// Third party includes
 
 namespace Falltergeist
 {
@@ -44,9 +37,7 @@ using Graphics::Size;
         {
         }
 
-        CritterDialogReview::~CritterDialogReview()
-        {
-        }
+        CritterDialogReview::~CritterDialogReview() = default;
 
         void CritterDialogReview::init()
         {

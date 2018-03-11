@@ -25,14 +25,9 @@
 #ifndef FALLTERGEIST_FORMAT_DAT_ENTRY_H
 #define FALLTERGEIST_FORMAT_DAT_ENTRY_H
 
-// C++ standard includes
 #include <cstdint>
 #include <memory>
 #include <string>
-
-// Falltergeist includes
-
-// Third party includes
 
 namespace Falltergeist
 {

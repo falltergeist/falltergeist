@@ -20,13 +20,8 @@
 #ifndef FALLTERGEIST_VM_HANDLER_OPCODE8033_H
 #define FALLTERGEIST_VM_HANDLER_OPCODE8033_H
 
-// C++ standard includes
-
-// Falltergeist includes
 #include "../../VM/OpcodeHandler.h"
 #include "../../Exception.h"
-
-// Third party includes
 
 namespace Falltergeist
 {

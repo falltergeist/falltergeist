@@ -17,17 +17,13 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// C++ standard includes
+#include "../Helpers/GameLocationHelper.h"
 
-// Falltergeist includes
 #include "../Game/Game.h"
 #include "../Game/Location.h"
-#include "../Helpers/GameLocationHelper.h"
 #include "../Logger.h"
 #include "../ResourceManager.h"
 #include "../Settings.h"
-
-// Third party includes
 
 namespace Falltergeist
 {
@@ -38,9 +34,9 @@ namespace Falltergeist
             auto game = Game::getInstance();
             auto initialLocation = getByName(game->settings()->initialLocation());
             if (!initialLocation) {
-                auto defaultSettings = new Settings;
+                Settings defaultSettings;
                 Logger::warning() << "No such map: `" << game->settings()->initialLocation() << "`; using default map" << std::endl;
-                initialLocation = getByName(defaultSettings->initialLocation());
+                initialLocation = getByName(defaultSettings.initialLocation());
             }
             return initialLocation;
         }

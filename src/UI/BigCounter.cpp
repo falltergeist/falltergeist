@@ -17,17 +17,10 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Related headers
 #include "../UI/BigCounter.h"
 
-// C++ standard includes
-
-// Falltergeist includes
-#include "../Graphics/Texture.h"
 #include "../ResourceManager.h"
 #include "../UI/Image.h"
-
-// Third party includes
 
 namespace Falltergeist
 {
@@ -48,9 +41,7 @@ BigCounter::BigCounter(const Point& pos, unsigned int length) : Base(pos)
     }
 }
 
-BigCounter::~BigCounter()
-{
-}
+BigCounter::~BigCounter() = default;
 
 void BigCounter::setNumber(unsigned int number)
 {

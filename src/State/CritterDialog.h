@@ -20,13 +20,9 @@
 #ifndef FALLTERGEIST_STATE_CRITTERDIALOG_H
 #define FALLTERGEIST_STATE_CRITTERDIALOG_H
 
-// C++ standard includes
-#include <vector>
-
-// Falltergeist includes
 #include "../State/State.h"
 
-// Third party includes
+#include <vector>
 
 namespace Falltergeist
 {

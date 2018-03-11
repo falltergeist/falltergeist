@@ -17,12 +17,8 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Related headers
 #include "../UI/PlayerPanel.h"
 
-// C++ standard includes
-
-// Falltergeist includes
 #include "../Audio/Mixer.h"
 #include "../Event/Event.h"
 #include "../Event/Keyboard.h"
@@ -42,12 +38,8 @@
 #include "../State/Skilldex.h"
 #include "../State/WorldMap.h"
 #include "../UI/Animation.h"
-#include "../UI/Image.h"
-#include "../UI/ImageButton.h"
 #include "../UI/SmallCounter.h"
 #include "../UI/TextArea.h"
-
-// Third party includes
 
 namespace Falltergeist
 {
@@ -213,9 +205,7 @@ PlayerPanel::PlayerPanel() : UI::Base()
     });
 }
 
-PlayerPanel::~PlayerPanel()
-{
-}
+PlayerPanel::~PlayerPanel() = default;
 
 Size PlayerPanel::size() const
 {
@@ -235,9 +225,9 @@ void PlayerPanel::renderHandSlot()
 
 void PlayerPanel::render(bool eggTransparency)
 {
-    for (auto it = _ui.begin(); it != _ui.end(); ++it)
+    for (auto & it : _ui)
     {
-        (*it)->render();
+        it->render();
     }
 
     // object in hand
@@ -273,9 +263,9 @@ void PlayerPanel::think()
 
     auto game = Game::getInstance();
 
-    for (auto it = _ui.begin(); it != _ui.end(); ++it)
+    for (auto & it : _ui)
     {
-        (*it)->think();
+        it->think();
     }
 
     // object in hand

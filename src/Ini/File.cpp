@@ -17,16 +17,7 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Related headers
 #include "../Ini/File.h"
-
-// C++ standard includes
-#include <algorithm>
-
-// Falltergeist includes
-#include "../Exception.h"
-
-// Third party includes
 
 namespace Falltergeist
 {
@@ -37,9 +28,7 @@ File::File()
 {
 }
 
-File::~File()
-{
-}
+File::~File() = default;
 
 std::shared_ptr<Section> File::section(const std::string &name)
 {

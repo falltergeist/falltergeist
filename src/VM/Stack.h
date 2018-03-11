@@ -20,13 +20,8 @@
 #ifndef FALLTERGEIST_VM_STACK_H
 #define FALLTERGEIST_VM_STACK_H
 
-// C++ standard includes
-#include <vector>
 #include <memory>
-
-// Falltergeist includes
-
-// Third party includes
+#include <vector>
 
 namespace Falltergeist
 {

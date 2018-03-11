@@ -25,12 +25,7 @@
 #ifndef FALLTERGEIST_FORMAT_PAL_COLOR_H
 #define FALLTERGEIST_FORMAT_PAL_COLOR_H
 
-// C++ standard includes
 #include <cstdint>
-
-// Falltergeist includes
-
-// Third party includes
 
 namespace Falltergeist
 {

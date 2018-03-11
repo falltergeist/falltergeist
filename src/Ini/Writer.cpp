@@ -17,16 +17,9 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Related headers
 #include "../Ini/Writer.h"
 
-// C++ standard includes
-
-// Falltergeist includes
-
 #include "../Ini/File.h"
-
-// Third party includes
 
 namespace Falltergeist
 {
@@ -37,9 +30,7 @@ Writer::Writer(const File &ini) : _ini(ini)
 {
 }
 
-Writer::~Writer()
-{
-}
+Writer::~Writer()= default;
 
 void Writer::write(std::ostream &stream)
 {

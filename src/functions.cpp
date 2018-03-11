@@ -17,18 +17,13 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// C++ standard includes
-#include <algorithm>
-#include <type_traits>
-
-// Falltergeist includes
-#include "Exception.h"
 #include "functions.h"
+
+#include "Exception.h"
+#include "Format/Msg/File.h"
 #include "ResourceManager.h"
 
-// Third party includes
-#include "Format/Msg/File.h"
-#include "Format/Msg/Message.h"
+#include <algorithm>
 
 namespace Falltergeist
 {

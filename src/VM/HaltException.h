@@ -20,12 +20,6 @@
 #ifndef FALLTERGEIST_VM_HALTEXCEPTION_H
 #define FALLTERGEIST_VM_HALTEXCEPTION_H
 
-// C++ standard includes
-
-// Falltergeist includes
-
-// Third party includes
-
 namespace Falltergeist
 {
     namespace VM

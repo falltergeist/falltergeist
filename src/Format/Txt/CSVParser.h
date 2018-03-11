@@ -25,17 +25,13 @@
 #ifndef FALLTERGEIST_FORMAT_TXT_CSVPARSER_H
 #define FALLTERGEIST_FORMAT_TXT_CSVPARSER_H
 
-// C++ standard includes
+#include "../Ini/Value.h"
+#include "../Txt/Parser.h"
+
 #include <list>
 #include <memory>
 #include <string>
 #include <vector>
-
-// Falltergeist includes
-#include "../Ini/Value.h"
-#include "../Txt/Parser.h"
-
-// Third party includes
 
 namespace Falltergeist
 {

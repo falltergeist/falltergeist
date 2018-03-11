@@ -25,14 +25,8 @@
 #ifndef FALLTERGEIST_FORMAT_FON_GLYPH_H
 #define FALLTERGEIST_FORMAT_FON_GLYPH_H
 
-// C++ standard includes
-#include <vector>
 #include <cstdint>
-
-// Falltergeist includes
-
-// Third party includes
-
+#include <vector>
 
 namespace Falltergeist
 {

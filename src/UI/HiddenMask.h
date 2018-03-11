@@ -20,12 +20,7 @@
 #ifndef FALLTERGEIST_UI_HIDDENMASK_H
 #define FALLTERGEIST_UI_HIDDENMASK_H
 
-// C++ standard includes
-
-// Falltergeist includes
 #include "../UI/Image.h"
-
-// Third party includes
 
 namespace Falltergeist
 {

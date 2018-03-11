@@ -17,17 +17,10 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Related headers
 #include "../UI/SmallCounter.h"
 
-// C++ standard includes
-
-// Falltergeist includes
-#include "../Graphics/Texture.h"
 #include "../ResourceManager.h"
 #include "../UI/Image.h"
-
-// Third party includes
 
 namespace Falltergeist
 {
@@ -50,9 +43,7 @@ SmallCounter::SmallCounter(const Point& pos) : Falltergeist::UI::Base(pos)
     }
 }
 
-SmallCounter::~SmallCounter()
-{
-}
+SmallCounter::~SmallCounter() = default;
 
 void SmallCounter::setLength(unsigned int length)
 {

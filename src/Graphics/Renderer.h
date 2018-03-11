@@ -20,19 +20,15 @@
 #ifndef FALLTERGEIST_GRAPHICS_RENDERER_H
 #define FALLTERGEIST_GRAPHICS_RENDERER_H
 
-// C++ standard includes
-#include <memory>
-#include <string>
-#include <vector>
-
-// Falltergeist includes
 #include "../Graphics/Point.h"
 #include "../Graphics/Size.h"
 
-// Third party includes
-#include <glm/glm.hpp>
 #include <GL/glew.h>
 #include <SDL.h>
+#include <glm/glm.hpp>
+#include <memory>
+#include <string>
+#include <vector>
 
 namespace Falltergeist
 {

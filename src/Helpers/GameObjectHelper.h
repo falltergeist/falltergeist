@@ -19,12 +19,7 @@
 #ifndef FALLTERGEIST_HELPERS_GAMEOBJECTHELPER_H
 #define FALLTERGEIST_HELPERS_GAMEOBJECTHELPER_H
 
-// C++ standard includes
 #include <memory>
-
-// Falltergeist includes
-
-// Third party includes
 
 namespace Falltergeist
 {

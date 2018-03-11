@@ -17,14 +17,8 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Related headers
 #include "../VM/OpcodeFactory.h"
 
-// C++ standard includes
-#include <sstream>
-#include <memory>
-
-// Falltergeist includes
 #include "../Exception.h"
 #include "../VM/Handler/Opcode8002.h"
 #include "../VM/Handler/Opcode8003.h"
@@ -53,7 +47,6 @@
 #include "../VM/Handler/Opcode8030Handler.h"
 #include "../VM/Handler/Opcode8031Handler.h"
 #include "../VM/Handler/Opcode8032Handler.h"
-#include "../VM/Handler/OpcodeComparisonHandler.h"
 #include "../VM/Handler/Opcode8039Handler.h"
 #include "../VM/Handler/Opcode803AHandler.h"
 #include "../VM/Handler/Opcode803BHandler.h"
@@ -199,11 +192,12 @@
 #include "../VM/Handler/Opcode8153Handler.h"
 #include "../VM/Handler/Opcode8154Handler.h"
 #include "../VM/Handler/Opcode9001Handler.h"
-#include "../VM/Handler/OpcodeC001Handler.h"
 #include "../VM/Handler/OpcodeA001Handler.h"
+#include "../VM/Handler/OpcodeC001Handler.h"
+#include "../VM/Handler/OpcodeComparisonHandler.h"
 #include "../VM/Script.h"
 
-// Third party includes
+#include <sstream>
 
 namespace Falltergeist
 {

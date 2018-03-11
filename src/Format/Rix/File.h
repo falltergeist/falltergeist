@@ -25,14 +25,9 @@
 #ifndef FALLTERGEIST_FORMAT_RIX_FILE_H
 #define	FALLTERGEIST_FORMAT_RIX_FILE_H
 
-// C++ standard includes
-
-// Falltergeist includes
 #include "../../Base/Buffer.h"
 #include "../Dat/Item.h"
 #include "../Enums.h"
-
-// Third party includes
 
 namespace Falltergeist
 {

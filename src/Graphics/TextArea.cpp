@@ -17,26 +17,15 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Related headers
 #include "TextArea.h"
 
-// C++ standard includes
+#include "../CrossPlatform.h"
+#include "../Game/Game.h"
+#include "../Logger.h"
+#include "../ResourceManager.h"
+
 #include <algorithm>
 #include <sstream>
-
-// Falltergeist includes
-#include "../CrossPlatform.h"
-#include "../Event/Mouse.h"
-#include "../Game/Game.h"
-#include "../Graphics/Font.h"
-#include "../Graphics/Renderer.h"
-#include "../Graphics/Shader.h"
-#include "../Graphics/Texture.h"
-#include "../ResourceManager.h"
-#include "../Logger.h"
-
-// Third party includes
-#include <SDL.h>
 
 namespace Falltergeist
 {
@@ -121,18 +110,18 @@ void TextArea::render(Point& pos, Graphics::Font* font, SDL_Color _color, SDL_Co
     }
 
     GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, _coords));
-    GL_CHECK(glVertexAttribPointer(_attribPos, 2, GL_FLOAT, GL_FALSE, 0, (void*)0 ));
+    GL_CHECK(glVertexAttribPointer(_attribPos, 2, GL_FLOAT, GL_FALSE, 0, (void*)nullptr ));
 
 
     GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, _texCoords));
-    GL_CHECK(glVertexAttribPointer(_attribTex, 2, GL_FLOAT, GL_FALSE, 0, (void*)0 ));
+    GL_CHECK(glVertexAttribPointer(_attribTex, 2, GL_FLOAT, GL_FALSE, 0, (void*)nullptr ));
 
     GL_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ebo));
 
     GL_CHECK(glEnableVertexAttribArray(_attribPos));
     GL_CHECK(glEnableVertexAttribArray(_attribTex));
 
-    GL_CHECK(glDrawElements(GL_TRIANGLES, _cnt, GL_UNSIGNED_SHORT, 0 ));
+    GL_CHECK(glDrawElements(GL_TRIANGLES, _cnt, GL_UNSIGNED_SHORT, nullptr ));
 
     GL_CHECK(glDisableVertexAttribArray(_attribPos));
     GL_CHECK(glDisableVertexAttribArray(_attribTex));

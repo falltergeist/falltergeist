@@ -20,15 +20,11 @@
 #ifndef FALLTERGEIST_VM_SCRIPT_H
 #define FALLTERGEIST_VM_SCRIPT_H
 
-// C++ standard includes
-#include <string>
-
-// Falltergeist includes
 #include "../Format/Enums.h"
 #include "../VM/Stack.h"
 #include "../VM/StackValue.h"
 
-// Third party includes
+#include <string>
 
 namespace Falltergeist
 {

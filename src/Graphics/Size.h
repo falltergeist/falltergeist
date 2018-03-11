@@ -20,12 +20,7 @@
 #ifndef FALLTERGEIST_GRAPHICS_SIZE_H
 #define FALLTERGEIST_GRAPHICS_SIZE_H
 
-// C++ standard includes
-
-// Falltergeist includes
 #include "../Graphics/Point.h"
-
-// Third party includes
 
 namespace Falltergeist
 {

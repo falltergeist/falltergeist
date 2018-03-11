@@ -20,13 +20,8 @@
 #ifndef FALLTERGEIST_STATE_SKILLDEX_H
 #define FALLTERGEIST_STATE_SKILLDEX_H
 
-// C++ standard includes
-
-// Falltergeist includes
 #include "../Format/Enums.h"
 #include "../State/State.h"
-
-// Third party includes
 
 namespace Falltergeist
 {

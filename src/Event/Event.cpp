@@ -22,14 +22,7 @@
  * THE SOFTWARE.
  */
 
-// Related headers
 #include "../Event/Event.h"
-
-// C++ standard includes
-
-// Falltergeist includes
-
-// Third party includes
 
 namespace Falltergeist
 {
@@ -47,9 +40,7 @@ namespace Falltergeist
         /**
          * @brief Destructor
          */
-        Event::~Event()
-        {
-        }
+        Event::~Event() = default;
 
         /**
          * @brief Returns event name

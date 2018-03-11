@@ -25,16 +25,12 @@
 #ifndef FALLTERGEIST_FORMAT_DAT_STREAM_H
 #define FALLTERGEIST_FORMAT_DAT_STREAM_H
 
-// C++ standard includes
-#include <fstream>
-#include <string>
-#include <memory>
-
-// Falltergeist includes
 #include "../../Base/Buffer.h"
 #include "../../Format/Enums.h"
 
-// Third party includes
+#include <fstream>
+#include <memory>
+#include <string>
 
 namespace Falltergeist
 {

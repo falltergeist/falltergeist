@@ -17,12 +17,8 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Related headers
 #include "../Game/DoorSceneryObject.h"
 
-// C++ standard includes
-
-// Falltergeist includes
 #include "../Audio/Mixer.h"
 #include "../Event/Event.h"
 #include "../Game/Game.h"
@@ -30,9 +26,6 @@
 #include "../State/Location.h"
 #include "../UI/Animation.h"
 #include "../UI/AnimationQueue.h"
-#include "../VM/Script.h"
-
-// Third party includes
 
 namespace Falltergeist
 {

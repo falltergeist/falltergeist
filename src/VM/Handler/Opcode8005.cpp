@@ -24,7 +24,6 @@
 
 // Falltergeist includes
 #include "../../Format/Int/File.h"
-#include "../../Format/Int/Procedure.h"
 #include "../../Logger.h"
 #include "../../VM/Script.h"
 

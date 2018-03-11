@@ -20,13 +20,8 @@
 #ifndef FALLTERGEIST_EVENT_MOUSE_H
 #define FALLTERGEIST_EVENT_MOUSE_H
 
-// C++ standard includes
-
-// Falltergeist includes
 #include "../Event/Event.h"
 #include "../Graphics/Point.h"
-
-// Third party includes
 
 namespace Falltergeist
 {

@@ -20,15 +20,10 @@
 #ifndef FALLTERGEIST_GRAPHICS_TILEMAP_H
 #define FALLTERGEIST_GRAPHICS_TILEMAP_H
 
-// C++ standard includes
-
-// Falltergeist includes
 #include "../Graphics/Point.h"
 #include "../Graphics/Renderer.h"
 #include "../Graphics/Shader.h"
 #include "../Graphics/Texture.h"
-
-// Third party includes
 
 namespace Falltergeist
 {

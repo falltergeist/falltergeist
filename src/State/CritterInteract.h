@@ -20,13 +20,8 @@
 #ifndef FALLTERGEIST_STATE_CRITTERINTERACT_H
 #define FALLTERGEIST_STATE_CRITTERINTERACT_H
 
-// C++ standard includes
-
-// Falltergeist includes
-#include "../State/State.h"
 #include "../Game/Timer.h"
-
-// Third party includes
+#include "../State/State.h"
 
 namespace Falltergeist
 {

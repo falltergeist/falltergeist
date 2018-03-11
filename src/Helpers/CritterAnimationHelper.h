@@ -20,12 +20,7 @@
 #ifndef FALLTERGEIST_HELPERS_CRITTERANIMATIONHELPER_H
 #define FALLTERGEIST_HELPERS_CRITTERANIMATIONHELPER_H
 
-// C++ standard includes
 #include <string>
-
-// Falltergeist includes
-
-// Third party includes
 
 namespace Falltergeist
 {

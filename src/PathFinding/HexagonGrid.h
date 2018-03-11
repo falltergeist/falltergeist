@@ -20,14 +20,10 @@
 #ifndef FALLTERGEIST_HEXAGONGRID_H
 #define FALLTERGEIST_HEXAGONGRID_H
 
-// C++ standard includes
-#include <vector>
-
-// Falltergeist includes
 #include "../Base/Iterators.h"
 #include "../Graphics/Point.h"
 
-// Third party includes
+#include <vector>
 
 namespace Falltergeist
 {

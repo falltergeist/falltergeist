@@ -17,18 +17,12 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Related headers
 #include "../UI/FpsCounter.h"
 
-// C++ standard includes
-#include <sstream>
-
-// Falltergeist includes
 #include "../Game/Game.h"
 #include "../ResourceManager.h"
 
-// Third party includes
-#include "SDL.h"
+#include <sstream>
 
 namespace Falltergeist
 {
@@ -47,9 +41,7 @@ FpsCounter::FpsCounter(int x, int y) : FpsCounter(Point(x, y))
 {
 }
 
-FpsCounter::~FpsCounter()
-{
-}
+FpsCounter::~FpsCounter() = default;
 
 void FpsCounter::think()
 {

@@ -25,12 +25,7 @@
 #ifndef FALLTERGEIST_FORMAT_TXT_LEXER_H
 #define FALLTERGEIST_FORMAT_TXT_LEXER_H
 
-// C++ standard includes
 #include <sstream>
-
-// Falltergeist includes
-
-// Third party includes
 
 namespace Falltergeist
 {

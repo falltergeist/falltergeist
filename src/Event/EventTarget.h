@@ -20,13 +20,9 @@
 #ifndef FALLTERGEIST_EVENT_EMITTER_H
 #define FALLTERGEIST_EVENT_EMITTER_H
 
-// C++ standard includes
-#include <memory>
-
-// Falltergeist includes
 #include "../Event/Handler.h"
 
-// Third party includes
+#include <memory>
 
 namespace Falltergeist
 {

@@ -17,30 +17,20 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Related headers
 #include "../UI/InventoryItem.h"
 
-// C++ standard includes
-#include <memory>
-
-// Falltergeist includes
 #include "../Audio/Mixer.h"
 #include "../Event/Event.h"
 #include "../Event/Mouse.h"
 #include "../Game/ArmorItemObject.h"
 #include "../Game/DudeObject.h"
 #include "../Game/Game.h"
-#include "../Game/ItemObject.h"
-#include "../Graphics/Point.h"
 #include "../Graphics/Rect.h"
 #include "../Graphics/Renderer.h"
 #include "../Graphics/Texture.h"
 #include "../Input/Mouse.h"
 #include "../Logger.h"
-#include "../UI/Image.h"
 #include "../UI/ItemsList.h"
-
-// Third party includes
 
 namespace Falltergeist
 {
@@ -58,8 +48,7 @@ InventoryItem::InventoryItem(Game::ItemObject *item, const Point& pos) : Fallter
 }
 
 InventoryItem::~InventoryItem()
-{
-}
+= default;
 
 InventoryItem::Type InventoryItem::type() const
 {

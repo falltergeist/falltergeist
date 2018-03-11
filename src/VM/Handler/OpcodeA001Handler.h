@@ -20,12 +20,7 @@
 #ifndef FALLTERGEIST_VM_HANDLER_OPCODEA001_H
 #define FALLTERGEIST_VM_HANDLER_OPCODEA001_H
 
-// C++ standard includes
-
-// Falltergeist includes
 #include "../../VM/OpcodeHandler.h"
-
-// Third party includes
 
 namespace Falltergeist
 {

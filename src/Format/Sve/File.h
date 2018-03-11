@@ -25,15 +25,11 @@
 #ifndef FALLTERGEIST_FORMAT_SVE_FILE_H
 #define FALLTERGEIST_FORMAT_SVE_FILE_H
 
-// C++ standard includes
+#include "../Dat/Item.h"
+
 #include <cstdint>
 #include <map>
 #include <string>
-
-// Falltergeist includes
-#include "../Dat/Item.h"
-
-// Third party includes
 
 namespace Falltergeist
 {

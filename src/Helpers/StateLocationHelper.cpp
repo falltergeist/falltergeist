@@ -17,15 +17,11 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// C++ standard includes
+#include "../Helpers/StateLocationHelper.h"
 
-// Falltergeist includes
 #include "../Game/Location.h"
 #include "../Helpers/GameLocationHelper.h"
-#include "../Helpers/StateLocationHelper.h"
 #include "../State/Location.h"
-
-// Third party includes
 
 namespace Falltergeist
 {

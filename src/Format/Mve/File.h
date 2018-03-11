@@ -25,15 +25,11 @@
 #ifndef FALLTERGEIST_FORMAT_MVE_FILE_H
 #define FALLTERGEIST_FORMAT_MVE_FILE_H
 
-// C++ standard includes
-#include <vector>
-
-// Falltergeist includes
 #include "../Dat/Item.h"
 #include "../Dat/Stream.h"
 #include "../Enums.h"
 
-// Third party includes
+#include <vector>
 
 namespace Falltergeist
 {

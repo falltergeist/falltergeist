@@ -31,7 +31,6 @@
 #include "../../PathFinding/HexagonGrid.h"
 #include "../../ResourceManager.h"
 #include "../../State/Location.h"
-#include "../../VM/Script.h"
 
 // Third party includes
 

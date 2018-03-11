@@ -17,21 +17,9 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Related headers
 #include "../UI/Image.h"
 
-// C++ standard includes
-
-// Falltergeist includes
-#include "../Exception.h"
-#include "../Format/Frm/File.h"
-#include "../Format/Frm/Direction.h"
-#include "../Graphics/Sprite.h"
-#include "../Graphics/Texture.h"
-#include "../Graphics/TransFlags.h"
 #include "../ResourceManager.h"
-
-// Third party includes
 
 namespace Falltergeist
 {
@@ -42,9 +30,7 @@ Image::Image(const std::string& filename) : Falltergeist::UI::Base(), _sprite(fi
 {
 }
 
-Image::~Image()
-{
-}
+Image::~Image() = default;
 
 void Image::render(bool eggTransparency)
 {

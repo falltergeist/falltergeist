@@ -17,18 +17,11 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Related headers
 #include "../../VM/Handler/OpcodeA001Handler.h"
 
-// C++ standard includes
-
-// Falltergeist includes
 #include "../../Format/Int/File.h"
 #include "../../Logger.h"
 #include "../../VM/Script.h"
-#include "../../VM/StackValue.h"
-
-// Third party includes
 
 namespace Falltergeist
 {

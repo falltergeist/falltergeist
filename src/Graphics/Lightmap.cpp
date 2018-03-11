@@ -17,18 +17,11 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Related headers
 #include "../Graphics/Lightmap.h"
 
-// C++ standard includes
-
-// Falltergeist includes
 #include "../Game/Game.h"
-#include "../Graphics/Shader.h"
 #include "../ResourceManager.h"
 #include "../State/Location.h"
-
-// Third-party includes
 
 namespace Falltergeist
 {
@@ -112,12 +105,12 @@ void Lightmap::render(const Point &pos)
 
 
     GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, _coords));
-    GL_CHECK(glVertexAttribPointer(_attribPos, 2, GL_FLOAT, GL_FALSE, 0, (void*)0 ));
+    GL_CHECK(glVertexAttribPointer(_attribPos, 2, GL_FLOAT, GL_FALSE, 0, (void*)nullptr ));
 
 
     GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, _lights));
 
-    GL_CHECK(glVertexAttribPointer(_attribLights, 1, GL_FLOAT, GL_FALSE, 0, (void*)0 ));
+    GL_CHECK(glVertexAttribPointer(_attribLights, 1, GL_FLOAT, GL_FALSE, 0, (void*)nullptr ));
 
     GL_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ebo));
 
@@ -126,7 +119,7 @@ void Lightmap::render(const Point &pos)
 
     GL_CHECK(glEnableVertexAttribArray(_attribLights));
 
-    GL_CHECK(glDrawElements(GL_TRIANGLES, _indexes, GL_UNSIGNED_INT, 0 ));
+    GL_CHECK(glDrawElements(GL_TRIANGLES, _indexes, GL_UNSIGNED_INT, nullptr ));
 
     GL_CHECK(glDisableVertexAttribArray(_attribPos));
 

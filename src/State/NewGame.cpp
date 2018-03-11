@@ -17,16 +17,9 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Related headers
 #include "../State/NewGame.h"
 
-// C++ standard includes
-#include <sstream>
-#include <memory>
-
-// Falltergeist includes
 #include "../Event/State.h"
-#include "../functions.h"
 #include "../Format/Bio/File.h"
 #include "../Game/DudeObject.h"
 #include "../Game/Game.h"
@@ -35,12 +28,11 @@
 #include "../ResourceManager.h"
 #include "../State/Location.h"
 #include "../State/PlayerCreate.h"
-#include "../UI/Image.h"
-#include "../UI/ImageButton.h"
 #include "../UI/ImageList.h"
 #include "../UI/TextArea.h"
+#include "../functions.h"
 
-// Third party includes
+#include <sstream>
 
 namespace Falltergeist
 {
@@ -53,9 +45,7 @@ namespace Falltergeist
         {
         }
 
-        NewGame::~NewGame()
-        {
-        }
+        NewGame::~NewGame() = default;
 
         void NewGame::init()
         {

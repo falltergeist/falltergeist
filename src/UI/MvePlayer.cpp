@@ -17,22 +17,17 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Related headers
 #include "../UI/MvePlayer.h"
 
-// C++ standard includes
-#include <bitset>
-
-// Falltergeist includes
 #include "../CrossPlatform.h"
+#include "../Exception.h"
 #include "../Format/Mve/Chunk.h"
 #include "../Format/Mve/File.h"
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
-#include "../Exception.h"
 #include "../Logger.h"
 
-// Third party includes
+#include <bitset>
 
 namespace Falltergeist
 {

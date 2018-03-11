@@ -20,19 +20,15 @@
 #ifndef FALLTERGEIST_STATE_H
 #define FALLTERGEIST_STATE_H
 
-// C++ standard includes
-#include <map>
-#include <memory>
-#include <vector>
-
-// Falltergeist includes
 #include "../Event/EventTarget.h"
 #include "../Event/Keyboard.h"
 #include "../Event/Mouse.h"
 #include "../Graphics/Point.h"
 #include "../VM/Script.h"
 
-// Third party includes
+#include <map>
+#include <memory>
+#include <vector>
 
 namespace Falltergeist
 {

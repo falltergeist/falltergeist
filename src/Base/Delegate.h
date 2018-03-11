@@ -20,11 +20,8 @@
 #ifndef FALLTERGEIST_BASE_DELEGATE_H
 #define FALLTERGEIST_BASE_DELEGATE_H
 
-// C++ standard includes
 #include <functional>
 #include <vector>
-
-// Falltergeist includes
 
 namespace Falltergeist
 {

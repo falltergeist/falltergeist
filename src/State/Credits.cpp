@@ -17,16 +17,9 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Related headers
 #include "../State/Credits.h"
 
-// C++ standard includes
-#include <sstream>
-
-// Falltergeist includes
 #include "../CrossPlatform.h"
-#include "../Event/Keyboard.h"
-#include "../Event/Mouse.h"
 #include "../Event/State.h"
 #include "../Font.h"
 #include "../Format/Dat/MiscFile.h"
@@ -36,7 +29,7 @@
 #include "../ResourceManager.h"
 #include "../UI/TextArea.h"
 
-// Third party includes
+#include <sstream>
 
 namespace Falltergeist
 {
@@ -46,9 +39,7 @@ namespace Falltergeist
         {
         }
 
-        Credits::~Credits()
-        {
-        }
+        Credits::~Credits() = default;
 
         void Credits::init()
         {

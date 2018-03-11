@@ -22,16 +22,10 @@
  * SOFTWARE.
  */
 
-// Related headers
 #include "../Ini/Section.h"
 
-// C++ standard includes
 #include <functional>
-
-// Falltergeist includes
-
-// Third party includes
-
+#include <utility>
 
 namespace Falltergeist
 {
@@ -40,13 +34,11 @@ namespace Format
 namespace Ini
 {
 
-Section::Section(const std::string &name) : _name(name)
+Section::Section(std::string name) : _name(std::move(name))
 {
 }
 
-Section::~Section()
-{
-}
+Section::~Section() = default;
 
 const std::string& Section::name() const
 {
@@ -80,7 +72,7 @@ void Section::setProperty(const std::string& name, const Value& value)
 
 std::string Section::propertyString(const std::string &name, const std::string &def) const
 {
-    PropertyMapConstIterator iter = _properties.find(name);
+    auto iter = _properties.find(name);
     if (iter == _properties.end())
     {
         return def;
@@ -90,7 +82,7 @@ std::string Section::propertyString(const std::string &name, const std::string &
 
 int Section::propertyInt(const std::string &name, int def) const
 {
-    PropertyMapConstIterator iter = _properties.find(name);
+    auto iter = _properties.find(name);
     if (iter == _properties.end())
     {
         return def;
@@ -100,7 +92,7 @@ int Section::propertyInt(const std::string &name, int def) const
 
 double Section::propertyDouble(const std::string &name, double def) const
 {
-    PropertyMapConstIterator iter = _properties.find(name);
+    auto iter = _properties.find(name);
     if (iter == _properties.end())
     {
         return def;
@@ -110,7 +102,7 @@ double Section::propertyDouble(const std::string &name, double def) const
 
 bool Section::propertyBool(const std::string &name, bool def) const
 {
-    PropertyMapConstIterator iter = _properties.find(name);
+    auto iter = _properties.find(name);
     if (iter == _properties.end())
     {
         return def;
@@ -120,7 +112,7 @@ bool Section::propertyBool(const std::string &name, bool def) const
 
 Array Section::propertyArray(const std::string& name) const
 {
-    PropertyMapConstIterator iter = _properties.find(name);
+    auto iter = _properties.find(name);
     if (iter != _properties.end())
     {
         return iter->second.toArray();

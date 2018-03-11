@@ -17,24 +17,15 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Related headers
 #include "../State/PipBoy.h"
 
-// C++ standard includes
-
-// Falltergeist includes
-#include "../Event/Keyboard.h"
 #include "../Game/Game.h"
-#include "../Game/Time.h"
 #include "../Graphics/Renderer.h"
 #include "../Input/Mouse.h"
 #include "../ResourceManager.h"
-#include "../UI/Image.h"
 #include "../UI/ImageButton.h"
 #include "../UI/MonthCounter.h"
 #include "../UI/SmallCounter.h"
-
-// Third party includes
 
 namespace Falltergeist
 {

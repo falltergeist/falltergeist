@@ -28,7 +28,6 @@
 #include "../../Logger.h"
 #include "../../State/CritterDialog.h"
 #include "../../State/CritterInteract.h"
-#include "../../VM/Script.h"
 
 // Third party includes
 

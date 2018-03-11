@@ -22,12 +22,7 @@
  * SOFTWARE.
  */
 
-// C++ standard includes
-
-// Falltergeist includes
 #include "../../Format/Int/Procedure.h"
-
-// Third party includes
 
 namespace Falltergeist
 {

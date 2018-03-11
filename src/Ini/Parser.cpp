@@ -17,19 +17,10 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Related headers
 #include "../Ini/Parser.h"
 
-// C++ standard includes
-#include <algorithm>
-#include <functional>
-#include <sstream>
-
-// Falltergeist includes
-#include "../Logger.h"
 #include "../Ini/File.h"
-
-// Third party includes
+#include "../Logger.h"
 
 namespace Falltergeist
 {
@@ -40,9 +31,7 @@ Parser::Parser(std::istream &stream) : _stream(stream), _section("")
 {
 }
 
-Parser::~Parser()
-{
-}
+Parser::~Parser() = default;
 
 void Parser::_trim(std::string &line)
 {

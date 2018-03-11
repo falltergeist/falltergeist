@@ -20,17 +20,12 @@
 #ifndef FALLTERGEIST_GAME_GAME_H
 #define FALLTERGEIST_GAME_GAME_H
 
-// C++ standard includes
+#include "../Game/Time.h"
+
+#include <SDL.h>
 #include <memory>
 #include <string>
 #include <vector>
-
-// Falltergeist includes
-#include "../Base/Singleton.h"
-#include "../Game/Time.h"
-
-// Third party includes
-#include <SDL.h>
 
 namespace Falltergeist
 {
@@ -161,14 +156,14 @@ namespace Falltergeist
                 std::vector<State::State*> _getActiveStates();
 
             private:
-                friend class Base::Singleton<Game>;
                 void _initGVARS();
                 std::unique_ptr<Event::Event> _createEventFromSDL(const SDL_Event& sdlEvent);
 
                 Game();
-                ~Game();
                 Game(Game const&) = delete;
+                ~Game();
                 void operator=(Game const&) = delete;
+                static Game* _instance;
         };
 
         Game* getInstance();

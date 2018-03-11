@@ -17,14 +17,7 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Related headers
 #include "../Event/Mouse.h"
-
-// C++ standard includes
-
-// Falltergeist includes
-
-// Third party includes
 
 namespace Falltergeist
 {
@@ -49,9 +42,7 @@ namespace Falltergeist
         {
         }
 
-        Mouse::~Mouse()
-        {
-        }
+        Mouse::~Mouse() = default;
 
         const char* Mouse::typeToString(Mouse::Type type)
         {

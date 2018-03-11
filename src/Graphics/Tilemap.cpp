@@ -17,20 +17,13 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// C++ standard includes
-#include <memory>
-
-// Falltergeist includes
+#include "../Graphics/Tilemap.h"
 
 #include "../Game/Game.h"
 #include "../Graphics/AnimatedPalette.h"
-#include "../Graphics/Shader.h"
 #include "../Graphics/Sprite.h"
-#include "../Graphics/Tilemap.h"
 #include "../ResourceManager.h"
 #include "../State/Location.h"
-
-// Third party includes
 
 namespace Falltergeist
 {
@@ -139,12 +132,12 @@ void Tilemap::render(const Point &pos, std::vector<GLuint> indexes, uint32_t atl
     }
 
     GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, _coords));
-    GL_CHECK(glVertexAttribPointer(_attribPos, 2, GL_FLOAT, GL_FALSE, 0, (void*)0 ));
+    GL_CHECK(glVertexAttribPointer(_attribPos, 2, GL_FLOAT, GL_FALSE, 0, (void*)nullptr ));
 
 
     GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, _texCoords));
 
-    GL_CHECK(glVertexAttribPointer(_attribTex, 2, GL_FLOAT, GL_FALSE, 0, (void*)0 ));
+    GL_CHECK(glVertexAttribPointer(_attribTex, 2, GL_FLOAT, GL_FALSE, 0, (void*)nullptr ));
 
     GL_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ebo));
 
@@ -155,7 +148,7 @@ void Tilemap::render(const Point &pos, std::vector<GLuint> indexes, uint32_t atl
 
     GL_CHECK(glEnableVertexAttribArray(_attribTex));
 
-    GL_CHECK(glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(indexes.size()), GL_UNSIGNED_INT, 0 ));
+    GL_CHECK(glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(indexes.size()), GL_UNSIGNED_INT, nullptr ));
 
     GL_CHECK(glDisableVertexAttribArray(_attribPos));
 

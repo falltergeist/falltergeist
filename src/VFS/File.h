@@ -20,12 +20,7 @@
 #ifndef FALLTERGEIST_VFS_FILE_H
 #define FALLTERGEIST_VFS_FILE_H
 
-// C++ standard includes
 #include <string>
-
-// Falltergeist includes
-
-// Third party includes
 
 namespace Falltergeist
 {

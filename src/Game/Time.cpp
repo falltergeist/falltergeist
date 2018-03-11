@@ -17,14 +17,8 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Related headers
 #include "../Game/Time.h"
 
-// C++ standard includes
-
-// Falltergeist includes
-
-// Third party includes
 #include "SDL.h"
 
 namespace Falltergeist

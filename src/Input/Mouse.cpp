@@ -17,24 +17,13 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Related headers
 #include "../Input/Mouse.h"
 
-// C++ standard includes
-#include <memory>
-
-// Falltergeist includes
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
-#include "../Graphics/Texture.h"
 #include "../ResourceManager.h"
-#include "../Settings.h"
 #include "../UI/Animation.h"
 #include "../UI/AnimationQueue.h"
-#include "../UI/Image.h"
-
-// Third party includes
-#include <SDL.h>
 
 namespace Falltergeist
 {

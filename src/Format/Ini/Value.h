@@ -25,13 +25,9 @@
 #ifndef FALLTERGEIST_FORMAT_INI_VALUE_H
 #define FALLTERGEIST_FORMAT_INI_VALUE_H
 
-// C++ standard includes
 #include <ostream>
 #include <string>
-
-// Falltergeist includes
-
-// Third party includes
+#include <vector>
 
 namespace Falltergeist
 {
@@ -51,7 +47,7 @@ typedef std::vector<std::pair<std::string, Value>> Array;
 class Value
 {
 public:
-    Value(const std::string &value = "");
+    Value(std::string value = "");
 
     void operator =(const std::string&);
 

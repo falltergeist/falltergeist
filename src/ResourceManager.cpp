@@ -17,23 +17,14 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// C++ standard includes
-#include <fstream>
-#include <sstream>
-#include <iomanip>
-#include <locale>
-#include <memory>
-#include <utility>
+#include "ResourceManager.h"
 
-// Falltergeist includes
 #include "CrossPlatform.h"
 #include "Exception.h"
 #include "Format/Acm/File.h"
 #include "Format/Bio/File.h"
-#include "Format/Dat/Stream.h"
 #include "Format/Dat/File.h"
 #include "Format/Dat/MiscFile.h"
-#include "Format/Dat/Item.h"
 #include "Format/Fon/File.h"
 #include "Format/Frm/File.h"
 #include "Format/Gam/File.h"
@@ -48,23 +39,21 @@
 #include "Format/Pro/File.h"
 #include "Format/Rix/File.h"
 #include "Format/Sve/File.h"
-#include "Format/Txt/CityFile.h"
 #include "Format/Txt/CSVBasedFile.h"
+#include "Format/Txt/CityFile.h"
 #include "Format/Txt/MapsFile.h"
 #include "Format/Txt/WorldmapFile.h"
 #include "Game/Location.h"
 #include "Graphics/Font.h"
 #include "Graphics/Font/AAF.h"
 #include "Graphics/Font/FON.h"
-#include "Graphics/Texture.h"
 #include "Graphics/Shader.h"
 #include "Helpers/CritterAnimationHelper.h"
-#include "Logger.h"
-#include "ResourceManager.h"
 #include "Ini/File.h"
+#include "Logger.h"
 
-// Third party includes
 #include <SDL_image.h>
+#include <iomanip>
 
 namespace Falltergeist
 {
@@ -80,6 +69,8 @@ namespace Falltergeist
         }
     }
 
+ResourceManager* ResourceManager::_instance = nullptr;
+
 ResourceManager::ResourceManager()
 {
     for (auto filename : CrossPlatform::findFalloutDataFiles())
@@ -92,7 +83,9 @@ ResourceManager::ResourceManager()
 // static
 ResourceManager* ResourceManager::getInstance()
 {
-    return Base::Singleton<ResourceManager>::get();
+    if (_instance == nullptr)
+        _instance = new ResourceManager();
+    return _instance;
 }
 
 void ResourceManager::_loadStreamForFile(string filename, std::function<void(Dat::Stream&&)> callback) {
@@ -315,7 +308,7 @@ Graphics::Texture* ResourceManager::texture(const string& filename)
     {
         // @fixme: this section looks quite ugly. we should try to do something with it someday
         SDL_Surface* tempSurface = IMG_Load(string(CrossPlatform::findFalltergeistDataPath() + "/" +filename).c_str());
-        if (tempSurface == NULL)
+        if (tempSurface == nullptr)
         {
             throw Exception("ResourceManager::texture(name) - cannot load texture from file " + filename + ": " + IMG_GetError());
         }

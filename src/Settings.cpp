@@ -17,21 +17,12 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// C++ standard includes
-#include <fstream>
-#include <string>
-#include <stdexcept>
-
-// Falltergeist includes
-#include "CrossPlatform.h"
-#include "Exception.h"
-#include "Logger.h"
-#include "Ini/File.h"
-#include "Ini/Section.h"
-#include "Ini/Writer.h"
 #include "Settings.h"
 
-// Third party includes
+#include "CrossPlatform.h"
+#include "Ini/File.h"
+#include "Ini/Writer.h"
+#include "Logger.h"
 
 namespace Falltergeist
 {
@@ -43,9 +34,7 @@ namespace Falltergeist
         }
     }
 
-    Settings::~Settings()
-    {
-    }
+    Settings::~Settings() = default;
 
     bool Settings::save()
     {

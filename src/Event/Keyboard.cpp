@@ -17,14 +17,7 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Related headers
 #include "../Event/Keyboard.h"
-
-// C++ standard includes
-
-// Falltergeist includes
-
-// Third party includes
 
 namespace Falltergeist
 {
@@ -47,9 +40,7 @@ namespace Falltergeist
         {
         }
 
-        Keyboard::~Keyboard()
-        {
-        }
+        Keyboard::~Keyboard() = default;
 
         const char* Keyboard::typeToString(Keyboard::Type type)
         {

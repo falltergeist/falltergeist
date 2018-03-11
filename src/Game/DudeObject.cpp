@@ -17,25 +17,15 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Related headers
 #include "../Game/DudeObject.h"
 
-// C++ standard includes
-#include <cmath>
-#include <functional>
-
-// Falltergeist includes
 #include "../Format/Gcd/File.h"
 #include "../Game/Game.h"
-#include "../Game/WeaponItemObject.h"
 #include "../Logger.h"
 #include "../ResourceManager.h"
 #include "../State/Location.h"
 #include "../UI/Animation.h"
 #include "../UI/AnimationQueue.h"
-#include "../UI/Image.h"
-
-// Third party includes
 
 namespace Falltergeist
 {

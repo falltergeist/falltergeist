@@ -20,15 +20,11 @@
 #ifndef FALLTERGEIST_UI_MVEPLAYER_H
 #define FALLTERGEIST_UI_MVEPLAYER_H
 
-// C++ standard includes
-#include <ctime>
-
-// Falltergeist includes
-#include "../UI/Base.h"
 #include "../Graphics/Movie.h"
+#include "../UI/Base.h"
 
-// Third party includes
 #include <SDL.h>
+#include <ctime>
 
 namespace Falltergeist
 {

@@ -24,16 +24,10 @@
 
 #include "../../Format/Dat/Stream.h"
 
-// C++ standard includes
-#include <string.h> // for memcpy
-#include <algorithm>
-
-// Falltergeist includes
-#include "../../Format/Dat/Entry.h"
 #include "../../Format/Dat/File.h"
-
-// Third party includes
 #include "zlib.h"
+
+#include <algorithm>
 
 namespace Falltergeist
 {

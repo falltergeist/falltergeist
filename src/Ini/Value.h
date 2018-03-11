@@ -20,14 +20,9 @@
 #ifndef FALLTERGEIST_INI_VALUE_H
 #define FALLTERGEIST_INI_VALUE_H
 
-// C++ standard includes
-#include <string>
 #include <iosfwd>
+#include <string>
 #include <vector>
-
-// Falltergeist includes
-
-// Third party includes
 
 namespace Falltergeist
 {

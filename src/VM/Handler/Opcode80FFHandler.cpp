@@ -25,13 +25,11 @@
 // Falltergeist includes
 #include "../../Game/CritterObject.h"
 #include "../../Game/Game.h"
-#include "../../Game/Object.h"
 #include "../../Logger.h"
 #include "../../PathFinding/Hexagon.h"
 #include "../../PathFinding/HexagonGrid.h"
 #include "../../ResourceManager.h"
 #include "../../State/Location.h"
-#include "../../VM/Script.h"
 
 // Third party includes
 

@@ -25,17 +25,13 @@
 #ifndef FALLTERGEIST_FORMAT_MAP_FILE_H
 #define FALLTERGEIST_FORMAT_MAP_FILE_H
 
-// C++ standard includes
-#include <string>
-#include <vector>
-
-// Falltergeist includes
 #include "../Dat/Item.h"
 #include "../Dat/Stream.h"
 #include "../Map/Elevation.h"
 #include "../Map/Script.h"
 
-// Third party includes
+#include <string>
+#include <vector>
 
 namespace Falltergeist
 {

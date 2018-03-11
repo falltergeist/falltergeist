@@ -17,21 +17,13 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Related headers
 #include "../UI/Slider.h"
 
-// C++ standard includes
-#include <memory>
-
-// Falltergeist includes
 #include "../Audio/Mixer.h"
 #include "../Event/Event.h"
 #include "../Event/Mouse.h"
 #include "../Game/Game.h"
-#include "../Graphics/Point.h"
 #include "../UI/Image.h"
-
-// Third party includes
 
 namespace Falltergeist
 {
@@ -54,9 +46,7 @@ Slider::Slider(int x, int y) : Falltergeist::UI::Base(Point(x, y))
     _upSound = "sound/sfx/ib1lu1x1.acm";
 }
 
-Slider::~Slider()
-{
-}
+Slider::~Slider() = default;
 
 void Slider::handle(Event::Event* event)
 {

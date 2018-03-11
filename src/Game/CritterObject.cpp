@@ -17,15 +17,8 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Related headers
 #include "../Game/CritterObject.h"
 
-// C++ standard includes
-#include <array>
-#include <string>
-#include <memory>
-
-// Falltergeist includes
 #include "../Exception.h"
 #include "../Game/ArmorItemObject.h"
 #include "../Game/Defines.h"
@@ -40,9 +33,8 @@
 #include "../State/Location.h"
 #include "../UI/Animation.h"
 #include "../UI/AnimationFrame.h"
-#include "../VM/Script.h"
 
-// Third party includes
+#include <array>
 
 namespace Falltergeist
 {

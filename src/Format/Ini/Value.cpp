@@ -22,18 +22,13 @@
  * SOFTWARE.
  */
 
-// Related headers
-#include "../Ini/Parser.h"
 #include "../Ini/Value.h"
 
-// C++ standard includes
-#include <sstream>
+#include "../Ini/Parser.h"
+
 #include <algorithm>
-
-// Falltergeist includes
-#include "../../Exception.h"
-
-// Third party includes
+#include <sstream>
+#include <utility>
 
 namespace Falltergeist
 {
@@ -42,7 +37,7 @@ namespace Format
 namespace Ini
 {
 
-Value::Value(const std::string& value) : _value(value)
+Value::Value(std::string  value) : _value(std::move(value))
 {
 }
 

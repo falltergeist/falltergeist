@@ -20,12 +20,7 @@
 #ifndef FALLTERGEIST_SETTINGS_H
 #define FALLTERGEIST_SETTINGS_H
 
-// C++ standard includes
 #include <string>
-
-// Falltergeist includes
-
-// Third patry includes
 
 namespace Falltergeist
 {
@@ -149,6 +144,6 @@ namespace Falltergeist
             double _voiceVolume = 1.0;
             int _audioBufferSize = 512;
     };
-} // Falltergeist
+}
 
 #endif // FALLTERGEIST_SETTINGS_H

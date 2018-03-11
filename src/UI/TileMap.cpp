@@ -17,20 +17,10 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Related headers
 #include "../UI/TileMap.h"
 
-// C++ standard includes
-#include <algorithm>
-#include <cmath>
-#include <vector>
-#include <memory>
-
-// Falltergeist includes
 #include "../Format/Lst/File.h"
 #include "../Game/Game.h"
-#include "../Graphics/Point.h"
-#include "../Graphics/Renderer.h"
 #include "../Graphics/Tilemap.h"
 #include "../LocationCamera.h"
 #include "../Logger.h"
@@ -38,8 +28,7 @@
 #include "../State/Location.h"
 #include "../UI/Tile.h"
 
-// Thrird party includes
-#include <SDL_image.h>
+#include <algorithm>
 
 namespace  Falltergeist
 {
@@ -50,9 +39,7 @@ TileMap::TileMap()
 {
 }
 
-TileMap::~TileMap()
-{
-}
+TileMap::~TileMap() = default;
 
 void TileMap::init()
 {

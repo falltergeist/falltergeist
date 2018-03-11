@@ -17,18 +17,12 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// C++ standard includes
-#include <ctime>
-#include <memory>
-#include <sstream>
+#include "../VM/Script.h"
 
-// Falltergeist includes
 #include "../Exception.h"
 #include "../Format/Int/File.h"
-#include "../Format/Int/Procedure.h"
 #include "../Format/Lst/File.h"
 #include "../Format/Msg/File.h"
-#include "../Format/Msg/Message.h"
 #include "../Game/Game.h"
 #include "../Game/Object.h"
 #include "../Logger.h"
@@ -36,10 +30,9 @@
 #include "../VM/ErrorException.h"
 #include "../VM/HaltException.h"
 #include "../VM/OpcodeFactory.h"
-#include "../VM/Script.h"
-#include "../VM/StackValue.h"
 
-// Third party includes
+#include <ctime>
+#include <sstream>
 
 namespace Falltergeist
 {
@@ -59,9 +52,7 @@ namespace Falltergeist
             if (!_script) throw Exception("Script::VM() - script is null: " + filename);
         }
 
-        Script::~Script()
-        {
-        }
+        Script::~Script() = default;
 
         std::string Script::filename()
         {
