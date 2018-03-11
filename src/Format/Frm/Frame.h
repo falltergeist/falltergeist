@@ -25,13 +25,8 @@
 #ifndef FALLTERGEIST_FORMAT_FMR_FRAME_H
 #define FALLTERGEIST_FORMAT_FMR_FRAME_H
 
-// C++ standard includes
 #include <cstdint>
 #include <vector>
-
-// Falltergeist includes
-
-// Third party includes
 
 namespace Falltergeist
 {

@@ -22,17 +22,9 @@
  * SOFTWARE.
  */
 
-// C++ standard includes
-#include <algorithm>
-
-// Falltergeist includes
-#include "../../Exception.h"
 #include "../../Format/Aaf/File.h"
 #include "../../Format/Acm/File.h"
 #include "../../Format/Bio/File.h"
-#include "../../Format/Dat/Item.h"
-#include "../../Format/Dat/MiscFile.h"
-#include "../../Format/Dat/Stream.h"
 #include "../../Format/Fon/File.h"
 #include "../../Format/Frm/File.h"
 #include "../../Format/Gam/File.h"
@@ -47,14 +39,18 @@
 #include "../../Format/Pro/File.h"
 #include "../../Format/Rix/File.h"
 #include "../../Format/Sve/File.h"
-#include "../../Format/Txt/CityFile.h"
+#include "../../Format/Dat/File.h"
+
+#include "../../Exception.h"
+#include "../../Format/Dat/Item.h"
+#include "../../Format/Dat/MiscFile.h"
+#include "../../Format/Dat/Stream.h"
 #include "../../Format/Txt/CSVBasedFile.h"
+#include "../../Format/Txt/CityFile.h"
 #include "../../Format/Txt/MapsFile.h"
 #include "../Txt/WorldmapFile.h"
 
-#include "../../Format/Dat/File.h"
-
-// Third party includes
+#include <algorithm>
 
 namespace Falltergeist
 {

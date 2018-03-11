@@ -22,14 +22,10 @@
  * SOFTWARE.
  */
 
-// C++ standard includes
-#include <cctype>
-#include <clocale>
-
-// Falltergeist includes
 #include "Lexer.h"
 
-// Third party includes
+#include <cctype>
+#include <clocale>
 
 namespace Falltergeist
 {

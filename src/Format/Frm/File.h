@@ -25,16 +25,12 @@
 #ifndef FALLTERGEIST_FORMAT_FRM_FILE_H
 #define FALLTERGEIST_FORMAT_FRM_FILE_H
 
-// C++ standard includes
+#include "../Dat/Item.h"
+#include "../Enums.h"
+#include "../Frm/Direction.h"
+
 #include <map>
 #include <vector>
-
-// Falltergeist includes
-#include "../Dat/Item.h"
-#include "../Frm/Direction.h"
-#include "../Enums.h"
-
-// Third party includes
 
 namespace Falltergeist
 {

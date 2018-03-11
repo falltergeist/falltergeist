@@ -22,16 +22,10 @@
  * SOFTWARE.
  */
 
-// Related headers
 #include "../Txt/Parser.h"
 
-// C++ standard includes
 #include <algorithm>
 #include <functional>
-
-// Falltergeist includes
-
-// Third party includes
 
 namespace Falltergeist
 {

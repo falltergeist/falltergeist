@@ -30,12 +30,6 @@
 #ifndef FALLTERGEIST_FORMAT_ACM_DECODER_H
 #define FALLTERGEIST_FORMAT_ACM_DECODER_H
 
-// C++ standard includes
-
-// Falltergeist includes
-
-// Third party includes
-
 namespace Falltergeist
 {
 namespace Format

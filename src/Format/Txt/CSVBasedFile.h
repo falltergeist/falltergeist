@@ -25,14 +25,10 @@
 #ifndef FALLTERGEIST_FORMAT_TXT_CSVBASEDFILE_H
 #define FALLTERGEIST_FORMAT_TXT_CSVBASEDFILE_H
 
-// C++ standard includes
-#include <list>
-#include <vector>
-
-// Falltergeist includes
 #include "../Dat/Item.h"
 
-// Third party includes
+#include <list>
+#include <vector>
 
 namespace Falltergeist
 {

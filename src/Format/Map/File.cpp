@@ -22,18 +22,15 @@
  * SOFTWARE.
  */
 
-// C++ standard includes
-#include <algorithm>
-
-// Falltergeist includes
-#include "../../Exception.h"
 #include "../Map/File.h"
+#include "../Pro/File.h"
+
+#include "../../Exception.h"
 #include "../Map/Elevation.h"
 #include "../Map/Object.h"
 #include "../Map/Script.h"
-#include "../Pro/File.h"
 
-// Third party includes
+#include <algorithm>
 
 namespace Falltergeist
 {

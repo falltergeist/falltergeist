@@ -22,16 +22,10 @@
  * SOFTWARE.
  */
 
-// Related headers
 #include "../Fon/File.h"
 
-// C++ standard includes
-
-// Falltergeist includes
 #include "../Dat/Stream.h"
 #include "../Fon/Glyph.h"
-
-// Third party includes
 
 namespace Falltergeist
 {

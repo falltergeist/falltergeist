@@ -25,17 +25,13 @@
 #ifndef FALLTERGEIST_FORMAT_DAT_FILE_H
 #define FALLTERGEIST_FORMAT_DAT_FILE_H
 
-// C++ standard includes
+#include "Entry.h"
+
 #include <cstdint>
 #include <fstream>
 #include <memory>
 #include <string>
 #include <unordered_map>
-
-// Falltergeist includes
-#include "Entry.h"
-
-// Third party includes
 
 namespace Falltergeist
 {

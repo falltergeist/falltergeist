@@ -22,12 +22,7 @@
  * SOFTWARE.
  */
 
-// C++ standard includes
-
-// Falltergeist includes
 #include "../Mve/Chunk.h"
-
-// Third party includes
 
 namespace Falltergeist
 {

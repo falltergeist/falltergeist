@@ -25,16 +25,12 @@
 #ifndef FALLTERGEIST_FORMAT_INI_PARSER_H
 #define FALLTERGEIST_FORMAT_INI_PARSER_H
 
-// C++ standard includes
-#include <memory>
-#include <string>
-#include <vector>
-
-// Falltergeist includes
 #include "../../Format/Ini/Value.h"
 #include "../../Format/Txt/Parser.h"
 
-// Third party includes
+#include <memory>
+#include <string>
+#include <vector>
 
 namespace Falltergeist
 {

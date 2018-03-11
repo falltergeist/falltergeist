@@ -22,12 +22,7 @@
  * SOFTWARE.
  */
 
-// C++ standard includes
-
-// Falltergeist includes
 #include "../../Format/Msg/Message.h"
-
-// Third party includes
 
 namespace Falltergeist
 {

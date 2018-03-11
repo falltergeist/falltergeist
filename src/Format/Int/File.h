@@ -25,17 +25,13 @@
 #ifndef FALLTERGEIST_FORMAT_INT_FILE_H
 #define FALLTERGEIST_FORMAT_INT_FILE_H
 
-// C++ standard includes
-#include <map>
-#include <string>
-#include <vector>
-
-// Falltergeist includes
 #include "../../Format/Dat/Item.h"
 #include "../../Format/Dat/Stream.h"
 #include "../../Format/Int/Procedure.h"
 
-// Third party includes
+#include <map>
+#include <string>
+#include <vector>
 
 namespace Falltergeist
 {

@@ -25,14 +25,10 @@
 #ifndef FALLTERGEIST_FORMAT_MVE_CHUNK_H
 #define FALLTERGEIST_FORMAT_MVE_CHUNK_H
 
-// C++ standard includes
-#include <memory>
-#include <vector>
-
-// Falltergeist includes
 #include "../Mve/Opcode.h"
 
-// Third party includes
+#include <memory>
+#include <vector>
 
 namespace Falltergeist
 {

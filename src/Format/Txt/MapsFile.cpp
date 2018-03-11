@@ -22,15 +22,11 @@
  * SOFTWARE.
  */
 
-// C++ standard includes
+#include "../Txt/MapsFile.h"
 
-// Falltergeist includes
 #include "../Dat/Stream.h"
 #include "../Ini/File.h"
 #include "../Ini/Parser.h"
-#include "../Txt/MapsFile.h"
-
-// Third party includes
 
 namespace Falltergeist
 {

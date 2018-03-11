@@ -25,13 +25,11 @@
 #ifndef FALLTERGEIST_FORMAT_ACM_FILE_H
 #define FALLTERGEIST_FORMAT_ACM_FILE_H
 
-// C++ standard includes
-#include <cstdint>
-
-// Falltergeist includes
 #include "../../Base/Buffer.h"
 #include "../Dat/Item.h"
 #include "../Dat/Stream.h"
+
+#include <cstdint>
 
 namespace Falltergeist
 {

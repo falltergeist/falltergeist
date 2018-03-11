@@ -22,12 +22,7 @@
  * SOFTWARE.
  */
 
-// C++ standard includes
-
-// Falltergeist includes
 #include "../Frm/Frame.h"
-
-// Third party includes
 
 namespace Falltergeist
 {

@@ -22,18 +22,13 @@
  * SOFTWARE.
  */
 
-// Related headers
-#include "../Ini/Parser.h"
 #include "../Ini/Value.h"
 
-// C++ standard includes
-#include <sstream>
-#include <algorithm>
-
-// Falltergeist includes
 #include "../../Exception.h"
+#include "../Ini/Parser.h"
 
-// Third party includes
+#include <algorithm>
+#include <sstream>
 
 namespace Falltergeist
 {

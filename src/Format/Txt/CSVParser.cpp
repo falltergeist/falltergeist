@@ -22,17 +22,11 @@
  * SOFTWARE.
  */
 
-// Related headers
 #include "CSVParser.h"
-
-// C++ standard includes
-#include <algorithm>
-#include <sstream>
-
-// Falltergeist includes
 #include "../Txt/CSVParser.h"
 
-// Third party includes
+#include <algorithm>
+#include <sstream>
 
 namespace Falltergeist
 {

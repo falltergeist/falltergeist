@@ -25,14 +25,10 @@
 #ifndef FALLTERGEIST_FORMAT_INT_PROCEDURE_H
 #define FALLTERGEIST_FORMAT_INT_PROCEDURE_H
 
-// C++ standard includes
-#include <cstdint>
-#include <string>
-
-// Falltergeist includes
 #include "../../Format/Enums.h"
 
-// Third party includes
+#include <cstdint>
+#include <string>
 
 namespace Falltergeist
 {

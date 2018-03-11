@@ -29,12 +29,7 @@
 #ifndef FALLTERGEIST_FORMAT_ACM_VALUEUNPACKER_H
 #define FALLTERGEIST_FORMAT_ACM_VALUEUNPACKER_H
 
-// C++ standard includes
-
-// Falltergeist includes
 #include "../Dat/Item.h"
-
-// Third party includes
 
 #define UNPACKER_BUFFER_SIZE 16384
 

@@ -25,16 +25,12 @@
 #ifndef FALLTERGEIST_FORMAT_TXT_WORLDMAPFILE_H
 #define FALLTERGEIST_FORMAT_TXT_WORLDMAPFILE_H
 
-// C++ standard includes
-#include <map>
-#include <sstream>
-#include <vector>
-
-// Falltergeist includes
 #include "../Dat/Item.h"
 #include "../Ini/Value.h"
 
-// Third party includes
+#include <map>
+#include <sstream>
+#include <vector>
 
 namespace Falltergeist
 {

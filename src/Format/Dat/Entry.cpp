@@ -22,14 +22,11 @@
  * SOFTWARE.
  */
 
-// C++ standard includes
-#include <algorithm>
-
-// Falltergeist includes
 #include "../../Format/Dat/Entry.h"
+
 #include "../../Format/Dat/File.h"
 
-// Third party includes
+#include <algorithm>
 
 namespace Falltergeist
 {

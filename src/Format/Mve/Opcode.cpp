@@ -22,12 +22,7 @@
  * SOFTWARE.
  */
 
-// C++ standard includes
-
-// Falltergeist includes
 #include "../Mve/Opcode.h"
-
-// Third party includes
 
 namespace Falltergeist
 {

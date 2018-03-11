@@ -22,16 +22,13 @@
  * SOFTWARE.
  */
 
-// C++ standard includes
-#include <cstring>
+#include "../Mve/File.h"
 
-// Falltergeist includes
+#include "../../Exception.h"
 #include "../Dat/Stream.h"
 #include "../Mve/Chunk.h"
-#include "../Mve/File.h"
-#include "../../Exception.h"
 
-// Third party includes
+#include <cstring>
 
 namespace Falltergeist
 {

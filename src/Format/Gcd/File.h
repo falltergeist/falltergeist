@@ -25,15 +25,11 @@
 #ifndef FALLTERGEIST_FORMAT_GCD_FILE_H
 #define FALLTERGEIST_FORMAT_GCD_FILE_H
 
-// C++ standard includes
-#include <string>
-#include <vector>
-
-// Falltergeist includes
 #include "../../Format/Dat/Item.h"
 #include "../../Format/Enums.h"
 
-// Third party includes
+#include <string>
+#include <vector>
 
 namespace Falltergeist
 {

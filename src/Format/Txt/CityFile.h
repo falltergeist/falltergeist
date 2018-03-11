@@ -25,13 +25,9 @@
 #ifndef FALLTERGEIST_FORMAT_TXT_CITYFILE_H
 #define FALLTERGEIST_FORMAT_TXT_CITYFILE_H
 
-// C++ standard includes
-#include <vector>
-
-// Falltergeist includes
 #include "../Dat/Item.h"
 
-// Third party includes
+#include <vector>
 
 namespace Falltergeist
 {

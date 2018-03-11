@@ -25,14 +25,10 @@
 #ifndef FALLTERGEIST_FORMAT_GAM_FILE_H
 #define FALLTERGEIST_FORMAT_GAM_FILE_H
 
-// C++ standard includes
-#include <map>
-#include <string>
-
-// Falltergeist includes
 #include "../Dat/Item.h"
 
-// Third party includes
+#include <map>
+#include <string>
 
 namespace Falltergeist
 {

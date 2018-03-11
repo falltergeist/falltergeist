@@ -22,14 +22,7 @@
  * SOFTWARE.
  */
 
-// Related headers
 #include "../Ini/File.h"
-
-// C++ standard includes
-
-// Falltergeist includes
-
-// Third party includes
 
 namespace Falltergeist
 {

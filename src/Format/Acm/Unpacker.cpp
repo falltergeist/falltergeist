@@ -28,14 +28,9 @@
 // Link to the plugin: https://github.com/gemrb/gemrb/tree/8e759bc6874a80d4a8d73bf79603624465b3aeb0/gemrb/plugins/ACMReader
 
 // C++ standard includes
-#include <cstdio>
-#include <cstdlib>
-
-// Falltergeist includes
-#include "../../Format/Dat/Stream.h"
 #include "Unpacker.h"
 
-// Third party includes
+#include "../../Format/Dat/Stream.h"
 
 namespace Falltergeist
 {

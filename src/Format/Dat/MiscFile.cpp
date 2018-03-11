@@ -22,14 +22,10 @@
  * SOFTWARE.
  */
 
-// C++ standard includes
-#include <string.h> // for memcpy
-#include <algorithm>
-
-// Falltergeist includes
 #include "../../Format/Dat/MiscFile.h"
 
-// Third party includes
+#include <algorithm>
+#include <string.h> // for memcpy
 
 namespace Falltergeist
 {

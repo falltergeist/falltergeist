@@ -25,14 +25,10 @@
 #ifndef FALLTERGEIST_FORMAT_FON_FILE_H
 #define FALLTERGEIST_FORMAT_FON_FILE_H
 
-// C++ standard includes
-#include <vector>
-
-// Falltergeist includes
 #include "../Dat/Item.h"
 #include "../Fon/Glyph.h"
 
-// Third party includes
+#include <vector>
 
 namespace Falltergeist
 {

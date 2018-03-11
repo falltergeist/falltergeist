@@ -25,13 +25,9 @@
 #ifndef FALLTERGEIST_FORMAT_INI_VALUE_H
 #define FALLTERGEIST_FORMAT_INI_VALUE_H
 
-// C++ standard includes
 #include <ostream>
 #include <string>
-
-// Falltergeist includes
-
-// Third party includes
+#include <vector>
 
 namespace Falltergeist
 {

@@ -22,12 +22,7 @@
  * SOFTWARE.
  */
 
-// C++ standard includes
-
-// Falltergeist includes
 #include "../Map/Object.h"
-
-// Third party includes
 
 namespace Falltergeist
 {
