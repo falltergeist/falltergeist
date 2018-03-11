@@ -20,13 +20,8 @@
 #ifndef FALLTERGEIST_UI_INVENTORYITEM_H
 #define FALLTERGEIST_UI_INVENTORYITEM_H
 
-// C++ standard includes
-
-// Falltergeist includes
 #include "../Format/Enums.h"
 #include "../UI/Base.h"
-
-// Third party includes
 
 namespace Falltergeist
 {

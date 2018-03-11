@@ -20,17 +20,13 @@
 #ifndef FALLTERGEIST_UI_BASE_H
 #define FALLTERGEIST_UI_BASE_H
 
-// C++ standard includes
-#include <memory>
-
-// Falltergeist includes
 #include "../Event/EventTarget.h"
 #include "../Graphics/Point.h"
 #include "../Graphics/Size.h"
 #include "../Graphics/TransFlags.h"
 #include "../UI/Base.h"
 
-// Third party includes
+#include <memory>
 
 namespace Falltergeist
 {

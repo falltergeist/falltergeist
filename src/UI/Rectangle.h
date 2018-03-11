@@ -20,13 +20,9 @@
 #ifndef FALLTERGEIST_UI_RECTANGLE_H
 #define FALLTERGEIST_UI_RECTANGLE_H
 
-// C++ standard includes
-
-// Falltergeist includes
 #include "../Graphics/Point.h"
 #include "../UI/Base.h"
 
-// Third party includes
 #include <SDL.h>
 
 namespace Falltergeist

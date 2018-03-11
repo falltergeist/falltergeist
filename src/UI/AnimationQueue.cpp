@@ -17,17 +17,10 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Related headers
 #include "../UI/AnimationQueue.h"
 
-// C++ standard includes
-#include <memory>
-
-// Falltergeist includes
 #include "../Event/Event.h"
 #include "../UI/Animation.h"
-
-// Third party includes
 
 namespace Falltergeist
 {

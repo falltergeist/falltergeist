@@ -20,14 +20,11 @@
 #ifndef FALLTERGEIST_UI_PLAYERPANEL_H
 #define FALLTERGEIST_UI_PLAYERPANEL_H
 
-// C++ standard includes
-#include <memory>
-#include <vector>
-
-// Falltergeist includes
 #include "../UI/Base.h"
 #include "../UI/ImageButton.h"
-// Third party includes
+
+#include <memory>
+#include <vector>
 
 namespace Falltergeist
 {

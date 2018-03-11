@@ -20,14 +20,10 @@
 #ifndef FALLTERGEIST_UI_ITEMSLIST_H
 #define FALLTERGEIST_UI_ITEMSLIST_H
 
-// C++ standard includes
-#include <vector>
-
-// Falltergeist includes
 #include "../UI/Base.h"
 #include "../UI/InventoryItem.h"
 
-// Third party includes
+#include <vector>
 
 namespace Falltergeist
 {

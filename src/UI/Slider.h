@@ -20,14 +20,10 @@
 #ifndef FALLTERGEIST_UI_SLIDER_H
 #define FALLTERGEIST_UI_SLIDER_H
 
-// C++ standard includes
-#include <string>
-
-// Falltergeist includes
 #include "../UI/Base.h"
 #include "../UI/ImageList.h"
 
-// Third party includes
+#include <string>
 
 namespace Falltergeist
 {

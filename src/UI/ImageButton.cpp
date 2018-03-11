@@ -17,21 +17,14 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Related headers
 #include "../UI/ImageButton.h"
 
-// C++ standard includes
-#include <string>
-
-// Falltergeist includes
 #include "../Audio/Mixer.h"
 #include "../Event/Event.h"
 #include "../Event/Mouse.h"
 #include "../Exception.h"
 #include "../Game/Game.h"
 #include "../ResourceManager.h"
-
-// Third party includes
 
 namespace Falltergeist
 {

@@ -17,17 +17,10 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Related headers
 #include "../UI/TextAreaList.h"
 
-// C++ standard includes
-
-// Falltergeist includes
 #include "../Graphics/Rect.h"
 #include "../UI/TextArea.h"
-
-
-// Third party includes
 
 namespace Falltergeist
 {

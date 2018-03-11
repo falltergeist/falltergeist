@@ -17,16 +17,9 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Related headeres
 #include "../UI/HiddenMask.h"
 
-// C++ standard includes
-
-// Falltergeist includes
 #include "../Graphics/Rect.h"
-#include "../Graphics/Texture.h"
-
-// Third party includes
 
 namespace Falltergeist
 {

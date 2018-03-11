@@ -20,13 +20,9 @@
 #ifndef FALLTERGEIST_UI_TILE_H
 #define FALLTERGEIST_UI_TILE_H
 
-// C++ standard includes
-#include <memory>
-
-// Falltergeist includes
 #include "../Graphics/Point.h"
 
-// Third party includes
+#include <memory>
 
 namespace Falltergeist
 {

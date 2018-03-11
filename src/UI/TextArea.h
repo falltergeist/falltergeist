@@ -20,17 +20,13 @@
 #ifndef FALLTERGEIST_UI_TEXTAREA_H
 #define FALLTERGEIST_UI_TEXTAREA_H
 
-// C++ standard includes
+#include "../Graphics/Font.h"
+#include "../Graphics/TextArea.h"
+#include "../UI/Base.h"
+
 #include <cstdint>
 #include <string>
 #include <vector>
-
-// Falltergeist includes
-#include "../Graphics/TextArea.h"
-#include "../UI/Base.h"
-#include "../Graphics/Font.h"
-
-// Third party includes
 
 namespace Falltergeist
 {

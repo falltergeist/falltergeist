@@ -20,13 +20,9 @@
 #ifndef FALLTERGEIST_UI_TEXTAREALIST_H
 #define FALLTERGEIST_UI_TEXTAREALIST_H
 
-// C++ standard includes
-#include <vector>
-
-// Falltergeist includes
 #include "../UI/Base.h"
 
-// Third party includes
+#include <vector>
 
 namespace Falltergeist
 {
