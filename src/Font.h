@@ -20,12 +20,12 @@
 #ifndef FALLTERGEIST_FONT_H
 #define FALLTERGEIST_FONT_H
 
-#include "Graphics/Texture.h"
 #include "Format/Aaf/File.h"
+#include "Graphics/Texture.h"
 
 #include <memory>
-#include <vector>
 #include <string>
+#include <vector>
 
 namespace Falltergeist
 {

@@ -39,8 +39,8 @@
 #include "Format/Pro/File.h"
 #include "Format/Rix/File.h"
 #include "Format/Sve/File.h"
-#include "Format/Txt/CityFile.h"
 #include "Format/Txt/CSVBasedFile.h"
+#include "Format/Txt/CityFile.h"
 #include "Format/Txt/MapsFile.h"
 #include "Format/Txt/WorldmapFile.h"
 #include "Game/Location.h"
@@ -49,8 +49,8 @@
 #include "Graphics/Font/FON.h"
 #include "Graphics/Shader.h"
 #include "Helpers/CritterAnimationHelper.h"
-#include "Logger.h"
 #include "Ini/File.h"
+#include "Logger.h"
 
 #include <SDL_image.h>
 #include <iomanip>

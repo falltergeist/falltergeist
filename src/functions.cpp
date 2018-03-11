@@ -20,8 +20,8 @@
 #include "functions.h"
 
 #include "Exception.h"
-#include "ResourceManager.h"
 #include "Format/Msg/File.h"
+#include "ResourceManager.h"
 
 #include <algorithm>
 

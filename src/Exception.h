@@ -20,8 +20,8 @@
 #ifndef FALLTERGEIST_EXCEPTION_H
 #define FALLTERGEIST_EXCEPTION_H
 
-#include <stdexcept>
 #include <exception>
+#include <stdexcept>
 #include <string>
 
 namespace Falltergeist

@@ -20,9 +20,9 @@
 #include "Settings.h"
 
 #include "CrossPlatform.h"
-#include "Logger.h"
 #include "Ini/File.h"
 #include "Ini/Writer.h"
+#include "Logger.h"
 
 namespace Falltergeist
 {
