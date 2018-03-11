@@ -28,9 +28,6 @@
 #include "../Settings.h"
 #include "../UI/MvePlayer.h"
 
-#include <SDL.h>
-#include <string>
-
 namespace Falltergeist
 {
     namespace Audio
