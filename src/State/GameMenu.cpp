@@ -17,14 +17,9 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Related headers
 #include "../State/GameMenu.h"
 
-// C++ standard includes
-
-// Falltergeist includes
 #include "../Audio/Mixer.h"
-#include "../functions.h"
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
 #include "../Input/Mouse.h"
@@ -34,12 +29,9 @@
 #include "../State/Location.h"
 #include "../State/SaveGame.h"
 #include "../State/SettingsMenu.h"
-#include "../UI/Image.h"
-#include "../UI/ImageButton.h"
 #include "../UI/PlayerPanel.h"
 #include "../UI/TextArea.h"
-
-// Third party includes
+#include "../functions.h"
 
 namespace Falltergeist
 {

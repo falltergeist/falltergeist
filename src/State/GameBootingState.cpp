@@ -17,16 +17,8 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Related headers
 #include "GameBootingState.h"
 
-// C++ standard includes
-#include <ctime>
-#include <string>
-#include <vector>
-#include <memory>
-
-// Falltergeist includes
 #include "../Game/DudeObject.h"
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
@@ -40,9 +32,8 @@
 #include "../State/MainMenu.h"
 #include "../State/Movie.h"
 #include "../State/SettingsMenu.h"
-#include "../UI/Image.h"
 
-// Third party includes
+#include <ctime>
 
 namespace Falltergeist
 {

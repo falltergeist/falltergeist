@@ -20,10 +20,7 @@
 #ifndef FALLTERGEIST_STATE_PIPBOY_H
 #define FALLTERGEIST_STATE_PIPBOY_H
 
-// C++ standard includes
 #include "../State/State.h"
-
-// Third party includes
 
 namespace Falltergeist
 {

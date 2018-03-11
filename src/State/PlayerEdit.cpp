@@ -17,29 +17,22 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Related headers
 #include "../State/PlayerEdit.h"
 
-// C++ standard includes
-#include <sstream>
-
-// Falltergeist includes
 #include "../Font.h"
-#include "../functions.h"
 #include "../Game/DudeObject.h"
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
 #include "../Input/Mouse.h"
 #include "../ResourceManager.h"
 #include "../State/Location.h"
-#include "../State/PlayerEditAlert.h"
 #include "../UI/BigCounter.h"
 #include "../UI/HiddenMask.h"
-#include "../UI/Image.h"
-#include "../UI/TextArea.h"
 #include "../UI/Rectangle.h"
+#include "../UI/TextArea.h"
+#include "../functions.h"
 
-// Third party includes
+#include <sstream>
 
 namespace Falltergeist
 {

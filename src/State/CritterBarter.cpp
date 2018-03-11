@@ -17,20 +17,14 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Related headers
 #include "../State/CritterBarter.h"
 
-// C++ standard includes
-
-// Falltergeist includes
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
-//#include "../State/CritterDialog.h"
+#include "../State/CritterDialog.h"
 #include "../State/CritterInteract.h"
 #include "../UI/Image.h"
 #include "../UI/ImageButton.h"
-
-// Third party includes
 
 namespace Falltergeist
 {

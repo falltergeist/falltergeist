@@ -20,12 +20,7 @@
 #ifndef FALLTERGEIST_STATE_PLAYERCREATEOPTIONS_H
 #define FALLTERGEIST_STATE_PLAYERCREATEOPTIONS_H
 
-// C++ standard includes
-
-// Falltergeist includes
 #include "../State/State.h"
-
-// Third party includes
 
 namespace Falltergeist
 {

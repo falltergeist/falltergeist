@@ -20,13 +20,9 @@
 #ifndef FALLTERGEIST_STATE_NEWGAME_H
 #define FALLTERGEIST_STATE_NEWGAME_H
 
-// C++ standard includes
-#include <vector>
-
-// Falltergeist includes
 #include "State.h"
 
-// Third party includes
+#include <vector>
 
 namespace Falltergeist
 {

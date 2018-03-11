@@ -20,13 +20,9 @@
 #ifndef FALLTERGEIST_STATE_PLAYEREDITALERT_H
 #define FALLTERGEIST_STATE_PLAYEREDITALERT_H
 
-// C++ standard includes
-#include <string>
-
-// Falltergeist includes
 #include "../State/State.h"
 
-// Third party includes
+#include <string>
 
 namespace Falltergeist
 {

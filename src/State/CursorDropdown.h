@@ -20,15 +20,11 @@
 #ifndef FALLTERGEIST_STATE_CURSORDROPDOWN_H
 #define FALLTERGEIST_STATE_CURSORDROPDOWN_H
 
-// C++ standard includes
-#include <memory>
-#include <vector>
-
-// Falltergeist includes
 #include "../Input/Mouse.h"
 #include "../State/State.h"
 
-// Third party includes
+#include <memory>
+#include <vector>
 
 namespace Falltergeist
 {

@@ -17,21 +17,16 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Related headers
 #include "../State/State.h"
-
-// C++ standard includes
-#include <algorithm>
-
-// Falltergeist includes
 #include "../Event/State.h"
+
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
 #include "../UI/ImageList.h"
 #include "../UI/SmallCounter.h"
 #include "../UI/TextArea.h"
 
-// Third party includes
+#include <algorithm>
 
 namespace Falltergeist
 {

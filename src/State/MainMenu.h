@@ -20,13 +20,9 @@
 #ifndef FALLTERGEIST_STATE_MAINMENU_H
 #define FALLTERGEIST_STATE_MAINMENU_H
 
-// C++ standard includes
-#include <memory>
-
-// Falltergeist includes
 #include "../State/State.h"
 
-// Third party includes
+#include <memory>
 
 namespace Falltergeist
 {

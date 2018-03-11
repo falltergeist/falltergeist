@@ -17,32 +17,23 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Related headers
 #include "../State/CritterDialog.h"
 
-// C++ standard includes
-#include <algorithm>
-#include <vector>
-
-// Falltergeist includes
 #include "../Exception.h"
 #include "../Format/Int/File.h"
-#include "../Format/Int/Procedure.h"
 #include "../Game/CritterObject.h"
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
 #include "../LocationCamera.h"
 #include "../PathFinding/Hexagon.h"
 #include "../ResourceManager.h"
-#include "../State/CritterInteract.h"
 #include "../State/CritterDialogReview.h"
+#include "../State/CritterInteract.h"
 #include "../State/Location.h"
 #include "../UI/AnimationQueue.h"
-#include "../UI/Image.h"
 #include "../UI/TextArea.h"
-#include "../VM/Script.h"
 
-// Third party includes
+#include <algorithm>
 
 namespace Falltergeist
 {

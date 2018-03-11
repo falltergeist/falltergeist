@@ -20,12 +20,7 @@
 #ifndef FALLTERGEIST_STATE_INVENTORY_H
 #define FALLTERGEIST_STATE_INVENTORY_H
 
-// C++ standard includes
-
-// Falltergeist includes
 #include "../State/State.h"
-
-// Third party includes
 
 namespace Falltergeist
 {

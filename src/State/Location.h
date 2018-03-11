@@ -20,13 +20,6 @@
 #ifndef FALLTERGEIST_STATE_LOCATION_H
 #define FALLTERGEIST_STATE_LOCATION_H
 
-// C++ standard includes
-#include <list>
-#include <memory>
-#include <Game/DudeObject.h>
-#include <Format/Map/File.h>
-
-// Falltergeist includes
 #include "../Game/Object.h"
 #include "../Game/Timer.h"
 #include "../Graphics/Lightmap.h"
@@ -34,7 +27,10 @@
 #include "../State/State.h"
 #include "../UI/ImageButton.h"
 
-// Third party includes
+#include <Format/Map/File.h>
+#include <Game/DudeObject.h>
+#include <list>
+#include <memory>
 
 namespace Falltergeist
 {

@@ -17,41 +17,28 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Related headers
 #include "../State/Inventory.h"
 
-// C++ standard includes
-#include <sstream>
-
-// Falltergeist includes
-#include "../Event/Event.h"
-#include "../Event/Mouse.h"
-#include "../functions.h"
 #include "../Game/ArmorItemObject.h"
 #include "../Game/CritterObject.h"
 #include "../Game/DudeObject.h"
 #include "../Game/Game.h"
-#include "../Game/Object.h"
 #include "../Game/ObjectFactory.h"
 #include "../Game/WeaponItemObject.h"
 #include "../Graphics/Renderer.h"
-#include "../Graphics/Size.h"
 #include "../Input/Mouse.h"
 #include "../ResourceManager.h"
-#include "../State/State.h"
-#include "../State/GameMenu.h"
 #include "../State/InventoryDragItem.h"
 #include "../State/Location.h"
-#include "../UI/Image.h"
-#include "../UI/ImageButton.h"
 #include "../UI/ImageList.h"
 #include "../UI/InventoryItem.h"
 #include "../UI/ItemsList.h"
 #include "../UI/PlayerPanel.h"
 #include "../UI/Rectangle.h"
 #include "../UI/TextArea.h"
+#include "../functions.h"
 
-// Third party includes
+#include <sstream>
 
 namespace Falltergeist
 {
