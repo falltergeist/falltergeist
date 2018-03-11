@@ -29,7 +29,6 @@
 #include "../../State/CritterDialog.h"
 #include "../../State/CritterDialogReview.h"
 #include "../../State/CritterInteract.h"
-#include "../../VM/Script.h"
 
 // Third party includes
 

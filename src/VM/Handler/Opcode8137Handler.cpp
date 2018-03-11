@@ -28,7 +28,6 @@
 #include "../../Logger.h"
 #include "../../State/State.h"
 #include "../../VM/HaltException.h"
-#include "../../VM/Script.h"
 
 // Third party includes
 

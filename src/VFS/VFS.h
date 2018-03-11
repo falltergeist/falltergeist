@@ -22,9 +22,9 @@
 
 #include "../VFS/Plugin/IPlugin.h"
 
-#include <string>
 #include <map>
 #include <memory>
+#include <string>
 #include <vector>
 
 namespace Falltergeist

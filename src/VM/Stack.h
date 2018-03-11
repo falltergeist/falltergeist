@@ -20,8 +20,8 @@
 #ifndef FALLTERGEIST_VM_STACK_H
 #define FALLTERGEIST_VM_STACK_H
 
-#include <vector>
 #include <memory>
+#include <vector>
 
 namespace Falltergeist
 {

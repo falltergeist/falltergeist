@@ -28,7 +28,6 @@
 #include "../../Game/Game.h"
 #include "../../Logger.h"
 #include "../../State/Location.h"
-#include "../../VM/Script.h"
 
 // Third party includes
 

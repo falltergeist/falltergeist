@@ -31,7 +31,6 @@
 #include "../../Game/Game.h"
 #include "../../Game/KeyItemObject.h"
 #include "../../Game/MiscItemObject.h"
-#include "../../Game/Object.h"
 #include "../../Game/WeaponItemObject.h"
 #include "../../VM/Script.h"
 

@@ -26,7 +26,6 @@
 #include "../../Game/ArmorItemObject.h"
 #include "../../Game/CritterObject.h"
 #include "../../Game/Game.h"
-#include "../../Game/Object.h"
 #include "../../Logger.h"
 #include "../../VM/Script.h"
 

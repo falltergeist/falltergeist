@@ -21,7 +21,6 @@
 #include "../../VM/Handler/Opcode80B4Handler.h"
 
 // C++ standard includes
-#include <cstdlib>
 #include <ctime>
 
 // Falltergeist includes

@@ -21,7 +21,6 @@
 #include "../../VM/Handler/Opcode810AHandler.h"
 
 // C++ standard includes
-#include <memory>
 
 // Falltergeist includes
 #include "../../Game/Object.h"
