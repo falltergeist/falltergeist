@@ -17,11 +17,11 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "src/Game/Game.h"
 #include "src/Exception.h"
+#include "src/Game/Game.h"
 #include "src/Logger.h"
 #include "src/Settings.h"
-#include "State/GameBootingState.h"
+#include "src/State/Start.h"
 
 using namespace Falltergeist;
 
@@ -30,18 +30,22 @@ int main(int argc, char* argv[])
     try
     {
         auto game = Game::Game::getInstance();
-
-        game->init(std::make_unique<Settings>());
-        game->setState(new State::GameBootingState());
+        game->init(std::unique_ptr<Settings>(new Settings()));
+        game->setState(new State::Start());
         game->run();
         game->shutdown();
-
         return 0;
     }
     catch(const Exception &e)
     {
         Logger::critical() << e.what() << std::endl;
-        return 1;
     }
+    /*
+    catch (const std::exception &e)
+    {
+        Logger::critical() << e.what() << std::endl;
+    }
+    */
+    return 1;
 }
 

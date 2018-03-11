@@ -17,8 +17,16 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "GameBootingState.h"
+// Related headers
+#include "../State/Start.h"
 
+// C++ standard includes
+#include <ctime>
+#include <string>
+#include <vector>
+#include <memory>
+
+// Falltergeist includes
 #include "../Game/DudeObject.h"
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
@@ -32,8 +40,9 @@
 #include "../State/MainMenu.h"
 #include "../State/Movie.h"
 #include "../State/SettingsMenu.h"
+#include "../UI/Image.h"
 
-#include <ctime>
+// Third party includes
 
 namespace Falltergeist
 {
@@ -41,15 +50,15 @@ namespace Falltergeist
 
     namespace State
     {
-        GameBootingState::GameBootingState() : State()
+        Start::Start() : State()
         {
         }
 
-        GameBootingState::~GameBootingState()
+        Start::~Start()
         {
         }
 
-        void GameBootingState::init()
+        void Start::init()
         {
             if (_initialized) return;
             State::init();
@@ -70,7 +79,7 @@ namespace Falltergeist
             Game::getInstance()->mouse()->setState(Input::Mouse::Cursor::WAIT);
         }
 
-        void GameBootingState::think()
+        void Start::think()
         {
             auto game = Game::getInstance();
             State::think();

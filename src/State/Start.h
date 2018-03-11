@@ -20,17 +20,22 @@
 #ifndef FALLTERGEIST_STATE_START_H
 #define FALLTERGEIST_STATE_START_H
 
+// C++ standard includes
+
+// Falltergeist includes
 #include "../State/State.h"
+
+// Third party includes
 
 namespace Falltergeist
 {
     namespace State
     {
-        class GameBootingState : public State
+        class Start : public State
         {
             public:
-                GameBootingState();
-                ~GameBootingState() override;
+                Start();
+                ~Start() override;
 
                 void think() override;
                 void init() override;
