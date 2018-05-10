@@ -27,38 +27,37 @@
 #include "../Format/Enums.h"
 #include "../VM/Stack.h"
 #include "../VM/StackValue.h"
+#include "../VM/IFalloutContext.h"
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace Format
-    {
-        namespace Int
-        {
-        class File;
+namespace Falltergeist {
+    namespace Format {
+        namespace Int {
+            class File;
         }
-        }
-
-        namespace Game
-        {
+    }
+    namespace Game {
         class Object;
-        }
-
-        namespace VM
-        {
+    }
+    namespace VM {
         /**
          * Script class represents Virtual Machine for running vanilla Fallout scripts.
          * VM uses 2 stacks (return stack and data stack).
          * Each operator from .INT script is handled by one of the Handler classes and it manipulates one or both stacks in some way.
          * Typical scripting command takes 0 or more arguments from the data stack and puts one return value to the same stack.
+         *
+         * TODO remove enable_shared_from_this
          */
-        class Script
-        {
+        class Script : public std::enable_shared_from_this<Script>, public virtual IFalloutContext {
             public:
                 Script(Format::Int::File* script, Game::Object* owner);
                 Script(const std::string& filename, Game::Object* owner);
                 virtual ~Script();
+
+                // IFalloutContext
+                std::shared_ptr<Game::DudeObject> player() override;
+
                 void run();
                 void initialize();
 

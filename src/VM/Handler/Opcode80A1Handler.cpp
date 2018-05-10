@@ -36,16 +36,19 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            Opcode80A1::Opcode80A1(VM::Script* script) : OpcodeHandler(script)
+            Opcode80A1::Opcode80A1(std::shared_ptr<VM::Script> script) : OpcodeHandler(script)
             {
             }
 
             void Opcode80A1::_run()
             {
+                applyTo(_script);
+            }
+
+            void Opcode80A1::applyTo(std::shared_ptr<Falltergeist::VM::IFalloutContext> context) {
                 Logger::debug("SCRIPT") << "[80A1] [+] void give_exp_points(int points)" << std::endl;
                 auto points = _script->dataStack()->popInteger();
-                auto game = Game::getInstance();
-                game->player()->setExperience(game->player()->experience() + points);
+                context->player()->setExperience(context->player()->experience() + points);
             }
         }
     }

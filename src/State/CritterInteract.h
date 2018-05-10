@@ -105,8 +105,8 @@ namespace Falltergeist
                 int msgFileID();
                 void setMsgFileID(int value);
 
-                VM::Script* script();
-                void setScript(VM::Script* script);
+                std::shared_ptr<VM::Script> script();
+                void setScript(std::shared_ptr<VM::Script> script);
 
                 void onStateActivate(Event::State* event) override;
                 void onStateDeactivate(Event::State* event) override;
@@ -127,7 +127,7 @@ namespace Falltergeist
                 int _headID = -1;
                 Mood _mood = Mood::NEUTRAL;
                 int _msgFileID = -1;
-                VM::Script* _script = nullptr;
+                std::shared_ptr<VM::Script> _script;
                 Game::CritterObject* _critter = nullptr;
                 std::string _headName;
                 uint32_t _startTime;

@@ -230,12 +230,12 @@ namespace Falltergeist
             _msgFileID = value;
         }
 
-        VM::Script* CritterInteract::script()
+        std::shared_ptr<VM::Script> CritterInteract::script()
         {
             return _script;
         }
 
-        void CritterInteract::setScript(VM::Script* script)
+        void CritterInteract::setScript(std::shared_ptr<VM::Script> script)
         {
             _script = script;
         }

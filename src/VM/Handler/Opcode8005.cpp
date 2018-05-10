@@ -37,7 +37,7 @@ namespace VM
 namespace Handler
 {
 
-Opcode8005::Opcode8005(VM::Script* script) : OpcodeHandler(script)
+Opcode8005::Opcode8005(std::shared_ptr<VM::Script> script) : OpcodeHandler(script)
 {
 }
 

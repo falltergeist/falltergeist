@@ -209,7 +209,7 @@ namespace Falltergeist
 {
     namespace VM
     {
-        std::unique_ptr<OpcodeHandler> OpcodeFactory::createOpcode(unsigned int number, VM::Script* script)
+        std::unique_ptr<OpcodeHandler> OpcodeFactory::createOpcode(unsigned int number, std::shared_ptr<VM::Script> script)
         {
             switch (number)
             {

@@ -36,7 +36,7 @@ namespace Falltergeist
             class Opcode80A7 : public OpcodeHandler
             {
                 public:
-                    Opcode80A7(VM::Script* script);
+                    Opcode80A7(std::shared_ptr<VM::Script> script);;
 
                 private:
                     void _run() override;

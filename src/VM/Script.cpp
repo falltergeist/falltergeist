@@ -31,6 +31,7 @@
 #include "../Format/Msg/Message.h"
 #include "../Game/Game.h"
 #include "../Game/Object.h"
+#include "../Game/DudeObject.h"
 #include "../Logger.h"
 #include "../ResourceManager.h"
 #include "../VM/ErrorException.h"
@@ -105,6 +106,8 @@ namespace Falltergeist
         }
 
         void Script::run() {
+            auto context = shared_from_this();
+
             while (_programCounter != _script->size()) {
                 if (_programCounter == 0 && _initialized) {
                     return;
@@ -113,7 +116,7 @@ namespace Falltergeist
                 _script->setPosition(_programCounter);
                 unsigned short opcode = _script->readOpcode();
 
-                std::unique_ptr<OpcodeHandler> opcodeHandler(OpcodeFactory::createOpcode(opcode, this));
+                std::unique_ptr<OpcodeHandler> opcodeHandler(OpcodeFactory::createOpcode(opcode, context));
                 try {
                     opcodeHandler->run();
                 } catch (const HaltException&) {
@@ -272,6 +275,11 @@ namespace Falltergeist
         {
             _usedSkill = skill;
             return this;
+        }
+
+        std::shared_ptr<Game::DudeObject> Script::player()
+        {
+            return Game::getInstance()->player();
         }
     }
 }

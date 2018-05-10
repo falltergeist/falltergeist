@@ -34,7 +34,7 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            Opcode802F::Opcode802F(VM::Script* script) : OpcodeHandler(script)
+            Opcode802F::Opcode802F(std::shared_ptr<VM::Script> script) : OpcodeHandler(script)
             {
             }
 

@@ -37,7 +37,7 @@ namespace Falltergeist
         class OpcodeFactory
         {
             public:
-                static std::unique_ptr<OpcodeHandler> createOpcode(unsigned int number, VM::Script* script);
+                static std::unique_ptr<OpcodeHandler> createOpcode(unsigned int number, std::shared_ptr<VM::Script> script);
         };
     }
 }

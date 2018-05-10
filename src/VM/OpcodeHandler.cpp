@@ -34,7 +34,7 @@ namespace Falltergeist
 {
     namespace VM
     {
-        OpcodeHandler::OpcodeHandler(VM::Script* script) : _script(script)
+        OpcodeHandler::OpcodeHandler(std::shared_ptr<VM::Script> script) : _script(script)
         {
             _offset = script->programCounter();
         }

@@ -147,7 +147,7 @@ namespace Falltergeist
                 Event::KeyboardHandler& keyDownHandler();
                 Event::KeyboardHandler& keyUpHandler();
 
-                void scriptFade(VM::Script* script, bool in);
+                void scriptFade(std::shared_ptr<VM::Script> script, bool in);
 
 
             protected:

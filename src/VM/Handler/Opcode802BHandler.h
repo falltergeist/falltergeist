@@ -36,7 +36,7 @@ namespace Handler
 
 class Opcode802B : public OpcodeHandler {
 public:
-    Opcode802B(VM::Script* script);
+    Opcode802B(std::shared_ptr<VM::Script> script);;
 
 private:
     void _run() override;
