@@ -305,12 +305,10 @@ namespace Falltergeist
                     }
 
                     auto msg = ResourceManager::getInstance()->msgFileType("text/english/game/pro_misc.msg");
-                    try
-                    {
+                    try {
                         object->setName(msg->message(proto->messageId())->text());
                         object->setDescription(msg->message(proto->messageId() + 1)->text());
-                    }
-                    catch (const Exception&) {}
+                    } catch (const Exception&) {}
                     break;
                 }
             }
@@ -318,10 +316,11 @@ namespace Falltergeist
             object->setFID(proto->FID());
             object->setFlags(proto->flags());
 
-            if (proto->scriptId() > 0)
-            {
+            if (proto->scriptId() > 0) {
                 auto intFile = ResourceManager::getInstance()->intFileType(proto->scriptId());
-                if (intFile) object->setScript(new VM::Script(intFile, object));
+                if (intFile) {
+                    object->setScript(std::make_shared<VM::Script>(intFile, object));
+                }
             }
 
             return object;

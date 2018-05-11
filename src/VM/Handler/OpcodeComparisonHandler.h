@@ -47,7 +47,7 @@ namespace Falltergeist
                         GREATER_EQUAL
                     };
 
-                    OpcodeComparison(VM::Script* script, Type cmpType);
+                    OpcodeComparison(std::shared_ptr<VM::Script> script, Type cmpType);
 
                 private:
                     Type _cmpType;

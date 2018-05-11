@@ -57,9 +57,8 @@ namespace Falltergeist
                 if (SID > 0)
                 {
                     auto intFile = ResourceManager::getInstance()->intFileType(SID);
-                    if (intFile)
-                    {
-                        object->setScript(new VM::Script(intFile, object));
+                    if (intFile) {
+                        object->setScript(std::make_shared<VM::Script>(intFile, object));
                     }
                 }
                 if (object->script())

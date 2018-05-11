@@ -54,7 +54,7 @@ namespace Falltergeist
 
             auto intFile = ResourceManager::getInstance()->intFileType(mapScript.scriptId());
             if (intFile) {
-                object->setScript(new VM::Script(intFile, object));
+                object->setScript(std::make_shared<VM::Script>(intFile, object));
             }
             return object;
         }
@@ -117,14 +117,14 @@ namespace Falltergeist
             if (mapObject->scriptId() > 0) {
                 auto intFile = ResourceManager::getInstance()->intFileType(mapObject->scriptId());
                 if (intFile) {
-                    object->setScript(new VM::Script(intFile, object));
+                    object->setScript(std::make_shared<VM::Script>(intFile, object));
                     object->setSID(mapObject->scriptId());
                 }
             }
             if (mapObject->mapScriptId() > 0 && mapObject->mapScriptId() != mapObject->scriptId()) {
                 auto intFile = ResourceManager::getInstance()->intFileType(mapObject->mapScriptId());
                 if (intFile) {
-                    object->setScript(new VM::Script(intFile, object));
+                    object->setScript(std::make_shared<VM::Script>(intFile, object));
                     object->setSID(mapObject->mapScriptId());
                 }
             }

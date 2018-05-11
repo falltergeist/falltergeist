@@ -134,8 +134,8 @@ namespace Falltergeist
 
 
                 // script entity associated with the object
-                VM::Script* script() const;
-                void setScript(VM::Script* script);
+                std::shared_ptr<VM::Script> script() const;
+                void setScript(std::shared_ptr<VM::Script> script);
 
                 /**
                  * @brief Handles OS events coming from the State::handle().
@@ -247,7 +247,7 @@ namespace Falltergeist
                 std::string _name;
                 std::string _scrName;
                 std::string _description;
-                std::unique_ptr<VM::Script> _script;
+                std::shared_ptr<VM::Script> _script;
                 std::unique_ptr<UI::Base> _ui;
                 virtual void _generateUi();
                 std::unique_ptr<UI::TextArea> _floatMessage;

@@ -35,7 +35,7 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            OpcodeComparison::OpcodeComparison(VM::Script* script, Type cmpType) : OpcodeHandler(script)
+            OpcodeComparison::OpcodeComparison(std::shared_ptr<VM::Script> script, Type cmpType) : OpcodeHandler(script)
             {
                 _cmpType = cmpType;
             }
