@@ -16,27 +16,17 @@
  * You should have received a copy of the GNU General Public License
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-#ifndef FALLTERGEIST_VM_IFALLOUTOPCODE_H
-#define FALLTERGEIST_VM_IFALLOUTOPCODE_H
-
-// C++ standard includes
-#include <memory>
-
-// Falltergeist includes
-
-// Third party includes
+#ifndef FALLTERGEIST_VM_IFALLOUTSTACKVALUE_H
+#define FALLTERGEIST_VM_IFALLOUTSTACKVALUE_H
 
 namespace Falltergeist {
     namespace VM {
-        class IFalloutContext;
-
-        class IFalloutOpcode {
+        class IFalloutStackValue {
         public:
-            virtual ~IFalloutOpcode() = default;
-            virtual void applyTo(std::shared_ptr<IFalloutContext> context) = 0;
+            virtual ~IFalloutStackValue() = default;
+            virtual int asInteger() const = 0;
         };
     }
 }
 
-#endif //FALLTERGEIST_VM_IFALLOUTOPCODE_H
+#endif //FALLTERGEIST_VM_IFALLOUTSTACKVALUE_H

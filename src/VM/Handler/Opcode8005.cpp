@@ -27,6 +27,8 @@
 #include "../../Format/Int/Procedure.h"
 #include "../../Logger.h"
 #include "../../VM/Script.h"
+#include "../../VM/IFalloutStack.h"
+#include "../../VM/IFalloutStackValue.h"
 
 // Third party includes
 
@@ -43,7 +45,7 @@ Opcode8005::Opcode8005(std::shared_ptr<VM::Script> script) : OpcodeHandler(scrip
 
 void Opcode8005::_run()
 {
-    auto functionIndex = _script->dataStack()->popInteger();
+    auto functionIndex = _script->dataStack()->pop()->asInteger();
     // @TODO: pass arguments and call external procedures
     /*auto argumentCount = _script->dataStack()->popInteger();
     std::vector<int> args;

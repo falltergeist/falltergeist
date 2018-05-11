@@ -41,6 +41,7 @@
 #include "../UI/Image.h"
 #include "../UI/TextArea.h"
 #include "../VM/Script.h"
+#include "../VM/IFalloutStack.h"
 
 // Third party includes
 

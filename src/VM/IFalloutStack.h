@@ -17,11 +17,12 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_VM_IFALLOUTOPCODE_H
-#define FALLTERGEIST_VM_IFALLOUTOPCODE_H
+#ifndef FALLTERGEIST_VM_IFALLOUTSTACK_H
+#define FALLTERGEIST_VM_IFALLOUTSTACK_H
 
 // C++ standard includes
 #include <memory>
+#include <vector>
 
 // Falltergeist includes
 
@@ -29,14 +30,21 @@
 
 namespace Falltergeist {
     namespace VM {
-        class IFalloutContext;
+        class IFalloutStackValue;
 
-        class IFalloutOpcode {
+        class IFalloutStack {
         public:
-            virtual ~IFalloutOpcode() = default;
-            virtual void applyTo(std::shared_ptr<IFalloutContext> context) = 0;
+            virtual ~IFalloutStack() = default;
+            virtual void push(std::shared_ptr<IFalloutStackValue> value) = 0;
+            virtual void push(int value) = 0;
+            virtual std::shared_ptr<IFalloutStackValue> at(int offset) = 0;
+            virtual std::shared_ptr<IFalloutStackValue> pop() = 0;
+            virtual std::shared_ptr<IFalloutStackValue> top() = 0;
+            virtual void clear() = 0;
+            virtual size_t size() = 0;
+            virtual void swap() = 0;
         };
     }
 }
 
-#endif //FALLTERGEIST_VM_IFALLOUTOPCODE_H
+#endif //FALLTERGEIST_VM_IFALLOUTSTACK_H

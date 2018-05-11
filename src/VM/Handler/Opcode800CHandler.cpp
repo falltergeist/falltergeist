@@ -25,6 +25,8 @@
 // Falltergeist includes
 #include "../../Logger.h"
 #include "../../VM/Script.h"
+#include "../../VM/IFalloutStack.h"
+#include "../../VM/IFalloutStackValue.h"
 
 // Third party includes
 

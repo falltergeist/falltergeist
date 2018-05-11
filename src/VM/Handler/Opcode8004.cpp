@@ -25,6 +25,8 @@
 // Falltergeist includes
 #include "../../Logger.h"
 #include "../../VM/Script.h"
+#include "../../VM/IFalloutStack.h"
+#include "../../VM/IFalloutStackValue.h"
 
 // Third party includes
 
@@ -40,7 +42,7 @@ namespace Falltergeist
 
             void Opcode8004::_run()
             {
-                auto address = _script->dataStack()->popInteger();
+                auto address = _script->dataStack()->pop()->asInteger();
                 Logger::debug("SCRIPT") << "[8004] [*] op_jmp(address)" << std::endl
                                         << "    address: " << std::hex << address << std::endl;
                 _script->setProgramCounter(address);

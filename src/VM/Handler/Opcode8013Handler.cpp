@@ -26,6 +26,8 @@
 #include "../../Logger.h"
 #include "../../VM/Script.h"
 #include "../../VM/StackValue.h"
+#include "../../VM/IFalloutStack.h"
+#include "../../VM/IFalloutStackValue.h"
 
 // Third party includes
 
@@ -41,16 +43,16 @@ namespace Falltergeist
 
             void Opcode8013::_run()
             {
-                auto number = _script->dataStack()->popInteger();
+                auto number = _script->dataStack()->pop()->asInteger();
                 auto value = _script->dataStack()->pop();
-                _script->dataStack()->values()->at(_script->SVARbase() + number) = value;
+                _script->dataStack()->at(_script->SVARbase() + number) = value;
 
                 auto& debug = Logger::debug("SCRIPT");
 
                 debug   << "[8013] [*] op_store_global" << std::endl
-                        << "      num: "  << number << std::endl
-                        << "     type: " << value.typeName() << std::endl
-                        << "    value: " << value.toString();
+                        << "      num: "  << number << std::endl;
+                        //<< "     type: " << value.typeName() << std::endl
+                        //<< "    value: " << value.toString();
 
                 debug << std::endl;
             }

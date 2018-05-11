@@ -57,6 +57,8 @@ namespace Falltergeist {
 
                 // IFalloutContext
                 std::shared_ptr<Game::DudeObject> player() override;
+                std::shared_ptr<IFalloutStack> dataStack() override;
+                std::shared_ptr<IFalloutStack> returnStack() override;
 
                 void run();
                 void initialize();
@@ -79,8 +81,6 @@ namespace Falltergeist {
                 unsigned int programCounter();
                 void setProgramCounter(unsigned int value);
 
-                Stack* dataStack();
-                Stack* returnStack();
                 std::vector<StackValue>* LVARS();
 
                 size_t DVARbase();
@@ -109,8 +109,8 @@ namespace Falltergeist {
                 Format::Int::File* _script = 0;
                 bool _initialized = false;
                 bool _overrides = false;
-                Stack _dataStack;
-                Stack _returnStack;
+                std::shared_ptr<IFalloutStack> _dataStack;
+                std::shared_ptr<IFalloutStack> _returnStack;
                 std::vector<StackValue> _LVARS;
                 unsigned int _programCounter = 0;
                 size_t _DVAR_base = 0;

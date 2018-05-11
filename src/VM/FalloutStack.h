@@ -17,33 +17,24 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Related headers
-#include "../../VM/Handler/Opcode800DHandler.h"
+#ifndef FALLTERGEIST_VM_FALLOUTSTACK_H
+#define FALLTERGEIST_VM_FALLOUTSTACK_H
 
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../Logger.h"
-#include "../../VM/Script.h"
-#include "../../VM/IFalloutStack.h"
+#include "../VM/IFalloutStack.h"
 
-// Third party includes
+// This
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode800D::Opcode800D(std::shared_ptr<VM::Script> script) : OpcodeHandler(script)
-            {
-            }
-
-            void Opcode800D::_run()
-            {
-                Logger::debug("SCRIPT") << "[800D] [*] op_d_to_a" << std::endl;
-                _script->returnStack()->push(_script->dataStack()->pop());
-            }
-        }
+namespace Falltergeist {
+    namespace VM {
+        class FalloutStack : public virtual IFalloutStack {
+        public:
+            virtual ~FalloutStack() = default;
+        };
     }
 }
+
+
+#endif //FALLTERGEIST_VM_FALLOUTSTACK_H
