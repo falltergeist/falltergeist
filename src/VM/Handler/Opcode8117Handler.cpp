@@ -28,19 +28,15 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode8117::Opcode8117(VM::Script* script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode8117::Opcode8117(VM::Script *script) : OpcodeHandler(script) {
             }
 
-            void Opcode8117::_run()
-            {
-                Logger::debug("SCRIPT") << "[8117] [=] int rm_mult_objs_from_inven(void* who, void* obj, int count)" << std::endl;
+            void Opcode8117::_run() {
+                Logger::debug("SCRIPT") << "[8117] [=] int rm_mult_objs_from_inven(void* who, void* obj, int count)"
+                                        << std::endl;
                 auto dataStack = _script->dataStack();
                 dataStack->popInteger();
                 dataStack->popObject();

@@ -28,22 +28,16 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode8030::Opcode8030(VM::Script* script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode8030::Opcode8030(VM::Script *script) : OpcodeHandler(script) {
             }
 
-            void Opcode8030::_run()
-            {
+            void Opcode8030::_run() {
                 Logger::debug("SCRIPT") << "[8030] [*] op_while(address, condition)" << std::endl;
                 auto condition = _script->dataStack()->popLogical();
-                if (!condition)
-                {
+                if (!condition) {
                     _script->setProgramCounter(_script->dataStack()->popInteger());
                 }
             }

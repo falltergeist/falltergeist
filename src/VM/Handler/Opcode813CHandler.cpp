@@ -29,27 +29,23 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode813C::Opcode813C(VM::Script* script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode813C::Opcode813C(VM::Script *script) : OpcodeHandler(script) {
             }
 
-            void Opcode813C::_run()
-            {
+            void Opcode813C::_run() {
                 int amount = _script->dataStack()->popInteger();
                 int skill = _script->dataStack()->popInteger();
-                auto critter = static_cast<Game::CritterObject*>(_script->dataStack()->popObject());
+                auto critter = static_cast<Game::CritterObject *>(_script->dataStack()->popObject());
 
-                critter->setSkillGainedValue((SKILL)skill, critter->skillGainedValue((SKILL)skill) + amount);
+                critter->setSkillGainedValue((SKILL) skill, critter->skillGainedValue((SKILL) skill) + amount);
 
-                Logger::debug("SCRIPT") << "[813C] void critter_mod_skill(GameCritterObject* who, int skill, int amount)" << std::endl
-                                        << "    skill = " << skill << std::endl
-                                        << "    amount = " << amount << std::endl;
+                Logger::debug("SCRIPT")
+                        << "[813C] void critter_mod_skill(GameCritterObject* who, int skill, int amount)" << std::endl
+                        << "    skill = " << skill << std::endl
+                        << "    amount = " << amount << std::endl;
             }
         }
     }

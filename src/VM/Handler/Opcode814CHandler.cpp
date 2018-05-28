@@ -32,22 +32,17 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode814C::Opcode814C(VM::Script* script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode814C::Opcode814C(VM::Script *script) : OpcodeHandler(script) {
             }
 
-            void Opcode814C::_run()
-            {
+            void Opcode814C::_run() {
                 Logger::debug("SCRIPT") << "[814C] [=] int rotation_to_tile(int srcTile, int destTile)" << std::endl;
                 // TODO: error checking
                 auto to_index = _script->dataStack()->popInteger();
-                auto from_index =_script->dataStack()->popInteger();
+                auto from_index = _script->dataStack()->popInteger();
                 auto grid = Game::getInstance()->locationState()->hexagonGrid();
                 auto from_hex = grid->at(from_index);
                 auto to_hex = grid->at(to_index);

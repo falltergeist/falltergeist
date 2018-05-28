@@ -29,23 +29,17 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode80C2::Opcode80C2(VM::Script* script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode80C2::Opcode80C2(VM::Script *script) : OpcodeHandler(script) {
             }
 
-            void Opcode80C2::_run()
-            {
+            void Opcode80C2::_run() {
                 Logger::debug("SCRIPT") << "[80C2] [*] LVAR[num] = value" << std::endl;
                 auto value = _script->dataStack()->pop();
                 unsigned int num = _script->dataStack()->popInteger();
-                while (num >= _script->LVARS()->size())
-                {
+                while (num >= _script->LVARS()->size()) {
                     _script->LVARS()->push_back(StackValue(0));
                 }
                 _script->LVARS()->at(num) = value;

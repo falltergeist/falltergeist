@@ -34,23 +34,19 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode80F8::Opcode80F8(VM::Script* script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode80F8::Opcode80F8(VM::Script *script) : OpcodeHandler(script) {
             }
 
-            void Opcode80F8::_run()
-            {
+            void Opcode80F8::_run() {
                 Logger::debug("SCRIPT") << "[80F8] [=] bool tile_is_visible (int hex)" << std::endl;
                 int hexnum = _script->dataStack()->popInteger();
                 auto hex = Game::getInstance()->locationState()->hexagonGrid()->at(hexnum);
-                bool inrect = Graphics::Rect::inRect( Point( hex->position() - Game::getInstance()->locationState()->camera()->topLeft() ),
-                                                      Game::getInstance()->locationState()->camera()->size() );
+                bool inrect = Graphics::Rect::inRect(
+                        Point(hex->position() - Game::getInstance()->locationState()->camera()->topLeft()),
+                        Game::getInstance()->locationState()->camera()->size());
                 _script->dataStack()->push(inrect);
             }
         }

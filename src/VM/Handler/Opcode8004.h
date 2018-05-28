@@ -27,19 +27,15 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            class Opcode8004 : public OpcodeHandler
-            {
-                public:
-                    Opcode8004(VM::Script* script);
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            class Opcode8004 : public OpcodeHandler {
+            public:
+                Opcode8004(VM::Script *script);
 
-                private:
-                    void _run() override;
+            private:
+                void _run() override;
             };
         }
     }

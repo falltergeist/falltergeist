@@ -29,22 +29,17 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode814B::Opcode814B(VM::Script* script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode814B::Opcode814B(VM::Script *script) : OpcodeHandler(script) {
             }
 
-            void Opcode814B::_run()
-            {
+            void Opcode814B::_run() {
                 // @TODO
                 Logger::debug("SCRIPT") << "[814B] [*] void* party_member_obj(int pid)" << std::endl;
                 _script->dataStack()->popInteger();
-                _script->dataStack()->push((Game::Object*)nullptr);
+                _script->dataStack()->push((Game::Object *) nullptr);
             }
         }
     }

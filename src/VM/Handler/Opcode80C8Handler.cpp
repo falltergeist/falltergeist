@@ -29,30 +29,24 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode80C8::Opcode80C8(VM::Script* script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode80C8::Opcode80C8(VM::Script *script) : OpcodeHandler(script) {
             }
 
-            void Opcode80C8::_run()
-            {
+            void Opcode80C8::_run() {
                 // @TODO: implement
                 Logger::debug("SCRIPT") << "[80C8] [=] int obj_type(void* obj)" << std::endl;
                 auto object = _script->dataStack()->popObject();
                 Game::Object::Type type = object->type();
-                switch (type)
-                {
+                switch (type) {
                     case Game::Object::Type::CRITTER:
                     case Game::Object::Type::DUDE:
                         _script->dataStack()->push(1);
                         break;
                     default:
-                        _script->dataStack()->push((int)type);
+                        _script->dataStack()->push((int) type);
                         break;
 
                 }

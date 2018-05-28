@@ -28,18 +28,13 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode80F9::Opcode80F9(VM::Script* script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode80F9::Opcode80F9(VM::Script *script) : OpcodeHandler(script) {
             }
 
-            void Opcode80F9::_run()
-            {
+            void Opcode80F9::_run() {
                 Logger::debug("SCRIPT") << "[80F9] [=] void dialogue_system_enter()" << std::endl;
             }
         }

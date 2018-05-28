@@ -28,20 +28,16 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode80D0::Opcode80D0(VM::Script* script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode80D0::Opcode80D0(VM::Script *script) : OpcodeHandler(script) {
             }
 
-            void Opcode80D0::_run()
-            {
-                Logger::debug("SCRIPT") << "[80D0] [=] void attack_complex(ObjectPtr who, int called_shot, int num_attacks, int bonus"
-                                        ", int min_damage, int max_damage, int attacker_results, int target_results)" << std::endl;
+            void Opcode80D0::_run() {
+                Logger::debug("SCRIPT")
+                        << "[80D0] [=] void attack_complex(ObjectPtr who, int called_shot, int num_attacks, int bonus"
+                           ", int min_damage, int max_damage, int attacker_results, int target_results)" << std::endl;
 
                 auto dataStack = _script->dataStack();
 

@@ -28,18 +28,13 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode80B9::Opcode80B9(VM::Script* script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode80B9::Opcode80B9(VM::Script *script) : OpcodeHandler(script) {
             }
 
-            void Opcode80B9::_run()
-            {
+            void Opcode80B9::_run() {
                 Logger::debug("SCRIPT") << "[80B9] script_overrides" << std::endl;
                 _script->setOverrides(true);
             }

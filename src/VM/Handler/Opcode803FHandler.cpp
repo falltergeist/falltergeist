@@ -28,18 +28,13 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode803F::Opcode803F(VM::Script* script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode803F::Opcode803F(VM::Script *script) : OpcodeHandler(script) {
             }
 
-            void Opcode803F::_run()
-            {
+            void Opcode803F::_run() {
                 Logger::debug("SCRIPT") << "[803F] [+] op_or" << std::endl;
                 auto b = _script->dataStack()->popLogical();
                 auto a = _script->dataStack()->popLogical();

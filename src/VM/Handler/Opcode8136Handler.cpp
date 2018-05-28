@@ -32,18 +32,13 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode8136::Opcode8136(VM::Script* script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode8136::Opcode8136(VM::Script *script) : OpcodeHandler(script) {
             }
 
-            void Opcode8136::_run()
-            {
+            void Opcode8136::_run() {
                 int time = _script->dataStack()->popInteger(); // original engine ignores time
                 Logger::debug("SCRIPT") << "[8136] [=] void gfade_out(int time)" << std::endl
                                         << "    time = " << time << std::endl;

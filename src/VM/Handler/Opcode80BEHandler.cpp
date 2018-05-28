@@ -28,18 +28,13 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode80BE::Opcode80BE(VM::Script* script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode80BE::Opcode80BE(VM::Script *script) : OpcodeHandler(script) {
             }
 
-            void Opcode80BE::_run()
-            {
+            void Opcode80BE::_run() {
                 Logger::debug("SCRIPT") << "[80BE/80C0] [=] object target_obj/obj_being_used_with()" << std::endl;
                 _script->dataStack()->push(_script->targetObject());
             }

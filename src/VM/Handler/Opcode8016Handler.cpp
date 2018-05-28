@@ -30,22 +30,16 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode8016::Opcode8016(VM::Script* script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode8016::Opcode8016(VM::Script *script) : OpcodeHandler(script) {
             }
 
-            void Opcode8016::_run()
-            {
+            void Opcode8016::_run() {
                 auto name = _script->dataStack()->popString();
                 auto EVARS = Game::getInstance()->locationState()->EVARS();
-                if (EVARS->find(name) == EVARS->end())
-                {
+                if (EVARS->find(name) == EVARS->end()) {
                     EVARS->insert(std::make_pair(name, StackValue(0)));
                 }
                 Logger::debug("SCRIPT") << "[8016] [*] op_export_var(name)" << std::endl

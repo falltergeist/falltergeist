@@ -28,18 +28,13 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode80F7::Opcode80F7(VM::Script* script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode80F7::Opcode80F7(VM::Script *script) : OpcodeHandler(script) {
             }
 
-            void Opcode80F7::_run()
-            {
+            void Opcode80F7::_run() {
                 Logger::debug("SCRIPT") << "[80F7] [=] int fixed_param()" << std::endl;
                 _script->dataStack()->push(_script->fixedParam());
             }

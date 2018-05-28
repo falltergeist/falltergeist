@@ -28,18 +28,13 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode8133::Opcode8133(VM::Script* script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode8133::Opcode8133(VM::Script *script) : OpcodeHandler(script) {
             }
 
-            void Opcode8133::_run()
-            {
+            void Opcode8133::_run() {
                 Logger::debug("SCRIPT") << "[8134] [=] void game_ui_disable()" << std::endl;
             }
         }

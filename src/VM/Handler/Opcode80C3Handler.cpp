@@ -30,22 +30,16 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode80C3::Opcode80C3(VM::Script* script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode80C3::Opcode80C3(VM::Script *script) : OpcodeHandler(script) {
             }
 
-            void Opcode80C3::_run()
-            {
+            void Opcode80C3::_run() {
                 Logger::debug("SCRIPT") << "[80C3] [?] MVAR[num]" << std::endl;
                 auto num = _script->dataStack()->popInteger();
-                if (num < 0)
-                {
+                if (num < 0) {
                     _script->dataStack()->push(0);
                 }
                 auto game = Game::getInstance();

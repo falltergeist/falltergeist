@@ -33,28 +33,23 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode80A7::Opcode80A7(VM::Script* script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode80A7::Opcode80A7(VM::Script *script) : OpcodeHandler(script) {
             }
 
-            void Opcode80A7::_run()
-            {
-                Logger::debug("SCRIPT") << "[80A7] [+] GameObject* tile_contains_pid_obj(int position, int elevation, int PID)" << std::endl;
+            void Opcode80A7::_run() {
+                Logger::debug("SCRIPT")
+                        << "[80A7] [+] GameObject* tile_contains_pid_obj(int position, int elevation, int PID)"
+                        << std::endl;
                 auto PID = _script->dataStack()->popInteger();
                 auto elevation = _script->dataStack()->popInteger();
                 auto position = _script->dataStack()->popInteger();
                 auto game = Game::getInstance();
-                Game::Object* found = nullptr;
-                for (auto object : *game->locationState()->hexagonGrid()->at(position)->objects())
-                {
-                    if (object->PID() == PID && object->elevation() == elevation)
-                    {
+                Game::Object *found = nullptr;
+                for (auto object : *game->locationState()->hexagonGrid()->at(position)->objects()) {
+                    if (object->PID() == PID && object->elevation() == elevation) {
                         found = object;
                         break;
                     }

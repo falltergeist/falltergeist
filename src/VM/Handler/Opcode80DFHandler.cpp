@@ -29,18 +29,13 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode80DF::Opcode80DF(VM::Script* script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode80DF::Opcode80DF(VM::Script *script) : OpcodeHandler(script) {
             }
 
-            void Opcode80DF::_run()
-            {
+            void Opcode80DF::_run() {
                 Logger::debug("SCRIPT") << "[80DF] [?] end_dialogue" << std::endl;
                 auto game = Game::getInstance();
                 game->popState(); // interact state

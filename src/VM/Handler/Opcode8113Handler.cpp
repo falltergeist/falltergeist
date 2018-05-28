@@ -28,19 +28,16 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode8113::Opcode8113(VM::Script* script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode8113::Opcode8113(VM::Script *script) : OpcodeHandler(script) {
             }
 
-            void Opcode8113::_run()
-            {
-                Logger::debug("SCRIPT") << "[8113] [=] void reg_anim_obj_move_to_tile(void* who, int dest_tile, int delay)" << std::endl;
+            void Opcode8113::_run() {
+                Logger::debug("SCRIPT")
+                        << "[8113] [=] void reg_anim_obj_move_to_tile(void* who, int dest_tile, int delay)"
+                        << std::endl;
                 _script->dataStack()->popInteger(); // -1
                 _script->dataStack()->popInteger();
                 _script->dataStack()->popObject();

@@ -29,18 +29,13 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode8027::Opcode8027(VM::Script* script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode8027::Opcode8027(VM::Script *script) : OpcodeHandler(script) {
             }
 
-            void Opcode8027::_run()
-            {
+            void Opcode8027::_run() {
                 Logger::debug("SCRIPT") << "[8027] [?] op_check_arg_count" << std::endl;
                 _script->dataStack()->pop(); // number of actual arguments
                 _script->dataStack()->pop(); // procedure index

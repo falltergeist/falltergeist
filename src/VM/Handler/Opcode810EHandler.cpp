@@ -31,23 +31,17 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode810E::Opcode810E(VM::Script* script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode810E::Opcode810E(VM::Script *script) : OpcodeHandler(script) {
             }
 
-            void Opcode810E::_run()
-            {
+            void Opcode810E::_run() {
                 Logger::debug("SCRIPT") << "[810E] [=] void reg_anim_func(int mode, int arg)" << std::endl;
                 auto arg = _script->dataStack()->pop(); // pointer or integer
                 auto p1 = _script->dataStack()->popInteger();
-                switch (p1)
-                {
+                switch (p1) {
                     case 0x1: // ANIM_BEGIN
                     {
                         // @TODO: implement
@@ -59,13 +53,10 @@ namespace Falltergeist
                     case 0x2: // ANIM_CLEAR
                     {
                         auto object = arg.objectValue();
-                        if (auto critterObject = dynamic_cast<Game::CritterObject*>(object))
-                        {
+                        if (auto critterObject = dynamic_cast<Game::CritterObject *>(object)) {
                             critterObject->stopMovement();
-                        }
-                        else
-                        {
-                            auto queue = dynamic_cast<UI::AnimationQueue*>(object->ui());
+                        } else {
+                            auto queue = dynamic_cast<UI::AnimationQueue *>(object->ui());
                             if (queue) queue->stop();
                         }
                         break;
@@ -75,8 +66,7 @@ namespace Falltergeist
                         // @TODO: implement
                         break;
                     }
-                    default:
-                    {
+                    default: {
                         _error("reg_anim_func - unsupported mode");
                     }
                 }

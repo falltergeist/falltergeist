@@ -30,18 +30,13 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode80E1::Opcode80E1(VM::Script* script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode80E1::Opcode80E1(VM::Script *script) : OpcodeHandler(script) {
             }
 
-            void Opcode80E1::_run()
-            {
+            void Opcode80E1::_run() {
                 // @TODO: add implementation
                 Logger::debug("SCRIPT") << "[80E1] [*] int metarule3(int meta, int p1, int p2, int p3)" << std::endl;
                 auto dataStack = _script->dataStack();
@@ -51,13 +46,11 @@ namespace Falltergeist
                 auto arg1 = dataStack->pop();
                 auto meta = dataStack->popInteger();
                 int result = 0;
-                switch(meta)
-                {
+                switch (meta) {
                     case 100: // rm_fixed_timer_event(object, fixed_param, 0)
                     {
                         auto state = Game::Game::getInstance()->locationState();
-                        if (state)
-                        {
+                        if (state) {
                             state->removeTimerEvent(arg1.objectValue(), arg2.integerValue());
                         }
                         break;
@@ -79,8 +72,7 @@ namespace Falltergeist
                     case 108: // void tile_set_center(int tileNum) - center camera on given tile
                     {
                         auto state = Game::Game::getInstance()->locationState();
-                        if (state)
-                        {
+                        if (state) {
                             state->centerCameraAtHexagon(arg1.integerValue());
                         }
                         break;

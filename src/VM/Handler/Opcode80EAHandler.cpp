@@ -30,20 +30,15 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode80EA::Opcode80EA(VM::Script* script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode80EA::Opcode80EA(VM::Script *script) : OpcodeHandler(script) {
             }
 
-            void Opcode80EA::_run()
-            {
+            void Opcode80EA::_run() {
                 Logger::debug("SCRIPT") << "[80EA] [*] int gameTime()" << std::endl;
-                _script->dataStack()->push((int)Game::getInstance()->gameTime()->ticks());
+                _script->dataStack()->push((int) Game::getInstance()->gameTime()->ticks());
             }
         }
     }

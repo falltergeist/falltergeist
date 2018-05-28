@@ -29,30 +29,23 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode8039::Opcode8039(VM::Script* script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode8039::Opcode8039(VM::Script *script) : OpcodeHandler(script) {
             }
 
-            void Opcode8039::_run()
-            {
-                auto& debug = Logger::debug("SCRIPT");
+            void Opcode8039::_run() {
+                auto &debug = Logger::debug("SCRIPT");
                 debug << "[8039] [*] op_add(aValue, bValue)" << std::endl;
                 auto bValue = _script->dataStack()->pop();
                 auto aValue = _script->dataStack()->pop();
                 debug << "    types: " << aValue.typeName() << " + " << bValue.typeName() << std::endl;
-                switch (bValue.type())
-                {
+                switch (bValue.type()) {
                     case StackValue::Type::INTEGER: // INTEGER
                     {
                         int arg2 = bValue.integerValue();
-                        switch (aValue.type())
-                        {
+                        switch (aValue.type()) {
                             case StackValue::Type::INTEGER: // INTEGER + INTEGER
                             {
                                 _script->dataStack()->push(aValue.integerValue() + arg2);
@@ -60,7 +53,7 @@ namespace Falltergeist
                             }
                             case StackValue::Type::FLOAT: // FLOAT + INTEGER
                             {
-                                _script->dataStack()->push(aValue.floatValue() + (float)arg2);
+                                _script->dataStack()->push(aValue.floatValue() + (float) arg2);
                                 break;
                             }
                             case StackValue::Type::STRING: // STRING + INTEGER
@@ -69,18 +62,15 @@ namespace Falltergeist
                                 _script->dataStack()->push(arg1 + bValue.toString());
                                 break;
                             }
-                            default:
-                            {
+                            default: {
                                 _error(std::string("op_add - invalid left argument type: ") + aValue.typeName());
                             }
                         }
                         break;
                     }
-                    case StackValue::Type::STRING:
-                    {
+                    case StackValue::Type::STRING: {
                         auto arg2 = bValue.stringValue();
-                        switch (aValue.type())
-                        {
+                        switch (aValue.type()) {
                             case StackValue::Type::STRING: // STRING + STRING
                             {
                                 _script->dataStack()->push(aValue.stringValue() + arg2);
@@ -96,8 +86,7 @@ namespace Falltergeist
                                 _error("op_add - INTEGER+STRING not allowed");
                                 break;
                             }
-                            default:
-                            {
+                            default: {
                                 _error(std::string("op_add - invalid left argument type: ") + aValue.typeName());
                             }
                         }
@@ -106,11 +95,10 @@ namespace Falltergeist
                     case StackValue::Type::FLOAT: // FLOAT
                     {
                         auto arg2 = bValue.floatValue();
-                        switch (aValue.type())
-                        {
+                        switch (aValue.type()) {
                             case StackValue::Type::INTEGER: // INTEGER + FLOAT
                             {
-                                _script->dataStack()->push((float)aValue.integerValue() + arg2);
+                                _script->dataStack()->push((float) aValue.integerValue() + arg2);
                                 break;
                             }
                             case StackValue::Type::FLOAT: // FLOAT + FLOAT
@@ -124,15 +112,13 @@ namespace Falltergeist
                                 _script->dataStack()->push(arg1 + bValue.toString());
                                 break;
                             }
-                            default:
-                            {
+                            default: {
                                 _error(std::string("op_add - invalid left argument type: ") + aValue.typeName());
                             }
                         }
                         break;
                     }
-                    default:
-                    {
+                    default: {
                         _error(std::string("op_add - invalid right argument type: ") + bValue.typeName());
                     }
                 }

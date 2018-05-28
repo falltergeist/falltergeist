@@ -28,26 +28,18 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode80B0::Opcode80B0(VM::Script* script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode80B0::Opcode80B0(VM::Script *script) : OpcodeHandler(script) {
             }
 
-            void Opcode80B0::_run()
-            {
+            void Opcode80B0::_run() {
                 Logger::debug("SCRIPT") << "[80B0] [*] int is_critical(int val)" << std::endl;
                 auto value = _script->dataStack()->popInteger();
-                if (value == 0 || value == 3)
-                {
+                if (value == 0 || value == 3) {
                     _script->dataStack()->push(1);
-                }
-                else
-                {
+                } else {
                     _script->dataStack()->push(0);
                 }
             }

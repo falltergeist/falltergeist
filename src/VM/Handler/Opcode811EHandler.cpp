@@ -32,36 +32,26 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode811E::Opcode811E(VM::Script* script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode811E::Opcode811E(VM::Script *script) : OpcodeHandler(script) {
             }
 
-            void Opcode811E::_run()
-            {
+            void Opcode811E::_run() {
                 Logger::debug("SCRIPT") << "[811E] [=] void gSay_Reply(int msg_file_num, int msg_num)" << std::endl;
-                auto dialog = dynamic_cast<State::CritterDialog*>(Game::getInstance()->topState());
+                auto dialog = dynamic_cast<State::CritterDialog *>(Game::getInstance()->topState());
                 dialog->deleteAnswers();
-                if (_script->dataStack()->top().type() == StackValue::Type::STRING)
-                {
+                if (_script->dataStack()->top().type() == StackValue::Type::STRING) {
                     auto question = _script->dataStack()->popString();
                     dialog->setQuestion(question);
-                }
-                else
-                {
+                } else {
                     auto msg_num = _script->dataStack()->popInteger();
                     auto msg_file_num = _script->dataStack()->popInteger();
                     dialog->setQuestion(_script->msgMessage(msg_file_num, msg_num));
                     auto speech = _script->msgSpeech(msg_file_num, msg_num);
-                    if (speech != "")
-                    {
-                        if (auto interact = dynamic_cast<State::CritterInteract*>(Game::getInstance()->topState(1)))
-                        {
+                    if (speech != "") {
+                        if (auto interact = dynamic_cast<State::CritterInteract *>(Game::getInstance()->topState(1))) {
                             interact->playSpeech(speech);
                         }
                     }

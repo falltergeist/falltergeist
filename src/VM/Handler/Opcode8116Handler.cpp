@@ -33,53 +33,42 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode8116::Opcode8116(VM::Script* script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode8116::Opcode8116(VM::Script *script) : OpcodeHandler(script) {
             }
 
-            void Opcode8116::_run()
-            {
-                Logger::debug("SCRIPT") << "[8116] [+] void add_mult_objs_to_inven(GameObject* who, GameItemObject* item, int amount)" << std::endl;
+            void Opcode8116::_run() {
+                Logger::debug("SCRIPT")
+                        << "[8116] [+] void add_mult_objs_to_inven(GameObject* who, GameItemObject* item, int amount)"
+                        << std::endl;
                 auto amount = _script->dataStack()->popInteger();
-                auto item = dynamic_cast<Game::ItemObject*>(_script->dataStack()->popObject());
+                auto item = dynamic_cast<Game::ItemObject *>(_script->dataStack()->popObject());
                 auto invenObj = _script->dataStack()->popObject();
 
-                if (!item)
-                {
+                if (!item) {
                     _error("add_mult_objs_to_inven - item not instanceof GameItemObject");
                     return;
                 }
 
                 item->setAmount(amount);
                 // who can be critter or container
-                std::vector<Game::ItemObject*>* inven;
-                if (auto critterObj = dynamic_cast<Game::CritterObject*>(invenObj))
-                {
+                std::vector<Game::ItemObject *> *inven;
+                if (auto critterObj = dynamic_cast<Game::CritterObject *>(invenObj)) {
                     inven = critterObj->inventory();
-                }
-                else if (auto contObj = dynamic_cast<Game::ContainerItemObject*>(invenObj))
-                {
+                } else if (auto contObj = dynamic_cast<Game::ContainerItemObject *>(invenObj)) {
                     inven = contObj->inventory();
-                }
-                else
-                {
+                } else {
                     _error("add_mult_objs_to_inven - wrong WHO parameter");
                     return;
                 }
 
                 inven->push_back(item);
 
-                if (item->hexagon())
-                {
+                if (item->hexagon()) {
                     auto location = Game::Game::getInstance()->locationState();
-                    if (location)
-                    {
+                    if (location) {
                         location->removeObjectFromMap(item);
                     }
                 }

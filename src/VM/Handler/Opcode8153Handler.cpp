@@ -28,18 +28,13 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode8153::Opcode8153(VM::Script* script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode8153::Opcode8153(VM::Script *script) : OpcodeHandler(script) {
             }
 
-            void Opcode8153::_run()
-            {
+            void Opcode8153::_run() {
                 Logger::debug("SCRIPT") << "[8153] [=] void terminate_combat()" << std::endl;
             }
         }

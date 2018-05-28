@@ -28,18 +28,13 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode80E4::Opcode80E4(VM::Script* script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode80E4::Opcode80E4(VM::Script *script) : OpcodeHandler(script) {
             }
 
-            void Opcode80E4::_run()
-            {
+            void Opcode80E4::_run() {
                 Logger::debug("SCRIPT") << "[80E4] [=] void load_map(string* map, int param)" << std::endl;
                 _script->dataStack()->popInteger();
                 _script->dataStack()->popObject();

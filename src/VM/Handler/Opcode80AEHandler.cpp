@@ -28,19 +28,15 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode80AE::Opcode80AE(VM::Script* script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode80AE::Opcode80AE(VM::Script *script) : OpcodeHandler(script) {
             }
 
-            void Opcode80AE::_run()
-            {
-                Logger::debug("SCRIPT") << "[80AE] [=] int do_check(ObjectPtr who, int check, int modifier)" << std::endl;
+            void Opcode80AE::_run() {
+                Logger::debug("SCRIPT") << "[80AE] [=] int do_check(ObjectPtr who, int check, int modifier)"
+                                        << std::endl;
                 auto dataStack = _script->dataStack();
                 dataStack->popInteger();
                 dataStack->popInteger();

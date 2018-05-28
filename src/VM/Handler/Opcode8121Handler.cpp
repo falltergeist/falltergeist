@@ -32,52 +32,42 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode8121::Opcode8121(VM::Script* script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode8121::Opcode8121(VM::Script *script) : OpcodeHandler(script) {
             }
 
-            void Opcode8121::_run()
-            {
-                Logger::debug("SCRIPT") << "[8121] [+] void giQ_Option(int iq_test, int msg_list, int msg_num, procedure target, int reaction)" << std::endl;
+            void Opcode8121::_run() {
+                Logger::debug("SCRIPT")
+                        << "[8121] [+] void giQ_Option(int iq_test, int msg_list, int msg_num, procedure target, int reaction)"
+                        << std::endl;
 
                 auto dataStack = _script->dataStack();
 
                 auto reaction = dataStack->popInteger();
                 auto function = dataStack->popInteger();
                 std::string text;
-                if (dataStack->top().type() == StackValue::Type::STRING)
-                {
+                if (dataStack->top().type() == StackValue::Type::STRING) {
                     text = dataStack->popString();
                     dataStack->popInteger(); // msg_list
-                }
-                else
-                {
+                } else {
                     auto msg_num = dataStack->popInteger();
                     auto msg_file_num = dataStack->popInteger();
                     text = _script->msgMessage(msg_file_num, msg_num);
                 }
                 auto iq = dataStack->popInteger();
                 auto game = Game::getInstance();
-                auto dialog = dynamic_cast<State::CritterDialog*>(game->topState());
-                if (iq >= 0)
-                {
-                    if (game->player()->stat(STAT::INTELLIGENCE) >= iq)
-                    {
+                auto dialog = dynamic_cast<State::CritterDialog *>(game->topState());
+                if (iq >= 0) {
+                    if (game->player()->stat(STAT::INTELLIGENCE) >= iq) {
                         dialog->reactions()->push_back(reaction);
                         dialog->functions()->push_back(function);
                         dialog->addAnswer(text);
                     }
                 }
-                if (iq < 0)
-                {
-                    if (game->player()->stat(STAT::INTELLIGENCE) <= abs(iq))
-                    {
+                if (iq < 0) {
+                    if (game->player()->stat(STAT::INTELLIGENCE) <= abs(iq)) {
                         dialog->reactions()->push_back(reaction);
                         dialog->functions()->push_back(function);
                         dialog->addAnswer(text);

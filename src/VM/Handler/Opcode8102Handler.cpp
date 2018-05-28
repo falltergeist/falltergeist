@@ -28,24 +28,21 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode8102::Opcode8102(VM::Script* script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode8102::Opcode8102(VM::Script *script) : OpcodeHandler(script) {
             }
 
-            void Opcode8102::_run()
-            {
-                Logger::debug("SCRIPT") << "[8102] [*] int critter_add_trait(void* who, int trait_type, int trait, int amount) " << std::endl;
+            void Opcode8102::_run() {
+                Logger::debug("SCRIPT")
+                        << "[8102] [*] int critter_add_trait(void* who, int trait_type, int trait, int amount) "
+                        << std::endl;
                 auto dataStack = _script->dataStack();
-                /* auto amount = */ (void)dataStack->popInteger();
-                /* auto trait = */ (void)dataStack->popInteger();
-                /* auto trait_type = */ (void)dataStack->popInteger();
-                /* auto who = */ (void)dataStack->popObject();
+                /* auto amount = */ (void) dataStack->popInteger();
+                /* auto trait = */ (void) dataStack->popInteger();
+                /* auto trait_type = */ (void) dataStack->popInteger();
+                /* auto who = */ (void) dataStack->popObject();
                 dataStack->push(0);
             }
         }

@@ -28,24 +28,19 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode8042::Opcode8042(VM::Script* script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode8042::Opcode8042(VM::Script *script) : OpcodeHandler(script) {
             }
 
-            void Opcode8042::_run()
-            {
+            void Opcode8042::_run() {
                 Logger::debug("SCRIPT") << "[8042] [*] op_bwxor" << std::endl;
                 auto bValue = _script->dataStack()->pop();
                 auto aValue = _script->dataStack()->pop();
-                if (!aValue.isNumber() || !bValue.isNumber())
-                {
-                    _error(std::string("op_bwxor: invalid argument types: ") + aValue.typeName() + " bwxor " + bValue.typeName());
+                if (!aValue.isNumber() || !bValue.isNumber()) {
+                    _error(std::string("op_bwxor: invalid argument types: ") + aValue.typeName() + " bwxor " +
+                           bValue.typeName());
                 }
                 _script->dataStack()->push(aValue.toInteger() ^ bValue.toInteger());
             }

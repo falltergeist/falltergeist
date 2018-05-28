@@ -37,27 +37,22 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode80C9::Opcode80C9(VM::Script* script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode80C9::Opcode80C9(VM::Script *script) : OpcodeHandler(script) {
             }
 
-            void Opcode80C9::_run()
-            {
+            void Opcode80C9::_run() {
                 Logger::debug("SCRIPT") << "[80C9] [+] int obj_item_subtype(GameItemObject* object)" << std::endl;
                 auto object = _script->dataStack()->popObject();
-                if      (dynamic_cast<Game::ArmorItemObject*>(object))     _script->dataStack()->push(0);
-                else if (dynamic_cast<Game::ContainerItemObject*>(object)) _script->dataStack()->push(1);
-                else if (dynamic_cast<Game::DrugItemObject*>(object))      _script->dataStack()->push(2);
-                else if (dynamic_cast<Game::WeaponItemObject*>(object))    _script->dataStack()->push(3);
-                else if (dynamic_cast<Game::AmmoItemObject*>(object))      _script->dataStack()->push(4);
-                else if (dynamic_cast<Game::MiscItemObject*>(object))      _script->dataStack()->push(5);
-                else if (dynamic_cast<Game::KeyItemObject*>(object))       _script->dataStack()->push(6);
+                if (dynamic_cast<Game::ArmorItemObject *>(object)) _script->dataStack()->push(0);
+                else if (dynamic_cast<Game::ContainerItemObject *>(object)) _script->dataStack()->push(1);
+                else if (dynamic_cast<Game::DrugItemObject *>(object)) _script->dataStack()->push(2);
+                else if (dynamic_cast<Game::WeaponItemObject *>(object)) _script->dataStack()->push(3);
+                else if (dynamic_cast<Game::AmmoItemObject *>(object)) _script->dataStack()->push(4);
+                else if (dynamic_cast<Game::MiscItemObject *>(object)) _script->dataStack()->push(5);
+                else if (dynamic_cast<Game::KeyItemObject *>(object)) _script->dataStack()->push(6);
                 else _script->dataStack()->push(-1);
             }
         }

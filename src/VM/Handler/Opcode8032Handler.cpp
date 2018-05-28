@@ -28,23 +28,21 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-namespace VM
-{
-namespace Handler
-{
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
 
-Opcode8032::Opcode8032(VM::Script* script) : OpcodeHandler(script) {
-}
+            Opcode8032::Opcode8032(VM::Script *script) : OpcodeHandler(script) {
+            }
 
-void Opcode8032::_run() {
-    auto num = _script->dataStack()->popInteger();
-    auto value = _script->dataStack()->values()->at(_script->DVARbase() + num);
-    _script->dataStack()->push(value);
-    Logger::debug("SCRIPT") << "[8032] [*] op_fetch " << "var" << std::hex << num << " type = " << value.typeName() << std::endl;
-}
+            void Opcode8032::_run() {
+                auto num = _script->dataStack()->popInteger();
+                auto value = _script->dataStack()->values()->at(_script->DVARbase() + num);
+                _script->dataStack()->push(value);
+                Logger::debug("SCRIPT") << "[8032] [*] op_fetch " << "var" << std::hex << num << " type = "
+                                        << value.typeName() << std::endl;
+            }
 
-}
-}
+        }
+    }
 }

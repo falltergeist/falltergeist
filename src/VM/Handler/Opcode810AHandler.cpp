@@ -32,23 +32,17 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode810A::Opcode810A(VM::Script* script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode810A::Opcode810A(VM::Script *script) : OpcodeHandler(script) {
             }
 
-            void Opcode810A::_run()
-            {
+            void Opcode810A::_run() {
                 Logger::debug("SCRIPT") << "[810A] [=] void float_msg(object who, string msg, int type) " << std::endl;
                 int type = _script->dataStack()->popInteger();
                 SDL_Color color = {0x00, 0x00, 0x00, 0xff};
-                switch (type)
-                {
+                switch (type) {
                     case -2:
                         // CAPITAL RED LETTERS  FF 00 00
                         color = {0xff, 0x00, 0x00, 0xff};

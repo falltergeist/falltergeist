@@ -30,18 +30,13 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode8101::Opcode8101(VM::Script* script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode8101::Opcode8101(VM::Script *script) : OpcodeHandler(script) {
             }
 
-            void Opcode8101::_run()
-            {
+            void Opcode8101::_run() {
                 Logger::debug("SCRIPT") << "[8101] [=] int cur_map_index()" << std::endl;
                 _script->dataStack()->push(Game::getInstance()->locationState()->currentMapIndex());
             }

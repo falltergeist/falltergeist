@@ -29,24 +29,19 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode80E8::Opcode80E8(VM::Script* script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode80E8::Opcode80E8(VM::Script *script) : OpcodeHandler(script) {
             }
 
-            void Opcode80E8::_run()
-            {
-                auto &debug = Logger::debug("SCRIPT") << "[80E8] [+] void critter_heal(ObjectPtr who, int amount)" << std::endl;
+            void Opcode80E8::_run() {
+                auto &debug = Logger::debug("SCRIPT") << "[80E8] [+] void critter_heal(ObjectPtr who, int amount)"
+                                                      << std::endl;
                 int amount = _script->dataStack()->popInteger();
                 debug << "    amount = " << amount << std::endl;
-                auto critter = dynamic_cast<Game::CritterObject*>(_script->dataStack()->popObject());
-                if (!critter)
-                {
+                auto critter = dynamic_cast<Game::CritterObject *>(_script->dataStack()->popObject());
+                if (!critter) {
                     _error("VM::critter_heal - invalid critter pointer");
                 }
                 critter->setHitPoints(critter->hitPoints() + amount);

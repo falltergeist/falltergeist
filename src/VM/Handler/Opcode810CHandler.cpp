@@ -30,27 +30,22 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode810C::Opcode810C(VM::Script* script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode810C::Opcode810C(VM::Script *script) : OpcodeHandler(script) {
             }
 
-            void Opcode810C::_run()
-            {
+            void Opcode810C::_run() {
                 int direction = _script->dataStack()->popInteger();
                 int animation = _script->dataStack()->popInteger();
-                auto object = static_cast<Game::Object*>(_script->dataStack()->popObject());
+                auto object = static_cast<Game::Object *>(_script->dataStack()->popObject());
 
-                Logger::debug("SCRIPT") << "[810C] [*] void anim(GameCritterObject* who, int animation, int direction)" << std::endl
+                Logger::debug("SCRIPT") << "[810C] [*] void anim(GameCritterObject* who, int animation, int direction)"
+                                        << std::endl
                                         << "    direction = 0x" << std::hex << direction << std::endl
                                         << "    animation = 0x" << std::hex << animation << std::endl;
-                switch (animation)
-                {
+                switch (animation) {
                     case 1000: // ANIMATE_ROTATION. direction is orientation
                     {
                         object->setOrientation(direction);

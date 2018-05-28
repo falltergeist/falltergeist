@@ -30,18 +30,13 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode80A3::Opcode80A3(VM::Script* script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode80A3::Opcode80A3(VM::Script *script) : OpcodeHandler(script) {
             }
 
-            void Opcode80A3::_run()
-            {
+            void Opcode80A3::_run() {
                 Logger::debug("SCRIPT") << "[80A3] [=] void play_sfx(string* p1)" << std::endl;
                 auto name = _script->dataStack()->popString();
                 Game::Game::getInstance()->mixer()->playACMSound("sound/sfx/" + name + ".acm");

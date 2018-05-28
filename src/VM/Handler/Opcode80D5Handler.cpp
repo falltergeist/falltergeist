@@ -32,19 +32,15 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode80D5::Opcode80D5(VM::Script* script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode80D5::Opcode80D5(VM::Script *script) : OpcodeHandler(script) {
             }
 
-            void Opcode80D5::_run()
-            {
-                Logger::debug("SCRIPT") << "[80D5] [*] int tile_num_in_direction(int start_tile, int dir, int distance)" << std::endl;
+            void Opcode80D5::_run() {
+                Logger::debug("SCRIPT") << "[80D5] [*] int tile_num_in_direction(int start_tile, int dir, int distance)"
+                                        << std::endl;
 
                 auto dataStack = _script->dataStack();
 
@@ -52,22 +48,16 @@ namespace Falltergeist
                 auto dir = dataStack->popInteger();
                 auto start_tile = dataStack->popInteger();
 
-                if (dir < 0 || dir > 5 || distance < 0)
-                {
+                if (dir < 0 || dir > 5 || distance < 0) {
                     //error?
                     dataStack->push(start_tile);
-                }
-                else
-                {
+                } else {
                     auto grid = Game::getInstance()->locationState()->hexagonGrid();
                     auto hex = grid->hexInDirection(grid->at(start_tile), dir, distance);
-                    if (hex)
-                    {
+                    if (hex) {
                         dataStack->push(hex->number());
 
-                    }
-                    else
-                    {
+                    } else {
                         dataStack->push(start_tile);
                     }
                 }

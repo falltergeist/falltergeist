@@ -27,24 +27,20 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
             /**
              * @brief 0x803F opcode handler class
              *
              * This opcode represents logical OR operation. It tooks 2 boolean values from the stack and pushes boolean value of logical OR operation
              */
-            class Opcode803F : public OpcodeHandler
-            {
-                public:
-                    Opcode803F(VM::Script* script);
+            class Opcode803F : public OpcodeHandler {
+            public:
+                Opcode803F(VM::Script *script);
 
-                private:
-                    void _run() override;
+            private:
+                void _run() override;
             };
         }
     }

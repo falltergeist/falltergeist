@@ -30,20 +30,16 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode8126::Opcode8126(VM::Script* script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode8126::Opcode8126(VM::Script *script) : OpcodeHandler(script) {
             }
 
-            void Opcode8126::_run()
-            {
-                Logger::debug("SCRIPT") << "[8126] [-] void reg_anim_animate_forever(GameObject* obj , int delay)" << std::endl;
-                /* int delay = */ (void)_script->dataStack()->popInteger();
+            void Opcode8126::_run() {
+                Logger::debug("SCRIPT") << "[8126] [-] void reg_anim_animate_forever(GameObject* obj , int delay)"
+                                        << std::endl;
+                /* int delay = */ (void) _script->dataStack()->popInteger();
                 /*
                 // delay - must be -1
                 if (delay != -1)
@@ -52,9 +48,8 @@ namespace Falltergeist
                 }
                 */
                 auto object = _script->dataStack()->popObject();
-                auto queue = dynamic_cast<UI::AnimationQueue*>(object->ui());
-                if (queue)
-                {
+                auto queue = dynamic_cast<UI::AnimationQueue *>(object->ui());
+                if (queue) {
                     queue->stop();
                     queue->setRepeat(true); // forever
                     queue->start();

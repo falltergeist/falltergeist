@@ -30,25 +30,20 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            OpcodeC001::OpcodeC001(VM::Script* script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            OpcodeC001::OpcodeC001(VM::Script *script) : OpcodeHandler(script) {
             }
 
-            void OpcodeC001::_run()
-            {
+            void OpcodeC001::_run() {
                 int value = _script->script()->readValue();
 
                 // Skip 4 bytes for readed integer value
                 _script->setProgramCounter(_script->programCounter() + 4);
                 _script->dataStack()->push(StackValue(value));
 
-                auto& debug = Logger::debug("SCRIPT");
+                auto &debug = Logger::debug("SCRIPT");
                 debug << "[C001] [*] push_d integer" << std::endl;
                 debug << "    value: " << std::to_string(value) << std::endl;
             }
