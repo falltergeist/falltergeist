@@ -25,26 +25,27 @@
 // Falltergeist includes
 #include "../../Logger.h"
 #include "../../VM/Script.h"
+#include "../../VM/IFalloutStack.h"
+#include "../../VM/IFalloutStackValue.h"
 
 // Third party includes
 
-namespace Falltergeist
-{
-namespace VM
-{
-namespace Handler
-{
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode802B::Opcode802B(std::shared_ptr<VM::Script> script) : OpcodeHandler(script) {
+            }
 
-Opcode802B::Opcode802B(std::shared_ptr<VM::Script> script) : OpcodeHandler(script) {
-}
+            void Opcode802B::applyTo(std::shared_ptr<IFalloutContext> context) {
+                auto argumentsCounter = context->dataStack()->pop()->asInteger();
+                context->returnStack()->push(static_cast<unsigned>(_script->DVARbase()));
+                _script->setDVARBase(context->dataStack()->size() - argumentsCounter);
+                Logger::debug("SCRIPT") << "[802B] [*] op_push_base = " << _script->DVARbase() << std::endl;
+            }
 
-void Opcode802B::_run() {
-    auto argumentsCounter = _script->dataStack()->popInteger();
-    _script->returnStack()->push(static_cast<unsigned>(_script->DVARbase()));
-    _script->setDVARBase(_script->dataStack()->size() - argumentsCounter);
-    Logger::debug("SCRIPT") << "[802B] [*] op_push_base = " << _script->DVARbase() << std::endl;
-}
-
-}
-}
+            void Opcode802B::_run() {
+                applyTo(_script);
+            }
+        }
+    }
 }

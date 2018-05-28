@@ -16,4 +16,62 @@
  * You should have received a copy of the GNU General Public License
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "FalloutStack.h"
+
+// C++ standard includes
+
+// Falltergeist includes
+#include "../Exception.h"
+#include "../VM/FalloutStack.h"
+#include "../VM/FalloutStackValue.h"
+
+// Third party includes
+
+namespace Falltergeist {
+    namespace VM {
+        void FalloutStack::push(std::shared_ptr<IFalloutStackValue> value) {
+            _values.push_back(value);
+        }
+
+        void FalloutStack::push(int value) {
+            _values.push_back(std::make_shared<FalloutStackValue>(value));
+        }
+
+        std::shared_ptr<IFalloutStackValue> FalloutStack::at(int offset) {
+            return _values.at(offset);
+        }
+
+        std::shared_ptr<IFalloutStackValue> FalloutStack::pop() {
+            if (_values.size() == 0) {
+                throw Exception("FalloutStack::pop() - stack is empty");
+            }
+            auto value = _values.back();
+            _values.pop_back();
+            return value;
+        }
+
+        std::shared_ptr<IFalloutStackValue> FalloutStack::top() {
+            return _values.back();
+        }
+
+        void FalloutStack::clear() {
+            _values.clear();
+        }
+
+        size_t FalloutStack::size() {
+            return _values.size();
+        }
+
+        void FalloutStack::swap() {
+            if (_values.size() < 2) {
+                throw Exception("FalloutStack::swap() - stack size is lesser than 2");
+            }
+
+            auto value1 = _values.back();
+            _values.pop_back();
+            auto value2 = _values.back();
+            _values.pop_back();
+            _values.push_back(value1);
+            _values.push_back(value2);
+        }
+    }
+}

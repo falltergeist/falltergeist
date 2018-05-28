@@ -25,30 +25,31 @@
 // Falltergeist includes
 #include "../../Logger.h"
 #include "../../VM/Script.h"
+#include "../../VM/IFalloutStack.h"
+#include "../../VM/IFalloutStackValue.h"
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode802F::Opcode802F(std::shared_ptr<VM::Script> script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode802F::Opcode802F(std::shared_ptr<VM::Script> script) : OpcodeHandler(script) {
             }
 
-            void Opcode802F::_run()
-            {
-                auto condition = _script->dataStack()->popLogical();
-                auto address = _script->dataStack()->popInteger();
-                Logger::debug("SCRIPT") << "[802F] [*] op_if(address, condition) " << std::hex << _script->programCounter() << std::endl
+            void Opcode802F::applyTo(std::shared_ptr<IFalloutContext> context) {
+                auto condition = context->dataStack()->pop()->asInteger();
+                auto address = context->dataStack()->pop()->asInteger();
+                Logger::debug("SCRIPT") << "[802F] [*] op_if(address, condition) " << std::hex
+                                        << context->programCounter() << std::endl
                                         << "    address = " << std::hex << address << std::endl
                                         << "    condition = " << std::dec << condition << std::endl;
-                if (!condition)
-                {
-                    _script->setProgramCounter(address);
+                if (!condition) {
+                    context->setProgramCounter(address);
                 }
+            }
+
+            void Opcode802F::_run() {
+                applyTo(_script);
             }
         }
     }

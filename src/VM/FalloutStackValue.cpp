@@ -29,7 +29,7 @@ namespace Falltergeist {
         FalloutStackValue::FalloutStackValue(int value) {
             _type = Type::INTEGER;
             _integerValue = value;
-        };
+        }
 
         FalloutStackValue::FalloutStackValue(const std::string &value) {
             _type = Type::STRING;

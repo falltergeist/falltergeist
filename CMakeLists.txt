@@ -84,7 +84,7 @@ include_directories(${GLM_INCLUDE_DIR})
 file(GLOB_RECURSE SOURCES  src/*.cpp)
 
 if(MSVC)
-	set(_additional_includes "package/windows.rc" pchheader.cpp src/VM/IContext.h src/VM/IFalloutContext.h src/VM/IFalloutOpcode.h src/VM/IFalloutStack.h src/VM/IFalloutStackValue.h src/VM/FalloutStack.cpp src/VM/FalloutStack.h src/VM/FalloutStackValue.cpp src/VM/FalloutStackValue.h)
+	set(_additional_includes "package/windows.rc" pchheader.cpp)
 	add_definitions(-D_CRT_SECURE_NO_WARNINGS)
 endif()
 
