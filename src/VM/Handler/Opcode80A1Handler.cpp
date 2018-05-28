@@ -25,29 +25,36 @@
 // Falltergeist includes
 #include "../../Game/DudeObject.h"
 #include "../../Game/Game.h"
-#include "../../Logger.h"
 #include "../../VM/Script.h"
+#include "../../VM/IFalloutStack.h
+#include "../../VM/IFalloutStackValue.h
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode80A1::Opcode80A1(std::shared_ptr<VM::Script> script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode80A1::Opcode80A1(std::shared_ptr<VM::Script> script) : OpcodeHandler(script) {
             }
 
-            void Opcode80A1::_run()
-            {
+            void Opcode80A1::_run() {
                 applyTo(_script);
             }
 
+            int Opcode80A1::number() {
+                return 0x80A1;
+            }
+
+            std::string Opcode80A1::name() {
+                return "void give_exp_points(int points)";
+            }
+
+            std::string Opcode80A1::notes() {
+                return "implemented";
+            }
+
             void Opcode80A1::applyTo(std::shared_ptr<Falltergeist::VM::IFalloutContext> context) {
-                Logger::debug("SCRIPT") << "[80A1] [+] void give_exp_points(int points)" << std::endl;
-                auto points = _script->dataStack()->popInteger();
+                auto points = context->dataStack()->pop()->asInteger();
                 context->player()->setExperience(context->player()->experience() + points);
             }
         }

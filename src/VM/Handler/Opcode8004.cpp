@@ -30,22 +30,22 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode8004::Opcode8004(std::shared_ptr<VM::Script> script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode8004::Opcode8004(std::shared_ptr<VM::Script> script) : OpcodeHandler(script) {
             }
 
-            void Opcode8004::_run()
-            {
-                auto address = _script->dataStack()->pop()->asInteger();
-                Logger::debug("SCRIPT") << "[8004] [*] op_jmp(address)" << std::endl
-                                        << "    address: " << std::hex << address << std::endl;
-                _script->setProgramCounter(address);
+            void Opcode8004::applyTo(std::shared_ptr<IFalloutContext> context) {
+                auto address = context->dataStack()->pop()->asInteger();
+                Logger::debug("SCRIPT")
+                    << "[8004] [*] op_jmp(address)" << std::endl
+                    << "    address: " << std::hex << address << std::endl;
+                context->setProgramCounter(address);
+            }
+
+            void Opcode8004::_run() {
+                applyTo(_script);
             }
         }
     }

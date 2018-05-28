@@ -23,40 +23,37 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../Format/Int/File.h"
-#include "../../Format/Int/Procedure.h"
 #include "../../Logger.h"
 #include "../../VM/Script.h"
+#include "../../VM/IFalloutProcedure.h"
 #include "../../VM/IFalloutStack.h"
 #include "../../VM/IFalloutStackValue.h"
 
 // Third party includes
 
-namespace Falltergeist
-{
-namespace VM
-{
-namespace Handler
-{
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode8005::Opcode8005(std::shared_ptr<VM::Script> script) : OpcodeHandler(script) {
+            }
 
-Opcode8005::Opcode8005(std::shared_ptr<VM::Script> script) : OpcodeHandler(script)
-{
-}
+            void Opcode8005::applyTo(std::shared_ptr<IFalloutContext> context) {
+                auto functionIndex = context->dataStack()->pop()->asInteger();
+                // @TODO: pass arguments and call external procedures
+                /*auto argumentCount = _script->dataStack()->popInteger();
+                std::vector<int> args;
+                for (int i = 0; i < argumentCount; i++)
+                {
+                    args.push_back(_script->dataStack()->popInteger());
+                }*/
+                context->setProgramCounter(context->procedure(functionIndex)->bodyOffset());
+                Logger::debug("SCRIPT") << "[8005] [*] op_call(0x" << std::hex << functionIndex << ") = 0x"
+                                        << context->programCounter() << std::endl;
+            }
 
-void Opcode8005::_run()
-{
-    auto functionIndex = _script->dataStack()->pop()->asInteger();
-    // @TODO: pass arguments and call external procedures
-    /*auto argumentCount = _script->dataStack()->popInteger();
-    std::vector<int> args;
-    for (int i = 0; i < argumentCount; i++)
-    {
-        args.push_back(_script->dataStack()->popInteger());
-    }*/
-    _script->setProgramCounter(_script->script()->procedures().at(functionIndex).bodyOffset());
-    Logger::debug("SCRIPT") << "[8005] [*] op_call(0x" << std::hex << functionIndex << ") = 0x" << _script->programCounter() << std::endl;
-}
-
-}
-}
+            void Opcode8005::_run() {
+                applyTo(_script);
+            }
+        }
+    }
 }

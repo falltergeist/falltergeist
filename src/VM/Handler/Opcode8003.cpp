@@ -24,22 +24,22 @@
 
 // Falltergeist includes
 #include "../../Logger.h"
+#include "../../VM/Script.h"
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode8003::Opcode8003(std::shared_ptr<VM::Script> script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode8003::Opcode8003(std::shared_ptr<VM::Script> script) : OpcodeHandler(script) {
             }
 
-            void Opcode8003::_run()
-            {
+            void Opcode8003::applyTo(std::shared_ptr<IFalloutContext> context) {
                 Logger::debug("SCRIPT") << "[8003] op_critical_done" << std::endl;
+            }
+
+            void Opcode8003::_run() {
+                applyTo(_script);
             }
         }
     }

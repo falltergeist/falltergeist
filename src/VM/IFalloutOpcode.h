@@ -22,6 +22,7 @@
 
 // C++ standard includes
 #include <memory>
+#include <string>
 
 // Falltergeist includes
 
@@ -34,6 +35,9 @@ namespace Falltergeist {
         class IFalloutOpcode {
         public:
             virtual ~IFalloutOpcode() = default;
+            virtual int number() = 0;
+            virtual std::string name() = 0;
+            virtual std::string notes() = 0;
             virtual void applyTo(std::shared_ptr<IFalloutContext> context) = 0;
         };
     }
