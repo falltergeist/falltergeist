@@ -30,18 +30,13 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode80F4::Opcode80F4(VM::Script* script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode80F4::Opcode80F4(VM::Script *script) : OpcodeHandler(script) {
             }
 
-            void Opcode80F4::_run()
-            {
+            void Opcode80F4::_run() {
                 Logger::debug("SCRIPT") << "[80F4] [=] int destroy_object(void* obj)" << std::endl;
                 auto object = _script->dataStack()->popObject();
                 Game::Game::getInstance()->locationState()->destroyObject(object);

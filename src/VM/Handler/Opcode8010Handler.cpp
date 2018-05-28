@@ -29,18 +29,13 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode8010::Opcode8010(VM::Script* script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode8010::Opcode8010(VM::Script *script) : OpcodeHandler(script) {
             }
 
-            void Opcode8010::_run()
-            {
+            void Opcode8010::_run() {
                 Logger::debug("SCRIPT") << "[8010] [*] op_exit_prog" << std::endl;
                 _script->setInitialized(true);
                 throw VM::HaltException();

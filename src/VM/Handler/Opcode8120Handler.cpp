@@ -28,19 +28,15 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode8120::Opcode8120(VM::Script* script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode8120::Opcode8120(VM::Script *script) : OpcodeHandler(script) {
             }
 
-            void Opcode8120::_run()
-            {
-                Logger::debug("SCRIPT") << "[8120] [=] void gSay_Message(int msg_list, int msg_num, int reaction)" << std::endl;
+            void Opcode8120::_run() {
+                Logger::debug("SCRIPT") << "[8120] [=] void gSay_Message(int msg_list, int msg_num, int reaction)"
+                                        << std::endl;
                 _script->dataStack()->popInteger();
                 _script->dataStack()->pop(); // string or integer
                 _script->dataStack()->popInteger();

@@ -28,18 +28,13 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode8004::Opcode8004(VM::Script* script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode8004::Opcode8004(VM::Script *script) : OpcodeHandler(script) {
             }
 
-            void Opcode8004::_run()
-            {
+            void Opcode8004::_run() {
                 auto address = _script->dataStack()->popInteger();
                 Logger::debug("SCRIPT") << "[8004] [*] op_jmp(address)" << std::endl
                                         << "    address: " << std::hex << address << std::endl;

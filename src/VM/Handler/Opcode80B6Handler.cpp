@@ -33,24 +33,19 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode80B6::Opcode80B6(VM::Script* script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode80B6::Opcode80B6(VM::Script *script) : OpcodeHandler(script) {
             }
 
-            void Opcode80B6::_run()
-            {
-                Logger::debug("SCRIPT") << "[80B6] [+] int move_to(GameObject* object, int position, int elevation)" << std::endl;
+            void Opcode80B6::_run() {
+                Logger::debug("SCRIPT") << "[80B6] [+] int move_to(GameObject* object, int position, int elevation)"
+                                        << std::endl;
                 auto elevation = _script->dataStack()->popInteger();
                 auto position = _script->dataStack()->popInteger();
                 auto object = _script->dataStack()->popObject();
-                if (!object)
-                {
+                if (!object) {
                     _error("move_to: object is NULL");
                 }
                 auto hexagon = Game::getInstance()->locationState()->hexagonGrid()->at(position);

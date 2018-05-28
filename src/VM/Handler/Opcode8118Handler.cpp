@@ -30,18 +30,13 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode8118::Opcode8118(VM::Script* script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode8118::Opcode8118(VM::Script *script) : OpcodeHandler(script) {
             }
 
-            void Opcode8118::_run()
-            {
+            void Opcode8118::_run() {
                 Logger::debug("SCRIPT") << "[8118] [*] int get_month" << std::endl;
                 _script->dataStack()->push(Game::getInstance()->gameTime()->month());
             }

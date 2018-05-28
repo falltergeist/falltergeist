@@ -28,18 +28,13 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode80DA::Opcode80DA(VM::Script* script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode80DA::Opcode80DA(VM::Script *script) : OpcodeHandler(script) {
             }
 
-            void Opcode80DA::_run()
-            {
+            void Opcode80DA::_run() {
                 Logger::debug("SCRIPT") << "[80DA] [=] void wield_obj_critter(void* who, void* obj)" << std::endl;
                 _script->dataStack()->popObject();
                 _script->dataStack()->popObject();

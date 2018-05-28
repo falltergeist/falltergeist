@@ -30,21 +30,16 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode8028::Opcode8028(VM::Script* script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode8028::Opcode8028(VM::Script *script) : OpcodeHandler(script) {
             }
 
-            void Opcode8028::_run()
-            {
+            void Opcode8028::_run() {
                 Logger::debug("SCRIPT") << "[8028] [?] int lookup_string_proc(string)" << std::endl;
                 std::string name = _script->dataStack()->popString();
-                _script->dataStack()->push((int)_script->script()->procedure(name)->bodyOffset());
+                _script->dataStack()->push((int) _script->script()->procedure(name)->bodyOffset());
             }
         }
     }

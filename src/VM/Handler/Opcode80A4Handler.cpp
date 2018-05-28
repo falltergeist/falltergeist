@@ -31,18 +31,13 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode80A4::Opcode80A4(VM::Script* script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode80A4::Opcode80A4(VM::Script *script) : OpcodeHandler(script) {
             }
 
-            void Opcode80A4::_run()
-            {
+            void Opcode80A4::_run() {
                 Logger::debug("SCRIPT") << "[80A4] [+] std::string* obj_name(GameCritterObject* who)" << std::endl;
                 auto object = _script->dataStack()->popObject();
                 _script->dataStack()->push(object->name());

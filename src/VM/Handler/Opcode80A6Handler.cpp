@@ -28,18 +28,13 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode80A6::Opcode80A6(VM::Script* script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode80A6::Opcode80A6(VM::Script *script) : OpcodeHandler(script) {
             }
 
-            void Opcode80A6::_run()
-            {
+            void Opcode80A6::_run() {
                 Logger::debug("SCRIPT") << "[80A6] [=] int SkillPoints(int PCStatNum)" << std::endl;
                 _script->dataStack()->popInteger();
                 _script->dataStack()->push(0);

@@ -33,31 +33,28 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode80A9::Opcode80A9(VM::Script* script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode80A9::Opcode80A9(VM::Script *script) : OpcodeHandler(script) {
             }
 
-            void Opcode80A9::_run()
-            {
-                Logger::debug("SCRIPT") << "[80A9] [+] void override_map_start(int x, int y, int elevation, int orientation)" << std::endl;
+            void Opcode80A9::_run() {
+                Logger::debug("SCRIPT")
+                        << "[80A9] [+] void override_map_start(int x, int y, int elevation, int orientation)"
+                        << std::endl;
                 auto dataStack = _script->dataStack();
 
                 auto orientation = dataStack->popInteger();
                 auto elevation = dataStack->popInteger();
                 auto y = dataStack->popInteger();
                 auto x = dataStack->popInteger();
-                auto position = y*200 + x;
+                auto position = y * 200 + x;
                 auto game = Game::Game::getInstance();
                 auto player = game->player();
                 auto hexagon = game->locationState()->hexagonGrid()->at(position);
                 Game::getInstance()->locationState()->moveObjectToHexagon(player.get(), hexagon);
-                            //player->setPosition(position);
+                //player->setPosition(position);
                 player->setOrientation(orientation);
                 player->setElevation(elevation);
                 Game::Game::getInstance()->locationState()->centerCameraAtHexagon(player->hexagon());

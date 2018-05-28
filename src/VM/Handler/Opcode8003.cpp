@@ -27,18 +27,13 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode8003::Opcode8003(VM::Script* script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode8003::Opcode8003(VM::Script *script) : OpcodeHandler(script) {
             }
 
-            void Opcode8003::_run()
-            {
+            void Opcode8003::_run() {
                 Logger::debug("SCRIPT") << "[8003] op_critical_done" << std::endl;
             }
         }

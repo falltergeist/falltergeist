@@ -31,26 +31,18 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode8100::Opcode8100(VM::Script* script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode8100::Opcode8100(VM::Script *script) : OpcodeHandler(script) {
             }
 
-            void Opcode8100::_run()
-            {
+            void Opcode8100::_run() {
                 Logger::debug("SCRIPT") << "[8100] [+] int obj_pid(void* obj)" << std::endl;
                 auto object = _script->dataStack()->popObject();
-                if (!object)
-                {
+                if (!object) {
                     _script->dataStack()->push(0);
-                }
-                else
-                {
+                } else {
                     _script->dataStack()->push(object->PID());
                 }
             }

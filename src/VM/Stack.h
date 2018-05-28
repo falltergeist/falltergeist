@@ -28,43 +28,55 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-namespace Game
-{
-    class Object;
-}
+namespace Falltergeist {
+    namespace Game {
+        class Object;
+    }
 
-namespace VM
-{
-    class StackValue;
+    namespace VM {
+        class StackValue;
 
-    class Stack
-    {
-    public:
-        Stack();
-        ~Stack();
-        void push(const StackValue &value);
-        void push(unsigned int value);
-        void push(int value);
-        void push(float value);
-        void push(Game::Object* value);
-        void push(const std::string &value);
+        class Stack {
+        public:
+            Stack();
 
-        const StackValue pop();
-        int popInteger();
-        float popFloat();
-        std::string popString();
-        Game::Object* popObject();
-        bool popLogical();
-        const StackValue top();
-        std::vector<StackValue>* values();
-        size_t size();
-        void swap();
+            ~Stack();
 
-    protected:
-        std::vector<StackValue> _values;
-    };
-}
+            void push(const StackValue &value);
+
+            void push(unsigned int value);
+
+            void push(int value);
+
+            void push(float value);
+
+            void push(Game::Object *value);
+
+            void push(const std::string &value);
+
+            const StackValue pop();
+
+            int popInteger();
+
+            float popFloat();
+
+            std::string popString();
+
+            Game::Object *popObject();
+
+            bool popLogical();
+
+            const StackValue top();
+
+            std::vector<StackValue> *values();
+
+            size_t size();
+
+            void swap();
+
+        protected:
+            std::vector<StackValue> _values;
+        };
+    }
 }
 #endif // FALLTERGEIST_VM_STACK_H

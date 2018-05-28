@@ -30,23 +30,18 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode80F6::Opcode80F6(VM::Script* script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode80F6::Opcode80F6(VM::Script *script) : OpcodeHandler(script) {
             }
 
-            void Opcode80F6::_run()
-            {
+            void Opcode80F6::_run() {
                 Logger::debug("SCRIPT") << "[80F6] [*] int game_time_hour" << std::endl;
                 unsigned int hours = Game::getInstance()->gameTime()->hours();
                 unsigned int minutes = Game::getInstance()->gameTime()->minutes();
 
-                _script->dataStack()->push(hours*100 + minutes);
+                _script->dataStack()->push(hours * 100 + minutes);
             }
         }
     }

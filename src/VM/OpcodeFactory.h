@@ -28,16 +28,13 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
+namespace Falltergeist {
+    namespace VM {
         class Script;
 
-        class OpcodeFactory
-        {
-            public:
-                static std::unique_ptr<OpcodeHandler> createOpcode(unsigned int number, VM::Script* script);
+        class OpcodeFactory {
+        public:
+            static std::unique_ptr<OpcodeHandler> createOpcode(unsigned int number, VM::Script *script);
         };
     }
 }

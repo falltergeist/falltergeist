@@ -27,14 +27,11 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        class ErrorException : public Exception
-        {
-            public:
-                ErrorException(const std::string& message);
+namespace Falltergeist {
+    namespace VM {
+        class ErrorException : public Exception {
+        public:
+            ErrorException(const std::string &message);
         };
     }
 }

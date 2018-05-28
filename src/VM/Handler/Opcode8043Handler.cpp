@@ -28,25 +28,19 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode8043::Opcode8043(VM::Script* script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode8043::Opcode8043(VM::Script *script) : OpcodeHandler(script) {
             }
 
-            void Opcode8043::_run()
-            {
+            void Opcode8043::_run() {
                 Logger::debug("SCRIPT") << "[8043] [*] op_bwnot" << std::endl;
                 auto arg = _script->dataStack()->pop();
-                if (!arg.isNumber())
-                {
+                if (!arg.isNumber()) {
                     _error(std::string("op_bwnot: invalid argument type: ") + arg.typeName());
                 }
-                _script->dataStack()->push(~ arg.toInteger());
+                _script->dataStack()->push(~arg.toInteger());
             }
         }
     }

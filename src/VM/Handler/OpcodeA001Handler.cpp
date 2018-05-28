@@ -30,24 +30,18 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            OpcodeA001::OpcodeA001(VM::Script* script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            OpcodeA001::OpcodeA001(VM::Script *script) : OpcodeHandler(script) {
             }
 
-            void OpcodeA001::_run()
-            {
-                union
-                {
+            void OpcodeA001::_run() {
+                union {
                     unsigned int iValue;
                     float fValue;
                 }
-                uValue;
+                        uValue;
 
                 uValue.iValue = _script->script()->readValue();
 
@@ -55,7 +49,7 @@ namespace Falltergeist
                 _script->setProgramCounter(_script->programCounter() + 4);
                 _script->dataStack()->push(StackValue(uValue.fValue));
 
-                auto& debug = Logger::debug("SCRIPT");
+                auto &debug = Logger::debug("SCRIPT");
                 debug << "[A001] [*] push_d float" << std::endl;
                 debug << "    value: " << std::to_string(uValue.fValue) << std::endl;
             }

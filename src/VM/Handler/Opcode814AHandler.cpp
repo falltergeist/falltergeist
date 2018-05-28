@@ -29,18 +29,13 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode814A::Opcode814A(VM::Script* script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode814A::Opcode814A(VM::Script *script) : OpcodeHandler(script) {
             }
 
-            void Opcode814A::_run()
-            {
+            void Opcode814A::_run() {
                 // @TODO
                 Logger::debug("SCRIPT") << "[814A] [*] int art_anim(int fid)" << std::endl;
                 _script->dataStack()->popInteger();

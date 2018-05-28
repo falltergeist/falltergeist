@@ -28,20 +28,15 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode80FA::Opcode80FA(VM::Script* script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode80FA::Opcode80FA(VM::Script *script) : OpcodeHandler(script) {
             }
 
-            void Opcode80FA::_run()
-            {
+            void Opcode80FA::_run() {
                 Logger::debug("SCRIPT") << "[80FA] [+] int action_being_used()" << std::endl;
-                _script->dataStack()->push((signed)_script->usedSkill());
+                _script->dataStack()->push((signed) _script->usedSkill());
             }
         }
     }

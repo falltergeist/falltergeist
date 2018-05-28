@@ -29,35 +29,27 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode80CA::Opcode80CA(VM::Script* script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode80CA::Opcode80CA(VM::Script *script) : OpcodeHandler(script) {
             }
 
-            void Opcode80CA::_run()
-            {
-                auto& debug = Logger::debug("SCRIPT");
+            void Opcode80CA::_run() {
+                auto &debug = Logger::debug("SCRIPT");
                 debug << "[80CA] [+] int value = get_critter_stat(GameCritterObject* who, int number)" << std::endl;
                 int number = _script->dataStack()->popInteger();
                 debug << "    number = " << number << std::endl;
                 auto object = _script->dataStack()->popObject();
-                if (!object)
-                {
+                if (!object) {
                     _error("get_critter_stat(who, stat) - who is NULL");
                 }
-                auto critter = dynamic_cast<Game::CritterObject*>(object);
-                if (!critter)
-                {
+                auto critter = dynamic_cast<Game::CritterObject *>(object);
+                if (!critter) {
                     _error("get_critter_stat(who, stat) - who is not a critter");
                 }
                 int result = 0;
-                switch (number)
-                {
+                switch (number) {
                     case 0: // ST
                     case 1: // PE
                     case 2: // EN
@@ -66,7 +58,7 @@ namespace Falltergeist
                     case 5: // AG
                     case 6: // LU
                     {
-                        result = critter->statTotal((STAT)number);
+                        result = critter->statTotal((STAT) number);
                         break;
                     }
                     case 7: // max hit points
@@ -199,7 +191,7 @@ namespace Falltergeist
                     }
                     case 34: // gender
                     {
-                        result = (unsigned)critter->gender();
+                        result = (unsigned) critter->gender();
                         break;
                     }
                     case 35: // hit points
@@ -217,8 +209,7 @@ namespace Falltergeist
                         result = critter->radiationLevel();
                         break;
                     }
-                    default:
-                    {
+                    default: {
                         _error("VM::opcode80CA - unimplemented number:" + std::to_string(number));
                     }
                 }

@@ -31,45 +31,33 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode80D9::Opcode80D9(VM::Script* script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode80D9::Opcode80D9(VM::Script *script) : OpcodeHandler(script) {
             }
 
-            void Opcode80D9::_run()
-            {
+            void Opcode80D9::_run() {
                 Logger::debug("SCRIPT") << "[80D9] [=] void rm_obj_from_inven(void* who, void* obj)" << std::endl;
-                auto item = dynamic_cast<Game::ItemObject*>(_script->dataStack()->popObject());
+                auto item = dynamic_cast<Game::ItemObject *>(_script->dataStack()->popObject());
                 auto invenObj = _script->dataStack()->popObject();
 
-                if (!item)
-                {
+                if (!item) {
                     _error("rm_obj_from_inven - item not instanceof GameItemObject");
                     return;
                 }
 
-                std::vector<Game::ItemObject*>* inven;
-                if (auto critterObj = dynamic_cast<Game::CritterObject*>(invenObj))
-                {
+                std::vector<Game::ItemObject *> *inven;
+                if (auto critterObj = dynamic_cast<Game::CritterObject *>(invenObj)) {
                     inven = critterObj->inventory();
-                }
-                else if (auto contObj = dynamic_cast<Game::ContainerItemObject*>(invenObj))
-                {
+                } else if (auto contObj = dynamic_cast<Game::ContainerItemObject *>(invenObj)) {
                     inven = contObj->inventory();
-                }
-                else
-                {
+                } else {
                     _error("rm_obj_from_inven - wrong WHO parameter");
                     return;
                 }
                 auto it = std::find(inven->begin(), inven->end(), item);
-                if (it != inven->end())
-                {
+                if (it != inven->end()) {
                     inven->erase(it);
                 }
             }

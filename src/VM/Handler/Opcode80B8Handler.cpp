@@ -31,18 +31,13 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode80B8::Opcode80B8(VM::Script* script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode80B8::Opcode80B8(VM::Script *script) : OpcodeHandler(script) {
             }
 
-            void Opcode80B8::_run()
-            {
+            void Opcode80B8::_run() {
                 Logger::debug("SCRIPT") << "[80B8] [*] void display_msg(string)" << std::endl;
                 auto value = _script->dataStack()->pop();
                 auto game = Game::getInstance();

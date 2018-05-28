@@ -28,22 +28,16 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode80AF::Opcode80AF(VM::Script* script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode80AF::Opcode80AF(VM::Script *script) : OpcodeHandler(script) {
             }
 
-            void Opcode80AF::_run()
-            {
+            void Opcode80AF::_run() {
                 Logger::debug("SCRIPT") << "[80AF] [*] int is_success(int val)" << std::endl;
                 auto value = _script->dataStack()->popInteger();
-                switch(value)
-                {
+                switch (value) {
                     case 0:
                     case 1:
                         _script->dataStack()->push(0);

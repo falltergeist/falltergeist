@@ -34,22 +34,17 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode80D4::Opcode80D4(VM::Script* script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode80D4::Opcode80D4(VM::Script *script) : OpcodeHandler(script) {
             }
 
-            void Opcode80D4::_run()
-            {
+            void Opcode80D4::_run() {
                 Logger::debug("SCRIPT") << "[80D4] [+] int tile_num(GameObject* object)" << std::endl;
                 auto object = _script->dataStack()->popObject();
                 if (!object) _error("tile_num - object is NULL");
-                _script->dataStack()->push((int)object->hexagon()->number());
+                _script->dataStack()->push((int) object->hexagon()->number());
             }
         }
     }

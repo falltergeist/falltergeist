@@ -31,22 +31,18 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode80D3::Opcode80D3(VM::Script* script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode80D3::Opcode80D3(VM::Script *script) : OpcodeHandler(script) {
             }
 
-            void Opcode80D3::_run()
-            {
+            void Opcode80D3::_run() {
                 Logger::debug("SCRIPT") << "[80D3] int tile_distance_objs(void* p2, void* p1)" << std::endl;
                 auto obj1 = _script->dataStack()->popObject();
                 auto obj2 = _script->dataStack()->popObject();
-                int distance = Game::getInstance()->locationState()->hexagonGrid()->distance(obj1->hexagon(), obj2->hexagon());
+                int distance = Game::getInstance()->locationState()->hexagonGrid()->distance(obj1->hexagon(),
+                                                                                             obj2->hexagon());
                 _script->dataStack()->push(distance);
             }
         }

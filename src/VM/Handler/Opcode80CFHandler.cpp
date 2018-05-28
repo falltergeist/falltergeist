@@ -28,19 +28,16 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode80CF::Opcode80CF(VM::Script* script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode80CF::Opcode80CF(VM::Script *script) : OpcodeHandler(script) {
             }
 
-            void Opcode80CF::_run()
-            {
-                Logger::debug("SCRIPT") << "[80CF] [=] int tile_in_tile_rect(int tile1, int tile2, int tile3, int tile4, int tile)" << std::endl;
+            void Opcode80CF::_run() {
+                Logger::debug("SCRIPT")
+                        << "[80CF] [=] int tile_in_tile_rect(int tile1, int tile2, int tile3, int tile4, int tile)"
+                        << std::endl;
                 auto dataStack = _script->dataStack();
 
                 int targetHex = dataStack->popInteger();
@@ -59,7 +56,8 @@ namespace Falltergeist
                 int bottomRightX = bottomRight % 200;
                 int bottomRightY = bottomRight / 200;
 
-                bool in = (targetX <= upperLeftX && targetY >= upperLeftY && targetX >= bottomRightX && targetY <= bottomRightY);
+                bool in = (targetX <= upperLeftX && targetY >= upperLeftY && targetX >= bottomRightX &&
+                           targetY <= bottomRightY);
                 _script->dataStack()->push(in);
             }
         }

@@ -28,18 +28,13 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode80F2::Opcode80F2(VM::Script* script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode80F2::Opcode80F2(VM::Script *script) : OpcodeHandler(script) {
             }
 
-            void Opcode80F2::_run()
-            {
+            void Opcode80F2::_run() {
                 Logger::debug("SCRIPT") << "[80F2] [=] int game_ticks(int seconds)" << std::endl;
                 auto seconds = _script->dataStack()->popInteger();
                 // one second equals 10 game ticks

@@ -28,19 +28,16 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode80B2::Opcode80B2(VM::Script* script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode80B2::Opcode80B2(VM::Script *script) : OpcodeHandler(script) {
             }
 
-            void Opcode80B2::_run()
-            {
-                Logger::debug("SCRIPT") << "[80B2] [=] void mark_area_known(int AREA_MARK_TYPE, int AreaNum, int MARK_STATE);" << std::endl;
+            void Opcode80B2::_run() {
+                Logger::debug("SCRIPT")
+                        << "[80B2] [=] void mark_area_known(int AREA_MARK_TYPE, int AreaNum, int MARK_STATE);"
+                        << std::endl;
                 _script->dataStack()->popInteger();
                 _script->dataStack()->popInteger();
                 _script->dataStack()->popInteger();

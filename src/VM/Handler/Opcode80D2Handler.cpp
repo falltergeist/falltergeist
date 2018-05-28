@@ -32,27 +32,19 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode80D2::Opcode80D2(VM::Script* script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode80D2::Opcode80D2(VM::Script *script) : OpcodeHandler(script) {
             }
 
-            void Opcode80D2::_run()
-            {
+            void Opcode80D2::_run() {
                 Logger::debug("SCRIPT") << "[80D2] [=] int tile_distance(int tile1, int tile2)" << std::endl;
                 auto tile1 = _script->dataStack()->popInteger();
                 auto tile2 = _script->dataStack()->popInteger();
-                if (tile1 < 0 || tile1 >= 200*200 || tile2 < 0 || tile2 >= 200*200)
-                {
+                if (tile1 < 0 || tile1 >= 200 * 200 || tile2 < 0 || tile2 >= 200 * 200) {
                     _script->dataStack()->push(9999);
-                }
-                else
-                {
+                } else {
                     auto grid = Game::getInstance()->locationState()->hexagonGrid();
                     auto dist = grid->distance(grid->at(tile1), grid->at(tile2));
                     _script->dataStack()->push(dist);

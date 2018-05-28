@@ -28,18 +28,13 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode802C::Opcode802C(VM::Script* script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode802C::Opcode802C(VM::Script *script) : OpcodeHandler(script) {
             }
 
-            void Opcode802C::_run()
-            {
+            void Opcode802C::_run() {
                 _script->setSVARbase(static_cast<int>(_script->dataStack()->size()));
                 Logger::debug("SCRIPT") << "[802C] [*] op_set_global = " << _script->SVARbase() << std::endl;
             }

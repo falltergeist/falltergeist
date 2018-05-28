@@ -28,18 +28,13 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode80AB::Opcode80AB(VM::Script* script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode80AB::Opcode80AB(VM::Script *script) : OpcodeHandler(script) {
             }
 
-            void Opcode80AB::_run()
-            {
+            void Opcode80AB::_run() {
                 // @TODO: implement
                 Logger::debug("SCRIPT") << "[80AB] [=] int using_skill(GameCritterObject* who, int skill)" << std::endl;
                 _script->dataStack()->popInteger();

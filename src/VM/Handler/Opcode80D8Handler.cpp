@@ -32,50 +32,37 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode80D8::Opcode80D8(VM::Script* script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode80D8::Opcode80D8(VM::Script *script) : OpcodeHandler(script) {
             }
 
-            void Opcode80D8::_run()
-            {
+            void Opcode80D8::_run() {
                 Logger::debug("SCRIPT") << "[80D8] [=] void add_obj_to_inven(void* who, void* item)" << std::endl;
-                auto item = dynamic_cast<Game::ItemObject*>(_script->dataStack()->popObject());
+                auto item = dynamic_cast<Game::ItemObject *>(_script->dataStack()->popObject());
                 auto invenObj = _script->dataStack()->popObject();
 
-                if (!item)
-                {
+                if (!item) {
                     _error("add_obj_to_inven - item not instanceof GameItemObject");
                     return;
                 }
 
-                std::vector<Game::ItemObject*>* inven;
-                if (auto critterObj = dynamic_cast<Game::CritterObject*>(invenObj))
-                {
+                std::vector<Game::ItemObject *> *inven;
+                if (auto critterObj = dynamic_cast<Game::CritterObject *>(invenObj)) {
                     inven = critterObj->inventory();
-                }
-                else if (auto contObj = dynamic_cast<Game::ContainerItemObject*>(invenObj))
-                {
+                } else if (auto contObj = dynamic_cast<Game::ContainerItemObject *>(invenObj)) {
                     inven = contObj->inventory();
-                }
-                else
-                {
+                } else {
                     _error("add_obj_to_inven - wrong WHO parameter");
                     return;
                 }
 
                 inven->push_back(item);
 
-                if (item->hexagon())
-                {
+                if (item->hexagon()) {
                     auto location = Game::Game::getInstance()->locationState();
-                    if (location)
-                    {
+                    if (location) {
                         location->moveObjectToHexagon(item, nullptr);
                     }
                 }

@@ -31,31 +31,24 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode810D::Opcode810D(VM::Script* script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode810D::Opcode810D(VM::Script *script) : OpcodeHandler(script) {
             }
 
-            void Opcode810D::_run()
-            {
+            void Opcode810D::_run() {
                 Logger::debug("SCRIPT") << "[810D] [=] void* obj_carrying_pid_obj(void* who, int pid)" << std::endl;
                 const int pid = _script->dataStack()->popInteger();
                 auto who = _script->dataStack()->popObject();
-                if (auto critter = dynamic_cast<Game::CritterObject*>((Game::Object*)who))
-                {
+                if (auto critter = dynamic_cast<Game::CritterObject *>((Game::Object *) who)) {
                     auto iterator = std::find_if(critter->inventory()->begin(), critter->inventory()->end(),
-                                                [&] (Game::ItemObject * &item) { return item->PID() == pid; });
+                                                 [&](Game::ItemObject *&item) { return item->PID() == pid; });
                     const bool found = iterator != critter->inventory()->end();
                     _script->dataStack()->push(found ? *iterator : nullptr);
-                }
-                else
-                {
-                    _warning(std::string("obj_carrying_pid_obj: 'who' is not valid GameCritterObject. It is ") + typeid(who).name());
+                } else {
+                    _warning(std::string("obj_carrying_pid_obj: 'who' is not valid GameCritterObject. It is ") +
+                             typeid(who).name());
                     _script->dataStack()->push(nullptr);
                 }
             }

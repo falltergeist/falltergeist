@@ -29,25 +29,19 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode8122::Opcode8122(VM::Script* script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode8122::Opcode8122(VM::Script *script) : OpcodeHandler(script) {
             }
 
-            void Opcode8122::_run()
-            {
+            void Opcode8122::_run() {
                 auto &debug = Logger::debug("SCRIPT");
                 debug << "[8122] [+] void poison(GameCritterObject* who, int amount)" << std::endl;
                 int amount = _script->dataStack()->popInteger();
                 debug << "    amount = " << amount << std::endl;
-                auto critter = dynamic_cast<Game::CritterObject*>(_script->dataStack()->popObject());
-                if (!critter)
-                {
+                auto critter = dynamic_cast<Game::CritterObject *>(_script->dataStack()->popObject());
+                if (!critter) {
                     _error("poison - WHO is not critter");
                 }
                 critter->setPoisonLevel(critter->poisonLevel() + amount);

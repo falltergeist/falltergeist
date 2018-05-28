@@ -28,44 +28,30 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode803C::Opcode803C(VM::Script* script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode803C::Opcode803C(VM::Script *script) : OpcodeHandler(script) {
             }
 
-            void Opcode803C::_run()
-            {
+            void Opcode803C::_run() {
                 Logger::debug("SCRIPT") << "[803C] [*] op_div /" << std::endl;
                 auto bValue = _script->dataStack()->pop();
                 auto aValue = _script->dataStack()->pop();
-                if (!bValue.isNumber() || !aValue.isNumber())
-                {
-                    _error(std::string("op_div(a, b): Incompatible types: ") + aValue.typeName() + " / " + bValue.typeName());
+                if (!bValue.isNumber() || !aValue.isNumber()) {
+                    _error(std::string("op_div(a, b): Incompatible types: ") + aValue.typeName() + " / " +
+                           bValue.typeName());
                 }
-                if (aValue.type() == StackValue::Type::INTEGER)
-                {
-                    if (bValue.type() == StackValue::Type::INTEGER)
-                    {
+                if (aValue.type() == StackValue::Type::INTEGER) {
+                    if (bValue.type() == StackValue::Type::INTEGER) {
                         _script->dataStack()->push(aValue.integerValue() / bValue.integerValue());
+                    } else {
+                        _script->dataStack()->push((float) aValue.integerValue() / bValue.floatValue());
                     }
-                    else
-                    {
-                        _script->dataStack()->push((float)aValue.integerValue() / bValue.floatValue());
-                    }
-                }
-                else
-                {
-                    if (bValue.type() == StackValue::Type::INTEGER)
-                    {
-                        _script->dataStack()->push(aValue.floatValue() / (float)bValue.integerValue());
-                    }
-                    else
-                    {
+                } else {
+                    if (bValue.type() == StackValue::Type::INTEGER) {
+                        _script->dataStack()->push(aValue.floatValue() / (float) bValue.integerValue());
+                    } else {
                         _script->dataStack()->push(aValue.floatValue() / bValue.floatValue());
                     }
                 }

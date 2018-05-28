@@ -28,20 +28,16 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode801C::Opcode801C(VM::Script* script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode801C::Opcode801C(VM::Script *script) : OpcodeHandler(script) {
             }
 
-            void Opcode801C::_run()
-            {
+            void Opcode801C::_run() {
                 _script->setProgramCounter(_script->returnStack()->popInteger());
-                Logger::debug("SCRIPT") << "[801C] [*] op_pop_return 0x" << std::hex << _script->programCounter() << std::endl;
+                Logger::debug("SCRIPT") << "[801C] [*] op_pop_return 0x" << std::hex << _script->programCounter()
+                                        << std::endl;
             }
         }
     }

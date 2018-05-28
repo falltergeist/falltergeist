@@ -29,31 +29,21 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode8044::Opcode8044(VM::Script* script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode8044::Opcode8044(VM::Script *script) : OpcodeHandler(script) {
             }
 
-            void Opcode8044::_run()
-            {
+            void Opcode8044::_run() {
                 Logger::debug("SCRIPT") << "[8044] [*] op_floor" << std::endl;
                 auto value = _script->dataStack()->pop();
                 int result = 0;
-                if (value.type() == StackValue::Type::FLOAT)
-                {
-                    result = (int)value.floatValue(); // this is how "floor" originally worked..
-                }
-                else if (value.type() == StackValue::Type::INTEGER)
-                {
+                if (value.type() == StackValue::Type::FLOAT) {
+                    result = (int) value.floatValue(); // this is how "floor" originally worked..
+                } else if (value.type() == StackValue::Type::INTEGER) {
                     result = value.integerValue();
-                }
-                else
-                {
+                } else {
                     _error(std::string("op_floor: invalid argument type: ") + value.typeName());
                 }
                 _script->dataStack()->push(result);

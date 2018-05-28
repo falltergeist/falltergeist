@@ -29,32 +29,24 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode8145::Opcode8145(VM::Script* script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode8145::Opcode8145(VM::Script *script) : OpcodeHandler(script) {
             }
 
-            void Opcode8145::_run()
-            {
+            void Opcode8145::_run() {
                 Logger::debug("SCRIPT") << "[8145] [=] void use_obj_on_obj(void* item, void* target)" << std::endl;
-                auto selfCritter = dynamic_cast<Game::CritterObject*>(_script->owner());
-                if (!selfCritter)
-                {
+                auto selfCritter = dynamic_cast<Game::CritterObject *>(_script->owner());
+                if (!selfCritter) {
                     _error("use_obj_on_obj: owner is not a critter!");
                 }
                 auto target = _script->dataStack()->popObject();
-                if (!target)
-                {
+                if (!target) {
                     _error("use_obj_on_obj: target is null");
                 }
                 auto item = _script->dataStack()->popObject();
-                if (!item)
-                {
+                if (!item) {
                     _error("use_obj_on_obj: item is null");
                 }
                 // @TODO: play animation

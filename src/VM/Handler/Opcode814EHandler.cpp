@@ -28,18 +28,13 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode814E::Opcode814E(VM::Script* script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode814E::Opcode814E(VM::Script *script) : OpcodeHandler(script) {
             }
 
-            void Opcode814E::_run()
-            {
+            void Opcode814E::_run() {
                 Logger::debug("SCRIPT") << "[814E] [=] void gdialog_set_barter_mod(int mod)" << std::endl;
                 _script->dataStack()->popInteger();
             }

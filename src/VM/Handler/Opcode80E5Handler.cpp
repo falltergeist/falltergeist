@@ -28,19 +28,15 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode80E5::Opcode80E5(VM::Script* script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode80E5::Opcode80E5(VM::Script *script) : OpcodeHandler(script) {
             }
 
-            void Opcode80E5::_run()
-            {
-                Logger::debug("SCRIPT") << "[80E5] [=] void wm_area_set_pos(int areaIdx, int xPos, int yPos)" << std::endl;
+            void Opcode80E5::_run() {
+                Logger::debug("SCRIPT") << "[80E5] [=] void wm_area_set_pos(int areaIdx, int xPos, int yPos)"
+                                        << std::endl;
                 _script->dataStack()->popInteger();
                 _script->dataStack()->popInteger();
                 _script->dataStack()->popInteger();

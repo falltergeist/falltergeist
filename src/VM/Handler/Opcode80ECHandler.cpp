@@ -30,22 +30,16 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode80EC::Opcode80EC(VM::Script* script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode80EC::Opcode80EC(VM::Script *script) : OpcodeHandler(script) {
             }
 
-            void Opcode80EC::_run()
-            {
+            void Opcode80EC::_run() {
                 Logger::debug("SCRIPT") << "[80EC] [=] int elevation(void* obj)" << std::endl;
                 auto object = _script->dataStack()->popObject();
-                if (!object)
-                {
+                if (!object) {
                     _error("elevation - object is NULL");
                 }
                 _script->dataStack()->push(object->elevation());

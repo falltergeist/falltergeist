@@ -30,28 +30,20 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode80C5::Opcode80C5(VM::Script* script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode80C5::Opcode80C5(VM::Script *script) : OpcodeHandler(script) {
             }
 
-            void Opcode80C5::_run()
-            {
-                auto& debug = Logger::debug("SCRIPT");
+            void Opcode80C5::_run() {
+                auto &debug = Logger::debug("SCRIPT");
                 debug << "[80C5] [?] GVAR[num]" << std::endl;
                 int num = _script->dataStack()->popInteger();
                 int value;
-                if (num < 0)
-                {
+                if (num < 0) {
                     value = 0;
-                }
-                else
-                {
+                } else {
                     auto game = Game::getInstance();
                     value = game->GVAR(num);
                 }

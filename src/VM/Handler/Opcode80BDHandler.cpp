@@ -28,18 +28,13 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode80BD::Opcode80BD(VM::Script* script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode80BD::Opcode80BD(VM::Script *script) : OpcodeHandler(script) {
             }
 
-            void Opcode80BD::_run()
-            {
+            void Opcode80BD::_run() {
                 Logger::debug("SCRIPT") << "[80BD] [=] void* source_obj()" << std::endl;
                 _script->dataStack()->push(_script->sourceObject());
             }

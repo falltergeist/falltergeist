@@ -28,19 +28,15 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode80EF::Opcode80EF(VM::Script* script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode80EF::Opcode80EF(VM::Script *script) : OpcodeHandler(script) {
             }
 
-            void Opcode80EF::_run()
-            {
-                Logger::debug("SCRIPT") << "[80EF] void critter_dmg(ObjectPtr who, int dmg_amount, int dmg_type)" << std::endl;
+            void Opcode80EF::_run() {
+                Logger::debug("SCRIPT") << "[80EF] void critter_dmg(ObjectPtr who, int dmg_amount, int dmg_type)"
+                                        << std::endl;
                 _script->dataStack()->popInteger();
                 _script->dataStack()->popInteger();
                 _script->dataStack()->popObject();

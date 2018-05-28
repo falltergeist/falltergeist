@@ -28,18 +28,13 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode8127::Opcode8127(VM::Script* script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode8127::Opcode8127(VM::Script *script) : OpcodeHandler(script) {
             }
 
-            void Opcode8127::_run()
-            {
+            void Opcode8127::_run() {
                 Logger::debug("SCRIPT") << "[8127] [*] void critter_injure(ObjectPtr who, int how)" << std::endl;
                 _script->dataStack()->popInteger();
                 _script->dataStack()->popObject();

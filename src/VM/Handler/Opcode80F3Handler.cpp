@@ -28,18 +28,13 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode80F3::Opcode80F3(VM::Script* script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode80F3::Opcode80F3(VM::Script *script) : OpcodeHandler(script) {
             }
 
-            void Opcode80F3::_run()
-            {
+            void Opcode80F3::_run() {
                 Logger::debug("SCRIPT") << "[80F3] [=] int has_trait(int type,void* who, int trait)" << std::endl;
                 auto dataStack = _script->dataStack();
                 dataStack->popInteger();

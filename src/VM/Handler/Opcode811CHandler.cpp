@@ -33,22 +33,16 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode811C::Opcode811C(VM::Script* script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode811C::Opcode811C(VM::Script *script) : OpcodeHandler(script) {
             }
 
-            void Opcode811C::_run()
-            {
+            void Opcode811C::_run() {
                 Logger::debug("SCRIPT") << "[811C] [?] gsay_start" << std::endl;
 
-                if (auto interact = dynamic_cast<Falltergeist::State::CritterInteract*>(Game::getInstance()->topState()))
-                {
+                if (auto interact = dynamic_cast<Falltergeist::State::CritterInteract *>(Game::getInstance()->topState())) {
                     interact->dialogReview()->setCritterName(_script->owner()->scrName());
                     interact->switchSubState(State::CritterInteract::SubState::DIALOG);
                 }

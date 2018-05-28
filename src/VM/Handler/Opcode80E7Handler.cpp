@@ -28,18 +28,13 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode80E7::Opcode80E7(VM::Script* script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode80E7::Opcode80E7(VM::Script *script) : OpcodeHandler(script) {
             }
 
-            void Opcode80E7::_run()
-            {
+            void Opcode80E7::_run() {
                 Logger::debug("SCRIPT") << "[80E7] [=] int anim_busy(void* obj)" << std::endl;
                 _script->dataStack()->popObject();//auto object = (GameObject*)popDataPointer();
                 //pushDataInteger(object->animationQueue()->enabled());

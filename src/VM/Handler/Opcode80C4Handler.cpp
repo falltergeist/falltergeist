@@ -31,18 +31,13 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode80C4::Opcode80C4(VM::Script* script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode80C4::Opcode80C4(VM::Script *script) : OpcodeHandler(script) {
             }
 
-            void Opcode80C4::_run()
-            {
+            void Opcode80C4::_run() {
                 Logger::debug("SCRIPT") << "[80C4] [+] MVAR[num] = value" << std::endl;
                 auto value = _script->dataStack()->popInteger();
                 auto num = _script->dataStack()->popInteger();

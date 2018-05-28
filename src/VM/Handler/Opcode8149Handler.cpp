@@ -29,18 +29,13 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode8149::Opcode8149(VM::Script* script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode8149::Opcode8149(VM::Script *script) : OpcodeHandler(script) {
             }
 
-            void Opcode8149::_run()
-            {
+            void Opcode8149::_run() {
                 // TODO: should it return FID of current animation?
                 Logger::debug("SCRIPT") << "[8149] [+] int obj_art_fid(void* obj)" << std::endl;
                 auto object = _script->dataStack()->popObject();

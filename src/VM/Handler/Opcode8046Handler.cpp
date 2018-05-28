@@ -29,30 +29,20 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode8046::Opcode8046(VM::Script* script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode8046::Opcode8046(VM::Script *script) : OpcodeHandler(script) {
             }
 
-            void Opcode8046::_run()
-            {
+            void Opcode8046::_run() {
                 Logger::debug("SCRIPT") << "[8046] [*] op_negate" << std::endl;
                 auto value = _script->dataStack()->pop();
-                if (value.type() == StackValue::Type::INTEGER)
-                {
-                    _script->dataStack()->push(- value.integerValue());
-                }
-                else if (value.type() == StackValue::Type::FLOAT)
-                {
-                    _script->dataStack()->push(- value.floatValue());
-                }
-                else
-                {
+                if (value.type() == StackValue::Type::INTEGER) {
+                    _script->dataStack()->push(-value.integerValue());
+                } else if (value.type() == StackValue::Type::FLOAT) {
+                    _script->dataStack()->push(-value.floatValue());
+                } else {
                     _error(std::string("Invalid argument type: ") + value.typeName());
                 }
             }

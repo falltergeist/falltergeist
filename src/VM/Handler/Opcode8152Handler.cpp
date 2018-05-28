@@ -28,19 +28,15 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode8152::Opcode8152(VM::Script* script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode8152::Opcode8152(VM::Script *script) : OpcodeHandler(script) {
             }
 
-            void Opcode8152::_run()
-            {
-                Logger::debug("SCRIPT") << "[8152] [=] void op_critter_set_flee_state(critter who, boolean flag)" << std::endl;
+            void Opcode8152::_run() {
+                Logger::debug("SCRIPT") << "[8152] [=] void op_critter_set_flee_state(critter who, boolean flag)"
+                                        << std::endl;
                 // @TODO: add implementation
                 _script->dataStack()->popLogical();
                 _script->dataStack()->popObject();

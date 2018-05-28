@@ -30,37 +30,24 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode812F::Opcode812F(VM::Script* script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode812F::Opcode812F(VM::Script *script) : OpcodeHandler(script) {
             }
 
-            void Opcode812F::_run()
-            {
+            void Opcode812F::_run() {
                 Logger::debug("SCRIPT") << "[812F] [+] void obj_unlock(GameObject* object)" << std::endl;
                 auto object = _script->dataStack()->popObject();
-                if (object)
-                {
-                    if (auto door = dynamic_cast<Game::DoorSceneryObject*>(object))
-                    {
+                if (object) {
+                    if (auto door = dynamic_cast<Game::DoorSceneryObject *>(object)) {
                         door->setLocked(false);
-                    }
-                    else if (auto container = dynamic_cast<Game::ContainerItemObject*>(object))
-                    {
+                    } else if (auto container = dynamic_cast<Game::ContainerItemObject *>(object)) {
                         container->setLocked(false);
-                    }
-                    else
-                    {
+                    } else {
                         _warning("obj_unlock: object is not door or container");
                     }
-                }
-                else
-                {
+                } else {
                     _warning("obj_unlock: object is null");
                 }
             }

@@ -30,25 +30,20 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode80F0::Opcode80F0(VM::Script* script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode80F0::Opcode80F0(VM::Script *script) : OpcodeHandler(script) {
             }
 
-            void Opcode80F0::_run()
-            {
-                Logger::debug("SCRIPT") << "[80F0] [=] void add_timer_event(void* obj, int time, int info)" << std::endl;
+            void Opcode80F0::_run() {
+                Logger::debug("SCRIPT") << "[80F0] [=] void add_timer_event(void* obj, int time, int info)"
+                                        << std::endl;
                 int fixedParam = _script->dataStack()->popInteger();
                 int delay = _script->dataStack()->popInteger();
-                Game::Object* object = _script->dataStack()->popObject();
+                Game::Object *object = _script->dataStack()->popObject();
                 auto state = Game::Game::getInstance()->locationState();
-                if (state)
-                {
+                if (state) {
                     state->addTimerEvent(object, delay, fixedParam);
                 }
             }

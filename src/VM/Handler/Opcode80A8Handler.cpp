@@ -28,19 +28,15 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode80A8::Opcode80A8(VM::Script* script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode80A8::Opcode80A8(VM::Script *script) : OpcodeHandler(script) {
             }
 
-            void Opcode80A8::_run()
-            {
-                Logger::debug("SCRIPT") << "[80A8] [=] void set_map_start(int x, int y, int elev, int rot)" << std::endl;
+            void Opcode80A8::_run() {
+                Logger::debug("SCRIPT") << "[80A8] [=] void set_map_start(int x, int y, int elev, int rot)"
+                                        << std::endl;
                 auto dataStack = _script->dataStack();
                 dataStack->popInteger();
                 dataStack->popInteger();

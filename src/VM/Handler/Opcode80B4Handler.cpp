@@ -30,22 +30,17 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode80B4::Opcode80B4(VM::Script* script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode80B4::Opcode80B4(VM::Script *script) : OpcodeHandler(script) {
             }
 
-            void Opcode80B4::_run()
-            {
+            void Opcode80B4::_run() {
                 Logger::debug("SCRIPT") << "[80B4] [+] int rand(int min, int max)" << std::endl;
                 auto max = _script->dataStack()->popInteger();
                 auto min = _script->dataStack()->popInteger();
-                _script->dataStack()->push(rand()%(max - min + 1) + min);
+                _script->dataStack()->push(rand() % (max - min + 1) + min);
             }
         }
     }

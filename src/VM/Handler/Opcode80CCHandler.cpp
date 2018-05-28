@@ -28,18 +28,13 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode80CC::Opcode80CC(VM::Script* script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode80CC::Opcode80CC(VM::Script *script) : OpcodeHandler(script) {
             }
 
-            void Opcode80CC::_run()
-            {
+            void Opcode80CC::_run() {
                 Logger::debug("SCRIPT") << "[80CC] [=] void animate_stand_obj(void* obj)" << std::endl;
                 _script->dataStack()->popObject();
             }

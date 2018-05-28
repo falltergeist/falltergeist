@@ -28,25 +28,19 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode810B::Opcode810B(VM::Script* script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode810B::Opcode810B(VM::Script *script) : OpcodeHandler(script) {
             }
 
-            void Opcode810B::_run()
-            {
+            void Opcode810B::_run() {
                 Logger::debug("SCRIPT") << "[810B] [*] int metarule(int type, value)" << std::endl;
                 auto value = _script->dataStack()->pop();
                 auto type = _script->dataStack()->popInteger();
                 int result = 0;
 
-                switch(type)
-                {
+                switch (type) {
                     case 14: // METARULE_TEST_FIRSTRUN
                         result = 1;
                         break;

@@ -29,28 +29,23 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode8012::Opcode8012(VM::Script* script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode8012::Opcode8012(VM::Script *script) : OpcodeHandler(script) {
             }
 
-            void Opcode8012::_run()
-            {
+            void Opcode8012::_run() {
                 auto number = _script->dataStack()->popInteger();
                 auto value = _script->dataStack()->values()->at(_script->SVARbase() + number);
                 _script->dataStack()->push(value);
 
-                auto& debug = Logger::debug("SCRIPT");
+                auto &debug = Logger::debug("SCRIPT");
 
-                debug   << "[8012] [*] value = op_fetch_global[num]" << std::endl
-                        << "      num: "  << number << std::endl
-                        << "     type: " << value.typeName() << std::endl
-                        << "    value: " << value.toString();
+                debug << "[8012] [*] value = op_fetch_global[num]" << std::endl
+                      << "      num: " << number << std::endl
+                      << "     type: " << value.typeName() << std::endl
+                      << "    value: " << value.toString();
 
                 debug << std::endl;
             }

@@ -28,18 +28,13 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode80E3::Opcode80E3(VM::Script* script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode80E3::Opcode80E3(VM::Script *script) : OpcodeHandler(script) {
             }
 
-            void Opcode80E3::_run()
-            {
+            void Opcode80E3::_run() {
                 Logger::debug("SCRIPT") << "[80E3] [=] void set_obj_visibility(void* obj, int visibility)" << std::endl;
                 _script->dataStack()->popInteger();
                 _script->dataStack()->popObject();

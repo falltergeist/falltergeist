@@ -30,25 +30,19 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode80FC::Opcode80FC(VM::Script* script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode80FC::Opcode80FC(VM::Script *script) : OpcodeHandler(script) {
             }
 
-            void Opcode80FC::_run()
-            {
+            void Opcode80FC::_run() {
 
                 int amount = _script->dataStack()->popInteger();
                 Logger::debug("SCRIPT") << "[80FC] [=] void game_time_advance(int amount)" << std::endl
                                         << "    amount = " << amount << std::endl;
                 auto time = Game::getInstance()->gameTime();
-                for (auto i = 0; i != amount; ++i)
-                {
+                for (auto i = 0; i != amount; ++i) {
                     time->increaseTicks();
                 }
             }
