@@ -25,23 +25,24 @@
 // Falltergeist includes
 #include "../../Logger.h"
 #include "../../VM/Script.h"
+#include "../../VM/IFalloutStack.h"
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode8019::Opcode8019(std::shared_ptr<VM::Script> script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode8019::Opcode8019(std::shared_ptr<VM::Script> script) : OpcodeHandler(script) {
             }
 
-            void Opcode8019::_run()
-            {
+            void Opcode8019::applyTo(std::shared_ptr<IFalloutContext> context) {
                 Logger::debug("SCRIPT") << "[8019] [*] op_swapa" << std::endl;
-                _script->returnStack()->swap();
+                context->returnStack()->swap();
+
+            }
+
+            void Opcode8019::_run() {
+                applyTo(_script);
             }
         }
     }

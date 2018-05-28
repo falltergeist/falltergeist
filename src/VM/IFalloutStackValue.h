@@ -19,12 +19,29 @@
 #ifndef FALLTERGEIST_VM_IFALLOUTSTACKVALUE_H
 #define FALLTERGEIST_VM_IFALLOUTSTACKVALUE_H
 
+// C++ standard includes
+#include <string>
+
+// Falltergeist includes
+
+// Third party includes
+
 namespace Falltergeist {
     namespace VM {
         class IFalloutStackValue {
         public:
+            enum class Type
+            {
+                INTEGER = 1,
+                FLOAT,
+                STRING,
+                OBJECT
+            };
+
             virtual ~IFalloutStackValue() = default;
             virtual int asInteger() const = 0;
+            virtual std::string asString() const = 0;
+            virtual Type type() const = 0;
         };
     }
 }

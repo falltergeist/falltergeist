@@ -27,29 +27,30 @@
 #include "../../Logger.h"
 #include "../../State/Location.h"
 #include "../../VM/Script.h"
+#include "../../VM/IFalloutStack.h"
+#include "../../VM/FalloutStackValue.h"
+#include "../../VM/IFalloutStackValue.h"
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode8016::Opcode8016(std::shared_ptr<VM::Script> script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode8016::Opcode8016(std::shared_ptr<VM::Script> script) : OpcodeHandler(script) {
             }
 
-            void Opcode8016::_run()
-            {
-                auto name = _script->dataStack()->popString();
+            void Opcode8016::applyTo(std::shared_ptr<IFalloutContext> context) {
+                auto name = context->dataStack()->pop()->asString();
                 auto EVARS = Game::getInstance()->locationState()->EVARS();
-                if (EVARS->find(name) == EVARS->end())
-                {
-                    EVARS->insert(std::make_pair(name, StackValue(0)));
+                if (EVARS->find(name) == EVARS->end()) {
+                    EVARS->insert(std::make_pair(name, std::make_shared<FalloutStackValue>(0)));
                 }
                 Logger::debug("SCRIPT") << "[8016] [*] op_export_var(name)" << std::endl
                                         << "    name: " << name << std::endl;
+            }
+
+            void Opcode8016::_run() {
+                applyTo(_script);
             }
         }
     }

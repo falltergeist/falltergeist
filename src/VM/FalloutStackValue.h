@@ -32,8 +32,15 @@ namespace Falltergeist {
         class FalloutStackValue : public virtual IFalloutStackValue {
         public:
             explicit FalloutStackValue(int value);
+            explicit FalloutStackValue(const std::string &value);
             virtual ~FalloutStackValue() = default;
             int asInteger() const override;
+            std::string asString() const override;
+            Type type() const override;
+        private:
+            Type _type;
+            int _integerValue;
+            std::string _stringValue;
         };
     }
 }

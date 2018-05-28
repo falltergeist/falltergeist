@@ -109,6 +109,11 @@ namespace Falltergeist
             _dataStack->pop()->asInteger(); // remove @start function result
         }
 
+        std::shared_ptr<IFalloutProcedure> Script::procedure(const std::string& name) const {
+            // TODO implement
+            return nullptr;
+        }
+
         void Script::run() {
             auto context = shared_from_this();
 
@@ -163,11 +168,11 @@ namespace Falltergeist
             return _script;
         }
 
-        unsigned int Script::programCounter() {
+        unsigned Script::programCounter() const {
             return _programCounter;
         }
 
-        void Script::setProgramCounter(unsigned int value)
+        void Script::setProgramCounter(unsigned value)
         {
             if (value >= _script->size()) {
                 std::stringstream ss;

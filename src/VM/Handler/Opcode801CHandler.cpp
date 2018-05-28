@@ -25,23 +25,24 @@
 // Falltergeist includes
 #include "../../Logger.h"
 #include "../../VM/Script.h"
+#include "../../VM/IFalloutStack.h"
+#include "../../VM/IFalloutStackValue.h"
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode801C::Opcode801C(std::shared_ptr<VM::Script> script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode801C::Opcode801C(std::shared_ptr<VM::Script> script) : OpcodeHandler(script) {
             }
 
-            void Opcode801C::_run()
-            {
-                _script->setProgramCounter(_script->returnStack()->popInteger());
-                Logger::debug("SCRIPT") << "[801C] [*] op_pop_return 0x" << std::hex << _script->programCounter() << std::endl;
+            void Opcode801C::applyTo(std::shared_ptr<IFalloutContext> context) {
+                context->setProgramCounter((unsigned)context->returnStack()->pop()->asInteger());
+                Logger::debug("SCRIPT") << "[801C] [*] op_pop_return 0x" << std::hex << context->programCounter() << std::endl;
+            }
+
+            void Opcode801C::_run() {
+                applyTo(_script);
             }
         }
     }

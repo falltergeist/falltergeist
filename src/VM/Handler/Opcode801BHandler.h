@@ -24,22 +24,20 @@
 
 // Falltergeist includes
 #include "../../VM/OpcodeHandler.h"
+#include "../../VM/IFalloutOpcode.h"
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            class Opcode801B : public OpcodeHandler
-            {
-                public:
-                    Opcode801B(std::shared_ptr<VM::Script> script);;
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            class Opcode801B : public OpcodeHandler, virtual public IFalloutOpcode {
+            public:
+                Opcode801B(std::shared_ptr<VM::Script> script);
+                void applyTo(std::shared_ptr<IFalloutContext> context) override;
 
-                private:
-                    void _run() override;
+            private:
+                void _run() override;
             };
         }
     }

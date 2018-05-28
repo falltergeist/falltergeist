@@ -59,6 +59,9 @@ namespace Falltergeist {
                 std::shared_ptr<Game::DudeObject> player() override;
                 std::shared_ptr<IFalloutStack> dataStack() override;
                 std::shared_ptr<IFalloutStack> returnStack() override;
+                std::shared_ptr<IFalloutProcedure> procedure(const std::string& name) const override;
+                unsigned programCounter() const override;
+                void setProgramCounter(unsigned value) override;
 
                 void run();
                 void initialize();
@@ -78,8 +81,6 @@ namespace Falltergeist {
 
                 Game::Object* owner();
 
-                unsigned int programCounter();
-                void setProgramCounter(unsigned int value);
 
                 std::vector<StackValue>* LVARS();
 
@@ -112,7 +113,7 @@ namespace Falltergeist {
                 std::shared_ptr<IFalloutStack> _dataStack;
                 std::shared_ptr<IFalloutStack> _returnStack;
                 std::vector<StackValue> _LVARS;
-                unsigned int _programCounter = 0;
+                unsigned _programCounter = 0;
                 size_t _DVAR_base = 0;
                 size_t _SVAR_base = 0;
         };

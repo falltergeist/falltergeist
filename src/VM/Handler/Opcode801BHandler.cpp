@@ -25,23 +25,24 @@
 // Falltergeist includes
 #include "../../Logger.h"
 #include "../../VM/Script.h"
+#include "../../VM/IFalloutStack.h"
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode801B::Opcode801B(std::shared_ptr<VM::Script> script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode801B::Opcode801B(std::shared_ptr<VM::Script> script) : OpcodeHandler(script) {
             }
 
-            void Opcode801B::_run()
-            {
+            void Opcode801B::applyTo(std::shared_ptr<IFalloutContext> context) {
                 Logger::debug("SCRIPT") << "[801B] op_dup" << std::endl;
-                _script->dataStack()->push(_script->dataStack()->top());
+                // TODO clone value
+                context->dataStack()->push(context->dataStack()->top());
+            }
+
+            void Opcode801B::_run() {
+                applyTo(_script);
             }
         }
     }

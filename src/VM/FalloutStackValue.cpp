@@ -17,4 +17,36 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+ // C++ standard includes
 #include "FalloutStackValue.h"
+
+// Falltergeist includes
+
+// Third party includes
+
+namespace Falltergeist {
+    namespace VM {
+        FalloutStackValue::FalloutStackValue(int value) {
+            _type = Type::INTEGER;
+            _integerValue = value;
+        };
+
+        FalloutStackValue::FalloutStackValue(const std::string &value) {
+            _type = Type::STRING;
+            _stringValue = value;
+        }
+
+        FalloutStackValue::Type FalloutStackValue::type() const {
+            return _type;
+        }
+
+        int FalloutStackValue::asInteger() const {
+            return _integerValue;
+        }
+
+        std::string FalloutStackValue::asString() const {
+            return _stringValue;
+        }
+    }
+}
+

@@ -17,29 +17,37 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_VM_HANDLER_OPCODE801A_H
-#define FALLTERGEIST_VM_HANDLER_OPCODE801A_H
+#ifndef FALLTERGEIST_VM_IFALLOUTPROCEDURE_H
+#define FALLTERGEIST_VM_IFALLOUTPROCEDURE_H
 
 // C++ standard includes
+#include <string>
 
 // Falltergeist includes
-#include "../../VM/OpcodeHandler.h"
-#include "../../VM/IFalloutOpcode.h"
 
 // Third party includes
 
 namespace Falltergeist {
     namespace VM {
-        namespace Handler {
-            class Opcode801A : public OpcodeHandler, public virtual IFalloutOpcode {
-            public:
-                Opcode801A(std::shared_ptr<VM::Script> script);
-                void applyTo(std::shared_ptr<IFalloutContext> context) override;
+        class IFalloutProcedure {
+        public:
+            virtual uint32_t flags() const = 0;
+            virtual uint32_t delay() const = 0;
+            virtual uint32_t conditionOffset() const = 0;
+            virtual uint32_t bodyOffset() const = 0;
+            virtual uint32_t argumentsCounter() = 0;
+            virtual std::string name() const = 0;
 
-            private:
-                void _run() override;
-            };
-        }
+            virtual bool isTimed() = 0;
+            virtual bool isConditional() = 0;
+            virtual bool isImported() = 0;
+            virtual bool isExported() = 0;
+            virtual bool isCritical() = 0;
+            virtual bool isPure() = 0;
+            virtual bool isInline() = 0;
+        };
     }
 }
-#endif // FALLTERGEIST_VM_HANDLER_OPCODE801A_H
+
+
+#endif //FALLTERGEIST_VM_IFALLOUTPROCEDURE_H

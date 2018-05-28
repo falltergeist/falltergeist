@@ -25,26 +25,25 @@
 // Falltergeist includes
 #include "../../Logger.h"
 #include "../../VM/Script.h"
-#include "../../VM/StackValue.h"
+#include "../../VM/IFalloutStack.h"
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode8027::Opcode8027(std::shared_ptr<VM::Script> script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode8027::Opcode8027(std::shared_ptr<VM::Script> script) : OpcodeHandler(script) {
             }
 
-            void Opcode8027::_run()
-            {
+            void Opcode8027::applyTo(std::shared_ptr<IFalloutContext> context) {
                 Logger::debug("SCRIPT") << "[8027] [?] op_check_arg_count" << std::endl;
-                _script->dataStack()->pop(); // number of actual arguments
-                _script->dataStack()->pop(); // procedure index
+                context->dataStack()->pop(); // number of actual arguments
+                context->dataStack()->pop(); // procedure index
                 // @TODO: compare number of arguments with procedure info and throw script exception if they are not equal
+            }
+
+            void Opcode8027::_run() {
+                applyTo(_script);
             }
         }
     }

@@ -16,30 +16,4 @@
  * You should have received a copy of the GNU General Public License
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-#ifndef FALLTERGEIST_VM_HANDLER_OPCODE801A_H
-#define FALLTERGEIST_VM_HANDLER_OPCODE801A_H
-
-// C++ standard includes
-
-// Falltergeist includes
-#include "../../VM/OpcodeHandler.h"
-#include "../../VM/IFalloutOpcode.h"
-
-// Third party includes
-
-namespace Falltergeist {
-    namespace VM {
-        namespace Handler {
-            class Opcode801A : public OpcodeHandler, public virtual IFalloutOpcode {
-            public:
-                Opcode801A(std::shared_ptr<VM::Script> script);
-                void applyTo(std::shared_ptr<IFalloutContext> context) override;
-
-            private:
-                void _run() override;
-            };
-        }
-    }
-}
-#endif // FALLTERGEIST_VM_HANDLER_OPCODE801A_H
+#include "IFalloutProcedure.h"

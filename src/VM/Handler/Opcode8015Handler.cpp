@@ -28,6 +28,7 @@
 #include "../../State/Location.h"
 #include "../../VM/Script.h"
 #include "../../VM/StackValue.h"
+#include "../../VM/IFalloutStack.h"
 
 // Third party includes
 
@@ -44,7 +45,7 @@ namespace Falltergeist
             void Opcode8015::_run()
             {
                 Logger::debug("SCRIPT") << "[8015] [*] op_store_external(name, value)" << std::endl;
-                std::string name = _script->dataStack()->popString();
+                std::string name = _script->dataStack()->pop()->asString();
                 auto value = _script->dataStack()->pop();
                 auto game = Game::getInstance();
                 auto EVARS = game->locationState()->EVARS();

@@ -23,16 +23,17 @@
 // C++ standard includes
 #include <list>
 #include <memory>
-#include <Game/DudeObject.h>
-#include <Format/Map/File.h>
 
 // Falltergeist includes
+#include "../Format/Map/File.h"
+#include "../Game/DudeObject.h"
 #include "../Game/Object.h"
 #include "../Game/Timer.h"
 #include "../Graphics/Lightmap.h"
 #include "../Input/Mouse.h"
 #include "../State/State.h"
 #include "../UI/ImageButton.h"
+#include "../VM/IFalloutStackValue.h"
 
 // Third party includes
 
@@ -63,7 +64,6 @@ namespace Falltergeist
     namespace VM
     {
         class Script;
-        class StackValue;
     }
     class Hexagon;
     class HexagonGrid;
@@ -103,7 +103,7 @@ namespace Falltergeist
                 void setMVAR(unsigned int number, int value);
                 int MVAR(unsigned int number);
 
-                std::map<std::string, VM::StackValue>* EVARS();
+                std::map<std::string, std::shared_ptr<VM::IFalloutStackValue>>* EVARS();
 
                 void moveObjectToHexagon(Game::Object *object, Hexagon *hexagon, bool update = true);
                 void removeObjectFromMap(Game::Object *object);
@@ -171,7 +171,7 @@ namespace Falltergeist
                 std::unique_ptr<LocationCamera> _camera;
                 std::unique_ptr<UI::TileMap> _floor;
                 std::unique_ptr<UI::TileMap> _roof;
-                std::map<std::string, VM::StackValue> _EVARS;
+                std::map<std::string, std::shared_ptr<VM::IFalloutStackValue>> _EVARS;
                 std::vector<UI::Base*> _floatMessages;
 
                 std::shared_ptr<Falltergeist::Game::Location> _location;

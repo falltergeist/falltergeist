@@ -48,23 +48,23 @@ namespace Falltergeist {
                 auto EVARS = game->locationState()->EVARS();
                 std::string name;
                 auto nameValue = _script->dataStack()->pop();
-                switch (nameValue.type()) {
-                    case StackValue::Type::INTEGER:
-                        name = _script->script()->identifiers().at((unsigned int) nameValue.integerValue());
+                switch (nameValue->type()) {
+                    case IFalloutStackValue::Type::INTEGER:
+                        name = _script->script()->identifiers().at((unsigned int) nameValue->asInteger());
                         break;
-                    case StackValue::Type::STRING: {
-                        name = nameValue.stringValue();
+                    case IFalloutStackValue::Type::STRING: {
+                        name = nameValue->asString();
                         break;
                     }
                     default:
-                        _error(std::string("op_fetch_external - invalid argument type: ") + nameValue.typeName());
+                        _error(std::string("op_fetch_external - invalid argument type: ")); // + nameValue.typeName());
                 }
                 debug << " name = " << name;
                 if (EVARS->find(name) == EVARS->end()) {
                     _error(std::string() + "op_fetch_external: exported variable \"" + name + "\" not found.");
                 }
                 auto value = EVARS->at(name);
-                debug << ", type = " << value.typeName() << ", value = " << value.toString() << std::endl;
+                //debug << ", type = " << value.typeName() << ", value = " << value.toString() << std::endl;
                 _script->dataStack()->push(value);
             }
 

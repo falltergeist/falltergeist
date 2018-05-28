@@ -27,24 +27,26 @@
 #include "../../Format/Int/Procedure.h"
 #include "../../Logger.h"
 #include "../../VM/Script.h"
+#include "../../VM/IFalloutProcedure.h"
+#include "../../VM/IFalloutStack.h"
+#include "../../VM/IFalloutStackValue.h"
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode8028::Opcode8028(std::shared_ptr<VM::Script> script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode8028::Opcode8028(std::shared_ptr<VM::Script> script) : OpcodeHandler(script) {
             }
 
-            void Opcode8028::_run()
-            {
+            void Opcode8028::applyTo(std::shared_ptr<IFalloutContext> context) {
                 Logger::debug("SCRIPT") << "[8028] [?] int lookup_string_proc(string)" << std::endl;
-                std::string name = _script->dataStack()->popString();
-                _script->dataStack()->push((int)_script->script()->procedure(name)->bodyOffset());
+                std::string name = context->dataStack()->pop()->asString();
+                context->dataStack()->push((int)context->procedure(name)->bodyOffset());
+            }
+
+            void Opcode8028::_run() {
+                applyTo(_script);
             }
         }
     }
