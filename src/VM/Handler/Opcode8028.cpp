@@ -41,11 +41,11 @@ namespace Falltergeist {
             int Opcode8028::number() {
                 return 0x8028;
             }
-            
+
             std::string Opcode8028::name() {
                 return "int lookup_string_proc(string procedure)";
             }
-            
+
             std::string Opcode8028::notes() {
                 return "returns procedure address";
             }

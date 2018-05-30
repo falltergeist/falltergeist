@@ -37,15 +37,15 @@ namespace Falltergeist {
                     context->setProgramCounter(context->dataStack()->popInteger());
                 }
             }
-            
+
             int Opcode8030::number() {
                 return 0x8030;
             }
-            
+
             std::string Opcode8030::name() {
                 return "void op_while(bool condition, int address)";
             }
-            
+
             std::string Opcode8030::notes() {
                 return "";
             }

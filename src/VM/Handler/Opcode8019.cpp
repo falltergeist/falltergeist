@@ -38,11 +38,11 @@ namespace Falltergeist {
             int Opcode8019::number() {
                 return 0x8019;
             }
-            
+
             std::string Opcode8019::name() {
                 return "void op_swapa()";
             }
-            
+
             std::string Opcode8019::notes() {
                 return "";
             }

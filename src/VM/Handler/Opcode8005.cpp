@@ -45,18 +45,15 @@ namespace Falltergeist {
                 context->setProgramCounter(context->procedure(functionIndex)->bodyOffset());
             }
 
-            int Opcode8005::number()
-            {
+            int Opcode8005::number() {
                 return 0x8005;
             }
 
-            std::string Opcode8005::name()
-            {
+            std::string Opcode8005::name() {
                 return "void op_call(int index)";
             }
 
-            std::string Opcode8005::notes()
-            {
+            std::string Opcode8005::notes() {
                 return "Partially implemented";
             }
         }

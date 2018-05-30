@@ -39,11 +39,11 @@ namespace Falltergeist {
             int Opcode8029::number() {
                 return 0x8029;
             }
-            
+
             std::string Opcode8029::name() {
                 return "void op_pop_base()";
             }
-            
+
             std::string Opcode8029::notes() {
                 return "";
             }

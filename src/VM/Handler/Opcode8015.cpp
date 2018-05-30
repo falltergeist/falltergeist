@@ -31,8 +31,7 @@
 namespace Falltergeist {
     namespace VM {
         namespace Handler {
-            void Opcode8015::applyTo(std::shared_ptr<IFalloutContext> context)
-            {
+            void Opcode8015::applyTo(std::shared_ptr<IFalloutContext> context) {
                 std::string name = context->dataStack()->pop()->asString();
                 auto value = context->dataStack()->pop();
                 auto game = Game::getInstance();

@@ -32,8 +32,7 @@
 namespace Falltergeist {
     namespace VM {
         namespace Handler {
-            void Opcode8012::applyTo(std::shared_ptr<IFalloutContext> context)
-            {
+            void Opcode8012::applyTo(std::shared_ptr<IFalloutContext> context) {
                 auto number = context->dataStack()->pop()->asInteger();
                 auto value = context->dataStack()->at(_script->SVARbase() + number);
                 context->dataStack()->push(value);
@@ -48,18 +47,15 @@ namespace Falltergeist {
 //                debug << std::endl;
             }
 
-            int Opcode8012::number()
-            {
+            int Opcode8012::number() {
                 return 0x8012;
             }
 
-            std::string Opcode8012::name()
-            {
+            std::string Opcode8012::name() {
                 return "mixed op_fetch_global(int number)";
             }
 
-            std::string Opcode8012::notes()
-            {
+            std::string Opcode8012::notes() {
                 return "";
             }
         }

@@ -33,17 +33,15 @@ namespace Falltergeist {
                 // nothing to do here ¯\_(ツ)_/¯
             }
 
-            int Opcode8003::number()
-            {
+            int Opcode8003::number() {
                 return 0x8003;
             }
-            std::string Opcode8003::name()
-            {
+
+            std::string Opcode8003::name() {
                 return "op_critical_done";
             }
 
-            std::string Opcode8003::notes()
-            {
+            std::string Opcode8003::notes() {
                 return "Unknown";
             }
         }

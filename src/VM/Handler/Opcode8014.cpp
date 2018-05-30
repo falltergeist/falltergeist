@@ -31,8 +31,7 @@
 namespace Falltergeist {
     namespace VM {
         namespace Handler {
-            void Opcode8014::applyTo(std::shared_ptr<IFalloutContext> context)
-            {
+            void Opcode8014::applyTo(std::shared_ptr<IFalloutContext> context) {
                 auto &debug = Logger::debug("SCRIPT");
                 debug << "[8014] [+] value = op_fetch_external(name)" << std::endl;
                 auto game = Game::getInstance();
@@ -58,19 +57,16 @@ namespace Falltergeist {
                 //debug << ", type = " << value.typeName() << ", value = " << value.toString() << std::endl;
                 _script->dataStack()->push(value);
             }
-            
-            int Opcode8014::number()
-            {
+
+            int Opcode8014::number() {
                 return 0x8014;
             }
-            
-            std::string Opcode8014::name()
-            {
+
+            std::string Opcode8014::name() {
                 return "mixed op_fetch_external(int|string name)";
             }
-            
-            std::string Opcode8014::notes()
-            {
+
+            std::string Opcode8014::notes() {
                 return "";
             }
         }

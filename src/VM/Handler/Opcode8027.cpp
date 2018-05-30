@@ -37,18 +37,15 @@ namespace Falltergeist {
                 // @TODO: compare number of arguments with procedure info and throw script exception if they are not equal
             }
 
-            int Opcode8027::number()
-            {
+            int Opcode8027::number() {
                 return 0x8027;
             }
-            
-            std::string Opcode8027::name()
-            {
+
+            std::string Opcode8027::name() {
                 return "op_check_arg_count(int argc, int procedure)";
             }
-            
-            std::string Opcode8027::notes()
-            {
+
+            std::string Opcode8027::notes() {
                 return "Maybe push result on stack?";
             }
         }

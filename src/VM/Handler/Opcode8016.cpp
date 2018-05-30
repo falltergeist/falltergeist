@@ -43,11 +43,11 @@ namespace Falltergeist {
             int Opcode8016::number() {
                 return 0x8016;
             }
-            
+
             std::string Opcode8016::name() {
                 return "void op_export_var(string name)";
             }
-            
+
             std::string Opcode8016::notes() {
                 return "";
             }

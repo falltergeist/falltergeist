@@ -29,24 +29,20 @@
 namespace Falltergeist {
     namespace VM {
         namespace Handler {
-            void Opcode8010::applyTo(std::shared_ptr<IFalloutContext> context)
-            {
+            void Opcode8010::applyTo(std::shared_ptr<IFalloutContext> context) {
                 _script->setInitialized(true);
                 throw VM::HaltException();
             }
 
-            int Opcode8010::number()
-            {
+            int Opcode8010::number() {
                 return 0x8010;
             }
 
-            std::string Opcode8010::name()
-            {
+            std::string Opcode8010::name() {
                 return "void op_exit_prog()";
             }
 
-            std::string Opcode8010::notes()
-            {
+            std::string Opcode8010::notes() {
                 return "Unknown";
             }
         }

@@ -33,9 +33,13 @@ namespace Falltergeist {
             class Opcode8003 : virtual public IFalloutOpcode {
             public:
                 Opcode8003() = default;
+
                 void applyTo(std::shared_ptr<IFalloutContext> context) override;
+
                 int number() override;
+
                 std::string name() override;
+
                 std::string notes() override;
             };
         }

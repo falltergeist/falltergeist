@@ -37,18 +37,15 @@ namespace Falltergeist {
                 context->setProgramCounter((unsigned) address);
             }
 
-            int Opcode8004::number()
-            {
+            int Opcode8004::number() {
                 return 0x8004;
             }
 
-            std::string Opcode8004::name()
-            {
+            std::string Opcode8004::name() {
                 return "void op_jmp(int address)";
             }
 
-            std::string Opcode8004::notes()
-            {
+            std::string Opcode8004::notes() {
                 return "Implemented";
             }
         }
