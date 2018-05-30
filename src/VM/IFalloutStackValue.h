@@ -30,8 +30,7 @@ namespace Falltergeist {
     namespace VM {
         class IFalloutStackValue {
         public:
-            enum class Type
-            {
+            enum class Type {
                 INTEGER = 1,
                 FLOAT,
                 STRING,
@@ -39,8 +38,11 @@ namespace Falltergeist {
             };
 
             virtual ~IFalloutStackValue() = default;
+
             virtual int asInteger() const = 0;
+
             virtual std::string asString() const = 0;
+
             virtual Type type() const = 0;
         };
     }

@@ -30,16 +30,23 @@
 namespace Falltergeist {
     namespace VM {
         class IFalloutProcedure;
+
         class IFalloutStack;
 
         class IFalloutContext : public virtual IContext {
         public:
             virtual ~IFalloutContext() = default;
+
             virtual std::shared_ptr<IFalloutStack> dataStack() = 0;
+
             virtual std::shared_ptr<IFalloutStack> returnStack() = 0;
+
             virtual void setProgramCounter(unsigned counter) = 0;
+
             virtual unsigned programCounter() const = 0;
-            virtual std::shared_ptr<IFalloutProcedure> procedure(const std::string& name) const = 0;
+
+            virtual std::shared_ptr<IFalloutProcedure> procedure(const std::string &name) const = 0;
+
             virtual std::shared_ptr<IFalloutProcedure> procedure(int index) const = 0;
         };
     }

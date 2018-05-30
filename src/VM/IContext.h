@@ -30,6 +30,7 @@ namespace Falltergeist {
         class IContext {
         public:
             virtual ~IContext() = default;
+
             virtual std::shared_ptr<Game::DudeObject> player() = 0;
         };
     }

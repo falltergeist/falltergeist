@@ -32,18 +32,13 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode8015::Opcode8015(std::shared_ptr<VM::Script> script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode8015::Opcode8015(std::shared_ptr<VM::Script> script) : OpcodeHandler(script) {
             }
 
-            void Opcode8015::_run()
-            {
+            void Opcode8015::_run() {
                 Logger::debug("SCRIPT") << "[8015] [*] op_store_external(name, value)" << std::endl;
                 std::string name = _script->dataStack()->pop()->asString();
                 auto value = _script->dataStack()->pop();

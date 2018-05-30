@@ -32,14 +32,23 @@ namespace Falltergeist {
         class FalloutStack : public virtual IFalloutStack {
         public:
             virtual ~FalloutStack() = default;
+
             void push(std::shared_ptr<IFalloutStackValue> value) override;
+
             void push(int value) override;
+
             std::shared_ptr<IFalloutStackValue> at(int offset) override;
+
             std::shared_ptr<IFalloutStackValue> pop() override;
+
             std::shared_ptr<IFalloutStackValue> top() override;
+
             void clear() override;
+
             size_t size() override;
+
             void swap() override;
+
         private:
             std::vector<std::shared_ptr<IFalloutStackValue>> _values;
         };

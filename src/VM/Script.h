@@ -50,72 +50,97 @@ namespace Falltergeist {
          * TODO remove enable_shared_from_this
          */
         class Script : public std::enable_shared_from_this<Script>, public virtual IFalloutContext {
-            public:
-                Script(Format::Int::File* script, Game::Object* owner);
-                Script(const std::string& filename, Game::Object* owner);
-                virtual ~Script();
+        public:
+            Script(Format::Int::File *script, Game::Object *owner);
 
-                // IFalloutContext
-                std::shared_ptr<Game::DudeObject> player() override;
-                std::shared_ptr<IFalloutStack> dataStack() override;
-                std::shared_ptr<IFalloutStack> returnStack() override;
-                std::shared_ptr<IFalloutProcedure> procedure(const std::string& name) const override;
-                unsigned programCounter() const override;
-                void setProgramCounter(unsigned value) override;
+            Script(const std::string &filename, Game::Object *owner);
 
-                void run();
-                void initialize();
+            virtual ~Script();
 
-                bool initialized();
-                bool overrides();
-                void setOverrides(bool Value);
-                void setInitialized(bool value);
-                std::string msgMessage(int msg_file_num, int msg_num);
-                std::string msgSpeech(int msg_file_num, int msg_num);
-                // Returns filename of an .int script file
-                std::string filename();
-                bool hasFunction(const std::string& name);
+            // IFalloutContext
+            std::shared_ptr<Game::DudeObject> player() override;
 
-                void call(const std::string& name);
-                Format::Int::File* script();
+            std::shared_ptr<IFalloutStack> dataStack() override;
 
-                Game::Object* owner();
+            std::shared_ptr<IFalloutStack> returnStack() override;
+
+            std::shared_ptr<IFalloutProcedure> procedure(const std::string &name) const override;
+
+            unsigned programCounter() const override;
+
+            void setProgramCounter(unsigned value) override;
+
+            void run();
+
+            void initialize();
+
+            bool initialized();
+
+            bool overrides();
+
+            void setOverrides(bool Value);
+
+            void setInitialized(bool value);
+
+            std::string msgMessage(int msg_file_num, int msg_num);
+
+            std::string msgSpeech(int msg_file_num, int msg_num);
+
+            // Returns filename of an .int script file
+            std::string filename();
+
+            bool hasFunction(const std::string &name);
+
+            void call(const std::string &name);
+
+            Format::Int::File *script();
+
+            Game::Object *owner();
 
 
-                std::vector<StackValue>* LVARS();
+            std::vector<StackValue> *LVARS();
 
-                size_t DVARbase();
-                void setDVARBase(size_t Value);
-                size_t SVARbase();
-                void setSVARbase(size_t Value);
+            size_t DVARbase();
 
-                VM::Script* setFixedParam(int _fixedParam);
-                int fixedParam() const;
-                VM::Script* setTargetObject(Game::Object* _targetObject);
-                Game::Object* targetObject() const;
-                VM::Script* setSourceObject(Game::Object* _sourceObject);
-                Game::Object* sourceObject() const;
+            void setDVARBase(size_t Value);
 
-                SKILL usedSkill() const;
-                VM::Script* setUsedSkill(SKILL skill);
+            size_t SVARbase();
 
-            protected:
-                Game::Object* _owner = nullptr;
-                Game::Object* _sourceObject = nullptr;
-                Game::Object* _targetObject = nullptr;
-                SKILL _usedSkill = SKILL::NONE;
+            void setSVARbase(size_t Value);
 
-                int _fixedParam = 0;
-                int _actionUsed = 0;
-                Format::Int::File* _script = 0;
-                bool _initialized = false;
-                bool _overrides = false;
-                std::shared_ptr<IFalloutStack> _dataStack;
-                std::shared_ptr<IFalloutStack> _returnStack;
-                std::vector<StackValue> _LVARS;
-                unsigned _programCounter = 0;
-                size_t _DVAR_base = 0;
-                size_t _SVAR_base = 0;
+            VM::Script *setFixedParam(int _fixedParam);
+
+            int fixedParam() const;
+
+            VM::Script *setTargetObject(Game::Object *_targetObject);
+
+            Game::Object *targetObject() const;
+
+            VM::Script *setSourceObject(Game::Object *_sourceObject);
+
+            Game::Object *sourceObject() const;
+
+            SKILL usedSkill() const;
+
+            VM::Script *setUsedSkill(SKILL skill);
+
+        protected:
+            Game::Object *_owner = nullptr;
+            Game::Object *_sourceObject = nullptr;
+            Game::Object *_targetObject = nullptr;
+            SKILL _usedSkill = SKILL::NONE;
+
+            int _fixedParam = 0;
+            int _actionUsed = 0;
+            Format::Int::File *_script = 0;
+            bool _initialized = false;
+            bool _overrides = false;
+            std::shared_ptr<IFalloutStack> _dataStack;
+            std::shared_ptr<IFalloutStack> _returnStack;
+            std::vector<StackValue> _LVARS;
+            unsigned _programCounter = 0;
+            size_t _DVAR_base = 0;
+            size_t _SVAR_base = 0;
         };
     }
 }

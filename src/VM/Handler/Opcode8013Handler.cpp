@@ -31,28 +31,23 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode8013::Opcode8013(std::shared_ptr<VM::Script> script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode8013::Opcode8013(std::shared_ptr<VM::Script> script) : OpcodeHandler(script) {
             }
 
-            void Opcode8013::_run()
-            {
+            void Opcode8013::_run() {
                 auto number = _script->dataStack()->pop()->asInteger();
                 auto value = _script->dataStack()->pop();
                 _script->dataStack()->at(_script->SVARbase() + number) = value;
 
-                auto& debug = Logger::debug("SCRIPT");
+                auto &debug = Logger::debug("SCRIPT");
 
-                debug   << "[8013] [*] op_store_global" << std::endl
-                        << "      num: "  << number << std::endl;
-                        //<< "     type: " << value.typeName() << std::endl
-                        //<< "    value: " << value.toString();
+                debug << "[8013] [*] op_store_global" << std::endl
+                      << "      num: " << number << std::endl;
+                //<< "     type: " << value.typeName() << std::endl
+                //<< "    value: " << value.toString();
 
                 debug << std::endl;
             }

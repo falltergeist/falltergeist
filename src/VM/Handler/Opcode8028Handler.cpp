@@ -42,7 +42,7 @@ namespace Falltergeist {
             void Opcode8028::applyTo(std::shared_ptr<IFalloutContext> context) {
                 Logger::debug("SCRIPT") << "[8028] [?] int lookup_string_proc(string)" << std::endl;
                 std::string name = context->dataStack()->pop()->asString();
-                context->dataStack()->push((int)context->procedure(name)->bodyOffset());
+                context->dataStack()->push((int) context->procedure(name)->bodyOffset());
             }
 
             void Opcode8028::_run() {

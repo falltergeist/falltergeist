@@ -39,8 +39,8 @@ namespace Falltergeist {
             void Opcode8004::applyTo(std::shared_ptr<IFalloutContext> context) {
                 auto address = context->dataStack()->pop()->asInteger();
                 Logger::debug("SCRIPT")
-                    << "[8004] [*] op_jmp(address)" << std::endl
-                    << "    address: " << std::hex << address << std::endl;
+                        << "[8004] [*] op_jmp(address)" << std::endl
+                        << "    address: " << std::hex << address << std::endl;
                 context->setProgramCounter(address);
             }
 

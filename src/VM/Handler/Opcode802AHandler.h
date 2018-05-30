@@ -34,6 +34,7 @@ namespace Falltergeist {
             class Opcode802A : public OpcodeHandler, virtual public IFalloutOpcode {
             public:
                 Opcode802A(std::shared_ptr<VM::Script> script);
+
                 void applyTo(std::shared_ptr<IFalloutContext> context) override;
 
             private:

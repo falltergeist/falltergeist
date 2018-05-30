@@ -37,8 +37,9 @@ namespace Falltergeist {
             }
 
             void Opcode801C::applyTo(std::shared_ptr<IFalloutContext> context) {
-                context->setProgramCounter((unsigned)context->returnStack()->pop()->asInteger());
-                Logger::debug("SCRIPT") << "[801C] [*] op_pop_return 0x" << std::hex << context->programCounter() << std::endl;
+                context->setProgramCounter((unsigned) context->returnStack()->pop()->asInteger());
+                Logger::debug("SCRIPT") << "[801C] [*] op_pop_return 0x" << std::hex << context->programCounter()
+                                        << std::endl;
             }
 
             void Opcode801C::_run() {
