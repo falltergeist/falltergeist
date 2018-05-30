@@ -40,7 +40,7 @@ namespace Falltergeist {
 
             void Opcode8121::_run() {
                 Logger::debug("SCRIPT")
-                        << "[8121] [+] void giQ_Option(int iq_test, int msg_list, int msg_num, procedure target, int reaction)"
+                        << "[8121] [+] void giQ_Option(int iq_test, int msg_list, int msg_num, getProcedureByIndex target, int reaction)"
                         << std::endl;
 
                 auto dataStack = _script->dataStack();

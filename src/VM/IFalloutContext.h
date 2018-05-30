@@ -45,9 +45,11 @@ namespace Falltergeist {
 
             virtual unsigned programCounter() const = 0;
 
-            virtual std::shared_ptr<IFalloutProcedure> procedure(const std::string &name) const = 0;
+            virtual void stopExecution() = 0;
 
-            virtual std::shared_ptr<IFalloutProcedure> procedure(int index) const = 0;
+            virtual std::shared_ptr<IFalloutProcedure> getProcedureByName(const std::string &name) const = 0;
+
+            virtual std::shared_ptr<IFalloutProcedure> getProcedureByIndex(int index) const = 0;
         };
     }
 }

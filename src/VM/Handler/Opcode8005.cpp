@@ -42,7 +42,7 @@ namespace Falltergeist {
                 {
                     args.push_back(_script->dataStack()->popInteger());
                 }*/
-                context->setProgramCounter(context->procedure(functionIndex)->bodyOffset());
+                context->setProgramCounter(context->getProcedureByIndex(functionIndex)->bodyOffset());
             }
 
             int Opcode8005::number() {

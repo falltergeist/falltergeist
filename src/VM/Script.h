@@ -64,7 +64,7 @@ namespace Falltergeist {
 
             std::shared_ptr<IFalloutStack> returnStack() override;
 
-            std::shared_ptr<IFalloutProcedure> procedure(const std::string &name) const override;
+            std::shared_ptr<IFalloutProcedure> getProcedureByName(const std::string &name) const override;
 
             unsigned programCounter() const override;
 

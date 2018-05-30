@@ -51,6 +51,10 @@ namespace Falltergeist {
             virtual size_t size() = 0;
 
             virtual void swap() = 0;
+
+            virtual int stackBase() = 0;
+
+            virtual void rememberStackBase() = 0;
         };
     }
 }

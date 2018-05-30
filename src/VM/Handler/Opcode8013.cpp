@@ -35,7 +35,7 @@ namespace Falltergeist {
             void Opcode8013::applyTo(std::shared_ptr<IFalloutContext> context) {
                 auto number = context->dataStack()->pop()->asInteger();
                 auto value = context->dataStack()->pop();
-                context->dataStack()->at(_script->SVARbase() + number) = value;
+                context->dataStack()->at(context->dataStack()->stackBase() + number) = value;
 
 //                auto &debug = Logger::debug("SCRIPT");
 //

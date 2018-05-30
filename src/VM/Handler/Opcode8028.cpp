@@ -35,7 +35,7 @@ namespace Falltergeist {
         namespace Handler {
             void Opcode8028::applyTo(std::shared_ptr<IFalloutContext> context) {
                 std::string name = context->dataStack()->pop()->asString();
-                context->dataStack()->push((int) context->procedure(name)->bodyOffset());
+                context->dataStack()->push((int) context->getProcedureByName(name)->bodyOffset());
             }
 
             int Opcode8028::number() {
@@ -43,11 +43,11 @@ namespace Falltergeist {
             }
 
             std::string Opcode8028::name() {
-                return "int lookup_string_proc(string procedure)";
+                return "int lookup_string_proc(string getProcedureByIndex)";
             }
 
             std::string Opcode8028::notes() {
-                return "returns procedure address";
+                return "returns getProcedureByIndex address";
             }
         }
     }

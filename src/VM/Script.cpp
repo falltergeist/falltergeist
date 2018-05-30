@@ -100,7 +100,7 @@ namespace Falltergeist {
             _dataStack->pop()->asInteger(); // remove @start function result
         }
 
-        std::shared_ptr<IFalloutProcedure> Script::procedure(const std::string &name) const {
+        std::shared_ptr<IFalloutProcedure> Script::getProcedureByName(const std::string &name) const {
             // TODO implement
             return nullptr;
         }

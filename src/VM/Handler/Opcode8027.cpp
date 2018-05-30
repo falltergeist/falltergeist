@@ -33,8 +33,8 @@ namespace Falltergeist {
         namespace Handler {
             void Opcode8027::applyTo(std::shared_ptr<IFalloutContext> context) {
                 context->dataStack()->pop(); // number of actual arguments
-                context->dataStack()->pop(); // procedure index
-                // @TODO: compare number of arguments with procedure info and throw script exception if they are not equal
+                context->dataStack()->pop(); // getProcedureByIndex index
+                // @TODO: compare number of arguments with getProcedureByIndex info and throw script exception if they are not equal
             }
 
             int Opcode8027::number() {
@@ -42,7 +42,7 @@ namespace Falltergeist {
             }
 
             std::string Opcode8027::name() {
-                return "op_check_arg_count(int argc, int procedure)";
+                return "op_check_arg_count(int argc, int getProcedureByIndex)";
             }
 
             std::string Opcode8027::notes() {

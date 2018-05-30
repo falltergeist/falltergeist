@@ -18,11 +18,12 @@
  */
 
 // Related headers
-#include "../Handler/Opcode8010.h"
+#include "../../VM/Handler/Opcode8010.h"
 
 // C++ standard includes
 
 // Falltergeist includes
+#include "../../VM/IFalloutContext.h
 
 // Third party includes
 
@@ -30,8 +31,7 @@ namespace Falltergeist {
     namespace VM {
         namespace Handler {
             void Opcode8010::applyTo(std::shared_ptr<IFalloutContext> context) {
-                _script->setInitialized(true);
-                throw VM::HaltException();
+                context->stopExecution();
             }
 
             int Opcode8010::number() {
