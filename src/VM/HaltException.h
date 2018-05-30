@@ -26,14 +26,11 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        class HaltException
-        {
-            public:
-                HaltException();
+namespace Falltergeist {
+    namespace VM {
+        class HaltException {
+        public:
+            HaltException();
         };
     }
 }

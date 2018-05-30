@@ -35,34 +35,29 @@
 
 // Third party includes
 
-namespace Falltergeist
-{
-    namespace VM
-    {
-        namespace Handler
-        {
-            Opcode80B7::Opcode80B7(std::shared_ptr<VM::Script> script) : OpcodeHandler(script)
-            {
+namespace Falltergeist {
+    namespace VM {
+        namespace Handler {
+            Opcode80B7::Opcode80B7(std::shared_ptr<VM::Script> script) : OpcodeHandler(script) {
             }
 
-            void Opcode80B7::_run()
-            {
-                Logger::debug("SCRIPT") << "[80B7] [+] GameObject* create_object_sid(int PID, int position, int elevation, int SID)" << std::endl;
+            void Opcode80B7::_run() {
+                Logger::debug("SCRIPT")
+                        << "[80B7] [+] GameObject* create_object_sid(int PID, int position, int elevation, int SID)"
+                        << std::endl;
                 auto dataStack = _script->dataStack();
                 auto SID = dataStack->popInteger();
                 auto elevation = dataStack->popInteger();
                 auto position = dataStack->popInteger();
                 auto PID = dataStack->popInteger();
                 auto object = Game::getInstance()->locationState()->addObject(PID, position, elevation);
-                if (SID > 0)
-                {
+                if (SID > 0) {
                     auto intFile = ResourceManager::getInstance()->intFileType(SID);
                     if (intFile) {
                         object->setScript(std::make_shared<VM::Script>(intFile, object));
                     }
                 }
-                if (object->script())
-                {
+                if (object->script()) {
                     object->script()->initialize();
                 }
                 _script->dataStack()->push(object);
