@@ -17,29 +17,28 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Related headers
-#include "../../VM/Handler/Opcode8010Handler.h"
+#ifndef FALLTERGEIST_VM_HANDLER_OPCODE8027_H
+#define FALLTERGEIST_VM_HANDLER_OPCODE8027_H
 
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../Logger.h"
-#include "../../VM/HaltException.h"
-#include "../../VM/Script.h"
+#include "../../VM/IFalloutOpcode.h"
 
 // Third party includes
 
 namespace Falltergeist {
     namespace VM {
         namespace Handler {
-            Opcode8010::Opcode8010(std::shared_ptr<VM::Script> script) : OpcodeHandler(script) {
-            }
-
-            void Opcode8010::_run() {
-                Logger::debug("SCRIPT") << "[8010] [*] op_exit_prog" << std::endl;
-                _script->setInitialized(true);
-                throw VM::HaltException();
-            }
+            class Opcode8027 : virtual public IFalloutOpcode {
+            public:
+                Opcode8027() = default;
+                void applyTo(std::shared_ptr<IFalloutContext> context) override;
+                int number() override;
+                std::string name() override;
+                std::string notes() override;
+            };
         }
     }
 }
+#endif // FALLTERGEIST_VM_HANDLER_OPCODE8027_H

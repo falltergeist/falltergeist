@@ -23,8 +23,7 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../Logger.h"
-#include "../../VM/Script.h"
+#include "../../VM/IFalloutContext.h"
 #include "../../VM/IFalloutProcedure.h"
 #include "../../VM/IFalloutStack.h"
 #include "../../VM/IFalloutStackValue.h"
@@ -34,9 +33,6 @@
 namespace Falltergeist {
     namespace VM {
         namespace Handler {
-            Opcode8005::Opcode8005(std::shared_ptr<VM::Script> script) : OpcodeHandler(script) {
-            }
-
             void Opcode8005::applyTo(std::shared_ptr<IFalloutContext> context) {
                 auto functionIndex = context->dataStack()->pop()->asInteger();
                 // @TODO: pass arguments and call external procedures
@@ -47,12 +43,21 @@ namespace Falltergeist {
                     args.push_back(_script->dataStack()->popInteger());
                 }*/
                 context->setProgramCounter(context->procedure(functionIndex)->bodyOffset());
-                Logger::debug("SCRIPT") << "[8005] [*] op_call(0x" << std::hex << functionIndex << ") = 0x"
-                                        << context->programCounter() << std::endl;
             }
 
-            void Opcode8005::_run() {
-                applyTo(_script);
+            int Opcode8005::number()
+            {
+                return 0x8005;
+            }
+
+            std::string Opcode8005::name()
+            {
+                return "void op_call(int index)";
+            }
+
+            std::string Opcode8005::notes()
+            {
+                return "Partially implemented";
             }
         }
     }

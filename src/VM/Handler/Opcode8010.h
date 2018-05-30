@@ -17,30 +17,28 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Related headers
-#include "../../VM/Handler/Opcode8030Handler.h"
+#ifndef FALLTERGEIST_VM_HANDLER_OPCODE8010_H
+#define FALLTERGEIST_VM_HANDLER_OPCODE8010_H
 
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../Logger.h"
-#include "../../VM/Script.h"
+#include "../../VM/IFalloutOpcode.h"
 
 // Third party includes
 
 namespace Falltergeist {
     namespace VM {
         namespace Handler {
-            Opcode8030::Opcode8030(std::shared_ptr<VM::Script> script) : OpcodeHandler(script) {
-            }
-
-            void Opcode8030::_run() {
-                Logger::debug("SCRIPT") << "[8030] [*] op_while(address, condition)" << std::endl;
-                auto condition = _script->dataStack()->popLogical();
-                if (!condition) {
-                    _script->setProgramCounter(_script->dataStack()->popInteger());
-                }
-            }
+            class Opcode8010 : virtual public IFalloutOpcode {
+            public:
+                Opcode8010() = default;
+                void applyTo(std::shared_ptr<IFalloutContext> context) override;
+                int number() override;
+                std::string name() override;
+                std::string notes() override;
+            };
         }
     }
 }
+#endif // FALLTERGEIST_VM_HANDLER_OPCODE8010_H

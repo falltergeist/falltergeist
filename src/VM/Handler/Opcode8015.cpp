@@ -17,30 +17,40 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_VM_HANDLER_OPCODE8029_H
-#define FALLTERGEIST_VM_HANDLER_OPCODE8029_H
+// Related headers
+#include "../../VM/Handler/Opcode8015.h"
 
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../VM/OpcodeHandler.h"
-#include "../../VM/IFalloutOpcode.h"
+#include "../../VM/IFalloutContext.h"
+#include "../../VM/IFalloutStack.h"
 
 // Third party includes
 
 namespace Falltergeist {
     namespace VM {
         namespace Handler {
-            class Opcode8029 : public OpcodeHandler, virtual public IFalloutOpcode {
-            public:
-                Opcode8029(std::shared_ptr<VM::Script> script);
+            void Opcode8015::applyTo(std::shared_ptr<IFalloutContext> context)
+            {
+                std::string name = context->dataStack()->pop()->asString();
+                auto value = context->dataStack()->pop();
+                auto game = Game::getInstance();
+                auto EVARS = game->locationState()->EVARS();
+                (*EVARS)[name] = value;
+            }
 
-                void applyTo(std::shared_ptr<IFalloutContext> context) override;
+            int Opcode8015::number() {
+                return 0x8015;
+            }
 
-            private:
-                void _run() override;
-            };
+            std::string Opcode8015::name() {
+                return "void op_store_internal(string name, mixed value)";
+            }
+
+            std::string Opcode8015::notes() {
+                return "";
+            }
         }
     }
 }
-#endif // FALLTERGEIST_VM_HANDLER_OPCODE8029_H

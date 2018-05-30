@@ -18,7 +18,7 @@
  */
 
 // Related headers
-#include "../../VM/Handler/Opcode8004.h"
+#include "../../VM/Handler/Opcode8012.h"
 
 // C++ standard includes
 
@@ -32,24 +32,35 @@
 namespace Falltergeist {
     namespace VM {
         namespace Handler {
-            void Opcode8004::applyTo(std::shared_ptr<IFalloutContext> context) {
-                auto address = context->dataStack()->pop()->asInteger();
-                context->setProgramCounter((unsigned) address);
+            void Opcode8012::applyTo(std::shared_ptr<IFalloutContext> context)
+            {
+                auto number = context->dataStack()->pop()->asInteger();
+                auto value = context->dataStack()->at(_script->SVARbase() + number);
+                context->dataStack()->push(value);
+
+//                auto &debug = Logger::debug("SCRIPT");
+//
+//                debug << "[8012] [*] value = op_fetch_global[num]" << std::endl
+//                      << "      num: " << number << std::endl;
+//                //<< "     type: " << value.typeName() << std::endl
+//                //<< "    value: " << value.toString();
+//
+//                debug << std::endl;
             }
 
-            int Opcode8004::number()
+            int Opcode8012::number()
             {
-                return 0x8004;
+                return 0x8012;
             }
 
-            std::string Opcode8004::name()
+            std::string Opcode8012::name()
             {
-                return "void op_jmp(int address)";
+                return "mixed op_fetch_global(int number)";
             }
 
-            std::string Opcode8004::notes()
+            std::string Opcode8012::notes()
             {
-                return "Implemented";
+                return "";
             }
         }
     }

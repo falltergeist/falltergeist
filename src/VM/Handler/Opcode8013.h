@@ -17,37 +17,27 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Related headers
-#include "../../VM/Handler/Opcode8028Handler.h"
+#ifndef FALLTERGEIST_VM_HANDLER_OPCODE8013_H
+#define FALLTERGEIST_VM_HANDLER_OPCODE8013_H
 
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../Format/Int/File.h"
-#include "../../Format/Int/Procedure.h"
-#include "../../Logger.h"
-#include "../../VM/Script.h"
-#include "../../VM/IFalloutProcedure.h"
-#include "../../VM/IFalloutStack.h"
-#include "../../VM/IFalloutStackValue.h"
+#include "../../VM/IFalloutOpcode.h"
 
 // Third party includes
 
 namespace Falltergeist {
     namespace VM {
         namespace Handler {
-            Opcode8028::Opcode8028(std::shared_ptr<VM::Script> script) : OpcodeHandler(script) {
-            }
-
-            void Opcode8028::applyTo(std::shared_ptr<IFalloutContext> context) {
-                Logger::debug("SCRIPT") << "[8028] [?] int lookup_string_proc(string)" << std::endl;
-                std::string name = context->dataStack()->pop()->asString();
-                context->dataStack()->push((int) context->procedure(name)->bodyOffset());
-            }
-
-            void Opcode8028::_run() {
-                applyTo(_script);
-            }
+            class Opcode8013 : virtual public IFalloutOpcode {
+            public:
+                Opcode8013() = default;
+                void applyTo(std::shared_ptr<IFalloutContext> context) override;
+                int number() override;
+                std::string name() override;
+                std::string notes() override;
         }
     }
 }
+#endif // FALLTERGEIST_VM_HANDLER_OPCODE8013_H

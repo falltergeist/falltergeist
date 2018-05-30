@@ -23,23 +23,29 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../Logger.h"
-#include "../../VM/Script.h"
 
 // Third party includes
 
 namespace Falltergeist {
     namespace VM {
         namespace Handler {
-            Opcode8002::Opcode8002(std::shared_ptr<VM::Script> script) : OpcodeHandler(script) {
-            }
-
             void Opcode8002::applyTo(std::shared_ptr<IFalloutContext> context) {
-                Logger::debug("SCRIPT") << "[8002] op_critical_start" << std::endl;
+                // nothing to do here ¯\_(ツ)_/¯
             }
 
-            void Opcode8002::_run() {
-                applyTo(_script);
+            int Opcode8002::number()
+            {
+                return 0x8002;
+            }
+            
+            std::string Opcode8002::name()
+            {
+                return "op_critical_start";
+            }
+
+            std::string Opcode8002::notes()
+            {
+                return "Unknown";
             }
         }
     }

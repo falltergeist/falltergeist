@@ -18,14 +18,13 @@
  */
 
 // Related headers
-#include "../../VM/Handler/Opcode8013Handler.h"
+#include "../../VM/Handler/Opcode8028.h"
 
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../Logger.h"
-#include "../../VM/Script.h"
-#include "../../VM/StackValue.h"
+#include "../../VM/IFalloutContext.h"
+#include "../../VM/IFalloutProcedure.h"
 #include "../../VM/IFalloutStack.h"
 #include "../../VM/IFalloutStackValue.h"
 
@@ -34,22 +33,21 @@
 namespace Falltergeist {
     namespace VM {
         namespace Handler {
-            Opcode8013::Opcode8013(std::shared_ptr<VM::Script> script) : OpcodeHandler(script) {
+            void Opcode8028::applyTo(std::shared_ptr<IFalloutContext> context) {
+                std::string name = context->dataStack()->pop()->asString();
+                context->dataStack()->push((int) context->procedure(name)->bodyOffset());
             }
 
-            void Opcode8013::_run() {
-                auto number = _script->dataStack()->pop()->asInteger();
-                auto value = _script->dataStack()->pop();
-                _script->dataStack()->at(_script->SVARbase() + number) = value;
-
-                auto &debug = Logger::debug("SCRIPT");
-
-                debug << "[8013] [*] op_store_global" << std::endl
-                      << "      num: " << number << std::endl;
-                //<< "     type: " << value.typeName() << std::endl
-                //<< "    value: " << value.toString();
-
-                debug << std::endl;
+            int Opcode8028::number() {
+                return 0x8028;
+            }
+            
+            std::string Opcode8028::name() {
+                return "int lookup_string_proc(string procedure)";
+            }
+            
+            std::string Opcode8028::notes() {
+                return "returns procedure address";
             }
         }
     }

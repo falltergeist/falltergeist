@@ -18,30 +18,38 @@
  */
 
 // Related headers
-#include "../../VM/Handler/Opcode8018Handler.h"
+#include "../../VM/Handler/Opcode8016.h"
 
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../Logger.h"
-#include "../../VM/Script.h"
+#include "../../VM/IFalloutContext.h"
 #include "../../VM/IFalloutStack.h"
+#include "../../VM/IFalloutStackValue.h"
 
 // Third party includes
 
 namespace Falltergeist {
     namespace VM {
         namespace Handler {
-            Opcode8018::Opcode8018(std::shared_ptr<VM::Script> script) : OpcodeHandler(script) {
+            void Opcode8016::applyTo(std::shared_ptr<IFalloutContext> context) {
+                auto name = context->dataStack()->pop()->asString();
+                auto EVARS = Game::getInstance()->locationState()->EVARS();
+                if (EVARS->find(name) == EVARS->end()) {
+                    EVARS->insert(std::make_pair(name, std::make_shared<FalloutStackValue>(0)));
+                }
             }
 
-            void Opcode8018::_run() {
-                applyTo(_script);
+            int Opcode8016::number() {
+                return 0x8016;
             }
-
-            void Opcode8018::applyTo(std::shared_ptr<IFalloutContext> context) {
-                Logger::debug("SCRIPT") << "[8018] [*] op_swap" << std::endl;
-                context->dataStack()->swap();
+            
+            std::string Opcode8016::name() {
+                return "void op_export_var(string name)";
+            }
+            
+            std::string Opcode8016::notes() {
+                return "";
             }
         }
     }

@@ -18,38 +18,36 @@
  */
 
 // Related headers
-#include "../../VM/Handler/Opcode8012Handler.h"
+#include "../../VM/Handler/Opcode8030.h"
 
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../Logger.h"
-#include "../../VM/Script.h"
-#include "../../VM/StackValue.h"
+#include "../../VM/IFalloutContext.h"
 #include "../../VM/IFalloutStack.h"
-#include "../../VM/IFalloutStackValue.h"
 
 // Third party includes
 
 namespace Falltergeist {
     namespace VM {
         namespace Handler {
-            Opcode8012::Opcode8012(std::shared_ptr<VM::Script> script) : OpcodeHandler(script) {
+            void Opcode8030::applyTo(std::shared_ptr<IFalloutContext> context) {
+                auto condition = context->dataStack()->popLogical();
+                if (!condition) {
+                    context->setProgramCounter(context->dataStack()->popInteger());
+                }
             }
-
-            void Opcode8012::_run() {
-                auto number = _script->dataStack()->pop()->asInteger();
-                auto value = _script->dataStack()->at(_script->SVARbase() + number);
-                _script->dataStack()->push(value);
-
-                auto &debug = Logger::debug("SCRIPT");
-
-                debug << "[8012] [*] value = op_fetch_global[num]" << std::endl
-                      << "      num: " << number << std::endl;
-                //<< "     type: " << value.typeName() << std::endl
-                //<< "    value: " << value.toString();
-
-                debug << std::endl;
+            
+            int Opcode8030::number() {
+                return 0x8030;
+            }
+            
+            std::string Opcode8030::name() {
+                return "void op_while(bool condition, int address)";
+            }
+            
+            std::string Opcode8030::notes() {
+                return "";
             }
         }
     }

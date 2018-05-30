@@ -17,27 +17,37 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_VM_HANDLER_OPCODE8013_H
-#define FALLTERGEIST_VM_HANDLER_OPCODE8013_H
+// Related headers
+#include "../../VM/Handler/Opcode8031.h"
 
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../VM/OpcodeHandler.h"
+#include "../../VM/IFalloutContext.h"
+#include "../../VM/IFalloutStack.h"
 
 // Third party includes
 
 namespace Falltergeist {
     namespace VM {
         namespace Handler {
-            class Opcode8013 : public OpcodeHandler {
-            public:
-                Opcode8013(std::shared_ptr<VM::Script> script);;
+            void Opcode8031::applyTo(std::shared_ptr<IFalloutContext> context) {
+                auto num = context->dataStack()->popInteger();
+                auto value = context->dataStack()->pop();
+                _script->dataStack()->values()->at(_script->DVARbase() + num) = value;
+            }
 
-            private:
-                void _run() override;
-            };
+            int Opcode8031::number() {
+                return 0x8031;
+            }
+
+            std::string Opcode8031::name() {
+                return "void op_store(int num, mixed value)";
+            }
+
+            std::string Opcode8031::notes() {
+                return "";
+            }
         }
     }
 }
-#endif // FALLTERGEIST_VM_HANDLER_OPCODE8013_H

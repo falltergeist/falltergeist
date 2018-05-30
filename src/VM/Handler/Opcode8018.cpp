@@ -18,16 +18,12 @@
  */
 
 // Related headers
-#include "../../VM/Handler/Opcode8015Handler.h"
+#include "../../VM/Handler/Opcode8018.h"
 
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../Game/Game.h"
-#include "../../Logger.h"
-#include "../../State/Location.h"
-#include "../../VM/Script.h"
-#include "../../VM/StackValue.h"
+#include "../../VM/IFalloutContext.h"
 #include "../../VM/IFalloutStack.h"
 
 // Third party includes
@@ -35,16 +31,20 @@
 namespace Falltergeist {
     namespace VM {
         namespace Handler {
-            Opcode8015::Opcode8015(std::shared_ptr<VM::Script> script) : OpcodeHandler(script) {
+            void Opcode8018::applyTo(std::shared_ptr<IFalloutContext> context) {
+                context->dataStack()->swap();
             }
 
-            void Opcode8015::_run() {
-                Logger::debug("SCRIPT") << "[8015] [*] op_store_external(name, value)" << std::endl;
-                std::string name = _script->dataStack()->pop()->asString();
-                auto value = _script->dataStack()->pop();
-                auto game = Game::getInstance();
-                auto EVARS = game->locationState()->EVARS();
-                (*EVARS)[name] = value;
+            int Opcode8018::number() {
+                return 0x8018;
+            }
+            
+            std::string Opcode8018::name() {
+                return "void op_swap()";
+            }
+            
+            std::string Opcode8018::notes() {
+                return "";
             }
         }
     }

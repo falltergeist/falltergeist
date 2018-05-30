@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright 2012-2018 Falltergeist Developers.
  *
  * This file is part of Falltergeist.
@@ -17,33 +17,28 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Related headers
-#include "../../VM/Handler/Opcode8019Handler.h"
+#ifndef FALLTERGEIST_VM_HANDLER_OPCODE8014_H
+#define FALLTERGEIST_VM_HANDLER_OPCODE8014_H
 
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../Logger.h"
-#include "../../VM/Script.h"
-#include "../../VM/IFalloutStack.h"
+#include "../../VM/IFalloutOpcode.h"
 
 // Third party includes
 
 namespace Falltergeist {
     namespace VM {
         namespace Handler {
-            Opcode8019::Opcode8019(std::shared_ptr<VM::Script> script) : OpcodeHandler(script) {
-            }
-
-            void Opcode8019::applyTo(std::shared_ptr<IFalloutContext> context) {
-                Logger::debug("SCRIPT") << "[8019] [*] op_swapa" << std::endl;
-                context->returnStack()->swap();
-
-            }
-
-            void Opcode8019::_run() {
-                applyTo(_script);
-            }
+            class Opcode8014 : virtual public IFalloutOpcode {
+            public:
+                Opcode8014() = default;
+                void applyTo(std::shared_ptr<IFalloutContext> context) override;
+                int number() override;
+                std::string name() override;
+                std::string notes() override;
+            };
         }
     }
 }
+#endif // FALLTERGEIST_VM_HANDLER_OPCODE8014_H

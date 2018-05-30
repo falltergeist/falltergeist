@@ -17,27 +17,40 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_VM_HANDLER_OPCODE8015_H
-#define FALLTERGEIST_VM_HANDLER_OPCODE8015_H
+// Related headers
+#include "../../VM/Handler/Opcode8027.h"
 
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../VM/OpcodeHandler.h"
+#include "../../VM/IFalloutContext.h"
+#include "../../VM/IFalloutStack.h"
 
 // Third party includes
 
 namespace Falltergeist {
     namespace VM {
         namespace Handler {
-            class Opcode8015 : public OpcodeHandler {
-            public:
-                Opcode8015(std::shared_ptr<VM::Script> script);;
+            void Opcode8027::applyTo(std::shared_ptr<IFalloutContext> context) {
+                context->dataStack()->pop(); // number of actual arguments
+                context->dataStack()->pop(); // procedure index
+                // @TODO: compare number of arguments with procedure info and throw script exception if they are not equal
+            }
 
-            private:
-                void _run() override;
-            };
+            int Opcode8027::number()
+            {
+                return 0x8027;
+            }
+            
+            std::string Opcode8027::name()
+            {
+                return "op_check_arg_count(int argc, int procedure)";
+            }
+            
+            std::string Opcode8027::notes()
+            {
+                return "Maybe push result on stack?";
+            }
         }
     }
 }
-#endif // FALLTERGEIST_VM_HANDLER_OPCODE8015_H
