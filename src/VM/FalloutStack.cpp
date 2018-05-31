@@ -22,25 +22,25 @@
 // Falltergeist includes
 #include "../Exception.h"
 #include "../VM/FalloutStack.h"
-#include "../VM/FalloutStackValue.h"
+#include "FalloutValue.h"
 
 // Third party includes
 
 namespace Falltergeist {
     namespace VM {
-        void FalloutStack::push(std::shared_ptr<IFalloutStackValue> value) {
+        void FalloutStack::push(std::shared_ptr<IFalloutValue> value) {
             _values.push_back(value);
         }
 
         void FalloutStack::push(int value) {
-            _values.push_back(std::make_shared<FalloutStackValue>(value));
+            _values.push_back(std::make_shared<FalloutValue>(value));
         }
 
-        std::shared_ptr<IFalloutStackValue> FalloutStack::at(int offset) {
+        std::shared_ptr<IFalloutValue> FalloutStack::at(int offset) {
             return _values.at(offset);
         }
 
-        std::shared_ptr<IFalloutStackValue> FalloutStack::pop() {
+        std::shared_ptr<IFalloutValue> FalloutStack::pop() {
             if (_values.size() == 0) {
                 throw Exception("FalloutStack::pop() - stack is empty");
             }
@@ -49,7 +49,7 @@ namespace Falltergeist {
             return value;
         }
 
-        std::shared_ptr<IFalloutStackValue> FalloutStack::top() {
+        std::shared_ptr<IFalloutValue> FalloutStack::top() {
             return _values.back();
         }
 

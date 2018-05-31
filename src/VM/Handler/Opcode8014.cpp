@@ -24,7 +24,7 @@
 
 // Falltergeist includes
 #include "../../VM/IFalloutStack.h"
-#include "../../VM/IFalloutStackValue.h"
+#include "VM/IFalloutValue.h"
 
 // Third party includes
 
@@ -39,10 +39,10 @@ namespace Falltergeist {
                 std::string name;
                 auto nameValue = _script->dataStack()->pop();
                 switch (nameValue->type()) {
-                    case IFalloutStackValue::Type::INTEGER:
+                    case IFalloutValue::Type::INTEGER:
                         name = _script->script()->identifiers().at((unsigned int) nameValue->asInteger());
                         break;
-                    case IFalloutStackValue::Type::STRING: {
+                    case IFalloutValue::Type::STRING: {
                         name = nameValue->asString();
                         break;
                     }

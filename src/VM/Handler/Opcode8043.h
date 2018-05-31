@@ -17,33 +17,32 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Related headers
-#include "../../VM/Handler/Opcode8041Handler.h"
+#ifndef FALLTERGEIST_VM_HANDLER_OPCODE8043_H
+#define FALLTERGEIST_VM_HANDLER_OPCODE8043_H
 
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../Logger.h"
-#include "../../VM/Script.h"
+#include "VM/IFalloutOpcode.h"
 
 // Third party includes
 
 namespace Falltergeist {
     namespace VM {
         namespace Handler {
-            Opcode8041::Opcode8041(std::shared_ptr<VM::Script> script) : OpcodeHandler(script) {
-            }
+            class Opcode8043 : virtual public IFalloutOpcode {
+            public:
+                Opcode8043() = default;
 
-            void Opcode8041::_run() {
-                Logger::debug("SCRIPT") << "[8041] [*] op_bwor" << std::endl;
-                auto bValue = _script->dataStack()->pop();
-                auto aValue = _script->dataStack()->pop();
-                if (!aValue.isNumber() || !bValue.isNumber()) {
-                    _error(std::string("op_bwor: invalid argument types: ") + aValue.typeName() + " bwor " +
-                           bValue.typeName());
-                }
-                _script->dataStack()->push(aValue.toInteger() | bValue.toInteger());
-            }
+                void applyTo(std::shared_ptr<IFalloutContext> context) override;
+
+                int number() override;
+
+                std::string name() override;
+
+                std::string notes() override;
+            };
         }
     }
 }
+#endif // FALLTERGEIST_VM_HANDLER_OPCODE8043_H

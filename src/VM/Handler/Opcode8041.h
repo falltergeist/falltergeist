@@ -17,36 +17,32 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef FALLTERGEIST_VM_HANDLER_OPCODE8041_H
+#define FALLTERGEIST_VM_HANDLER_OPCODE8041_H
+
 // C++ standard includes
-#include "FalloutStackValue.h"
 
 // Falltergeist includes
+#include "VM/IFalloutOpcode.h"
 
 // Third party includes
 
 namespace Falltergeist {
     namespace VM {
-        FalloutStackValue::FalloutStackValue(int value) {
-            _type = Type::INTEGER;
-            _integerValue = value;
-        }
+        namespace Handler {
+            class Opcode8041 : virtual public IFalloutOpcode {
+            public:
+                Opcode8041() = default;
 
-        FalloutStackValue::FalloutStackValue(const std::string &value) {
-            _type = Type::STRING;
-            _stringValue = value;
-        }
+                void applyTo(std::shared_ptr<IFalloutContext> context) override;
 
-        FalloutStackValue::Type FalloutStackValue::type() const {
-            return _type;
-        }
+                int number() override;
 
-        int FalloutStackValue::asInteger() const {
-            return _integerValue;
-        }
+                std::string name() override;
 
-        std::string FalloutStackValue::asString() const {
-            return _stringValue;
+                std::string notes() override;
+            };
         }
     }
 }
-
+#endif // FALLTERGEIST_VM_HANDLER_OPCODE8041_H

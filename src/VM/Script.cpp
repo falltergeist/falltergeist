@@ -36,7 +36,7 @@
 #include "../ResourceManager.h"
 #include "../VM/ErrorException.h"
 #include "../VM/FalloutStack.h"
-#include "../VM/FalloutStackValue.h"
+#include "FalloutValue.h"
 #include "../VM/HaltException.h"
 #include "../VM/OpcodeFactory.h"
 #include "../VM/Script.h"

@@ -17,39 +17,37 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_VM_FALLOUTSTACKVALUE_H
-#define FALLTERGEIST_VM_FALLOUTSTACKVALUE_H
+// Related headers
+#include "Opcode8043.h"
 
 // C++ standard includes
 
 // Falltergeist includes
-#include "../VM/IFalloutStackValue.h"
+#include "VM/IFalloutContext.h"
+#include "VM/IFalloutStack.h"
+#include "VM/IFalloutValue.h"
 
 // Third party includes
 
 namespace Falltergeist {
     namespace VM {
-        class FalloutStackValue : public virtual IFalloutStackValue {
-        public:
-            explicit FalloutStackValue(int value);
+        namespace Handler {
+            void Opcode8043::applyTo(std::shared_ptr<IFalloutContext> context) {
+                auto arg = context->dataStack()->pop();
+                context->dataStack()->push(~arg->asInteger());
+            }
 
-            explicit FalloutStackValue(const std::string &value);
+            int Opcode8043::number() {
+                return 0x8043;
+            }
 
-            virtual ~FalloutStackValue() = default;
+            std::string Opcode8043::name() {
+                return "int op_bwnot(int a)";
+            }
 
-            int asInteger() const override;
-
-            std::string asString() const override;
-
-            Type type() const override;
-
-        private:
-            Type _type;
-            int _integerValue;
-            std::string _stringValue;
-        };
+            std::string Opcode8043::notes() {
+                return "";
+            }
+        }
     }
 }
-
-
-#endif //FALLTERGEIST_VM_FALLOUTSTACKVALUE_H

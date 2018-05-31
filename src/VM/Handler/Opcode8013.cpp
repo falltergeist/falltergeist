@@ -25,7 +25,7 @@
 // Falltergeist includes
 #include "../../VM/IFalloutContext.h"
 #include "../../VM/IFalloutStack.h"
-#include "../../VM/IFalloutStackValue.h"
+#include "VM/IFalloutValue.h"
 
 // Third party includes
 

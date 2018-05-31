@@ -18,13 +18,14 @@
  */
 
 // Related headers
-#include "../../VM/Handler/Opcode8032Handler.h"
+#include "VM/Handler/Opcode8040.h"
 
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../Logger.h"
-#include "../../VM/Script.h"
+#include "VM/IFalloutContext.h"
+#include "VM/IFalloutStack.h"
+#include "VM/IFalloutValue.h"
 
 // Third party includes
 
@@ -32,17 +33,23 @@ namespace Falltergeist {
     namespace VM {
         namespace Handler {
 
-            Opcode8032::Opcode8032(std::shared_ptr<VM::Script> script) : OpcodeHandler(script) {
+            void Opcode8040::applyTo(std::shared_ptr<IFalloutContext> context) {
+                auto bValue = context->dataStack()->pop();
+                auto aValue = context->dataStack()->pop();
+                context->dataStack()->push(aValue->asInteger() & bValue->asInteger());
             }
 
-            void Opcode8032::_run() {
-                auto num = _script->dataStack()->popInteger();
-                auto value = _script->dataStack()->values()->at(_script->DVARbase() + num);
-                _script->dataStack()->push(value);
-                Logger::debug("SCRIPT") << "[8032] [*] op_fetch " << "var" << std::hex << num << " type = "
-                                        << value.typeName() << std::endl;
+            int Opcode8040::number() {
+                return 0x8040;
             }
 
+            std::string Opcode8040::name() {
+                return "int op_bwand (int a, int b)";
+            }
+
+            std::string Opcode8040::notes() {
+                return "";
+            }
         }
     }
 }

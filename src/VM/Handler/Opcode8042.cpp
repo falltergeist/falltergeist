@@ -18,29 +18,37 @@
  */
 
 // Related headers
-#include "../../VM/Handler/Opcode8043Handler.h"
+#include "Opcode8042.h"
 
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../Logger.h"
-#include "../../VM/Script.h"
+#include "VM/IFalloutContext.h"
+#include "VM/IFalloutStack.h"
+#include "VM/IFalloutValue.h"
 
 // Third party includes
 
 namespace Falltergeist {
     namespace VM {
         namespace Handler {
-            Opcode8043::Opcode8043(std::shared_ptr<VM::Script> script) : OpcodeHandler(script) {
+
+            void Opcode8042::applyTo(std::shared_ptr<IFalloutContext> context) {
+                auto bValue = context->dataStack()->pop();
+                auto aValue = context->dataStack()->pop();
+                context->dataStack()->push(aValue->asInteger() ^ bValue->asInteger());
             }
 
-            void Opcode8043::_run() {
-                Logger::debug("SCRIPT") << "[8043] [*] op_bwnot" << std::endl;
-                auto arg = _script->dataStack()->pop();
-                if (!arg.isNumber()) {
-                    _error(std::string("op_bwnot: invalid argument type: ") + arg.typeName());
-                }
-                _script->dataStack()->push(~arg.toInteger());
+            int Opcode8042::number() {
+                return 0x8042;
+            }
+
+            std::string Opcode8042::name() {
+                return "int op_bwxor(int a, int b)";
+            }
+
+            std::string Opcode8042::notes() {
+                return "";
             }
         }
     }

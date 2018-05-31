@@ -18,31 +18,37 @@
  */
 
 // Related headers
-#include "../../VM/Handler/Opcode8042Handler.h"
+#include "../../VM/Handler/Opcode8032.h"
 
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../Logger.h"
-#include "../../VM/Script.h"
+#include "../../VM/IFalloutContext.h"
+#include "../../VM/IFalloutStack.h"
+#include "VM/IFalloutValue.h"
 
 // Third party includes
 
 namespace Falltergeist {
     namespace VM {
         namespace Handler {
-            Opcode8042::Opcode8042(std::shared_ptr<VM::Script> script) : OpcodeHandler(script) {
+
+            void Opcode8032::applyTo(std::shared_ptr<IFalloutContext> context) {
+                auto num = context->dataStack()->pop()->asInteger();
+                auto value = context->dataStack()->at(context->DVARbase() + num);
+                context->dataStack()->push(value);
             }
 
-            void Opcode8042::_run() {
-                Logger::debug("SCRIPT") << "[8042] [*] op_bwxor" << std::endl;
-                auto bValue = _script->dataStack()->pop();
-                auto aValue = _script->dataStack()->pop();
-                if (!aValue.isNumber() || !bValue.isNumber()) {
-                    _error(std::string("op_bwxor: invalid argument types: ") + aValue.typeName() + " bwxor " +
-                           bValue.typeName());
-                }
-                _script->dataStack()->push(aValue.toInteger() ^ bValue.toInteger());
+            int Opcode8032::number() {
+                return 0x8032;
+            }
+
+            std::string Opcode8032::name() {
+                return "mixed op_fetch(int number)";
+            }
+
+            std::string Opcode8032::notes() {
+                return "";
             }
         }
     }

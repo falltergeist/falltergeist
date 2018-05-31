@@ -17,27 +17,39 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_VM_HANDLER_OPCODE8043_H
-#define FALLTERGEIST_VM_HANDLER_OPCODE8043_H
+// Related headers
+#include "VM/Handler/Opcode8039.h"
 
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../VM/OpcodeHandler.h"
+#include "VM/IFalloutContext.h"
+#include "VM/IFalloutStack.h"
+#include "VM/IFalloutValue.h"
 
 // Third party includes
 
 namespace Falltergeist {
     namespace VM {
         namespace Handler {
-            class Opcode8043 : public OpcodeHandler {
-            public:
-                Opcode8043(std::shared_ptr<VM::Script> script);;
 
-            private:
-                void _run() override;
-            };
+            void Opcode8039::applyTo(std::shared_ptr<Falltergeist::VM::IFalloutContext> context) {
+                auto bValue = context->dataStack()->pop();
+                auto aValue = context->dataStack()->pop();
+                context->dataStack()->push(aValue->add(bValue));
+            }
+
+            int Opcode8039::number() {
+                return 0x8039;
+            }
+
+            std::string Opcode8039::name() {
+                return "mixed = op_add(mixed a, mixed b)";
+            }
+
+            std::string Opcode8039::notes() {
+                return "";
+            }
         }
     }
 }
-#endif // FALLTERGEIST_VM_HANDLER_OPCODE8043_H

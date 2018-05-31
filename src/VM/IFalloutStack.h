@@ -30,21 +30,21 @@
 
 namespace Falltergeist {
     namespace VM {
-        class IFalloutStackValue;
+        class IFalloutValue;
 
         class IFalloutStack {
         public:
             virtual ~IFalloutStack() = default;
 
-            virtual void push(std::shared_ptr<IFalloutStackValue> value) = 0;
+            virtual void push(std::shared_ptr<IFalloutValue> value) = 0;
 
             virtual void push(int value) = 0;
 
-            virtual std::shared_ptr<IFalloutStackValue> at(int offset) = 0;
+            virtual std::shared_ptr<IFalloutValue> at(int offset) = 0;
 
-            virtual std::shared_ptr<IFalloutStackValue> pop() = 0;
+            virtual std::shared_ptr<IFalloutValue> pop() = 0;
 
-            virtual std::shared_ptr<IFalloutStackValue> top() = 0;
+            virtual std::shared_ptr<IFalloutValue> top() = 0;
 
             virtual void clear() = 0;
 

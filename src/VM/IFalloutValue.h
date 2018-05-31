@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2018 Falltergeist Developers.
+ * Copyright 2012-2014 Falltergeist Developers.
  *
  * This file is part of Falltergeist.
  *
@@ -16,28 +16,39 @@
  * You should have received a copy of the GNU General Public License
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-#ifndef FALLTERGEIST_VM_HANDLER_OPCODE8040_H
-#define FALLTERGEIST_VM_HANDLER_OPCODE8040_H
+#ifndef FALLTERGEIST_VM_IFALLOUTVALUE_H
+#define FALLTERGEIST_VM_IFALLOUTVALUE_H
 
 // C++ standard includes
+#include <memory>
+#include <string>
 
 // Falltergeist includes
-#include "../../VM/OpcodeHandler.h"
 
 // Third party includes
 
 namespace Falltergeist {
     namespace VM {
-        namespace Handler {
-            class Opcode8040 : public OpcodeHandler {
-            public:
-                Opcode8040(std::shared_ptr<VM::Script> script);;
-
-            private:
-                void _run() override;
+        class IFalloutValue {
+        public:
+            enum class Type {
+                INTEGER = 1,
+                FLOAT,
+                STRING,
+                OBJECT
             };
-        }
+
+            virtual ~IFalloutValue() = default;
+
+            virtual int asInteger() const = 0;
+
+            virtual std::string asString() const = 0;
+
+            virtual Type type() const = 0;
+
+            virtual std::shared_ptr<IFalloutValue> add(std::shared_ptr<IFalloutValue> value) const = 0;
+        };
     }
 }
-#endif // FALLTERGEIST_VM_HANDLER_OPCODE8040_H
+
+#endif //FALLTERGEIST_VM_IFALLOUTVALUE_H

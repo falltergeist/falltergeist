@@ -33,15 +33,15 @@ namespace Falltergeist {
         public:
             virtual ~FalloutStack() = default;
 
-            void push(std::shared_ptr<IFalloutStackValue> value) override;
+            void push(std::shared_ptr<IFalloutValue> value) override;
 
             void push(int value) override;
 
-            std::shared_ptr<IFalloutStackValue> at(int offset) override;
+            std::shared_ptr<IFalloutValue> at(int offset) override;
 
-            std::shared_ptr<IFalloutStackValue> pop() override;
+            std::shared_ptr<IFalloutValue> pop() override;
 
-            std::shared_ptr<IFalloutStackValue> top() override;
+            std::shared_ptr<IFalloutValue> top() override;
 
             void clear() override;
 
@@ -50,7 +50,7 @@ namespace Falltergeist {
             void swap() override;
 
         private:
-            std::vector<std::shared_ptr<IFalloutStackValue>> _values;
+            std::vector<std::shared_ptr<IFalloutValue>> _values;
         };
     }
 }

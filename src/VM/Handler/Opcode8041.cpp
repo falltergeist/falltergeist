@@ -17,26 +17,39 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_VM_HANDLER_OPCODE8041_H
-#define FALLTERGEIST_VM_HANDLER_OPCODE8041_H
+// Related headers
+#include "VM/Handler/Opcode8041.h"
 
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../VM/OpcodeHandler.h"
+#include "VM/IFalloutContext.h"
+#include "VM/IFalloutStack.h"
+#include "VM/IFalloutValue.h"
 
 // Third party includes
 
 namespace Falltergeist {
     namespace VM {
         namespace Handler {
-            class Opcode8041 : public OpcodeHandler {
-            public:
-                Opcode8041(std::shared_ptr<VM::Script> script);;
 
-                virtual void _run();
-            };
+            void applyTo(std::shared_ptr<IFalloutContext> context) {
+                auto bValue = context->dataStack()->pop();
+                auto aValue = context->dataStack()->pop();
+                context->dataStack()->push(aValue->asInteger() | bValue->asInteger());
+            }
+
+            int Opcode8041::number() {
+                return 0x8041;
+            }
+
+            std::string Opcode8041::name() {
+                return "int op_bwor(int a, int b)";
+            }
+
+            std::string Opcode8041::notes() {
+                return "";
+            }
         }
     }
 }
-#endif // FALLTERGEIST_VM_HANDLER_OPCODE8041_H

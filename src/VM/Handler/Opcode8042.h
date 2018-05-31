@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2014 Falltergeist Developers.
+ * Copyright 2012-2018 Falltergeist Developers.
  *
  * This file is part of Falltergeist.
  *
@@ -16,36 +16,33 @@
  * You should have received a copy of the GNU General Public License
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef FALLTERGEIST_VM_IFALLOUTSTACKVALUE_H
-#define FALLTERGEIST_VM_IFALLOUTSTACKVALUE_H
+
+#ifndef FALLTERGEIST_VM_HANDLER_OPCODE8042_H
+#define FALLTERGEIST_VM_HANDLER_OPCODE8042_H
 
 // C++ standard includes
-#include <string>
 
 // Falltergeist includes
+#include "VM/IFalloutOpcode.h"
 
 // Third party includes
 
 namespace Falltergeist {
     namespace VM {
-        class IFalloutStackValue {
-        public:
-            enum class Type {
-                INTEGER = 1,
-                FLOAT,
-                STRING,
-                OBJECT
+        namespace Handler {
+            class Opcode8042 : virtual public IFalloutOpcode {
+            public:
+                Opcode8042() = default;
+
+                void applyTo(std::shared_ptr<IFalloutContext> context) override;
+
+                int number() override;
+
+                std::string name() override;
+
+                std::string notes() override;
             };
-
-            virtual ~IFalloutStackValue() = default;
-
-            virtual int asInteger() const = 0;
-
-            virtual std::string asString() const = 0;
-
-            virtual Type type() const = 0;
-        };
+        }
     }
 }
-
-#endif //FALLTERGEIST_VM_IFALLOUTSTACKVALUE_H
+#endif // FALLTERGEIST_VM_HANDLER_OPCODE8042_H
