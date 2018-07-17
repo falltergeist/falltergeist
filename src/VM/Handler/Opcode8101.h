@@ -17,36 +17,32 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Related headers
-#include "../../VM/Handler/Opcode8102Handler.h"
+#ifndef FALLTERGEIST_VM_HANDLER_OPCODE8101_H
+#define FALLTERGEIST_VM_HANDLER_OPCODE8101_H
 
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../Logger.h"
-#include "../../VM/Script.h"
+#include "../../VM/IFalloutOpcode.h"
 
 // Third party includes
 
 namespace Falltergeist {
     namespace VM {
         namespace Handler {
-            Opcode8102::Opcode8102(std::shared_ptr<VM::Script> script) : OpcodeHandler(script) {
-            }
+            class Opcode8101 : virtual public IFalloutOpcode {
+            public:
+                Opcode8101() = default;
 
-            void Opcode8102::_run() {
-                Logger::debug("SCRIPT")
-                        << "[8102] [*] int critter_add_trait(void* who, int trait_type, int trait, int amount) "
-                        << std::endl;
-                auto dataStack = _script->dataStack();
-                /* auto amount = */ (void) dataStack->popInteger();
-                /* auto trait = */ (void) dataStack->popInteger();
-                /* auto trait_type = */ (void) dataStack->popInteger();
-                /* auto who = */ (void) dataStack->popObject();
-                dataStack->push(0);
-            }
+                void applyTo(std::shared_ptr<IFalloutContext> context) override;
+
+                int number() override;
+
+                std::string name() override;
+
+                std::string notes() override;
+            };
         }
     }
 }
-
-
+#endif // FALLTERGEIST_VM_HANDLER_OPCODE8101_H

@@ -18,31 +18,35 @@
  */
 
 // Related headers
-#include "../../VM/Handler/Opcode8105Handler.h"
+#include "Opcode8115.h"
 
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../Logger.h"
-#include "../../VM/Script.h"
-#include "../../VM/StackValue.h"
+#include "../../VM/IFalloutContext.h"
+#include "../../VM/IFalloutStack.h"
+#include "../../VM/IFalloutValue.h"
 
 // Third party includes
 
 namespace Falltergeist {
     namespace VM {
         namespace Handler {
-            Opcode8105::Opcode8105(std::shared_ptr<VM::Script> script) : OpcodeHandler(script) {
+            void Opcode8115::applyTo(std::shared_ptr<IFalloutContext> context) {
+                /* int movie = */ (void) context->dataStack()->pop()->asInteger();
             }
 
-            void Opcode8105::_run() {
-                Logger::debug("SCRIPT") << "[8105] [+] string message_str(int msg_list, int msg_num);" << std::endl;
-                auto msgNum = _script->dataStack()->popInteger();
-                auto msgList = _script->dataStack()->popInteger();
-                _script->dataStack()->push(_script->msgMessage(msgList, msgNum));
+            int Opcode8115::number() {
+                return 0x8115;
+            }
+
+            std::string Opcode8115::name() {
+                return "void playMovie(int movie)";
+            }
+
+            std::string Opcode8115::notes() {
+                return "";
             }
         }
     }
 }
-
-

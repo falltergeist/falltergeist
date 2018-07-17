@@ -17,29 +17,32 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Related headers
-#include "../../VM/Handler/Opcode8101Handler.h"
+#ifndef FALLTERGEIST_VM_HANDLER_OPCODE8105_H
+#define FALLTERGEIST_VM_HANDLER_OPCODE8105_H
 
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../Game/Game.h"
-#include "../../Logger.h"
-#include "../../State/Location.h"
-#include "../../VM/Script.h"
+#include "../../VM/IFalloutOpcode.h"
 
 // Third party includes
 
 namespace Falltergeist {
     namespace VM {
         namespace Handler {
-            Opcode8101::Opcode8101(std::shared_ptr<VM::Script> script) : OpcodeHandler(script) {
-            }
+            class Opcode8105 : virtual public IFalloutOpcode {
+            public:
+                Opcode8105() = default;
 
-            void Opcode8101::_run() {
-                Logger::debug("SCRIPT") << "[8101] [=] int cur_map_index()" << std::endl;
-                _script->dataStack()->push(Game::getInstance()->locationState()->currentMapIndex());
-            }
+                void applyTo(std::shared_ptr<IFalloutContext> context) override;
+
+                int number() override;
+
+                std::string name() override;
+
+                std::string notes() override;
+            };
         }
     }
 }
+#endif // FALLTERGEIST_VM_HANDLER_OPCODE8105_H

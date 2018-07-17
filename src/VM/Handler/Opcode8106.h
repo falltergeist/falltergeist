@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2018 Falltergeist Developers.
+ * Copyright 2012-2014 Falltergeist Developers.
  *
  * This file is part of Falltergeist.
  *
@@ -17,28 +17,32 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Related headers
-#include "../../VM/Handler/Opcode8045Handler.h"
+#ifndef FALLTERGEIST_VM_HANDLER_OPCODE8106_H
+#define FALLTERGEIST_VM_HANDLER_OPCODE8106_H
 
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../Logger.h"
-#include "../../VM/Script.h"
+#include "../../VM/IFalloutOpcode.h"
 
 // Third party includes
 
 namespace Falltergeist {
     namespace VM {
         namespace Handler {
-            Opcode8045::Opcode8045(std::shared_ptr<VM::Script> script) : OpcodeHandler(script) {
-            }
+            class Opcode8106 : virtual public IFalloutOpcode {
+            public:
+                Opcode8106() = default;
 
-            void Opcode8045::_run() {
-                Logger::debug("SCRIPT") << "[8045] [*] op_not" << std::endl;
-                auto a = _script->dataStack()->popLogical();
-                _script->dataStack()->push((int) (!a));
-            }
+                void applyTo(std::shared_ptr<IFalloutContext> context) override;
+
+                int number() override;
+
+                std::string name() override;
+
+                std::string notes() override;
+            };
         }
     }
 }
+#endif // FALLTERGEIST_VM_HANDLER_OPCODE8106_H

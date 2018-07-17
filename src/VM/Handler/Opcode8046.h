@@ -17,35 +17,32 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Related headers
-#include "../../VM/Handler/Opcode8046Handler.h"
+#ifndef FALLTERGEIST_VM_HANDLER_OPCODE8046_H
+#define FALLTERGEIST_VM_HANDLER_OPCODE8046_H
 
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../Logger.h"
-#include "../../VM/Script.h"
-#include "../../VM/StackValue.h"
+#include "../../VM/IFalloutOpcode.h"
 
 // Third party includes
 
 namespace Falltergeist {
     namespace VM {
         namespace Handler {
-            Opcode8046::Opcode8046(std::shared_ptr<VM::Script> script) : OpcodeHandler(script) {
-            }
+            class Opcode8046 : virtual public IFalloutOpcode {
+            public:
+                Opcode8046() = default;
 
-            void Opcode8046::_run() {
-                Logger::debug("SCRIPT") << "[8046] [*] op_negate" << std::endl;
-                auto value = _script->dataStack()->pop();
-                if (value.type() == StackValue::Type::INTEGER) {
-                    _script->dataStack()->push(-value.integerValue());
-                } else if (value.type() == StackValue::Type::FLOAT) {
-                    _script->dataStack()->push(-value.floatValue());
-                } else {
-                    _error(std::string("Invalid argument type: ") + value.typeName());
-                }
-            }
+                void applyTo(std::shared_ptr<IFalloutContext> context) override;
+
+                int number() override;
+
+                std::string name() override;
+
+                std::string notes() override;
+            };
         }
     }
 }
+#endif // FALLTERGEIST_VM_HANDLER_OPCODE8045_H

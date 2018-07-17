@@ -18,35 +18,43 @@
  */
 
 // Related headers
-#include "../../VM/Handler/Opcode8044Handler.h"
+#include "Opcode8046.h"
 
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../Logger.h"
-#include "../../VM/Script.h"
-#include "../../VM/StackValue.h"
+#include "../../VM/IFalloutContext.h"
+#include "../../VM/IFalloutStack.h"
+#include "../../VM/IFalloutValue.h"
 
 // Third party includes
 
 namespace Falltergeist {
     namespace VM {
         namespace Handler {
-            Opcode8044::Opcode8044(std::shared_ptr<VM::Script> script) : OpcodeHandler(script) {
+            void Opcode8046::applyTo(std::shared_ptr<IFalloutContext> context) {
+                auto value = context->dataStack()->pop();
+                if (value->type() == IFalloutValue::Type::INTEGER) {
+                    context->dataStack()->push(-value->asInteger());
+                } else if (value->type() == IFalloutValue::Type::FLOAT) {
+                    context->dataStack()->push(-value.asFloat());
+                } else {
+                    // TODO throw exception
+                    //_error(std::string("Invalid argument type: ") + value.typeName());
+                }
             }
 
-            void Opcode8044::_run() {
-                Logger::debug("SCRIPT") << "[8044] [*] op_floor" << std::endl;
-                auto value = _script->dataStack()->pop();
-                int result = 0;
-                if (value.type() == StackValue::Type::FLOAT) {
-                    result = (int) value.floatValue(); // this is how "floor" originally worked..
-                } else if (value.type() == StackValue::Type::INTEGER) {
-                    result = value.integerValue();
-                } else {
-                    _error(std::string("op_floor: invalid argument type: ") + value.typeName());
-                }
-                _script->dataStack()->push(result);
+
+            int Opcode8046::number() {
+                return 0x8046;
+            }
+
+            std::string Opcode8046::name() {
+                return "op_negate(value)";
+            }
+
+            std::string Opcode8046::notes() {
+                return "";
             }
         }
     }

@@ -18,33 +18,39 @@
  */
 
 // Related headers
-#include "../../VM/Handler/Opcode8100Handler.h"
+#include "Opcode8100.h"
 
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../Game/Game.h"
-#include "../../Game/Object.h"
-#include "../../Game/ObjectFactory.h"
-#include "../../Logger.h"
-#include "../../VM/Script.h"
+#include "../../VM/IFalloutContext.h"
+#include "../../VM/IFalloutStack.h"
+#include "../../VM/IFalloutValue.h"
 
 // Third party includes
 
 namespace Falltergeist {
     namespace VM {
         namespace Handler {
-            Opcode8100::Opcode8100(std::shared_ptr<VM::Script> script) : OpcodeHandler(script) {
+            void Opcode8100::applyTo(std::shared_ptr<IFalloutContext> context) {
+                auto object = context->dataStack()->pop()->asObject();
+                if (!object) {
+                    context->dataStack()->push(0);
+                } else {
+                    context->dataStack()->push(object->PID());
+                }
             }
 
-            void Opcode8100::_run() {
-                Logger::debug("SCRIPT") << "[8100] [+] int obj_pid(void* obj)" << std::endl;
-                auto object = _script->dataStack()->popObject();
-                if (!object) {
-                    _script->dataStack()->push(0);
-                } else {
-                    _script->dataStack()->push(object->PID());
-                }
+            int Opcode8100::number() {
+                return 0x8100;
+            }
+
+            std::string Opcode8100::name() {
+                return "in obj_pid(void* obj)";
+            }
+
+            std::string Opcode8100::notes() {
+                return "";
             }
         }
     }

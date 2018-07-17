@@ -18,30 +18,42 @@
  */
 
 // Related headers
-#include "../../VM/Handler/Opcode8113Handler.h"
+#include "Opcode8102.h"
 
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../Logger.h"
-#include "../../VM/Script.h"
+#include "../../VM/IFalloutStack.h"
+#include "../../VM/IFalloutContext.h"
+#include "../../VM/IFalloutValue.h"
 
 // Third party includes
 
 namespace Falltergeist {
     namespace VM {
         namespace Handler {
-            Opcode8113::Opcode8113(std::shared_ptr<VM::Script> script) : OpcodeHandler(script) {
+            void Opcode8102::applyTo(std::shared_ptr<IFalloutContext> context) {
+                auto dataStack = context->dataStack();
+                /* auto amount = */ (void) dataStack->pop()->asInteger();
+                /* auto trait = */ (void) dataStack->pop()->asInteger();
+                /* auto trait_type = */ (void) dataStack->pop()->asInteger();
+                /* auto who = */ (void) dataStack->pop()->asObject();
+                dataStack->push(0);
             }
 
-            void Opcode8113::_run() {
-                Logger::debug("SCRIPT")
-                        << "[8113] [=] void reg_anim_obj_move_to_tile(void* who, int dest_tile, int delay)"
-                        << std::endl;
-                _script->dataStack()->popInteger(); // -1
-                _script->dataStack()->popInteger();
-                _script->dataStack()->popObject();
+            int Opcode8102::number() {
+                return 0x8102;
+            }
+
+            std::string Opcode8102::name() {
+                return "int critter_add_trait(void* who, int trait_type, int trait, int amount)";
+            }
+
+            std::string Opcode8102::notes() {
+                return "";
             }
         }
     }
 }
+
+
