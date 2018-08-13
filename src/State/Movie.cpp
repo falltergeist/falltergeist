@@ -36,6 +36,7 @@
 #include "../Ini/Parser.h"
 #include "../Input/Mouse.h"
 #include "../ResourceManager.h"
+#include "../State/State.h"
 #include "../State/MainMenu.h"
 #include "../UI/MvePlayer.h"
 #include "../UI/TextArea.h"
@@ -184,6 +185,14 @@ namespace Falltergeist
         {
             Game::getInstance()->mixer()->stopMusic();
             Game::getInstance()->mouse()->popState();
+
+            // without this the location will be absolutely dark if you didn't interrupted movie play
+            if (Game::getInstance()->locationState())
+            {
+                fadeDoneHandler().clear();
+                Game::getInstance()->renderer()->fadeIn(255, 255, 255, 500);
+            }
+
             Game::getInstance()->popState();
         }
     }
