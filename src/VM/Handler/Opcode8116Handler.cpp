@@ -27,6 +27,7 @@
 #include "../../Game/CritterObject.h"
 #include "../../Game/Game.h"
 #include "../../Game/Object.h"
+#include "../../Game/ObjectFactory.h"
 #include "../../Logger.h"
 #include "../../State/Location.h"
 #include "../../VM/Script.h"
@@ -64,14 +65,17 @@ namespace Falltergeist {
                     return;
                 }
 
-                inven->push_back(item);
+                Game::ItemObject* copy = item;
 
                 if (item->hexagon()) {
                     auto location = Game::Game::getInstance()->locationState();
                     if (location) {
+                        copy = (Game::ItemObject*)Game::ObjectFactory::getInstance()->createObject(item->PID());
                         location->removeObjectFromMap(item);
                     }
                 }
+
+                inven->push_back(copy);
             }
         }
     }
