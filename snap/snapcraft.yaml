@@ -19,7 +19,6 @@ apps:
   
 parts:
   falltergeist.launcher:
-   source: snap
    plugin: dump
    install: |
        chmod +x falltergeist.launcher
