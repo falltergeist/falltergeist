@@ -18,8 +18,8 @@
 #
 
 if(APPLE)
-  configure_file(package/osx/Info.plist.in package/osx/Info.plist)
-  configure_file(package/osx.sh.in package/osx.sh)
+  configure_file(${CMAKE_SOURCE_DIR}/package/osx/Info.plist.in package/osx/Info.plist)
+  configure_file(${CMAKE_SOURCE_DIR}/package/osx.sh.in package/osx.sh)
 
 add_custom_command(
     OUTPUT Falltergeist.dmg
