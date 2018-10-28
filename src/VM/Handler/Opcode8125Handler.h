@@ -17,8 +17,8 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_VM_HANDLER_OPCODE8113_H
-#define FALLTERGEIST_VM_HANDLER_OPCODE8113_H
+#ifndef FALLTERGEIST_VM_HANDLER_OPCODE8125_H
+#define FALLTERGEIST_VM_HANDLER_OPCODE8125_H
 
 // C++ standard includes
 
@@ -40,4 +40,4 @@ namespace Falltergeist {
         }
     }
 }
-#endif // FALLTERGEIST_VM_HANDLER_OPCODE8113_H
+#endif // FALLTERGEIST_VM_HANDLER_OPCODE8125_H
