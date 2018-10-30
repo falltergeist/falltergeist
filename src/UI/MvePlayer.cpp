@@ -737,7 +737,7 @@ void MvePlayer::_initAudioBuffer(uint8_t version, uint8_t* data)
 //  std::bitset<16> bit(flags);
 //  uint16_t sample_rate=get_short(data+4); //always 22050
     uint32_t buflen = get_int(data + 6);
-    _audioBuf = (int16_t*)malloc(buflen*2);
+    _audioBuf = new int16_t[buflen];
     _audioBufHead = 0;
     _audioBufTail = 0;
     _audioBufSize = buflen;
