@@ -24,6 +24,8 @@
 
 // Falltergeist includes
 #include "../../Logger.h"
+#include "../../Game/Game.h"
+#include "../../State/Movie.h"
 #include "../../VM/Script.h"
 
 // Third party includes
@@ -36,7 +38,9 @@ namespace Falltergeist {
 
             void Opcode8115::_run() {
                 Logger::debug("SCRIPT") << "[8115] [*] void playMovie(int movie)" << std::endl;
-                /* int movie = */ (void) _script->dataStack()->popInteger();
+                int movie = _script->dataStack()->popInteger();
+                auto state = new State::Movie(movie);
+                Game::Game::getInstance()->pushState(state);
             }
         }
     }
