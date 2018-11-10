@@ -97,8 +97,8 @@ namespace Falltergeist
             std::string version = CrossPlatform::getVersion();
             renderer()->setCaption(version.c_str());
 
-            _mixer = std::make_unique<Audio::Mixer>();
-            _mixer->setMusicVolume(_settings->musicVolume());
+            _mixer = std::make_shared<Audio::Mixer>();
+            _mixer->setChannelVolume(Audio::Channel::Music, _settings->musicVolume());
             _mouse = std::make_unique<Input::Mouse>();
             _fpsCounter = std::make_unique<UI::FpsCounter>(renderer()->width() - 42, 2);
             _fpsCounter->setWidth(42);
@@ -465,9 +465,9 @@ namespace Falltergeist
             return &_gameTime;
         }
 
-        Audio::Mixer* Game::mixer()
+        std::shared_ptr<Audio::IMixer> Game::mixer()
         {
-            return _mixer.get();
+            return _mixer;
         }
 
         Event::Dispatcher* Game::eventDispatcher()

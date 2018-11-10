@@ -1,5 +1,6 @@
-0.3.2 Under development
+Under development
 =======================
+- [feature] Audio mixer interface class (alexeevdv)
 
 0.3.1 (2018-01-14)
 =======================

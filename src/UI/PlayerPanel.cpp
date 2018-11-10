@@ -23,7 +23,7 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../Audio/Mixer.h"
+#include "../Audio/IMixer.h"
 #include "../Event/Event.h"
 #include "../Event/Keyboard.h"
 #include "../Game/Defines.h"

@@ -17,8 +17,7 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_AUDIO_MIXER_H
-#define FALLTERGEIST_AUDIO_MIXER_H
+#pragma once
 
 // C++ standard includes
 #include <cstdint>
@@ -26,41 +25,33 @@
 #include <unordered_map>
 
 // Falltergeist includes
+#include "../Audio/IMixer.h"
 
 // Third party includes
 #include <SDL_mixer.h>
 
-namespace Falltergeist
-{
-    namespace UI
-    {
+namespace Falltergeist {
+    namespace UI {
         class MvePlayer;
     }
-    namespace Audio
-    {
-        class Mixer
-        {
+    namespace Audio {
+        class Mixer : public IMixer {
             public:
                 Mixer();
-                ~Mixer();
-                void stopMusic();
-                void stopSounds();
-                void playACMMusic(const std::string& filename, bool loop = false);
-                void playACMSpeech(const std::string& filename);
-                void playACMSound(const std::string& filename);
-                void playMovieMusic(UI::MvePlayer* mve);
-                void pauseMusic();
-                void resumeMusic();
-                std::string& lastMusic();
-                /**
-                 * @return current music volume
-                 */
-                double musicVolume();
-                /**
-                 * @brief Sets volume of music
-                 * @param volume from 0.0 to 1.0
-                 */
-                void setMusicVolume(double volume);
+                ~Mixer() override;
+                void playACMMusic(const std::string& filename, bool loop) override;
+                void playACMSpeech(const std::string& filename) override;
+                void playACMSound(const std::string& filename) override;
+                void playMovieMusic(UI::MvePlayer* mve) override;
+                std::string& lastMusic() override;
+
+                void stopChannel(Channel channel) override;
+                void pauseChannel(Channel channel) override;
+                void resumeChannel(Channel channel) override;
+                void setMasterVolume(double volume) override;
+                double masterVolume() override;
+                void setChannelVolume(Channel channel, double volume) override;
+                double channelVolume(Channel channel) override;
 
             protected:
                 void _init();
@@ -79,4 +70,3 @@ namespace Falltergeist
         };
     }
 }
-#endif // FALLTERGEIST_AUDIO_MIXER_H

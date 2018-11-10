@@ -24,7 +24,7 @@
 #include <memory>
 
 // Falltergeist includes
-#include "../Audio/Mixer.h"
+#include "../Audio/IMixer.h"
 #include "../Exception.h"
 #include "../Game/CritterObject.h"
 #include "../Game/DudeObject.h"
