@@ -367,6 +367,12 @@ namespace Falltergeist
 
         void Location::initializePlayerTestAppareance(std::shared_ptr<Game::DudeObject> player) const
         {
+            static bool equipped;
+            if (equipped) {
+                return;
+            }
+
+            equipped = true;
             player->setArmorSlot(nullptr);
             auto powerArmor = (Game::ItemObject*) Game::ObjectFactory::getInstance()->createObject(PID_POWERED_ARMOR);
             auto leatherJacket = (Game::ItemObject*) Game::ObjectFactory::getInstance()->createObject(PID_LEATHER_JACKET);
