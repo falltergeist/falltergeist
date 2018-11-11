@@ -148,12 +148,6 @@ namespace Falltergeist
             pmve->getAudio(stream, len);
         }
 
-        void Mixer::playMovieMusic(UI::MvePlayer *mve) {
-            musicCallback = std::bind(&Mixer::_movieCallback, this, std::placeholders::_1, std::placeholders::_2,
-                                      std::placeholders::_3);
-            Mix_HookMusic(myMusicPlayer, reinterpret_cast<void *>(mve));
-        }
-
         void Mixer::playACMSound(const std::string &filename) {
             auto acm = ResourceManager::getInstance()->acmFileType(filename);
             if (!acm) return;
@@ -213,6 +207,15 @@ namespace Falltergeist
                 playACMSound(filename);
             }
             // TODO implement for different extensions(filetypes)
+        }
+
+        void Mixer::playOnce(Channel channel, std::shared_ptr<ISound> sound) {
+            // TODO replace with placing sound to given channel map
+            _sound = sound;
+            Mix_HookMusic([](void *udata, Uint8 *stream, int len) {
+                auto sound = (ISound*)(udata);
+                sound->readSamples(stream, (uint32_t)len);
+            }, reinterpret_cast<void *>(sound.get()));
         }
 
         void Mixer::stopChannel(Channel channel) {

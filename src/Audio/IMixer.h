@@ -19,7 +19,10 @@
 
 #pragma once
 
+#include <memory>
 #include <string>
+
+#include "../Audio/ISound.h"
 
 namespace Falltergeist {
     namespace UI {
@@ -34,7 +37,6 @@ namespace Falltergeist {
         class IMixer {
         public:
             virtual ~IMixer() = default;
-            virtual void playMovieMusic(UI::MvePlayer* mve) = 0;
             virtual std::string& lastMusic() = 0;
 
             /**
@@ -50,6 +52,13 @@ namespace Falltergeist {
              * @param filename
              */
             virtual void playOnce(Channel channel, const std::string& filename) = 0;
+
+            /**
+             * Play sound once in given channel
+             * @param channel
+             * @param sound
+             */
+            virtual void playOnce(Channel channel, std::shared_ptr<ISound> sound) = 0;
 
             /**
              * @param channel

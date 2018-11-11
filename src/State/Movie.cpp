@@ -24,6 +24,7 @@
 
 // Falltergeist includes
 #include "../Audio/IMixer.h"
+#include "../Audio/MveSound.h"
 #include "../CrossPlatform.h"
 #include "../Event/Keyboard.h"
 #include "../Event/Mouse.h"
@@ -150,9 +151,10 @@ namespace Falltergeist
                 _effect_index++;
             }
 
-            if (!_started)
-            {
-                Game::getInstance()->mixer()->playMovieMusic(dynamic_cast<UI::MvePlayer*>(getUI("movie")));
+            if (!_started) {
+                auto mvePlayer = dynamic_cast<UI::MvePlayer*>(getUI("movie"));
+                auto mveSound = std::make_shared<Audio::MveSound>(mvePlayer);
+                Game::getInstance()->mixer()->playOnce(Audio::Channel::Music, mveSound);
                 _started = true;
             }
             if ((dynamic_cast<UI::MvePlayer*>(getUI("movie")))->finished())

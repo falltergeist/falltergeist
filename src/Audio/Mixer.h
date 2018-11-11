@@ -39,11 +39,11 @@ namespace Falltergeist {
             public:
                 Mixer();
                 ~Mixer() override;
-                void playMovieMusic(UI::MvePlayer* mve) override;
                 std::string& lastMusic() override;
 
                 void playLooped(Channel channel, const std::string& filename) override;
                 void playOnce(Channel channel, const std::string& filename) override;
+                void playOnce(Channel channel, std::shared_ptr<ISound> sound) override;
                 void stopChannel(Channel channel) override;
                 void pauseChannel(Channel channel) override;
                 void resumeChannel(Channel channel) override;
@@ -69,6 +69,7 @@ namespace Falltergeist {
                 double _musicVolume = 1.0;
                 SDL_AudioFormat _format;
                 std::string _lastMusic = "";
+                std::shared_ptr<ISound> _sound = nullptr;
         };
     }
 }
