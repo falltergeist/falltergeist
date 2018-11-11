@@ -67,6 +67,9 @@ namespace Falltergeist
             Logger::info() << message + "[OK]" << std::endl;
             int frequency, channels;
             Mix_QuerySpec(&frequency, &_format, &channels);
+            _volumes.at(Channel::Music) = 1.0;
+            _volumes.at(Channel::Speech) = 1.0;
+            _volumes.at(Channel::Effects) = 1.0;
         }
 
         std::function<void(void *, uint8_t *, uint32_t)> musicCallback;
@@ -92,16 +95,20 @@ namespace Falltergeist
             Base::Buffer<uint16_t> tmp(len / 2);
             pacm->readSamples(tmp.data(), len / 2);
             SDL_memset(stream, 0, len);
-            SDL_MixAudioFormat(stream, (uint8_t *) tmp.data(), _format, len,
-                               static_cast<int>(SDL_MIX_MAXVOLUME * _musicVolume));
+            SDL_MixAudioFormat(
+                stream,
+                (uint8_t *) tmp.data(),
+                _format,
+                len,
+                static_cast<int>(SDL_MIX_MAXVOLUME * channelVolume(Channel::Music))
+            );
         }
 
-        void Mixer::playACMMusic(const std::string &filename, bool loop) {
+        void Mixer::_playACMMusic(const std::string &filename, bool loop) {
             Mix_HookMusic(NULL, NULL);
             auto acm = ResourceManager::getInstance()->acmFileType(
                     Game::getInstance()->settings()->musicPath() + filename);
             if (!acm) return;
-            _lastMusic = filename;
             _loop = loop;
             musicCallback = std::bind(&Mixer::_musicCallback, this, std::placeholders::_1, std::placeholders::_2,
                                       std::placeholders::_3);
@@ -127,7 +134,7 @@ namespace Falltergeist
             }
         }
 
-        void Mixer::playACMSpeech(const std::string &filename) {
+        void Mixer::_playACMSpeech(const std::string &filename) {
             Mix_HookMusic(NULL, NULL);
             auto acm = ResourceManager::getInstance()->acmFileType("sound/speech/" + filename);
             if (!acm) return;
@@ -137,18 +144,7 @@ namespace Falltergeist
             Mix_HookMusic(myMusicPlayer, (void *) acm);
         }
 
-        void Mixer::_movieCallback(void *udata, uint8_t *stream, uint32_t len) {
-            auto pmve = (UI::MvePlayer *) (udata);
-            if (pmve->samplesLeft() <= 0) {
-                Logger::debug("AUDIO") << "buffer underrun?" << std::endl;
-                Mix_HookMusic(NULL, NULL);
-                return;
-            }
-
-            pmve->getAudio(stream, len);
-        }
-
-        void Mixer::playACMSound(const std::string &filename) {
+        void Mixer::_playACMSound(const std::string &filename) {
             auto acm = ResourceManager::getInstance()->acmFileType(filename);
             if (!acm) return;
             Logger::debug("Mixer") << "playing: " << acm->filename() << std::endl;
@@ -185,26 +181,22 @@ namespace Falltergeist
             Mix_PlayChannel(-1, chunk, 0);
         }
 
-        std::string &Mixer::lastMusic() {
-            return _lastMusic;
-        }
-
         void Mixer::playLooped(Channel channel, const std::string& filename) {
             if (channel == Channel::Music) {
-                playACMMusic(filename, true);
+                _playACMMusic(filename, true);
             }
             // TODO implement for different extensions(filetypes) and channels
         }
 
         void Mixer::playOnce(Channel channel, const std::string& filename) {
             if (channel == Channel::Music) {
-                playACMMusic(filename, false);
+                _playACMMusic(filename, false);
             }
             if (channel == Channel::Speech) {
-                playACMSpeech(filename);
+                _playACMSpeech(filename);
             }
             if (channel == Channel::Effects) {
-                playACMSound(filename);
+                _playACMSound(filename);
             }
             // TODO implement for different extensions(filetypes)
         }
@@ -235,37 +227,31 @@ namespace Falltergeist
         }
 
         void Mixer::setMasterVolume(double volume) {
-            // TODO
+            volume = _normalizeVolume(volume);
+            _masterVolume = volume;
         }
 
         double Mixer::masterVolume() {
-            // TODO
-            return 1.0;
+            return _masterVolume;
         };
 
         void Mixer::setChannelVolume(Channel channel, double volume) {
+            volume = _normalizeVolume(volume);
+            _volumes.at(channel) = volume;
+        }
+
+        double Mixer::channelVolume(Channel channel) {
+            return _volumes.at(channel);
+        }
+
+        double Mixer::_normalizeVolume(double volume) {
             if (volume < 0.0) {
                 volume = 0.0;
             }
             if (volume > 1.0) {
                 volume = 1.0;
             }
-
-            if (channel == Channel::Music) {
-                _musicVolume = volume;
-            }
-
-            // TODO add channel volume for other channels
-        }
-
-        double Mixer::channelVolume(Channel channel) {
-            if (channel == Channel::Music) {
-                return _musicVolume;
-            }
-
-            // TODO implement other channels
-
-            return 0;
+            return volume;
         }
     }
 }

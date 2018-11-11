@@ -37,7 +37,6 @@ namespace Falltergeist {
         class IMixer {
         public:
             virtual ~IMixer() = default;
-            virtual std::string& lastMusic() = 0;
 
             /**
              * Play file looped in given channel

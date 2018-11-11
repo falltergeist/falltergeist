@@ -23,6 +23,7 @@
 #include <cstdint>
 #include <string>
 #include <unordered_map>
+#include <map>
 
 // Falltergeist includes
 #include "../Audio/IMixer.h"
@@ -39,7 +40,6 @@ namespace Falltergeist {
             public:
                 Mixer();
                 ~Mixer() override;
-                std::string& lastMusic() override;
 
                 void playLooped(Channel channel, const std::string& filename) override;
                 void playOnce(Channel channel, const std::string& filename) override;
@@ -56,20 +56,20 @@ namespace Falltergeist {
                 void _init();
 
             private:
-                void playACMMusic(const std::string& filename, bool loop);
-                void playACMSpeech(const std::string& filename);
-                void playACMSound(const std::string& filename);
+                void _playACMMusic(const std::string& filename, bool loop);
+                void _playACMSpeech(const std::string& filename);
+                void _playACMSound(const std::string& filename);
                 void _musicCallback(void* udata, uint8_t* stream, uint32_t len);
                 void _speechCallback(void* udata, uint8_t* stream, uint32_t len);
-                void _movieCallback(void* udata, uint8_t* stream, uint32_t len);
                 std::unordered_map<std::string, Mix_Chunk*> _sfx;
                 bool _paused = false;
                 bool _loop = false;
 
-                double _musicVolume = 1.0;
+                double _masterVolume = 1.0;
+                std::map<Channel, double> _volumes;
                 SDL_AudioFormat _format;
-                std::string _lastMusic = "";
                 std::shared_ptr<ISound> _sound = nullptr;
+                double _normalizeVolume(double volume);
         };
     }
 }

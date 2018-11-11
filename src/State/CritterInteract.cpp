@@ -74,9 +74,7 @@ namespace Falltergeist
         {
             Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::BIG_ARROW);
             if (_headID >= 0) {
-                // stop music completely
-                // TODO: because Dialog state is activated *before* Interact, this stops speech too =/
-                //Game::getInstance()->mixer()->stopMusic();
+                Game::getInstance()->mixer()->pauseChannel(Audio::Channel::Music);
             } else {
                 // lower music volume
                 auto mixer = Game::getInstance()->mixer();
@@ -88,8 +86,7 @@ namespace Falltergeist
         {
             Game::getInstance()->mouse()->popState();
             if (_headID >= 0) {
-                auto mixer = Game::getInstance()->mixer();
-                mixer->playLooped(Audio::Channel::Music, mixer->lastMusic());
+                Game::getInstance()->mixer()->resumeChannel(Audio::Channel::Music);
             } else {
                 // restore music volume
                 auto mixer = Game::getInstance()->mixer();
