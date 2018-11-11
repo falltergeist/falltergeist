@@ -27,7 +27,7 @@
 #include <memory>
 
 // Falltergeist includes
-#include "../Audio/Mixer.h"
+#include "../Audio/SdlMixer.h"
 #include "../CrossPlatform.h"
 #include "../Event/Dispatcher.h"
 #include "../Event/State.h"
@@ -97,7 +97,7 @@ namespace Falltergeist
             std::string version = CrossPlatform::getVersion();
             renderer()->setCaption(version.c_str());
 
-            _mixer = std::make_shared<Audio::Mixer>();
+            _mixer = std::make_shared<Audio::SdlMixer>();
             _mixer->setChannelVolume(Audio::Channel::Music, _settings->musicVolume());
             _mouse = std::make_unique<Input::Mouse>();
             _fpsCounter = std::make_unique<UI::FpsCounter>(renderer()->width() - 42, 2);

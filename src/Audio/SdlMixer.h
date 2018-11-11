@@ -36,10 +36,10 @@ namespace Falltergeist {
         class MvePlayer;
     }
     namespace Audio {
-        class Mixer : public IMixer {
+        class SdlMixer : public IMixer {
             public:
-                Mixer();
-                ~Mixer() override;
+                SdlMixer();
+                ~SdlMixer() override;
 
                 void playLooped(Channel channel, const std::string& filename) override;
                 void playOnce(Channel channel, const std::string& filename) override;

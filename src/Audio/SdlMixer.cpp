@@ -18,7 +18,7 @@
  */
 
 // Related headers
-#include "../Audio/Mixer.h"
+#include "../Audio/SdlMixer.h"
 
 // C++ standard includes
 #include <string>
@@ -39,11 +39,11 @@
 namespace Falltergeist
 {
     namespace Audio {
-        Mixer::Mixer() {
+        SdlMixer::SdlMixer() {
             _init();
         }
 
-        Mixer::~Mixer() {
+        SdlMixer::~SdlMixer() {
             for (auto &x: _sfx) {
                 Mix_FreeChunk(x.second);
             }
@@ -51,7 +51,7 @@ namespace Falltergeist
             Mix_CloseAudio();
         }
 
-        void Mixer::_init() {
+        void SdlMixer::_init() {
             std::string message = "[AUDIO] - SDL_Init - ";
             if (SDL_InitSubSystem(SDL_INIT_AUDIO) < 0) {
                 Logger::critical() << message + "[FAIL]" << std::endl;
@@ -67,9 +67,9 @@ namespace Falltergeist
             Logger::info() << message + "[OK]" << std::endl;
             int frequency, channels;
             Mix_QuerySpec(&frequency, &_format, &channels);
-            _volumes.at(Channel::Music) = 1.0;
-            _volumes.at(Channel::Speech) = 1.0;
-            _volumes.at(Channel::Effects) = 1.0;
+            _volumes.insert(std::make_pair<Channel, double>(Channel::Music, 1.0f));
+            _volumes.insert(std::make_pair<Channel, double>(Channel::Speech, 1.0f));
+            _volumes.insert(std::make_pair<Channel, double>(Channel::Effects, 1.0f));
         }
 
         std::function<void(void *, uint8_t *, uint32_t)> musicCallback;
@@ -78,7 +78,7 @@ namespace Falltergeist
             musicCallback(udata, stream, len);
         }
 
-        void Mixer::_musicCallback(void *udata, uint8_t *stream, uint32_t len) {
+        void SdlMixer::_musicCallback(void *udata, uint8_t *stream, uint32_t len) {
             if (_paused) return;
 
             auto pacm = (Format::Acm::File *) (udata);
@@ -104,19 +104,19 @@ namespace Falltergeist
             );
         }
 
-        void Mixer::_playACMMusic(const std::string &filename, bool loop) {
+        void SdlMixer::_playACMMusic(const std::string &filename, bool loop) {
             Mix_HookMusic(NULL, NULL);
             auto acm = ResourceManager::getInstance()->acmFileType(
                     Game::getInstance()->settings()->musicPath() + filename);
             if (!acm) return;
             _loop = loop;
-            musicCallback = std::bind(&Mixer::_musicCallback, this, std::placeholders::_1, std::placeholders::_2,
+            musicCallback = std::bind(&SdlMixer::_musicCallback, this, std::placeholders::_1, std::placeholders::_2,
                                       std::placeholders::_3);
             acm->rewind();
             Mix_HookMusic(myMusicPlayer, (void *) acm);
         }
 
-        void Mixer::_speechCallback(void *udata, uint8_t *stream, uint32_t len) {
+        void SdlMixer::_speechCallback(void *udata, uint8_t *stream, uint32_t len) {
             if (_paused) return;
 
             auto pacm = (Format::Acm::File *) (udata);
@@ -134,17 +134,17 @@ namespace Falltergeist
             }
         }
 
-        void Mixer::_playACMSpeech(const std::string &filename) {
+        void SdlMixer::_playACMSpeech(const std::string &filename) {
             Mix_HookMusic(NULL, NULL);
             auto acm = ResourceManager::getInstance()->acmFileType("sound/speech/" + filename);
             if (!acm) return;
-            musicCallback = std::bind(&Mixer::_speechCallback, this, std::placeholders::_1, std::placeholders::_2,
+            musicCallback = std::bind(&SdlMixer::_speechCallback, this, std::placeholders::_1, std::placeholders::_2,
                                       std::placeholders::_3);
             acm->rewind();
             Mix_HookMusic(myMusicPlayer, (void *) acm);
         }
 
-        void Mixer::_playACMSound(const std::string &filename) {
+        void SdlMixer::_playACMSound(const std::string &filename) {
             auto acm = ResourceManager::getInstance()->acmFileType(filename);
             if (!acm) return;
             Logger::debug("Mixer") << "playing: " << acm->filename() << std::endl;
@@ -181,14 +181,14 @@ namespace Falltergeist
             Mix_PlayChannel(-1, chunk, 0);
         }
 
-        void Mixer::playLooped(Channel channel, const std::string& filename) {
+        void SdlMixer::playLooped(Channel channel, const std::string& filename) {
             if (channel == Channel::Music) {
                 _playACMMusic(filename, true);
             }
             // TODO implement for different extensions(filetypes) and channels
         }
 
-        void Mixer::playOnce(Channel channel, const std::string& filename) {
+        void SdlMixer::playOnce(Channel channel, const std::string& filename) {
             if (channel == Channel::Music) {
                 _playACMMusic(filename, false);
             }
@@ -201,7 +201,7 @@ namespace Falltergeist
             // TODO implement for different extensions(filetypes)
         }
 
-        void Mixer::playOnce(Channel channel, std::shared_ptr<ISound> sound) {
+        void SdlMixer::playOnce(Channel channel, std::shared_ptr<ISound> sound) {
             // TODO replace with placing sound to given channel map
             _sound = sound;
             Mix_HookMusic([](void *udata, Uint8 *stream, int len) {
@@ -210,46 +210,46 @@ namespace Falltergeist
             }, reinterpret_cast<void *>(sound.get()));
         }
 
-        void Mixer::stopChannel(Channel channel) {
+        void SdlMixer::stopChannel(Channel channel) {
             // TODO
             Mix_HookMusic(NULL, NULL);
             //Mix_HaltChannel(-1);
         }
 
-        void Mixer::pauseChannel(Channel channel) {
+        void SdlMixer::pauseChannel(Channel channel) {
             // TODO
             _paused = true;
         }
 
-        void Mixer::resumeChannel(Channel channel) {
+        void SdlMixer::resumeChannel(Channel channel) {
             // TODO
             _paused = false;
         }
 
-        void Mixer::setMasterVolume(double volume) {
+        void SdlMixer::setMasterVolume(double volume) {
             volume = _normalizeVolume(volume);
             _masterVolume = volume;
         }
 
-        double Mixer::masterVolume() {
+        double SdlMixer::masterVolume() {
             return _masterVolume;
-        };
+        }
 
-        void Mixer::setChannelVolume(Channel channel, double volume) {
+        void SdlMixer::setChannelVolume(Channel channel, double volume) {
             volume = _normalizeVolume(volume);
             _volumes.at(channel) = volume;
         }
 
-        double Mixer::channelVolume(Channel channel) {
+        double SdlMixer::channelVolume(Channel channel) {
             return _volumes.at(channel);
         }
 
-        double Mixer::_normalizeVolume(double volume) {
-            if (volume < 0.0) {
-                volume = 0.0;
+        double SdlMixer::_normalizeVolume(double volume) {
+            if (volume < 0.0f) {
+                volume = 0.0f;
             }
-            if (volume > 1.0) {
-                volume = 1.0;
+            if (volume > 1.0f) {
+                volume = 1.0f;
             }
             return volume;
         }
