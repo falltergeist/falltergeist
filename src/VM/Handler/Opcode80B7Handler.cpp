@@ -50,7 +50,13 @@ namespace Falltergeist {
                 auto elevation = dataStack->popInteger();
                 auto position = dataStack->popInteger();
                 auto PID = dataStack->popInteger();
-                auto object = Game::getInstance()->locationState()->addObject(PID, position, elevation);
+                Game::Object *object;
+
+                if (position > 0) {
+                    object = Game::getInstance()->locationState()->addObject(PID, position, elevation);
+                } else {
+                    object = Game::ObjectFactory::getInstance()->createObject(PID);
+                }
                 if (SID > 0) {
                     auto intFile = ResourceManager::getInstance()->intFileType(SID);
                     if (intFile) {
