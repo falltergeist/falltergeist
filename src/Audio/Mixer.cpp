@@ -195,6 +195,26 @@ namespace Falltergeist
             return _lastMusic;
         }
 
+        void Mixer::playLooped(Channel channel, const std::string& filename) {
+            if (channel == Channel::Music) {
+                playACMMusic(filename, true);
+            }
+            // TODO implement for different extensions(filetypes) and channels
+        }
+
+        void Mixer::playOnce(Channel channel, const std::string& filename) {
+            if (channel == Channel::Music) {
+                playACMMusic(filename, false);
+            }
+            if (channel == Channel::Speech) {
+                playACMSpeech(filename);
+            }
+            if (channel == Channel::Effects) {
+                playACMSound(filename);
+            }
+            // TODO implement for different extensions(filetypes)
+        }
+
         void Mixer::stopChannel(Channel channel) {
             // TODO
             Mix_HookMusic(NULL, NULL);

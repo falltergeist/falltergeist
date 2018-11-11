@@ -87,12 +87,10 @@ namespace Falltergeist
         void CritterInteract::onStateDeactivate(Event::State* event)
         {
             Game::getInstance()->mouse()->popState();
-            if (_headID >= 0)
-            {
-                Game::getInstance()->mixer()->playACMMusic(Game::getInstance()->mixer()->lastMusic(), true);
-            }
-            else
-            {
+            if (_headID >= 0) {
+                auto mixer = Game::getInstance()->mixer();
+                mixer->playLooped(Audio::Channel::Music, mixer->lastMusic());
+            } else {
                 // restore music volume
                 auto mixer = Game::getInstance()->mixer();
                 mixer->setChannelVolume(Audio::Channel::Music, mixer->channelVolume(Audio::Channel::Music) * 2.0);
@@ -239,10 +237,9 @@ namespace Falltergeist
             _script = script;
         }
 
-        void CritterInteract::playSpeech(const std::string &speech)
-        {
+        void CritterInteract::playSpeech(const std::string &speech) {
             _fidgetTimer.stop();
-            Game::getInstance()->mixer()->playACMSpeech(_headName+"/"+speech+".acm");
+            Game::getInstance()->mixer()->playOnce(Audio::Channel::Speech, _headName + "/" + speech + ".acm");
             // start timer
             _startTime = SDL_GetTicks();
             _nextIndex = 0;

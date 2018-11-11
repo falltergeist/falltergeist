@@ -177,7 +177,7 @@ namespace Falltergeist
                 if (deltaY > 0) {
                     game->mouse()->setPosition({_initialX, _iconsPos.y()});
                 }
-                Game::getInstance()->mixer()->playACMSound("sound/sfx/iaccuxx1.acm");
+                Game::getInstance()->mixer()->playOnce(Audio::Channel::Effects, "sound/sfx/iaccuxx1.acm");
             }
         }
 

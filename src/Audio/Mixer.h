@@ -39,12 +39,11 @@ namespace Falltergeist {
             public:
                 Mixer();
                 ~Mixer() override;
-                void playACMMusic(const std::string& filename, bool loop) override;
-                void playACMSpeech(const std::string& filename) override;
-                void playACMSound(const std::string& filename) override;
                 void playMovieMusic(UI::MvePlayer* mve) override;
                 std::string& lastMusic() override;
 
+                void playLooped(Channel channel, const std::string& filename) override;
+                void playOnce(Channel channel, const std::string& filename) override;
                 void stopChannel(Channel channel) override;
                 void pauseChannel(Channel channel) override;
                 void resumeChannel(Channel channel) override;
@@ -57,6 +56,9 @@ namespace Falltergeist {
                 void _init();
 
             private:
+                void playACMMusic(const std::string& filename, bool loop);
+                void playACMSpeech(const std::string& filename);
+                void playACMSound(const std::string& filename);
                 void _musicCallback(void* udata, uint8_t* stream, uint32_t len);
                 void _speechCallback(void* udata, uint8_t* stream, uint32_t len);
                 void _movieCallback(void* udata, uint8_t* stream, uint32_t len);

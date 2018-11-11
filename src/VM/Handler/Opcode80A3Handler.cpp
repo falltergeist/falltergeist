@@ -39,7 +39,7 @@ namespace Falltergeist {
             void Opcode80A3::_run() {
                 Logger::debug("SCRIPT") << "[80A3] [=] void play_sfx(string* p1)" << std::endl;
                 auto name = _script->dataStack()->popString();
-                Game::Game::getInstance()->mixer()->playACMSound("sound/sfx/" + name + ".acm");
+                Game::Game::getInstance()->mixer()->playOnce(Audio::Channel::Effects, "sound/sfx/" + name + ".acm");
             }
         }
     }

@@ -237,9 +237,8 @@ void ImageButton::_onMouseClick(Event::Mouse* event)
     {
         sender->_checked = !sender->_checked;
     }
-    if (!sender->_upSound.empty())
-    {
-        Game::getInstance()->mixer()->playACMSound(sender->_upSound);
+    if (!sender->_upSound.empty()) {
+        Game::getInstance()->mixer()->playOnce(Audio::Channel::Effects, sender->_upSound);
     }
 }
 
@@ -248,9 +247,8 @@ void ImageButton::_onMouseDown(Event::Mouse* event)
     if (!event->leftButton() || !_enabled) return;
 
     auto sender = dynamic_cast<ImageButton*>(event->target());
-    if (!sender->_downSound.empty())
-    {
-        Game::getInstance()->mixer()->playACMSound(sender->_downSound);
+    if (!sender->_downSound.empty()) {
+        Game::getInstance()->mixer()->playOnce(Audio::Channel::Effects, sender->_downSound);
     }
 }
 

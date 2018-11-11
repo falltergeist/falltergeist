@@ -105,7 +105,7 @@ void ItemsList::onMouseDragStart(Event::Mouse* event)
     if (index < _inventoryItems.size())
     {
         Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::NONE);
-        Game::getInstance()->mixer()->playACMSound("sound/sfx/ipickup1.acm");
+        Game::getInstance()->mixer()->playOnce(Audio::Channel::Effects, "sound/sfx/ipickup1.acm");
         _draggedItem = _inventoryItems.at(index).get();
         _draggedItem->setType(InventoryItem::Type::DRAG);
         _draggedItem->setOffset((event->position() - _draggedItem->position()) - (_draggedItem->size() / 2));
@@ -131,7 +131,7 @@ void ItemsList::onMouseDragStop(Event::Mouse* event)
     if (_draggedItem)
     {
         Game::getInstance()->mouse()->popState();
-        Game::getInstance()->mixer()->playACMSound("sound/sfx/iputdown.acm");
+        Game::getInstance()->mixer()->playOnce(Audio::Channel::Effects, "sound/sfx/iputdown.acm");
         _draggedItem->setOffset(0, 0);
         _draggedItem->setType(_type);
         auto itemevent = std::make_unique<Event::Mouse>(*event, "itemdragstop");

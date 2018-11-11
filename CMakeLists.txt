@@ -84,7 +84,7 @@ include_directories(${GLM_INCLUDE_DIR})
 file(GLOB_RECURSE SOURCES  src/*.cpp)
 
 if(MSVC)
-	set(_additional_includes "package/windows.rc" pchheader.cpp)
+	set(_additional_includes "package/windows.rc" pchheader.cpp src/Audio/IMixer.h)
 	add_definitions(-D_CRT_SECURE_NO_WARNINGS)
 endif()
 

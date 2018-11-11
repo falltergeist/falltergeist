@@ -34,11 +34,22 @@ namespace Falltergeist {
         class IMixer {
         public:
             virtual ~IMixer() = default;
-            virtual void playACMMusic(const std::string& filename, bool loop) = 0;
-            virtual void playACMSpeech(const std::string& filename) = 0;
-            virtual void playACMSound(const std::string& filename) = 0;
             virtual void playMovieMusic(UI::MvePlayer* mve) = 0;
             virtual std::string& lastMusic() = 0;
+
+            /**
+             * Play file looped in given channel
+             * @param channel
+             * @param filename
+             */
+            virtual void playLooped(Channel channel, const std::string& filename) = 0;
+
+            /**
+             * Play file once in given channel
+             * @param channel
+             * @param filename
+             */
+            virtual void playOnce(Channel channel, const std::string& filename) = 0;
 
             /**
              * @param channel

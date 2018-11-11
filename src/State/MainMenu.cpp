@@ -270,11 +270,10 @@ namespace Falltergeist
             }
         }
 
-        void MainMenu::onStateActivate(Event::State* event)
-        {
+        void MainMenu::onStateActivate(Event::State *event) {
             Game::getInstance()->mouse()->setState(Input::Mouse::Cursor::BIG_ARROW);
-            Game::getInstance()->mixer()->playACMMusic("07desert.acm",true);
-            Game::getInstance()->renderer()->fadeIn(0,0,0,1000);
+            Game::getInstance()->mixer()->playLooped(Audio::Channel::Music, "07desert.acm");
+            Game::getInstance()->renderer()->fadeIn(0, 0, 0, 1000);
         }
     }
 }

@@ -174,7 +174,7 @@ void InventoryItem::onMouseLeftDown(Event::Mouse* event)
 void InventoryItem::onMouseDragStart(Event::Mouse* event)
 {
     Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::NONE);
-    Game::getInstance()->mixer()->playACMSound("sound/sfx/ipickup1.acm");
+    Game::getInstance()->mixer()->playOnce(Audio::Channel::Effects, "sound/sfx/ipickup1.acm");
     _oldType = type();
     setType(Type::DRAG);
     setOffset((event->position() - _position) - size() / 2);
@@ -188,7 +188,7 @@ void InventoryItem::onMouseDrag(Event::Mouse* event)
 void InventoryItem::onMouseDragStop(Event::Mouse* event)
 {
     Game::getInstance()->mouse()->popState();
-    Game::getInstance()->mixer()->playACMSound("sound/sfx/iputdown.acm");
+    Game::getInstance()->mixer()->playOnce(Audio::Channel::Effects, "sound/sfx/iputdown.acm");
     setOffset({0, 0});
     setType(_oldType);
 

@@ -141,13 +141,11 @@ void MultistateImageButton::_onMouseUp(Event::Mouse* event)
 
     auto sender = dynamic_cast<MultistateImageButton*>(event->target());
 
-    if (!sender->_downSound.empty())
-    {
-        Game::getInstance()->mixer()->playACMSound(sender->_downSound);
+    if (!sender->_downSound.empty()) {
+        Game::getInstance()->mixer()->playOnce(Audio::Channel::Effects, sender->_downSound);
     }
-    if (!sender->_upSound.empty())
-    {
-        Game::getInstance()->mixer()->playACMSound(sender->_upSound);
+    if (!sender->_upSound.empty()) {
+        Game::getInstance()->mixer()->playOnce(Audio::Channel::Effects, sender->_upSound);
     }
 }
 

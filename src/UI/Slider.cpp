@@ -86,8 +86,8 @@ void Slider::handle(Event::Event* event)
                 _offset.setX(ofs.x());
                 _value = ((maxValue() - minValue()) / 218.f) * (float)_offset.x();
                 emitEvent(std::make_unique<Event::Event>("change"), changeHandler());
-                Game::getInstance()->mixer()->playACMSound(_downSound);
-                Game::getInstance()->mixer()->playACMSound(_upSound);
+                Game::getInstance()->mixer()->playOnce(Audio::Channel::Effects, _downSound);
+                Game::getInstance()->mixer()->playOnce(Audio::Channel::Effects, _upSound);
                 return;
             }
         }
@@ -111,18 +111,16 @@ void Slider::_onDrag(Event::Mouse* event)
 void Slider::_onLeftButtonDown(Event::Mouse* event)
 {
     auto sender = dynamic_cast<Slider*>(event->target());
-    if (!sender->_downSound.empty())
-    {
-        Game::getInstance()->mixer()->playACMSound(sender->_downSound);
+    if (!sender->_downSound.empty()) {
+        Game::getInstance()->mixer()->playOnce(Audio::Channel::Effects, sender->_downSound);
     }
 }
 
 void Slider::_onLeftButtonUp(Event::Mouse* event)
 {
     auto sender = dynamic_cast<Slider*>(event->target());
-    if (!sender->_upSound.empty())
-    {
-        Game::getInstance()->mixer()->playACMSound(sender->_upSound);
+    if (!sender->_upSound.empty()) {
+        Game::getInstance()->mixer()->playOnce(Audio::Channel::Effects, sender->_upSound);
     }
 }
 

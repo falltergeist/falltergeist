@@ -80,7 +80,7 @@ namespace Falltergeist
                     queue->start();
                     queue->animationEndedHandler().add(std::bind(&DoorSceneryObject::onOpeningAnimationEnded, this, std::placeholders::_1));
                     if (_soundId) {
-                        Game::getInstance()->mixer()->playACMSound(std::string("sound/sfx/sodoors") + _soundId + ".acm");
+                        Game::getInstance()->mixer()->playOnce(Audio::Channel::Effects, std::string("sound/sfx/sodoors") + _soundId + ".acm");
                     }
                 }
             } else {
@@ -88,7 +88,7 @@ namespace Falltergeist
                     queue->start();
                     queue->animationEndedHandler().add(std::bind(&DoorSceneryObject::onClosingAnimationEnded, this, std::placeholders::_1));
                     if (_soundId) {
-                        Game::getInstance()->mixer()->playACMSound(std::string("sound/sfx/scdoors") + _soundId + ".acm");
+                        Game::getInstance()->mixer()->playOnce(Audio::Channel::Effects, std::string("sound/sfx/scdoors") + _soundId + ".acm");
                     }
                 }
             }

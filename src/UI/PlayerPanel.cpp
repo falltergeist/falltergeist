@@ -296,7 +296,7 @@ void PlayerPanel::think()
 
 void PlayerPanel::playWindowOpenSfx()
 {
-    Game::getInstance()->mixer()->playACMSound("sound/sfx/ib1p1xx1.acm");
+    Game::getInstance()->mixer()->playOnce(Audio::Channel::Effects, "sound/sfx/ib1p1xx1.acm");
 }
 
 void PlayerPanel::changeHand()
@@ -483,7 +483,7 @@ void PlayerPanel::openLoadGame()
 
 void PlayerPanel::displayMessage(const std::string& message)
 {
-    Game::getInstance()->mixer()->playACMSound("sound/sfx/monitor.acm");
+    Game::getInstance()->mixer()->playOnce(Audio::Channel::Effects, "sound/sfx/monitor.acm");
     std::string msg = "\n\x95";
     msg += message;
     *_messageLog << msg;
