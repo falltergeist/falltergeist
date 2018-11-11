@@ -23,6 +23,7 @@
 // C++ standard includes
 
 // Falltergeist includes
+#include "../Exception.h"
 #include "../UI/MvePlayer.h"
 
 // Third party includes
@@ -32,7 +33,20 @@ namespace Falltergeist {
         MveSound::MveSound(Falltergeist::UI::MvePlayer *mvePlayer) : mvePlayer(mvePlayer) {
         }
 
-        MveSound::~MveSound() {
+        uint8_t MveSound::channels() {
+            return 2;
+        }
+
+        uint32_t MveSound::sampleRate() {
+            return 22050;
+        }
+
+        void MveSound::rewind() {
+            throw Exception("Not implemented");
+        }
+
+        uint32_t MveSound::samplesAvailable() {
+            return mvePlayer->samplesLeft();
         }
 
         uint32_t MveSound::readSamples(uint8_t *audioBuffer, uint32_t bytes) {

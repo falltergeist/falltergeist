@@ -57,6 +57,13 @@ namespace Falltergeist {
             virtual void playOnce(Channel channel, const std::string& filename) = 0;
 
             /**
+             * Play sound loopen in given channel
+             * @param channel
+             * @param sound
+             */
+            virtual void playLooped(Channel channel, std::shared_ptr<ISound> sound) = 0;
+
+            /**
              * Play sound once in given channel
              * @param channel
              * @param sound

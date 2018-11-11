@@ -24,6 +24,7 @@
 #include <string>
 
 // Falltergeist includes
+#include "../Audio/AcmSound.h"
 #include "../Base/Buffer.h"
 #include "../Exception.h"
 #include "../Format/Acm/File.h"
@@ -43,9 +44,6 @@ namespace Falltergeist {
         }
 
         SdlMixer::~SdlMixer() {
-            for (auto &x: _sfx) {
-                Mix_FreeChunk(x.second);
-            }
             Mix_HookMusic(NULL, NULL);
             Mix_CloseAudio();
         }
@@ -66,118 +64,59 @@ namespace Falltergeist {
             Logger::info() << message + "[OK]" << std::endl;
             int frequency, channels;
             Mix_QuerySpec(&frequency, &_format, &channels);
+            _initChannels();
+        }
+
+        void SdlMixer::_initChannels() {
             _volumes.insert(std::make_pair<Channel, double>(Channel::Music, 1.0f));
             _volumes.insert(std::make_pair<Channel, double>(Channel::Speech, 1.0f));
             _volumes.insert(std::make_pair<Channel, double>(Channel::Effects, 1.0f));
-        }
-
-        std::function<void(void *, uint8_t *, uint32_t)> musicCallback;
-
-        void myMusicPlayer(void *udata, uint8_t *stream, int len) {
-            musicCallback(udata, stream, len);
-        }
-
-        void SdlMixer::_musicCallback(void *udata, uint8_t *stream, uint32_t len) {
-            if (_paused) return;
-
-            auto pacm = (Format::Acm::File *) (udata);
-            if (pacm->samplesLeft() <= 0) {
-                if (_loop) {
-                    pacm->rewind();
-                } else {
-                    Mix_HookMusic(NULL, NULL);
-                    return;
-                }
-            }
-
-            // music is stereo. just fetch
-            Base::Buffer<uint16_t> tmp(len / 2);
-            pacm->readSamples(tmp.data(), len / 2);
-            SDL_memset(stream, 0, len);
-            SDL_MixAudioFormat(
-                stream,
-                (uint8_t *) tmp.data(),
-                _format,
-                len,
-                static_cast<int>(SDL_MIX_MAXVOLUME * channelVolume(Channel::Music))
+            _sounds.insert(
+                std::make_pair<Channel, std::list<std::shared_ptr<ISound>>>(
+                    Channel::Music,
+                    {}
+                )
+            );
+            _sounds.insert(
+                std::make_pair<Channel, std::list<std::shared_ptr<ISound>>>(
+                    Channel::Speech,
+                    {}
+                )
+            );
+            _sounds.insert(
+                std::make_pair<Channel, std::list<std::shared_ptr<ISound>>>(
+                    Channel::Effects,
+                    {}
+                )
             );
         }
 
         void SdlMixer::_playACMMusic(const std::string &filename, bool loop) {
-            Mix_HookMusic(NULL, NULL);
-            auto acm = ResourceManager::getInstance()->acmFileType(
-                    Game::getInstance()->settings()->musicPath() + filename);
-            if (!acm) return;
-            _loop = loop;
-            musicCallback = std::bind(&SdlMixer::_musicCallback, this, std::placeholders::_1, std::placeholders::_2,
-                                      std::placeholders::_3);
-            acm->rewind();
-            Mix_HookMusic(myMusicPlayer, (void *) acm);
-        }
-
-        void SdlMixer::_speechCallback(void *udata, uint8_t *stream, uint32_t len) {
-            if (_paused) return;
-
-            auto pacm = (Format::Acm::File *) (udata);
-            if (pacm->samplesLeft() <= 0) {
-                Mix_HookMusic(NULL, NULL);
+            auto acm = ResourceManager::getInstance()->acmFileType(Game::getInstance()->settings()->musicPath() + filename);
+            if (!acm) {
                 return;
             }
-
-            Base::Buffer<uint16_t> tmp(len / 2);
-            uint16_t *sstr = (uint16_t *) stream;
-            pacm->readSamples(tmp.data(), len / 4);
-            for (size_t i = 0; i < len / 4; i++) {
-                sstr[i * 2] = tmp[i];
-                sstr[i * 2 + 1] = tmp[i];
+            if (loop) {
+                playOnce(Channel::Music, std::make_shared<AcmSound>(acm));
+            } else {
+                playLooped(Channel::Music, std::make_shared<AcmSound>(acm));
             }
         }
 
         void SdlMixer::_playACMSpeech(const std::string &filename) {
-            Mix_HookMusic(NULL, NULL);
             auto acm = ResourceManager::getInstance()->acmFileType("sound/speech/" + filename);
-            if (!acm) return;
-            musicCallback = std::bind(&SdlMixer::_speechCallback, this, std::placeholders::_1, std::placeholders::_2,
-                                      std::placeholders::_3);
-            acm->rewind();
-            Mix_HookMusic(myMusicPlayer, (void *) acm);
+            if (!acm) {
+                return;
+            }
+            playOnce(Channel::Speech, std::make_shared<AcmSound>(acm));
         }
 
         void SdlMixer::_playACMSound(const std::string &filename) {
             auto acm = ResourceManager::getInstance()->acmFileType(filename);
-            if (!acm) return;
-            Logger::debug("Mixer") << "playing: " << acm->filename() << std::endl;
-            Mix_Chunk *chunk = NULL;
-
-            auto it = _sfx.find(acm->filename());
-            if (it != _sfx.end()) {
-                chunk = it->second;
+            if (!acm) {
+                return;
             }
-
-            if (!chunk) {
-                auto samples = acm->samples();
-
-                Base::Buffer<uint16_t> tmpSamples(samples);
-                auto cnt = acm->readSamples(tmpSamples.data(), samples) * 2;
-
-                SDL_AudioCVT cvt;
-                SDL_BuildAudioCVT(&cvt, AUDIO_S16LSB, 1, 22050, AUDIO_S16LSB, 2, 22050); //convert from mono to stereo
-
-                cvt.buf = (Uint8 *) malloc(cnt * cvt.len_mult);
-                memcpy(cvt.buf, tmpSamples.data(), cnt);
-                cvt.len = static_cast<int>(cnt);
-                SDL_ConvertAudio(&cvt);
-
-                // make SDL_mixer chunk
-                chunk = Mix_QuickLoad_RAW(cvt.buf, static_cast<uint32_t>(cvt.len * cvt.len_ratio));
-                if (_sfx.size() > 100) // TODO: make this configurable
-                {
-                    Mix_FreeChunk(_sfx.begin()->second);
-                    _sfx.erase(_sfx.begin());
-                }
-                _sfx.insert(std::pair<std::string, Mix_Chunk *>(acm->filename(), chunk));
-            }
-            Mix_PlayChannel(-1, chunk, 0);
+            playOnce(Channel::Effects, std::make_shared<AcmSound>(acm));
         }
 
         void SdlMixer::playLooped(Channel channel, const std::string& filename) {
@@ -203,10 +142,16 @@ namespace Falltergeist {
         void SdlMixer::playOnce(Channel channel, std::shared_ptr<ISound> sound) {
             // TODO replace with placing sound to given channel map
             _sound = sound;
+            Mix_HookMusic(NULL, NULL);
             Mix_HookMusic([](void *udata, Uint8 *stream, int len) {
                 auto sound = (ISound*)(udata);
                 sound->readSamples(stream, (uint32_t)len);
             }, reinterpret_cast<void *>(sound.get()));
+        }
+
+        void SdlMixer::playLooped(Channel channel, std::shared_ptr<ISound> sound) {
+            // TODO implement looping
+            playOnce(channel, sound);
         }
 
         void SdlMixer::stopChannel(Channel channel) {
@@ -217,12 +162,10 @@ namespace Falltergeist {
 
         void SdlMixer::pauseChannel(Channel channel) {
             // TODO
-            _paused = true;
         }
 
         void SdlMixer::resumeChannel(Channel channel) {
             // TODO
-            _paused = false;
         }
 
         void SdlMixer::setMasterVolume(double volume) {

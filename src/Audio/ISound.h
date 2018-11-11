@@ -31,6 +31,10 @@ namespace Falltergeist {
         class ISound {
         public:
             virtual ~ISound() = default;
+            virtual uint8_t channels() = 0;
+            virtual uint32_t sampleRate() = 0;
+            virtual void rewind() = 0;
+            virtual uint32_t samplesAvailable() = 0;
             virtual uint32_t readSamples(uint8_t *audioBuffer, uint32_t bytes) = 0;
         };
     }

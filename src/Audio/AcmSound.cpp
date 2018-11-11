@@ -32,6 +32,23 @@
 namespace Falltergeist {
     namespace Audio {
         AcmSound::AcmSound(Format::Acm::File *acmFile) : acmFile(acmFile) {
+            acmFile->rewind();
+        }
+
+        uint8_t AcmSound::channels() {
+            return (uint8_t) acmFile->channels();
+        }
+
+        uint32_t AcmSound::sampleRate() {
+            return (uint32_t) acmFile->bitrate();
+        }
+
+        void AcmSound::rewind() {
+            acmFile->rewind();
+        }
+
+        uint32_t AcmSound::samplesAvailable() {
+            return (uint32_t) acmFile->samplesLeft();
         }
 
         uint32_t AcmSound::readSamples(uint8_t *audioBuffer, uint32_t bytes) {

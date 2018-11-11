@@ -35,8 +35,12 @@ namespace Falltergeist {
     namespace Audio {
         class AcmSound : public ISound {
         public:
-            AcmSound(Format::Acm::File *acmFile);
+            explicit AcmSound(Format::Acm::File *acmFile);
             ~AcmSound() override = default;
+            uint8_t channels() override;
+            uint32_t sampleRate() override;
+            void rewind() override;
+            uint32_t samplesAvailable() override;
             uint32_t readSamples(uint8_t *audioBuffer, uint32_t bytes) override;
         private:
             Format::Acm::File* acmFile = nullptr; // TODO use smart pointer instead

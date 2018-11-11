@@ -34,8 +34,12 @@ namespace Falltergeist {
     namespace Audio {
         class MveSound : public ISound {
         public:
-            MveSound(UI::MvePlayer *mvePlayer);
-            ~MveSound() override;
+            explicit MveSound(UI::MvePlayer *mvePlayer);
+            ~MveSound() override = default;
+            uint8_t channels() override;
+            uint32_t sampleRate() override;
+            void rewind() override;
+            uint32_t samplesAvailable() override;
             uint32_t readSamples(uint8_t *audioBuffer, uint32_t bytes) override;
         private:
             UI::MvePlayer *mvePlayer = nullptr; // TODO replace with smart pointer
