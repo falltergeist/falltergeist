@@ -36,8 +36,7 @@
 // Third party includes
 #include <SDL.h>
 
-namespace Falltergeist
-{
+namespace Falltergeist {
     namespace Audio {
         SdlMixer::SdlMixer() {
             _init();

@@ -19,10 +19,14 @@
 
 #pragma once
 
+// C++ standard includes
 #include <memory>
 #include <string>
 
+// Falltergeist includes
 #include "../Audio/ISound.h"
+
+// Third party includes
 
 namespace Falltergeist {
     namespace UI {
