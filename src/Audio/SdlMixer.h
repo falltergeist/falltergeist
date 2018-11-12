@@ -43,8 +43,7 @@ namespace Falltergeist {
 
                 void playLooped(Channel channel, const std::string& filename) override;
                 void playOnce(Channel channel, const std::string& filename) override;
-                void playLooped(Channel channel, std::shared_ptr<ISound> sound) override;
-                void playOnce(Channel channel, std::shared_ptr<ISound> sound) override;
+                void play(Channel channel, std::shared_ptr<ISound> sound) override;
                 void stopChannel(Channel channel) override;
                 void pauseChannel(Channel channel) override;
                 void resumeChannel(Channel channel) override;

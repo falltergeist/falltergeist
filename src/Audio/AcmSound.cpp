@@ -31,28 +31,28 @@
 
 namespace Falltergeist {
     namespace Audio {
-        AcmSound::AcmSound(Format::Acm::File *acmFile) : acmFile(acmFile) {
-            acmFile->rewind();
+        AcmSound::AcmSound(Format::Acm::File *acmFile) : _acmFile(acmFile) {
+            _acmFile->rewind();
         }
 
         uint8_t AcmSound::channels() {
-            return (uint8_t) acmFile->channels();
+            return (uint8_t) _acmFile->channels();
         }
 
         uint32_t AcmSound::sampleRate() {
-            return (uint32_t) acmFile->bitrate();
+            return (uint32_t) _acmFile->bitrate();
         }
 
         void AcmSound::rewind() {
-            acmFile->rewind();
+            _acmFile->rewind();
         }
 
         uint32_t AcmSound::samplesAvailable() {
-            return (uint32_t) acmFile->samplesLeft();
+            return (uint32_t) _acmFile->samplesLeft();
         }
 
         uint32_t AcmSound::readSamples(uint8_t *audioBuffer, uint32_t bytes) {
-            if (acmFile->samplesLeft() <= 0) {
+            if (_acmFile->samplesLeft() <= 0) {
                 memset(audioBuffer, 0, bytes);
                 return 0;
             }
@@ -60,13 +60,21 @@ namespace Falltergeist {
             Base::Buffer<uint16_t> tmp(bytes / 2);
             uint16_t *sstr = (uint16_t *) audioBuffer;
             // TODO check if requested bytes cout is available
-            acmFile->readSamples(tmp.data(), bytes / 4);
+            _acmFile->readSamples(tmp.data(), bytes / 4);
             for (size_t i = 0; i < bytes / 4; i++) {
                 sstr[i * 2] = tmp[i];
                 sstr[i * 2 + 1] = tmp[i];
             }
 
             return bytes;
+        }
+
+        bool AcmSound::looped() {
+            return _looped;
+        }
+
+        void AcmSound::setLooped(bool value) {
+            _looped = value;
         }
     }
 }

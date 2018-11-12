@@ -42,8 +42,11 @@ namespace Falltergeist {
             void rewind() override;
             uint32_t samplesAvailable() override;
             uint32_t readSamples(uint8_t *audioBuffer, uint32_t bytes) override;
+            bool looped() override;
+            void setLooped(bool value) override;
         private:
-            Format::Acm::File* acmFile = nullptr; // TODO use smart pointer instead
+            Format::Acm::File* _acmFile = nullptr; // TODO use smart pointer instead
+            bool _looped = false;
         };
     }
 }

@@ -119,11 +119,9 @@ namespace Falltergeist {
             if (!acm) {
                 return;
             }
-            if (loop) {
-                playOnce(Channel::Music, std::make_shared<AcmSound>(acm));
-            } else {
-                playLooped(Channel::Music, std::make_shared<AcmSound>(acm));
-            }
+            auto sound = std::make_shared<AcmSound>(acm);
+            sound->setLooped(loop);
+            play(Channel::Music, sound);
         }
 
         void SdlMixer::_playACMSpeech(const std::string &filename) {
@@ -131,7 +129,7 @@ namespace Falltergeist {
             if (!acm) {
                 return;
             }
-            playOnce(Channel::Speech, std::make_shared<AcmSound>(acm));
+            play(Channel::Speech, std::make_shared<AcmSound>(acm));
         }
 
         void SdlMixer::_playACMSound(const std::string &filename) {
@@ -139,7 +137,7 @@ namespace Falltergeist {
             if (!acm) {
                 return;
             }
-            playOnce(Channel::Effects, std::make_shared<AcmSound>(acm));
+            play(Channel::Effects, std::make_shared<AcmSound>(acm));
         }
 
         void SdlMixer::playLooped(Channel channel, const std::string& filename) {
@@ -162,13 +160,8 @@ namespace Falltergeist {
             // TODO implement for different extensions(filetypes)
         }
 
-        void SdlMixer::playOnce(Channel channel, std::shared_ptr<ISound> sound) {
+        void SdlMixer::play(Channel channel, std::shared_ptr<ISound> sound) {
             _sounds.at(channel).push_back(sound);
-        }
-
-        void SdlMixer::playLooped(Channel channel, std::shared_ptr<ISound> sound) {
-            // TODO implement looping
-            playOnce(channel, sound);
         }
 
         void SdlMixer::stopChannel(Channel channel) {

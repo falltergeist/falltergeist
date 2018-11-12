@@ -41,8 +41,11 @@ namespace Falltergeist {
             void rewind() override;
             uint32_t samplesAvailable() override;
             uint32_t readSamples(uint8_t *audioBuffer, uint32_t bytes) override;
+            bool looped() override;
+            void setLooped(bool value) override;
         private:
-            UI::MvePlayer *mvePlayer = nullptr; // TODO replace with smart pointer
+            UI::MvePlayer *_mvePlayer = nullptr; // TODO replace with smart pointer
+            bool _looped = false;
         };
     }
 }

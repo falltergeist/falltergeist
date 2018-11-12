@@ -30,7 +30,7 @@
 
 namespace Falltergeist {
     namespace Audio {
-        MveSound::MveSound(Falltergeist::UI::MvePlayer *mvePlayer) : mvePlayer(mvePlayer) {
+        MveSound::MveSound(Falltergeist::UI::MvePlayer *mvePlayer) : _mvePlayer(mvePlayer) {
         }
 
         uint8_t MveSound::channels() {
@@ -46,16 +46,24 @@ namespace Falltergeist {
         }
 
         uint32_t MveSound::samplesAvailable() {
-            return mvePlayer->samplesLeft();
+            return _mvePlayer->samplesLeft();
         }
 
         uint32_t MveSound::readSamples(uint8_t *audioBuffer, uint32_t bytes) {
-            if (mvePlayer->samplesLeft() <= 0) {
+            if (_mvePlayer->samplesLeft() <= 0) {
                 memset(audioBuffer, 0, bytes);
                 return 0;
             }
 
-            return mvePlayer->getAudio(audioBuffer, bytes);
+            return _mvePlayer->getAudio(audioBuffer, bytes);
+        }
+
+        bool MveSound::looped() {
+            return _looped;
+        }
+
+        void MveSound::setLooped(bool value) {
+            _looped = value;
         }
     }
 }

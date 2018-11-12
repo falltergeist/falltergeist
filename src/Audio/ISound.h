@@ -36,6 +36,8 @@ namespace Falltergeist {
             virtual void rewind() = 0;
             virtual uint32_t samplesAvailable() = 0;
             virtual uint32_t readSamples(uint8_t *audioBuffer, uint32_t bytes) = 0;
+            virtual bool looped() = 0;
+            virtual void setLooped(bool value) = 0;
         };
     }
 }

@@ -154,7 +154,7 @@ namespace Falltergeist
             if (!_started) {
                 auto mvePlayer = dynamic_cast<UI::MvePlayer*>(getUI("movie"));
                 auto mveSound = std::make_shared<Audio::MveSound>(mvePlayer);
-                Game::getInstance()->mixer()->playOnce(Audio::Channel::Music, mveSound);
+                Game::getInstance()->mixer()->play(Audio::Channel::Music, mveSound);
                 _started = true;
             }
             if ((dynamic_cast<UI::MvePlayer*>(getUI("movie")))->finished())
