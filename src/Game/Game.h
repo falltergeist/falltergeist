@@ -32,11 +32,9 @@
 // Third party includes
 #include <SDL.h>
 
-namespace Falltergeist
-{
-    namespace Audio
-    {
-        class Mixer;
+namespace Falltergeist {
+    namespace Audio {
+        class IMixer;
     }
     namespace Event
     {
@@ -119,7 +117,7 @@ namespace Falltergeist
                 Graphics::Renderer* renderer();
                 Time* gameTime();
                 State::Location* locationState();
-                Audio::Mixer* mixer();
+                std::shared_ptr<Audio::IMixer> mixer();
                 Event::Dispatcher* eventDispatcher();
 
                 void setGVAR(unsigned int number, int value);
@@ -141,7 +139,7 @@ namespace Falltergeist
 
                 std::unique_ptr<VFS::VFS> _vfs;
                 std::unique_ptr<Graphics::Renderer> _renderer;
-                std::unique_ptr<Audio::Mixer> _mixer;
+                std::shared_ptr<Audio::IMixer> _mixer;
                 std::unique_ptr<Input::Mouse> _mouse;
                 std::unique_ptr<Settings> _settings;
                 std::unique_ptr<Graphics::AnimatedPalette> _animatedPalette;

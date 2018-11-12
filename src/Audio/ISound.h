@@ -17,32 +17,27 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Related headers
-#include "../../VM/Handler/Opcode80A3Handler.h"
+#pragma once
 
 // C++ standard includes
+#include <cstdint>
 
 // Falltergeist includes
-#include "../../Audio/IMixer.h"
-#include "../../Game/Game.h"
-#include "../../Logger.h"
-#include "../../VM/Script.h"
 
 // Third party includes
 
 namespace Falltergeist {
-    namespace VM {
-        namespace Handler {
-            Opcode80A3::Opcode80A3(VM::Script *script) : OpcodeHandler(script) {
-            }
-
-            void Opcode80A3::_run() {
-                Logger::debug("SCRIPT") << "[80A3] [=] void play_sfx(string* p1)" << std::endl;
-                auto name = _script->dataStack()->popString();
-                Game::Game::getInstance()->mixer()->playOnce(Audio::Channel::Effects, "sound/sfx/" + name + ".acm");
-            }
-        }
+    namespace Audio {
+        class ISound {
+        public:
+            virtual ~ISound() = default;
+            virtual uint8_t channels() = 0;
+            virtual uint32_t sampleRate() = 0;
+            virtual void rewind() = 0;
+            virtual uint32_t samplesAvailable() = 0;
+            virtual uint32_t readSamples(uint8_t *audioBuffer, uint32_t bytes) = 0;
+            virtual bool looped() = 0;
+            virtual void setLooped(bool value) = 0;
+        };
     }
 }
-
-

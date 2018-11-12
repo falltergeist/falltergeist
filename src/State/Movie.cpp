@@ -23,7 +23,8 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../Audio/Mixer.h"
+#include "../Audio/IMixer.h"
+#include "../Audio/MveSound.h"
 #include "../CrossPlatform.h"
 #include "../Event/Keyboard.h"
 #include "../Event/Mouse.h"
@@ -150,9 +151,10 @@ namespace Falltergeist
                 _effect_index++;
             }
 
-            if (!_started)
-            {
-                Game::getInstance()->mixer()->playMovieMusic(dynamic_cast<UI::MvePlayer*>(getUI("movie")));
+            if (!_started) {
+                auto mvePlayer = dynamic_cast<UI::MvePlayer*>(getUI("movie"));
+                auto mveSound = std::make_shared<Audio::MveSound>(mvePlayer);
+                Game::getInstance()->mixer()->play(Audio::Channel::Music, mveSound);
                 _started = true;
             }
             if ((dynamic_cast<UI::MvePlayer*>(getUI("movie")))->finished())
@@ -183,7 +185,7 @@ namespace Falltergeist
 
         void Movie::onVideoFinished()
         {
-            Game::getInstance()->mixer()->stopMusic();
+            Game::getInstance()->mixer()->stopChannel(Audio::Channel::Music);
             Game::getInstance()->mouse()->popState();
 
             // without this the location will be absolutely dark if you didn't interrupted movie play

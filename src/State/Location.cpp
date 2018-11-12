@@ -28,7 +28,7 @@
 #include <memory>
 
 // Falltergeist includes
-#include "../Audio/Mixer.h"
+#include "../Audio/IMixer.h"
 #include "../Event/Mouse.h"
 #include "../Exception.h"
 #include "../Format/Msg/File.h"
@@ -284,7 +284,7 @@ namespace Falltergeist
 
                 if (!it->music.empty() && Game::getInstance()->settings()->musicVolume() > 0.0001) {
                     Logger::info("Location") << "Playing music " << it->music << std::endl;
-                    Game::getInstance()->mixer()->playACMMusic(it->music + ".acm");
+                    Game::getInstance()->mixer()->playOnce(Audio::Channel::Music, it->music + ".acm");
                 } else {
                     Logger::info("Location") << "Map " << mapShortName << " has no music." << std::endl;
                 }
@@ -299,7 +299,7 @@ namespace Falltergeist
                         }
                         if (it != _ambientSfx.cend()) {
                             Logger::info("Location") << "Playing ambient sfx " << it->first << std::endl;
-                            Game::getInstance()->mixer()->playACMSound("sound/sfx/" + it->first + ".acm");
+                            Game::getInstance()->mixer()->playOnce(Audio::Channel::Effects, "sound/sfx/" + it->first + ".acm");
                         } else {
                             Logger::error("Location") << "Could not match ambient sfx for map " << mapShortName
                                                       << " with " << rnd << std::endl;

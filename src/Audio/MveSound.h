@@ -17,32 +17,35 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Related headers
-#include "../../VM/Handler/Opcode80A3Handler.h"
+#pragma once
 
 // C++ standard includes
+#include <memory>
 
 // Falltergeist includes
-#include "../../Audio/IMixer.h"
-#include "../../Game/Game.h"
-#include "../../Logger.h"
-#include "../../VM/Script.h"
+#include "../Audio/ISound.h"
 
 // Third party includes
 
 namespace Falltergeist {
-    namespace VM {
-        namespace Handler {
-            Opcode80A3::Opcode80A3(VM::Script *script) : OpcodeHandler(script) {
-            }
-
-            void Opcode80A3::_run() {
-                Logger::debug("SCRIPT") << "[80A3] [=] void play_sfx(string* p1)" << std::endl;
-                auto name = _script->dataStack()->popString();
-                Game::Game::getInstance()->mixer()->playOnce(Audio::Channel::Effects, "sound/sfx/" + name + ".acm");
-            }
-        }
+    namespace UI {
+        class MvePlayer;
+    }
+    namespace Audio {
+        class MveSound : public ISound {
+        public:
+            explicit MveSound(UI::MvePlayer *mvePlayer);
+            ~MveSound() override = default;
+            uint8_t channels() override;
+            uint32_t sampleRate() override;
+            void rewind() override;
+            uint32_t samplesAvailable() override;
+            uint32_t readSamples(uint8_t *audioBuffer, uint32_t bytes) override;
+            bool looped() override;
+            void setLooped(bool value) override;
+        private:
+            UI::MvePlayer *_mvePlayer = nullptr; // TODO replace with smart pointer
+            bool _looped = false;
+        };
     }
 }
-
-

@@ -23,7 +23,7 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../Audio/Mixer.h"
+#include "../Audio/IMixer.h"
 #include "../functions.h"
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
@@ -357,7 +357,7 @@ namespace Falltergeist
             addUI("music_volume", musicVolumeSlider);
             musicVolumeSlider->changeHandler().add([=](Event::Event* evt)
             {
-                Game::getInstance()->mixer()->setMusicVolume(musicVolumeSlider->value());
+                Game::getInstance()->mixer()->setChannelVolume(Audio::Channel::Music, musicVolumeSlider->value());
             });
 
             // SOUND EFFECTS VOLUME SLIDER

@@ -24,7 +24,7 @@
 #include <sstream>
 
 // Falltergeist includes
-#include "../Audio/Mixer.h"
+#include "../Audio/IMixer.h"
 #include "../Event/State.h"
 #include "../functions.h"
 #include "../Game/Game.h"
@@ -54,7 +54,7 @@ namespace Falltergeist
 
         MainMenu::~MainMenu()
         {
-            Game::getInstance()->mixer()->stopMusic();
+            Game::getInstance()->mixer()->stopChannel(Audio::Channel::Music);
         }
 
         void MainMenu::init()
@@ -190,7 +190,7 @@ namespace Falltergeist
         void MainMenu::onExitStart(Event::State* event)
         {
             fadeDoneHandler().clear();
-            Game::getInstance()->mixer()->stopMusic();
+            Game::getInstance()->mixer()->stopChannel(Audio::Channel::Music);
             Game::getInstance()->quit();
         }
 
@@ -270,11 +270,10 @@ namespace Falltergeist
             }
         }
 
-        void MainMenu::onStateActivate(Event::State* event)
-        {
+        void MainMenu::onStateActivate(Event::State *event) {
             Game::getInstance()->mouse()->setState(Input::Mouse::Cursor::BIG_ARROW);
-            Game::getInstance()->mixer()->playACMMusic("07desert.acm",true);
-            Game::getInstance()->renderer()->fadeIn(0,0,0,1000);
+            Game::getInstance()->mixer()->playLooped(Audio::Channel::Music, "07desert.acm");
+            Game::getInstance()->renderer()->fadeIn(0, 0, 0, 1000);
         }
     }
 }

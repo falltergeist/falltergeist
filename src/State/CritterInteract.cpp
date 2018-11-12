@@ -25,6 +25,7 @@
 #include <memory>
 
 // Falltergeist includes
+#include "../Audio/IMixer.h"
 #include "../Format/Lst/File.h"
 #include "../Format/Lip/File.h"
 #include "../Game/CritterObject.h"
@@ -43,7 +44,6 @@
 #include "../UI/Animation.h"
 #include "../UI/AnimationFrame.h"
 #include "../UI/AnimationQueue.h"
-#include "../Audio/Mixer.h"
 
 // Third party includes
 
@@ -73,30 +73,24 @@ namespace Falltergeist
         void CritterInteract::onStateActivate(Event::State* event)
         {
             Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::BIG_ARROW);
-            if (_headID >= 0)
-            {
-                // stop music completely
-                // TODO: because Dialog state is activated *before* Interact, this stops speech too =/
-                //Game::getInstance()->mixer()->stopMusic();
-            }
-            else
-            {
+            if (_headID >= 0) {
+                Game::getInstance()->mixer()->pauseChannel(Audio::Channel::Music);
+            } else {
                 // lower music volume
-                Game::getInstance()->mixer()->setMusicVolume(Game::getInstance()->mixer()->musicVolume()/2.0);
+                auto mixer = Game::getInstance()->mixer();
+                mixer->setChannelVolume(Audio::Channel::Music, mixer->channelVolume(Audio::Channel::Music) / 2.0);
             }
         }
 
         void CritterInteract::onStateDeactivate(Event::State* event)
         {
             Game::getInstance()->mouse()->popState();
-            if (_headID >= 0)
-            {
-                Game::getInstance()->mixer()->playACMMusic(Game::getInstance()->mixer()->lastMusic(), true);
-            }
-            else
-            {
+            if (_headID >= 0) {
+                Game::getInstance()->mixer()->resumeChannel(Audio::Channel::Music);
+            } else {
                 // restore music volume
-                Game::getInstance()->mixer()->setMusicVolume(Game::getInstance()->mixer()->musicVolume()*2.0);
+                auto mixer = Game::getInstance()->mixer();
+                mixer->setChannelVolume(Audio::Channel::Music, mixer->channelVolume(Audio::Channel::Music) * 2.0);
             }
         }
 
@@ -240,10 +234,9 @@ namespace Falltergeist
             _script = script;
         }
 
-        void CritterInteract::playSpeech(const std::string &speech)
-        {
+        void CritterInteract::playSpeech(const std::string &speech) {
             _fidgetTimer.stop();
-            Game::getInstance()->mixer()->playACMSpeech(_headName+"/"+speech+".acm");
+            Game::getInstance()->mixer()->playOnce(Audio::Channel::Speech, _headName + "/" + speech + ".acm");
             // start timer
             _startTime = SDL_GetTicks();
             _nextIndex = 0;
@@ -329,7 +322,7 @@ namespace Falltergeist
 
         void CritterInteract::switchSubState(CritterInteract::SubState state)
         {
-            Game::getInstance()->mixer()->stopMusic();
+            Game::getInstance()->mixer()->stopChannel(Audio::Channel::Music);
             _phase = Phase::FIDGET;
             _fidgetTimer.start(0);
             if (_state!=SubState::NONE)
@@ -356,7 +349,7 @@ namespace Falltergeist
 
         void CritterInteract::transition(Reaction reaction)
         {
-            Game::getInstance()->mixer()->stopMusic();
+            Game::getInstance()->mixer()->stopChannel(Audio::Channel::Music);
             auto newmood = _mood;
 
             if (headID()!= -1)
@@ -453,8 +446,4 @@ namespace Falltergeist
             script()->run();
         }
     }
-
-
-
-
 }
