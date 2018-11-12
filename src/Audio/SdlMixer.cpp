@@ -22,6 +22,7 @@
 
 // C++ standard includes
 #include <string>
+#include <iostream>
 
 // Falltergeist includes
 #include "../Audio/AcmSound.h"
@@ -64,15 +65,8 @@ namespace Falltergeist {
             want.channels = 2;
             want.samples = Game::getInstance()->settings()->audioBufferSize();
             want.callback = [](void* userdata, Uint8* stream, int len) {
-                // some silence first
-                memset(stream, 0, len);
                 auto mixer = (SdlMixer*) userdata;
-                for (auto &map : mixer->_sounds) {
-                    //auto channel = map.first;
-                    for (auto &sound : map.second) {
-                        sound->readSamples(stream, (uint32_t)len);
-                    }
-                }
+                mixer->_mixChannels(stream, (uint32_t)len);
             };
             want.userdata = (void*) this;
 
@@ -91,27 +85,12 @@ namespace Falltergeist {
         }
 
         void SdlMixer::_initChannels() {
-            _volumes.insert(std::make_pair<Channel, double>(Channel::Music, 1.0f));
-            _volumes.insert(std::make_pair<Channel, double>(Channel::Speech, 1.0f));
-            _volumes.insert(std::make_pair<Channel, double>(Channel::Effects, 1.0f));
-            _sounds.insert(
-                std::make_pair<Channel, std::list<std::shared_ptr<ISound>>>(
-                    Channel::Music,
-                    {}
-                )
-            );
-            _sounds.insert(
-                std::make_pair<Channel, std::list<std::shared_ptr<ISound>>>(
-                    Channel::Speech,
-                    {}
-                )
-            );
-            _sounds.insert(
-                std::make_pair<Channel, std::list<std::shared_ptr<ISound>>>(
-                    Channel::Effects,
-                    {}
-                )
-            );
+            _volumes[Channel::Music] = 0.0f;
+            _volumes[Channel::Speech] = 0.0f;
+            _volumes[Channel::Effects] = 0.0f;
+            _sounds[Channel::Music] = {};
+            _sounds[Channel::Speech] = {};
+            _sounds[Channel::Effects] = {};
         }
 
         void SdlMixer::_playACMMusic(const std::string &filename, bool loop) {
@@ -187,11 +166,12 @@ namespace Falltergeist {
 
         void SdlMixer::setChannelVolume(Channel channel, double volume) {
             volume = _normalizeVolume(volume);
-            _volumes.at(channel) = volume;
+            _volumes[channel] = volume;
         }
 
         double SdlMixer::channelVolume(Channel channel) {
-            return _volumes.at(channel);
+            std::cout << _volumes[channel] << std::endl;
+            return _volumes[channel];
         }
 
         double SdlMixer::_normalizeVolume(double volume) {
@@ -202,6 +182,45 @@ namespace Falltergeist {
                 volume = 1.0f;
             }
             return volume;
+        }
+
+        void SdlMixer::_mixChannels(uint8_t *stream, uint32_t bytes)
+        {
+            auto master = new uint8_t[bytes]{0};
+            for (auto &map : _sounds) {
+
+                auto channel = map.first;
+                // Mix each sound from the channel to master channel
+                for (auto &sound : map.second) {
+                    auto buffer = new uint8_t[bytes]{0};
+                    sound->readSamples(buffer, bytes);
+                    _mixBuffers(channelVolume(channel), (int16_t*) buffer, (int16_t*) master, bytes/2);
+                    delete [] buffer;
+                }
+
+                // Remove sounds that are finished
+                map.second.remove_if([](std::shared_ptr<ISound> sound) {
+                    if (sound->samplesAvailable() == 0) {
+                        if (sound->looped()) {
+                            sound->rewind();
+                            return false;
+                        }
+                        return true;
+                    }
+                    return false;
+                });
+            }
+            memset(stream, 0, bytes);
+            _mixBuffers(masterVolume(), (int16_t*) master, (int16_t*) stream, bytes/2);
+            delete [] master;
+        }
+
+        void SdlMixer::_mixBuffers(double volume, int16_t *source, int16_t *destination, uint32_t samples) {
+            // adjust volume and put to destination
+            for (uint32_t i = 0; i < samples; i++) {
+                int16_t adjusted = source[i] * volume;
+                destination[i] += adjusted;
+            }
         }
     }
 }

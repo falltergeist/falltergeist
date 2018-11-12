@@ -63,6 +63,8 @@ namespace Falltergeist {
                 std::map<Channel, double> _volumes;
                 std::map<Channel, std::list<std::shared_ptr<ISound>>> _sounds;
                 double _normalizeVolume(double volume);
+                void _mixChannels(uint8_t *stream, uint32_t bytes);
+                void _mixBuffers(double volume, int16_t *source, int16_t *destination, uint32_t samples);
         };
     }
 }
