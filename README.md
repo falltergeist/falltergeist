@@ -7,7 +7,6 @@ https://falltergeist.org/
 ## Dependencies
 
 - [SDL2](http://www.libsdl.org)
-- [SDL2\_mixer](http://www.libsdl.org/projects/SDL_mixer/)
 - [SDL2\_image](http://www.libsdl.org/projects/SDL_image/)
 - [GLEW](http://glew.sourceforge.net/)
 - [GLM](http://glm.g-truc.net/)

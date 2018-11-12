@@ -44,8 +44,7 @@ namespace Falltergeist {
         }
 
         SdlMixer::~SdlMixer() {
-            Mix_HookMusic(NULL, NULL);
-            Mix_CloseAudio();
+            SDL_CloseAudio();
         }
 
         void SdlMixer::_init() {
@@ -56,14 +55,38 @@ namespace Falltergeist {
             }
             Logger::info() << message + "[OK]" << std::endl;
 
-            message = "[AUDIO] - Mix_OpenAudio - ";
-            if (Mix_OpenAudio(22050, AUDIO_S16LSB, 2, Game::getInstance()->settings()->audioBufferSize()) < 0) {
+            message = "[AUDIO] - Sdl_OpenAudio - ";
+            SDL_AudioSpec want, have;
+
+            SDL_memset(&want, 0, sizeof(want));
+            want.freq = 22050;
+            want.format = AUDIO_S16LSB;
+            want.channels = 2;
+            want.samples = Game::getInstance()->settings()->audioBufferSize();
+            want.callback = [](void* userdata, Uint8* stream, int len) {
+                // some silence first
+                memset(stream, 0, len);
+                auto mixer = (SdlMixer*) userdata;
+                for (auto &map : mixer->_sounds) {
+                    //auto channel = map.first;
+                    for (auto &sound : map.second) {
+                        sound->readSamples(stream, (uint32_t)len);
+                    }
+                }
+            };
+            want.userdata = (void*) this;
+
+            if (SDL_OpenAudio(&want, &have) < 0) {
                 Logger::critical() << message + "[FAIL]" << std::endl;
-                throw Exception(Mix_GetError());
+                throw Exception(SDL_GetError());
             }
+
+            if (have.format != want.format) {
+                Logger::critical() << message + "[FAIL]" << std::endl;
+                throw Exception("We didn't get desired audio format.");
+            }
+            SDL_PauseAudio(0);
             Logger::info() << message + "[OK]" << std::endl;
-            int frequency, channels;
-            Mix_QuerySpec(&frequency, &_format, &channels);
             _initChannels();
         }
 
@@ -140,13 +163,7 @@ namespace Falltergeist {
         }
 
         void SdlMixer::playOnce(Channel channel, std::shared_ptr<ISound> sound) {
-            // TODO replace with placing sound to given channel map
-            _sound = sound;
-            Mix_HookMusic(NULL, NULL);
-            Mix_HookMusic([](void *udata, Uint8 *stream, int len) {
-                auto sound = (ISound*)(udata);
-                sound->readSamples(stream, (uint32_t)len);
-            }, reinterpret_cast<void *>(sound.get()));
+            _sounds.at(channel).push_back(sound);
         }
 
         void SdlMixer::playLooped(Channel channel, std::shared_ptr<ISound> sound) {
@@ -156,8 +173,6 @@ namespace Falltergeist {
 
         void SdlMixer::stopChannel(Channel channel) {
             // TODO
-            Mix_HookMusic(NULL, NULL);
-            //Mix_HaltChannel(-1);
         }
 
         void SdlMixer::pauseChannel(Channel channel) {

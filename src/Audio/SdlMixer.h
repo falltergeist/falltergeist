@@ -30,7 +30,6 @@
 #include "../Audio/IMixer.h"
 
 // Third party includes
-#include <SDL_mixer.h>
 
 namespace Falltergeist {
     namespace UI {
@@ -64,8 +63,6 @@ namespace Falltergeist {
                 double _masterVolume = 1.0;
                 std::map<Channel, double> _volumes;
                 std::map<Channel, std::list<std::shared_ptr<ISound>>> _sounds;
-                SDL_AudioFormat _format;
-                std::shared_ptr<ISound> _sound = nullptr;
                 double _normalizeVolume(double volume);
         };
     }

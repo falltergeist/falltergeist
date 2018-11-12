@@ -2,7 +2,6 @@
 zlib/1.2.11@lasote/stable
 SDL2/2.0.5@lasote/stable
 SDL2_image/2.0.1@lasote/stable
-SDL2_mixer/2.0.1@a_teammate/testing
 glew/2.0.0@coding3d/stable
 glm/0.9.7.6@dlarudgus20/stable
 
@@ -13,7 +12,6 @@ cmake
 SDL2:directx=False
 SDL2:shared=False
 SDL2_image:shared=False
-SDL2_mixer:shared=False
 libjpeg-turbo:shared=True
 libpng:shared=True
 zlib:shared=True
