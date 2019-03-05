@@ -113,16 +113,15 @@ void Hexagon::setHeuristic(unsigned int value)
 
 bool Hexagon::canWalkThru()
 {
-    bool canWalkThru = true;
-    for (auto object : _objects)
-    {
-        if (auto door = dynamic_cast<Game::DoorSceneryObject*>(object))
-        {
+	// Search current hex...
+    for (auto object : _objects) {
+    	// If there's a door on this hex...
+        if (auto door = dynamic_cast<Game::DoorSceneryObject*>(object)) {
+        	// Return the walkThru state of the door
             return door->canWalkThru();
         }
-        if (!object->canWalkThru()) canWalkThru = false;
     }
-    return canWalkThru;
+    return true; // In any other situation
 }
 
 bool Hexagon::inRender()
