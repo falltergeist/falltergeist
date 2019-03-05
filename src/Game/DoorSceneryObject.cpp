@@ -48,18 +48,17 @@ namespace Falltergeist
             return _opened;
         }
 
-        void DoorSceneryObject::setOpened(bool value)
-        {
-        	// Don't change if door is locked.
-        	if (_locked == false) {
-        		_opened = value;
-				setCanLightThru(_opened);
+void DoorSceneryObject::setOpened(bool value) {
+    // Don't change if door is locked.
+    if (_locked == false) {
+        _opened = value;
+        setCanLightThru(_opened);
 
-				if (auto queue = dynamic_cast<UI::AnimationQueue*>(this->ui())) {
-					queue->currentAnimation()->setReverse(value);
-				}
-        	}
+        if (auto queue = dynamic_cast<UI::AnimationQueue*>(this->ui())) {
+            queue->currentAnimation()->setReverse(value);
         }
+    }
+}
 
         bool DoorSceneryObject::locked() const
         {
