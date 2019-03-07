@@ -42,27 +42,33 @@ struct HeuristicComparison : public std::binary_function<Hexagon*, Hexagon*, boo
     }
 };
 
-
+// TODO: Refactor this ctor to make it more understandable.
 HexagonGrid::HexagonGrid()
 {
     // Creating 200x200 hexagonal map
     unsigned int index = 0;
-    for (unsigned int q = 0; q != 200; ++q)
+    const unsigned int xMod = HEX_WIDTH / 2;  // x offset
+    const unsigned int yMod = HEX_HEIGHT / 2; // y offset
+
+    for (unsigned int hy = 0; hy != GRID_HEIGHT; ++hy) // rows
     {
-        for (unsigned int p = 0; p != 200; ++p, ++index)
+        for (unsigned int hx = 0; hx != GRID_WIDTH; ++hx, ++index) // columns
         {
             _hexagons.emplace_back(std::make_unique<Hexagon>(index));
             auto& hexagon = _hexagons.back();
-            int x = 48*100 + 16*(q+1) - 24*p;
-            int y = (q+1)*12 + 6*p + 12;
-            if (p&1)
-            {
-                x -= 8;
-                y -= 6;
-            }
-
-            hexagon->setCubeX(q - (p + (p&1))/2);
-            hexagon->setCubeZ(p);
+            // Calculate hex's actual position
+            const bool oddCol = hx & 1;
+            const int  oddMod = hy + 1;
+            const int x = (48 * (GRID_WIDTH / 2))
+                        + (HEX_WIDTH * oddMod)
+                        - ((HEX_HEIGHT * 2) * hx)
+                        - (xMod * oddCol);
+            const int y = (oddMod * HEX_HEIGHT)
+                        + (yMod * hx)
+                        + HEX_HEIGHT
+                        - (yMod * oddCol);
+            hexagon->setCubeX(hy - (hx + oddCol) / 2);
+            hexagon->setCubeZ(hx);
             hexagon->setCubeY(-hexagon->cubeX() - hexagon->cubeZ());
 
             hexagon->setPosition({x, y});
@@ -70,43 +76,51 @@ HexagonGrid::HexagonGrid()
     }
 
     // Creating links between hexagons
-    for (index = 0; index != 200*200; ++index)
+    for (index = 0; index != GRID_WIDTH * GRID_HEIGHT; ++index)
     {
+       /* North: index - 200 *
+        * East:  index - 1   *
+        * South: index + 200 *
+        * West:  index + 1   */
         auto hexagon = _hexagons.at(index).get();
 
-        unsigned int q = index/200; // hexagonal y
-        unsigned int p = index%200; // hexagonal x
+        const bool oddCol = index & 1;
+        const unsigned hy = index / GRID_HEIGHT; // hexagonal y
+        const unsigned hx = index % GRID_WIDTH;  // hexagonal x
+        const unsigned leftMod  = hx + 1;
+        const unsigned rightMod = hx - 1;
+        const unsigned botMod = (hy + !oddCol) * GRID_HEIGHT;
+        const unsigned topMod = (hy -  oddCol) * GRID_HEIGHT;
+        // Bottom
+        const unsigned indexBot  = (hy + 1) * GRID_HEIGHT + hx; // index 1
+        // Left
+        const unsigned indexBotLeft = botMod + leftMod; // index 2
+        const unsigned indexTopLeft = topMod + leftMod; // index 3
+        // Top
+        const unsigned indexTop = (hy - 1) * GRID_HEIGHT + hx; // index 4
+        // Right
+        const unsigned indexBotRight  = botMod + rightMod; // index 5
+        const unsigned indexTopRight  = topMod + rightMod; // index 6
 
-        unsigned index1 = (q + 1)*200 + p;
-        unsigned index4 = (q-1)*200 + p;
-        unsigned int index2, index3, index5, index6;
-        if (index&1)
-        {
-            index2 = q*200 + p-1;
-            index3 = (q-1)*200 + p-1;
-            index5 = (q-1)*200 + p+1;
-            index6 = q*200 + p+1;
-        }
-        else
-        {
-            index2 = (q+1)*200 + p-1;
-            index3 = q*200 + p-1;
-            index5 = q*200 + p+1;
-            index6 = (q+1)*200 + p+1;
-        }
-
-        if (index1 < _hexagons.size()) hexagon->neighbors()->push_back(_hexagons.at(index1).get());
-        if (index2 < _hexagons.size()) hexagon->neighbors()->push_back(_hexagons.at(index2).get());
-        if (index3 < _hexagons.size()) hexagon->neighbors()->push_back(_hexagons.at(index3).get());
-        if (index4 < _hexagons.size()) hexagon->neighbors()->push_back(_hexagons.at(index4).get());
-        if (index5 < _hexagons.size()) hexagon->neighbors()->push_back(_hexagons.at(index5).get());
-        if (index6 < _hexagons.size()) hexagon->neighbors()->push_back(_hexagons.at(index6).get());
+        const unsigned gridSize = GRID_HEIGHT * GRID_WIDTH;
+        std::array<Hexagon*, HEX_SIDES>& neighbor = hexagon->neighbors();
+        // Don't get a neighbour if at the map's borders
+        if (indexBot < gridSize)
+            neighbor[0] = _hexagons.at(indexBot).get();
+        if (indexBotLeft < gridSize)
+            neighbor[1] = _hexagons.at(indexBotLeft).get();
+        if (indexTopLeft < gridSize)
+            neighbor[2] = _hexagons.at(indexTopLeft).get();
+        if (indexTop < gridSize)
+            neighbor[3] = _hexagons.at(indexTop).get();
+        if (indexBotRight < gridSize)
+            neighbor[4] = _hexagons.at(indexBotRight).get();
+        if (indexTopRight < gridSize)
+            neighbor[5] = _hexagons.at(indexTopRight).get();
     }
 }
 
-HexagonGrid::~HexagonGrid()
-{
-}
+HexagonGrid::~HexagonGrid() {}
 
 Hexagon* HexagonGrid::at(size_t index)
 {
@@ -118,10 +132,10 @@ Hexagon* HexagonGrid::hexagonAt(const Point& pos)
     for (auto& hexagon : _hexagons)
     {
         auto hexPos = hexagon->position();
-        if (pos.x() >= hexPos.x() - 16
-            && pos.x() < hexPos.x() + 16
-            && pos.y() >= hexPos.y() - 8
-            && pos.y() < hexPos.y() + 4)
+        if (pos.x() >= hexPos.x() - HEX_WIDTH &&
+            pos.x() <  hexPos.x() + HEX_WIDTH &&
+            pos.y() >= hexPos.y() - 8 &&
+            pos.y() <  hexPos.y() + 4)
         {
             return hexagon.get();
         }
@@ -139,16 +153,16 @@ std::vector<Hexagon*> HexagonGrid::findPath(Hexagon* from, Hexagon* to)
     Hexagon* current = nullptr;
     std::vector<Hexagon*> result;
     std::priority_queue<Hexagon*, std::vector<Hexagon*>, HeuristicComparison> unvisited;
-    unsigned int cameFrom[200*200] = {};
-    unsigned int costSoFar[200*200] = {};
+    unsigned int cameFrom[GRID_HEIGHT * GRID_WIDTH]  = {};
+    unsigned int costSoFar[GRID_HEIGHT * GRID_WIDTH] = {};
 
     // if we can't go to the location
-    // @todo remove when path will have lenght restriction
+    // @todo remove when path will have length restriction
     if (!to->canWalkThru()) return result;
 
     unvisited.push(from);
 
-    cameFrom[from->number()] = 0;
+    cameFrom[from->number()]  = 0;
     costSoFar[from->number()] = 0;
 
 
@@ -159,22 +173,29 @@ std::vector<Hexagon*> HexagonGrid::findPath(Hexagon* from, Hexagon* to)
         // search limit
         if (costSoFar[current->number()] >= 100) break;
 
-        for (Hexagon* neighbor : *current->neighbors())
+        std::array<Hexagon*, HEX_SIDES>& neighbor = current->neighbors();
+        // look to each adjacent hex...
+        for (int i = 0; i < HEX_SIDES; i++)
         {
-            if (!neighbor->canWalkThru()) continue;
+            // Does the hex exist?
+            if (neighbor[i] == nullptr) continue;
+            // Is that hex blocked?
+            if (!neighbor[i]->canWalkThru()) continue;
 
+            // This hex is a viable path. But is it the shortest?
+            auto &neighborCost   = costSoFar[neighbor[i]->number()];
             unsigned int newCost = costSoFar[current->number()] + 1;
-            auto &heighborCost = costSoFar[neighbor->number()];
-            if (heighborCost == 0 || newCost < heighborCost)
+
+            if (neighborCost == 0 || newCost < neighborCost)
             {
                 // add hexagon to unvisited queue only once and don't change heuristic
-                if (heighborCost == 0)
+                if (neighborCost == 0)
                 {
-                    neighbor->setHeuristic(distance(neighbor, to) + newCost);
-                    unvisited.push(neighbor);
+                    neighbor[i]->setHeuristic(distance(neighbor[i], to) + newCost);
+                    unvisited.push(neighbor[i]);
                 }
-                heighborCost = newCost;
-                cameFrom[neighbor->number()] = current->number();
+                neighborCost = newCost;
+                cameFrom[neighbor[i]->number()] = current->number();
             }
         }
     }

@@ -21,6 +21,7 @@
 #define FALLTERGEIST_HEXAGONGRID_H
 
 // C++ standard includes
+#include <array>
 #include <vector>
 
 // Falltergeist includes
@@ -28,6 +29,10 @@
 #include "../Graphics/Point.h"
 
 // Third party includes
+
+
+#define GRID_WIDTH 200
+#define GRID_HEIGHT 200
 
 namespace Falltergeist
 {
@@ -51,7 +56,7 @@ public:
     void initLight(Hexagon* hex, bool add = true);
 
 protected:
-    HexagonVector _hexagons;
+    HexagonVector _hexagons; // The 200x200 grid
 };
 
 }
