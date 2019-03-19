@@ -1,0 +1,21 @@
+image: gcc
+
+build:
+  stage: build
+  # before_script: 
+    - apt update && apt install -y libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libglew-dev libglm-dev zlib1g-dev cmake make g++
+  script: 
+    - cmake . && make
+  artifacts:
+    paths:
+      - bin
+  # depending on your build setup it's most likely a good idea to cache outputs to reduce the build time
+  cache:
+    paths:
+      - "*.o"
+
+# run tests using the binary built before
+# test:
+  # stage: test
+  # script:
+    # - ./runmytests.sh
