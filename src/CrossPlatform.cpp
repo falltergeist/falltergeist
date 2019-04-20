@@ -423,12 +423,18 @@ std::vector<std::string> CrossPlatform::getDataPaths()
         _dataPaths.push_back(std::string(maybeDataHome) + "/falltergeist");
     }
 
-    std::string sharedir = getExecutableDirectory()+"/../share/falltergeist";
-
-    DIR *pxDir = opendir(sharedir.c_str());
-    if(pxDir) {
+    std::string sharedir = getExecutableDirectory() + "/../share/falltergeist";
+    DIR *pShareDir = opendir(sharedir.c_str());
+    if (pShareDir) {
         _dataPaths.push_back(sharedir.c_str());
-        closedir(pxDir);
+        closedir(pShareDir);
+    }
+
+    std::string parentdir = getExecutableDirectory() + "/..";
+    DIR *pParentDir = opendir(parentdir.c_str());
+    if (pParentDir) {
+        _dataPaths.push_back(parentdir.c_str());
+        closedir(pParentDir);
     }
 #else
     _dataPaths.push_back(getConfigPath());
