@@ -1,5 +1,6 @@
-0.3.2 Under development
+Under development
 =======================
+- [feature] Search data files in parent dir too (alexeevdv)
 
 0.3.1 (2018-01-14)
 =======================
@@ -13,7 +14,6 @@
 - [bugfix][#532] Missing break statements are added in Opcode8039 switch cases (alexeevdv)
 - [bugfix][#547] segafult when move between locations (alexeevdv)
 - [feature] Ability to use skills on objects (alexeevdv)
-- [feature] Search data files in parent dir too (alexeevdv)
 
 0.3.0 (2016-03-16)
 =======================
