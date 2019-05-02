@@ -532,8 +532,8 @@ namespace Falltergeist
         // for different animation cycles.
         void CritterObject::onMovementAnimationFrame(Event::Event* event)
         {
-            auto animation = dynamic_cast<UI::Animation*>(ui());
-            auto curFrameOfs = animation->frameOffset();
+            UI::Animation *animation = dynamic_cast<UI::Animation*>(ui());
+            Point curFrameOfs = animation->frameOffset();
             if (isOutsideOfHexForDirection(curFrameOfs, _orientation)) {
                 // if we stepped too much away from current hex center, switch to the next hex
                 auto moveQueue = movementQueue();
@@ -553,6 +553,7 @@ namespace Falltergeist
                 }
                 if (moveQueue->empty()) {
                     _moving = false;
+                    animation = dynamic_cast<UI::Animation*>(ui());
                     animation->stop();
                     setActionAnimation("aa")->stop();
                     _setupNextIdleAnim();
