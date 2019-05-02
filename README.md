@@ -32,3 +32,14 @@ or mount CD-ROM with original game, then run
 ```
 ./falltergeist
 ```
+
+## Development roadmap
+
+This is a pretty highlevel roadmap to get to a playable game. The idea behind it is to step by step get closer to the full game.
+
+- Worldmap support
+- Elevators
+- NPCs
+- Combat AI
+- Full scripting support
+- Skills
