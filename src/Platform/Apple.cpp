@@ -1,5 +1,7 @@
 #if defined (__APPLE__)
 
+#include <string>
+#include <vector>
 #include <mach/mach_time.h>
 #include <sys/stat.h>
 #include <sys/types.h>
@@ -37,9 +39,38 @@ namespace Falltergeist
             return static_cast<uint32_t>(((double)time * (double)timebase.numer) / ((double)timebase.denom));
         }
 
-        std::string Apple::applicationDataPath()
+        bool Falltergeist::Platform::Apple::createDirectory(std::string path)
         {
-            return getHomeDirectory() + "/Library/Application Support/falltergeist";
+            Logger::error() << "Create directory is not supported" << std::endl;
+            return false;
+        }
+
+        bool Falltergeist::Platform::Apple::fileExists(std::string path)
+        {
+            Logger::error() << "File exists is not supported" << std::endl;
+            return false;
+        }
+
+        std::string Falltergeist::Platform::Apple::applicationConfigDirectory()
+        {
+            return homeDirectory() + "/Library/Application Support/falltergeist";
+        }
+
+        std::string Falltergeist::Platform::Apple::applicationDataDirectory()
+        {
+            return homeDirectory() + "/Library/Application Support/falltergeist";
+        }
+
+        std::vector <std::string> Falltergeist::Platform::Apple::listDirectory(std::string path)
+        {
+            Logger::error() << "Directory listing is not supported" << std::endl;
+            return std::vector<std::string>();
+        }
+
+        std::string Apple::homeDirectory()
+        {
+            char *cwd = getenv("HOME");
+            return std::string(cwd);
         }
     }
 }
