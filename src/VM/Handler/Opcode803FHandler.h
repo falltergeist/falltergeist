@@ -23,7 +23,7 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../VM/OpcodeHandler.h"
+#include "../../VM/IFalloutOpcode.h"
 
 // Third party includes
 
@@ -35,7 +35,7 @@ namespace Falltergeist {
              *
              * This opcode represents logical OR operation. It tooks 2 boolean values from the stack and pushes boolean value of logical OR operation
              */
-            class Opcode803F : public OpcodeHandler {
+            class Opcode803F : virtual public IFalloutOpcode {
             public:
                 Opcode803F(std::shared_ptr<VM::Script> script);;
 

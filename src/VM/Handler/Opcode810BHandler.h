@@ -23,14 +23,14 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../VM/OpcodeHandler.h"
+#include "../../VM/IFalloutOpcode.h"
 
 // Third party includes
 
 namespace Falltergeist {
     namespace VM {
         namespace Handler {
-            class Opcode810B : public OpcodeHandler {
+            class Opcode810B : virtual public IFalloutOpcode {
             public:
                 Opcode810B(std::shared_ptr<VM::Script> script);;
 
