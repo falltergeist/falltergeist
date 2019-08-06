@@ -79,6 +79,7 @@
 #include "../UI/Tile.h"
 #include "../UI/TileMap.h"
 #include "../VM/Script.h"
+#include "../VM/IFalloutValue.h"
 
 // Third party includes
 
@@ -942,7 +943,7 @@ namespace Falltergeist
             return _location->MVARS()->at(number);
         }
 
-        std::map<std::string, std::shared_ptr<VM::IFalloutStackValue>> *Location::EVARS()
+        std::map<std::string, std::shared_ptr<VM::IFalloutValue>> *Location::EVARS()
         {
             return &_EVARS;
         }

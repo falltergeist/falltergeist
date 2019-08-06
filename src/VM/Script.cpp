@@ -263,5 +263,33 @@ namespace Falltergeist {
         std::shared_ptr<Game::DudeObject> Script::player() {
             return Game::getInstance()->player();
         }
+
+        void Script::stopExecution() {
+
+        }
+
+        std::shared_ptr<IFalloutProcedure> Script::getProcedureByIndex(unsigned int index) const {
+            return std::shared_ptr<IFalloutProcedure>();
+        }
+
+        std::string Script::getIdentifierByIndex(unsigned int index) const {
+            return std::__cxx11::string();
+        }
+
+        unsigned int Script::dynamicVarStackBase() const {
+            return 0;
+        }
+
+        void Script::setDynamicVarStackBase(unsigned int stackBase) {
+
+        }
+
+        unsigned int Script::scriptVarStackBase() const {
+            return 0;
+        }
+
+        void Script::setScriptVarStackBase(unsigned int stackBase) {
+
+        }
     }
 }

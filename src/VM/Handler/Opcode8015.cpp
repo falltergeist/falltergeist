@@ -1,6 +1,9 @@
+#include "../../Game/Game.h"
+#include "../../State/Location.h"
 #include "../../VM/Handler/Opcode8015.h"
 #include "../../VM/IFalloutContext.h"
 #include "../../VM/IFalloutStack.h"
+#include "../../VM/IFalloutValue.h"
 
 namespace Falltergeist
 {

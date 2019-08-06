@@ -10,7 +10,8 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            void Opcode80A3::applyTo(std::shared_ptr<IFalloutContext> context) {
+            void Opcode80A3::applyTo(std::shared_ptr<IFalloutContext> context)
+            {
                 auto name = _script->dataStack()->popString();
                 Game::Game::getInstance()->mixer()->playACMSound("sound/sfx/" + name + ".acm");
             }
@@ -20,7 +21,8 @@ namespace Falltergeist
                 return 0x80A3;
             }
 
-            std::string Opcode80A3::name() {
+            std::string Opcode80A3::name()
+            {
                 return "void play_sfx(string* p1)";
             }
 

@@ -1,54 +1,26 @@
-/*
- * Copyright 2012-2014 Falltergeist Developers.
- *
- * This file is part of Falltergeist.
- *
- * Falltergeist is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Falltergeist is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
- */
-#ifndef FALLTERGEIST_VM_IFALLOUTVALUE_H
-#define FALLTERGEIST_VM_IFALLOUTVALUE_H
+#pragma once
 
-// C++ standard includes
 #include <memory>
 #include <string>
 
-// Falltergeist includes
-
-// Third party includes
-
-namespace Falltergeist {
-    namespace VM {
-        class IFalloutValue {
-        public:
-            enum class Type {
-                INTEGER = 1,
-                FLOAT,
-                STRING,
-                OBJECT
-            };
-
-            virtual ~IFalloutValue() = default;
-
-            virtual int asInteger() const = 0;
-
-            virtual std::string asString() const = 0;
-
-            virtual Type type() const = 0;
-
-            virtual std::shared_ptr<IFalloutValue> add(std::shared_ptr<IFalloutValue> value) const = 0;
+namespace Falltergeist
+{
+    namespace VM
+    {
+        class IFalloutValue
+        {
+            public:
+                enum class Type {
+                    INTEGER = 1,
+                    FLOAT,
+                    STRING,
+                    OBJECT
+                };
+                virtual int asInteger() const = 0;
+                virtual float asFloat() const = 0;
+                virtual std::string asString() const = 0;
+                virtual Type type() const = 0;
+                virtual std::shared_ptr<IFalloutValue> add(std::shared_ptr<IFalloutValue> value) const = 0;
         };
     }
 }
-
-#endif //FALLTERGEIST_VM_IFALLOUTVALUE_H

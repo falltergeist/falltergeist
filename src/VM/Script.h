@@ -60,6 +60,10 @@ namespace Falltergeist {
             // IFalloutContext
             std::shared_ptr<Game::DudeObject> player() override;
 
+            void stopExecution() override;
+
+            std::shared_ptr<IFalloutProcedure> getProcedureByIndex(unsigned int index) const override;
+
             std::shared_ptr<IFalloutStack> dataStack() override;
 
             std::shared_ptr<IFalloutStack> returnStack() override;
@@ -67,6 +71,14 @@ namespace Falltergeist {
             std::shared_ptr<IFalloutProcedure> getProcedureByName(const std::string &name) const override;
 
             unsigned programCounter() const override;
+
+            unsigned int scriptVarStackBase() const override;
+
+            void setScriptVarStackBase(unsigned int stackBase) override;
+
+            unsigned int dynamicVarStackBase() const override;
+
+            void setDynamicVarStackBase(unsigned int stackBase) override;
 
             void setProgramCounter(unsigned value) override;
 
@@ -123,6 +135,8 @@ namespace Falltergeist {
             SKILL usedSkill() const;
 
             VM::Script *setUsedSkill(SKILL skill);
+
+            std::string getIdentifierByIndex(unsigned int index) const override;
 
         protected:
             Game::Object *_owner = nullptr;
