@@ -12,7 +12,7 @@ namespace Falltergeist
             void Opcode8032::applyTo(std::shared_ptr<IFalloutContext> context)
             {
                 auto num = context->dataStack()->pop()->asInteger();
-                auto value = context->dataStack()->at(context->DVARbase() + num);
+                auto value = context->dataStack()->at(context->dynamicVarStackBase() + num);
                 context->dataStack()->push(value);
             }
 

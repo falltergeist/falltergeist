@@ -1,9 +1,10 @@
 #include "../../Game/CritterObject.h"
 #include "../../Game/Game.h"
-#include "../../Logger.h"
 #include "../../VM/Handler/Opcode80A4.h"
-#include "../../VM/Script.h"
-#include "../../VM/StackValue.h"
+#include "../../VM/IFalloutContext.h"
+#include "../../VM/IFalloutStack.h"
+#include "../../VM/IFalloutValue.h"
+#include "../../VM/FalloutValue.h"
 
 namespace Falltergeist
 {
@@ -13,8 +14,8 @@ namespace Falltergeist
         {
             void Opcode80A4::applyTo(std::shared_ptr<IFalloutContext> context)
             {
-                auto object = _script->dataStack()->popObject();
-                _script->dataStack()->push(object->name());
+                auto object = context->dataStack()->pop()->asObject();
+                context->dataStack()->push(std::make_shared<FalloutValue>(object->name()));
             }
 
             int Opcode80A4::number()
@@ -27,7 +28,8 @@ namespace Falltergeist
                 return "std::string* obj_name(GameCritterObject* who)";
             }
 
-            std::string Opcode80A4::notes() {
+            std::string Opcode80A4::notes()
+            {
                 return "";
             }
         }

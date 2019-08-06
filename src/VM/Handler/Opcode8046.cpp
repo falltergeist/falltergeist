@@ -15,7 +15,7 @@ namespace Falltergeist
                 if (value->type() == IFalloutValue::Type::INTEGER) {
                     context->dataStack()->push(-value->asInteger());
                 } else if (value->type() == IFalloutValue::Type::FLOAT) {
-                    context->dataStack()->push(-value.asFloat());
+                    context->dataStack()->push(-value->asFloat());
                 } else {
                     // TODO throw exception
                     //_error(std::string("Invalid argument type: ") + value.typeName());

@@ -1,5 +1,7 @@
 #include "../../VM/Handler/Opcode80A6.h"
-#include "../../VM/Script.h"
+#include "../../VM/IFalloutContext.h"
+#include "../../VM/IFalloutStack.h"
+#include "../../VM/IFalloutValue.h"
 
 namespace Falltergeist
 {
@@ -9,8 +11,9 @@ namespace Falltergeist
         {
             void Opcode80A6::applyTo(std::shared_ptr<IFalloutContext> context)
             {
-                _script->dataStack()->popInteger();
-                _script->dataStack()->push(0);
+                context->dataStack()->pop()->asInteger();
+                // TODO
+                context->dataStack()->push(0);
             }
 
             int Opcode80A6::number()

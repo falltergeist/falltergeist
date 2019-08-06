@@ -1,6 +1,7 @@
 #include "../../VM/Handler/Opcode8031.h"
 #include "../../VM/IFalloutContext.h"
 #include "../../VM/IFalloutStack.h"
+#include "../../VM/IFalloutValue.h"
 
 namespace Falltergeist
 {
@@ -10,9 +11,9 @@ namespace Falltergeist
         {
             void Opcode8031::applyTo(std::shared_ptr<IFalloutContext> context)
             {
-                auto num = context->dataStack()->popInteger();
+                auto num = context->dataStack()->pop()->asInteger();
                 auto value = context->dataStack()->pop();
-                _script->dataStack()->values()->at(_script->DVARbase() + num) = value;
+                context->dataStack()->at(context->dynamicVarStackBase() + num) = value;
             }
 
             int Opcode8031::number()

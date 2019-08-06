@@ -1,6 +1,7 @@
-#include "../../Logger.h"
 #include "../../VM/Handler/Opcode80A8.h"
-#include "../../VM/Script.h"
+#include "../../VM/IFalloutContext.h"
+#include "../../VM/IFalloutStack.h"
+#include "../../VM/IFalloutValue.h"
 
 namespace Falltergeist
 {
@@ -10,11 +11,12 @@ namespace Falltergeist
         {
             void Opcode80A8::applyTo(std::shared_ptr<IFalloutContext> context)
             {
-                auto dataStack = _script->dataStack();
-                dataStack->popInteger();
-                dataStack->popInteger();
-                dataStack->popInteger();
-                dataStack->popInteger();
+                auto dataStack = context->dataStack();
+                // TODO
+                dataStack->pop()->asInteger();
+                dataStack->pop()->asInteger();
+                dataStack->pop()->asInteger();
+                dataStack->pop()->asInteger();
             }
 
             int Opcode80A8::number()

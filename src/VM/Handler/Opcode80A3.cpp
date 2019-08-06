@@ -1,8 +1,9 @@
 #include "../../VM/Handler/Opcode80A3.h"
 #include "../../Audio/Mixer.h"
 #include "../../Game/Game.h"
-#include "../../Logger.h"
-#include "../../VM/Script.h"
+#include "../../VM/IFalloutContext.h"
+#include "../../VM/IFalloutStack.h"
+#include "../../VM/IFalloutValue.h"
 
 namespace Falltergeist
 {
@@ -12,7 +13,7 @@ namespace Falltergeist
         {
             void Opcode80A3::applyTo(std::shared_ptr<IFalloutContext> context)
             {
-                auto name = _script->dataStack()->popString();
+                auto name = context->dataStack()->pop()->asString();
                 Game::Game::getInstance()->mixer()->playACMSound("sound/sfx/" + name + ".acm");
             }
 

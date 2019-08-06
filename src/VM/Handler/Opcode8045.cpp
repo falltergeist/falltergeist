@@ -11,7 +11,7 @@ namespace Falltergeist
         {
             void Opcode8045::applyTo(std::shared_ptr<IFalloutContext> context)
             {
-                auto a = context->dataStack()->pop()->asBoolean();
+                auto a = (bool) context->dataStack()->pop()->asInteger();
                 context->dataStack()->push((int) (!a));
             }
 
