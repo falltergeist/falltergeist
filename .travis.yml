@@ -4,8 +4,6 @@ os:
 
 language: cpp
 sudo: required
-osx_image: xcode7.3
-dist: trusty
 
 script:
   - cmake .
@@ -15,10 +13,23 @@ compiler:
   - clang
   - gcc
 
-install:
-- if [ "$TRAVIS_OS_NAME" == "linux" ]; then source ./travis/linux.install.sh; fi
-- if [ "$TRAVIS_OS_NAME" == "osx" ];   then source ./travis/osx.install.sh;   fi
-
+addons:
+  apt:
+    packages: 
+      - libsdl2-dev 
+      - libsdl2-mixer-dev 
+      - libsdl2-image-dev 
+      - libglew-dev 
+      - libglm-dev 
+      - mesa-common-dev
+  homebrew:
+    packages: 
+      - sdl2 
+      - sdl2_mixer 
+      - sdl2_image 
+      - glew 
+      - glm
+    update: true
 notifications:
   webhooks:
     - https://krake.one/travis-ci/402390990402355201/9O9q4_MrVt5-VI-XGU5GKndoCebPJyVyBaEbLjzDijN-hhcLI9SqyfNLpzLaq3QEESMV
