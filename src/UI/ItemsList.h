@@ -53,12 +53,6 @@ public:
     std::vector<std::unique_ptr<InventoryItem>>& inventoryItems();
     InventoryItem* draggedItem();
 
-    /*void setSlotsNumber(unsigned int value);
-    unsigned int slotsNumber();
-
-    void setSlotOffset(unsigned int value);
-    unsigned int slotOffset();*/
-
     void update();
 
     void scrollUp();
@@ -67,8 +61,11 @@ public:
     bool canScrollUp();
     bool canScrollDown();
 
-    unsigned int slotsNumber();
-    unsigned int slotOffset();
+    unsigned int slotsNumber() const;
+    void setSlotsNumber(unsigned int value);
+
+    unsigned int slotOffset() const;
+    // void setSlotOffset(unsigned int value);
 
     virtual void render(bool eggTransparency = false) override;
 

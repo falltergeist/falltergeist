@@ -430,6 +430,11 @@ uint32_t File::weight() const
     return _weight;
 }
 
+uint32_t File::basePrice() const
+{
+    return _basePrice;
+}
+
 int32_t File::perk() const
 {
     return _perk;

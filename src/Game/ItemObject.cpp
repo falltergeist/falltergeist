@@ -66,6 +66,16 @@ namespace Falltergeist
             _weight = value;
         }
 
+        unsigned int ItemObject::price() const
+        {
+            return _price;
+        }
+
+        void ItemObject::setPrice(unsigned price)
+        {
+            _price = price;
+        }
+
         int ItemObject::inventoryFID() const
         {
             return _inventoryFID;

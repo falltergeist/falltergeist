@@ -245,12 +245,17 @@ void ItemsList::scrollDown()
     this->update();
 }
 
-unsigned int ItemsList::slotsNumber()
+unsigned int ItemsList::slotsNumber() const
 {
     return _slotsNumber;
 }
 
-unsigned int ItemsList::slotOffset()
+void ItemsList::setSlotsNumber(unsigned int value)
+{
+    _slotsNumber = value;
+}
+
+unsigned int ItemsList::slotOffset() const
 {
     return _slotOffset;
 }
