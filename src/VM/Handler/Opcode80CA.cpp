@@ -1,52 +1,27 @@
-/*
- * Copyright 2012-2018 Falltergeist Developers.
- *
- * This file is part of Falltergeist.
- *
- * Falltergeist is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Falltergeist is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
- */
-
-// Related headers
-#include "../../VM/Handler/Opcode80CAHandler.h"
-
-// C++ standard includes
-
-// Falltergeist includes
+#include "../../VM/Handler/Opcode80CA.h"
+#include "../../VM/IFalloutContext.h"
+#include "../../VM/IFalloutStack.h"
+#include "../../VM/IFalloutValue.h"
 #include "../../Game/CritterObject.h"
-#include "../../Logger.h"
-#include "../../VM/Script.h"
 
-// Third party includes
-
-namespace Falltergeist {
-    namespace VM {
-        namespace Handler {
-            Opcode80CA::Opcode80CA(std::shared_ptr<VM::Script> script) : OpcodeHandler(script) {
-            }
-
-            void Opcode80CA::_run() {
-                auto &debug = Logger::debug("SCRIPT");
-                debug << "[80CA] [+] int value = get_critter_stat(GameCritterObject* who, int number)" << std::endl;
-                int number = _script->dataStack()->popInteger();
-                debug << "    number = " << number << std::endl;
-                auto object = _script->dataStack()->popObject();
+namespace Falltergeist
+{
+    namespace VM
+    {
+        namespace Handler
+        {
+            void Opcode80CA::applyTo(std::shared_ptr<IFalloutContext> context)
+            {
+                int number = context->dataStack()->pop()->asInteger();
+                auto object = context->dataStack()->pop()->asObject();
                 if (!object) {
-                    _error("get_critter_stat(who, stat) - who is NULL");
+                    // TODO
+                    //_error("get_critter_stat(who, stat) - who is NULL");
                 }
-                auto critter = dynamic_cast<Game::CritterObject *>(object);
+                auto critter = std::dynamic_pointer_cast<Game::CritterObject>(object);
                 if (!critter) {
-                    _error("get_critter_stat(who, stat) - who is not a critter");
+                    // TODO
+                    //_error("get_critter_stat(who, stat) - who is not a critter");
                 }
                 int result = 0;
                 switch (number) {
@@ -210,11 +185,26 @@ namespace Falltergeist {
                         break;
                     }
                     default: {
-                        _error("VM::opcode80CA - unimplemented number:" + std::to_string(number));
+                        // TODO
+                        // _error("VM::opcode80CA - unimplemented number:" + std::to_string(number));
                     }
                 }
-                _script->dataStack()->push(result);
-                debug << "    value  = " << result << std::endl;
+                context->dataStack()->push(result);
+            }
+
+            int Opcode80CA::number()
+            {
+                return 0x80CA;
+            }
+
+            std::string Opcode80CA::name()
+            {
+                return "int value = get_critter_stat(GameCritterObject* who, int number)";
+            }
+
+            std::string Opcode80CA::notes()
+            {
+                return "";
             }
         }
     }

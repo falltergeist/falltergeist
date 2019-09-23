@@ -1,17 +1,15 @@
 ﻿#include "../../VM/Handler/Opcode9001Handler.h"
 #include "../../Format/Int/File.h"
-#include "../../Logger.h"
-#include "../../VM/Script.h"
 #include "../../VM/StackValue.h"
 
-namespace Falltergeist {
-    namespace VM {
-        namespace Handler {
-
-            Opcode9001::Opcode9001(std::shared_ptr<VM::Script> script) : OpcodeHandler(script) {
-            }
-
-            void Opcode9001::_run() {
+namespace Falltergeist
+{
+    namespace VM
+    {
+        namespace Handler
+        {
+            void Opcode9001::applyTo(std::shared_ptr<IFalloutContext> context)
+            {
                 unsigned int data = _script->script()->readValue();
                 unsigned short nextOpcode = _script->script()->readOpcode();
 
@@ -39,6 +37,5 @@ namespace Falltergeist {
                       << "    value: " << value.toString() << std::endl;
             }
         }
-
     }
 }

@@ -1,21 +1,19 @@
 #include "../../VM/Handler/OpcodeA001Handler.h"
 #include "../../Format/Int/File.h"
-#include "../../Logger.h"
-#include "../../VM/Script.h"
 #include "../../VM/StackValue.h"
 
-namespace Falltergeist {
-    namespace VM {
-        namespace Handler {
-            OpcodeA001::OpcodeA001(std::shared_ptr<VM::Script> script) : OpcodeHandler(script) {
-            }
-
-            void OpcodeA001::_run() {
+namespace Falltergeist
+{
+    namespace VM
+    {
+        namespace Handler
+        {
+            void OpcodeA001::applyTo(std::shared_ptr<IFalloutContext> context)
+            {
                 union {
                     unsigned int iValue;
                     float fValue;
-                }
-                        uValue;
+                } uValue;
 
                 uValue.iValue = _script->script()->readValue();
 

@@ -1,16 +1,15 @@
 #include "../../VM/Handler/OpcodeC001Handler.h"
 #include "../../Format/Int/File.h"
-#include "../../Logger.h"
-#include "../../VM/Script.h"
 #include "../../VM/StackValue.h"
 
-namespace Falltergeist {
-    namespace VM {
-        namespace Handler {
-            OpcodeC001::OpcodeC001(std::shared_ptr<VM::Script> script) : OpcodeHandler(script) {
-            }
-
-            void OpcodeC001::_run() {
+namespace Falltergeist
+{
+    namespace VM
+    {
+        namespace Handler
+        {
+            void OpcodeC001::applyTo(std::shared_ptr<IFalloutContext> context)
+            {
                 int value = _script->script()->readValue();
 
                 // Skip 4 bytes for readed integer value

@@ -1,16 +1,15 @@
 #include "../../VM/Handler/Opcode8131Handler.h"
 #include "../../Game/ContainerItemObject.h"
 #include "../../Game/DoorSceneryObject.h"
-#include "../../Logger.h"
-#include "../../VM/Script.h"
 
-namespace Falltergeist {
-    namespace VM {
-        namespace Handler {
-            Opcode8131::Opcode8131(std::shared_ptr<VM::Script> script) : OpcodeHandler(script) {
-            }
-
-            void Opcode8131::_run() {
+namespace Falltergeist
+{
+    namespace VM
+    {
+        namespace Handler
+        {
+            void Opcode8131::applyTo(std::shared_ptr<IFalloutContext> context)
+            {
                 Logger::debug("SCRIPT") << "[8131] [+] void obj_open(GameDoorSceneryObject* object) " << std::endl;
                 auto object = _script->dataStack()->popObject();
                 if (!object) {

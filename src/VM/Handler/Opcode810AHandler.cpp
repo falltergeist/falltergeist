@@ -1,44 +1,17 @@
-/*
- * Copyright 2012-2014 Falltergeist Developers.
- *
- * This file is part of Falltergeist.
- *
- * Falltergeist is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Falltergeist is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
- */
-
-// Related headers
-#include "../../VM/Handler/Opcode810AHandler.h"
-
-// C++ standard includes
 #include <memory>
-
-// Falltergeist includes
+#include "../../VM/Handler/Opcode810AHandler.h"
 #include "../../Game/Object.h"
-#include "../../Logger.h"
 #include "../../ResourceManager.h"
 #include "../../UI/TextArea.h"
-#include "../../VM/Script.h"
 
-// Third party includes
-
-namespace Falltergeist {
-    namespace VM {
-        namespace Handler {
-            Opcode810A::Opcode810A(std::shared_ptr<VM::Script> script) : OpcodeHandler(script) {
-            }
-
-            void Opcode810A::_run() {
+namespace Falltergeist
+{
+    namespace VM
+    {
+        namespace Handler
+        {
+            void Opcode810A::applyTo(std::shared_ptr<IFalloutContext> context)
+            {
                 Logger::debug("SCRIPT") << "[810A] [=] void float_msg(object who, string msg, int type) " << std::endl;
                 int type = _script->dataStack()->popInteger();
                 SDL_Color color = {0x00, 0x00, 0x00, 0xff};
