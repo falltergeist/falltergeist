@@ -2,6 +2,7 @@
 Type=Application
 Name=Falltergeist
 Comment=Open Source Fallout 2 Engine
+Icon=falltergeist
 Categories=Game;RolePlaying;
 Exec=falltergeist
 Terminal=false
