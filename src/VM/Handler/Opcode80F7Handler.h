@@ -12,6 +12,10 @@ namespace Falltergeist
             {
                 public:
                     Opcode80F7() = default;
+                    void applyTo(std::shared_ptr<IFalloutContext> context) override;
+                    int number() override;
+                    std::string name() override;
+                    std::string notes() override;
             };
         }
     }
