@@ -42,6 +42,7 @@
 #include "../State/GameMenu.h"
 #include "../State/InventoryDragItem.h"
 #include "../State/Location.h"
+#include "../UI/Animation.h"
 #include "../UI/Image.h"
 #include "../UI/ImageButton.h"
 #include "../UI/ImageList.h"
@@ -265,6 +266,11 @@ namespace Falltergeist
             auto inventoryList = new UI::ItemsList(Point(40, 40));
             inventoryList->setItems(game->player()->inventory());
             addUI("inventory_list", inventoryList);
+
+            // TODO: this is a rotating animation in the vanilla engine
+            auto dudeCritter = Game::getInstance()->player()->generateAnimation("aa", Game::Orientation::SC);
+            dudeCritter->setPosition({188, 52});
+            addUI(dudeCritter);
 
             // BIG ICONS
             // icon: armor

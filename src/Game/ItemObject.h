@@ -61,6 +61,10 @@ namespace Falltergeist
                 unsigned int weight() const;
                 void setWeight(unsigned int value);
 
+                // item price without any modifiers
+                unsigned int price() const;
+                void setPrice(unsigned price);
+
                 // item volume
                 unsigned int volume() const;
                 void setVolume(unsigned int volume);
@@ -77,6 +81,7 @@ namespace Falltergeist
                 Subtype _subtype;
                 unsigned int _amount = 1;
                 unsigned int _weight = 0;
+                unsigned int _price = 0;
                 unsigned int _volume = 0;
                 int _inventoryFID = -1;
                 std::unique_ptr<UI::Image> _inventoryUi, _inventorySlotUi, _inventoryDragUi;

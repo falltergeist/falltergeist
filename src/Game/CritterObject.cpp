@@ -626,6 +626,14 @@ namespace Falltergeist
 
         UI::Animation* CritterObject::setActionAnimation(const string& action)
         {
+            auto animation = generateAnimation(action, orientation());
+            animation->play();
+            setUI(animation);
+            return animation;
+        }
+
+        UI::Animation* CritterObject::generateAnimation(const string& action, Orientation orientation)
+        {
             string animName = _generateArmorFrmString();
 
             unsigned weaponId = WEAPON_NONE;
@@ -640,12 +648,10 @@ namespace Falltergeist
                 animName += action;
             }
 
-            UI::Animation* animation = new UI::Animation("art/critters/" + animName + ".frm", orientation());
+            UI::Animation* animation = new UI::Animation("art/critters/" + animName + ".frm", orientation);
             animation->animationEndedHandler().add([animation](Event::Event* event) {
                 animation->setCurrentFrame(0);
             });
-            animation->play();
-            setUI(animation);
             return animation;
         }
 

@@ -159,6 +159,7 @@ namespace Falltergeist
                 UI::Animation* setWeaponAnimation(unsigned animationId);
 
                 UI::Animation* animation();
+                UI::Animation* generateAnimation(const std::string& action, Orientation orientation);
 
             protected:
                 bool _moving  = false;
