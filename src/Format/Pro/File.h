@@ -80,6 +80,7 @@ public:
     uint32_t flags() const;
     uint32_t flagsExt() const;
     uint32_t weight() const;
+    uint32_t basePrice() const;
     uint32_t critterHitPointsMax() const;
     uint32_t critterActionPoints() const;
     uint32_t critterArmorClass() const;

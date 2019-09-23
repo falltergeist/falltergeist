@@ -178,6 +178,8 @@ namespace Falltergeist
             _oldCameraCenter = locationState->camera()->center();
 
             locationState->camera()->setCenter(critter()->hexagon()->position() + Point(0, 100));
+
+            _barter->setTrader(critter());
         }
 
         int CritterInteract::backgroundID()

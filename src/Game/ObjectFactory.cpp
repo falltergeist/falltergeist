@@ -131,6 +131,7 @@ namespace Falltergeist
                     ((ItemObject*)object)->setWeight(proto->weight());
                     // @TODO: ((GameItemObject*)object)->setVolume(proto->containerSize());
                     ((ItemObject*)object)->setInventoryFID(proto->inventoryFID());
+                    ((ItemObject*)object)->setPrice(proto->basePrice());
                     auto msg = ResourceManager::getInstance()->msgFileType("text/english/game/pro_item.msg");
                     try
                     {
