@@ -166,7 +166,7 @@ File::File(Dat::Stream&& stream)
 
             stream.uint32(); // ai packet number
             stream.uint32(); // team number
-            stream.uint32(); // flags
+            _critterFlags = stream.uint32();
 
             for (unsigned int i = 0; i != 7; ++i)
             {
@@ -371,6 +371,11 @@ std::vector<uint32_t>* File::damageResist()
 std::vector<uint32_t>* File::damageThreshold()
 {
     return &_damageThreshold;
+}
+
+uint32_t File::critterFlags() const
+{
+    return _critterFlags;
 }
 
 uint32_t File::critterHitPointsMax() const

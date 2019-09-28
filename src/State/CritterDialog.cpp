@@ -25,6 +25,7 @@
 #include <vector>
 
 // Falltergeist includes
+#include "../functions.h"
 #include "../Exception.h"
 #include "../Format/Int/File.h"
 #include "../Format/Int/Procedure.h"
@@ -188,7 +189,12 @@ namespace Falltergeist
         {
             if (auto interact = dynamic_cast<CritterInteract*>(Game::getInstance()->topState(1)))
             {
-                interact->switchSubState(CritterInteract::SubState::BARTER);
+                if (interact->critter()->canTrade()) {
+                    interact->switchSubState(CritterInteract::SubState::BARTER);
+                } else {
+                    auto question = dynamic_cast<UI::TextArea*>(getUI("question"));
+                    question->setText(_t(MSG_PROTO, 903));
+                }
             }
         }
 
