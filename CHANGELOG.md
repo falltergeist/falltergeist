@@ -3,6 +3,7 @@ Under development
 - [feature] Search data files in parent dir too (alexeevdv)
 - [feature] Basic barter system (JanSimek)
 - [feature] Fix and update Travis build (JanSimek)
+- [feature] Added 'Take All' and scroll buttons to the container window (JanSimek)
 
 0.3.1 (2018-01-14)
 =======================
