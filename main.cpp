@@ -45,6 +45,10 @@ int main(int argc, char* argv[])
     catch(const Exception &e)
     {
         Logger::critical() << e.what() << std::endl;
+
+#if defined(_WIN32) || defined(WIN32)
+        system("PAUSE");
+#endif
     }
     /*
     catch (const std::exception &e)
