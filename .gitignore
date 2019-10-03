@@ -18,3 +18,4 @@ ext
 build/
 CMakeSettings.json
 /cmake-build-debug
+*.dat
