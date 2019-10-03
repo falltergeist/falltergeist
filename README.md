@@ -13,25 +13,50 @@ https://falltergeist.org/
 - [GLM](http://glm.g-truc.net/)
 - [Zlib](http://www.zlib.net/)
 
-## Compilation under linux
+## Compilation
+
+### Linux
 
 ```
 cmake . && make
 ```
 
-## Running under linux
+### Windows (Visual Studio)
 
-Put master.dat and critter.dat files into the falltergeist data directory, that is
+You could add dependencies manually but it is easier to use [Conan](https://docs.conan.io/en/latest/howtos/vs2017_cmake.html). 
+
+First, set up your [Conan profile](https://docs.conan.io/en/latest/reference/profiles.html) to match your compiler or let conan autodetect your settings (`conan profile new vs --detect` and use ` --profile=vs` when running `conan install`). Visual Studio 2019 profile should look like this:
+
+```ini
+[settings]
+os=Windows
+os_build=Windows
+arch=x86_64
+arch_build=x86_64
+compiler=Visual Studio
+compiler.version=16
+build_type=Debug
+```
+
+Then open 'Developer PowerShell for Visual Studio' and execute the following commands:
+
+```
+conan install . --build missing
+cmake .
+devenv /build Debug falltergeist.sln
+```
+(or open and build the solution in Visual Studio instead of running the devenv command)
+
+
+## Running
+
+Put **master.dat** and **critter.dat** files into the falltergeist data directory, that is
 
 * `~/.local/share/falltergeist/`  or `/usr/local/share/falltergeist` (for global installs) on Linux,
-*  `~/Library/Application Support/falltergeist` on OS X,
+* `~/Library/Application Support/falltergeist` on OS X,
 * `%APPDATA%/falltergeist` on Windows,
 
-or mount CD-ROM with original game, then run
-
-```
-./falltergeist
-```
+or mount CD-ROM with original game, then run `./falltergeist` on \*nix or `.\bin\falltergeist.exe` on Windows.
 
 ## Development roadmap
 
