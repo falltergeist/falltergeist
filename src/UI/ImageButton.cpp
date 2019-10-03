@@ -61,7 +61,6 @@ void ImageButton::_init(Type type)
         case Type::SMALL_RED_CIRCLE:
             _butup = make_shared<Graphics::Sprite>("art/intrface/lilredup.frm");
             _butdown = make_shared<Graphics::Sprite>("art/intrface/lilreddn.frm");
-
             _downSound = "sound/sfx/ib1p1xx1.acm";
             _upSound = "sound/sfx/ib1lu1x1.acm";
             break;
@@ -167,14 +166,23 @@ void ImageButton::_init(Type type)
             _downSound = "sound/sfx/ib2lu1x1.acm";
             _upSound = "sound/sfx/ib1p1xx1.acm";
             break;
-        //TODO: add sound effects for inventory scroll buttons
         case Type::INVENTORY_UP_ARROW:
             _butup = make_shared<Graphics::Sprite>("art/intrface/invupout.frm");
             _butdown = make_shared<Graphics::Sprite>("art/intrface/invupin.frm");
+            _downSound = "sound/sfx/ib1p1xx1.acm";
+            _upSound = "sound/sfx/ib1lu1x1.acm";
             break;
         case Type::INVENTORY_DOWN_ARROW:
             _butup = make_shared<Graphics::Sprite>("art/intrface/invdnout.frm");
             _butdown = make_shared<Graphics::Sprite>("art/intrface/invdnin.frm");
+            _downSound = "sound/sfx/ib1p1xx1.acm";
+            _upSound = "sound/sfx/ib1lu1x1.acm";
+            break;
+        case Type::INVENTORY_TAKE_ALL:
+            _butup = make_shared<Graphics::Sprite>("art/intrface/invmaup.frm");
+            _butdown = make_shared<Graphics::Sprite>("art/intrface/invmadn.frm");
+            _downSound = "sound/sfx/ib1p1xx1.acm";
+            _upSound = "sound/sfx/ib1lu1x1.acm";
             break;
         case Type::PIPBOY_ALARM_BUTTON:
             _butup = make_shared<Graphics::Sprite>("art/intrface/alarmout.frm");
@@ -183,6 +191,8 @@ void ImageButton::_init(Type type)
         case Type::DIALOG_RED_BUTTON:
             _butup = make_shared<Graphics::Sprite>("art/intrface/di_rdbt2.frm");
             _butdown = make_shared<Graphics::Sprite>("art/intrface/di_rdbt1.frm");
+            _downSound = "sound/sfx/ib2p1xx1.acm";
+            _upSound = "sound/sfx/ib2lu1x1.acm";
             break;
         case Type::DIALOG_REVIEW_BUTTON:
             _butup = make_shared<Graphics::Sprite>("art/intrface/di_rest1.frm");
@@ -203,10 +213,14 @@ void ImageButton::_init(Type type)
         case Type::DIALOG_UP_ARROW:
             _butup = make_shared<Graphics::Sprite>("art/intrface/di_up1.frm");
             _butdown = make_shared<Graphics::Sprite>("art/intrface/di_up2.frm");
+            _downSound = "sound/sfx/ib1p1xx1.acm";
+            _upSound = "sound/sfx/ib1lu1x1.acm";
             break;
         case Type::DIALOG_DOWN_ARROW:
             _butup = make_shared<Graphics::Sprite>("art/intrface/di_down1.frm");
             _butdown = make_shared<Graphics::Sprite>("art/intrface/di_down2.frm");
+            _downSound = "sound/sfx/ib1p1xx1.acm";
+            _upSound = "sound/sfx/ib1lu1x1.acm";
             break;
         case Type::SMALL_UP_ARROW:
             _butup = make_shared<Graphics::Sprite>("art/intrface/uparwoff.frm");
