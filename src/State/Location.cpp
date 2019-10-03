@@ -1110,51 +1110,51 @@ namespace Falltergeist
 
             switch (action)
             {
-            case Mouse::Icon::LOOK:
-                object->description_p_proc();
-                break;
+                case Mouse::Icon::LOOK:
+                    object->description_p_proc();
+                    break;
 
 
-            case Mouse::Icon::USE:
-            {
-                auto player = Game::getInstance()->player();
-                auto animation = player->setActionAnimation("al");
+                case Mouse::Icon::USE:
+                {
+                    auto player = Game::getInstance()->player();
+                    auto animation = player->setActionAnimation("al");
 
-                animation->actionFrameHandler().add([object, player](Event::Event *event) {
-                    object->onUseAnimationActionFrame(event, player.get());
-                });
-                break;
-            }
+                    animation->actionFrameHandler().add([object, player](Event::Event *event) {
+                        object->onUseAnimationActionFrame(event, player.get());
+                    });
+                    break;
+                }
 
-            case Mouse::Icon::ROTATE:
-            {
-                auto dude = dynamic_cast<Game::DudeObject *>(object);
+                case Mouse::Icon::ROTATE:
+                {
+                    auto dude = dynamic_cast<Game::DudeObject *>(object);
 
-                if (!dude)
-                    throw Exception("Location::handleAction() - only Dude can be rotated");
+                    if (!dude)
+                        throw Exception("Location::handleAction() - only Dude can be rotated");
 
-                auto orientation = dude->orientation() + 1;
+                    auto orientation = dude->orientation() + 1;
 
-                if (orientation >= HEX_SIDES)
-                    orientation = 0;
+                    if (orientation >= HEX_SIDES)
+                        orientation = 0;
 
-                dude->setOrientation(orientation);
-                break;
-            }
+                    dude->setOrientation(orientation);
+                    break;
+                }
 
-            case Mouse::Icon::TALK:
-            {
-                auto critter = dynamic_cast<Game::CritterObject *>(object);
+                case Mouse::Icon::TALK:
+                {
+                    auto critter = dynamic_cast<Game::CritterObject *>(object);
 
-                if (!critter)
-                    throw Exception("Location::handleAction() - can talk only with critters!");
+                    if (!critter)
+                        throw Exception("Location::handleAction() - can talk only with critters!");
 
-                critter->talk_p_proc();
-                break;
-            }
+                    critter->talk_p_proc();
+                    break;
+                }
 
-            default:
-                return;
+                default:
+                    return;
             }
         }
 
