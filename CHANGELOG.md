@@ -4,6 +4,8 @@ Under development
 - [feature] Basic barter system (Zervox, JanSimek)
 - [feature] Fix and update Travis build (JanSimek)
 - [feature] Load critter flags from PRO file (JanSimek)
+- [feature] Added 'Take All' and scroll buttons to the container window (JanSimek)
+- [bugfix] Fix linking release builds on Windows and prevent closing console after a crash (JanSimek)
 
 0.3.1 (2018-01-14)
 =======================

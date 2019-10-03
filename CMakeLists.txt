@@ -20,7 +20,7 @@
 # It must be set before project
 set(CMAKE_BUILD_TYPE "Debug" CACHE STRING "Choose the type of build (by default Debug)")
 
-cmake_minimum_required(VERSION 3.1)
+cmake_minimum_required(VERSION 3.8)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake/modules)
 
 project(falltergeist)
@@ -84,8 +84,8 @@ include_directories(${GLM_INCLUDE_DIR})
 file(GLOB_RECURSE SOURCES  src/*.cpp)
 
 if(MSVC)
-	set(_additional_includes "package/windows.rc" pchheader.cpp)
-	add_definitions(-D_CRT_SECURE_NO_WARNINGS)
+        file(GLOB_RECURSE HEADERS  src/*.h)
+        set(_additional_includes "package/windows.rc" pchheader.cpp ${HEADERS})
 endif()
 
 add_executable(falltergeist main.cpp ${SOURCES} ${_additional_includes})
@@ -97,11 +97,20 @@ set_target_properties(falltergeist PROPERTIES
 )
 
 if(MSVC)
-	set_property(TARGET falltergeist
-		APPEND PROPERTY LINK_FLAGS /NODEFAULTLIB:MSVCRT
-	)
+	set_property(TARGET falltergeist APPEND PROPERTY LINK_FLAGS_DEBUG /NODEFAULTLIB:MSVCRT)
+
+	set_property(TARGET falltergeist APPEND PROPERTY LINK_FLAGS_RELEASE /NODEFAULTLIB:MSVCRTD)
+	set_property(TARGET falltergeist APPEND PROPERTY LINK_FLAGS_MINSIZEREL /NODEFAULTLIB:MSVCRTD)
+	set_property(TARGET falltergeist APPEND PROPERTY LINK_FLAGS_RELWITHDEBINFO /NODEFAULTLIB:MSVCRTD)
+
 	include(cmake/modules/PrecompiledHeader.cmake)
 	add_precompiled_header(falltergeist pchheader.h FORCEINCLUDE SOURCE_CXX pchheader.cpp)
+
+	set_property(GLOBAL PROPERTY USE_FOLDERS ON)
+	source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}" PREFIX "Source Files" FILES ${SOURCES})
+	source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}" PREFIX "Header Files" FILES ${HEADERS})
+
+	add_definitions(-D_CRT_SECURE_NO_WARNINGS)
 else()
 	add_definitions(-Wall)
 endif()
