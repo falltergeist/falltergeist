@@ -800,6 +800,7 @@ namespace Falltergeist
 
         void Location::onMouseUp(Event::Mouse *event)
         {
+            // Player movement
             if (event->leftButton()) {
                 auto game = Game::getInstance();
                 auto mouse = game->mouse();
@@ -822,14 +823,46 @@ namespace Falltergeist
                     }
                 }
 
+                // Using a skill
                 if (mouse->state() == Input::Mouse::Cursor::USE) {
                     auto object = getGameObjectUnderCursor();
-                    if (!object) {
-                        return;
+
+                    if (!object) return;
+
+                    // Find path to object
+                    auto hexagon = object->hexagon();
+
+                    for (auto adjacentHex : hexagon->neighbors())
+                    {
+                        auto player = game->player();
+
+                        if (!adjacentHex->canWalkThru()) continue;
+
+                        auto path = hexagonGrid()->findPath(player->hexagon(), adjacentHex);
+
+                        auto length = path.size();
+                        if(length)
+                        {
+                            /* Remove the last hexagon from the path so the player stops on
+                            an adjacent tile (rather than on the tile the object occupies) */
+                            path.pop_back();
+
+                            player->stopMovement();
+                            player->setRunning(true);
+
+                            // Move!
+                            for (auto pathHexagon : path)
+                            {
+                                player->movementQueue()->push_back(pathHexagon);
+                            }
+
+                            // Use
+                            object->use_skill_on_p_proc(skillInUse(), object, Game::getInstance()->player().get());
+                            mouse->setState(Input::Mouse::Cursor::ACTION);
+
+                            break;
+                        }
                     }
-                    // TODO "use" animation
-                    object->use_skill_on_p_proc(skillInUse(), object, Game::getInstance()->player().get());
-                    mouse->setState(Input::Mouse::Cursor::ACTION);
                 }
             }
         }
