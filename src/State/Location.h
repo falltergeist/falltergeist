@@ -231,6 +231,8 @@ namespace Falltergeist
 
                 void processTimers();
 
+                bool movePlayerToObject(Game::Object *object);
+
                 Game::Object* getGameObjectUnderCursor();
         };
     }

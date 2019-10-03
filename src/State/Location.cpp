@@ -429,6 +429,9 @@ namespace Falltergeist
                 } else if (event->name() == "mouseclick") {
                     auto icons = getCursorIconsForObject(object);
                     if (!icons.empty()) {
+                        // Move
+                        movePlayerToObject(object);
+                        // Use
                         handleAction(object, icons.front());
                         _actionCursorButtonPressed = false;
                     }
@@ -829,40 +832,14 @@ namespace Falltergeist
 
                     if (!object) return;
 
-                    // Find path to object
-                    auto hexagon = object->hexagon();
+                    // Move
+                    movePlayerToObject(object);
 
-                    for (auto adjacentHex : hexagon->neighbors())
-                    {
-                        auto player = game->player();
+                    // TODO: Animate
 
-                        if (!adjacentHex->canWalkThru()) continue;
-
-                        auto path = hexagonGrid()->findPath(player->hexagon(), adjacentHex);
-
-                        auto length = path.size();
-                        if(length)
-                        {
-                            /* Remove the last hexagon from the path so the player stops on
-                            an adjacent tile (rather than on the tile the object occupies) */
-                            path.pop_back();
-
-                            player->stopMovement();
-                            player->setRunning(true);
-
-                            // Move!
-                            for (auto pathHexagon : path)
-                            {
-                                player->movementQueue()->push_back(pathHexagon);
-                            }
-
-                            // Use
-                            object->use_skill_on_p_proc(skillInUse(), object, Game::getInstance()->player().get());
-                            mouse->setState(Input::Mouse::Cursor::ACTION);
-
-                            break;
-                        }
-                    }
+                    // Use
+                    object->use_skill_on_p_proc(skillInUse(), object, Game::getInstance()->player().get());
+                    mouse->setState(Input::Mouse::Cursor::ACTION);
                 }
             }
         }
@@ -952,6 +929,42 @@ namespace Falltergeist
             if (event->keyCode() == SDLK_DOWN) {
                 _camera->setCenter(_camera->center() + Point(0, KEYBOARD_SCROLL_STEP));
             }
+        }
+
+        bool Location::movePlayerToObject(Game::Object *object)
+        {
+            // Find path to object
+            auto hexagon = object->hexagon();
+
+            for (auto adjacentHex : hexagon->neighbors())
+            {
+                auto game = Game::getInstance();
+                auto player = game->player();
+
+                if (!adjacentHex->canWalkThru()) continue;
+
+                auto path = hexagonGrid()->findPath(player->hexagon(), adjacentHex);
+
+                if(path.size())
+                {
+                    /* Remove the last hexagon from the path so the player stops on
+                    an adjacent tile (rather than on the tile the object occupies) */
+                    path.pop_back();
+
+                    player->stopMovement();
+                    player->setRunning(true);
+
+                    // Move!
+                    for (auto pathHexagon : path)
+                    {
+                        player->movementQueue()->push_back(pathHexagon);
+                    }
+                    // The player was able to move to an adjacent tile
+                    return true;
+                }
+            }
+            // There wasn't a clear path
+            return false;
         }
 
         LocationCamera *Location::camera()
@@ -1152,7 +1165,7 @@ namespace Falltergeist
                 {
                     auto player = Game::getInstance()->player();
                     auto animation = player->setActionAnimation("al");
-
+                    // Move to object
                     animation->actionFrameHandler().add([object, player](Event::Event *event) {
                         object->onUseAnimationActionFrame(event, player.get());
                     });
