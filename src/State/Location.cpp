@@ -1106,36 +1106,54 @@ namespace Falltergeist
 
         void Location::handleAction(Game::Object *object, Input::Mouse::Icon action)
         {
-            if (action == Input::Mouse::Icon::LOOK) {
-                object->description_p_proc();
-                return;
-            }
+            using Input::Mouse;
 
-            if (action == Input::Mouse::Icon::USE) {
+            switch (action)
+            {
+            case Mouse::Icon::LOOK:
+                object->description_p_proc();
+                break;
+
+
+            case Mouse::Icon::USE:
+            {
                 auto player = Game::getInstance()->player();
                 auto animation = player->setActionAnimation("al");
+
                 animation->actionFrameHandler().add([object, player](Event::Event *event) {
                     object->onUseAnimationActionFrame(event, player.get());
                 });
-                return;
+                break;
             }
 
-            if (action == Input::Mouse::Icon::ROTATE) {
+            case Mouse::Icon::ROTATE:
+            {
                 auto dude = dynamic_cast<Game::DudeObject *>(object);
-                if (!dude) throw Exception("Location::handleAction() - only Dude can be rotated");
+
+                if (!dude)
+                    throw Exception("Location::handleAction() - only Dude can be rotated");
 
                 auto orientation = dude->orientation() + 1;
-                if (orientation > 5) orientation = 0;
+
+                if (orientation >= HEX_SIDES)
+                    orientation = 0;
+
                 dude->setOrientation(orientation);
-                return;
+                break;
             }
 
-            if (action == Input::Mouse::Icon::TALK) {
-                if (auto critter = dynamic_cast<Game::CritterObject *>(object)) {
-                    critter->talk_p_proc();
-                } else {
+            case Mouse::Icon::TALK:
+            {
+                auto critter = dynamic_cast<Game::CritterObject *>(object);
+
+                if (!critter)
                     throw Exception("Location::handleAction() - can talk only with critters!");
-                }
+
+                critter->talk_p_proc();
+                break;
+            }
+
+            default:
                 return;
             }
         }
