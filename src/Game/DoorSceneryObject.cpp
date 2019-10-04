@@ -50,7 +50,7 @@ bool DoorSceneryObject::opened() const
 
 void DoorSceneryObject::setOpened(bool value) {
     // Don't change if door is locked.
-    if (_locked == false)
+    if (!_locked)
     {
         _opened = value;
         setCanLightThru(_opened);
