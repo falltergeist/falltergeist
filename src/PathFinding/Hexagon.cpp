@@ -63,7 +63,7 @@ void Hexagon::setPosition(const Point& pos)
 bool Hexagon::canWalkThru()
 {
     // Search hex for any blocking objects...
-    for (auto object : _objects)
+    for (const auto object : _objects)
     {
         if (!object->canWalkThru()) return false;
     }
