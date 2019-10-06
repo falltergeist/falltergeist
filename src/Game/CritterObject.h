@@ -1,33 +1,8 @@
-/*
- * Copyright 2012-2018 Falltergeist Developers.
- *
- * This file is part of Falltergeist.
- *
- * Falltergeist is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Falltergeist is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
- */
+#pragma once
 
-#ifndef FALLTERGEIST_GAMECRITTEROBJECT_H
-#define FALLTERGEIST_GAMECRITTEROBJECT_H
-
-// C++ standard includes
 #include <vector>
-
-// Falltergeist includes
 #include "../Format/Enums.h"
 #include "../Game/Object.h"
-
-// Third party includes
 
 namespace Falltergeist
 {
@@ -92,6 +67,8 @@ namespace Falltergeist
 
                 int traitTagged(TRAIT num) const;
                 void setTraitTagged(TRAIT num, int value);
+
+                void setCritterFlags(unsigned int flags);
 
                 int hitPoints() const;
                 void setHitPoints(int value);
@@ -161,7 +138,40 @@ namespace Falltergeist
                 UI::Animation* animation();
                 UI::Animation* generateAnimation(const std::string& action, Orientation orientation);
 
-            protected:
+                bool canTrade() const;
+                void setCanTrade(bool canTrade);
+
+                bool canStealFrom() const;
+                void setCanStealFrom(bool canStealFrom);
+
+                bool canDropItems() const;
+                void setCanDropItems(bool canDropItems);
+
+                bool canLoseLimbs() const;
+                void setCanLoseLimbs(bool canLoseLimbs);
+
+                bool canAge() const;
+                void setCanAge(bool canAge);
+
+                bool canHeal() const;
+                void setCanHeal(bool canHeal);
+
+                bool invulnerable() const;
+                void setInvulnerable(bool invulnerable);
+
+                bool leavesBody() const;
+                void setLeavesBody(bool leavesBody);
+
+                bool hasSpecialDeath() const;
+                void setHasSpecialDeath(bool hasSpecialDeath);
+
+                bool hasMeleeRange() const;
+                void setHasMeleeRange(bool hasMeleeRange);
+
+                bool canKnockdown() const;
+                void setCanKnockdown(bool canKnockdown);
+
+        protected:
                 bool _moving  = false;
                 bool _running = false;
 
@@ -177,6 +187,18 @@ namespace Falltergeist
                 int _meleeDamage = 0;
                 int _sequence = 0;
                 int _criticalChance = 0;
+
+                bool _canTrade;
+                bool _canStealFrom;
+                bool _canDropItems;
+                bool _canLoseLimbs;
+                bool _canAge; // dead body does not disappear
+                bool _canHeal; // damage is not healed over time
+                bool _invulnerable;
+                bool _leavesBody;
+                bool _hasSpecialDeath;
+                bool _hasMeleeRange; // melee attack is possible at a distance
+                bool _canKnockdown; // can be knocked down
 
                 unsigned int _nextIdleAnim = 0;
                 unsigned _age = 0;
@@ -205,5 +227,3 @@ namespace Falltergeist
         };
     }
 }
-
-#endif // FALLTERGEIST_GAMECRITTEROBJECT_H

@@ -1,31 +1,7 @@
-/*
- * Copyright 2012-2018 Falltergeist Developers.
- *
- * This file is part of Falltergeist.
- *
- * Falltergeist is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Falltergeist is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
- */
-
-// Related headers
-#include "../Game/CritterObject.h"
-
-// C++ standard includes
 #include <array>
 #include <string>
 #include <memory>
-
-// Falltergeist includes
+#include "../Game/CritterObject.h"
 #include "../Exception.h"
 #include "../Game/ArmorItemObject.h"
 #include "../Game/Defines.h"
@@ -41,8 +17,6 @@
 #include "../UI/Animation.h"
 #include "../UI/AnimationFrame.h"
 #include "../VM/Script.h"
-
-// Third party includes
 
 namespace Falltergeist
 {
@@ -288,6 +262,21 @@ namespace Falltergeist
                 throw Exception("CritterObject::setTraitTagged(num, value) - num out of range:" + std::to_string((unsigned)num));
             }
             _traitsTagged.at((unsigned)num) = value;
+        }
+
+        void CritterObject::setCritterFlags(unsigned int flags)
+        {
+            setCanTrade((flags & 0x00000002));
+            setCanStealFrom((flags & 0x00000020));
+            setCanDropItems((flags & 0x00000040));
+            setCanLoseLimbs((flags & 0x00000080));
+            setCanAge((flags & 0x00000100));
+            setCanHeal((flags & 0x00000200));
+            setInvulnerable((flags & 0x00000400));
+            setLeavesBody((flags & 0x00000800));
+            setHasSpecialDeath((flags & 0x00001000));
+            setHasMeleeRange((flags & 0x00002000));
+            setCanKnockdown((flags & 0x00004000));
         }
 
         int CritterObject::hitPoints() const
@@ -653,6 +642,116 @@ namespace Falltergeist
                 animation->setCurrentFrame(0);
             });
             return animation;
+        }
+
+        bool CritterObject::canTrade() const
+        {
+            return _canTrade;
+        }
+
+        void CritterObject::setCanTrade(bool canTrade)
+        {
+            _canTrade = canTrade;
+        }
+
+        bool CritterObject::canStealFrom() const
+        {
+            return _canStealFrom;
+        }
+
+        void CritterObject::setCanStealFrom(bool canStealFrom)
+        {
+            _canStealFrom = canStealFrom;
+        }
+
+        bool CritterObject::canDropItems() const
+        {
+            return _canDropItems;
+        }
+
+        void CritterObject::setCanDropItems(bool canDropItems)
+        {
+            _canDropItems = canDropItems;
+        }
+
+        bool CritterObject::canLoseLimbs() const
+        {
+            return _canLoseLimbs;
+        }
+
+        void CritterObject::setCanLoseLimbs(bool canLoseLimbs)
+        {
+            _canLoseLimbs = canLoseLimbs;
+        }
+
+        bool CritterObject::canAge() const
+        {
+            return _canAge;
+        }
+
+        void CritterObject::setCanAge(bool canAge)
+        {
+            _canAge = canAge;
+        }
+
+        bool CritterObject::canHeal() const
+        {
+            return _canHeal;
+        }
+
+        void CritterObject::setCanHeal(bool canHeal)
+        {
+            _canHeal = canHeal;
+        }
+
+        bool CritterObject::invulnerable() const
+        {
+            return _invulnerable;
+        }
+
+        void CritterObject::setInvulnerable(bool invulnerable)
+        {
+            _invulnerable = invulnerable;
+        }
+
+        bool CritterObject::leavesBody() const
+        {
+            return _leavesBody;
+        }
+
+        void CritterObject::setLeavesBody(bool leavesBody)
+        {
+            _leavesBody = leavesBody;
+        }
+
+        bool CritterObject::hasSpecialDeath() const
+        {
+            return _hasSpecialDeath;
+        }
+
+        void CritterObject::setHasSpecialDeath(bool hasSpecialDeath)
+        {
+            _hasSpecialDeath = hasSpecialDeath;
+        }
+
+        bool CritterObject::hasMeleeRange() const
+        {
+            return _hasMeleeRange;
+        }
+
+        void CritterObject::setHasMeleeRange(bool hasMeleeRange)
+        {
+            _hasMeleeRange = hasMeleeRange;
+        }
+
+        bool CritterObject::canKnockdown() const
+        {
+            return _canKnockdown;
+        }
+
+        void CritterObject::setCanKnockdown(bool knockdown)
+        {
+            _canKnockdown = knockdown;
         }
 
         UI::Animation* CritterObject::setWeaponAnimation(unsigned animationId)
