@@ -290,6 +290,21 @@ namespace Falltergeist
             _traitsTagged.at((unsigned)num) = value;
         }
 
+        void CritterObject::setCritterFlags(unsigned int flags)
+        {
+            setCanTrade((flags & 0x00000002));
+            setCanStealFrom((flags & 0x00000020));
+            setCanDropItems((flags & 0x00000040));
+            setCanLoseLimbs((flags & 0x00000080));
+            setCanAge((flags & 0x00000100));
+            setCanHeal((flags & 0x00000200));
+            setInvulnerable((flags & 0x00000400));
+            setLeavesBody((flags & 0x00000800));
+            setHasSpecialDeath((flags & 0x00001000));
+            setHasMeleeRange((flags & 0x00002000));
+            setCanKnockdown((flags & 0x00004000));
+        }
+
         int CritterObject::hitPoints() const
         {
             return _hitPoints;
@@ -653,6 +668,116 @@ namespace Falltergeist
                 animation->setCurrentFrame(0);
             });
             return animation;
+        }
+
+        bool CritterObject::canTrade() const
+        {
+            return _canTrade;
+        }
+
+        void CritterObject::setCanTrade(bool canTrade)
+        {
+            _canTrade = canTrade;
+        }
+
+        bool CritterObject::canStealFrom() const
+        {
+            return _canStealFrom;
+        }
+
+        void CritterObject::setCanStealFrom(bool canStealFrom)
+        {
+            _canStealFrom = canStealFrom;
+        }
+
+        bool CritterObject::canDropItems() const
+        {
+            return _canDropItems;
+        }
+
+        void CritterObject::setCanDropItems(bool canDropItems)
+        {
+            _canDropItems = canDropItems;
+        }
+
+        bool CritterObject::canLoseLimbs() const
+        {
+            return _canLoseLimbs;
+        }
+
+        void CritterObject::setCanLoseLimbs(bool canLoseLimbs)
+        {
+            _canLoseLimbs = canLoseLimbs;
+        }
+
+        bool CritterObject::canAge() const
+        {
+            return _canAge;
+        }
+
+        void CritterObject::setCanAge(bool canAge)
+        {
+            _canAge = canAge;
+        }
+
+        bool CritterObject::canHeal() const
+        {
+            return _canHeal;
+        }
+
+        void CritterObject::setCanHeal(bool canHeal)
+        {
+            _canHeal = canHeal;
+        }
+
+        bool CritterObject::invulnerable() const
+        {
+            return _invulnerable;
+        }
+
+        void CritterObject::setInvulnerable(bool invulnerable)
+        {
+            _invulnerable = invulnerable;
+        }
+
+        bool CritterObject::leavesBody() const
+        {
+            return _leavesBody;
+        }
+
+        void CritterObject::setLeavesBody(bool leavesBody)
+        {
+            _leavesBody = leavesBody;
+        }
+
+        bool CritterObject::hasSpecialDeath() const
+        {
+            return _hasSpecialDeath;
+        }
+
+        void CritterObject::setHasSpecialDeath(bool hasSpecialDeath)
+        {
+            _hasSpecialDeath = hasSpecialDeath;
+        }
+
+        bool CritterObject::hasMeleeRange() const
+        {
+            return _hasMeleeRange;
+        }
+
+        void CritterObject::setHasMeleeRange(bool hasMeleeRange)
+        {
+            _hasMeleeRange = hasMeleeRange;
+        }
+
+        bool CritterObject::canKnockdown() const
+        {
+            return _canKnockdown;
+        }
+
+        void CritterObject::setCanKnockdown(bool knockdown)
+        {
+            _canKnockdown = knockdown;
         }
 
         UI::Animation* CritterObject::setWeaponAnimation(unsigned animationId)

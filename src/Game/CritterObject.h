@@ -93,6 +93,8 @@ namespace Falltergeist
                 int traitTagged(TRAIT num) const;
                 void setTraitTagged(TRAIT num, int value);
 
+                void setCritterFlags(unsigned int flags);
+
                 int hitPoints() const;
                 void setHitPoints(int value);
 
@@ -161,7 +163,40 @@ namespace Falltergeist
                 UI::Animation* animation();
                 UI::Animation* generateAnimation(const std::string& action, Orientation orientation);
 
-            protected:
+                bool canTrade() const;
+                void setCanTrade(bool canTrade);
+
+                bool canStealFrom() const;
+                void setCanStealFrom(bool canStealFrom);
+
+                bool canDropItems() const;
+                void setCanDropItems(bool canDropItems);
+
+                bool canLoseLimbs() const;
+                void setCanLoseLimbs(bool canLoseLimbs);
+
+                bool canAge() const;
+                void setCanAge(bool canAge);
+
+                bool canHeal() const;
+                void setCanHeal(bool canHeal);
+
+                bool invulnerable() const;
+                void setInvulnerable(bool invulnerable);
+
+                bool leavesBody() const;
+                void setLeavesBody(bool leavesBody);
+
+                bool hasSpecialDeath() const;
+                void setHasSpecialDeath(bool hasSpecialDeath);
+
+                bool hasMeleeRange() const;
+                void setHasMeleeRange(bool hasMeleeRange);
+
+                bool canKnockdown() const;
+                void setCanKnockdown(bool canKnockdown);
+
+        protected:
                 bool _moving  = false;
                 bool _running = false;
 
@@ -177,6 +212,18 @@ namespace Falltergeist
                 int _meleeDamage = 0;
                 int _sequence = 0;
                 int _criticalChance = 0;
+
+                bool _canTrade;
+                bool _canStealFrom;
+                bool _canDropItems;
+                bool _canLoseLimbs;
+                bool _canAge; // dead body does not disappear
+                bool _canHeal; // damage is not healed over time
+                bool _invulnerable;
+                bool _leavesBody;
+                bool _hasSpecialDeath;
+                bool _hasMeleeRange; // melee attack is possible at a distance
+                bool _canKnockdown; // can be knocked down
 
                 unsigned int _nextIdleAnim = 0;
                 unsigned _age = 0;

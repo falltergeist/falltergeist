@@ -163,6 +163,7 @@ namespace Falltergeist
                     }
                     ((CritterObject*)object)->setActionPoints(proto->critterActionPoints());
                     ((CritterObject*)object)->setActionPointsMax(proto->critterActionPoints());
+                    ((CritterObject*)object)->setCritterFlags(proto->critterFlags());
                     ((CritterObject*)object)->setHitPointsMax(proto->critterHitPointsMax());
                     ((CritterObject*)object)->setArmorClass(proto->critterArmorClass());
                     ((CritterObject*)object)->setCarryWeightMax(proto->critterCarryWeightMax());

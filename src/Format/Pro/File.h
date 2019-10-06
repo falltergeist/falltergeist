@@ -81,6 +81,7 @@ public:
     uint32_t flagsExt() const;
     uint32_t weight() const;
     uint32_t basePrice() const;
+    uint32_t critterFlags() const;
     uint32_t critterHitPointsMax() const;
     uint32_t critterActionPoints() const;
     uint32_t critterArmorClass() const;
@@ -126,6 +127,7 @@ protected:
     uint32_t _weaponAmmoCapacity = 0;
     uint32_t _subtypeId = 0;
     uint32_t _messageId = 0;
+    uint32_t _critterFlags = 0;
     uint32_t _critterHitPointsMax = 0;
     uint32_t _critterActionPoints = 0;
     uint32_t _critterArmorClass = 0;
