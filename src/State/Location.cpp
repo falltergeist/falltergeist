@@ -1,63 +1,26 @@
-﻿/*
- * Copyright 2012-2018 Falltergeist Developers.
- *
- * This file is part of Falltergeist.
- *
- * Falltergeist is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Falltergeist is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
- */
-
-// Related headers
-#include "../State/Location.h"
-
-// C++ standard includes
-#include <algorithm>
-#include <cmath>
+﻿#include <algorithm>
 #include <cstdlib>
 #include <list>
 #include <memory>
-
-// Falltergeist includes
+#include "../State/Location.h"
 #include "../Audio/Mixer.h"
-#include "../Event/Mouse.h"
 #include "../Exception.h"
 #include "../Format/Msg/File.h"
-#include "../Format/Msg/Message.h"
-#include "../Format/Map/File.h"
-#include "../Format/Map/Elevation.h"
-#include "../Format/Map/Object.h"
-#include "../Format/Map/Script.h"
 #include "../Format/Txt/MapsFile.h"
 #include "../Format/Gam/File.h"
 #include "../functions.h"
 #include "../Game/ContainerItemObject.h"
 #include "../Game/Defines.h"
 #include "../Game/DoorSceneryObject.h"
-#include "../Game/DudeObject.h"
 #include "../Game/ExitMiscObject.h"
 #include "../Game/Game.h"
 #include "../Game/Location.h"
 #include "../Game/LocationElevation.h"
-#include "../Game/Object.h"
 #include "../Game/ObjectFactory.h"
 #include "../Game/SpatialObject.h"
-#include "../Game/Time.h"
 #include "../Game/WeaponItemObject.h"
-#include "../Graphics/Point.h"
-#include "../Graphics/Renderer.h"
-#include "../Helpers/GameObjectHelper.h"
 #include "../Helpers/GameLocationHelper.h"
-#include "../Input/Mouse.h"
+#include "../Helpers/GameObjectHelper.h"
 #include "../LocationCamera.h"
 #include "../Logger.h"
 #include "../PathFinding/Hexagon.h"
@@ -65,22 +28,15 @@
 #include "../ResourceManager.h"
 #include "../Settings.h"
 #include "../State/CursorDropdown.h"
-#include "../State/ExitConfirm.h"
-#include "../State/MainMenu.h"
 #include "../State/WorldMap.h"
 #include "../UI/Animation.h"
 #include "../UI/AnimationFrame.h"
 #include "../UI/AnimationQueue.h"
-#include "../UI/Image.h"
-#include "../UI/ImageButton.h"
 #include "../UI/PlayerPanel.h"
 #include "../UI/SmallCounter.h"
 #include "../UI/TextArea.h"
 #include "../UI/Tile.h"
 #include "../UI/TileMap.h"
-#include "../VM/Script.h"
-
-// Third party includes
 
 namespace Falltergeist
 {
@@ -378,8 +334,10 @@ namespace Falltergeist
             auto leatherJacket = (Game::ItemObject*) Game::ObjectFactory::getInstance()->createObject(PID_LEATHER_JACKET);
             auto combatArmor = (Game::ItemObject*) Game::ObjectFactory::getInstance()->createObject(PID_COMBAT_ARMOR);
             auto purpleRobe = (Game::ItemObject*) Game::ObjectFactory::getInstance()->createObject(PID_PURPLE_ROBE);
+            purpleRobe->setAmount(5);
             auto miniGun = (Game::WeaponItemObject*)Game::ObjectFactory::getInstance()->createObject(PID_MINIGUN);
             auto spear = (Game::WeaponItemObject*) Game::ObjectFactory::getInstance()->createObject(PID_SPEAR);
+
             player->inventory()->push_back(powerArmor);
             player->inventory()->push_back(leatherJacket);
             player->inventory()->push_back(combatArmor);
@@ -429,6 +387,9 @@ namespace Falltergeist
                 } else if (event->name() == "mouseclick") {
                     auto icons = getCursorIconsForObject(object);
                     if (!icons.empty()) {
+                        // Move
+                        movePlayerToObject(object);
+                        // Use
                         handleAction(object, icons.front());
                         _actionCursorButtonPressed = false;
                     }
@@ -800,6 +761,7 @@ namespace Falltergeist
 
         void Location::onMouseUp(Event::Mouse *event)
         {
+            // Player movement
             if (event->leftButton()) {
                 auto game = Game::getInstance();
                 auto mouse = game->mouse();
@@ -822,12 +784,18 @@ namespace Falltergeist
                     }
                 }
 
+                // Using a skill
                 if (mouse->state() == Input::Mouse::Cursor::USE) {
                     auto object = getGameObjectUnderCursor();
-                    if (!object) {
-                        return;
-                    }
-                    // TODO "use" animation
+
+                    if (!object) return;
+
+                    // Move
+                    movePlayerToObject(object);
+
+                    // TODO: Animate
+
+                    // Use
                     object->use_skill_on_p_proc(skillInUse(), object, Game::getInstance()->player().get());
                     mouse->setState(Input::Mouse::Cursor::ACTION);
                 }
@@ -919,6 +887,42 @@ namespace Falltergeist
             if (event->keyCode() == SDLK_DOWN) {
                 _camera->setCenter(_camera->center() + Point(0, KEYBOARD_SCROLL_STEP));
             }
+        }
+
+        bool Location::movePlayerToObject(Game::Object *object)
+        {
+            // Find path to object
+            auto hexagon = object->hexagon();
+
+            for (auto adjacentHex : hexagon->neighbors())
+            {
+                auto game = Game::getInstance();
+                auto player = game->player();
+
+                if (!adjacentHex->canWalkThru()) continue;
+
+                auto path = hexagonGrid()->findPath(player->hexagon(), adjacentHex);
+
+                if(path.size())
+                {
+                    /* Remove the last hexagon from the path so the player stops on
+                    an adjacent tile (rather than on the tile the object occupies) */
+                    path.pop_back();
+
+                    player->stopMovement();
+                    player->setRunning(true);
+
+                    // Move!
+                    for (auto pathHexagon : path)
+                    {
+                        player->movementQueue()->push_back(pathHexagon);
+                    }
+                    // The player was able to move to an adjacent tile
+                    return true;
+                }
+            }
+            // There wasn't a clear path
+            return false;
         }
 
         LocationCamera *Location::camera()
@@ -1106,37 +1110,55 @@ namespace Falltergeist
 
         void Location::handleAction(Game::Object *object, Input::Mouse::Icon action)
         {
-            if (action == Input::Mouse::Icon::LOOK) {
-                object->description_p_proc();
-                return;
-            }
+            using Input::Mouse;
 
-            if (action == Input::Mouse::Icon::USE) {
-                auto player = Game::getInstance()->player();
-                auto animation = player->setActionAnimation("al");
-                animation->actionFrameHandler().add([object, player](Event::Event *event) {
-                    object->onUseAnimationActionFrame(event, player.get());
-                });
-                return;
-            }
+            switch (action)
+            {
+                case Mouse::Icon::LOOK:
+                    object->description_p_proc();
+                    break;
 
-            if (action == Input::Mouse::Icon::ROTATE) {
-                auto dude = dynamic_cast<Game::DudeObject *>(object);
-                if (!dude) throw Exception("Location::handleAction() - only Dude can be rotated");
 
-                auto orientation = dude->orientation() + 1;
-                if (orientation > 5) orientation = 0;
-                dude->setOrientation(orientation);
-                return;
-            }
-
-            if (action == Input::Mouse::Icon::TALK) {
-                if (auto critter = dynamic_cast<Game::CritterObject *>(object)) {
-                    critter->talk_p_proc();
-                } else {
-                    throw Exception("Location::handleAction() - can talk only with critters!");
+                case Mouse::Icon::USE:
+                {
+                    auto player = Game::getInstance()->player();
+                    auto animation = player->setActionAnimation("al");
+                    // Move to object
+                    animation->actionFrameHandler().add([object, player](Event::Event *event) {
+                        object->onUseAnimationActionFrame(event, player.get());
+                    });
+                    break;
                 }
-                return;
+
+                case Mouse::Icon::ROTATE:
+                {
+                    auto dude = dynamic_cast<Game::DudeObject *>(object);
+
+                    if (!dude)
+                        throw Exception("Location::handleAction() - only Dude can be rotated");
+
+                    auto orientation = dude->orientation() + 1;
+
+                    if (orientation >= HEX_SIDES)
+                        orientation = 0;
+
+                    dude->setOrientation(orientation);
+                    break;
+                }
+
+                case Mouse::Icon::TALK:
+                {
+                    auto critter = dynamic_cast<Game::CritterObject *>(object);
+
+                    if (!critter)
+                        throw Exception("Location::handleAction() - can talk only with critters!");
+
+                    critter->talk_p_proc();
+                    break;
+                }
+
+                default:
+                    return;
             }
         }
 

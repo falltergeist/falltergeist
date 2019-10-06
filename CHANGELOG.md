@@ -1,11 +1,16 @@
 Under development
 =======================
+- [bugfix] Opcode810D (obj_carrying_pid_obj) checks containers as well (JanSimek)
+- [bugfix] Fix linking release builds on Windows and prevent closing console after a crash (JanSimek)
 - [feature] Search data files in parent dir too (alexeevdv)
 - [feature] Basic barter system (Zervox, JanSimek)
 - [feature] Fix and update Travis build (JanSimek)
 - [feature] Load critter flags from PRO file (JanSimek)
 - [feature] Added 'Take All' and scroll buttons to the container window (JanSimek)
-- [bugfix] Fix linking release builds on Windows and prevent closing console after a crash (JanSimek)
+- [feature] Show number of stacked items in the inventory (JanSimek)
+- [feature] Player moves to an adjacent hexagon when using (a skill on) an object (AdamFx990)
+- [feature] Doors can't be opened if they're locked (AdamFx990)
+- [feature] Optimisations & code readability improvements to hexagon logic (AdamFx990)
 
 0.3.1 (2018-01-14)
 =======================
