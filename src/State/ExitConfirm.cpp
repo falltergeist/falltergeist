@@ -16,13 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-// Related headers
 #include "../State/ExitConfirm.h"
-
-// C++ standard includes
-
-// Falltergeist includes
 #include "../functions.h"
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
@@ -34,8 +28,6 @@
 #include "../UI/ImageButton.h"
 #include "../UI/PlayerPanel.h"
 #include "../UI/TextArea.h"
-
-// Third party includes
 
 namespace Falltergeist
 {
