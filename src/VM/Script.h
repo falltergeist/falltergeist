@@ -27,7 +27,7 @@
 #include "../Format/Enums.h"
 #include "../VM/Stack.h"
 #include "../VM/StackValue.h"
-#include "../VM/IFalloutContext.h"
+#include "../VM/Fallout/IContext.h"
 
 // Third party includes
 
@@ -49,38 +49,13 @@ namespace Falltergeist {
          *
          * TODO remove enable_shared_from_this
          */
-        class Script : public std::enable_shared_from_this<Script>, public virtual IFalloutContext {
+        class Script : public std::enable_shared_from_this<Script> {
         public:
             Script(Format::Int::File *script, Game::Object *owner);
 
             Script(const std::string &filename, Game::Object *owner);
 
             virtual ~Script();
-
-            // IFalloutContext
-            std::shared_ptr<Game::DudeObject> player() override;
-
-            void stopExecution() override;
-
-            std::shared_ptr<IFalloutProcedure> getProcedureByIndex(unsigned int index) const override;
-
-            std::shared_ptr<IFalloutStack> dataStack() override;
-
-            std::shared_ptr<IFalloutStack> returnStack() override;
-
-            std::shared_ptr<IFalloutProcedure> getProcedureByName(const std::string &name) const override;
-
-            unsigned programCounter() const override;
-
-            unsigned int scriptVarStackBase() const override;
-
-            void setScriptVarStackBase(unsigned int stackBase) override;
-
-            unsigned int dynamicVarStackBase() const override;
-
-            void setDynamicVarStackBase(unsigned int stackBase) override;
-
-            void setProgramCounter(unsigned value) override;
 
             void run();
 
@@ -136,8 +111,6 @@ namespace Falltergeist {
 
             VM::Script *setUsedSkill(SKILL skill);
 
-            std::string getIdentifierByIndex(unsigned int index) const override;
-
         protected:
             Game::Object *_owner = nullptr;
             Game::Object *_sourceObject = nullptr;
@@ -149,8 +122,6 @@ namespace Falltergeist {
             Format::Int::File *_script = 0;
             bool _initialized = false;
             bool _overrides = false;
-            std::shared_ptr<IFalloutStack> _dataStack;
-            std::shared_ptr<IFalloutStack> _returnStack;
             std::vector<StackValue> _LVARS;
             unsigned _programCounter = 0;
             size_t _DVAR_base = 0;

@@ -35,10 +35,10 @@
 #include "../Logger.h"
 #include "../ResourceManager.h"
 #include "../VM/ErrorException.h"
-#include "../VM/FalloutStack.h"
-#include "FalloutValue.h"
+#include "VM/Fallout/Stack.h"
+#include "VM/Fallout/StackValue.h"
 #include "../VM/HaltException.h"
-#include "../VM/OpcodeFactory.h"
+#include "VM/Fallout/OpcodeFactory.h"
 #include "../VM/Script.h"
 #include "../VM/StackValue.h"
 
@@ -47,8 +47,8 @@
 namespace Falltergeist {
     namespace VM {
         Script::Script(Format::Int::File *script, Game::Object *owner) {
-            _returnStack = std::make_shared<FalloutStack>();
-            _dataStack = std::make_shared<FalloutStack>();
+            _returnStack = std::make_shared<Stack>();
+            _dataStack = std::make_shared<Stack>();
             _owner = owner;
             _script = script;
             if (!_script) throw Exception("Script::VM() - script is null");
@@ -100,7 +100,7 @@ namespace Falltergeist {
             _dataStack->pop()->asInteger(); // remove @start function result
         }
 
-        std::shared_ptr<IFalloutProcedure> Script::getProcedureByName(const std::string &name) const {
+        std::shared_ptr<IProcedure> Script::getProcedureByName(const std::string &name) const {
             // TODO implement
             return nullptr;
         }
@@ -176,11 +176,11 @@ namespace Falltergeist {
             _programCounter = value;
         }
 
-        std::shared_ptr<IFalloutStack> Script::dataStack() {
+        std::shared_ptr<IStack> Script::dataStack() {
             return &_dataStack;
         }
 
-        std::shared_ptr<IFalloutStack> Script::returnStack() {
+        std::shared_ptr<IStack> Script::returnStack() {
             return &_returnStack;
         }
 
@@ -268,8 +268,8 @@ namespace Falltergeist {
 
         }
 
-        std::shared_ptr<IFalloutProcedure> Script::getProcedureByIndex(unsigned int index) const {
-            return std::shared_ptr<IFalloutProcedure>();
+        std::shared_ptr<IProcedure> Script::getProcedureByIndex(unsigned int index) const {
+            return std::shared_ptr<IProcedure>();
         }
 
         std::string Script::getIdentifierByIndex(unsigned int index) const {

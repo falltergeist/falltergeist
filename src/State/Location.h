@@ -12,7 +12,7 @@
 #include "../Input/Mouse.h"
 #include "../State/State.h"
 #include "../UI/ImageButton.h"
-#include "../VM/IFalloutValue.h"
+#include "VM/Fallout/IStackValue.h"
 
 namespace Falltergeist
 {
@@ -77,10 +77,12 @@ namespace Falltergeist
                 unsigned int elevation() const;
                 void setElevation(unsigned int elevation);
 
+                // TODO move to fallout context
                 void setMVAR(unsigned int number, int value);
                 int MVAR(unsigned int number);
 
-                std::map<std::string, std::shared_ptr<VM::IFalloutValue>>* EVARS();
+                // TODO move to fallout context
+                std::map<std::string, std::shared_ptr<VM::Fallout::IStackValue>>* EVARS();
 
                 void moveObjectToHexagon(Game::Object *object, Hexagon *hexagon, bool update = true);
                 void removeObjectFromMap(Game::Object *object);
@@ -148,7 +150,8 @@ namespace Falltergeist
                 std::unique_ptr<LocationCamera> _camera;
                 std::unique_ptr<UI::TileMap> _floor;
                 std::unique_ptr<UI::TileMap> _roof;
-                std::map<std::string, std::shared_ptr<VM::IFalloutValue>> _EVARS;
+                // TODO move to fallout context
+                std::map<std::string, std::shared_ptr<VM::Fallout::IStackValue>> _EVARS;
                 std::vector<UI::Base*> _floatMessages;
 
                 std::shared_ptr<Falltergeist::Game::Location> _location;

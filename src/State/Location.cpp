@@ -946,7 +946,7 @@ namespace Falltergeist
             return _location->MVARS()->at(number);
         }
 
-        std::map<std::string, std::shared_ptr<VM::IFalloutValue>> *Location::EVARS()
+        std::map<std::string, std::shared_ptr<VM::Fallout::IStackValue>> *Location::EVARS()
         {
             return &_EVARS;
         }
