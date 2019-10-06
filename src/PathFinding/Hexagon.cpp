@@ -32,28 +32,17 @@
 namespace Falltergeist
 {
 
-Hexagon::Hexagon()
-{
-}
+Hexagon::Hexagon() {}
 
 Hexagon::Hexagon(unsigned int number)
 {
+    // Init hex's grid position
     setNumber(number);
 }
 
-unsigned int Hexagon::number()
+std::array<Hexagon*, HEX_SIDES>& Hexagon::neighbors()
 {
-    return _number;
-}
-
-void Hexagon::setNumber(unsigned int number)
-{
-    _number = number;
-}
-
-std::vector<Hexagon*>* Hexagon::neighbors()
-{
-    return &_neighbors;
+    return _neighbors;
 }
 
 std::list<Game::Object*>* Hexagon::objects()
@@ -71,68 +60,14 @@ void Hexagon::setPosition(const Point& pos)
     _position = pos;
 }
 
-int Hexagon::cubeX()
-{
-    return _cubeX;
-}
-
-void Hexagon::setCubeX(int value)
-{
-    _cubeX = value;
-}
-
-int Hexagon::cubeY()
-{
-    return _cubeY;
-}
-
-void Hexagon::setCubeY(int value)
-{
-    _cubeY = value;
-}
-
-int Hexagon::cubeZ()
-{
-    return _cubeZ;
-}
-
-void Hexagon::setCubeZ(int value)
-{
-    _cubeZ = value;
-}
-
-unsigned int Hexagon::heuristic()
-{
-    return _heuristic;
-}
-
-void Hexagon::setHeuristic(unsigned int value)
-{
-    _heuristic = value;
-}
-
 bool Hexagon::canWalkThru()
 {
-    bool canWalkThru = true;
-    for (auto object : _objects)
+    // Search hex for any blocking objects...
+    for (const auto object : _objects)
     {
-        if (auto door = dynamic_cast<Game::DoorSceneryObject*>(object))
-        {
-            return door->canWalkThru();
-        }
-        if (!object->canWalkThru()) canWalkThru = false;
+        if (!object->canWalkThru()) return false;
     }
-    return canWalkThru;
-}
-
-bool Hexagon::inRender()
-{
-    return _inRender;
-}
-
-void Hexagon::setInRender(bool value)
-{
-    _inRender = value;
+    return true;
 }
 
 Game::Orientation Hexagon::orientationTo(Hexagon *hexagon)
@@ -171,14 +106,14 @@ Game::Orientation Hexagon::orientationTo(Hexagon *hexagon)
 
 unsigned int Hexagon::addLight(unsigned int light)
 {
-    _light+=light;
+    _light += light;
     if (_light > 65536) _light = 65536;
     return _light;
 }
 
 unsigned int Hexagon::subLight(unsigned int light)
 {
-    _light-=light;
+    _light -= light;
     if ((int)_light < 655) _light = 655;
     return _light;
 }

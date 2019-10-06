@@ -5,6 +5,9 @@ Under development
 - [feature] Fix and update Travis build (JanSimek)
 - [feature] Added 'Take All' and scroll buttons to the container window (JanSimek)
 - [bugfix] Fix linking release builds on Windows and prevent closing console after a crash (JanSimek)
+- [feature] Player moves to an adjacent hexagon when using (a skill on) an object (AdamFx990)
+- [feature] Doors can't be opened if they're locked (AdamFx990)
+- [feature] Optimisations & code readability improvements to hexagon logic (AdamFx990)
 
 0.3.1 (2018-01-14)
 =======================

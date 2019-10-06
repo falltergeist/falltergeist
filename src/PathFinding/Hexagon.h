@@ -21,7 +21,7 @@
 #define FALLTERGEIST_HEXAGON_H
 
 // C++ standard includes
-#include <vector>
+#include <array>
 #include <list>
 
 // Falltergeist includes
@@ -29,6 +29,11 @@
 #include "../Graphics/Point.h"
 
 // Third party includes
+
+
+#define HEX_SIDES 6
+#define HEX_WIDTH 16
+#define HEX_HEIGHT 12
 
 namespace Falltergeist
 {
@@ -42,45 +47,58 @@ using Graphics::Point;
 class Hexagon
 {
 public:
+    // ctors
     Hexagon();
     Hexagon(unsigned int number);
 
     const Point& position() const;
     void setPosition(const Point& pos);
 
-    unsigned int number();
-    void setNumber(unsigned int number);
+    inline bool inRender()
+    { return _inRender; }
+    inline void setInRender(bool value)
+    { _inRender = value; }
 
-    std::vector<Hexagon*>* neighbors();
+    inline unsigned int number()
+    { return _number; }
+    inline void setNumber(unsigned int value)
+    { _number = value; }
 
-    std::list<Game::Object*>* objects();
+    inline unsigned int heuristic()
+    { return _heuristic; }
+    inline void setHeuristic(unsigned int value)
+    { _heuristic = value; }
 
-    int cubeX();
-    void setCubeX(int value);
+    inline int cubeX()
+    { return _cubeX; }
+    inline void setCubeX(unsigned int value)
+    { _cubeX = value; }
 
-    int cubeY();
-    void setCubeY(int value);
+    inline int cubeY()
+    { return _cubeY; }
+    inline void setCubeY(unsigned int value)
+    { _cubeY = value; }
 
-    int cubeZ();
-    void setCubeZ(int value);
-
-    unsigned int heuristic();
-    void setHeuristic(unsigned int value);
-
-    bool canWalkThru();
-
-    void setInRender(bool value);
-    bool inRender();
-
-    Game::Orientation orientationTo(Hexagon *hexagon);
+    inline int cubeZ()
+    { return _cubeZ; }
+    inline void setCubeZ(unsigned int value)
+    { _cubeZ = value; }
 
     unsigned int addLight(unsigned int light);
     unsigned int subLight(unsigned int light);
     unsigned int setLight(unsigned int light);
     unsigned int light();
 
+    bool canWalkThru();
+
+    std::array<Hexagon*, HEX_SIDES>& neighbors();
+
+    std::list<Game::Object*>* objects();
+
+    Game::Orientation orientationTo(Hexagon *hexagon);
+
 protected:
-    std::vector<Hexagon*> _neighbors;
+    std::array<Hexagon*, HEX_SIDES> _neighbors;
     std::list<Game::Object*> _objects;
     unsigned int _number = 0; // position in hexagonal grid
 

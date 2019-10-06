@@ -429,6 +429,9 @@ namespace Falltergeist
                 } else if (event->name() == "mouseclick") {
                     auto icons = getCursorIconsForObject(object);
                     if (!icons.empty()) {
+                        // Move
+                        movePlayerToObject(object);
+                        // Use
                         handleAction(object, icons.front());
                         _actionCursorButtonPressed = false;
                     }
@@ -800,6 +803,7 @@ namespace Falltergeist
 
         void Location::onMouseUp(Event::Mouse *event)
         {
+            // Player movement
             if (event->leftButton()) {
                 auto game = Game::getInstance();
                 auto mouse = game->mouse();
@@ -822,12 +826,18 @@ namespace Falltergeist
                     }
                 }
 
+                // Using a skill
                 if (mouse->state() == Input::Mouse::Cursor::USE) {
                     auto object = getGameObjectUnderCursor();
-                    if (!object) {
-                        return;
-                    }
-                    // TODO "use" animation
+
+                    if (!object) return;
+
+                    // Move
+                    movePlayerToObject(object);
+
+                    // TODO: Animate
+
+                    // Use
                     object->use_skill_on_p_proc(skillInUse(), object, Game::getInstance()->player().get());
                     mouse->setState(Input::Mouse::Cursor::ACTION);
                 }
@@ -919,6 +929,42 @@ namespace Falltergeist
             if (event->keyCode() == SDLK_DOWN) {
                 _camera->setCenter(_camera->center() + Point(0, KEYBOARD_SCROLL_STEP));
             }
+        }
+
+        bool Location::movePlayerToObject(Game::Object *object)
+        {
+            // Find path to object
+            auto hexagon = object->hexagon();
+
+            for (auto adjacentHex : hexagon->neighbors())
+            {
+                auto game = Game::getInstance();
+                auto player = game->player();
+
+                if (!adjacentHex->canWalkThru()) continue;
+
+                auto path = hexagonGrid()->findPath(player->hexagon(), adjacentHex);
+
+                if(path.size())
+                {
+                    /* Remove the last hexagon from the path so the player stops on
+                    an adjacent tile (rather than on the tile the object occupies) */
+                    path.pop_back();
+
+                    player->stopMovement();
+                    player->setRunning(true);
+
+                    // Move!
+                    for (auto pathHexagon : path)
+                    {
+                        player->movementQueue()->push_back(pathHexagon);
+                    }
+                    // The player was able to move to an adjacent tile
+                    return true;
+                }
+            }
+            // There wasn't a clear path
+            return false;
         }
 
         LocationCamera *Location::camera()
@@ -1106,37 +1152,55 @@ namespace Falltergeist
 
         void Location::handleAction(Game::Object *object, Input::Mouse::Icon action)
         {
-            if (action == Input::Mouse::Icon::LOOK) {
-                object->description_p_proc();
-                return;
-            }
+            using Input::Mouse;
 
-            if (action == Input::Mouse::Icon::USE) {
-                auto player = Game::getInstance()->player();
-                auto animation = player->setActionAnimation("al");
-                animation->actionFrameHandler().add([object, player](Event::Event *event) {
-                    object->onUseAnimationActionFrame(event, player.get());
-                });
-                return;
-            }
+            switch (action)
+            {
+                case Mouse::Icon::LOOK:
+                    object->description_p_proc();
+                    break;
 
-            if (action == Input::Mouse::Icon::ROTATE) {
-                auto dude = dynamic_cast<Game::DudeObject *>(object);
-                if (!dude) throw Exception("Location::handleAction() - only Dude can be rotated");
 
-                auto orientation = dude->orientation() + 1;
-                if (orientation > 5) orientation = 0;
-                dude->setOrientation(orientation);
-                return;
-            }
-
-            if (action == Input::Mouse::Icon::TALK) {
-                if (auto critter = dynamic_cast<Game::CritterObject *>(object)) {
-                    critter->talk_p_proc();
-                } else {
-                    throw Exception("Location::handleAction() - can talk only with critters!");
+                case Mouse::Icon::USE:
+                {
+                    auto player = Game::getInstance()->player();
+                    auto animation = player->setActionAnimation("al");
+                    // Move to object
+                    animation->actionFrameHandler().add([object, player](Event::Event *event) {
+                        object->onUseAnimationActionFrame(event, player.get());
+                    });
+                    break;
                 }
-                return;
+
+                case Mouse::Icon::ROTATE:
+                {
+                    auto dude = dynamic_cast<Game::DudeObject *>(object);
+
+                    if (!dude)
+                        throw Exception("Location::handleAction() - only Dude can be rotated");
+
+                    auto orientation = dude->orientation() + 1;
+
+                    if (orientation >= HEX_SIDES)
+                        orientation = 0;
+
+                    dude->setOrientation(orientation);
+                    break;
+                }
+
+                case Mouse::Icon::TALK:
+                {
+                    auto critter = dynamic_cast<Game::CritterObject *>(object);
+
+                    if (!critter)
+                        throw Exception("Location::handleAction() - can talk only with critters!");
+
+                    critter->talk_p_proc();
+                    break;
+                }
+
+                default:
+                    return;
             }
         }
 
