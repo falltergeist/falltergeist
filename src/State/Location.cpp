@@ -1,63 +1,26 @@
-﻿/*
- * Copyright 2012-2018 Falltergeist Developers.
- *
- * This file is part of Falltergeist.
- *
- * Falltergeist is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Falltergeist is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
- */
-
-// Related headers
-#include "../State/Location.h"
-
-// C++ standard includes
-#include <algorithm>
-#include <cmath>
+﻿#include <algorithm>
 #include <cstdlib>
 #include <list>
 #include <memory>
-
-// Falltergeist includes
+#include "../State/Location.h"
 #include "../Audio/Mixer.h"
-#include "../Event/Mouse.h"
 #include "../Exception.h"
 #include "../Format/Msg/File.h"
-#include "../Format/Msg/Message.h"
-#include "../Format/Map/File.h"
-#include "../Format/Map/Elevation.h"
-#include "../Format/Map/Object.h"
-#include "../Format/Map/Script.h"
 #include "../Format/Txt/MapsFile.h"
 #include "../Format/Gam/File.h"
 #include "../functions.h"
 #include "../Game/ContainerItemObject.h"
 #include "../Game/Defines.h"
 #include "../Game/DoorSceneryObject.h"
-#include "../Game/DudeObject.h"
 #include "../Game/ExitMiscObject.h"
 #include "../Game/Game.h"
 #include "../Game/Location.h"
 #include "../Game/LocationElevation.h"
-#include "../Game/Object.h"
 #include "../Game/ObjectFactory.h"
 #include "../Game/SpatialObject.h"
-#include "../Game/Time.h"
 #include "../Game/WeaponItemObject.h"
-#include "../Graphics/Point.h"
-#include "../Graphics/Renderer.h"
-#include "../Helpers/GameObjectHelper.h"
 #include "../Helpers/GameLocationHelper.h"
-#include "../Input/Mouse.h"
+#include "../Helpers/GameObjectHelper.h"
 #include "../LocationCamera.h"
 #include "../Logger.h"
 #include "../PathFinding/Hexagon.h"
@@ -65,22 +28,15 @@
 #include "../ResourceManager.h"
 #include "../Settings.h"
 #include "../State/CursorDropdown.h"
-#include "../State/ExitConfirm.h"
-#include "../State/MainMenu.h"
 #include "../State/WorldMap.h"
 #include "../UI/Animation.h"
 #include "../UI/AnimationFrame.h"
 #include "../UI/AnimationQueue.h"
-#include "../UI/Image.h"
-#include "../UI/ImageButton.h"
 #include "../UI/PlayerPanel.h"
 #include "../UI/SmallCounter.h"
 #include "../UI/TextArea.h"
 #include "../UI/Tile.h"
 #include "../UI/TileMap.h"
-#include "../VM/Script.h"
-
-// Third party includes
 
 namespace Falltergeist
 {
