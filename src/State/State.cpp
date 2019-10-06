@@ -242,7 +242,7 @@ namespace Falltergeist
             return _keyUpHandler;
         }
 
-        void State::scriptFade(VM::Script *script, bool in)
+        void State::scriptFade(std::shared_ptr<VM::Script> script, bool in)
         {
             fadeDoneHandler().clear();
             fadeDoneHandler().add([this, script](Event::Event* event) {

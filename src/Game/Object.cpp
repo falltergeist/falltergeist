@@ -153,14 +153,14 @@ namespace Falltergeist {
             _description = value;
         }
 
-        VM::Script *Object::script() const
+        std::shared_ptr<VM::Script> Object::script() const
         {
-            return _script.get();
+            return _script;
         }
 
-        void Object::setScript(VM::Script *script)
+        void Object::setScript(std::shared_ptr<VM::Script> script)
         {
-            _script.reset(script);
+            _script = script;
         }
 
         UI::Base *Object::ui() const

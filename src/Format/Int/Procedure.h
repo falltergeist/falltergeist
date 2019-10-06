@@ -78,7 +78,7 @@ protected:
     uint32_t _flags = 0;
     uint32_t _delay = 0; // delay for timed procedures
     uint32_t _conditionOffset = 0; // offset of condition in code for conditional procedures
-    uint32_t _bodyOffset = 0; // procedure body offset from the beginning of the file
+    uint32_t _bodyOffset = 0; // getProcedureByIndex body offset from the beginning of the file
     uint32_t _argumentsCounter = 0; // number of arguments
 
 };

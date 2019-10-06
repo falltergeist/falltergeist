@@ -18,6 +18,7 @@
 #include "../UI/Image.h"
 #include "../UI/TextArea.h"
 #include "../VM/Script.h"
+#include "VM/Fallout/IStack.h"
 
 namespace Falltergeist
 {
@@ -221,20 +222,21 @@ namespace Falltergeist
             dialog->dialogReview()->addAnswer(_answers.at(i)->text().substr(1));
 
             // @todo optimize
-            auto script = dialog->script();
-            int newOffset = script->script()->procedures().at(_functions.at(i)).bodyOffset();
-            int oldOffset = script->programCounter() - 2;
-            int reaction = 50;
-            if (i < _reactions.size())
-            {
-                reaction = _reactions.at(i);
-            }
-            deleteAnswers();
-            script->dataStack()->push(0); // arguments counter;
-            script->returnStack()->push(oldOffset); // return adrress
-            script->setProgramCounter(newOffset);
+            // @TODO move to VM
+//            auto script = dialog->script();
+//            int newOffset = script->script()->procedures().at(_functions.at(i)).bodyOffset();
+//            int oldOffset = script->programCounter() - 2;
+//            int reaction = 50;
+//            if (i < _reactions.size())
+//            {
+//                reaction = _reactions.at(i);
+//            }
+//            deleteAnswers();
+//            script->dataStack()->push(0); // arguments counter;
+//            script->returnStack()->push(oldOffset); // return adrress
+//            script->setProgramCounter(newOffset);
             // play transition, if needed, then run script.
-            dialog->transition(static_cast<CritterInteract::Reaction>(reaction));
+//            dialog->transition(static_cast<CritterInteract::Reaction>(reaction));
             //dialog->script()->run();
         }
 

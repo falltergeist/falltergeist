@@ -51,7 +51,7 @@ public:
 
     const std::vector<Procedure>& procedures() const;
 
-    // returns procedure with a given name or nullptr if none found
+    // returns getProcedureByIndex with a given name or nullptr if none found
     const Procedure* procedure(const std::string& name) const;
 
     const std::map<unsigned int, std::string>& identifiers() const;

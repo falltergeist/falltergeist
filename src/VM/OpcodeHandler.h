@@ -34,14 +34,14 @@ namespace Falltergeist {
 
         class OpcodeHandler {
         public:
-            OpcodeHandler(VM::Script *script);
+            OpcodeHandler(std::shared_ptr<VM::Script> script);
 
             virtual ~OpcodeHandler();
 
             void run();
 
         protected:
-            VM::Script *_script;
+            std::shared_ptr<VM::Script> _script;
             unsigned int _offset;
 
             virtual void _run();

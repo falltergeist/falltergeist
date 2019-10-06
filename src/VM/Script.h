@@ -27,6 +27,7 @@
 #include "../Format/Enums.h"
 #include "../VM/Stack.h"
 #include "../VM/StackValue.h"
+#include "../VM/Fallout/IContext.h"
 
 // Third party includes
 
@@ -36,19 +37,19 @@ namespace Falltergeist {
             class File;
         }
     }
-
     namespace Game {
         class Object;
     }
-
     namespace VM {
         /**
          * Script class represents Virtual Machine for running vanilla Fallout scripts.
          * VM uses 2 stacks (return stack and data stack).
          * Each operator from .INT script is handled by one of the Handler classes and it manipulates one or both stacks in some way.
          * Typical scripting command takes 0 or more arguments from the data stack and puts one return value to the same stack.
+         *
+         * TODO remove enable_shared_from_this
          */
-        class Script {
+        class Script : public std::enable_shared_from_this<Script> {
         public:
             Script(Format::Int::File *script, Game::Object *owner);
 
@@ -83,13 +84,6 @@ namespace Falltergeist {
 
             Game::Object *owner();
 
-            unsigned int programCounter();
-
-            void setProgramCounter(unsigned int value);
-
-            Stack *dataStack();
-
-            Stack *returnStack();
 
             std::vector<StackValue> *LVARS();
 
@@ -128,10 +122,8 @@ namespace Falltergeist {
             Format::Int::File *_script = 0;
             bool _initialized = false;
             bool _overrides = false;
-            Stack _dataStack;
-            Stack _returnStack;
             std::vector<StackValue> _LVARS;
-            unsigned int _programCounter = 0;
+            unsigned _programCounter = 0;
             size_t _DVAR_base = 0;
             size_t _SVAR_base = 0;
         };

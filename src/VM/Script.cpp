@@ -31,11 +31,14 @@
 #include "../Format/Msg/Message.h"
 #include "../Game/Game.h"
 #include "../Game/Object.h"
+#include "../Game/DudeObject.h"
 #include "../Logger.h"
 #include "../ResourceManager.h"
 #include "../VM/ErrorException.h"
+#include "VM/Fallout/Stack.h"
+#include "VM/Fallout/StackValue.h"
 #include "../VM/HaltException.h"
-#include "../VM/OpcodeFactory.h"
+#include "VM/Fallout/OpcodeFactory.h"
 #include "../VM/Script.h"
 #include "../VM/StackValue.h"
 
@@ -44,6 +47,8 @@
 namespace Falltergeist {
     namespace VM {
         Script::Script(Format::Int::File *script, Game::Object *owner) {
+            _returnStack = std::make_shared<Stack>();
+            _dataStack = std::make_shared<Stack>();
             _owner = owner;
             _script = script;
             if (!_script) throw Exception("Script::VM() - script is null");
@@ -74,11 +79,11 @@ namespace Falltergeist {
             }
 
             _programCounter = procedure->bodyOffset();
-            _dataStack.push(0); // arguments counter;
-            _returnStack.push(0); // return address
+            _dataStack->push(0); // arguments counter;
+            _returnStack->push(0); // return address
             Logger::debug("SCRIPT") << "CALLED: " << name << " [" << _script->filename() << "]" << std::endl;
             run();
-            _dataStack.popInteger(); // remove function result
+            _dataStack->pop()->asInteger(); // remove function result
             Logger::debug("SCRIPT") << "Function ended" << std::endl;
 
             // reset special script arguments
@@ -92,10 +97,17 @@ namespace Falltergeist {
             }
             _programCounter = 0;
             run();
-            _dataStack.popInteger(); // remove @start function result
+            _dataStack->pop()->asInteger(); // remove @start function result
+        }
+
+        std::shared_ptr<IProcedure> Script::getProcedureByName(const std::string &name) const {
+            // TODO implement
+            return nullptr;
         }
 
         void Script::run() {
+            auto context = shared_from_this();
+
             while (_programCounter != _script->size()) {
                 if (_programCounter == 0 && _initialized) {
                     return;
@@ -104,7 +116,7 @@ namespace Falltergeist {
                 _script->setPosition(_programCounter);
                 unsigned short opcode = _script->readOpcode();
 
-                std::unique_ptr<OpcodeHandler> opcodeHandler(OpcodeFactory::createOpcode(opcode, this));
+                std::unique_ptr<OpcodeHandler> opcodeHandler(OpcodeFactory::createOpcode(opcode, context));
                 try {
                     opcodeHandler->run();
                 } catch (const HaltException &) {
@@ -112,8 +124,8 @@ namespace Falltergeist {
                 } catch (const ErrorException &e) {
                     Logger::error("SCRIPT") << e.what() << " in [" << std::hex << opcode << "] at "
                                             << _script->filename() << ":0x" << offset << std::endl;
-                    _dataStack.values()->clear();
-                    _dataStack.push(0); // to end script properly
+                    _dataStack->clear();
+                    _dataStack->push(0); // to end script properly
                     return;
                 }
             }
@@ -151,11 +163,11 @@ namespace Falltergeist {
             return _script;
         }
 
-        unsigned int Script::programCounter() {
+        unsigned Script::programCounter() const {
             return _programCounter;
         }
 
-        void Script::setProgramCounter(unsigned int value) {
+        void Script::setProgramCounter(unsigned value) {
             if (value >= _script->size()) {
                 std::stringstream ss;
                 ss << "Script::setProgramCounter() - address out of range: " << std::hex << value;
@@ -164,11 +176,11 @@ namespace Falltergeist {
             _programCounter = value;
         }
 
-        Stack *Script::dataStack() {
+        std::shared_ptr<IStack> Script::dataStack() {
             return &_dataStack;
         }
 
-        Stack *Script::returnStack() {
+        std::shared_ptr<IStack> Script::returnStack() {
             return &_returnStack;
         }
 
@@ -246,6 +258,38 @@ namespace Falltergeist {
         Script *Script::setUsedSkill(SKILL skill) {
             _usedSkill = skill;
             return this;
+        }
+
+        std::shared_ptr<Game::DudeObject> Script::player() {
+            return Game::getInstance()->player();
+        }
+
+        void Script::stopExecution() {
+
+        }
+
+        std::shared_ptr<IProcedure> Script::getProcedureByIndex(unsigned int index) const {
+            return std::shared_ptr<IProcedure>();
+        }
+
+        std::string Script::getIdentifierByIndex(unsigned int index) const {
+            return std::__cxx11::string();
+        }
+
+        unsigned int Script::dynamicVarStackBase() const {
+            return 0;
+        }
+
+        void Script::setDynamicVarStackBase(unsigned int stackBase) {
+
+        }
+
+        unsigned int Script::scriptVarStackBase() const {
+            return 0;
+        }
+
+        void Script::setScriptVarStackBase(unsigned int stackBase) {
+
         }
     }
 }

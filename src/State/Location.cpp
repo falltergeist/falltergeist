@@ -159,7 +159,7 @@ namespace Falltergeist
             player->setOrientation(_location->defaultOrientation());
 
             // Player script
-            player->setScript(new VM::Script(ResourceManager::getInstance()->intFileType(0), player.get()));
+            player->setScript(std::make_shared<VM::Script>(ResourceManager::getInstance()->intFileType(0), player.get()));
 
             auto hexagon = hexagonGrid()->at(_location->defaultPosition());
             _objects.emplace_back(player);
@@ -946,7 +946,7 @@ namespace Falltergeist
             return _location->MVARS()->at(number);
         }
 
-        std::map<std::string, VM::StackValue> *Location::EVARS()
+        std::map<std::string, std::shared_ptr<VM::Fallout::IStackValue>> *Location::EVARS()
         {
             return &_EVARS;
         }
