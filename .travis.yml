@@ -7,7 +7,7 @@ sudo: required
 
 script:
   - cmake .
-  - make -j2
+  - make -kj2
 
 compiler:
   - clang
