@@ -28,6 +28,7 @@
 #include "../ResourceManager.h"
 #include "../UI/Animation.h"
 #include "../UI/Image.h"
+#include "../UI/TextArea.h"
 
 // Third party includes
 
@@ -54,6 +55,7 @@ namespace Falltergeist
         void ItemObject::setAmount(unsigned int value)
         {
             _amount = value;
+            _inventoryAmountUi->setText("x" + std::to_string(value));
         }
 
         unsigned int ItemObject::weight() const
@@ -91,6 +93,11 @@ namespace Falltergeist
             return _inventoryDragUi.get();
         }
 
+        UI::TextArea *ItemObject::inventoryAmountUi() const
+        {
+            return _inventoryAmountUi.get();
+        }
+
         void ItemObject::setVolume(unsigned int volume)
         {
             _volume = volume;
@@ -123,6 +130,8 @@ namespace Falltergeist
             _inventoryDragUi = std::make_unique<UI::Image>(ResourceManager::getInstance()->FIDtoFrmName(inventoryFID()));
             _inventoryUi = std::make_unique<UI::Image>(ResourceManager::getInstance()->FIDtoFrmName(inventoryFID()));
             _inventorySlotUi = std::make_unique<UI::Image>(ResourceManager::getInstance()->FIDtoFrmName(inventoryFID()));
+            _inventoryAmountUi = std::make_unique<UI::TextArea>("x" + std::to_string(_amount), inventorySlotUi()->position());
+            _inventoryAmountUi->setColor({ 255, 255, 255, 0 });
         }
 
         ItemObject::Subtype ItemObject::subtype() const

@@ -76,6 +76,7 @@ namespace Falltergeist
                 UI::Image* inventoryUi() const;
                 UI::Image* inventorySlotUi() const;
                 UI::Image* inventoryDragUi() const;
+                UI::TextArea* inventoryAmountUi() const;
 
             protected:
                 Subtype _subtype;
@@ -84,6 +85,7 @@ namespace Falltergeist
                 unsigned int _price = 0;
                 unsigned int _volume = 0;
                 int _inventoryFID = -1;
+                std::unique_ptr<UI::TextArea> _inventoryAmountUi;
                 std::unique_ptr<UI::Image> _inventoryUi, _inventorySlotUi, _inventoryDragUi;
                 void _generateUi() override;
         };
