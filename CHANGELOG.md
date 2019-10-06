@@ -4,6 +4,7 @@ Under development
 - [feature] Basic barter system (JanSimek)
 - [feature] Fix and update Travis build (JanSimek)
 - [feature] Added 'Take All' and scroll buttons to the container window (JanSimek)
+- [feature] Show number of stacked items in the inventory (JanSimek)
 - [bugfix] Fix linking release builds on Windows and prevent closing console after a crash (JanSimek)
 - [feature] Player moves to an adjacent hexagon when using (a skill on) an object (AdamFx990)
 - [feature] Doors can't be opened if they're locked (AdamFx990)

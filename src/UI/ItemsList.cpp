@@ -38,6 +38,7 @@
 #include "../Input/Mouse.h"
 #include "../Logger.h"
 #include "../UI/InventoryItem.h"
+#include "../UI/TextArea.h"
 
 // Third party includes
 
@@ -83,8 +84,15 @@ void ItemsList::render(bool eggTransparency)
     unsigned int i = 0;
     for (auto& item : _inventoryItems)
     {
-        item->setPosition(position() + Point(0, _slotHeight*i));
+        Point pos = position() + Point(0, _slotHeight*i);
+        item->setPosition(pos);
         item->render();
+
+        auto itemObj = item->item();
+        if (itemObj->amount() > 1) {
+            itemObj->inventoryAmountUi()->setPosition(pos + Point(9, 8));
+            itemObj->inventoryAmountUi()->render();
+        }
         i++;
     }
 }
