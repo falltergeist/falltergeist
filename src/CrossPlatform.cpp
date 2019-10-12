@@ -429,13 +429,6 @@ std::vector<std::string> CrossPlatform::getDataPaths()
         _dataPaths.push_back(sharedir.c_str());
         closedir(pShareDir);
     }
-
-    std::string parentdir = getExecutableDirectory() + "/..";
-    DIR *pParentDir = opendir(parentdir.c_str());
-    if (pParentDir) {
-        _dataPaths.push_back(parentdir.c_str());
-        closedir(pParentDir);
-    }
 #else
     _dataPaths.push_back(getConfigPath());
 #endif
