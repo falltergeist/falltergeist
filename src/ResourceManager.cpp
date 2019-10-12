@@ -98,14 +98,14 @@ ResourceManager* ResourceManager::getInstance()
 void ResourceManager::_loadStreamForFile(string filename, std::function<void(Dat::Stream&&)> callback) {
     // Searching file in Fallout data directory
     {
-        string path = CrossPlatform::findFalloutDataPath() + "/" + filename;
+        string path = CrossPlatform::findFalloutDataPath() + "/data/" + filename;
 
         ifstream stream;
         stream.open(path, ios_base::binary);
         if (stream.is_open()) {
             Logger::debug("RESOURCE MANAGER") << "Loading file: " << filename << " [FROM FALLOUT DATA DIR]" << endl;
         } else {
-            path = CrossPlatform::findFalltergeistDataPath() + "/" + filename;
+            path = CrossPlatform::findFalltergeistDataPath() + "/data/" + filename;
             stream.open(path, ios_base::binary);
             if (stream.is_open()) {
                 Logger::debug("RESOURCE MANAGER") << "Loading file: " << filename << " [FROM FALLTERGEIST DATA DIR]" << endl;

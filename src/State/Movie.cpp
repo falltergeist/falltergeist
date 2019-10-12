@@ -42,10 +42,10 @@ namespace Falltergeist
             auto renderer = Game::getInstance()->renderer();
             setPosition((renderer->size() - Point(640, 320)) / 2);
 
-            auto lst = ResourceManager::getInstance()->lstFileType("data/movies.lst");
+            auto lst = ResourceManager::getInstance()->lstFileType("movies.lst");
             std::string movie = "art/cuts/" + lst->strings()->at(_id);
 
-            auto cfglst = ResourceManager::getInstance()->lstFileType("data/moviecfgs.lst");
+            auto cfglst = ResourceManager::getInstance()->lstFileType("moviecfgs.lst");
             std::string moviecfgfile = "art/cuts/" + cfglst->strings()->at(_id);
             _effects.push_back({0,1, 0, 0, 0, 1});
 
@@ -77,7 +77,7 @@ namespace Falltergeist
                 _effects.push_back({1,-1, 0, 0, 0, 1});
             }
 
-            auto sublst = ResourceManager::getInstance()->lstFileType("data/subtitles.lst");
+            auto sublst = ResourceManager::getInstance()->lstFileType("subtitles.lst");
             std::string subfile = "text/english/cuts/" + sublst->strings()->at(_id);
 
             if (sublst->strings()->at(_id)!="reserved.sve")
