@@ -2,6 +2,7 @@ Under development
 =======================
 - [bugfix] Opcode810D (obj_carrying_pid_obj) checks containers as well (JanSimek)
 - [bugfix] Fix linking release builds on Windows and prevent closing console after a crash (JanSimek)
+- [bugfix][#531,#538] Fixed multiple crashes when opening inventory and removing objects from map (JanSimek)
 - [feature] Search data files in parent dir too (alexeevdv)
 - [feature] Basic barter system (Zervox, JanSimek)
 - [feature] Fix and update Travis build (JanSimek)

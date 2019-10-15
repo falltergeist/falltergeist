@@ -1069,7 +1069,13 @@ namespace Falltergeist
 
         void Location::removeObjectFromMap(Game::Object *object)
         {
+            if (!object->hexagon()) {
+                Logger::error("Location") << "Cannot remove '" << object->name() << "' from map because it's not on a hexagon" << std::endl;
+                return;
+            }
+
             auto objectsAtHex = object->hexagon()->objects();
+
 
             for (auto it = objectsAtHex->begin(); it != objectsAtHex->end(); ++it) {
                 if (*it == object) {
@@ -1091,7 +1097,9 @@ namespace Falltergeist
         void Location::destroyObject(Game::Object *object)
         {
             object->destroy_p_proc();
-            removeObjectFromMap(object);
+            if (object->hexagon()) {
+                removeObjectFromMap(object);
+            }
         }
 
         void Location::centerCameraAtHexagon(Hexagon *hexagon)
@@ -1256,7 +1264,11 @@ namespace Falltergeist
         Game::Object *Location::addObject(unsigned int PID, unsigned int position, unsigned int elevation)
         {
             auto object = Game::ObjectFactory::getInstance()->createObject(PID);
-            _objects.emplace_back(object);
+
+            // FIXME: This prevents the default destructor of shared_ptr from leaving a dangling pointer
+            //        in removeObjectFromMap() - until we get rid of raw pointers.
+            _objects.emplace_back(std::shared_ptr<Game::Object>(std::shared_ptr<Game::Object>{}, object));
+
             moveObjectToHexagon(object, hexagonGrid()->at(position));
             object->setElevation(elevation);
             return object;
