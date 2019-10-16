@@ -1195,16 +1195,20 @@ namespace Falltergeist
 
         void Location::removeTimerEvent(Game::Object *obj)
         {
-            _timerEvents.remove_if([=](Location::TimerEvent &item) { return item.object == obj; });
+            _timerEvents.erase(std::remove_if(_timerEvents.begin(), _timerEvents.end(),
+                [=](Location::TimerEvent &item) {
+                    return item.object == obj;
+                }
+            ), _timerEvents.end());
         }
 
         void Location::removeTimerEvent(Game::Object *obj, int fixedParam)
         {
-            _timerEvents.remove_if(
+            _timerEvents.erase(std::remove_if(_timerEvents.begin(), _timerEvents.end(),
                 [=](Location::TimerEvent &item) {
                     return item.object == obj && item.fixedParam == fixedParam;
                 }
-            );
+            ), _timerEvents.end());
         }
 
         unsigned int Location::lightLevel()
