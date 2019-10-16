@@ -82,7 +82,7 @@ namespace Falltergeist
             _vfs = std::make_unique<VFS::VFS>();
             _eventDispatcher = std::make_unique<Event::Dispatcher>();
 
-            _renderer = std::make_unique<Graphics::Renderer>(_settings->screenWidth(), _settings->screenHeight());
+            _renderer = std::make_unique<Graphics::Renderer>();
 
             Logger::info("GAME") << CrossPlatform::getVersion() << std::endl;
             Logger::info("GAME") << "Opensource Fallout 2 game engine" << std::endl;

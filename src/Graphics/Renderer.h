@@ -61,8 +61,7 @@ public:
         GLES2
     };
 
-    Renderer(unsigned int width, unsigned int height);
-    Renderer(const Size& size);
+    Renderer();
     ~Renderer();
 
     void init();
@@ -129,6 +128,7 @@ protected:
 
     SDL_Window* _sdlWindow;
     SDL_GLContext _glcontext;
+    SDL_Renderer* _sdlRenderer;
     GLuint _vao;
     GLuint _ebo;
     GLuint _texcoord_vbo;

@@ -50,23 +50,18 @@ namespace Falltergeist
 namespace Graphics
 {
 
-Renderer::Renderer(unsigned int width, unsigned int height)
+Renderer::Renderer()
 {
-    _size.setWidth(width);
-    _size.setHeight(height);
-
     std::string message = "Renderer initialization - ";
     if (SDL_InitSubSystem(SDL_INIT_VIDEO) < 0)
     {
         Logger::critical("VIDEO") << message + "[FAIL]" << std::endl;
         throw Exception(SDL_GetError());
     }
+
     Logger::info("VIDEO") << message + "[OK]" << std::endl;
 }
 
-Renderer::Renderer(const Size& size) : Renderer((unsigned)size.width(), (unsigned)size.height())
-{
-}
 
 Renderer::~Renderer()
 {
@@ -88,13 +83,25 @@ void Renderer::init()
     // Game::getInstance()->engineSettings()->setFullscreen(true);
     // Game::getInstance()->engineSettings()->setScale(1); //or 2, if fullhd device
 
-    std::string message =  "SDL_CreateWindow " + std::to_string(_size.width()) + "x" + std::to_string(_size.height()) + "x" +std::to_string(32)+ " - ";
+    Settings *_settings = Game::getInstance()->settings();
+
+    _size.setWidth(_settings->screenWidth());
+    _size.setHeight(_settings->screenHeight());
 
     uint32_t flags = SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL;
-    if (Game::getInstance()->settings()->fullscreen())
+
+    if (_settings->fullscreen())
     {
         flags |= SDL_WINDOW_FULLSCREEN;
+        flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
+        SDL_DisplayMode DM;
+        SDL_GetCurrentDisplayMode(0, &DM);
+        _size.setWidth(DM.w);
+        _size.setHeight(DM.h);
+
     }
+
+    std::string message =  "SDL_CreateWindow " + std::to_string(_size.width()) + "x" + std::to_string(_size.height()) + "x" +std::to_string(32)+ " - ";
 
     _sdlWindow = SDL_CreateWindow("", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, _size.width(), _size.height(), flags);
     if (!_sdlWindow)
