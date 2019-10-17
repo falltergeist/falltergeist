@@ -40,6 +40,15 @@ namespace Falltergeist
 
                 void setDelta(signed int* deltaX, signed int* deltaY);
                 void correctDelta(signed int* deltaX, signed int* deltaY);
+                // void correctDeltaX(signed int* deltaX);
+                // void correctDeltaY(signed int* deltaY);
+                void deltaNegativeToZero(signed int* delta);
+                void deltaToMax(
+                    signed int* delta,
+                    signed int tilesNumber,
+                    signed int tileDimension,
+                    signed int mapDimension
+                );
 
             private:
                 UI::Image* _panel = nullptr;

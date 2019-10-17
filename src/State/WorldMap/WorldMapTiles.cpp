@@ -12,31 +12,45 @@ namespace Falltergeist
             _tiles = new UI::ImageList(_worldMapTiles, 0, 0);
         }
 
-        void WorldMap::setDelta(signed int* deltaX, signed int* deltaY){
+        void WorldMap::setDelta(signed int* deltaX, signed int* deltaY)
+        {
             *deltaX = worldMapX - mapWidth/2;
             *deltaY = worldMapY - mapHeight/2;
         }
 
-        void WorldMap::correctDelta(signed int* deltaX, signed int* deltaY){
-            unsigned int worldMapSizeX = tilesNumberX*tileWidth;
-            unsigned int worldMapSizeY = tilesNumberY*tileHeight;
-            if (*deltaX<0)
-            {
-                *deltaX = 0;
-            }
-            if (*deltaY<0)
-            {
-                *deltaY = 0;
-            }
-            if (worldMapSizeX-*deltaX < mapWidth)
-            {
-                *deltaX = worldMapSizeX - mapWidth;
-            }
-            if (worldMapSizeY-*deltaY < mapHeight)
-            {
-                *deltaY = worldMapSizeY - mapHeight;
-            }
+        void WorldMap::correctDelta(signed int* deltaX, signed int* deltaY)
+        {
+            deltaNegativeToZero(deltaX);
+            deltaToMax(deltaX, tilesNumberX, tileHeight, mapHeight);
+            deltaNegativeToZero(deltaY);
+            deltaToMax(deltaY, tilesNumberY, tileHeight, mapHeight);
         }
+
+        // void WorldMap::correctDeltaX(signed int* deltaX)
+        // {
+        //     deltaNegativeToZero(deltaX);
+        //     deltaToMax(deltaX, tilesNumberX, tileHeight, mapHeight);
+        // };
+
+        // void WorldMap::correctDeltaY(signed int* deltaY)
+        // {
+        //     deltaNegativeToZero(deltaY);
+        //     deltaToMax(deltaY, tilesNumberY, tileHeight, mapHeight);
+        // };
+
+        void WorldMap::deltaNegativeToZero(signed int* delta)
+        {
+            *delta = *delta < 0 ?  0 : *delta;
+        };
+
+        void WorldMap::deltaToMax(signed int* delta, signed int tilesNumber, signed int tileDimension, signed int mapDimension)
+        {
+            signed int worldMapSize = tilesNumber * tileDimension;
+            if (worldMapSize - *delta < mapDimension)
+            {
+                *delta = worldMapSize - mapDimension;
+            }
+        };
 
         void WorldMap::renderTiles()
         {
