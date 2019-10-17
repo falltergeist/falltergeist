@@ -50,8 +50,11 @@ namespace Falltergeist
 namespace Graphics
 {
 
-Renderer::Renderer()
+Renderer::Renderer(unsigned int width, unsigned int height)
 {
+    _size.setWidth(width);
+    _size.setHeight(height);
+
     std::string message = "Renderer initialization - ";
     if (SDL_InitSubSystem(SDL_INIT_VIDEO) < 0)
     {
@@ -62,6 +65,9 @@ Renderer::Renderer()
     Logger::info("VIDEO") << message + "[OK]" << std::endl;
 }
 
+Renderer::Renderer(const Size& size) : Renderer((unsigned)size.width(), (unsigned)size.height())
+{
+}
 
 Renderer::~Renderer()
 {

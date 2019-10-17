@@ -61,7 +61,8 @@ public:
         GLES2
     };
 
-    Renderer();
+    Renderer(unsigned int width, unsigned int height);
+    Renderer(const Size& size);
     ~Renderer();
 
     void init();
