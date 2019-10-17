@@ -28,7 +28,7 @@
 #include "../ResourceManager.h"
 #include "../Settings.h"
 #include "../State/CursorDropdown.h"
-#include "../State/WorldMap.h"
+#include "../State/WorldMap/WorldMap.h"
 #include "../UI/Animation.h"
 #include "../UI/AnimationFrame.h"
 #include "../UI/AnimationQueue.h"
