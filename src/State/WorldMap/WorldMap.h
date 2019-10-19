@@ -65,6 +65,9 @@ namespace Falltergeist
                 unsigned int fullscreenSidepanelWidth;
                 unsigned int panelBorder = 22;
 
+                //music
+                bool hasCar = true;
+
                 // temporary!
                 // @todo: move it to other place!
                 // coordinates of the player on world map

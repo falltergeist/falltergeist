@@ -1,4 +1,6 @@
 #include "./WorldMap.h"
+#include "./../../Game/Game.h"
+#include "./../../Audio/Mixer.h"
 
 namespace Falltergeist
 {
@@ -22,6 +24,13 @@ namespace Falltergeist
             initPanel();
 
             setPanelOffset();
+
+            if (hasCar) {
+                Game::getInstance()->mixer()->playACMMusic("20car.acm",true);
+            }else{
+                Game::getInstance()->mixer()->playACMMusic("23world.acm",true);
+            }
+
         }
 
         void WorldMap::render()
