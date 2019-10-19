@@ -1,9 +1,22 @@
 #pragma once
 
 #include <vector>
+#include <stdio.h>
+#include <time.h>
 #include "../../State/State.h"
 #include "../../UI/Base.h"
+#include "../../UI/Image.h"
+#include "../../UI/ImageButton.h"
+#include "../../UI/ImageList.h"
+#include "../../UI/TextArea.h"
 #include "../../Graphics/Size.h"
+#include "../../Game/Game.h"
+#include "../../Settings.h"
+#include "../../Logger.h"
+#include "../../Audio/Mixer.h"
+#include "../../Input/Mouse.h"
+
+#include <SDL.h>
 
 namespace Falltergeist
 {
@@ -24,10 +37,12 @@ namespace Falltergeist
 
                 void init() override;
                 void render() override;
+                void think() override;
                 void handle(Event::Event* event) override;
                 void onKeyDown(Event::Keyboard* event) override;
                 void onStateActivate(Event::State* event) override;
                 void onStateDeactivate(Event::State* event) override;
+                void processInput();
                 void exit();
 
                 void setPanelOffset();
@@ -43,9 +58,8 @@ namespace Falltergeist
 
                 void setDelta();
                 void correctDelta();
-                void deltaNegativeToZero(signed int* delta);
+                void deltaNegativeToZero(int* delta);
                 void deltaToMax(
-                    const char orientation,
                     signed int* delta,
                     signed int tilesNumber,
                     signed int tileDimension,
@@ -59,7 +73,14 @@ namespace Falltergeist
                     signed int mapDimension
                 );
 
+                void travel();
+                int  setDestination(char orientation, unsigned int clickPosition);
+                void preventTravelOutboundMin(float* nextPosition);
+                void preventTravelOutboundMax(float* nextPosition, float currentPosition, int maxRange);
+
             private:
+                //get keyboard state pointer
+                const Uint8* keystate = SDL_GetKeyboardState(NULL);
                 UI::ImageList* _tiles = nullptr;
                 UI::ImageButton* _hotspot = nullptr;
 
@@ -71,14 +92,20 @@ namespace Falltergeist
                 unsigned int fullscreenSidepanelWidth;
                 unsigned int panelBorder = 22;
 
-                //music
-                bool hasCar = true;
-
                 // temporary!
                 // @todo: move it to other place!
-                // coordinates of the player on world map
-                unsigned int worldMapX = 0;
-                unsigned int worldMapY = 0;
+                // coordinates of the player on world map, has car
+                float worldMapX = 0;
+                float worldMapY = 0;
+                float nextWorldMapX = 0;
+                float nextWorldMapY = 0;
+                bool hasCar = true;
+                float directionHorizontal = 0;
+                float directionVertical = 0;
+
+                unsigned int destinationX = 0;
+                unsigned int destinationY = 0;
+                bool isTraveling = false;
 
                 // map offset for fullscreen or windowed
                 signed int offsetX = 0;

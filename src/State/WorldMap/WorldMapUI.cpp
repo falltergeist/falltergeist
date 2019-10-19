@@ -1,9 +1,4 @@
 #include "./WorldMap.h"
-#include "../../Game/Game.h"
-#include "../../Settings.h"
-#include "../../UI/Image.h"
-#include "../../UI/ImageButton.h"
-#include "../../UI/TextArea.h"
 
 namespace Falltergeist
 {
@@ -55,7 +50,12 @@ namespace Falltergeist
 
         void WorldMap::renderHotspot()
         {
-            _hotspot->setPosition(Point(mapMinX + worldMapX - deltaX, mapMinY + worldMapY - deltaY));
+            if (Game::getInstance()->settings()->worldMapFullscreen()) {
+                _hotspot->setPosition(Point(mapMinX + worldMapX - deltaX, mapMinY + worldMapY - deltaY));
+            }else{
+                _hotspot->setPosition(Point(mapMinX + worldMapX - deltaX - panelBorder, mapMinY + worldMapY - deltaY  - panelBorder));
+            }
+
             _hotspot->render();
         }
 

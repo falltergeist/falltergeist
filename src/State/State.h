@@ -98,6 +98,7 @@ namespace Falltergeist
                 virtual void onStateActivate(Event::State* event);
                 virtual void onStateDeactivate(Event::State* event);
                 virtual void onKeyDown(Event::Keyboard* event);
+                virtual void onKeyUp(Event::Keyboard* event);
 
                 /**
                  * Invoked when state becomes active to receive events (when first pushed and after other modal states are removed from "above").

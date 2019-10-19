@@ -1,6 +1,4 @@
 #include "./WorldMap.h"
-#include "./../../Game/Game.h"
-#include "./../../Audio/Mixer.h"
 
 namespace Falltergeist
 {
@@ -33,6 +31,13 @@ namespace Falltergeist
 
         }
 
+        void WorldMap::think()
+        {
+            State::think();
+            processInput();
+            travel();
+        }
+
         void WorldMap::render()
         {
             // MAP SHOW
@@ -45,6 +50,7 @@ namespace Falltergeist
             // render ui elements
             renderHotspot();
             renderPanel();
+
         }
 
         void WorldMap::exit()

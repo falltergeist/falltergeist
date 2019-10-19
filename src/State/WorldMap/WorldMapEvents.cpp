@@ -1,6 +1,4 @@
 #include "./WorldMap.h"
-#include "../../Game/Game.h"
-#include "../../Input/Mouse.h"
 
 namespace Falltergeist
 {
@@ -18,13 +16,15 @@ namespace Falltergeist
                 // Left button down
                 if (mouseEvent->name() == "mousedown" && mouseEvent->leftButton())
                 {
+                    int mouseX = mouse->x();
+                    int mouseY = mouse->y();
                     // check if point clicked belongs to the screen
-                    if ((mapMinX<=(unsigned int)mouse->x()) && ((unsigned int)mouse->x()<=(mapMinX+mapWidth)) &&
-                        (mapMinY<=(unsigned int)mouse->y()) && ((unsigned int)mouse->y()<=(mapMinY+mapHeight)))
+                    if ((mapMinX<=(unsigned int)mouseX) && ((unsigned int)mouseX<=(mapMinX+mapWidth)) &&
+                        (mapMinY<=(unsigned int)mouseY) && ((unsigned int)mouseY<=(mapMinY+mapHeight)))
                     {
-                        // change destination point
-                        worldMapX = mouse->x()+deltaX-mapMinX;
-                        worldMapY = mouse->y()+deltaY-mapMinY;
+                        destinationX = setDestination('x', (unsigned int)mouseX);
+                        destinationY = setDestination('y', (unsigned int)mouseY);
+                        isTraveling = true;
                     }
                 }
             }
@@ -32,7 +32,34 @@ namespace Falltergeist
             if (auto keyboardEvent = dynamic_cast<Event::Keyboard*>(event))
             {
                 if (keyboardEvent->name() == "keydown")
+                {
                     onKeyDown(keyboardEvent);
+                }
+            }
+        }
+
+        void WorldMap::processInput()
+        {
+            SDL_PumpEvents();
+            if(keystate[SDL_GetScancodeFromKey(SDLK_LEFT)])
+            {
+                isTraveling = true;
+                directionHorizontal = -1;
+            }
+            if(keystate[SDL_GetScancodeFromKey(SDLK_RIGHT)])
+            {
+                isTraveling = true;
+                directionHorizontal = 1;
+            }
+            if(keystate[SDL_GetScancodeFromKey(SDLK_UP)])
+            {
+                isTraveling = true;
+                directionVertical = -1;
+            }
+            if(keystate[SDL_GetScancodeFromKey(SDLK_DOWN)])
+            {
+                isTraveling = true;
+                directionVertical = 1;
             }
         }
 

@@ -1,8 +1,4 @@
 #include "./WorldMap.h"
-#include "../../UI/ImageList.h"
-#include "../../UI/Image.h"
-#include "../../Game/Game.h"
-#include "../../Logger.h"
 
 namespace Falltergeist
 {
@@ -23,9 +19,9 @@ namespace Falltergeist
         void WorldMap::correctDelta()
         {
             deltaNegativeToZero(&deltaX);
-            deltaToMax('x', &deltaX, tilesNumberX, tileWidth, mapWidth);
+            deltaToMax(&deltaX, tilesNumberX, tileWidth, mapWidth);
             deltaNegativeToZero(&deltaY);
-            deltaToMax('y', &deltaY, tilesNumberY, tileHeight, mapHeight);
+            deltaToMax(&deltaY, tilesNumberY, tileHeight, mapHeight);
         }
 
         void WorldMap::deltaNegativeToZero(signed int* delta)
@@ -33,7 +29,7 @@ namespace Falltergeist
             *delta = *delta < 0 ?  0 - panelBorder : *delta;
         };
 
-        void WorldMap::deltaToMax(const char orientation, signed int* delta, signed int tilesNumber, signed int tileDimension, signed int mapDimension)
+        void WorldMap::deltaToMax(signed int* delta, signed int tilesNumber, signed int tileDimension, signed int mapDimension)
         {
             signed int worldMapSize = (tilesNumber * tileDimension) - panelBorder;
             if (worldMapSize - *delta < mapDimension)
@@ -74,7 +70,8 @@ namespace Falltergeist
 
         //we can avoid using the checks if a part  of map is in the wie
         //by creating a container class that can be clipped
-        bool WorldMap::inRenderView(signed int worldTileMin, signed int delta, signed int tileDimension, signed int mapDimension){
+        bool WorldMap::inRenderView(signed int worldTileMin, signed int delta, signed int tileDimension, signed int mapDimension)
+        {
             bool min = (
                 (delta <= worldTileMin) &&
                 (worldTileMin <= delta + (signed int)mapDimension)
@@ -82,7 +79,7 @@ namespace Falltergeist
             bool max = (
                 (delta <= worldTileMin+(signed int)tileDimension) &&
                 (worldTileMin + (signed int)tileDimension<=delta+(signed int)mapDimension)
-                );
+            );
             return  min || max;
         };
 
