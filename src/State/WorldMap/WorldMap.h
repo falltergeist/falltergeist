@@ -52,7 +52,12 @@ namespace Falltergeist
                     signed int mapDimension
                 );
 
-                bool inRenderView(const char orientation, signed int worldTileMinX);
+                bool inRenderView(
+                    signed int worldTileMin,
+                    signed int delta,
+                    signed int tileDimension,
+                    signed int mapDimension
+                );
 
             private:
                 UI::ImageList* _tiles = nullptr;

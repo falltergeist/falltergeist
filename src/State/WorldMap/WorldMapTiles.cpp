@@ -60,7 +60,10 @@ namespace Falltergeist
                     // checking current tile borders
                     // either xmin or xmax SHOULD belongs to map area AND
                     // either ymin or ymax SHOULD belongs to map area
-                    if(inRenderView('x', tileMinX) && inRenderView('y', tileMinY) )
+                    if(
+                        inRenderView(tileMinX, deltaX, tileWidth, mapWidth) &&
+                        inRenderView(tileMinY, deltaY, tileHeight, mapHeight)
+                    )
                     {
                         _tiles->images().at(y*tilesNumberX+x)->setPosition(Point(x*tileWidth-deltaX + offsetX, y*tileHeight-deltaY + offsetY));
                         _tiles->images().at(y*tilesNumberX+x)->render();
@@ -71,25 +74,16 @@ namespace Falltergeist
 
         //we can avoid using the checks if a part  of map is in the wie
         //by creating a container class that can be clipped
-        bool WorldMap::inRenderView(const char orientation, signed int worldTileMin){
-            if (orientation == 'x')
-            {
-                bool inXmin = (
-                    (deltaX <= worldTileMin) &&
-                    (worldTileMin <= deltaX + (signed int)mapWidth)
+        bool WorldMap::inRenderView(signed int worldTileMin, signed int delta, signed int tileDimension, signed int mapDimension){
+            bool min = (
+                (delta <= worldTileMin) &&
+                (worldTileMin <= delta + (signed int)mapDimension)
+            );
+            bool max = (
+                (delta <= worldTileMin+(signed int)tileDimension) &&
+                (worldTileMin + (signed int)tileDimension<=delta+(signed int)mapDimension)
                 );
-                bool inXmax = ((deltaX<=worldTileMin+(signed int)tileWidth) &&
-                        (worldTileMin+(signed int)tileWidth<=deltaX+(signed int)mapWidth));
-                return  inXmin || inXmax;
-            }
-            else
-            {
-                bool inYmin = ((deltaY<=worldTileMin) &&
-                        (worldTileMin<=deltaY+(signed int)mapHeight));
-                bool inYmax = ((deltaY<=worldTileMin+(signed int)tileHeight) &&
-                        (worldTileMin+(signed int)tileHeight<=deltaY+(signed int)mapHeight));
-                return  inYmin || inYmax;
-            }
+            return  min || max;
         };
 
     }
