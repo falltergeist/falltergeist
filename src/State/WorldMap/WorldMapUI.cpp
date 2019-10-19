@@ -28,6 +28,9 @@ namespace Falltergeist
                 mapMinX = 0;
                 mapMinY = 0;
                 panelBorder = 0;
+                panelX = renderWidth - fullscreenSidepanelWidth;
+                panelY = 0;
+                panelSize = Graphics::Size(fullscreenSidepanelWidth, renderHeight);
             }
             else
             {
@@ -36,6 +39,9 @@ namespace Falltergeist
                 mapHeight = 442;  // fallout 2 map screen height
                 mapMinX = (renderWidth - 640)/2 + panelBorder;
                 mapMinY = (renderHeight - 480)/2 + panelBorder;
+                panelX = (renderWidth - _panel->size().width()) / 2;
+                panelY = (renderHeight - _panel->size().height()) / 2;
+                panelSize = Graphics::Size(_panel->size().width(), _panel->size().height());
             }
         };
 
@@ -55,20 +61,6 @@ namespace Falltergeist
 
         void WorldMap::renderPanel()
         {
-            unsigned int renderWidth = Game::getInstance()->renderer()->width();
-            unsigned int renderHeight = Game::getInstance()->renderer()->height();
-            if (Game::getInstance()->settings()->worldMapFullscreen())
-            {
-                panelSize = Graphics::Size(fullscreenSidepanelWidth, renderHeight);
-                panelX = renderWidth - fullscreenSidepanelWidth;
-                panelY = 0;
-            }
-            else
-            {
-                panelSize = Graphics::Size(_panel->size().width(), _panel->size().height());
-                panelX = (renderWidth - _panel->size().width()) / 2;
-                panelY = (renderHeight - _panel->size().height()) / 2;
-            }
             _panel->setPosition(Point(panelX, panelY));
             _panel->render(panelSize);
         }
