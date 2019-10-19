@@ -27,14 +27,23 @@ namespace Falltergeist
                 mapHeight = renderHeight;
                 mapMinX = 0;
                 mapMinY = 0;
+                panelBorder = 0;
             }
             else
             {
                 _panel = new UI::Image(fullPanelSprite);
                 mapWidth = 450;   // fallout 2 map screen width
                 mapHeight = 442;  // fallout 2 map screen height
-                mapMinX = (renderWidth - 640)/2 + 22;
-                mapMinY = (renderHeight - 480)/2 + 21;
+                mapMinX = (renderWidth - 640)/2 + panelBorder;
+                mapMinY = (renderHeight - 480)/2 + panelBorder;
+            }
+        };
+
+        void WorldMap::setPanelOffset()
+        {
+            if (!Game::getInstance()->settings()->worldMapFullscreen()) {
+                offsetX = (Game::getInstance()->renderer()->width() - _panel->size().width()) / 2;
+                offsetY = (Game::getInstance()->renderer()->height() - _panel->size().height()) / 2;
             }
         };
 
@@ -48,8 +57,6 @@ namespace Falltergeist
         {
             unsigned int renderWidth = Game::getInstance()->renderer()->width();
             unsigned int renderHeight = Game::getInstance()->renderer()->height();
-            unsigned int panelX;
-            unsigned int panelY;
             if (Game::getInstance()->settings()->worldMapFullscreen())
             {
                 panelSize = Graphics::Size(fullscreenSidepanelWidth, renderHeight);

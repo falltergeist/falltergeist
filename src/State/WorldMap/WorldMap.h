@@ -29,6 +29,8 @@ namespace Falltergeist
                 void onStateActivate(Event::State* event) override;
                 void onStateDeactivate(Event::State* event) override;
 
+                void setPanelOffset();
+
                 void initHotspot();
                 void renderHotspot();
 
@@ -38,25 +40,30 @@ namespace Falltergeist
                 void initTiles();
                 void renderTiles();
 
-                void setDelta(signed int* deltaX, signed int* deltaY);
-                void correctDelta(signed int* deltaX, signed int* deltaY);
-                // void correctDeltaX(signed int* deltaX);
-                // void correctDeltaY(signed int* deltaY);
+                void setDelta();
+                void correctDelta();
                 void deltaNegativeToZero(signed int* delta);
                 void deltaToMax(
+                    const char orientation,
                     signed int* delta,
                     signed int tilesNumber,
                     signed int tileDimension,
                     signed int mapDimension
                 );
 
+                bool inRenderView(const char orientation, signed int worldTileMinX);
+
             private:
-                UI::Image* _panel = nullptr;
                 UI::ImageList* _tiles = nullptr;
                 UI::ImageButton* _hotspot = nullptr;
-                Graphics::Size panelSize;
 
+                //panel
+                UI::Image* _panel = nullptr;
+                Graphics::Size panelSize;
+                unsigned int panelX;
+                unsigned int panelY;
                 unsigned int fullscreenSidepanelWidth;
+                unsigned int panelBorder = 22;
 
                 // temporary!
                 // @todo: move it to other place!
@@ -64,7 +71,11 @@ namespace Falltergeist
                 unsigned int worldMapX = 0;
                 unsigned int worldMapY = 0;
 
-                // delta (shift of map to fit to screen)
+                // map offset for fullscreen or windowed
+                signed int offsetX = 0;
+                signed int offsetY = 0;
+
+                // delta (shift of map)
                 signed int deltaX = 0;
                 signed int deltaY = 0;
 
