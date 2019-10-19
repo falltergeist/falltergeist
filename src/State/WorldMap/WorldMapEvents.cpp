@@ -52,6 +52,7 @@ namespace Falltergeist
             {
                 case SDLK_ESCAPE:
                 {
+                    exit();
                     Game::getInstance()->popState();
                 }
             }

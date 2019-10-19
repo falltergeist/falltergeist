@@ -79,6 +79,7 @@ namespace Falltergeist
         void Mixer::stopMusic()
         {
             Mix_HookMusic(NULL, NULL);
+            return;
         }
 
         std::function<void(void*, uint8_t*, uint32_t)> musicCallback;

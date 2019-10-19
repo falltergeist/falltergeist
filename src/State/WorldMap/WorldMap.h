@@ -28,6 +28,7 @@ namespace Falltergeist
                 void onKeyDown(Event::Keyboard* event) override;
                 void onStateActivate(Event::State* event) override;
                 void onStateDeactivate(Event::State* event) override;
+                void exit();
 
                 void setPanelOffset();
 

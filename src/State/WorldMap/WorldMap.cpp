@@ -47,5 +47,10 @@ namespace Falltergeist
             renderPanel();
         }
 
+        void WorldMap::exit()
+        {
+            Game::getInstance()->mixer()->stopMusic();
+        }
+
     }
 }
