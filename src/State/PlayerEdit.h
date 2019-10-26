@@ -32,6 +32,7 @@ namespace Falltergeist
                 void onNameButtonClick(Event::Mouse* event);
                 void onGenderButtonClick(Event::Mouse* event);
                 void onLabelClick(Event::Mouse* event);
+                void onTabClick(Event::Mouse* event);
                 void doCancel();
                 void doDone();
                 void doPrint();
