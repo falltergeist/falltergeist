@@ -30,6 +30,7 @@ if(WIN32)
     endif()
 
     #dependencies
-    file(GLOB dep_files ${dep_files} "${CMAKE_BINARY_DIR}/bin/*.dll" "${CMAKE_FIND_ROOT_PATH}/bin/*.dll")
-    install(FILES ${dep_files} DESTINATION .)
+    install(DIRECTORY $<TARGET_FILE_DIR:falltergeist>/
+        DESTINATION .
+        FILES_MATCHING PATTERN "*.dll")
 endif()

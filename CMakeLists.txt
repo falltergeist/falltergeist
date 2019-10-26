@@ -124,3 +124,8 @@ endif()
 include(cmake/install/windows.cmake)
 include(cmake/install/linux.cmake)
 include(cmake/install/apple.cmake)
+
+# Appveyor
+set(CPACK_GENERATOR "ZIP")
+set(CPACK_PACKAGE_FILE_NAME falltergeist-${falltergeist_VERSION}-${CMAKE_SYSTEM_NAME})
+include(CPack)
