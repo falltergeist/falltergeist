@@ -428,10 +428,6 @@ namespace Falltergeist
         mach_timebase_info_data_t info;
         mach_timebase_info(&info);
 
-        uint64_t time = mach_absolute_time();
-        return static_cast<uint32_t>(((double)time * (double)timebase.numer) / ((double)timebase.denom));
-
-
         static uint64_t lastTime = mach_absolute_time();
         uint64_t currentTime = mach_absolute_time();
         uint64_t duration = currentTime - lastTime;
