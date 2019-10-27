@@ -11,6 +11,7 @@ Under development
 - [feature] Player moves to an adjacent hexagon when using (a skill on) an object (AdamFx990)
 - [feature] Doors can't be opened if they're locked (AdamFx990)
 - [feature] Optimisations & code readability improvements to hexagon logic (AdamFx990)
+- [feature][#476] Automated Appveyor Windows builds (JanSimek, burner1024)
 
 0.3.1 (2018-01-14)
 =======================
