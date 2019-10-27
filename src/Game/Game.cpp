@@ -1,32 +1,8 @@
-/*
- * Copyright 2012-2018 Falltergeist Developers.
- *
- * This file is part of Falltergeist.
- *
- * Falltergeist is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Falltergeist is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
- */
-
-// Related headers
-#include "../Game/Game.h"
-
-// C++ standard includes
 #include <algorithm>
 #include <sstream>
 #include <ctime>
 #include <memory>
-
-// Falltergeist includes
+#include <SDL_image.h>
 #include "../Audio/Mixer.h"
 #include "../CrossPlatform.h"
 #include "../Event/Dispatcher.h"
@@ -34,6 +10,7 @@
 #include "../Exception.h"
 #include "../Format/Gam/File.h"
 #include "../Game/DudeObject.h"
+#include "../Game/Game.h"
 #include "../Game/Time.h"
 #include "../Graphics/AnimatedPalette.h"
 #include "../Graphics/Renderer.h"
@@ -46,9 +23,6 @@
 #include "../UI/FpsCounter.h"
 #include "../UI/TextArea.h"
 #include "../VFS/VFS.h"
-
-// Third patry includes
-#include <SDL_image.h>
 
 namespace Falltergeist
 {
@@ -180,9 +154,8 @@ namespace Falltergeist
             _frame = 0;
             while (!_quit) {
                 handle();
-                think();
+                think(CrossPlatform::nanosecondsPassed());
                 render();
-                SDL_Delay(1);
                 _statesForDelete.clear();
                 _frame++;
             }
@@ -404,12 +377,12 @@ namespace Falltergeist
             }
         }
 
-        void Game::think()
+        void Game::think(uint32_t nanosecondsPassed)
         {
-            _fpsCounter->think();
-            _mouse->think();
+            _fpsCounter->think(nanosecondsPassed);
+            _mouse->think(nanosecondsPassed);
 
-            _animatedPalette->think();
+            _animatedPalette->think(nanosecondsPassed);
 
             *_mousePosition = "";
             *_mousePosition << mouse()->position().x() << " : " << mouse()->position().y();
@@ -423,7 +396,7 @@ namespace Falltergeist
             }
 
             for (auto state : _getActiveStates()) {
-                state->think();
+                state->think(nanosecondsPassed);
             }
             // process custom events
             _eventDispatcher->processScheduledEvents();

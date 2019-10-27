@@ -1,52 +1,24 @@
-/*
- * Copyright 2012-2018 Falltergeist Developers.
- *
- * This file is part of Falltergeist.
- *
- * Falltergeist is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Falltergeist is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
- */
+#pragma once
 
-#ifndef FALLTERGEIST_UI_FPSCOUNTER_H
-#define FALLTERGEIST_UI_FPSCOUNTER_H
-
-// C++ standard includes
-
-// Falltergeist includes
 #include "../UI/TextArea.h"
-
-// Third party includes
 
 namespace Falltergeist
 {
-namespace UI
-{
+    namespace UI
+    {
+        class FpsCounter : public TextArea
+        {
+            public:
+                FpsCounter(const Point& pos = Point(598, 2));
+                FpsCounter(int x, int y);
+                ~FpsCounter() override;
 
-class FpsCounter : public TextArea
-{
-public:
-    FpsCounter(const Point& pos = Point(598, 2));
-    FpsCounter(int x, int y);
-    ~FpsCounter() override;
+                void think(uint32_t nanosecondsPassed) override;
+                unsigned int frames();
 
-    void think() override;
-    unsigned int frames();
-
-protected:
-    unsigned int _lastTicks = 0;
-    unsigned int _frames = 0;
-};
-
+            protected:
+                uint32_t _nanosecondsTracked = 0;
+                uint32_t _frames = 0;
+        };
+    }
 }
-}
-#endif // FALLTERGEIST_UI_FPSCOUNTER_H

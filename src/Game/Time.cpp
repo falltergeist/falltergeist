@@ -1,50 +1,45 @@
-/*
- * Copyright 2012-2018 Falltergeist Developers.
- *
- * This file is part of Falltergeist.
- *
- * Falltergeist is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Falltergeist is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
- */
-
-// Related headers
 #include "../Game/Time.h"
-
-// C++ standard includes
-
-// Falltergeist includes
-
-// Third party includes
-#include "SDL.h"
 
 namespace Falltergeist
 {
     namespace Game
     {
-        void Time::think()
+        void Time::think(uint32_t nanosecondsPassed)
         {
-            if (SDL_GetTicks() - _timer < 100) {
-                return;
+            _nanoseconds+= nanosecondsPassed;
+
+            while (_nanoseconds >= 1000) {
+                _nanoseconds-= 1000;
+                _increaseMicroseconds();
             }
-            _timer = SDL_GetTicks();
-            increaseTicks();
         }
 
         void Time::increaseTicks()
         {
+            // TODO get rid of this method
             _ticks++;
+            // 1 tick = 10 ms
 
-            if (_ticks%10 == 0) {
+
+            for (auto i = 0; i < 10; i++) {
+                _increaseMilliseconds();
+            }
+        }
+
+        void Time::_increaseMicroseconds()
+        {
+            _microseconds++;
+            if (_microseconds >= 1000) {
+                _microseconds -= 1000;
+                _increaseMilliseconds();
+            }
+        }
+
+        void Time::_increaseMilliseconds()
+        {
+            _milliseconds++;
+            if (_milliseconds >= 1000) {
+                _milliseconds -= 1000;
                 _increaseSeconds();
             }
         }
@@ -52,8 +47,8 @@ namespace Falltergeist
         void Time::_increaseSeconds()
         {
             _seconds++;
-            if (_seconds == 60) {
-                _seconds = 0;
+            if (_seconds >= 60) {
+                _seconds -= 60;
                 _increaseMinutes();
             }
         }
@@ -61,8 +56,8 @@ namespace Falltergeist
         void Time::_increaseMinutes()
         {
             _minutes++;
-            if (_minutes == 60) {
-                _minutes = 0;
+            if (_minutes >= 60) {
+                _minutes -= 60;
                 _increaseHours();
             }
         }
@@ -70,8 +65,8 @@ namespace Falltergeist
         void Time::_increaseHours()
         {
             _hours++;
-            if (_hours == 24) {
-                _hours = 0;
+            if (_hours >= 24) {
+                _hours -= 24;
                 _increaseDay();
             }
         }
@@ -117,7 +112,6 @@ namespace Falltergeist
                         }
                     }
             }
-
         }
 
         void Time::_increaseMonth()
@@ -139,7 +133,22 @@ namespace Falltergeist
             return _ticks;
         }
 
-        unsigned int Time::seconds()
+        uint32_t Time::nanoseconds()
+        {
+            return _nanoseconds;
+        }
+
+        uint32_t Time::microseconds()
+        {
+            return _microseconds;
+        }
+
+        uint32_t Time::milliseconds()
+        {
+            return _milliseconds;
+        }
+
+        uint32_t Time::seconds()
         {
             return _seconds;
         }

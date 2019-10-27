@@ -123,7 +123,7 @@ namespace Falltergeist
                 virtual void use_skill_on_p_proc();
                 virtual void is_dropping_p_proc();
 
-                void think() override;
+                void think(uint32_t nanosecondsPassed) override;
                 virtual void onMovementAnimationEnded(Event::Event* event);
                 virtual void onMovementAnimationFrame(Event::Event* event);
 

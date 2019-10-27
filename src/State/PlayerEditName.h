@@ -19,7 +19,7 @@ namespace Falltergeist
                 ~PlayerEditName() override;
 
                 void init() override;
-                void think() override;
+                void think(uint32_t nanosecondsPassed) override;
 
                 void onDoneButtonClick(Event::Mouse* event);
                 void onTextAreaKeyDown(Event::Keyboard* event);
@@ -28,7 +28,7 @@ namespace Falltergeist
                 void doBack();
 
             protected:
-                unsigned int _timer;
+                uint32_t _blinkingCursorNanosecondsTracked = 0;
                 UI::TextArea* _name = nullptr;
                 UI::Rectangle* _cursor = nullptr;
                 std::map<char,char> _keyCodes;

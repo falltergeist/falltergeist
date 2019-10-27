@@ -24,7 +24,7 @@ namespace Falltergeist
                 ~SettingsMenu() override;
 
                 void init() override;
-                void think() override;
+                void think(uint32_t nanosecondsPassed) override;
 
                 void onDefaultButtonClick(Event::Mouse* event);
                 void doCancel();

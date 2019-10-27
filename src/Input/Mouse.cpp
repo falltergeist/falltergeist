@@ -1,39 +1,13 @@
-/*
- * Copyright 2012-2018 Falltergeist Developers.
- *
- * This file is part of Falltergeist.
- *
- * Falltergeist is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Falltergeist is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
- */
-
-// Related headers
-#include "../Input/Mouse.h"
-
-// C++ standard includes
 #include <memory>
-
-// Falltergeist includes
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
 #include "../Graphics/Texture.h"
+#include "../Input/Mouse.h"
 #include "../ResourceManager.h"
 #include "../Settings.h"
 #include "../UI/Animation.h"
 #include "../UI/AnimationQueue.h"
 #include "../UI/Image.h"
-
-// Third party includes
 #include <SDL.h>
 
 namespace Falltergeist
@@ -243,7 +217,7 @@ namespace Falltergeist
             }
         }
 
-        void Mouse::think()
+        void Mouse::think(uint32_t nanosecondsPassed)
         {
             SDL_GetMouseState(&_position.rx(), &_position.ry());
             _position = Point(
@@ -251,7 +225,7 @@ namespace Falltergeist
                 static_cast<int>(_position.y() / Game::getInstance()->renderer()->scaleY())
             );
             if (_ui) {
-                _ui->think();
+                _ui->think(nanosecondsPassed);
             }
         }
 

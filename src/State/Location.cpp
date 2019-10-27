@@ -485,39 +485,40 @@ namespace Falltergeist
             }
         }
 
-        void Location::think()
+        void Location::think(uint32_t nanosecondsPassed)
         {
-            Game::getInstance()->gameTime()->think();
-            thinkObjects();
+            Game::getInstance()->gameTime()->think(nanosecondsPassed);
+            thinkObjects(nanosecondsPassed);
             auto player = Game::getInstance()->player();
-            player->think();
-            performScrolling();
+            player->think(nanosecondsPassed);
+            performScrolling(nanosecondsPassed);
             if (_locationEnter) {
                 _locationEnter = false;
-                firstLocationEnter();
+                firstLocationEnter(nanosecondsPassed);
             } else {
-                updateLocation();
+                updateLocation(nanosecondsPassed);
             }
-            processTimers();
-            State::think();
+            processTimers(nanosecondsPassed);
+            State::think(nanosecondsPassed);
         }
 
         // timers processing
-        void Location::processTimers()
+        void Location::processTimers(uint32_t nanosecondsPassed)
         {
-            _actionCursorTimer.think();
-            _ambientSfxTimer.think();
+            _actionCursorTimer.think(nanosecondsPassed);
+            _ambientSfxTimer.think(nanosecondsPassed);
 
             for (auto it = _timerEvents.begin(); it != _timerEvents.end();) {
-                it->timer.think();
+                it->timer.think(nanosecondsPassed);
                 if (!it->timer.enabled()) {
                     it = _timerEvents.erase(it);
                 } else ++it;
             }
         }
 
-        void Location::updateLocation()
+        void Location::updateLocation(uint32_t nanosecondsPassed)
         {
+            // TODO use nanoseconds
             auto player = Game::getInstance()->player();
             if (_scriptsTicks + 10000 < SDL_GetTicks()) {
                 _scriptsTicks = SDL_GetTicks();
@@ -531,7 +532,7 @@ namespace Falltergeist
             }
         }
 
-        void Location::firstLocationEnter() const
+        void Location::firstLocationEnter(uint32_t nanosecondsPassed) const
         {
             auto player = Game::getInstance()->player();
             if (_location->script()) {
@@ -565,8 +566,9 @@ namespace Falltergeist
             }
         }
 
-        void Location::performScrolling()
+        void Location::performScrolling(uint32_t nanosecondsPassed)
         {
+            // TODO use nanosecondsPassed
             // location scrolling
             if (this->_scrollTicks + 10 < SDL_GetTicks()) {
                 this->_scrollTicks = SDL_GetTicks();
@@ -624,10 +626,10 @@ namespace Falltergeist
             }
         }
 
-        void Location::thinkObjects() const
+        void Location::thinkObjects(uint32_t nanosecondsPassed) const
         {
             for (auto &object : _objects) {
-                object->think();
+                object->think(nanosecondsPassed);
             }
         }
 

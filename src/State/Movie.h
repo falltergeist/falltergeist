@@ -32,7 +32,7 @@ namespace Falltergeist
                 ~Movie() override;
 
                 void init() override;
-                void think() override;
+                void think(uint32_t nanosecondsPassed) override;
                 void handle(Event::Event* event) override;
 
                 void onVideoFinished();
