@@ -23,8 +23,8 @@
 // C++ standard includes
 
 // Falltergeist includes
+#include "../../Game/Component/Lockable.h"
 #include "../../Game/ContainerItemObject.h"
-#include "../../Game/DoorSceneryObject.h"
 #include "../../Logger.h"
 #include "../../VM/Script.h"
 
@@ -41,10 +41,8 @@ namespace Falltergeist {
                 auto object = _script->dataStack()->popObject();
                 if (object) {
                     debug << "    PID: 0x" << std::hex << (object ? object->PID() : 0) << std::endl;
-                    if (auto door = dynamic_cast<Game::DoorSceneryObject *>(object)) {
-                        door->setLocked(true);
-                    } else if (auto container = dynamic_cast<Game::ContainerItemObject *>(object)) {
-                        container->setLocked(true);
+                    if (auto lockable = object->getComponent<Game::Component::Lockable>()) {
+                        lockable->lock();
                     } else {
                         _warning("obj_lock: object is not door or container");
                     }

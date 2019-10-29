@@ -3,6 +3,7 @@
 #include "../Format/Map/Script.h"
 #include "../Format/Msg/File.h"
 #include "../Game/ContainerItemObject.h"
+#include "../Game/Component/Lockable.h"
 #include "../Game/CritterObject.h"
 #include "../Game/DoorSceneryObject.h"
 #include "../Game/ExitMiscObject.h"
@@ -58,8 +59,8 @@ namespace Falltergeist
                 exitGrid->setExitDirection(mapObject->exitOrientation());
             }
 
-            if (auto door = dynamic_cast<Game::DoorSceneryObject *>(object)) {
-                door->setOpened(mapObject->opened());
+            if (auto lockable = object->getComponent<Game::Component::Lockable>()) {
+                mapObject->opened() ? lockable->open() : lockable->close();
             }
 
             if (auto container = dynamic_cast<Game::ContainerItemObject *>(object)) {

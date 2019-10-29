@@ -5,6 +5,7 @@
 #include "../Format/Pro/File.h"
 #include "../Game/AmmoItemObject.h"
 #include "../Game/ArmorItemObject.h"
+#include "../Game/Component/Lockable.h"
 #include "../Game/ContainerItemObject.h"
 #include "../Game/CritterObject.h"
 #include "../Game/DoorSceneryObject.h"
@@ -64,6 +65,7 @@ namespace Falltergeist
                         case ITEM_TYPE::CONTAINER:
                         {
                             object = new ContainerItemObject();
+                            object->addComponent<Component::Lockable>(std::make_shared<Component::Lockable>());
                             break;
                         }
                         case ITEM_TYPE::DRUG:
@@ -161,6 +163,7 @@ namespace Falltergeist
                         case SCENERY_TYPE::DOOR:
                         {
                             object = new DoorSceneryObject();
+                            object->addComponent<Component::Lockable>(std::make_shared<Component::Lockable>());
                             break;
                         }
                         case SCENERY_TYPE::ELEVATOR:

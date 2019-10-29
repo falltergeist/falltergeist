@@ -23,7 +23,8 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../Game/DoorSceneryObject.h"
+#include "../../Game/Component/Lockable.h"
+#include "../../Game/Object.h"
 #include "../../Logger.h"
 #include "../../VM/Script.h"
 
@@ -37,8 +38,8 @@ namespace Falltergeist {
 
             void Opcode812D::_run() {
                 Logger::debug("SCRIPT") << "[812D] [+] int is_locked(GameDoorSceneryObject* object)" << std::endl;
-                auto object = dynamic_cast<Game::DoorSceneryObject *>(_script->dataStack()->popObject());
-                _script->dataStack()->push(object->locked());
+                auto lockable = _script->dataStack()->popObject()->getComponent<Game::Component::Lockable>();
+                _script->dataStack()->push(lockable->isLocked());
             }
         }
     }
