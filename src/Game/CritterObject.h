@@ -136,7 +136,6 @@ namespace Falltergeist
                 UI::Animation* setWeaponAnimation(unsigned animationId);
 
                 UI::Animation* animation();
-                UI::Animation* generateAnimation(const std::string& action, Orientation orientation);
 
                 bool canTrade() const;
                 void setCanTrade(bool canTrade);
@@ -221,7 +220,6 @@ namespace Falltergeist
                 ItemObject* _rightHandSlot = 0;
 
                 virtual std::unique_ptr<UI::Animation> _generateMovementAnimation();
-                virtual std::string _generateArmorFrmString();
                 void _setupNextIdleAnim();
                 void _generateUi() override;
         };

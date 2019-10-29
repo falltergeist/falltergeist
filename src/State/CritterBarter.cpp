@@ -4,6 +4,8 @@
 #include "../Game/ContainerItemObject.h"
 #include "../Game/DudeObject.h"
 #include "../Game/Game.h"
+#include "../Graphics/CritterAnimationFactory.h"
+#include "../Helpers/CritterHelper.h"
 #include "../State/CritterInteract.h"
 #include "../UI/Animation.h"
 #include "../UI/Image.h"
@@ -43,13 +45,26 @@ namespace Falltergeist
 
             addUI("background", new UI::Image("art/intrface/barter.frm"));
 
-            auto dudeCritter = Game::getInstance()->player()->generateAnimation("aa", Game::Orientation::SC);
-            dudeCritter->setPosition({30, 45});
-            addUI(dudeCritter);
+            auto dude = Game::getInstance()->player();
 
-            auto traderCritter = _trader->generateAnimation("aa", Game::Orientation::SC);
+            Helpers::CritterHelper critterHelper;
+            Graphics::CritterAnimationFactory animationFactory;
+
+            auto dudeCritter = animationFactory.buildStandingAnimation(
+                critterHelper.armorFID(dude.get()),
+                critterHelper.weaponId(dude.get()),
+                Game::Orientation::SC
+            );
+            dudeCritter->setPosition({30, 45});
+            addUI(dudeCritter.release());
+
+            auto traderCritter = animationFactory.buildStandingAnimation(
+                critterHelper.armorFID(_trader),
+                critterHelper.weaponId(_trader),
+                Game::Orientation::SC
+            );
             traderCritter->setPosition({ 580, 45 });
-            addUI(traderCritter);
+            addUI(traderCritter.release());
 
             auto reaction = new UI::TextArea("", 140, -62);
             reaction->setSize({375, 53});

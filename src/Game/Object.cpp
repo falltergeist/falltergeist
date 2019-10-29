@@ -13,6 +13,7 @@
 #include "../Game/DudeObject.h"
 #include "../Game/Game.h"
 #include "../Game/Object.h"
+#include "../Graphics/ObjectUIFactory.h"
 #include "../PathFinding/HexagonGrid.h"
 #include "../LocationCamera.h"
 #include "../Logger.h"
@@ -156,23 +157,8 @@ namespace Falltergeist
 
         void Object::_generateUi()
         {
-            _ui.reset();
-            auto frm = ResourceManager::getInstance()->frmFileType(FID());
-            if (!frm) {
-                return;
-            }
-            if (frm->framesPerDirection() > 1 || frm->directions().size() > 1) {
-                auto queue = std::make_unique<UI::AnimationQueue>();
-                queue->animations().push_back(
-                    std::make_unique<UI::Animation>(
-                        ResourceManager::getInstance()->FIDtoFrmName(FID()),
-                        orientation()
-                    )
-                );
-                _ui = std::move(queue);
-            } else {
-                _ui = std::make_unique<UI::Image>(frm, orientation());
-            }
+            Graphics::ObjectUIFactory uiFactory;
+            _ui = uiFactory.buildByFID(FID(), orientation());
         }
 
         bool Object::canWalkThru() const

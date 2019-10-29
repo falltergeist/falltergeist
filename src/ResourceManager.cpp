@@ -58,7 +58,6 @@
 #include "Graphics/Font/FON.h"
 #include "Graphics/Texture.h"
 #include "Graphics/Shader.h"
-#include "Helpers/CritterAnimationHelper.h"
 #include "Logger.h"
 #include "ResourceManager.h"
 #include "Ini/File.h"
@@ -70,7 +69,6 @@ namespace Falltergeist
 {
     using namespace std;
     using namespace Format;
-    using Helpers::CritterAnimationHelper;
 
     namespace
     {
