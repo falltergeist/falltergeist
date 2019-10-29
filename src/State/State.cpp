@@ -34,10 +34,10 @@ namespace Falltergeist
             _initialized = true;
         }
 
-        void State::think()
+        void State::think(uint32_t nanosecondsPassed)
         {
             for (auto& ui : _ui) {
-                ui->think();
+                ui->think(nanosecondsPassed);
             }
         }
 

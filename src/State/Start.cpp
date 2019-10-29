@@ -1,4 +1,3 @@
-#include <ctime>
 #include <string>
 #include <vector>
 #include <memory>
@@ -34,7 +33,9 @@ namespace Falltergeist
 
         void Start::init()
         {
-            if (_initialized) return;
+            if (_initialized) {
+                return;
+            }
             State::init();
 
             setModal(true);
@@ -48,17 +49,18 @@ namespace Falltergeist
 
             addUI("splash", new UI::Image("art/splash/" + splashes.at(rand() % splashes.size())));
 
-            _splashTicks = SDL_GetTicks();
+            _delayTimer = std::make_unique<Game::CountdownTimer>(3);
 
             Game::getInstance()->mouse()->setState(Input::Mouse::Cursor::WAIT);
         }
 
-        void Start::think()
+        void Start::think(uint32_t nanosecondsPassed)
         {
+            _delayTimer->think(nanosecondsPassed);
+
             auto game = Game::getInstance();
-            State::think();
-            if (game->settings()->forceLocation())
-            {
+            State::think(nanosecondsPassed);
+            if (game->settings()->forceLocation()) {
                 auto player = std::make_unique<Game::DudeObject>();
                 player->loadFromGCDFile(ResourceManager::getInstance()->gcdFileType("premade/combat.gcd"));
                 game->setPlayer(std::move(player));
@@ -67,8 +69,8 @@ namespace Falltergeist
                 game->setState(stateLocationHelper.getInitialLocationState());
                 return;
             }
-            if (_splashTicks + 3000 < SDL_GetTicks())
-            {
+
+            if (_delayTimer->isFinished()) {
                 game->setState(new MainMenu());
                 game->pushState(new Movie(17));
                 game->pushState(new Movie(1));

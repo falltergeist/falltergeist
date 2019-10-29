@@ -1,4 +1,4 @@
-#include <ctype.h>
+#include <cstdint>
 #include "../State/PlayerEditName.h"
 #include "../functions.h"
 #include "../Game/DudeObject.h"
@@ -70,8 +70,6 @@ namespace Falltergeist
             _keyCodes.insert(std::make_pair(SDLK_8, '8'));
             _keyCodes.insert(std::make_pair(SDLK_9, '9'));
             _keyCodes.insert(std::make_pair(SDLK_0, '0'));
-
-            _timer = SDL_GetTicks();
 
             auto bg = new UI::Image("art/intrface/charwin.frm");
             bg->setPosition(bgPos + Point(22, 0));
@@ -158,14 +156,16 @@ namespace Falltergeist
             doDone();
         }
 
-        void PlayerEditName::think()
+        void PlayerEditName::think(uint32_t nanosecondsPassed)
         {
+            // TODO use nanosecondsPassed
             int bgX = (Game::getInstance()->renderer()->width() - 640) / 2;
-            State::think();
-            if (SDL_GetTicks() - _timer > 300)
-            {
+            State::think(nanosecondsPassed);
+
+            _blinkingCursorNanosecondsTracked += nanosecondsPassed;
+            if (_blinkingCursorNanosecondsTracked >= 3e8) { // 300 ms
+                _blinkingCursorNanosecondsTracked -= 3e8;
                 _cursor->setVisible(!_cursor->visible());
-                _timer = SDL_GetTicks();
             }
             _cursor->setPosition({bgX + _name->textSize().width() + 45, _cursor->position().y()});
         }

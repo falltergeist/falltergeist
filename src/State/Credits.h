@@ -17,7 +17,7 @@ namespace Falltergeist
                 ~Credits() override;
 
                 void init() override;
-                void think() override;
+                void think(uint32_t nanosecondsPassed) override;
                 void handle(Event::Event* event) override;
 
                 void onCreditsFinished();
@@ -25,7 +25,7 @@ namespace Falltergeist
                 void onStateActivate(Event::State* event) override;
             private:
                 std::vector<UI::TextArea*> _lines;
-                unsigned long int _lastTicks;
+                uint32_t _scrollingNanosecondsTracked = 0;
         };
     }
 }

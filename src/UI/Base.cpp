@@ -78,7 +78,7 @@ void Base::setY(int value)
     setPosition(Point(position().x(), value));
 }
 
-void Base::think()
+void Base::think(uint32_t nanosecondsPassed)
 {
 }
 

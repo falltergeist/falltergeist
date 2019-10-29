@@ -2,8 +2,9 @@
 
 #include <list>
 #include <memory>
-#include "../Game/DudeObject.h"
 #include "../Format/Map/File.h"
+#include "../Game/DudeObject.h"
+#include "../Game/GameTimer.h"
 #include "../Game/Object.h"
 #include "../Game/Timer.h"
 #include "../Graphics/Lightmap.h"
@@ -60,7 +61,7 @@ namespace Falltergeist
                 ~Location() override;
 
                 void init() override;
-                void think() override;
+                void think(uint32_t nanosecondsPassed) override;
                 void handle(Event::Event* event) override;
                 void render() override;
 
@@ -196,15 +197,15 @@ namespace Falltergeist
 
                 void renderTestingOutline() const;
 
-                void thinkObjects() const;
+                void thinkObjects(uint32_t nanosecondsPassed) const;
 
-                void performScrolling();
+                void performScrolling(uint32_t nanosecondsPassed);
 
-                void firstLocationEnter() const;
+                void firstLocationEnter(uint32_t nanosecondsPassed) const;
 
-                void updateLocation();
+                void updateLocation(uint32_t nanosecondsPassed);
 
-                void processTimers();
+                void processTimers(uint32_t nanosecondsPassed);
 
                 bool movePlayerToObject(Game::Object *object);
 

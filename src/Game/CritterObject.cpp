@@ -490,7 +490,7 @@ namespace Falltergeist
             return &_movementQueue;
         }
 
-        void CritterObject::think()
+        void CritterObject::think(uint32_t nanosecondsPassed)
         {
             if (!movementQueue()->empty()) {
                 if (!_moving) {
@@ -512,7 +512,7 @@ namespace Falltergeist
                     }
                 }
             }
-            Object::think();
+            Object::think(nanosecondsPassed);
         }
 
         static const std::array<int, 6> xTileOffsets = {{16, 32, 16, -16, -32, -16}};

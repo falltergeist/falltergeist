@@ -399,9 +399,9 @@ namespace Falltergeist
             _images.insert(std::pair<std::string, UI::Image*>(name, image));
         }
 
-        void PlayerEdit::think()
+        void PlayerEdit::think(uint32_t nanosecondsPassed)
         {
-            State::think();
+            State::think(nanosecondsPassed);
             auto player = Game::getInstance()->player();
 
             *_labels.at("name") = player->name();

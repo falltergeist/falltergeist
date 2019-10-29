@@ -85,38 +85,30 @@ namespace Falltergeist
                 _lines.push_back(tx);
                 y += tx->textSize().height() + cur_font->verticalGap() + additionalGap;
             }
-            _lastTicks=SDL_GetTicks();
         }
 
-        void Credits::think()
+        void Credits::think(uint32_t nanosecondsPassed)
         {
-            State::think();
+            State::think(nanosecondsPassed);
 
-            unsigned long int nt = SDL_GetTicks();
-            if (nt - _lastTicks > 50)
-            {
+            _scrollingNanosecondsTracked += nanosecondsPassed;
+            if (_scrollingNanosecondsTracked >= 1e7) { // 50 ms
+                _scrollingNanosecondsTracked -= 1e7;
                 _position.ry() -= 1;
                 long int _lastY = 0;
-                for (auto ui: _lines)
-                {
+                for (auto ui: _lines) {
                     ui->setY(ui->y()-1);
 
-                    if ( (ui->y() > -30) && (ui->y() < (int)(Game::getInstance()->renderer()->height()+10) ) )
-                    {
+                    if ((ui->y() > -30) && (ui->y() < (int)(Game::getInstance()->renderer()->height()+10) )) {
                         ui->setVisible(true);
-                    }
-                    else
-                    {
+                    } else {
                         ui->setVisible(false);
                     }
 
                     _lastY = ui->y();
                 }
 
-                _lastTicks=nt;
-
-                if (_lastY < -30)
-                {
+                if (_lastY < -30) {
                     this->onCreditsFinished();
                 }
             }
