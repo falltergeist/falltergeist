@@ -3,7 +3,9 @@
 #include "../Game/ContainerItemObject.h"
 #include "../Game/DudeObject.h"
 #include "../Game/Game.h"
+#include "../Graphics/CritterAnimationFactory.h"
 #include "../Graphics/Renderer.h"
+#include "../Helpers/CritterHelper.h"
 #include "../Input/Mouse.h"
 #include "../Logger.h"
 #include "../UI/Animation.h"
@@ -36,9 +38,18 @@ namespace Falltergeist
 
             addUI("background", new UI::Image("art/intrface/loot.frm"));
 
-            auto dudeCritter = Game::getInstance()->player()->generateAnimation("aa", Game::Orientation::SC);
+            auto dude = Game::getInstance()->player();
+
+            Helpers::CritterHelper critterHelper;
+            Graphics::CritterAnimationFactory animationFactory;
+
+            auto dudeCritter = animationFactory.buildStandingAnimation(
+                critterHelper.armorFID(dude.get()),
+                critterHelper.weaponId(dude.get()),
+                Game::Orientation::SC
+            );
             dudeCritter->setPosition({56, 47});
-            addUI(dudeCritter);
+            addUI(dudeCritter.release());
 
             // FIXME: chests and lockers should be shown opened and centered vertically
             auto objectCopy = new Game::Object();
@@ -91,7 +102,6 @@ namespace Falltergeist
 
             dudeList->itemDragStopHandler().add([containerList](Event::Mouse* event){ containerList->onItemDragStop(event); });
             containerList->itemDragStopHandler().add([dudeList](Event::Mouse* event){ dudeList->onItemDragStop(event); });
-
         }
 
         Game::ContainerItemObject* Container::object()

@@ -10,8 +10,9 @@
 #include "../Game/Object.h"
 #include "../Game/ObjectFactory.h"
 #include "../Game/WeaponItemObject.h"
-#include "../Graphics/Renderer.h"
+#include "../Graphics/CritterAnimationFactory.h"
 #include "../Graphics/Size.h"
+#include "../Helpers/CritterHelper.h"
 #include "../Input/Mouse.h"
 #include "../ResourceManager.h"
 #include "../State/State.h"
@@ -242,9 +243,18 @@ namespace Falltergeist
             addUI("inventory_list", inventoryList);
 
             // TODO: this is a rotating animation in the vanilla engine
-            auto dudeCritter = Game::getInstance()->player()->generateAnimation("aa", Game::Orientation::SC);
+            auto dude = Game::getInstance()->player();
+
+            Helpers::CritterHelper critterHelper;
+            Graphics::CritterAnimationFactory animationFactory;
+
+            auto dudeCritter = animationFactory.buildStandingAnimation(
+                critterHelper.armorFID(dude.get()),
+                critterHelper.weaponId(dude.get()),
+                Game::Orientation::SC
+            );
             dudeCritter->setPosition({188, 52});
-            addUI(dudeCritter);
+            addUI(dudeCritter.release());
 
             // BIG ICONS
             // icon: armor

@@ -310,11 +310,6 @@ namespace Falltergeist
         void PlayerPanel::openInventory()
         {
             auto state = new State::Inventory();
-            state->popHandler().add([this](Event::State* evt)
-                {
-                    // update player frame
-                    Game::getInstance()->player()->setActionAnimation("aa")->stop();
-                });
             Game::getInstance()->pushState(state);
             playWindowOpenSfx();
         }
