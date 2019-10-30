@@ -15,7 +15,7 @@
 #include "../State/PlayerEdit.h"
 #include "../State/SaveGame.h"
 #include "../State/Skilldex.h"
-#include "../State/WorldMap.h"
+#include "../State/WorldMap/WorldMap.h"
 #include "../UI/Animation.h"
 #include "../UI/Image.h"
 #include "../UI/ImageButton.h"

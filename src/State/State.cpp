@@ -23,6 +23,9 @@ namespace Falltergeist
             keyDownHandler().add([this](Event::Keyboard* event) {
                 this->onKeyDown(event);
             });
+            keyUpHandler().add([this](Event::Keyboard* event) {
+                this->onKeyUp(event);
+            });
         }
 
         State::~State()
@@ -194,6 +197,10 @@ namespace Falltergeist
         }
 
         void State::onKeyDown(Event::Keyboard* event)
+        {
+        }
+
+        void State::onKeyUp(Event::Keyboard* event)
         {
         }
 
