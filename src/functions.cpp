@@ -46,6 +46,7 @@ std::string _t(MSG_TYPE type, unsigned int number)
         "text/english/game/stat.msg",
         "text/english/game/skilldex.msg",
         "text/english/game/dbox.msg",
+        "text/english/game/perk.msg",
         "text/english/game/proto.msg",
         "text/english/game/pro_item.msg"
     };

@@ -41,7 +41,7 @@ namespace Falltergeist
 {
     namespace Game
     {
-        DudeObject::DudeObject() : CritterObject()
+        DudeObject::DudeObject() : CritterObject(), _perks(static_cast<unsigned>(PERK::PERK_COUNT))
         {
             _type = Type::DUDE;
             setLightIntensity(65536);
@@ -124,6 +124,19 @@ namespace Falltergeist
         void DudeObject::setSkillsPoints(int value)
         {
             _skillsPoints = value;
+        }
+
+        /**
+         * @return current rank of the \p perk or zero if the player doesn't have the perk
+         */
+        int DudeObject::perk(PERK perk) const
+        {
+            return _perks.at(static_cast<unsigned>(perk));
+        }
+
+        void DudeObject::addPerk(PERK perk)
+        {
+            _perks[static_cast<unsigned>(perk)]++;
         }
 
         int DudeObject::hitPointsMax() const

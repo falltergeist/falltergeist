@@ -21,6 +21,7 @@
 #define FALLTERGEIST_GAME_DUDEOBJECT_H
 
 // C++ standard includes
+#include <vector>
 
 // Falltergeist includes
 #include "../Game/CritterObject.h"
@@ -64,6 +65,9 @@ namespace Falltergeist
                 int skillsPoints() const;
                 void setSkillsPoints(int value);
 
+                int perk(PERK perk) const;
+                void addPerk(PERK perk);
+
                 int level() const;
                 void setLevel(int value);
 
@@ -92,6 +96,7 @@ namespace Falltergeist
                 int _experience = 0;
                 int _statsPoints = 0;
                 int _skillsPoints = 3;
+                std::vector<unsigned> _perks;
                 std::string _biography;
                 void _generateUi() override;
         };

@@ -100,6 +100,132 @@ enum class TRAIT : int32_t
     GIFTED
 };
 
+enum class PERK : int32_t
+{
+    AWARENESS = 1,
+    BONUS_HTH_ATTACKS,
+    BONUS_HTH_DAMAGE,
+    BONUS_MOVE,
+    BONUS_RANGED_DAMAGE,
+    BONUS_RATE_OF_FIRE,
+    EARLIER_SEQUENCE,
+    FASTER_HEALING,
+    MORE_CRITICALS,
+    NIGHT_VISION,
+    PRESENCE,
+    RAD_RESISTANCE,
+    TOUGHNESS,
+    STRONG_BACK,
+    SHARPSHOOTER,
+    SILENT_RUNNING,
+    SURVIVALIST,
+    MASTER_TRADER,
+    EDUCATED,
+    HEALER,
+    FORTUNE_FINDER,
+    BETTER_CRITICALS,
+    EMPATHY,
+    SLAYER,
+    SNIPER,
+    SILENT_DEATH,
+    ACTION_BOY,
+    MENTAL_BLOCK,   /// \b unimplemented in the vanilla F2 engine
+    LIFEGIVER,
+    DODGER,
+    SNAKEATER,
+    MR_FIXIT,
+    MEDIC,
+    MASTER_THIEF,
+    SPEAKER,
+    HEAVE_HO,
+    FRIENDLY_FOE,   /// \b unimplemented in the vanilla F2 engine
+    PICKPOCKET = 38,
+    GHOST,
+    CULT_OF_PERSONALITY,
+    SCROUNGER,
+    EXPLORER,
+    FLOWER_CHILD,   /// \b unimplemented in the vanilla F2 engine
+    PATHFINDER,
+    ANIMAL_FRIEND,  /// \b unimplemented in the vanilla F2 engine
+    SCOUT,
+    MYSTERIOUS_STRANGER,
+    RANGER,
+    QUICK_POCKETS,
+    SMOOTH_TALKER,
+    SWIFT_LEARNER,
+    TAG,
+    MUTATE,
+    NUKA_COLA_ADDICTION,            /// \b addiction perk
+    BUFFOUT_ADDICTION,              /// \b addiction perk
+    MENTATS_ADDICTION,              /// \b addiction perk
+    PSYCHO_ADDICTION,               /// \b addiction perk
+    RADAWAY_ADDICTION,              /// \b addiction perk
+    WEAPON_LONG_RANGE,              /// \b weapon perk
+    WEAPON_ACCURATE,                /// \b weapon perk
+    WEAPON_PENETRATE,               /// \b weapon perk
+    WEAPON_KNOCKBACK,               /// \b weapon perk
+    POWERED_ARMOR,                  /// \b armor perk
+    COMBAT_ARMOR,                   /// \b armor perk
+    WEAPON_SCOPE_RANGE,             /// \b weapon perk
+    WEAPON_FAST_RELOAD,             /// \b weapon perk
+    WEAPON_NIGHT_SIGHT,             /// \b weapon perk
+    WEAPON_FLAMEBOY,                /// \b weapon perk
+    ARMOR_ADVANCED_I,               /// \b armor perk
+    ARMOR_ADVANCED_II,              /// \b armor perk
+    JET_ADDICTION,                  /// \b addiction perk
+    TRAGIC_ADDICTION,               /// \b unimplemented in the vanilla F2 engine
+    ARMOR_CHARISMA,                 /// \b armor perk
+    GECKO_SKINNING,                 /// \b special perk
+    DERMAL_IMPACT_ARMOR,            /// \b special perk
+    DERMAL_IMPACT_ASSLT_ENHANCED,   /// \b special perk
+    PHOENIX_ARMOR_IMPLANTS,         /// \b special perk
+    PHOENIX_ASSAULT_ENHANCEMENT,    /// \b special perk
+    VAULT_CITY_INOCULATIONS,        /// \b special perk
+    ADRENALINE_RUSH,
+    CAUTIOUS_NATURE,
+    COMPREHENSION,
+    DEMOLITION_EXPERT,
+    GAMBLER,
+    GAIN_STRENGTH,
+    GAIN_PERCEPTION,
+    GAIN_ENDURANCE,
+    GAIN_CHARISMA,
+    GAIN_INTELLIGENCE,
+    GAIN_AGILITY,
+    GAIN_LUCK,
+    HARMLESS,
+    HERE_AND_NOW,
+    HTH_EVADE,
+    KAMA_SUTRA_MASTER,
+    KARMA_BEACON,
+    LIGHT_STEP,
+    LIVING_ANATOMY,
+    MAGNETIC_PERSONALITY,
+    NEGOTIATOR,
+    PACK_RAT,
+    PYROMANIAC,
+    QUICK_RECOVERY,
+    SALESMAN,
+    STONEWALL,
+    THIEF,
+    WEAPON_HANDLING,
+    VAULT_CITY_TRAINING,            /// \b special perk
+    ALCOHOL_RAISED_HIT_POINTS,      /// \b special perk
+    ALCOHOL_RAISED_HIT_POINTS_II,   /// \b special perk
+    ALCOHOL_LOWERED_HIT_POINTS,     /// \b special perk
+    ALCOHOL_LOWERED_HIT_POINTS_II,  /// \b special perk
+    AUTODOC_RAISED_HIT_POINTS,      /// \b special perk
+    AUTODOC_RAISED_HIT_POINTS_II,   /// \b special perk
+    AUTODOC_LOWERED_HIT_POINTS,     /// \b special perk
+    AUTODOC_LOWERED_HIT_POINTS_II,  /// \b special perk
+    EXPERT_EXCREMENT_EXPEDITOR,     /// \b special perk
+    WEAPON_ENHANCED_KNOCKOUT,       /// \b special perk
+    // JINXED - a TRAIT, but is listed in PERKS.MSG as the last perk
+
+    // Should be last entry.
+    PERK_COUNT
+};
+
 enum class ENDIANNESS : char
 {
     BIG = 0,

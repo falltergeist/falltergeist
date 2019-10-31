@@ -16,6 +16,15 @@ namespace Falltergeist
     }
     namespace State
     {
+        struct PerkEligibility
+        {
+            PERK perk;
+            int maxRank;
+            int minLevel;
+            std::function<bool()> otherRequirements;
+            std::string image;
+        };
+
         class PlayerEdit : public State
         {
             public:
@@ -40,6 +49,8 @@ namespace Falltergeist
                 void onStateActivate(Event::State* event) override;
                 void onStateDeactivate(Event::State* event) override;
                 void onKeyDown(Event::Keyboard* event) override;
+
+                std::vector<PerkEligibility> getSelectablePerks() const;
 
             protected:
                 UI::TextArea* _selectedLabel = nullptr;

@@ -167,8 +167,8 @@ namespace Falltergeist
 
         void CritterBarter::resetTransaction()
         {
-            dynamic_cast<UI::TextArea*>(getUI("sellPriceText"))->setText("$0");
-            dynamic_cast<UI::TextArea*>(getUI("buyPriceText"))->setText("$0");
+            getTextArea("sellPriceText")->setText("$0");
+            getTextArea("buyPriceText")->setText("$0");
 
             _itemsToSell.clear();
             dynamic_cast<UI::ItemsList*>(getUI("mineList"))->setItems(Game::getInstance()->player()->inventory());
@@ -184,7 +184,7 @@ namespace Falltergeist
 
         void CritterBarter::onOfferButtonClick(Event::Mouse*)
         {
-            auto reaction = dynamic_cast<UI::TextArea*>(getUI("reaction"));
+            auto reaction = getTextArea("reaction");
 
             try {
                 if (_sellPriceTotal == 0 && _buyPriceTotal == 0) {
@@ -233,7 +233,7 @@ namespace Falltergeist
             for (const auto &v : _itemsToBuy)
                 _trader->inventory()->push_back(v);
 
-            dynamic_cast<UI::TextArea*>(getUI("reaction"))->setText("");
+            getTextArea("reaction")->setText("");
 
             resetTransaction();
         }
