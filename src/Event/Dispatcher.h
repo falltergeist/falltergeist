@@ -11,6 +11,8 @@ namespace Falltergeist
         {
             public:
                 Dispatcher() {}
+                Dispatcher(const Dispatcher&) = delete;
+                void operator=(const Dispatcher&) = delete;
 
                 template<typename T>
                 void scheduleEvent(EventTarget* target, std::unique_ptr<T> eventArg, Base::Delegate<T*> handlerArg);
@@ -21,9 +23,11 @@ namespace Falltergeist
             private:
                 struct AbstractTask
                 {
-                    AbstractTask(EventTarget* target);
-                    EventTarget* target;
+                    explicit AbstractTask(EventTarget* target);
+                    virtual ~AbstractTask() = default;
                     virtual void perform() = 0;
+
+                    EventTarget* target;
                 };
 
                 template <typename T>
@@ -35,10 +39,6 @@ namespace Falltergeist
                     std::unique_ptr<T> event;
                     Base::Delegate<T*> handler;
                 };
-
-
-                Dispatcher(const Dispatcher&) = delete;
-                void operator=(const Dispatcher&) = delete;
 
                 std::list<std::unique_ptr<AbstractTask>> _scheduledTasks, _tasksInProcess;
         };

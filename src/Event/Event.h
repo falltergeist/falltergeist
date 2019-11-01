@@ -17,7 +17,7 @@ namespace Falltergeist
         {
             public:
                 Event(const std::string& name);
-                virtual ~Event();
+                virtual ~Event() = default;
 
                 std::string name() const;
                 void setName(const std::string& name);

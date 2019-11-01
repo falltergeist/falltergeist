@@ -21,10 +21,6 @@ namespace Falltergeist
         {
         }
 
-        Keyboard::~Keyboard()
-        {
-        }
-
         const char* Keyboard::typeToString(Keyboard::Type type)
         {
             switch (type)

@@ -17,10 +17,10 @@ namespace Falltergeist
 
                 static const char* typeToString(Type);
 
-                Keyboard(Type type);
+                explicit Keyboard(Type type);
                 Keyboard(const Keyboard& event, const std::string& newName);
                 Keyboard(const Keyboard& event);
-                ~Keyboard() override;
+                ~Keyboard() override = default;
 
                 /**
                  * @brief Type of an original event from OS.

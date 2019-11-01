@@ -14,13 +14,6 @@ namespace Falltergeist
         }
 
         /**
-         * @brief Destructor
-         */
-        Event::~Event()
-        {
-        }
-
-        /**
          * @brief Returns event name
          * @return Event name
          */
