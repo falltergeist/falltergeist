@@ -2,8 +2,8 @@
 
 #include <ctime>
 #include <SDL.h>
-#include "../UI/Base.h"
 #include "../Graphics/Movie.h"
+#include "../UI/Base.h"
 
 namespace Falltergeist
 {

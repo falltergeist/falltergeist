@@ -31,12 +31,9 @@ namespace Falltergeist
 
         static inline int16_t clip_int16(int a)
         {
-            if ((a+0x8000) & ~0xFFFF)
-            {
+            if ((a+0x8000) & ~0xFFFF) {
                 return (a>>31) ^ 0x7FFF;
-            }
-            else
-            {
+            } else {
                 return a;
             }
         }
@@ -62,8 +59,7 @@ namespace Falltergeist
             _mve = mve;
             _mve->setPosition(26);
             _chunk = _mve->getNextChunk();
-            while(!_finished && !_timerStarted )
-            {
+            while(!_finished && !_timerStarted ) {
                 _processChunk();
             }
         }
@@ -81,8 +77,7 @@ namespace Falltergeist
         void MvePlayer::render(bool eggTransparency)
         {
             //we dont have data yet
-            if (!_timerStarted)
-            {
+            if (!_timerStarted) {
                 return;
             }
             _movie->render(_position.x(),_position.y());
@@ -93,13 +88,10 @@ namespace Falltergeist
             SDL_Rect rect;
             rect.w=8;
             rect.h=8;
-            if (b < 56)
-            {
+            if (b < 56) {
                 rect.x = _x+sign*(8 + (b % 7));
                 rect.y = _y+sign*(b / 7);
-            }
-            else
-            {
+            } else {
                 rect.x = _x+sign*(-14 + ((b - 56) % 29));
                 rect.y = _y+sign*( 8 + ((b - 56) / 29));
             }
@@ -127,8 +119,7 @@ namespace Falltergeist
         {
             std::bitset<8> bitmask(mask);
             SDL_Rect dstrect;
-            for (uint32_t dx = 0; dx < 8; dx++)
-            {
+            for (uint32_t dx = 0; dx < 8; dx++) {
                 dstrect.w = 1;
                 dstrect.h = 1;
                 dstrect.x = x + dx;
@@ -141,8 +132,7 @@ namespace Falltergeist
         {
             std::bitset<8> bitmask(mask);
             SDL_Rect dstrect;
-            for (uint32_t di = 0; di < 8; di++)
-            {
+            for (uint32_t di = 0; di < 8; di++) {
                 dstrect.w = 2;
                 dstrect.h = 2;
                 dstrect.x = x + (di % 4) * 2;
@@ -155,8 +145,7 @@ namespace Falltergeist
         {
             std::bitset<8> bitmasks[2] = {mask1, mask2};
             SDL_Rect dstrect;
-            for (uint32_t dx = 0;dx < 8; dx++)
-            {
+            for (uint32_t dx = 0;dx < 8; dx++) {
                 dstrect.w = 1;
                 dstrect.h = 1;
                 dstrect.x = x + dx;
@@ -169,8 +158,7 @@ namespace Falltergeist
         {
             std::bitset<8> bitmask(mask);
             SDL_Rect dstrect;
-            for (uint32_t dx = 0; dx < 4; dx++)
-            {
+            for (uint32_t dx = 0; dx < 4; dx++) {
                 dstrect.w = 2;
                 dstrect.h = 2;
                 dstrect.x = x + dx*2;
@@ -183,8 +171,7 @@ namespace Falltergeist
         {
             std::bitset<8> bitmask(mask);
             SDL_Rect dstrect;
-            for (uint32_t dx = 0; dx < 4; dx++)
-            {
+            for (uint32_t dx = 0; dx < 4; dx++) {
                 dstrect.w = 2;
                 dstrect.h = 1;
                 dstrect.x = x + dx*2;
@@ -197,8 +184,7 @@ namespace Falltergeist
         {
             std::bitset<8> bitmasks[2]={mask1,mask2};
             SDL_Rect dstrect;
-            for (uint32_t dx = 0; dx < 8; dx++)
-            {
+            for (uint32_t dx = 0; dx < 8; dx++) {
                 dstrect.w = 1;
                 dstrect.h = 2;
                 dstrect.x = x + dx;
@@ -214,20 +200,15 @@ namespace Falltergeist
             std::bitset<8> bitmask1(mask1);
             std::bitset<8> bitmask2(mask2);
             SDL_Rect dstrect;
-            for (uint32_t dy = 0; dy < 4; dy++)
-            {
-                for (uint32_t dx = 0; dx < 4; dx++)
-                {
+            for (uint32_t dy = 0; dy < 4; dy++) {
+                for (uint32_t dx = 0; dx < 4; dx++) {
                     dstrect.w = 1;
                     dstrect.h = 1;
                     dstrect.x = x + dx;
                     dstrect.y = y + dy;
-                    if (dy < 2)
-                    {
+                    if (dy < 2) {
                         SDL_FillRect(_currentBuf,&dstrect, (bitmask1.test(4*(dy%2)+dx) ? c2 : c1));
-                    }
-                    else
-                    {
+                    } else {
                         SDL_FillRect(_currentBuf,&dstrect, (bitmask2.test(4*(dy%2)+dx) ? c2 : c1));
                     }
                 }
@@ -244,10 +225,8 @@ namespace Falltergeist
             bitmasks[2] = mask3;
             bitmasks[3] = mask4;
             SDL_Rect dstrect;
-            for (uint32_t dy = 0; dy < 4; dy++)
-            {
-                for (uint32_t dx = 0; dx < 4; dx++)
-                {
+            for (uint32_t dy = 0; dy < 4; dy++) {
+                for (uint32_t dx = 0; dx < 4; dx++) {
                     dstrect.w = 1;
                     dstrect.h = 1;
                     dstrect.x = x + dx;
@@ -265,10 +244,8 @@ namespace Falltergeist
             SDL_Rect srcrect;
             SDL_Rect dstrect;
             uint8_t color;
-            for (uint32_t y = 0; y < h;y++)
-            {
-                for (uint32_t x = 0; x < w;x++)
-                {
+            for (uint32_t y = 0; y < h;y++) {
+                for (uint32_t x = 0; x < w;x++) {
                     curMap = (y*w + x);
                     switch (_decodingMap[curMap])
                     {
@@ -329,22 +306,19 @@ namespace Falltergeist
                         case 0x6:
                             //skip 2 blocks
                             x++;
-                            if (x >= w)
-                            {
+                            if (x >= w) {
                                 x = 0;
                                 y++;
                             }
                             x++;
-                            if (x >= w)
-                            {
+                            if (x >= w) {
                                 x = 0;
                                 y++;
                             }
                             break;
                         //hell
                         case 0x7:
-                            if (data[0]<=data[1])
-                            {
+                            if (data[0]<=data[1]) {
                                 _drawRow(x*8, y*8,     data[0], data[1], data[2] );
                                 _drawRow(x*8, y*8 + 1, data[0], data[1], data[3] );
                                 _drawRow(x*8, y*8 + 2, data[0], data[1], data[4] );
@@ -355,9 +329,7 @@ namespace Falltergeist
                                 _drawRow(x*8, y*8 + 7, data[0], data[1], data[9]);
                                 data += 10;
                                 len -= 10;
-                            }
-                            else
-                            {
+                            } else {
                                 _drawRow2x2(x*8, y*8,     data[0], data[1], data[2]);
                                 _drawRow2x2(x*8, y*8 + 4, data[0], data[1], data[3]);
                                 data += 4;
@@ -365,8 +337,7 @@ namespace Falltergeist
                             }
                             break;
                         case 0x8:
-                            if (data[0] <= data[1])
-                            {
+                            if (data[0] <= data[1]) {
                                 // cross-split
                                 // 0 | 2
                                 // -----
@@ -377,11 +348,8 @@ namespace Falltergeist
                                 _drawQuadrant(x*8 + 4, y*8 + 4, data[12], data[13], data[14], data[15]);
                                 data+=16;
                                 len-=16;
-                            }
-                            else
-                            {
-                                if (data[6] <= data[7])
-                                {
+                            } else {
+                                if (data[6] <= data[7]) {
                                     //left|right split. same as above, except uses 1 byte per 2 4x4 blocks
                                     // 0 | 2
                                     // 1 | 3
@@ -389,9 +357,7 @@ namespace Falltergeist
                                     _drawQuadrant(x*8,     y*8 + 4, data[0], data[1], data[4],  data[5] );
                                     _drawQuadrant(x*8 + 4, y*8,     data[6], data[7], data[8],  data[9] );
                                     _drawQuadrant(x*8 + 4, y*8 + 4, data[6], data[7], data[10], data[11]);
-                                }
-                                else
-                                {
+                                } else {
                                     //top|bottom split
                                     // 0 1
                                     //-----
@@ -410,8 +376,7 @@ namespace Falltergeist
                             }
                             break;
                         case 0x9:
-                            if (data[0] <= data[1] && data[2] <= data[3])
-                            {
+                            if (data[0] <= data[1] && data[2] <= data[3]) {
                                 _drawRow4colors(x*8, y*8,     data[0], data[1], data[2], data[3], data[4],   data[5] );
                                 _drawRow4colors(x*8, y*8 + 1, data[0], data[1], data[2], data[3], data[6],   data[7] );
                                 _drawRow4colors(x*8, y*8 + 2, data[0], data[1], data[2], data[3], data[8],   data[9] );
@@ -422,18 +387,14 @@ namespace Falltergeist
                                 _drawRow4colors(x*8, y*8 + 7, data[0], data[1], data[2], data[3], data[18],  data[19]);
                                 data += 20;
                                 len -= 20;
-                            }
-                            else if (data[0] <= data[1] && data[2] > data[3])
-                            {
+                            } else if (data[0] <= data[1] && data[2] > data[3]) {
                                 _drawRow4colors2x2(x*8, y*8,     data[0], data[1], data[2], data[3], data[4]);
                                 _drawRow4colors2x2(x*8, y*8 + 2, data[0], data[1], data[2], data[3], data[5]);
                                 _drawRow4colors2x2(x*8, y*8 + 4, data[0], data[1], data[2], data[3], data[6]);
                                 _drawRow4colors2x2(x*8, y*8 + 6, data[0], data[1], data[2], data[3], data[7]);
                                 data += 8;
                                 len -= 8;
-                            }
-                            else if (data[0] > data[1] && data[2] <= data[3])
-                            {
+                            } else if (data[0] > data[1] && data[2] <= data[3]) {
                                 _drawRow4colors2x1(x*8, y*8,     data[0], data[1], data[2], data[3], data[4] );
                                 _drawRow4colors2x1(x*8, y*8 + 1, data[0], data[1], data[2], data[3], data[5] );
                                 _drawRow4colors2x1(x*8, y*8 + 2, data[0], data[1], data[2], data[3], data[6] );
@@ -444,9 +405,7 @@ namespace Falltergeist
                                 _drawRow4colors2x1(x*8, y*8 + 7, data[0], data[1], data[2], data[3], data[11]);
                                 data += 12;
                                 len -= 12;
-                            }
-                            else if (data[0] > data[1] && data[2] > data[3])
-                            {
+                            } else if (data[0] > data[1] && data[2] > data[3]) {
                                 _drawRow4colors1x2(x*8, y*8,     data[0], data[1], data[2], data[3], data[4],  data[5]);
                                 _drawRow4colors1x2(x*8, y*8 + 2, data[0], data[1], data[2], data[3], data[6],  data[7]);
                                 _drawRow4colors1x2(x*8, y*8 + 4, data[0], data[1], data[2], data[3], data[8],  data[9]);
@@ -456,8 +415,7 @@ namespace Falltergeist
                             }
                             break;
                         case 0xA:
-                            if (data[0] <= data[1])
-                            {
+                            if (data[0] <= data[1]) {
                                 // quadrant. 4 colors per block, 2 bits of pattern per pixel
                                 // 0 | 2
                                 // -----
@@ -469,11 +427,8 @@ namespace Falltergeist
 
                                 data += 32;
                                 len -= 32;
-                            }
-                            else
-                            {
-                                if (data[12] <= data[13])
-                                {
+                            } else {
+                                if (data[12] <= data[13]) {
                                     //vertical split, 4 colors per half
                                     // 0 | 2
                                     // 1 | 3
@@ -481,9 +436,7 @@ namespace Falltergeist
                                     _drawQuadrant4colors(x*8,     y*8 + 4, data[0],  data[1],  data[2],  data[3],  data[8],  data[9],  data[10], data[11]);
                                     _drawQuadrant4colors(x*8 + 4, y*8,     data[12], data[13], data[14], data[15], data[16], data[17], data[18], data[19]);
                                     _drawQuadrant4colors(x*8 + 4, y*8 + 4, data[12], data[13], data[14], data[15], data[20], data[21], data[22], data[23]);
-                                }
-                                else
-                                {
+                                } else {
                                     //horizontal split, 4 colors per half
                                     // 0  1
                                     //-----
@@ -505,10 +458,8 @@ namespace Falltergeist
                         case 0xB:
                             dstrect.w = 1;
                             dstrect.h = 1;
-                            for (uint32_t fy = 0; fy < 8; fy++)
-                            {
-                                for (uint32_t fx = 0; fx < 8; fx++)
-                                {
+                            for (uint32_t fy = 0; fy < 8; fy++) {
+                                for (uint32_t fx = 0; fx < 8; fx++) {
                                     color=data[fy*8 + fx];
                                     dstrect.x = x*8 + fx;
                                     dstrect.y = y*8 + fy;
@@ -521,10 +472,8 @@ namespace Falltergeist
                         case 0xC:
                             dstrect.w = 2;
                             dstrect.h = 2;
-                            for (uint32_t fy = 0; fy < 4; fy++)
-                            {
-                                for (uint32_t fx = 0; fx < 4; fx++)
-                                {
+                            for (uint32_t fy = 0; fy < 4; fy++) {
+                                for (uint32_t fx = 0; fx < 4; fx++) {
                                     color = data[fy*4 + fx];
                                     dstrect.x = x*8 + fx*2;
                                     dstrect.y = y*8 + fy*2;
@@ -537,10 +486,8 @@ namespace Falltergeist
                         case 0xD:
                             dstrect.w = 4;
                             dstrect.h = 4;
-                            for (uint32_t fy = 0; fy < 2; fy++)
-                            {
-                                for (uint32_t fx = 0; fx < 2; fx++)
-                                {
+                            for (uint32_t fy = 0; fy < 2; fy++) {
+                                for (uint32_t fx = 0; fx < 2; fx++) {
                                     color = data[fy*2 + fx];
                                     dstrect.x = x*8 + fx*4;
                                     dstrect.y = y*8 + fy*4;

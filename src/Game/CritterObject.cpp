@@ -11,13 +11,10 @@
 #include "../Game/WeaponItemObject.h"
 #include "../Helpers/CritterHelper.h"
 #include "../Graphics/CritterAnimationFactory.h"
-#include "../Logger.h"
 #include "../PathFinding/Hexagon.h"
 #include "../ResourceManager.h"
 #include "../State/Location.h"
-#include "../UI/Animation.h"
 #include "../UI/AnimationFrame.h"
-#include "../VM/Script.h"
 
 namespace Falltergeist
 {
