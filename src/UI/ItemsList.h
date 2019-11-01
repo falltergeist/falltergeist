@@ -59,7 +59,7 @@ namespace Falltergeist
 
                 virtual bool opaque(const Point &pos) override;
 
-            protected:
+            private:
                 std::vector<Game::ItemObject*>* _items = nullptr;
                 InventoryItem* _draggedItem = nullptr;
                 std::vector<std::unique_ptr<InventoryItem>> _inventoryItems;

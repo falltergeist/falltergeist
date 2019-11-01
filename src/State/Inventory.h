@@ -14,7 +14,7 @@ namespace Falltergeist
         {
             public:
                 Inventory();
-                ~Inventory() override;
+                ~Inventory() override = default;
 
                 void init() override;
 

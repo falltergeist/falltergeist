@@ -17,7 +17,6 @@
 #include "../State/Skilldex.h"
 #include "../State/WorldMap.h"
 #include "../UI/Animation.h"
-#include "../UI/Image.h"
 #include "../UI/ImageButton.h"
 #include "../UI/PlayerPanel.h"
 #include "../UI/SmallCounter.h"
@@ -41,11 +40,11 @@ namespace Falltergeist
 
             _background->setPosition(this->position());
 
-            mouseInHandler().add([this, mouse](Event::Event* event) {
+            mouseInHandler().add([mouse](Event::Event* event) {
                 mouse->pushState(Input::Mouse::Cursor::BIG_ARROW);
             });
 
-            mouseOutHandler().add([this, mouse](Event::Event* event) {
+            mouseOutHandler().add([mouse](Event::Event* event) {
                 if (mouse->scrollState()) {
                     // this trick is needed for correct cursor type returning on scrolling
                     auto state = mouse->state();
@@ -310,11 +309,6 @@ namespace Falltergeist
         void PlayerPanel::openInventory()
         {
             auto state = new State::Inventory();
-            state->popHandler().add([this](Event::State* evt)
-                {
-                    // update player frame
-                    Game::getInstance()->player()->setActionAnimation("aa")->stop();
-                });
             Game::getInstance()->pushState(state);
             playWindowOpenSfx();
         }

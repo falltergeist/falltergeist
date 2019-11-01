@@ -1183,7 +1183,7 @@ namespace Falltergeist
         {
             Game::GameTimer timer((unsigned) delay);
             timer.start();
-            timer.tickHandler().add([this, obj, fixedParam](Event::Event *) {
+            timer.tickHandler().add([obj, fixedParam](Event::Event *) {
                 if (obj) {
                     if (auto vm = obj->script()) {
                         vm->setFixedParam(fixedParam);
