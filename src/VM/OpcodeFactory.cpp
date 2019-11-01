@@ -1,30 +1,6 @@
-/*
- * Copyright 2012-2014 Falltergeist Developers.
- *
- * This file is part of Falltergeist.
- *
- * Falltergeist is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Falltergeist is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
- */
-
-// Related headers
 #include "../VM/OpcodeFactory.h"
-
-// C++ standard includes
 #include <sstream>
 #include <memory>
-
-// Falltergeist includes
 #include "../Exception.h"
 #include "../VM/Handler/Opcode8002.h"
 #include "../VM/Handler/Opcode8003.h"
@@ -203,11 +179,12 @@
 #include "../VM/Handler/OpcodeA001Handler.h"
 #include "../VM/Script.h"
 
-// Third party includes
-
-namespace Falltergeist {
-    namespace VM {
-        std::unique_ptr<OpcodeHandler> OpcodeFactory::createOpcode(unsigned int number, VM::Script *script) {
+namespace Falltergeist
+{
+    namespace VM
+    {
+        std::unique_ptr<OpcodeHandler> OpcodeFactory::createOpcode(unsigned int number, VM::Script *script)
+        {
             switch (number) {
                 case 0x8000:
                     return std::make_unique<OpcodeHandler>(script); // O_NOOP

@@ -8,38 +8,38 @@ namespace Falltergeist
     {
         class AbstractTimer
         {
-        public:
-            AbstractTimer(unsigned int interval);
+            public:
+                AbstractTimer(unsigned int interval);
 
-            void start();
+                void start();
 
-            void start(unsigned int interval, bool repeat = false);
+                void start(unsigned int interval, bool repeat = false);
 
-            void stop();
+                void stop();
 
-            bool enabled() const;
+                bool enabled() const;
 
-            unsigned int interval() const;
+                unsigned int interval() const;
 
-            void setInterval(unsigned int interval);
+                void setInterval(unsigned int interval);
 
-            bool repeat() const;
+                bool repeat() const;
 
-            void setRepeat(bool repeat);
+                void setRepeat(bool repeat);
 
-            Event::Handler& tickHandler();
+                Event::Handler& tickHandler();
 
-            void think(uint32_t nanosecondsPassed);
+                void think(uint32_t nanosecondsPassed);
 
-        protected:
-            virtual unsigned int _getTime() = 0;
+            protected:
+                virtual unsigned int _getTime() = 0;
 
-            Event::Handler _tickHandler;
+                Event::Handler _tickHandler;
 
-            bool _enabled = false;
-            bool _repeat = false;
-            unsigned int _interval;
-            unsigned int _lastTick;
+                bool _enabled = false;
+                bool _repeat = false;
+                unsigned int _interval;
+                unsigned int _lastTick;
         };
     }
 }

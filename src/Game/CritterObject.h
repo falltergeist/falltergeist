@@ -120,7 +120,7 @@ namespace Falltergeist
                 virtual void combat_p_proc();
                 virtual void critter_p_proc();
                 virtual void talk_p_proc();
-                virtual void use_skill_on_p_proc();
+                void use_skill_on_p_proc(SKILL skill, Object* objectUsed, CritterObject* usedBy) override;
                 virtual void is_dropping_p_proc();
 
                 void think(uint32_t nanosecondsPassed) override;
