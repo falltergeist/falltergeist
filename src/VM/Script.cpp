@@ -1,28 +1,6 @@
-/*
- * Copyright 2012-2014 Falltergeist Developers.
- *
- * This file is part of Falltergeist.
- *
- * Falltergeist is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Falltergeist is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
- */
-
-// C++ standard includes
 #include <ctime>
 #include <memory>
 #include <sstream>
-
-// Falltergeist includes
 #include "../Exception.h"
 #include "../Format/Int/File.h"
 #include "../Format/Int/Procedure.h"
@@ -39,34 +17,44 @@
 #include "../VM/Script.h"
 #include "../VM/StackValue.h"
 
-// Third party includes
-
-namespace Falltergeist {
-    namespace VM {
-        Script::Script(Format::Int::File *script, Game::Object *owner) {
+namespace Falltergeist
+{
+    namespace VM
+    {
+        Script::Script(Format::Int::File *script, Game::Object *owner)
+        {
             _owner = owner;
             _script = script;
-            if (!_script) throw Exception("Script::VM() - script is null");
+            if (!_script) {
+                throw Exception("Script::VM() - script is null");
+            }
         }
 
-        Script::Script(const std::string &filename, Game::Object *owner) {
+        Script::Script(const std::string &filename, Game::Object *owner)
+        {
             _owner = owner;
             _script = ResourceManager::getInstance()->intFileType(filename);
-            if (!_script) throw Exception("Script::VM() - script is null: " + filename);
+            if (!_script) {
+                throw Exception("Script::VM() - script is null: " + filename);
+            }
         }
 
-        Script::~Script() {
+        Script::~Script()
+        {
         }
 
-        std::string Script::filename() {
+        std::string Script::filename()
+        {
             return _script->filename();
         }
 
-        bool Script::hasFunction(const std::string &name) {
+        bool Script::hasFunction(const std::string &name)
+        {
             return _script->procedure(name) != nullptr;
         }
 
-        void Script::call(const std::string &name) {
+        void Script::call(const std::string &name)
+        {
             _overrides = false;
             auto procedure = _script->procedure(name);
             if (!procedure) {
@@ -86,7 +74,8 @@ namespace Falltergeist {
             _actionUsed = _fixedParam = 0;
         }
 
-        void Script::initialize() {
+        void Script::initialize()
+        {
             if (_initialized) {
                 return;
             }
@@ -95,7 +84,8 @@ namespace Falltergeist {
             _dataStack.popInteger(); // remove @start function result
         }
 
-        void Script::run() {
+        void Script::run()
+        {
             while (_programCounter != _script->size()) {
                 if (_programCounter == 0 && _initialized) {
                     return;
@@ -119,7 +109,8 @@ namespace Falltergeist {
             }
         }
 
-        std::string Script::msgMessage(int msg_file_num, int msg_num) {
+        std::string Script::msgMessage(int msg_file_num, int msg_num)
+        {
             auto lst = ResourceManager::getInstance()->lstFileType("scripts/scripts.lst");
             auto scriptName = lst->strings()->at(msg_file_num - 1);
             auto msg = ResourceManager::getInstance()->msgFileType(
@@ -133,7 +124,8 @@ namespace Falltergeist {
             return msg->message(msg_num)->text();
         }
 
-        std::string Script::msgSpeech(int msg_file_num, int msg_num) {
+        std::string Script::msgSpeech(int msg_file_num, int msg_num)
+        {
             auto lst = ResourceManager::getInstance()->lstFileType("scripts/scripts.lst");
             auto scriptName = lst->strings()->at(msg_file_num - 1);
             auto msg = ResourceManager::getInstance()->msgFileType(
@@ -147,15 +139,18 @@ namespace Falltergeist {
             return msg->message(msg_num)->sound();
         }
 
-        Format::Int::File *Script::script() {
+        Format::Int::File *Script::script()
+        {
             return _script;
         }
 
-        unsigned int Script::programCounter() {
+        unsigned int Script::programCounter()
+        {
             return _programCounter;
         }
 
-        void Script::setProgramCounter(unsigned int value) {
+        void Script::setProgramCounter(unsigned int value)
+        {
             if (value >= _script->size()) {
                 std::stringstream ss;
                 ss << "Script::setProgramCounter() - address out of range: " << std::hex << value;
@@ -164,86 +159,106 @@ namespace Falltergeist {
             _programCounter = value;
         }
 
-        Stack *Script::dataStack() {
+        Stack *Script::dataStack()
+        {
             return &_dataStack;
         }
 
-        Stack *Script::returnStack() {
+        Stack *Script::returnStack()
+        {
             return &_returnStack;
         }
 
-        std::vector<StackValue> *Script::LVARS() {
+        std::vector<StackValue> *Script::LVARS()
+        {
             return &_LVARS;
         }
 
-        Game::Object *Script::owner() {
+        Game::Object *Script::owner()
+        {
             return _owner;
         }
 
-        bool Script::initialized() {
+        bool Script::initialized()
+        {
             return _initialized;
         }
 
-        void Script::setInitialized(bool value) {
+        void Script::setInitialized(bool value)
+        {
             _initialized = value;
         }
 
-        size_t Script::SVARbase() {
+        size_t Script::SVARbase()
+        {
             return _SVAR_base;
         }
 
-        void Script::setSVARbase(size_t Value) {
-            _SVAR_base = Value;
+        void Script::setSVARbase(size_t value)
+        {
+            _SVAR_base = value;
         }
 
-        Script *Script::setFixedParam(int fixedParam) {
+        Script *Script::setFixedParam(int fixedParam)
+        {
             this->_fixedParam = fixedParam;
             return this;
         }
 
-        int Script::fixedParam() const {
+        int Script::fixedParam() const
+        {
             return _fixedParam;
         }
 
-        Script *Script::setTargetObject(Game::Object *targetObject) {
+        Script *Script::setTargetObject(Game::Object *targetObject)
+        {
             this->_targetObject = targetObject;
             return this;
         }
 
-        Game::Object *Script::targetObject() const {
+        Game::Object *Script::targetObject() const
+        {
             return _targetObject;
         }
 
-        Script *Script::setSourceObject(Game::Object *sourceObject) {
+        Script *Script::setSourceObject(Game::Object *sourceObject)
+        {
             this->_sourceObject = sourceObject;
             return this;
         }
 
-        Game::Object *Script::sourceObject() const {
+        Game::Object *Script::sourceObject() const
+        {
             return _sourceObject;
         }
 
-        size_t Script::DVARbase() {
+        size_t Script::DVARbase()
+        {
             return _DVAR_base;
         }
 
-        void Script::setDVARBase(size_t Value) {
+        void Script::setDVARBase(size_t Value)
+        {
             _DVAR_base = Value;
         }
 
-        bool Script::overrides() {
+        bool Script::overrides()
+        {
             return _overrides;
         }
 
-        void Script::setOverrides(bool Value) {
+        void Script::setOverrides(bool Value)
+        {
             _overrides = Value;
         }
 
-        SKILL Script::usedSkill() const {
+        SKILL Script::usedSkill() const
+        {
             return _usedSkill;
         }
 
-        Script *Script::setUsedSkill(SKILL skill) {
+        Script *Script::setUsedSkill(SKILL skill)
+        {
             _usedSkill = skill;
             return this;
         }

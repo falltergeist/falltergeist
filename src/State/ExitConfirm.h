@@ -15,7 +15,7 @@ namespace Falltergeist
         {
             public:
                 ExitConfirm();
-                ~ExitConfirm() override;
+                ~ExitConfirm() override = default;
 
                 void init() override;
 

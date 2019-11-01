@@ -22,7 +22,6 @@
 #include "../State/Location.h"
 #include "../UI/FpsCounter.h"
 #include "../UI/TextArea.h"
-#include "../VFS/VFS.h"
 
 namespace Falltergeist
 {
@@ -53,7 +52,6 @@ namespace Falltergeist
 
             _settings = std::move(settings);
 
-            _vfs = std::make_unique<VFS::VFS>();
             _eventDispatcher = std::make_unique<Event::Dispatcher>();
 
             _renderer = std::make_unique<Graphics::Renderer>(_settings->screenWidth(), _settings->screenHeight());
