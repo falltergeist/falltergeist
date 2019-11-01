@@ -1,5 +1,3 @@
-#pragma once
-
 #include "../Graphics/Size.h"
 
 namespace Falltergeist

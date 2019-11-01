@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <functional>
 #include "../Txt/Parser.h"
 
 namespace Falltergeist

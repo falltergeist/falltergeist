@@ -52,43 +52,40 @@ namespace Falltergeist
             addUI("question", question);
 
             // TODO: maybe move text scrolling into separate UI? Though it is only in two places and works slightly differently...
-            question->mouseClickHandler().add([this, question](Event::Mouse* event)
+            question->mouseClickHandler().add([question](Event::Mouse* event) {
+                Point relPos = event->position() - question->position();
+                if (relPos.y() < (question->size().height() / 2))
                 {
+                    if (question->lineOffset() > 0)
+                    {
+                        question->setLineOffset(question->lineOffset() - 4);
+                    }
+                }
+                else if (question->lineOffset() < question->numLines() - 4)
+                {
+                    question->setLineOffset(question->lineOffset() + 4);
+                }
+            });
+
+            question->mouseMoveHandler().add([question](Event::Mouse* event) {
+                if (question->numLines() > 4)
+                {
+                    auto mouse = Game::getInstance()->mouse();
                     Point relPos = event->position() - question->position();
-                    if (relPos.y() < (question->size().height() / 2))
-                    {
-                        if (question->lineOffset() > 0)
-                        {
-                            question->setLineOffset(question->lineOffset() - 4);
-                        }
-                    }
-                    else if (question->lineOffset() < question->numLines() - 4)
-                    {
-                        question->setLineOffset(question->lineOffset() + 4);
-                    }
-                });
+                    auto state = relPos.y() < (question->size().height() / 2)
+                        ? Input::Mouse::Cursor::SMALL_UP_ARROW
+                        : Input::Mouse::Cursor::SMALL_DOWN_ARROW;
 
-            question->mouseMoveHandler().add([this, question](Event::Mouse* event)
-                {
-                    if (question->numLines() > 4)
+                    if (mouse->state() != state)
                     {
-                        auto mouse = Game::getInstance()->mouse();
-                        Point relPos = event->position() - question->position();
-                        auto state = relPos.y() < (question->size().height() / 2)
-                            ? Input::Mouse::Cursor::SMALL_UP_ARROW
-                            : Input::Mouse::Cursor::SMALL_DOWN_ARROW;
-
-                        if (mouse->state() != state)
-                        {
-                            mouse->setState(state);
-                        }
+                        mouse->setState(state);
                     }
-                });
+                }
+            });
 
-             question->mouseOutHandler().add([question](Event::Mouse* event)
-                {
-                    Game::getInstance()->mouse()->setState(Input::Mouse::Cursor::BIG_ARROW);
-                });
+            question->mouseOutHandler().add([](Event::Mouse* event) {
+                Game::getInstance()->mouse()->setState(Input::Mouse::Cursor::BIG_ARROW);
+            });
 
             // Interface buttons
             auto reviewButton = new UI::ImageButton(UI::ImageButton::Type::DIALOG_REVIEW_BUTTON, 13, 154);

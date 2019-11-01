@@ -10,8 +10,8 @@ namespace Falltergeist
         class AAF : public Graphics::Font
         {
             public:
-                AAF(const std::string& filename);
-                ~AAF();
+                explicit AAF(const std::string& filename);
+                ~AAF() override = default;
 
                 unsigned short horizontalGap() override;
                 unsigned short verticalGap() override;
@@ -20,13 +20,8 @@ namespace Falltergeist
                 unsigned short height() override;
                 unsigned short glyphWidth(uint8_t ch) override;
 
-                virtual std::string filename() const { return _filename; }
-                virtual Graphics::Texture *texture() { return _texture.get(); }
-
             private:
                 Format::Aaf::File* _aaf = nullptr;
-                std::unique_ptr<Graphics::Texture> _texture = nullptr;
-                std::string _filename;
         };
     }
 }

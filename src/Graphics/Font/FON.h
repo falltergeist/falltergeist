@@ -10,8 +10,8 @@ namespace Falltergeist
         class FON : public Graphics::Font
         {
             public:
-                FON(const std::string& filename);
-                ~FON();
+                explicit FON(const std::string& filename);
+                ~FON() override = default;
 
                 unsigned short horizontalGap() override;
                 unsigned short verticalGap() override;
@@ -20,13 +20,8 @@ namespace Falltergeist
                 unsigned short height() override;
                 unsigned short glyphWidth(uint8_t ch) override;
 
-                virtual std::string filename() const { return _filename; }
-                virtual Graphics::Texture *texture() { return _texture.get(); }
-
             private:
                 Format::Fon::File* _fon = nullptr;
-                std::unique_ptr<Graphics::Texture> _texture = nullptr;
-                std::string _filename;
         };
     }
 }

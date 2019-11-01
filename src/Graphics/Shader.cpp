@@ -1,5 +1,3 @@
-#pragma once
-
 #include <fstream>
 #include "../CrossPlatform.h"
 #include "../Exception.h"

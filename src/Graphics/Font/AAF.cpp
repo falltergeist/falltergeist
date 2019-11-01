@@ -20,10 +20,6 @@ namespace Falltergeist
             _texture->loadFromRGBA(_aaf->rgba());
         }
 
-        AAF::~AAF()
-        {
-        }
-
         unsigned short AAF::horizontalGap()
         {
             return _aaf->horizontalGap();

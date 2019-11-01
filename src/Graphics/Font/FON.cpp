@@ -20,10 +20,6 @@ namespace Falltergeist
             _texture->loadFromRGBA(_fon->rgba());
         }
 
-        FON::~FON()
-        {
-        }
-
         unsigned short FON::horizontalGap()
         {
             return _fon->horizontalGap();

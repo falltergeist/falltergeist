@@ -19,18 +19,25 @@ namespace Falltergeist
         class Font
         {
             public:
-                Font() {}
-                virtual ~Font() {}
+                Font() = default;
+                virtual ~Font() = default;
 
-                virtual unsigned short horizontalGap() { return 0; }
-                virtual unsigned short verticalGap() { return 0; }
-                virtual unsigned short spaceWidth() { return 0; }
-                virtual unsigned short width() { return 0; }
-                virtual unsigned short height() { return 0; }
-                virtual unsigned short glyphWidth(uint8_t ch) { return 0; }
+                virtual unsigned short horizontalGap() = 0;
+                virtual unsigned short verticalGap() = 0;
+                virtual unsigned short spaceWidth() = 0;
+                virtual unsigned short width() = 0;
+                virtual unsigned short height() = 0;
+                virtual unsigned short glyphWidth(uint8_t ch) = 0;
 
-                virtual std::string filename() const { return _filename; }
-                virtual Graphics::Texture *texture() { return _texture.get(); }
+                virtual std::string filename() const
+                {
+                    return _filename;
+                }
+
+                virtual Graphics::Texture *texture()
+                {
+                    return _texture.get();
+                }
 
             protected:
                 std::unique_ptr<Graphics::Texture> _texture = nullptr;
