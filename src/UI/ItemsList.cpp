@@ -1,19 +1,15 @@
 #include <memory>
-#include "../UI/ItemsList.h"
 #include "../Audio/Mixer.h"
 #include "../Event/Event.h"
 #include "../Event/Mouse.h"
 #include "../Game/ArmorItemObject.h"
 #include "../Game/DudeObject.h"
 #include "../Game/Game.h"
-#include "../Game/ItemObject.h"
-#include "../Graphics/Point.h"
 #include "../Graphics/Rect.h"
 #include "../Graphics/Renderer.h"
-#include "../Graphics/Texture.h"
 #include "../Input/Mouse.h"
-#include "../Logger.h"
 #include "../UI/InventoryItem.h"
+#include "../UI/ItemsList.h"
 #include "../UI/TextArea.h"
 
 namespace Falltergeist
@@ -113,13 +109,11 @@ namespace Falltergeist
         void ItemsList::onItemDragStop(Event::Mouse* event)
         {
             // check if mouse is in this item list
-            if (!Rect::inRect(event->position(), position(), Size(_slotWidth, _slotHeight*_slotsNumber)))
-            {
+            if (!Rect::inRect(event->position(), position(), Size(_slotWidth, _slotHeight*_slotsNumber))) {
                 return;
             }
 
-            if (auto itemsList = dynamic_cast<ItemsList*>(event->target()))
-            {
+            if (auto itemsList = dynamic_cast<ItemsList*>(event->target())) {
                 // @todo create addItem method
                 this->addItem(itemsList->draggedItem(), 1);
 
@@ -127,13 +121,11 @@ namespace Falltergeist
                 itemsList->update();
             }
 
-            if (auto inventoryItem = dynamic_cast<UI::InventoryItem*>(event->target()))
-            {
+            if (auto inventoryItem = dynamic_cast<UI::InventoryItem*>(event->target())) {
                 // @todo create addItem method
                 this->addItem(inventoryItem, 1);
 
-                if (dynamic_cast<Game::ArmorItemObject*>(inventoryItem->item()) && inventoryItem->type() == InventoryItem::Type::SLOT)
-                {
+                if (dynamic_cast<Game::ArmorItemObject*>(inventoryItem->item()) && inventoryItem->type() == InventoryItem::Type::SLOT) {
                     Game::getInstance()->player()->setArmorSlot(nullptr);
                 }
                 inventoryItem->setItem(0);
@@ -143,17 +135,12 @@ namespace Falltergeist
         void ItemsList::onItemDragStop(Event::Mouse* event, HAND hand)
         {
             // check if mouse is in this item list
-            if (Rect::inRect(event->position(), position(), Size(_slotWidth, _slotHeight*_slotsNumber)))
-            {
-                if (auto inventoryItem = dynamic_cast<UI::InventoryItem*>(event->target()))
-                {
+            if (Rect::inRect(event->position(), position(), Size(_slotWidth, _slotHeight*_slotsNumber))) {
+                if (auto inventoryItem = dynamic_cast<UI::InventoryItem*>(event->target())) {
                     this->addItem(inventoryItem, 1);
-                    if (hand == HAND::LEFT)
-                    {
+                    if (hand == HAND::LEFT) {
                         Game::getInstance()->player()->setLeftHandSlot(nullptr);
-                    }
-                    else
-                    {
+                    } else {
                         Game::getInstance()->player()->setRightHandSlot(nullptr);
                     }
                     inventoryItem->setItem(0);
@@ -175,11 +162,9 @@ namespace Falltergeist
 
         void ItemsList::removeItem(InventoryItem* item, unsigned int amount)
         {
-            for (auto it = _items->begin(); it != _items->end(); ++it)
-            {
+            for (auto it = _items->begin(); it != _items->end(); ++it) {
                 Game::ItemObject* object = *it;
-                if (object == item->item())
-                {
+                if (object == item->item()) {
                     _items->erase(it);
                     break;
                 }
@@ -237,10 +222,11 @@ namespace Falltergeist
 
         bool ItemsList::opaque(const Point &pos) {
             unsigned int i = 0;
-            for (auto& item : _inventoryItems)
-            {
+            for (auto& item : _inventoryItems) {
                 bool pixel = item->opaque(pos - Point(0, _slotHeight*i));
-                if (pixel) return pixel;
+                if (pixel) {
+                    return pixel;
+                }
                 i++;
             }
             return false;

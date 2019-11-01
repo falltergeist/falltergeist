@@ -1,7 +1,7 @@
 ﻿#include <algorithm>
 #include <cmath>
-#include <vector>
 #include <memory>
+#include <vector>
 #include <SDL_image.h>
 #include "../Format/Lst/File.h"
 #include "../Game/Game.h"

@@ -1,67 +1,38 @@
-/*
- * Copyright 2012-2018 Falltergeist Developers.
- *
- * This file is part of Falltergeist.
- *
- * Falltergeist is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Falltergeist is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
- */
+#pragma once
 
-#ifndef FALLTERGEIST_INI_FILE_H
-#define	FALLTERGEIST_INI_FILE_H
-
-// C++ standard includes
+#include <algorithm>
 #include <fstream>
-#include <string>
 #include <map>
 #include <memory>
 #include <sstream>
-#include <algorithm>
-
-// Falltergeist includes
+#include <string>
 #include "../Ini/Parser.h"
 #include "../Ini/Section.h"
 
-// Third party includes
-
 namespace Falltergeist
 {
-namespace Ini
-{
+    namespace Ini
+    {
+        class File
+        {
+            public:
+                using iterator = std::map<std::string, std::shared_ptr<Section>>::iterator;
+                using const_iterator = std::map<std::string, std::shared_ptr<Section>>::const_iterator;
 
-class File
-{
-public:
-    using iterator = std::map<std::string, std::shared_ptr<Section>>::iterator;
-    using const_iterator = std::map<std::string, std::shared_ptr<Section>>::const_iterator;
+                File();
+                ~File();
+                std::shared_ptr<Section> section(const std::string &name);
+                std::map<std::string, std::shared_ptr<Section>>* sections();
 
-    File();
-    ~File();
-    std::shared_ptr<Section> section(const std::string &name);
-    std::map<std::string, std::shared_ptr<Section>>* sections();
+                iterator begin();
+                const_iterator begin() const;
+                iterator end();
+                const_iterator end() const;
 
-    iterator begin();
-    const_iterator begin() const;
-    iterator end();
-    const_iterator end() const;
+                bool hasSection(const std::string &name) const;
 
-    bool hasSection(const std::string &name) const;
-
-private:
-    std::map<std::string, std::shared_ptr<Section>> _sections;
-
-};
-
+            private:
+                std::map<std::string, std::shared_ptr<Section>> _sections;
+        };
+    }
 }
-}
-#endif	// FALLTERGEIST_INI_FILE_H

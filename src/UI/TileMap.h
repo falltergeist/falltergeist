@@ -37,7 +37,7 @@ namespace Falltergeist
                 // Tests if there is a non-transparent pixel at the given point.
                 bool opaque(const Point& pos);
 
-            protected:
+            private:
                 std::map<unsigned int, std::unique_ptr<Tile>> _tiles;
                 uint32_t _tilesPerAtlas;
                 std::unique_ptr<Graphics::Tilemap> _tilemap;

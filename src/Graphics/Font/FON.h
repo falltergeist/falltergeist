@@ -1,55 +1,27 @@
-/*
- * Copyright 2012-2018 Falltergeist Developers.
- *
- * This file is part of Falltergeist.
- *
- * Falltergeist is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Falltergeist is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
- */
+#pragma once
 
-#ifndef FALLTERGEIST_GRAPHICS_FONT_FON_H
-#define FALLTERGEIST_GRAPHICS_FONT_FON_H
-
-// C++ standard includes
-
-// Falltergeist includes
 #include "../../Format/Fon/File.h"
 #include "../../Graphics/Font.h"
 
-// Third party includes
-
 namespace Falltergeist
 {
-namespace Graphics
-{
+    namespace Graphics
+    {
+        class FON : public Graphics::Font
+        {
+            public:
+                explicit FON(const std::string& filename);
+                ~FON() override = default;
 
-class FON : public Graphics::Font
-{
-public:
-    FON(const std::string& filename);
-    ~FON();
+                unsigned short horizontalGap() override;
+                unsigned short verticalGap() override;
+                unsigned short spaceWidth() override;
+                unsigned short width() override;
+                unsigned short height() override;
+                unsigned short glyphWidth(uint8_t ch) override;
 
-    virtual unsigned short horizontalGap() override;
-    virtual unsigned short verticalGap() override;
-    virtual unsigned short spaceWidth() override;
-    virtual unsigned short width() override;
-    virtual unsigned short height() override;
-    virtual unsigned short glyphWidth(uint8_t ch) override;
-
-private:
-    Format::Fon::File* _fon = nullptr;
-};
-
+            private:
+                Format::Fon::File* _fon = nullptr;
+        };
+    }
 }
-}
-#endif //FALLTERGEIST_GRAPHICS_FONT_FON_H

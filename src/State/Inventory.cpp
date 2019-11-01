@@ -35,24 +35,16 @@ namespace Falltergeist
     {
         Inventory::Inventory() : State()
         {
-            pushHandler().add([this](Event::State* ev)
-                {
-                    Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::ACTION);
-                });
-            popHandler().add([this](Event::State* ev)
-                {
-                    // If hand cursor now
-                    if (Game::getInstance()->mouse()->state() == Input::Mouse::Cursor::HAND)
-                    {
-                        Game::getInstance()->mouse()->popState();
-                    }
+            pushHandler().add([](Event::State* ev) {
+                Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::ACTION);
+            });
+            popHandler().add([](Event::State* ev) {
+                // If hand cursor now
+                if (Game::getInstance()->mouse()->state() == Input::Mouse::Cursor::HAND) {
                     Game::getInstance()->mouse()->popState();
-                });
-        }
-
-        Inventory::~Inventory()
-        {
-
+                }
+                Game::getInstance()->mouse()->popState();
+            });
         }
 
         void Inventory::init()
