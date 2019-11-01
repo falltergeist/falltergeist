@@ -116,7 +116,7 @@ namespace Falltergeist
 
                 if (currentRank < perk.maxRank && player->level() >= perk.minLevel && perk.otherRequirements()) {
 
-                    auto perkLabel = std::make_unique<UI::TextArea>(_t(MSG_PERK, 100 + static_cast<unsigned>(perk.perk)));
+                    auto perkLabel = std::make_unique<UI::TextArea>(_t(MSG_PERK, 101 + static_cast<unsigned>(perk.perk)));
                     perkLabel->mouseClickHandler().add([=](...) {
                         // TODO: TextAreaList doesn't support mouse input events for its child items
                     });
@@ -148,8 +148,8 @@ namespace Falltergeist
 
                     _selectedPerk = _perksList.at(i);
                     unsigned perkIndex = static_cast<unsigned>(_perksList.at(i));
-                    _title->setText(_t(MSG_PERK, 100 + perkIndex));
-                    _description->setText(_t(MSG_PERK, 1100 + perkIndex));
+                    _title->setText(_t(MSG_PERK, 101 + perkIndex));
+                    _description->setText(_t(MSG_PERK, 1101 + perkIndex));
                     _selectedImage = _images.at(i);
                     _selectedImage->setPosition(_bgPos + Point(450, 160));
                 } else {
@@ -163,7 +163,7 @@ namespace Falltergeist
         {
             Game::getInstance()->player()->addPerk(_selectedPerk);
             auto perksTab = dynamic_cast<UI::TextAreaList*>(Game::getInstance()->topState(1)->getUI("tab_perks"));
-            perksTab->addArea(std::make_unique<UI::TextArea>(_t(MSG_PERK, 100 + static_cast<unsigned>(_selectedPerk))));
+            perksTab->addArea(std::make_unique<UI::TextArea>(_t(MSG_PERK, 101 + static_cast<unsigned>(_selectedPerk))));
             Game::getInstance()->popState();
         }
 

@@ -13,7 +13,7 @@ namespace Falltergeist
 {
     namespace Game
     {
-        DudeObject::DudeObject() : CritterObject(), _perks(static_cast<unsigned>(PERK::PERK_COUNT))
+        DudeObject::DudeObject() : CritterObject()
         {
             _type = Type::DUDE;
             setLightIntensity(65536);

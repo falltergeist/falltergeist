@@ -72,7 +72,7 @@ enum class TRAIT : int32_t
 
 enum class PERK : int32_t
 {
-    AWARENESS = 1,
+    AWARENESS = 0,
     BONUS_HTH_ATTACKS,
     BONUS_HTH_DAMAGE,
     BONUS_MOVE,
@@ -109,7 +109,7 @@ enum class PERK : int32_t
     SPEAKER,
     HEAVE_HO,
     FRIENDLY_FOE,   /// \b unimplemented in the vanilla F2 engine
-    PICKPOCKET = 38,
+    PICKPOCKET,
     GHOST,
     CULT_OF_PERSONALITY,
     SCROUNGER,
@@ -190,7 +190,7 @@ enum class PERK : int32_t
     AUTODOC_LOWERED_HIT_POINTS_II,  /// \b special perk
     EXPERT_EXCREMENT_EXPEDITOR,     /// \b special perk
     WEAPON_ENHANCED_KNOCKOUT,       /// \b special perk
-    // JINXED - a TRAIT, but is listed in PERKS.MSG as the last perk
+    JINXED,                         /// \b special perk given to the player when the 'Pariah dog' joins him
 
     // Should be last entry.
     PERK_COUNT

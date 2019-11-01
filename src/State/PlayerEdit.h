@@ -50,7 +50,7 @@ namespace Falltergeist
                 void onStateDeactivate(Event::State* event) override;
                 void onKeyDown(Event::Keyboard* event) override;
 
-                std::vector<PerkEligibility> getSelectablePerks() const;
+                std::array<PerkEligibility, 77> getSelectablePerks() const;
 
             protected:
                 UI::TextArea* _selectedLabel = nullptr;

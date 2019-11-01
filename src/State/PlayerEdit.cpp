@@ -305,7 +305,7 @@ namespace Falltergeist
             {
                 if (player->perk(static_cast<PERK>(i)) > 0)
                 {
-                    perksAndTraits->addArea(std::unique_ptr<UI::TextArea>(new UI::TextArea(_t(MSG_PERK, 100 + i), {0,0})));
+                    perksAndTraits->addArea(std::unique_ptr<UI::TextArea>(new UI::TextArea(_t(MSG_PERK, 101 + i), {0,0})));
                 }
             }
 
@@ -369,7 +369,7 @@ namespace Falltergeist
             addUI(tabsArrowDown);
 
             // TEST PERK LEVELLING
-            // Game::getInstance()->pushState(new PlayerChoosePerk());
+             Game::getInstance()->pushState(new PlayerChoosePerk());
         }
 
         UI::TextArea* PlayerEdit::_addLabel(const std::string& name, UI::TextArea* label)
@@ -681,11 +681,11 @@ namespace Falltergeist
             _description->render();
         }
 
-        std::vector<PerkEligibility> PlayerEdit::getSelectablePerks() const
+        std::array<PerkEligibility, 77> PlayerEdit::getSelectablePerks() const
         {
             auto player = Game::getInstance()->player();
 
-            return {
+            return {{
                 // perk | maximum ranks | level requirement | other requirements | image filename
                 { PERK::AWARENESS,          1, 3, [player]() { return player->stat(STAT::PERCEPTION) >= 5;      }, "AWARENES" },
                 { PERK::BONUS_HTH_ATTACKS,  1,15, [player]() { return player->stat(STAT::AGILITY) >= 6;         }, "HND2HND" },
@@ -798,7 +798,7 @@ namespace Falltergeist
                 { PERK::THIEF,              1, 3, [player]() { return true;                                     }, "STEAL"      },
                 { PERK::WEAPON_HANDLING,    1,12, [player]() { return player->stat(STAT::STRENGTH) <= 7
                                                                && player->stat(STAT::AGILITY) >= 5;             }, "WEPNHAND"   }
-            };
+            }};
         }
     }
 }
