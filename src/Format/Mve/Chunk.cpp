@@ -1,5 +1,3 @@
-#pragma once
-
 #include "../Mve/Chunk.h"
 
 namespace Falltergeist

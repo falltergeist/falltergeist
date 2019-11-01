@@ -477,7 +477,7 @@ namespace Falltergeist
         {
         }
 
-        void CritterObject::use_skill_on_p_proc()
+        void CritterObject::use_skill_on_p_proc(SKILL skill, Object* objectUsed, CritterObject* usedBy)
         {
         }
 
