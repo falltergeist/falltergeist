@@ -1007,8 +1007,8 @@ namespace Falltergeist
                 }
             }
 
-            object->setHexagon(hexagon);
             if (hexagon) {
+                object->setHexagon(hexagon);
                 hexagon->objects()->push_back(object);
             }
 
