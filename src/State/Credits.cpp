@@ -92,7 +92,7 @@ namespace Falltergeist
 
             _linePositions = new int[_lines.size()];
 
-            for (int i = 0; i < _lines.size(); i++) {
+            for (size_t i = 0; i < _lines.size(); i++) {
                 _linePositions[i] = _lines.at(i)->y();
             }
         }
@@ -106,9 +106,9 @@ namespace Falltergeist
             _timePassed += deltaTime;
 
             long int _lastY = 0;
-            for (int i = 0; i < _lines.size(); i++) {
+            for (size_t i = 0; i < _lines.size(); i++) {
                 auto ui = _lines.at(i);
-                int yPosition = _linePositions[i] - (_timePassed * scrollingSpeed);
+                int yPosition = _linePositions[i] - static_cast<int>(_timePassed * scrollingSpeed);
                 ui->setY(yPosition);
                 _lastY = ui->y();
             }

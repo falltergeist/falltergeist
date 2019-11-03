@@ -51,15 +51,6 @@ namespace Falltergeist
     std::vector<std::string> CrossPlatform::_dataFiles;
     const std::vector<std::string> CrossPlatform::_necessaryDatFiles = {"master.dat", "critter.dat"};
 
-
-    CrossPlatform::CrossPlatform()
-    {
-    }
-
-    CrossPlatform::~CrossPlatform()
-    {
-    }
-
     std::string CrossPlatform::getVersion()
     {
         if (_version.length() > 0) {

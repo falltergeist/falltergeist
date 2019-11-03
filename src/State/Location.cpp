@@ -568,61 +568,54 @@ namespace Falltergeist
 
         void Location::performScrolling(float deltaTime)
         {
-            // TODO use nanosecondsPassed
-            // location scrolling
-            if (this->_scrollTicks + 10 < SDL_GetTicks()) {
-                this->_scrollTicks = SDL_GetTicks();
-                int scrollDelta = 5;
+            float scrollSpeed = 5.0f /* pixels */ / 10.0f /* ms */;
+            int scrollDelta = scrollSpeed * deltaTime;
 
-                //Game::getInstance()->mouse()->setType(Mouse::ACTION);
+            Point pScrollDelta = Point(
+                this->_scrollLeft ? -scrollDelta : (this->_scrollRight ? scrollDelta : 0),
+                this->_scrollTop ? -scrollDelta : (this->_scrollBottom ? scrollDelta : 0)
+            );
+            this->_camera->setCenter(this->_camera->center() + pScrollDelta);
 
-                Point pScrollDelta = Point(
-                    this->_scrollLeft ? -scrollDelta : (this->_scrollRight ? scrollDelta : 0),
-                    this->_scrollTop ? -scrollDelta : (this->_scrollBottom ? scrollDelta : 0)
-                );
-                this->_camera->setCenter(this->_camera->center() + pScrollDelta);
+            auto mouse = Game::getInstance()->mouse();
 
-                auto mouse = Game::getInstance()->mouse();
-
-                // if scrolling is active
-                if (this->_scrollLeft || this->_scrollRight || this->_scrollTop || this->_scrollBottom) {
-                    Input::Mouse::Cursor state;
-                    if (this->_scrollLeft) {
-                        state = Input::Mouse::Cursor::SCROLL_W;
-                    }
-                    if (this->_scrollRight) {
-                        state = Input::Mouse::Cursor::SCROLL_E;
-                    }
-                    if (this->_scrollTop) {
-                        state = Input::Mouse::Cursor::SCROLL_N;
-                    }
-                    if (this->_scrollBottom) {
-                        state = Input::Mouse::Cursor::SCROLL_S;
-                    }
-                    if (this->_scrollLeft && this->_scrollTop) {
-                        state = Input::Mouse::Cursor::SCROLL_NW;
-                    }
-                    if (this->_scrollLeft && this->_scrollBottom) {
-                        state = Input::Mouse::Cursor::SCROLL_SW;
-                    }
-                    if (this->_scrollRight && this->_scrollTop) {
-                        state = Input::Mouse::Cursor::SCROLL_NE;
-                    }
-                    if (this->_scrollRight && this->_scrollBottom) {
-                        state = Input::Mouse::Cursor::SCROLL_SE;
-                    }
-                    if (mouse->state() != state) {
-                        if (mouse->scrollState()) {
-                            mouse->popState();
-                        }
-                        mouse->pushState(state);
-                    }
-                } else {
+            // if scrolling is active
+            if (this->_scrollLeft || this->_scrollRight || this->_scrollTop || this->_scrollBottom) {
+                Input::Mouse::Cursor state;
+                if (this->_scrollLeft) {
+                    state = Input::Mouse::Cursor::SCROLL_W;
+                }
+                if (this->_scrollRight) {
+                    state = Input::Mouse::Cursor::SCROLL_E;
+                }
+                if (this->_scrollTop) {
+                    state = Input::Mouse::Cursor::SCROLL_N;
+                }
+                if (this->_scrollBottom) {
+                    state = Input::Mouse::Cursor::SCROLL_S;
+                }
+                if (this->_scrollLeft && this->_scrollTop) {
+                    state = Input::Mouse::Cursor::SCROLL_NW;
+                }
+                if (this->_scrollLeft && this->_scrollBottom) {
+                    state = Input::Mouse::Cursor::SCROLL_SW;
+                }
+                if (this->_scrollRight && this->_scrollTop) {
+                    state = Input::Mouse::Cursor::SCROLL_NE;
+                }
+                if (this->_scrollRight && this->_scrollBottom) {
+                    state = Input::Mouse::Cursor::SCROLL_SE;
+                }
+                if (mouse->state() != state) {
                     if (mouse->scrollState()) {
                         mouse->popState();
                     }
+                    mouse->pushState(state);
                 }
-
+            } else {
+                if (mouse->scrollState()) {
+                    mouse->popState();
+                }
             }
         }
 

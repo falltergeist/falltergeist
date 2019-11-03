@@ -132,9 +132,7 @@ namespace Falltergeist
                 static const int DROPDOWN_DELAY;
 
                 // Timers
-                unsigned int _scrollTicks = 0;
                 unsigned int _scriptsTicks = 0;
-                unsigned int _actionCursorTicks = 0;
                 unsigned int _mouseMoveTicks = 0;
                 Game::Timer _actionCursorTimer;
                 Game::Timer _ambientSfxTimer;
@@ -145,10 +143,7 @@ namespace Falltergeist
 
                 std::unique_ptr<HexagonGrid> _hexagonGrid;
                 std::unique_ptr<LocationCamera> _camera;
-                std::unique_ptr<UI::TileMap> _floor;
-                std::unique_ptr<UI::TileMap> _roof;
                 std::map<std::string, VM::StackValue> _EVARS;
-                std::vector<UI::Base*> _floatMessages;
 
                 std::shared_ptr<Falltergeist::Game::Location> _location;
                 unsigned int _elevation = 0;
