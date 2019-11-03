@@ -27,7 +27,7 @@ namespace Falltergeist
 
                 void render(bool eggTransparency = false) override;
                 void handle(Event::Event *event) override;
-                void think(uint32_t nanosecondsPassed) override;
+                void think(float deltaTime) override;
 
                 virtual bool opaque(const Point &pos) override;
 

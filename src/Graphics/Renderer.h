@@ -43,7 +43,7 @@ namespace Falltergeist
 
                 void beginFrame();
                 void endFrame();
-                void think();
+                void think(float deltaTime);
 
                 int width();
                 int height();
@@ -52,7 +52,6 @@ namespace Falltergeist
                 float scaleX();
                 float scaleY();
 
-                bool fadeDone();
                 bool fading();
 
                 void fadeIn(uint8_t r, uint8_t g, uint8_t b, unsigned int time, bool inmovie = false);
@@ -85,7 +84,7 @@ namespace Falltergeist
                 RenderPath _renderpath = RenderPath::OGL21;
 
                 short _fadeStep = 0;
-                unsigned int _fadeTimer = 0;
+                float _fadeTimer = 0;
                 unsigned int _fadeDelay = 0;
                 unsigned int _fadeAlpha = 0;
                 bool _fadeDone = true;

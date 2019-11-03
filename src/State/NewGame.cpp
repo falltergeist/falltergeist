@@ -85,9 +85,9 @@ namespace Falltergeist
             addUI("stats3_values", new UI::TextArea(383, 150));
         }
 
-        void NewGame::think(uint32_t nanosecondsPassed)
+        void NewGame::think(float deltaTime)
         {
-            State::think(nanosecondsPassed);
+            State::think(deltaTime);
         }
 
         void NewGame::doBeginGame()

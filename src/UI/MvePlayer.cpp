@@ -802,19 +802,19 @@ namespace Falltergeist
             _chunk = _mve->getNextChunk();
         }
 
-        void MvePlayer::think(uint32_t nanosecondsPassed)
+        void MvePlayer::think(float deltaTime)
         {
             if (!_timerStarted) {
                 return;
             }
 
-            if (_nanosecondsTracked >= _delay*1000) // 66728
+            if (_millisecondsTracked >= _delay / 1000) // 66.728
             {
-                _nanosecondsTracked -= _delay * 1000;
+                _millisecondsTracked -= _delay / 1000;
                 _processChunk();
             }
 
-            _nanosecondsTracked += nanosecondsPassed;
+            _millisecondsTracked += deltaTime;
         }
 
         bool MvePlayer::finished()

@@ -28,7 +28,7 @@ namespace Falltergeist
 
             static bool fileExists(std::string file);
 
-            static uint32_t nanosecondsPassed();
+            static float deltaTime();
 
         protected:
             static std::string _falloutDataPath;

@@ -55,7 +55,7 @@ namespace Falltergeist
             currentAnimation()->render(eggTransparency);
         }
 
-        void AnimationQueue::think(uint32_t nanosecondsPassed)
+        void AnimationQueue::think(float deltaTime)
         {
             if (_playing)
             {
@@ -90,7 +90,7 @@ namespace Falltergeist
                     currentAnimation()->play();
                 }
 
-                currentAnimation()->think(nanosecondsPassed);
+                currentAnimation()->think(deltaTime);
             }
         }
 

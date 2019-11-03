@@ -13,7 +13,7 @@ namespace Falltergeist
                 Start();
                 ~Start() override;
 
-                void think(uint32_t nanosecondsPassed) override;
+                void think(float deltaTime) override;
                 void init() override;
 
             protected:

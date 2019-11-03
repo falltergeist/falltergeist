@@ -61,7 +61,7 @@ namespace Falltergeist
                 ~Location() override;
 
                 void init() override;
-                void think(uint32_t nanosecondsPassed) override;
+                void think(float deltaTime) override;
                 void handle(Event::Event* event) override;
                 void render() override;
 
@@ -197,15 +197,15 @@ namespace Falltergeist
 
                 void renderTestingOutline() const;
 
-                void thinkObjects(uint32_t nanosecondsPassed) const;
+                void thinkObjects(float deltaTime) const;
 
-                void performScrolling(uint32_t nanosecondsPassed);
+                void performScrolling(float deltaTime);
 
-                void firstLocationEnter(uint32_t nanosecondsPassed) const;
+                void firstLocationEnter(float deltaTime) const;
 
-                void updateLocation(uint32_t nanosecondsPassed);
+                void updateLocation(float deltaTime);
 
-                void processTimers(uint32_t nanosecondsPassed);
+                void processTimers(float deltaTime);
 
                 bool movePlayerToObject(Game::Object *object);
 

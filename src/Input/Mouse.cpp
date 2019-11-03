@@ -217,7 +217,7 @@ namespace Falltergeist
             }
         }
 
-        void Mouse::think(uint32_t nanosecondsPassed)
+        void Mouse::think(float deltaTime)
         {
             SDL_GetMouseState(&_position.rx(), &_position.ry());
             _position = Point(
@@ -225,7 +225,7 @@ namespace Falltergeist
                 static_cast<int>(_position.y() / Game::getInstance()->renderer()->scaleY())
             );
             if (_ui) {
-                _ui->think(nanosecondsPassed);
+                _ui->think(deltaTime);
             }
         }
 

@@ -20,7 +20,7 @@ namespace Falltergeist
 
                 std::vector<std::unique_ptr<AnimationFrame>>& frames();
 
-                void think(uint32_t nanosecondsPassed) override;
+                void think(float deltaTime) override;
                 void render(bool eggTransparency = false) override;
 
 

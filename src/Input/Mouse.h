@@ -85,7 +85,7 @@ namespace Falltergeist
 
                 void render();
                 void renderOutline();
-                void think(uint32_t nanosecondsPassed);
+                void think(float deltaTime);
 
                 UI::Base* ui();
 

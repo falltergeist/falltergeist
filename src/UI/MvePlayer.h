@@ -23,7 +23,7 @@ namespace Falltergeist
                 MvePlayer(Format::Mve::File* mve);
                 ~MvePlayer() override;
 
-                void think(uint32_t nanosecondsPassed) override;
+                void think(float deltaTime) override;
                 void render(bool eggTransparency = false) override;
                 bool finished();
                 uint32_t getAudio(uint8_t* data, uint32_t len);
@@ -50,7 +50,7 @@ namespace Falltergeist
                 uint32_t _audioBufSize = 0;
                 uint32_t _samplesReady = 0;
 
-                uint32_t _nanosecondsTracked = 0;
+                float _millisecondsTracked = 0;
                 SDL_Surface* _currentBuf = NULL;
                 SDL_Surface* _backBuf = NULL;
 

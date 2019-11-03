@@ -485,38 +485,38 @@ namespace Falltergeist
             }
         }
 
-        void Location::think(uint32_t nanosecondsPassed)
+        void Location::think(float deltaTime)
         {
-            Game::getInstance()->gameTime()->think(nanosecondsPassed);
-            thinkObjects(nanosecondsPassed);
+            Game::getInstance()->gameTime()->think(deltaTime);
+            thinkObjects(deltaTime);
             auto player = Game::getInstance()->player();
-            player->think(nanosecondsPassed);
-            performScrolling(nanosecondsPassed);
+            player->think(deltaTime);
+            performScrolling(deltaTime);
             if (_locationEnter) {
                 _locationEnter = false;
-                firstLocationEnter(nanosecondsPassed);
+                firstLocationEnter(deltaTime);
             } else {
-                updateLocation(nanosecondsPassed);
+                updateLocation(deltaTime);
             }
-            processTimers(nanosecondsPassed);
-            State::think(nanosecondsPassed);
+            processTimers(deltaTime);
+            State::think(deltaTime);
         }
 
         // timers processing
-        void Location::processTimers(uint32_t nanosecondsPassed)
+        void Location::processTimers(float deltaTime)
         {
-            _actionCursorTimer.think(nanosecondsPassed);
-            _ambientSfxTimer.think(nanosecondsPassed);
+            _actionCursorTimer.think(deltaTime);
+            _ambientSfxTimer.think(deltaTime);
 
             for (auto it = _timerEvents.begin(); it != _timerEvents.end();) {
-                it->timer.think(nanosecondsPassed);
+                it->timer.think(deltaTime);
                 if (!it->timer.enabled()) {
                     it = _timerEvents.erase(it);
                 } else ++it;
             }
         }
 
-        void Location::updateLocation(uint32_t nanosecondsPassed)
+        void Location::updateLocation(float deltaTime)
         {
             // TODO use nanoseconds
             auto player = Game::getInstance()->player();
@@ -532,7 +532,7 @@ namespace Falltergeist
             }
         }
 
-        void Location::firstLocationEnter(uint32_t nanosecondsPassed) const
+        void Location::firstLocationEnter(float deltaTime) const
         {
             auto player = Game::getInstance()->player();
             if (_location->script()) {
@@ -566,7 +566,7 @@ namespace Falltergeist
             }
         }
 
-        void Location::performScrolling(uint32_t nanosecondsPassed)
+        void Location::performScrolling(float deltaTime)
         {
             // TODO use nanosecondsPassed
             // location scrolling
@@ -626,10 +626,10 @@ namespace Falltergeist
             }
         }
 
-        void Location::thinkObjects(uint32_t nanosecondsPassed) const
+        void Location::thinkObjects(float deltaTime) const
         {
             for (auto &object : _objects) {
-                object->think(nanosecondsPassed);
+                object->think(deltaTime);
             }
         }
 

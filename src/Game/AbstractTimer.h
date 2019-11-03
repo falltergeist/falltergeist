@@ -29,7 +29,7 @@ namespace Falltergeist
 
                 Event::Handler& tickHandler();
 
-                void think(uint32_t nanosecondsPassed);
+                void think(float deltaTime);
 
             protected:
                 virtual unsigned int _getTime() = 0;

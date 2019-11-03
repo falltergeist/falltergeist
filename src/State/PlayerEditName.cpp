@@ -156,15 +156,15 @@ namespace Falltergeist
             doDone();
         }
 
-        void PlayerEditName::think(uint32_t nanosecondsPassed)
+        void PlayerEditName::think(float deltaTime)
         {
             // TODO use nanosecondsPassed
             int bgX = (Game::getInstance()->renderer()->width() - 640) / 2;
-            State::think(nanosecondsPassed);
+            State::think(deltaTime);
 
-            _blinkingCursorNanosecondsTracked += nanosecondsPassed;
-            if (_blinkingCursorNanosecondsTracked >= 3e8) { // 300 ms
-                _blinkingCursorNanosecondsTracked -= 3e8;
+            _blinkingCursorMillisecondsTracked += deltaTime;
+            if (_blinkingCursorMillisecondsTracked >= 300.0f) {
+                _blinkingCursorMillisecondsTracked -= 300.0f;
                 _cursor->setVisible(!_cursor->visible());
             }
             _cursor->setPosition({bgX + _name->textSize().width() + 45, _cursor->position().y()});

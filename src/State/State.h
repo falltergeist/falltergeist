@@ -88,7 +88,7 @@ namespace Falltergeist
                  * @brief Process all real-time logic of this state.
                  * This method is called after handle() but before render() in the main loop.
                  */
-                virtual void think(uint32_t nanosecondsPassed);
+                virtual void think(float deltaTime);
                 /**
                  * @brief Renders all visible objects of this state on screen.
                  * This method is called last in the main loop (after handle() and think()).

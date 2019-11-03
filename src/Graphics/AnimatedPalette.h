@@ -17,21 +17,21 @@ namespace Falltergeist
                 ~AnimatedPalette();
 
                 std::vector<GLuint> counters();
-                void think(uint32_t nanosecondsPassed);
+                void think(float deltaTime);
 
             protected:
 
-                unsigned int _slimeNanosecondsTracked = 0;
+                float _slimeMillisecondsTracked = 0;
                 unsigned int _slimeCounter = 0;
-                unsigned int _fireSlowNanosecondsTracked = 0;
+                float _fireSlowMillisecondsTracked = 0;
                 unsigned int _fireSlowCounter = 0;
-                unsigned int _fireFastNanosecondsTracked = 0;
+                float _fireFastMillisecondsTracked = 0;
                 unsigned int _fireFastCounter = 0;
-                unsigned int _monitorsNanosecondsTracked = 0;
+                float _monitorsMillisecondsTracked = 0;
                 unsigned int _monitorsCounter = 0;
-                unsigned int _shoreNanosecondsTracked = 0;
+                float _shoreMillisecondsTracked = 0;
                 unsigned int _shoreCounter = 0;
-                unsigned int _blinkingRedNanosecondsTracked = 0;
+                float _blinkingRedMillisecondsTracked = 0;
                 unsigned char _blinkingRedCounter = 0;
                 short _blinkingRed = -1;
         };

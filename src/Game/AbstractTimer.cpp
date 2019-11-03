@@ -14,7 +14,7 @@ namespace Falltergeist
             return _tickHandler;
         }
 
-        void AbstractTimer::think(uint32_t nanosecondsPassed)
+        void AbstractTimer::think(float deltaTime)
         {
             // TODO use nanoseconds
             if (_enabled && _getTime() > _lastTick + _interval) {

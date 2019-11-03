@@ -97,9 +97,9 @@ namespace Falltergeist
             addUI(barterButton);
         }
 
-        void CritterDialog::think(uint32_t nanosecondsPassed)
+        void CritterDialog::think(float deltaTime)
         {
-            State::think(nanosecondsPassed);
+            State::think(deltaTime);
         }
 
         // TODO: add auto-text scrolling after 10 seconds (when it's longer than 4 lines)

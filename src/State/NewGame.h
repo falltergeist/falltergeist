@@ -18,7 +18,7 @@ namespace Falltergeist
                 ~NewGame() override;
 
                 void init() override;
-                void think(uint32_t nanosecondsPassed) override;
+                void think(float deltaTime) override;
 
                 void onBackButtonClick(Event::Mouse* event);
                 void onBackFadeDone(Event::State* event);
