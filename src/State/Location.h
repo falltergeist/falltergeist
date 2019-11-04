@@ -4,14 +4,12 @@
 #include <memory>
 #include "../Format/Map/File.h"
 #include "../Game/DudeObject.h"
-#include "../Game/GameTimer.h"
 #include "../Game/Object.h"
 #include "../Game/Timer.h"
 #include "../Graphics/Lightmap.h"
 #include "../Input/Mouse.h"
 #include "../State/State.h"
 #include "../UI/ImageButton.h"
-#include "../Game/CountdownTimer.h"
 
 namespace Falltergeist
 {
@@ -92,7 +90,7 @@ namespace Falltergeist
 
                 void displayMessage(const std::string& message);
 
-                void addTimerEvent(Game::Object* obj, int delay, int fixedParam = 0);
+                void addTimerEvent(Game::Object* obj, int ticks, int fixedParam = 0);
                 void removeTimerEvent(Game::Object* obj);
                 void removeTimerEvent(Game::Object* obj, int fixedParam);
 
@@ -125,7 +123,7 @@ namespace Falltergeist
                 struct TimerEvent
                 {
                     Game::Object* object;
-                    Game::GameTimer timer;
+                    Game::Timer timer;
                     int fixedParam;
                 };
 
@@ -133,8 +131,7 @@ namespace Falltergeist
                 static const int DROPDOWN_DELAY;
 
                 // Timers
-                Game::CountdownTimer _locationScriptTimer;
-                Game::CountdownTimer _mouseMoveTimer;
+                Game::Timer _locationScriptTimer;
                 Game::Timer _actionCursorTimer;
                 Game::Timer _ambientSfxTimer;
                 // for VM opcode add_timer_event
@@ -198,8 +195,6 @@ namespace Falltergeist
                 void performScrolling(const float &deltaTime);
 
                 void firstLocationEnter(const float &deltaTime) const;
-
-                void updateLocation(const float &deltaTime);
 
                 void processTimers(const float &deltaTime);
 

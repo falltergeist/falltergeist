@@ -174,7 +174,6 @@ namespace Falltergeist
             _mouseUpHandler.add(std::bind(&Location::onMouseUp, this, std::placeholders::_1));
             _mouseMoveHandler.add(std::bind(&Location::onMouseMove, this, std::placeholders::_1));
 
-
             // action cursor stuff
             _actionCursorTimer.setInterval((unsigned) DROPDOWN_DELAY);
             _actionCursorTimer.tickHandler().add([this, game](Event::Event *) {
@@ -200,6 +199,17 @@ namespace Falltergeist
                 _actionCursorButtonPressed = false;
             });
 
+            _locationScriptTimer.start(10000.0f, true);
+            _locationScriptTimer.tickHandler().add([this](Event::Event*) {
+                auto player = Game::getInstance()->player();
+                if (_location->script()) {
+                    _location->script()->call("map_update_p_proc");
+                }
+                for (auto &object : _objects) {
+                    object->map_update_p_proc();
+                }
+                player->map_update_p_proc();
+            });
         }
 
         void Location::onStateActivate(Event::State *event)
@@ -491,8 +501,6 @@ namespace Falltergeist
             if (_locationEnter) {
                 _locationEnter = false;
                 firstLocationEnter(deltaTime);
-            } else {
-                updateLocation(deltaTime);
             }
             processTimers(deltaTime);
             State::think(deltaTime);
@@ -501,7 +509,6 @@ namespace Falltergeist
         // timers processing
         void Location::processTimers(const float &deltaTime)
         {
-            _mouseMoveTimer.think(deltaTime);
             _locationScriptTimer.think(deltaTime);
             _actionCursorTimer.think(deltaTime);
             _ambientSfxTimer.think(deltaTime);
@@ -511,21 +518,6 @@ namespace Falltergeist
                 if (!it->timer.enabled()) {
                     it = _timerEvents.erase(it);
                 } else ++it;
-            }
-        }
-
-        void Location::updateLocation(const float &deltaTime)
-        {
-            auto player = Game::getInstance()->player();
-            if (_locationScriptTimer.isFinished()) {
-                _locationScriptTimer.set(10000);
-                if (_location->script()) {
-                    _location->script()->call("map_update_p_proc");
-                }
-                for (auto &object : _objects) {
-                    object->map_update_p_proc();
-                }
-                player->map_update_p_proc();
             }
         }
 
@@ -677,15 +669,6 @@ namespace Falltergeist
 
                 if (mouseEvent->originalType() == Mouse::Type::MOVE) {
                     emitEvent(std::make_unique<Event::Mouse>(*mouseEvent), _mouseMoveHandler);
-
-                    if (mouse->state() == Input::Mouse::Cursor::ACTION) {
-                        // optimization to prevent FPS drops on mouse move
-                        if (_mouseMoveTimer.isFinished()) {
-                            _mouseMoveTimer.set(50);
-                        } else {
-                            event->setHandled(true);
-                        }
-                    }
                 }
 
                 // let event fall down to all objects when using action cursor and within active view
@@ -1168,9 +1151,9 @@ namespace Falltergeist
             return _playerPanel;
         }
 
-        void Location::addTimerEvent(Game::Object *obj, int delay, int fixedParam)
+        void Location::addTimerEvent(Game::Object *obj, int ticks, int fixedParam)
         {
-            Game::GameTimer timer((float) delay);
+            Game::Timer timer(static_cast<float>(ticks) * 10.0f);
             timer.start();
             timer.tickHandler().add([obj, fixedParam](Event::Event *) {
                 if (obj) {
