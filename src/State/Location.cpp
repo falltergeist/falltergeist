@@ -514,7 +514,7 @@ namespace Falltergeist
             }
         }
 
-        void Location::updateLocation(float deltaTime)
+        void Location::updateLocation(const float &deltaTime)
         {
             auto player = Game::getInstance()->player();
             if (_locationScriptTimer.isFinished()) {
@@ -529,7 +529,7 @@ namespace Falltergeist
             }
         }
 
-        void Location::firstLocationEnter(float deltaTime) const
+        void Location::firstLocationEnter(const float &deltaTime) const
         {
             auto player = Game::getInstance()->player();
             if (_location->script()) {
@@ -563,7 +563,7 @@ namespace Falltergeist
             }
         }
 
-        void Location::performScrolling(float deltaTime)
+        void Location::performScrolling(const float &deltaTime)
         {
             float scrollSpeed = 5.0f /* pixels */ / 10.0f /* ms */;
             int scrollDelta = scrollSpeed * deltaTime;
@@ -616,7 +616,7 @@ namespace Falltergeist
             }
         }
 
-        void Location::thinkObjects(float deltaTime) const
+        void Location::thinkObjects(const float &deltaTime) const
         {
             for (auto &object : _objects) {
                 object->think(deltaTime);

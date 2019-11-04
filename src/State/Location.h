@@ -193,13 +193,13 @@ namespace Falltergeist
 
                 void renderTestingOutline() const;
 
-                void thinkObjects(float deltaTime) const;
+                void thinkObjects(const float &deltaTime) const;
 
-                void performScrolling(float deltaTime);
+                void performScrolling(const float &deltaTime);
 
-                void firstLocationEnter(float deltaTime) const;
+                void firstLocationEnter(const float &deltaTime) const;
 
-                void updateLocation(float deltaTime);
+                void updateLocation(const float &deltaTime);
 
                 void processTimers(const float &deltaTime);
 
