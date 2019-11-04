@@ -17,7 +17,7 @@ namespace Falltergeist
                 ~Credits() override;
 
                 void init() override;
-                void think(float deltaTime) override;
+                void think(const float &deltaTime) override;
                 void handle(Event::Event* event) override;
 
                 void onCreditsFinished();

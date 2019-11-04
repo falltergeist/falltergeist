@@ -47,12 +47,12 @@ namespace Falltergeist
 
             addUI("splash", new UI::Image("art/splash/" + splashes.at(rand() % splashes.size())));
 
-            _delayTimer = std::make_unique<Game::CountdownTimer>(3);
+            _delayTimer = std::make_unique<Game::CountdownTimer>(3000);
 
             Game::getInstance()->mouse()->setState(Input::Mouse::Cursor::WAIT);
         }
 
-        void Start::think(float deltaTime)
+        void Start::think(const float &deltaTime)
         {
             _delayTimer->think(deltaTime);
 

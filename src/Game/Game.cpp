@@ -389,7 +389,7 @@ namespace Falltergeist
             }
         }
 
-        void Game::think(float deltaTime)
+        void Game::think(const float &deltaTime)
         {
             _fpsCounter->think(deltaTime);
             _mouse->think(deltaTime);

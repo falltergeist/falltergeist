@@ -49,7 +49,7 @@ namespace Falltergeist
             setPosition(Point(position().x(), value));
         }
 
-        void Base::think(float deltaTime)
+        void Base::think(const float &deltaTime)
         {
         }
 

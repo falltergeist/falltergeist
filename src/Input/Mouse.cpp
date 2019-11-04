@@ -217,7 +217,7 @@ namespace Falltergeist
             }
         }
 
-        void Mouse::think(float deltaTime)
+        void Mouse::think(const float &deltaTime)
         {
             SDL_GetMouseState(&_position.rx(), &_position.ry());
             _position = Point(

@@ -4,50 +4,37 @@ namespace Falltergeist
 {
     namespace Game
     {
-        CountdownTimer::CountdownTimer(uint32_t seconds, uint32_t milliseconds)
+        CountdownTimer::CountdownTimer(uint32_t milliseconds)
         {
-            _seconds = seconds;
             _milliseconds = milliseconds;
         }
 
-        void CountdownTimer::think(float deltaTime)
+        void CountdownTimer::think(const float &deltaTime)
         {
             if (isFinished()) {
                 return;
             }
 
-            uint32_t seconds = 0;
-
-            while (deltaTime >= 1000.0f) {
-                seconds++;
-                deltaTime -= 1000.0f;
-            }
-
-            if (_milliseconds >= deltaTime) {
-                _milliseconds -= deltaTime;
+            if (_milliseconds >= static_cast<uint32_t>(deltaTime)) {
+                _milliseconds -= static_cast<uint32_t>(deltaTime);
             } else {
-                if (_seconds > seconds) {
-                    seconds++;
-                    _milliseconds = 1000 + (_milliseconds - deltaTime);
-                } else {
-                    _milliseconds = 0;
-                }
+                _milliseconds = 0;
             }
-            _decreaseSeconds(seconds);
         }
 
         bool CountdownTimer::isFinished()
         {
-            return _seconds == 0 && _milliseconds == 0;
+            return _milliseconds == 0;
         }
 
-        void CountdownTimer::_decreaseSeconds(uint32_t seconds)
+        void CountdownTimer::set(uint32_t milliseconds)
         {
-            if (_seconds >= seconds) {
-                _seconds -= seconds;
-            } else {
-                _seconds = 0;
-            }
+            _milliseconds = milliseconds;
+        }
+
+        uint32_t CountdownTimer::get() const
+        {
+            return _milliseconds;
         }
     }
 }

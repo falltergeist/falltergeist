@@ -13,7 +13,7 @@ namespace Falltergeist
                 FpsCounter(int x, int y);
                 ~FpsCounter() override;
 
-                void think(float deltaTime) override;
+                void think(const float &deltaTime) override;
                 unsigned int frames();
 
             protected:

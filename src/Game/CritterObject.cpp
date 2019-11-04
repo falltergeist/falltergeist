@@ -487,7 +487,7 @@ namespace Falltergeist
             return &_movementQueue;
         }
 
-        void CritterObject::think(float deltaTime)
+        void CritterObject::think(const float &deltaTime)
         {
             if (!movementQueue()->empty()) {
                 if (!_moving) {

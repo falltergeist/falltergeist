@@ -802,7 +802,7 @@ namespace Falltergeist
             _chunk = _mve->getNextChunk();
         }
 
-        void MvePlayer::think(float deltaTime)
+        void MvePlayer::think(const float &deltaTime)
         {
             if (!_timerStarted) {
                 return;

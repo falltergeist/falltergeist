@@ -23,7 +23,7 @@ namespace Falltergeist
                 MvePlayer(Format::Mve::File* mve);
                 ~MvePlayer() override;
 
-                void think(float deltaTime) override;
+                void think(const float &deltaTime) override;
                 void render(bool eggTransparency = false) override;
                 bool finished();
                 uint32_t getAudio(uint8_t* data, uint32_t len);

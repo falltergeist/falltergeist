@@ -55,7 +55,7 @@ namespace Falltergeist
             currentAnimation()->render(eggTransparency);
         }
 
-        void AnimationQueue::think(float deltaTime)
+        void AnimationQueue::think(const float &deltaTime)
         {
             if (_playing)
             {

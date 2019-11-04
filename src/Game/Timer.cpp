@@ -5,13 +5,8 @@ namespace Falltergeist
 {
     namespace Game
     {
-        Timer::Timer(unsigned interval) : AbstractTimer(interval)
+        Timer::Timer(float interval) : AbstractTimer(interval)
         {
-        }
-
-        unsigned int Timer::_getTime()
-        {
-            return SDL_GetTicks();
         }
     }
 }

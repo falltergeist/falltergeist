@@ -24,7 +24,7 @@ namespace Falltergeist
                 void setRepeat(bool value);
 
                 void render(bool eggTransparency = false) override;
-                void think(float deltaTime) override;
+                void think(const float &deltaTime) override;
 
                 virtual bool opaque(const Point &pos) override;
 

@@ -21,7 +21,7 @@ namespace Falltergeist
         {
         }
 
-        void FpsCounter::think(float deltaTime)
+        void FpsCounter::think(const float &deltaTime)
         {
             _millisecondsTracked += deltaTime;
 

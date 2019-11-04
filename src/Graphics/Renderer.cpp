@@ -230,7 +230,7 @@ namespace Falltergeist
 
         }
 
-        void Renderer::think(float deltaTime)
+        void Renderer::think(const float &deltaTime)
         {
             if (_fadeDone) {
                 return;

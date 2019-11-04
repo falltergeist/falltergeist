@@ -62,10 +62,6 @@ namespace Falltergeist
             _hexagonInfo->setHorizontalAlign(UI::TextArea::HorizontalAlign::RIGHT);
         }
 
-        Location::~Location()
-        {
-        }
-
         void Location::init()
         {
             if (initialized()) {
@@ -485,7 +481,7 @@ namespace Falltergeist
             }
         }
 
-        void Location::think(float deltaTime)
+        void Location::think(const float &deltaTime)
         {
             Game::getInstance()->gameTime()->think(deltaTime);
             thinkObjects(deltaTime);
@@ -503,8 +499,10 @@ namespace Falltergeist
         }
 
         // timers processing
-        void Location::processTimers(float deltaTime)
+        void Location::processTimers(const float &deltaTime)
         {
+            _mouseMoveTimer.think(deltaTime);
+            _locationScriptTimer.think(deltaTime);
             _actionCursorTimer.think(deltaTime);
             _ambientSfxTimer.think(deltaTime);
 
@@ -518,10 +516,9 @@ namespace Falltergeist
 
         void Location::updateLocation(float deltaTime)
         {
-            // TODO use nanoseconds
             auto player = Game::getInstance()->player();
-            if (_scriptsTicks + 10000 < SDL_GetTicks()) {
-                _scriptsTicks = SDL_GetTicks();
+            if (_locationScriptTimer.isFinished()) {
+                _locationScriptTimer.set(10000);
                 if (_location->script()) {
                     _location->script()->call("map_update_p_proc");
                 }
@@ -683,12 +680,10 @@ namespace Falltergeist
 
                     if (mouse->state() == Input::Mouse::Cursor::ACTION) {
                         // optimization to prevent FPS drops on mouse move
-                        // TODO: replace with a Timer?
-                        auto ticks = SDL_GetTicks();
-                        if (ticks - _mouseMoveTicks < 50) {
-                            event->setHandled(true);
+                        if (_mouseMoveTimer.isFinished()) {
+                            _mouseMoveTimer.set(50);
                         } else {
-                            _mouseMoveTicks = ticks;
+                            event->setHandled(true);
                         }
                     }
                 }
@@ -1175,7 +1170,7 @@ namespace Falltergeist
 
         void Location::addTimerEvent(Game::Object *obj, int delay, int fixedParam)
         {
-            Game::GameTimer timer((unsigned) delay);
+            Game::GameTimer timer((float) delay);
             timer.start();
             timer.tickHandler().add([obj, fixedParam](Event::Event *) {
                 if (obj) {

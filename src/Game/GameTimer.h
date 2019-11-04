@@ -16,12 +16,7 @@ namespace Falltergeist
         class GameTimer : public AbstractTimer
         {
             public:
-                GameTimer(unsigned interval = 1000);
-
-            protected:
-                Time* _time;
-
-                unsigned int _getTime() override;
+                GameTimer(float interval = 1000);
         };
     }
 }

@@ -12,7 +12,7 @@ namespace Falltergeist
         {
         }
 
-        void AnimatedPalette::think(float deltaTime)
+        void AnimatedPalette::think(const float &deltaTime)
         {
             _monitorsMillisecondsTracked += deltaTime;
             if (_monitorsMillisecondsTracked >= 100.0f) {

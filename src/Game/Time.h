@@ -12,7 +12,7 @@ namespace Falltergeist
                 Time() = default;
                 ~Time() = default;
 
-                void think(float deltaTime);
+                void think(const float &deltaTime);
                 void increaseTicks();
                 uint32_t ticks();
                 uint32_t milliseconds();

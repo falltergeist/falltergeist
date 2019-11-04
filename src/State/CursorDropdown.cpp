@@ -181,7 +181,7 @@ namespace Falltergeist
             }
         }
 
-        void CursorDropdown::think(float deltaTime)
+        void CursorDropdown::think(const float &deltaTime)
         {
             State::think(deltaTime);
 

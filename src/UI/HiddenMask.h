@@ -20,7 +20,7 @@ namespace Falltergeist
 
                 virtual bool opaque(const Point &pos) override;
 
-                void think(float deltaTime) override;
+                void think(const float &deltaTime) override;
         };
     }
 }

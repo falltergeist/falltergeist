@@ -399,7 +399,7 @@ namespace Falltergeist
             _images.insert(std::pair<std::string, UI::Image*>(name, image));
         }
 
-        void PlayerEdit::think(float deltaTime)
+        void PlayerEdit::think(const float &deltaTime)
         {
             State::think(deltaTime);
             auto player = Game::getInstance()->player();

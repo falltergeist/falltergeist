@@ -19,7 +19,7 @@ namespace Falltergeist
                 ~PlayerEditName() override;
 
                 void init() override;
-                void think(float deltaTime) override;
+                void think(const float &deltaTime) override;
 
                 void onDoneButtonClick(Event::Mouse* event);
                 void onTextAreaKeyDown(Event::Keyboard* event);

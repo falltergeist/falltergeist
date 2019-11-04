@@ -156,7 +156,7 @@ namespace Falltergeist
             doDone();
         }
 
-        void PlayerEditName::think(float deltaTime)
+        void PlayerEditName::think(const float &deltaTime)
         {
             int bgX = (Game::getInstance()->renderer()->width() - 640) / 2;
             State::think(deltaTime);

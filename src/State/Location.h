@@ -11,6 +11,7 @@
 #include "../Input/Mouse.h"
 #include "../State/State.h"
 #include "../UI/ImageButton.h"
+#include "../Game/CountdownTimer.h"
 
 namespace Falltergeist
 {
@@ -58,10 +59,10 @@ namespace Falltergeist
         {
             public:
                 Location();
-                ~Location() override;
+                ~Location() override = default;
 
                 void init() override;
-                void think(float deltaTime) override;
+                void think(const float &deltaTime) override;
                 void handle(Event::Event* event) override;
                 void render() override;
 
@@ -132,8 +133,8 @@ namespace Falltergeist
                 static const int DROPDOWN_DELAY;
 
                 // Timers
-                unsigned int _scriptsTicks = 0;
-                unsigned int _mouseMoveTicks = 0;
+                Game::CountdownTimer _locationScriptTimer;
+                Game::CountdownTimer _mouseMoveTimer;
                 Game::Timer _actionCursorTimer;
                 Game::Timer _ambientSfxTimer;
                 // for VM opcode add_timer_event
@@ -200,7 +201,7 @@ namespace Falltergeist
 
                 void updateLocation(float deltaTime);
 
-                void processTimers(float deltaTime);
+                void processTimers(const float &deltaTime);
 
                 bool movePlayerToObject(Game::Object *object);
 

@@ -97,7 +97,7 @@ namespace Falltergeist
             }
         }
 
-        void Credits::think(float deltaTime)
+        void Credits::think(const float &deltaTime)
         {
             State::think(deltaTime);
 

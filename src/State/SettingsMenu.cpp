@@ -355,11 +355,6 @@ namespace Falltergeist
             addUI("mouse_sensitivity",mouseSensitivitySlider);
         }
 
-        void SettingsMenu::think(float deltaTime)
-        {
-            State::think(deltaTime);
-        }
-
         //IniFileSection SettingsMenu::_getSettings()
         //{
         //    // @todo Load options from FALLTERGEIST_DATA/config.ini if exists

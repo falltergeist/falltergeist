@@ -13,10 +13,7 @@ namespace Falltergeist
         class Timer : public AbstractTimer
         {
             public:
-                Timer(unsigned interval = 1000);
-
-            protected:
-                unsigned int _getTime() override;
+                explicit Timer(float interval = 1000.0f);
         };
     }
 }

@@ -17,7 +17,7 @@ namespace Falltergeist
                 ~AnimatedPalette();
 
                 std::vector<GLuint> counters();
-                void think(float deltaTime);
+                void think(const float &deltaTime);
 
             protected:
 

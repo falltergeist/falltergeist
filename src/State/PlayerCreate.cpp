@@ -271,7 +271,7 @@ namespace Falltergeist
             _images.insert(std::pair<std::string, UI::Image*>(name, image));
         }
 
-        void PlayerCreate::think(float deltaTime)
+        void PlayerCreate::think(const float &deltaTime)
         {
             // TODO: this shit shouldn't be updated each fucking frame, duh
             State::think(deltaTime);

@@ -239,7 +239,7 @@ namespace Falltergeist
             }
         }
 
-        void PlayerPanel::think(float deltaTime)
+        void PlayerPanel::think(const float &deltaTime)
         {
             UI::Base::think(deltaTime);
 

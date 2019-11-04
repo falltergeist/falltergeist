@@ -101,7 +101,7 @@ namespace Falltergeist
                 _nextSubLine = std::pair<int,std::string>(999999,"");
         }
 
-        void Movie::think(float deltaTime)
+        void Movie::think(const float &deltaTime)
         {
             State::think(deltaTime);
 

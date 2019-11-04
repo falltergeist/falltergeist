@@ -22,7 +22,6 @@ namespace Falltergeist
                 CritterDialog();
                 ~CritterDialog() override;
                 void init() override;
-                void think(float deltaTime) override;
 
                 void setQuestion(const std::string& value);
 

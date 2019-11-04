@@ -5,7 +5,7 @@ namespace Falltergeist
 {
     namespace Game
     {
-        AbstractTimer::AbstractTimer(unsigned interval) : _interval(interval)
+        AbstractTimer::AbstractTimer(float interval) : _interval(interval)
         {
         }
 
@@ -14,26 +14,33 @@ namespace Falltergeist
             return _tickHandler;
         }
 
-        void AbstractTimer::think(float deltaTime)
+        void AbstractTimer::think(const float &deltaTime)
         {
-            // TODO use nanoseconds
-            if (_enabled && _getTime() > _lastTick + _interval) {
+            if (!_enabled) {
+                return;
+            }
+
+            _timeTracked += deltaTime;
+
+            if (_timeTracked >= _interval) {
+                _timeTracked = _interval;
                 // Invoke directly without Event Dispatcher, for now.
                 Event::Event event("tick");
                 if (!_repeat) {
                     _enabled = false;
                 }
                 _tickHandler.invoke(&event);
+                _timeTracked = 0;
             }
         }
 
         void AbstractTimer::start()
         {
             _enabled = true;
-            _lastTick = _getTime();
+            _timeTracked = 0;
         }
 
-        void AbstractTimer::start(unsigned int interval, bool repeat)
+        void AbstractTimer::start(float interval, bool repeat)
         {
             _interval = interval;
             _repeat = repeat;
@@ -50,24 +57,9 @@ namespace Falltergeist
             return _enabled;
         }
 
-        unsigned int AbstractTimer::interval() const
-        {
-            return _interval;
-        }
-
-        void AbstractTimer::setInterval(unsigned int interval)
+        void AbstractTimer::setInterval(float interval)
         {
             _interval = interval;
-        }
-
-        bool AbstractTimer::repeat() const
-        {
-            return _repeat;
-        }
-
-        void AbstractTimer::setRepeat(bool repeat)
-        {
-            _repeat = repeat;
         }
     }
 }

@@ -43,7 +43,7 @@ namespace Falltergeist
 
                 void beginFrame();
                 void endFrame();
-                void think(float deltaTime);
+                void think(const float &deltaTime);
 
                 int width();
                 int height();

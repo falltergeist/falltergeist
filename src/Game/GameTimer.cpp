@@ -5,14 +5,8 @@ namespace Falltergeist
 {
     namespace Game
     {
-        GameTimer::GameTimer(unsigned interval) : AbstractTimer(interval)
+        GameTimer::GameTimer(float interval) : AbstractTimer(interval * 10)
         {
-            _time = Game::getInstance()->gameTime();
-        }
-
-        unsigned int GameTimer::_getTime()
-        {
-            return _time->ticks();
         }
     }
 }

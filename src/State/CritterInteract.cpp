@@ -255,7 +255,7 @@ namespace Falltergeist
             return 0;
         }
 
-        void CritterInteract::think(float deltaTime)
+        void CritterInteract::think(const float &deltaTime)
         {
             State::think(deltaTime);
 

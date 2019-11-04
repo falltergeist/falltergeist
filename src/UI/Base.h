@@ -56,7 +56,7 @@ namespace Falltergeist
                  * @brief Process any real-time actions at each frame.
                  * This method is called after handle() but before render() in the main loop.
                  */
-                virtual void think(float deltaTime);
+                virtual void think(const float &deltaTime);
                 /**
                  * @brief Render this UI element on game window.
                  * This method is called last in the main loop (after handle() and think()).

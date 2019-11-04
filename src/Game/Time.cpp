@@ -4,7 +4,7 @@ namespace Falltergeist
 {
     namespace Game
     {
-        void Time::think(float deltaTime)
+        void Time::think(const float &deltaTime)
         {
             _milliseconds += deltaTime;
 
