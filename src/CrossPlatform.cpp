@@ -51,15 +51,6 @@ namespace Falltergeist
     std::vector<std::string> CrossPlatform::_dataFiles;
     const std::vector<std::string> CrossPlatform::_necessaryDatFiles = {"master.dat", "critter.dat"};
 
-
-    CrossPlatform::CrossPlatform()
-    {
-    }
-
-    CrossPlatform::~CrossPlatform()
-    {
-    }
-
     std::string CrossPlatform::getVersion()
     {
         if (_version.length() > 0) {
@@ -419,52 +410,5 @@ namespace Falltergeist
         _dataPaths.push_back(getConfigPath());
     #endif
         return _dataPaths;
-    }
-
-    uint32_t CrossPlatform::nanosecondsPassed()
-    {
-    #if defined(__MACH__)
-        /* Get the timebase info */
-        mach_timebase_info_data_t info;
-        mach_timebase_info(&info);
-
-        static uint64_t lastTime = mach_absolute_time();
-        uint64_t currentTime = mach_absolute_time();
-        uint64_t duration = currentTime - lastTime;
-        lastTime = currentTime;
-
-        /* Convert to nanoseconds */
-        duration *= info.numer;
-        duration /= info.denom;
-
-        return duration;
-    #elif defined(_WIN32) || defined(WIN32)
-        static auto lastTime = std::chrono::high_resolution_clock::now();
-
-        auto currentTime = std::chrono::high_resolution_clock::now();
-
-        auto nanosecondsPassed =
-            std::chrono::time_point_cast<std::chrono::nanoseconds>(currentTime).time_since_epoch().count()
-            - std::chrono::time_point_cast<std::chrono::nanoseconds>(lastTime).time_since_epoch().count()
-        ;
-
-         lastTime = currentTime;
-
-        return static_cast<uint32_t>(nanosecondsPassed);
-    #else
-        static struct timespec lastTime = {0, 0};
-        if (lastTime.tv_nsec == 0) {
-            clock_gettime(CLOCK_MONOTONIC, &lastTime);
-        }
-
-        struct timespec currentTime = {0, 0};
-        clock_gettime(CLOCK_MONOTONIC, &currentTime);
-
-        uint32_t nanosecondsPassed = (currentTime.tv_sec * 1e9 + currentTime.tv_nsec) - (lastTime.tv_sec * 1e9 + lastTime.tv_nsec);
-
-        lastTime = currentTime;
-
-        return nanosecondsPassed;
-    #endif
     }
 }

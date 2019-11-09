@@ -161,9 +161,7 @@ namespace Falltergeist
                     break;
             }
 
-
             glGetIntegerv(GL_MAX_TEXTURE_SIZE, &_maxTexSize);
-
 
             message =  "Init GLEW - ";
             glewExperimental = GL_TRUE;
@@ -232,13 +230,21 @@ namespace Falltergeist
 
         }
 
-        void Renderer::think()
+        void Renderer::think(const float &deltaTime)
         {
-            if (_fadeDone) return;
+            if (_fadeDone) {
+                return;
+            }
 
-            unsigned int ticks = SDL_GetTicks();
-            if (ticks - _fadeTimer > _fadeDelay)
-            {
+            _fadeTimer += deltaTime;
+
+            float fadeDelay = static_cast<float>(_fadeDelay);
+            if (fadeDelay < 1.0f) {
+                fadeDelay = 1.0f;
+            }
+
+            while (_fadeTimer >= fadeDelay) {
+                _fadeTimer -= fadeDelay;
                 _fadeAlpha += _fadeStep;
                 if (_fadeAlpha <= 0 || _fadeAlpha > 255)
                 {
@@ -249,14 +255,8 @@ namespace Falltergeist
                     state->emitEvent(std::make_unique<Event::State>("fadedone"), state->fadeDoneHandler());
                     return;
                 }
-                _fadeTimer = ticks;
             }
             _fadeColor.a = _fadeAlpha;
-        }
-
-        bool Renderer::fadeDone()
-        {
-            return _fadeDone && _fadeAlpha == 0;
         }
 
         bool Renderer::fading()
@@ -272,6 +272,7 @@ namespace Falltergeist
             _fadeStep = -1;
             _fadeDone = false;
             _fadeDelay = static_cast<unsigned>(round(time / 256));
+            _fadeTimer = 0;
         }
 
         void Renderer::fadeOut(uint8_t r, uint8_t g, uint8_t b, unsigned int time, bool inmovie)
@@ -282,6 +283,7 @@ namespace Falltergeist
             _fadeStep = 1;
             _fadeDone = false;
             _fadeDelay = static_cast<unsigned>(round(time / 256));
+            _fadeTimer = 0;
         }
 
 
@@ -290,8 +292,6 @@ namespace Falltergeist
             GL_CHECK(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
             GL_CHECK(glEnable(GL_BLEND));
             GL_CHECK(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
-
-            think();
         }
 
         void Renderer::endFrame()

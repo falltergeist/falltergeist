@@ -23,7 +23,7 @@ namespace Falltergeist
                 ~PlayerEdit() override;
 
                 void init() override;
-                void think(uint32_t nanosecondsPassed) override;
+                void think(const float &deltaTime) override;
                 void render() override;
 
                 void onMaskClick(Event::Mouse* event);

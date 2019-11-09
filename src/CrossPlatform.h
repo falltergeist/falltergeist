@@ -9,9 +9,6 @@ namespace Falltergeist
     class CrossPlatform
     {
         public:
-            CrossPlatform();
-            ~CrossPlatform();
-
             static std::string getVersion();
             static std::string getHomeDirectory();
             static std::string getExecutableDirectory();
@@ -28,9 +25,10 @@ namespace Falltergeist
 
             static bool fileExists(std::string file);
 
-            static uint32_t nanosecondsPassed();
-
         protected:
+            CrossPlatform() = default;
+            ~CrossPlatform() = default;
+
             static std::string _falloutDataPath;
             static std::string _falltergeistDataPath;
             static std::vector<std::string> _dataFiles;

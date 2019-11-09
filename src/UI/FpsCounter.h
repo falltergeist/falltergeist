@@ -13,11 +13,11 @@ namespace Falltergeist
                 FpsCounter(int x, int y);
                 ~FpsCounter() override;
 
-                void think(uint32_t nanosecondsPassed) override;
+                void think(const float &deltaTime) override;
                 unsigned int frames();
 
             protected:
-                uint32_t _nanosecondsTracked = 0;
+                float _millisecondsTracked = 0;
                 uint32_t _frames = 0;
         };
     }

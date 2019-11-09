@@ -122,7 +122,7 @@ namespace Falltergeist
                  * @brief Process any real-time actions of the game object (like calling critter_p_proc).
                  * This method is called after handle() but before render() in the main loop.
                  */
-                virtual void think(uint32_t nanosecondsPassed);
+                virtual void think(const float &deltaTime);
                 /**
                  * @brief Render this object, if it has visible UI elements.
                  * This method is called last in the main loop (after handle() and think()).

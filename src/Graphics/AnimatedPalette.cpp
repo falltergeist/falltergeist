@@ -12,56 +12,56 @@ namespace Falltergeist
         {
         }
 
-        void AnimatedPalette::think(uint32_t nanosecondsPassed)
+        void AnimatedPalette::think(const float &deltaTime)
         {
-            _monitorsNanosecondsTracked += nanosecondsPassed;
-            if (_monitorsNanosecondsTracked >= 1e8) { // 100 ms
-                _monitorsNanosecondsTracked -= 1e8;
+            _monitorsMillisecondsTracked += deltaTime;
+            if (_monitorsMillisecondsTracked >= 100.0f) {
+                _monitorsMillisecondsTracked -= 100.0f;
                 _monitorsCounter++;
                 if (_monitorsCounter >= 5) {
                     _monitorsCounter = 0;
                 }
             }
 
-            _slimeNanosecondsTracked += nanosecondsPassed;
-            if (_slimeNanosecondsTracked >= 2e8) { // 200 ms
-                _slimeNanosecondsTracked -= 2e8;
+            _slimeMillisecondsTracked += deltaTime;
+            if (_slimeMillisecondsTracked >= 200.0f) {
+                _slimeMillisecondsTracked -= 200.0f;
                 _slimeCounter++;
                 if (_slimeCounter >= 4) {
                     _slimeCounter = 0;
                 }
             }
 
-            _shoreNanosecondsTracked += nanosecondsPassed;
-            if (_shoreNanosecondsTracked >= 2e8) { // 200 ms
-                _shoreNanosecondsTracked -= 2e8;
+            _shoreMillisecondsTracked += deltaTime;
+            if (_shoreMillisecondsTracked >= 200.0f) {
+                _shoreMillisecondsTracked -= 200.0f;
                 _shoreCounter++;
                 if (_shoreCounter >= 6) {
                     _shoreCounter = 0;
                 }
             }
 
-            _fireSlowNanosecondsTracked += nanosecondsPassed;
-            if (_fireSlowNanosecondsTracked >= 2e8) { // 200 ms
-                _fireSlowNanosecondsTracked -= 2e8;
+            _fireSlowMillisecondsTracked += deltaTime;
+            if (_fireSlowMillisecondsTracked >= 200.0f) {
+                _fireSlowMillisecondsTracked -= 200.0f;
                 _fireSlowCounter++;
                 if (_fireSlowCounter >= 5) {
                     _fireSlowCounter = 0;
                 }
             }
 
-            _fireFastNanosecondsTracked += nanosecondsPassed;
-            if (_fireFastNanosecondsTracked >= 142 * 1e6) { // 142 ms
-                _fireFastNanosecondsTracked -= 142 * 1e6;
+            _fireFastMillisecondsTracked += deltaTime;
+            if (_fireFastMillisecondsTracked >= 142.0f) {
+                _fireFastMillisecondsTracked -= 142.0f;
                 _fireFastCounter++;
                 if (_fireFastCounter >= 5) {
                     _fireFastCounter = 0;
                 }
             }
 
-            _blinkingRedNanosecondsTracked += nanosecondsPassed;
-            if (_blinkingRedNanosecondsTracked >= 33 * 1e6){ // 33 ms
-                _blinkingRedNanosecondsTracked -= 33 * 1e6;
+            _blinkingRedMillisecondsTracked += deltaTime;
+            if (_blinkingRedMillisecondsTracked >= 33.0f) {
+                _blinkingRedMillisecondsTracked -= 33.0f;
                 if ((_blinkingRedCounter == 0) || (_blinkingRedCounter == 15)) {
                     _blinkingRed = -_blinkingRed;
                 }

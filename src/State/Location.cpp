@@ -62,10 +62,6 @@ namespace Falltergeist
             _hexagonInfo->setHorizontalAlign(UI::TextArea::HorizontalAlign::RIGHT);
         }
 
-        Location::~Location()
-        {
-        }
-
         void Location::init()
         {
             if (initialized()) {
@@ -178,7 +174,6 @@ namespace Falltergeist
             _mouseUpHandler.add(std::bind(&Location::onMouseUp, this, std::placeholders::_1));
             _mouseMoveHandler.add(std::bind(&Location::onMouseMove, this, std::placeholders::_1));
 
-
             // action cursor stuff
             _actionCursorTimer.setInterval((unsigned) DROPDOWN_DELAY);
             _actionCursorTimer.tickHandler().add([this, game](Event::Event *) {
@@ -204,6 +199,17 @@ namespace Falltergeist
                 _actionCursorButtonPressed = false;
             });
 
+            _locationScriptTimer.start(10000.0f, true);
+            _locationScriptTimer.tickHandler().add([this](Event::Event*) {
+                auto player = Game::getInstance()->player();
+                if (_location->script()) {
+                    _location->script()->call("map_update_p_proc");
+                }
+                for (auto &object : _objects) {
+                    object->map_update_p_proc();
+                }
+                player->map_update_p_proc();
+            });
         }
 
         void Location::onStateActivate(Event::State *event)
@@ -485,54 +491,37 @@ namespace Falltergeist
             }
         }
 
-        void Location::think(uint32_t nanosecondsPassed)
+        void Location::think(const float &deltaTime)
         {
-            Game::getInstance()->gameTime()->think(nanosecondsPassed);
-            thinkObjects(nanosecondsPassed);
+            Game::getInstance()->gameTime()->think(deltaTime);
+            thinkObjects(deltaTime);
             auto player = Game::getInstance()->player();
-            player->think(nanosecondsPassed);
-            performScrolling(nanosecondsPassed);
+            player->think(deltaTime);
+            performScrolling(deltaTime);
             if (_locationEnter) {
                 _locationEnter = false;
-                firstLocationEnter(nanosecondsPassed);
-            } else {
-                updateLocation(nanosecondsPassed);
+                firstLocationEnter(deltaTime);
             }
-            processTimers(nanosecondsPassed);
-            State::think(nanosecondsPassed);
+            processTimers(deltaTime);
+            State::think(deltaTime);
         }
 
         // timers processing
-        void Location::processTimers(uint32_t nanosecondsPassed)
+        void Location::processTimers(const float &deltaTime)
         {
-            _actionCursorTimer.think(nanosecondsPassed);
-            _ambientSfxTimer.think(nanosecondsPassed);
+            _locationScriptTimer.think(deltaTime);
+            _actionCursorTimer.think(deltaTime);
+            _ambientSfxTimer.think(deltaTime);
 
             for (auto it = _timerEvents.begin(); it != _timerEvents.end();) {
-                it->timer.think(nanosecondsPassed);
+                it->timer.think(deltaTime);
                 if (!it->timer.enabled()) {
                     it = _timerEvents.erase(it);
                 } else ++it;
             }
         }
 
-        void Location::updateLocation(uint32_t nanosecondsPassed)
-        {
-            // TODO use nanoseconds
-            auto player = Game::getInstance()->player();
-            if (_scriptsTicks + 10000 < SDL_GetTicks()) {
-                _scriptsTicks = SDL_GetTicks();
-                if (_location->script()) {
-                    _location->script()->call("map_update_p_proc");
-                }
-                for (auto &object : _objects) {
-                    object->map_update_p_proc();
-                }
-                player->map_update_p_proc();
-            }
-        }
-
-        void Location::firstLocationEnter(uint32_t nanosecondsPassed) const
+        void Location::firstLocationEnter(const float &deltaTime) const
         {
             auto player = Game::getInstance()->player();
             if (_location->script()) {
@@ -566,70 +555,63 @@ namespace Falltergeist
             }
         }
 
-        void Location::performScrolling(uint32_t nanosecondsPassed)
+        void Location::performScrolling(const float &deltaTime)
         {
-            // TODO use nanosecondsPassed
-            // location scrolling
-            if (this->_scrollTicks + 10 < SDL_GetTicks()) {
-                this->_scrollTicks = SDL_GetTicks();
-                int scrollDelta = 5;
+            float scrollSpeed = 5.0f /* pixels */ / 10.0f /* ms */;
+            int scrollDelta = scrollSpeed * deltaTime;
 
-                //Game::getInstance()->mouse()->setType(Mouse::ACTION);
+            Point pScrollDelta = Point(
+                this->_scrollLeft ? -scrollDelta : (this->_scrollRight ? scrollDelta : 0),
+                this->_scrollTop ? -scrollDelta : (this->_scrollBottom ? scrollDelta : 0)
+            );
+            this->_camera->setCenter(this->_camera->center() + pScrollDelta);
 
-                Point pScrollDelta = Point(
-                    this->_scrollLeft ? -scrollDelta : (this->_scrollRight ? scrollDelta : 0),
-                    this->_scrollTop ? -scrollDelta : (this->_scrollBottom ? scrollDelta : 0)
-                );
-                this->_camera->setCenter(this->_camera->center() + pScrollDelta);
+            auto mouse = Game::getInstance()->mouse();
 
-                auto mouse = Game::getInstance()->mouse();
-
-                // if scrolling is active
-                if (this->_scrollLeft || this->_scrollRight || this->_scrollTop || this->_scrollBottom) {
-                    Input::Mouse::Cursor state;
-                    if (this->_scrollLeft) {
-                        state = Input::Mouse::Cursor::SCROLL_W;
-                    }
-                    if (this->_scrollRight) {
-                        state = Input::Mouse::Cursor::SCROLL_E;
-                    }
-                    if (this->_scrollTop) {
-                        state = Input::Mouse::Cursor::SCROLL_N;
-                    }
-                    if (this->_scrollBottom) {
-                        state = Input::Mouse::Cursor::SCROLL_S;
-                    }
-                    if (this->_scrollLeft && this->_scrollTop) {
-                        state = Input::Mouse::Cursor::SCROLL_NW;
-                    }
-                    if (this->_scrollLeft && this->_scrollBottom) {
-                        state = Input::Mouse::Cursor::SCROLL_SW;
-                    }
-                    if (this->_scrollRight && this->_scrollTop) {
-                        state = Input::Mouse::Cursor::SCROLL_NE;
-                    }
-                    if (this->_scrollRight && this->_scrollBottom) {
-                        state = Input::Mouse::Cursor::SCROLL_SE;
-                    }
-                    if (mouse->state() != state) {
-                        if (mouse->scrollState()) {
-                            mouse->popState();
-                        }
-                        mouse->pushState(state);
-                    }
-                } else {
+            // if scrolling is active
+            if (this->_scrollLeft || this->_scrollRight || this->_scrollTop || this->_scrollBottom) {
+                Input::Mouse::Cursor state;
+                if (this->_scrollLeft) {
+                    state = Input::Mouse::Cursor::SCROLL_W;
+                }
+                if (this->_scrollRight) {
+                    state = Input::Mouse::Cursor::SCROLL_E;
+                }
+                if (this->_scrollTop) {
+                    state = Input::Mouse::Cursor::SCROLL_N;
+                }
+                if (this->_scrollBottom) {
+                    state = Input::Mouse::Cursor::SCROLL_S;
+                }
+                if (this->_scrollLeft && this->_scrollTop) {
+                    state = Input::Mouse::Cursor::SCROLL_NW;
+                }
+                if (this->_scrollLeft && this->_scrollBottom) {
+                    state = Input::Mouse::Cursor::SCROLL_SW;
+                }
+                if (this->_scrollRight && this->_scrollTop) {
+                    state = Input::Mouse::Cursor::SCROLL_NE;
+                }
+                if (this->_scrollRight && this->_scrollBottom) {
+                    state = Input::Mouse::Cursor::SCROLL_SE;
+                }
+                if (mouse->state() != state) {
                     if (mouse->scrollState()) {
                         mouse->popState();
                     }
+                    mouse->pushState(state);
                 }
-
+            } else {
+                if (mouse->scrollState()) {
+                    mouse->popState();
+                }
             }
         }
 
-        void Location::thinkObjects(uint32_t nanosecondsPassed) const
+        void Location::thinkObjects(const float &deltaTime) const
         {
             for (auto &object : _objects) {
-                object->think(nanosecondsPassed);
+                object->think(deltaTime);
             }
         }
 
@@ -687,17 +669,6 @@ namespace Falltergeist
 
                 if (mouseEvent->originalType() == Mouse::Type::MOVE) {
                     emitEvent(std::make_unique<Event::Mouse>(*mouseEvent), _mouseMoveHandler);
-
-                    if (mouse->state() == Input::Mouse::Cursor::ACTION) {
-                        // optimization to prevent FPS drops on mouse move
-                        // TODO: replace with a Timer?
-                        auto ticks = SDL_GetTicks();
-                        if (ticks - _mouseMoveTicks < 50) {
-                            event->setHandled(true);
-                        } else {
-                            _mouseMoveTicks = ticks;
-                        }
-                    }
                 }
 
                 // let event fall down to all objects when using action cursor and within active view
@@ -1180,9 +1151,9 @@ namespace Falltergeist
             return _playerPanel;
         }
 
-        void Location::addTimerEvent(Game::Object *obj, int delay, int fixedParam)
+        void Location::addTimerEvent(Game::Object *obj, int ticks, int fixedParam)
         {
-            Game::GameTimer timer((unsigned) delay);
+            Game::Timer timer(static_cast<float>(ticks) * 10.0f);
             timer.start();
             timer.tickHandler().add([obj, fixedParam](Event::Event *) {
                 if (obj) {

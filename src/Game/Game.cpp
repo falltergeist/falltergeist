@@ -150,12 +150,26 @@ namespace Falltergeist
         {
             Logger::info("GAME") << "Starting main loop" << std::endl;
             _frame = 0;
+
+            uint32_t FPS = 60;
+            uint32_t frameDelay = 1000 / FPS;
+
+            uint32_t frameStart = 0;
+            uint32_t frameTime = 0;
             while (!_quit) {
+                frameStart = SDL_GetTicks();
+
                 handle();
-                think(CrossPlatform::nanosecondsPassed());
+                think(frameTime);
                 render();
                 _statesForDelete.clear();
                 _frame++;
+
+                frameTime = SDL_GetTicks() - frameStart;
+                if (frameDelay > frameTime) {
+                    SDL_Delay(frameDelay - frameTime);
+                    frameTime += (frameDelay - frameTime);
+                }
             }
             Logger::info("GAME") << "Stopping main loop" << std::endl;
         }
@@ -375,12 +389,12 @@ namespace Falltergeist
             }
         }
 
-        void Game::think(uint32_t nanosecondsPassed)
+        void Game::think(const float &deltaTime)
         {
-            _fpsCounter->think(nanosecondsPassed);
-            _mouse->think(nanosecondsPassed);
+            _fpsCounter->think(deltaTime);
+            _mouse->think(deltaTime);
 
-            _animatedPalette->think(nanosecondsPassed);
+            _animatedPalette->think(deltaTime);
 
             *_mousePosition = "";
             *_mousePosition << mouse()->position().x() << " : " << mouse()->position().y();
@@ -389,12 +403,15 @@ namespace Falltergeist
             *_currentTime << _gameTime.year()  << "-" << _gameTime.month()   << "-" << _gameTime.day() << " "
                           << _gameTime.hours() << ":" << _gameTime.minutes() << ":" << _gameTime.seconds() << " " << _gameTime.ticks();
 
+            // TODO get rid of time in Renderer. It should know nothing about time
+            _renderer->think(deltaTime);
+
             if (_renderer->fading()) {
                 return;
             }
 
             for (auto state : _getActiveStates()) {
-                state->think(nanosecondsPassed);
+                state->think(deltaTime);
             }
             // process custom events
             _eventDispatcher->processScheduledEvents();

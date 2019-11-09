@@ -487,7 +487,7 @@ namespace Falltergeist
             return &_movementQueue;
         }
 
-        void CritterObject::think(uint32_t nanosecondsPassed)
+        void CritterObject::think(const float &deltaTime)
         {
             if (!movementQueue()->empty()) {
                 if (!_moving) {
@@ -509,7 +509,7 @@ namespace Falltergeist
                     }
                 }
             }
-            Object::think(nanosecondsPassed);
+            Object::think(deltaTime);
         }
 
         static const std::array<int, 6> xTileOffsets = {{16, 32, 16, -16, -32, -16}};

@@ -239,22 +239,22 @@ namespace Falltergeist
             }
         }
 
-        void PlayerPanel::think(uint32_t nanosecondsPassed)
+        void PlayerPanel::think(const float &deltaTime)
         {
-            UI::Base::think(nanosecondsPassed);
+            UI::Base::think(deltaTime);
 
             auto game = Game::getInstance();
 
             for (auto it = _ui.begin(); it != _ui.end(); ++it)
             {
-                (*it)->think(nanosecondsPassed);
+                (*it)->think(deltaTime);
             }
 
             // object in hand
             if (auto item = game->player()->currentHandSlot())
             {
                 auto itemUi = item->inventoryDragUi();
-                itemUi->think(nanosecondsPassed);
+                itemUi->think(deltaTime);
             }
 
             if (_scrollingLogTimer && (SDL_GetTicks() > _scrollingLogTimer + 150)

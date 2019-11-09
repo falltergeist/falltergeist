@@ -322,10 +322,10 @@ namespace Falltergeist
                    : transparent;
         }
 
-        void Object::think(uint32_t nanosecondsPassed)
+        void Object::think(const float &deltaTime)
         {
             if (_ui) {
-                _ui->think(nanosecondsPassed);
+                _ui->think(deltaTime);
             }
         }
 

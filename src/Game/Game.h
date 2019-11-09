@@ -77,7 +77,7 @@ namespace Falltergeist
                 /**
                  * @brief Process real-time logic.
                  */
-                void think(uint32_t nanosecondsPassed);
+                void think(const float &deltaTime);
                 /**
                  * @brief Render the game.
                  */

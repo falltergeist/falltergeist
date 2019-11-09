@@ -355,11 +355,6 @@ namespace Falltergeist
             addUI("mouse_sensitivity",mouseSensitivitySlider);
         }
 
-        void SettingsMenu::think(uint32_t nanosecondsPassed)
-        {
-            State::think(nanosecondsPassed);
-        }
-
         //IniFileSection SettingsMenu::_getSettings()
         //{
         //    // @todo Load options from FALLTERGEIST_DATA/config.ini if exists

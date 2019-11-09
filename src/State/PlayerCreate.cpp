@@ -271,10 +271,10 @@ namespace Falltergeist
             _images.insert(std::pair<std::string, UI::Image*>(name, image));
         }
 
-        void PlayerCreate::think(uint32_t nanosecondsPassed)
+        void PlayerCreate::think(const float &deltaTime)
         {
             // TODO: this shit shouldn't be updated each fucking frame, duh
-            State::think(nanosecondsPassed);
+            State::think(deltaTime);
             auto player = Game::getInstance()->player();
 
             *_labels.at("name") = player->name();

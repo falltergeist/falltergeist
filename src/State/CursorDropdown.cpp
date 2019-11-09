@@ -181,9 +181,9 @@ namespace Falltergeist
             }
         }
 
-        void CursorDropdown::think(uint32_t nanosecondsPassed)
+        void CursorDropdown::think(const float &deltaTime)
         {
-            State::think(nanosecondsPassed);
+            State::think(deltaTime);
 
             auto game = Game::getInstance();
 
