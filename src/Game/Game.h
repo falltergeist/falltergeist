@@ -1,36 +1,11 @@
-/*
- * Copyright 2012-2018 Falltergeist Developers.
- *
- * This file is part of Falltergeist.
- *
- * Falltergeist is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Falltergeist is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
- */
+#pragma once
 
-#ifndef FALLTERGEIST_GAME_GAME_H
-#define FALLTERGEIST_GAME_GAME_H
-
-// C++ standard includes
 #include <memory>
 #include <string>
 #include <vector>
-
-// Falltergeist includes
+#include <SDL.h>
 #include "../Base/Singleton.h"
 #include "../Game/Time.h"
-
-// Third party includes
-#include <SDL.h>
 
 namespace Falltergeist
 {
@@ -67,10 +42,6 @@ namespace Falltergeist
         class FpsCounter;
         class TextArea;
     }
-    namespace VFS
-    {
-        class VFS;
-    }
 
     class Exception;
     class ResourceManager;
@@ -106,7 +77,7 @@ namespace Falltergeist
                 /**
                  * @brief Process real-time logic.
                  */
-                void think();
+                void think(const float &deltaTime);
                 /**
                  * @brief Render the game.
                  */
@@ -139,7 +110,6 @@ namespace Falltergeist
 
                 unsigned int _frame = 0;
 
-                std::unique_ptr<VFS::VFS> _vfs;
                 std::unique_ptr<Graphics::Renderer> _renderer;
                 std::unique_ptr<Audio::Mixer> _mixer;
                 std::unique_ptr<Input::Mouse> _mouse;
@@ -174,5 +144,3 @@ namespace Falltergeist
         Game* getInstance();
     }
 }
-
-#endif // FALLTERGEIST_GAME_GAME_H

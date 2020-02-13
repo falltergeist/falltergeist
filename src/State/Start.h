@@ -1,5 +1,6 @@
 #pragma once
 
+#include "../Game/Timer.h"
 #include "../State/State.h"
 
 namespace Falltergeist
@@ -12,11 +13,11 @@ namespace Falltergeist
                 Start();
                 ~Start() override;
 
-                void think() override;
+                void think(const float &deltaTime) override;
                 void init() override;
 
             protected:
-                unsigned int _splashTicks = 0;
+                std::unique_ptr<Game::Timer> _delayTimer;
         };
     }
 }

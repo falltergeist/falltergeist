@@ -25,7 +25,7 @@ namespace Falltergeist
                 ~CursorDropdown() override;
 
                 void init() override;
-                void think() override;
+                void think(const float &deltaTime) override;
                 void handle(Event::Event* event) override;
                 void render() override;
 

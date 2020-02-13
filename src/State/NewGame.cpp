@@ -85,11 +85,6 @@ namespace Falltergeist
             addUI("stats3_values", new UI::TextArea(383, 150));
         }
 
-        void NewGame::think()
-        {
-            State::think();
-        }
-
         void NewGame::doBeginGame()
         {
             Game::getInstance()->setPlayer(std::move(_characters.at(_selectedCharacter)));

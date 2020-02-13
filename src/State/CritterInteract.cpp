@@ -255,15 +255,15 @@ namespace Falltergeist
             return 0;
         }
 
-        void CritterInteract::think()
+        void CritterInteract::think(const float &deltaTime)
         {
-            State::think();
+            State::think(deltaTime);
 
             // switch state
             switch (_phase)
             {
                 case Phase::FIDGET:
-                    _fidgetTimer.think();
+                    _fidgetTimer.think(deltaTime);
                     break;
                 case Phase::TALK:
                     // if playing speech - set phoneme frame

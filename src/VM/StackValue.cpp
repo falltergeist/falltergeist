@@ -1,108 +1,101 @@
-/*
- * Copyright 2012-2014 Falltergeist Developers.
- *
- * This file is part of Falltergeist.
- *
- * Falltergeist is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Falltergeist is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
- */
-
-// Related headers
-#include "../VM/StackValue.h"
-
-// C++ standard includes
 #include <iomanip>
 #include <sstream>
 #include <stdexcept>
 #include <string>
-
-// Falltergeist includes
 #include "../Game/Object.h"
 #include "../VM/ErrorException.h"
+#include "../VM/StackValue.h"
 
-// Third party includes
-
-namespace Falltergeist {
-    namespace VM {
-        StackValue::StackValue() {
+namespace Falltergeist
+{
+    namespace VM
+    {
+        StackValue::StackValue()
+        {
             _type = Type::INTEGER;
             _intValue = 0;
         }
 
-        StackValue::StackValue(int value) {
+        StackValue::StackValue(int value)
+        {
             _type = Type::INTEGER;
             _intValue = value;
         }
 
-        StackValue::StackValue(float value) {
+        StackValue::StackValue(float value)
+        {
             _type = Type::FLOAT;
             _floatValue = value;
         }
 
-        StackValue::StackValue(const std::string &value) {
+        StackValue::StackValue(const std::string &value)
+        {
             _type = Type::STRING;
             _stringValue = value;
         }
 
-        StackValue::StackValue(Game::Object *value) {
+        StackValue::StackValue(Game::Object *value)
+        {
             //throw Exception("StackValue::StackValue(Game::GameObject*) - null object value is not allowed, use integer 0");
             _type = Type::OBJECT;
             _objectValue = value;
         }
 
-        StackValue::~StackValue() {
+        StackValue::~StackValue()
+        {
         }
 
-        StackValue::Type StackValue::type() const {
+        StackValue::Type StackValue::type() const
+        {
             return _type;
         }
 
-        bool StackValue::isNumber() const {
+        bool StackValue::isNumber() const
+        {
             return (_type == Type::FLOAT || _type == Type::INTEGER);
         }
 
-        int StackValue::integerValue() const {
-            if (_type != Type::INTEGER)
+        int StackValue::integerValue() const
+        {
+            if (_type != Type::INTEGER) {
                 throw ErrorException(std::string("StackValue::integerValue() - stack value is not integer, it is ") +
                                      typeName(_type));
+            }
             return _intValue;
         }
 
-        float StackValue::floatValue() const {
-            if (_type != Type::FLOAT)
+        float StackValue::floatValue() const
+        {
+            if (_type != Type::FLOAT) {
                 throw ErrorException(
-                        std::string("StackValue::floatValue() - stack value is not float, it is ") + typeName(_type));
+                    std::string("StackValue::floatValue() - stack value is not float, it is ") + typeName(_type));
+            }
             return _floatValue;
         }
 
-        std::string StackValue::stringValue() const {
-            if (_type != Type::STRING)
+        std::string StackValue::stringValue() const
+        {
+            if (_type != Type::STRING) {
                 throw ErrorException(
-                        std::string("StackValue::stringValue() - stack value is not string, it is ") + typeName(_type));
+                    std::string("StackValue::stringValue() - stack value is not string, it is ") + typeName(_type));
+            }
             return _stringValue;
         }
 
-        Game::Object *StackValue::objectValue() const {
+        Game::Object *StackValue::objectValue() const
+        {
             if (_type == Type::INTEGER && _intValue == 0) {
                 return nullptr;
             }
-            if (_type != Type::OBJECT)
+            if (_type != Type::OBJECT) {
                 throw ErrorException(std::string("StackValue::objectValue() - stack value is not an object, it is ") +
                                      typeName(_type));
+            }
             return _objectValue;
         }
 
-        std::string StackValue::toString() const {
+        std::string StackValue::toString() const
+        {
             switch (_type) {
                 case Type::INTEGER:
                     return std::to_string(_intValue);
@@ -122,7 +115,8 @@ namespace Falltergeist {
             }
         }
 
-        int StackValue::toInteger() const {
+        int StackValue::toInteger() const
+        {
             switch (_type) {
                 case Type::INTEGER:
                     return _intValue;
@@ -144,7 +138,8 @@ namespace Falltergeist {
             }
         }
 
-        bool StackValue::toBoolean() const {
+        bool StackValue::toBoolean() const
+        {
             switch (_type) {
                 case Type::INTEGER:
                     return _intValue != 0;
@@ -158,11 +153,13 @@ namespace Falltergeist {
             throw ErrorException("StackValue::toBoolean() - something strange happened");
         }
 
-        const char *StackValue::typeName() const {
+        const char *StackValue::typeName() const
+        {
             return typeName(_type);
         }
 
-        const char *StackValue::typeName(Type type) {
+        const char *StackValue::typeName(Type type)
+        {
             switch (type) {
                 case Type::INTEGER:
                     return "integer";

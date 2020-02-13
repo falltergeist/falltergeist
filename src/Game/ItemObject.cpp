@@ -1,9 +1,6 @@
 #include <memory>
 #include "../Game/ItemObject.h"
-#include "../Graphics/Texture.h"
 #include "../ResourceManager.h"
-#include "../UI/Animation.h"
-#include "../UI/Image.h"
 #include "../UI/TextArea.h"
 
 namespace Falltergeist

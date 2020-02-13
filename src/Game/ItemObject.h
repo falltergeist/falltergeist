@@ -1,7 +1,7 @@
 #pragma once
 
-#include <UI/Image.h>
 #include "../Game/Object.h"
+#include "../UI/Image.h"
 
 namespace Falltergeist
 {

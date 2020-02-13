@@ -1,31 +1,6 @@
-﻿/*
- * Copyright 2012-2018 Falltergeist Developers.
- *
- * This file is part of Falltergeist.
- *
- * Falltergeist is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Falltergeist is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
- */
-
-// Related headers
-#include "../Game/Object.h"
-
-// C++ standard includes
-#include <cmath>
+﻿#include <cmath>
 #include <cstdio>
 #include <memory>
-
-// Falltergeist includes
 #include "../Exception.h"
 #include "../Format/Frm/File.h"
 #include "../Format/Msg/File.h"
@@ -37,6 +12,8 @@
 #include "../Game/Defines.h"
 #include "../Game/DudeObject.h"
 #include "../Game/Game.h"
+#include "../Game/Object.h"
+#include "../Graphics/ObjectUIFactory.h"
 #include "../PathFinding/HexagonGrid.h"
 #include "../LocationCamera.h"
 #include "../Logger.h"
@@ -49,25 +26,30 @@
 #include "../UI/TextArea.h"
 #include "../VM/Script.h"
 
-// Third party includes
-
-namespace Falltergeist {
-    namespace Game {
-        Object::Object() : Event::EventTarget(Game::getInstance()->eventDispatcher()) {
+namespace Falltergeist
+{
+    namespace Game
+    {
+        Object::Object() : Event::EventTarget(Game::getInstance()->eventDispatcher())
+        {
         }
 
-        Object::~Object() {
+        Object::~Object()
+        {
         }
 
-        Object::Type Object::type() const {
+        Object::Type Object::type() const
+        {
             return _type;
         }
 
-        int Object::PID() const {
+        int Object::PID() const
+        {
             return _PID;
         }
 
-        void Object::setPID(int value) {
+        void Object::setPID(int value)
+        {
             _PID = value;
         }
 
@@ -175,23 +157,8 @@ namespace Falltergeist {
 
         void Object::_generateUi()
         {
-            _ui.reset();
-            auto frm = ResourceManager::getInstance()->frmFileType(FID());
-            if (!frm) {
-                return;
-            }
-            if (frm->framesPerDirection() > 1 || frm->directions().size() > 1) {
-                auto queue = std::make_unique<UI::AnimationQueue>();
-                queue->animations().push_back(
-                    std::make_unique<UI::Animation>(
-                        ResourceManager::getInstance()->FIDtoFrmName(FID()),
-                        orientation()
-                    )
-                );
-                _ui = std::move(queue);
-            } else {
-                _ui = std::make_unique<UI::Image>(frm, orientation());
-            }
+            Graphics::ObjectUIFactory uiFactory;
+            _ui = uiFactory.buildByFID(FID(), orientation());
         }
 
         bool Object::canWalkThru() const
@@ -355,9 +322,11 @@ namespace Falltergeist {
                    : transparent;
         }
 
-        void Object::think()
+        void Object::think(const float &deltaTime)
         {
-            if (_ui) _ui->think();
+            if (_ui) {
+                _ui->think(deltaTime);
+            }
         }
 
         void Object::handle(Event::Event *event)

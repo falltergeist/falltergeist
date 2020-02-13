@@ -1,4 +1,5 @@
 #include <sstream>
+
 #include "../State/PlayerEdit.h"
 #include "../Font.h"
 #include "../functions.h"
@@ -12,7 +13,9 @@
 #include "../UI/BigCounter.h"
 #include "../UI/HiddenMask.h"
 #include "../UI/Image.h"
+#include "../UI/ImageList.h"
 #include "../UI/TextArea.h"
+#include "../UI/TextAreaList.h"
 #include "../UI/Rectangle.h"
 
 namespace Falltergeist
@@ -258,6 +261,103 @@ namespace Falltergeist
             _description->setFont("font1.aaf", {0,0,0,0xff});
             _description->setSize({140, 120});
             _description->setWordWrap(true);
+
+            // TABS
+            UI::ImageList *tabs = new UI::ImageList({ "art/intrface/perksfdr.frm",
+                                                      "art/intrface/karmafdr.frm",
+                                                      "art/intrface/killsfdr.frm" }, backgroundX+10, backgroundY+325);
+            tabs->mouseClickHandler().add(std::bind(&PlayerEdit::onTabClick, this, std::placeholders::_1));
+            addUI("tabs", tabs);
+
+            // Tab labels: perks, karma, kills
+            for (unsigned int i = 0; i < 3; i++) {
+                auto tab = addUI("tab_" + std::to_string(i),
+                                     new UI::TextArea(_t(MSG_EDITOR, 109+i), backgroundX+10+35+(100*i), backgroundY+325+7+(i == 0 ? -1 : 1)));
+                dynamic_cast<UI::TextArea*>(tab)->setFont(font3_b89c28ff, color);
+            }
+
+            Point tabContentPos = tabs->position() + Point(25, 45);
+
+            // Perks and traits
+            auto perksAndTraits = new UI::TextAreaList(tabContentPos);
+            perksAndTraits->setSize({ 0, 100 });
+
+            auto traits = new UI::TextArea(_t(MSG_EDITOR, 156), {0, 0});
+            traits->setWidth(270);
+            traits->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
+            perksAndTraits->addArea(std::unique_ptr<UI::TextArea>(traits));
+
+            for (unsigned i = static_cast<unsigned>(TRAIT::FAST_METABOLISM); i <= static_cast<unsigned>(TRAIT::GIFTED); i++)
+            {
+                if (player->traitTagged(static_cast<TRAIT>(i)))
+                {
+                    perksAndTraits->addArea(std::unique_ptr<UI::TextArea>(new UI::TextArea(_t(MSG_TRAITS, 100 + i), {0,0})));
+                }
+            }
+
+            auto perks = new UI::TextArea(_t(MSG_EDITOR, 109), {0, 0});
+            perks->setWidth(270);
+            perks->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
+            perksAndTraits->addArea(std::unique_ptr<UI::TextArea>(perks));
+
+            addUI("tab_perks", perksAndTraits);
+
+            // Karma overview
+            auto karma = new UI::TextAreaList(tabContentPos);
+            karma->setSize({ 0, 100 });
+            karma->setVisible(false);
+
+            karma->addArea(std::unique_ptr<UI::TextArea>(new UI::TextArea(_t(MSG_EDITOR, 125), {0, 0})));
+
+            auto reputation = new UI::TextArea(_t(MSG_EDITOR, 4000), {0, 0});
+            reputation->setWidth(270);
+            reputation->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
+            karma->addArea(std::unique_ptr<UI::TextArea>(reputation));
+
+            addUI("tab_karma", karma);
+
+            // Killing statistics
+            auto killEnemyNames = new UI::TextAreaList(tabContentPos);
+            auto killEnemyScore = new UI::TextAreaList(tabContentPos + Point(270, 0));
+            killEnemyNames->setSize({ 0, 100 });
+            killEnemyScore->setSize({ 0, 100 });
+            killEnemyNames->setVisible(false);
+            killEnemyScore->setVisible(false);
+
+            // TODO: _underline_. Just for testing. Real kill stats should be stored in a map inside DudeObject(?)
+            for (unsigned int i = 0; i < 19; i++) {
+                killEnemyNames->addArea(std::unique_ptr<UI::TextArea>(new UI::TextArea(_t(MSG_PROTO, 1450+i), {0, 0})));
+                killEnemyScore->addArea(std::unique_ptr<UI::TextArea>(new UI::TextArea(std::to_string(i), {0, 0})));
+            }
+
+            addUI("tab_kills_enemies", killEnemyNames);
+            addUI("tab_kills_score", killEnemyScore);
+
+            auto tabsArrowUp = new UI::ImageButton(UI::ImageButton::Type::SMALL_UP_ARROW, backgroundX+317, backgroundY+363);
+            tabsArrowUp->mouseClickHandler().add([=](...) {
+                switch (tabs->currentImage()) {
+                case 0: perksAndTraits->scrollUp();
+                    break;
+                case 1: karma->scrollUp();
+                    break;
+                case 2: killEnemyNames->scrollUp(); killEnemyScore->scrollUp();
+                    break;
+                }
+            });
+            addUI(tabsArrowUp);
+
+            auto tabsArrowDown = new UI::ImageButton(UI::ImageButton::Type::SMALL_DOWN_ARROW, backgroundX+317, backgroundY+376);
+            tabsArrowDown->mouseClickHandler().add([=](...) {
+                switch (tabs->currentImage()) {
+                case 0: perksAndTraits->scrollDown();
+                    break;
+                case 1: karma->scrollDown();
+                    break;
+                case 2: killEnemyNames->scrollDown(); killEnemyScore->scrollDown();
+                    break;
+                }
+            });
+            addUI(tabsArrowDown);
         }
 
         UI::TextArea* PlayerEdit::_addLabel(const std::string& name, UI::TextArea* label)
@@ -299,9 +399,9 @@ namespace Falltergeist
             _images.insert(std::pair<std::string, UI::Image*>(name, image));
         }
 
-        void PlayerEdit::think()
+        void PlayerEdit::think(const float &deltaTime)
         {
-            State::think();
+            State::think(deltaTime);
             auto player = Game::getInstance()->player();
 
             *_labels.at("name") = player->name();
@@ -364,12 +464,6 @@ namespace Falltergeist
                 {
                     it->second->setColor(font1_3ff800ff);
                 }
-
-        //        if (name.find("traits_") == 0)
-        //        {
-        //            unsigned int number = atoi(name.substr(7).c_str());
-        //            it->second->setColor(player->trait(number - 1) ? font1_a0a0a0ff : font1_3ff800ff);
-        //        }
 
                 if (name.find("skills_") == 0)
                 {
@@ -456,9 +550,8 @@ namespace Falltergeist
         //        if (it->second.get() == event->target())
                 if (it->second == event->target())
                 {
-        //            if (name.find("stats_") == 0 || name.find("traits_") == 0 || name.find("skills_") == 0 || name.find("health_") == 0 || name.find("params_") == 0 || name.find("label_") == 0 || name.find("level_") == 0 )
+                    // name.find("traits_") == 0 ||
                     if (name.find("stats_") == 0 || name.find("skills_") == 0 || name.find("health_") == 0 || name.find("params_") == 0 || name.find("label_") == 0 || name.find("level_") == 0 )
-        //            if (name.find("stats_") == 0 || name.find("skills_") == 0 || name.find("health_") == 0 || name.find("params_") == 0 || name.find("label_") == 0 )
                     {
                         std::string label = name;
                         if (name.find("_value") > 0)
@@ -488,6 +581,38 @@ namespace Falltergeist
                     }
                 }
             }
+        }
+
+        /**
+         * Switching between tabs
+         * PERKS = 0, KARMA = 1, KILLS = 2
+         */
+        void PlayerEdit::onTabClick(Event::Mouse* event)
+        {
+            auto tabs = dynamic_cast<UI::ImageList*>(getUI("tabs"));
+            unsigned int clickX = static_cast<unsigned>(event->position().x() - tabs->position().x());
+
+            for (unsigned int i = 0, tabEnd = 0; i < 3; i++) {
+                unsigned int tabStart = tabEnd;
+                // selected width = 120, unselected width = 100
+                tabEnd += (i == tabs->currentImage() ? 120 : 100);
+
+                auto tab = dynamic_cast<UI::TextArea*>(getUI("tab_" + std::to_string(i)));
+                const auto tabsY = tabs->position().y() + 7;
+
+                // Slightly raise the selected tab and lower the others
+                if (tabStart <= clickX && clickX <= tabEnd) {
+                    tabs->setCurrentImage(i);
+                    tab->setPosition({ tab->position().x(), tabsY - 1 });
+                } else {
+                    tab->setPosition({ tab->position().x(), tabsY + 1 });
+                }
+            }
+
+            getUI("tab_perks")->setVisible(tabs->currentImage() == 0 ? true : false);
+            getUI("tab_karma")->setVisible(tabs->currentImage() == 1 ? true : false);
+            getUI("tab_kills_enemies")->setVisible(tabs->currentImage() == 2 ? true : false);
+            getUI("tab_kills_score")->setVisible(tabs->currentImage() == 2 ? true : false);
         }
 
         void PlayerEdit::doCancel()

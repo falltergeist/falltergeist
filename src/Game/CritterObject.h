@@ -120,10 +120,10 @@ namespace Falltergeist
                 virtual void combat_p_proc();
                 virtual void critter_p_proc();
                 virtual void talk_p_proc();
-                virtual void use_skill_on_p_proc();
+                void use_skill_on_p_proc(SKILL skill, Object* objectUsed, CritterObject* usedBy) override;
                 virtual void is_dropping_p_proc();
 
-                void think() override;
+                void think(const float &deltaTime) override;
                 virtual void onMovementAnimationEnded(Event::Event* event);
                 virtual void onMovementAnimationFrame(Event::Event* event);
 
@@ -136,7 +136,6 @@ namespace Falltergeist
                 UI::Animation* setWeaponAnimation(unsigned animationId);
 
                 UI::Animation* animation();
-                UI::Animation* generateAnimation(const std::string& action, Orientation orientation);
 
                 bool canTrade() const;
                 void setCanTrade(bool canTrade);
@@ -221,7 +220,6 @@ namespace Falltergeist
                 ItemObject* _rightHandSlot = 0;
 
                 virtual std::unique_ptr<UI::Animation> _generateMovementAnimation();
-                virtual std::string _generateArmorFrmString();
                 void _setupNextIdleAnim();
                 void _generateUi() override;
         };

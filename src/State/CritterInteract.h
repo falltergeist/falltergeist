@@ -58,7 +58,7 @@ namespace Falltergeist
                     REVIEW,
                     CONTROL
                 };
-                virtual void think() override;
+                void think(const float &deltaTime) override;
 
                 CritterInteract();
                 ~CritterInteract() override;

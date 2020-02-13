@@ -1,32 +1,8 @@
-/*
- * Copyright 2012-2018 Falltergeist Developers.
- *
- * This file is part of Falltergeist.
- *
- * Falltergeist is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Falltergeist is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
- */
-
-// Related headers
-#include "../Game/Game.h"
-
-// C++ standard includes
 #include <algorithm>
 #include <sstream>
 #include <ctime>
 #include <memory>
-
-// Falltergeist includes
+#include <SDL_image.h>
 #include "../Audio/Mixer.h"
 #include "../CrossPlatform.h"
 #include "../Event/Dispatcher.h"
@@ -34,6 +10,7 @@
 #include "../Exception.h"
 #include "../Format/Gam/File.h"
 #include "../Game/DudeObject.h"
+#include "../Game/Game.h"
 #include "../Game/Time.h"
 #include "../Graphics/AnimatedPalette.h"
 #include "../Graphics/Renderer.h"
@@ -45,10 +22,6 @@
 #include "../State/Location.h"
 #include "../UI/FpsCounter.h"
 #include "../UI/TextArea.h"
-#include "../VFS/VFS.h"
-
-// Third patry includes
-#include <SDL_image.h>
 
 namespace Falltergeist
 {
@@ -79,7 +52,6 @@ namespace Falltergeist
 
             _settings = std::move(settings);
 
-            _vfs = std::make_unique<VFS::VFS>();
             _eventDispatcher = std::make_unique<Event::Dispatcher>();
 
             _renderer = std::make_unique<Graphics::Renderer>(_settings->screenWidth(), _settings->screenHeight());
@@ -178,13 +150,26 @@ namespace Falltergeist
         {
             Logger::info("GAME") << "Starting main loop" << std::endl;
             _frame = 0;
+
+            uint32_t FPS = 60;
+            uint32_t frameDelay = 1000 / FPS;
+
+            uint32_t frameStart = 0;
+            uint32_t frameTime = 0;
             while (!_quit) {
+                frameStart = SDL_GetTicks();
+
                 handle();
-                think();
+                think(frameTime);
                 render();
-                SDL_Delay(1);
                 _statesForDelete.clear();
                 _frame++;
+
+                frameTime = SDL_GetTicks() - frameStart;
+                if (frameDelay > frameTime) {
+                    SDL_Delay(frameDelay - frameTime);
+                    frameTime += (frameDelay - frameTime);
+                }
             }
             Logger::info("GAME") << "Stopping main loop" << std::endl;
         }
@@ -404,12 +389,12 @@ namespace Falltergeist
             }
         }
 
-        void Game::think()
+        void Game::think(const float &deltaTime)
         {
-            _fpsCounter->think();
-            _mouse->think();
+            _fpsCounter->think(deltaTime);
+            _mouse->think(deltaTime);
 
-            _animatedPalette->think();
+            _animatedPalette->think(deltaTime);
 
             *_mousePosition = "";
             *_mousePosition << mouse()->position().x() << " : " << mouse()->position().y();
@@ -418,12 +403,15 @@ namespace Falltergeist
             *_currentTime << _gameTime.year()  << "-" << _gameTime.month()   << "-" << _gameTime.day() << " "
                           << _gameTime.hours() << ":" << _gameTime.minutes() << ":" << _gameTime.seconds() << " " << _gameTime.ticks();
 
+            // TODO get rid of time in Renderer. It should know nothing about time
+            _renderer->think(deltaTime);
+
             if (_renderer->fading()) {
                 return;
             }
 
             for (auto state : _getActiveStates()) {
-                state->think();
+                state->think(deltaTime);
             }
             // process custom events
             _eventDispatcher->processScheduledEvents();
