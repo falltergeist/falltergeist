@@ -1,19 +1,37 @@
 #pragma once
 
-#include "../Game/AbstractTimer.h"
+#include "../Event/Handler.h"
 
 namespace Falltergeist
 {
     namespace Game
     {
-        /**
-         * @brief Real-time timer.
-         * Operates in milliseconds (1000 is one real-time second).
-         */
-        class Timer : public AbstractTimer
+        class Timer
         {
             public:
-                explicit Timer(float interval = 1000.0f);
+                explicit Timer(const float &milliseconds = 1000.0f);
+
+                void start();
+
+                void start(const float &interval, bool repeat = false);
+
+                void stop();
+
+                bool enabled() const;
+
+                void setInterval(const float &interval);
+
+                Event::Handler& tickHandler();
+
+                void think(const float &deltaTime);
+
+            private:
+                Event::Handler _tickHandler;
+
+                bool _enabled = false;
+                bool _repeat = false;
+                float _interval = 0;
+                float _timeTracked = 0;
         };
     }
 }

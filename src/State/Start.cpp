@@ -47,7 +47,15 @@ namespace Falltergeist
 
             addUI("splash", new UI::Image("art/splash/" + splashes.at(rand() % splashes.size())));
 
-            _delayTimer = std::make_unique<Game::CountdownTimer>(3000);
+            auto game = Game::getInstance();
+            _delayTimer = std::make_unique<Game::Timer>(3000);
+            _delayTimer->start();
+            _delayTimer->tickHandler().add([game](Event::Event*) {
+                game->setState(new MainMenu());
+                game->pushState(new Movie(17));
+                game->pushState(new Movie(1));
+                game->pushState(new Movie(0));
+            });
 
             Game::getInstance()->mouse()->setState(Input::Mouse::Cursor::WAIT);
         }
@@ -66,13 +74,6 @@ namespace Falltergeist
                 StateLocationHelper stateLocationHelper;
                 game->setState(stateLocationHelper.getInitialLocationState());
                 return;
-            }
-
-            if (_delayTimer->isFinished()) {
-                game->setState(new MainMenu());
-                game->pushState(new Movie(17));
-                game->pushState(new Movie(1));
-                game->pushState(new Movie(0));
             }
         }
     }
