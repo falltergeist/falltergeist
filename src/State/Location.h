@@ -1,32 +1,9 @@
-/*
- * Copyright 2012-2018 Falltergeist Developers.
- *
- * This file is part of Falltergeist.
- *
- * Falltergeist is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Falltergeist is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
- */
+#pragma once
 
-#ifndef FALLTERGEIST_STATE_LOCATION_H
-#define FALLTERGEIST_STATE_LOCATION_H
-
-// C++ standard includes
 #include <list>
 #include <memory>
-#include <Game/DudeObject.h>
-#include <Format/Map/File.h>
-
-// Falltergeist includes
+#include "../Format/Map/File.h"
+#include "../Game/DudeObject.h"
 #include "../Game/Object.h"
 #include "../Game/Timer.h"
 #include "../Graphics/Lightmap.h"
@@ -34,10 +11,12 @@
 #include "../State/State.h"
 #include "../UI/ImageButton.h"
 
-// Third party includes
-
 namespace Falltergeist
 {
+    namespace Audio
+    {
+        class Mixer;
+    }
     namespace Format
     {
         namespace Map
@@ -68,6 +47,7 @@ namespace Falltergeist
     class Hexagon;
     class HexagonGrid;
     class LocationCamera;
+    class Settings;
 
     namespace State
     {
@@ -78,10 +58,17 @@ namespace Falltergeist
          * pushed: when player starts new game or loads new game
          * popped: when player closes the game, exits to main menu or loads the game
          */
-        class Location : public State
+        class Location final : public State
         {
             public:
-                Location();
+                Location(
+                    std::shared_ptr<Game::DudeObject> player,
+                    std::shared_ptr<Audio::Mixer> audioMixer,
+                    std::shared_ptr<Input::Mouse> mouse,
+                    std::shared_ptr<Settings> settings,
+                    std::shared_ptr<Game::Time> gameTime,
+                    std::shared_ptr<Graphics::Renderer> renderer
+                );
                 ~Location() override;
 
                 void init() override;
@@ -143,6 +130,14 @@ namespace Falltergeist
 
                 SKILL skillInUse() const;
                 void setSkillInUse(SKILL skill);
+
+            private:
+                std::shared_ptr<Game::DudeObject> player;
+                std::shared_ptr<Audio::Mixer> audioMixer;
+                std::shared_ptr<Input::Mouse> mouse;
+                std::shared_ptr<Settings> settings;
+                std::shared_ptr<Game::Time> gameTime;
+                std::shared_ptr<Graphics::Renderer> renderer;
 
             protected:
                 struct TimerEvent
@@ -206,7 +201,7 @@ namespace Falltergeist
 
                 std::vector<Game::SpatialObject*> _spatials;
 
-                void initializePlayerTestAppareance(std::shared_ptr<Game::DudeObject> player) const;
+                void initializePlayerTestAppearance() const;
 
                 void initializeLightmap();
 
@@ -235,4 +230,3 @@ namespace Falltergeist
         };
     }
 }
-#endif // FALLTERGEIST_STATE_LOCATION_H

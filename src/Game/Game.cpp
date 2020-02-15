@@ -1,32 +1,8 @@
-/*
- * Copyright 2012-2018 Falltergeist Developers.
- *
- * This file is part of Falltergeist.
- *
- * Falltergeist is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Falltergeist is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
- */
-
-// Related headers
 #include "../Game/Game.h"
-
-// C++ standard includes
 #include <algorithm>
 #include <sstream>
 #include <ctime>
 #include <memory>
-
-// Falltergeist includes
 #include "../Audio/Mixer.h"
 #include "../CrossPlatform.h"
 #include "../Event/Dispatcher.h"
@@ -46,8 +22,6 @@
 #include "../UI/FpsCounter.h"
 #include "../UI/TextArea.h"
 #include "../VFS/VFS.h"
-
-// Third patry includes
 #include <SDL_image.h>
 
 namespace Falltergeist
@@ -76,13 +50,14 @@ namespace Falltergeist
                 return;
             }
             _initialized = true;
+            _gameTime = std::make_shared<Time>();
 
             _settings = std::move(settings);
 
             _vfs = std::make_unique<VFS::VFS>();
             _eventDispatcher = std::make_unique<Event::Dispatcher>();
 
-            _renderer = std::make_unique<Graphics::Renderer>(_settings->screenWidth(), _settings->screenHeight());
+            _renderer = std::make_shared<Graphics::Renderer>(_settings->screenWidth(), _settings->screenHeight());
 
             Logger::info("GAME") << CrossPlatform::getVersion() << std::endl;
             Logger::info("GAME") << "Opensource Fallout 2 game engine" << std::endl;
@@ -97,9 +72,9 @@ namespace Falltergeist
             std::string version = CrossPlatform::getVersion();
             renderer()->setCaption(version.c_str());
 
-            _mixer = std::make_unique<Audio::Mixer>();
+            _mixer = std::make_shared<Audio::Mixer>();
             _mixer->setMusicVolume(_settings->musicVolume());
-            _mouse = std::make_unique<Input::Mouse>();
+            _mouse = std::make_shared<Input::Mouse>();
             _fpsCounter = std::make_unique<UI::FpsCounter>(renderer()->width() - 42, 2);
             _fpsCounter->setWidth(42);
             _fpsCounter->setHorizontalAlign(UI::TextArea::HorizontalAlign::RIGHT);
@@ -204,9 +179,9 @@ namespace Falltergeist
             return _player;
         }
 
-        Input::Mouse* Game::mouse() const
+        std::shared_ptr<Input::Mouse> Game::mouse() const
         {
-            return _mouse.get();
+            return _mouse;
         }
 
         State::Location* Game::locationState()
@@ -302,14 +277,14 @@ namespace Falltergeist
             return subset;
         }
 
-        Graphics::Renderer* Game::renderer()
+        std::shared_ptr<Graphics::Renderer> Game::renderer() const
         {
-            return _renderer.get();
+            return _renderer;
         }
 
-        Settings* Game::settings() const
+        std::shared_ptr<Settings> Game::settings() const
         {
-            return _settings.get();
+            return _settings;
         }
 
         // TODO: probably need to move this to factory class
@@ -415,8 +390,8 @@ namespace Falltergeist
             *_mousePosition << mouse()->position().x() << " : " << mouse()->position().y();
 
             *_currentTime = "";
-            *_currentTime << _gameTime.year()  << "-" << _gameTime.month()   << "-" << _gameTime.day() << " "
-                          << _gameTime.hours() << ":" << _gameTime.minutes() << ":" << _gameTime.seconds() << " " << _gameTime.ticks();
+            *_currentTime << _gameTime->year()  << "-" << _gameTime->month()   << "-" << _gameTime->day() << " "
+                          << _gameTime->hours() << ":" << _gameTime->minutes() << ":" << _gameTime->seconds() << " " << _gameTime->ticks();
 
             if (_renderer->fading()) {
                 return;
@@ -460,14 +435,14 @@ namespace Falltergeist
             return _animatedPalette.get();
         }
 
-        Time* Game::gameTime()
+        std::shared_ptr<Time> Game::gameTime() const
         {
-            return &_gameTime;
+            return _gameTime;
         }
 
-        Audio::Mixer* Game::mixer()
+        std::shared_ptr<Audio::Mixer> Game::mixer() const
         {
-            return _mixer.get();
+            return _mixer;
         }
 
         Event::Dispatcher* Game::eventDispatcher()
