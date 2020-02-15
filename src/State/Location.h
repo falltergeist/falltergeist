@@ -13,6 +13,10 @@
 
 namespace Falltergeist
 {
+    namespace Audio
+    {
+        class Mixer;
+    }
     namespace Format
     {
         namespace Map
@@ -26,6 +30,7 @@ namespace Falltergeist
         class Location;
         class Object;
         class SpatialObject;
+        class Time;
     }
     namespace UI
     {
@@ -43,6 +48,7 @@ namespace Falltergeist
     class Hexagon;
     class HexagonGrid;
     class LocationCamera;
+    class Settings;
 
     namespace State
     {
@@ -56,7 +62,14 @@ namespace Falltergeist
         class Location : public State
         {
             public:
-                Location();
+                Location(
+                    std::shared_ptr<Game::DudeObject> player,
+                    std::shared_ptr<Input::Mouse> mouse,
+                    std::shared_ptr<Settings> settings,
+                    std::shared_ptr<Graphics::Renderer> renderer,
+                    std::shared_ptr<Audio::Mixer> audioMixer,
+                    std::shared_ptr<Game::Time> gameTime
+                );
                 ~Location() override = default;
 
                 void init() override;
@@ -118,6 +131,14 @@ namespace Falltergeist
 
                 SKILL skillInUse() const;
                 void setSkillInUse(SKILL skill);
+
+            private:
+                std::shared_ptr<Game::DudeObject> player;
+                std::shared_ptr<Input::Mouse> mouse;
+                std::shared_ptr<Settings> settings;
+                std::shared_ptr<Graphics::Renderer> renderer;
+                std::shared_ptr<Audio::Mixer> audioMixer;
+                std::shared_ptr<Game::Time> gameTime;
 
             protected:
                 struct TimerEvent
