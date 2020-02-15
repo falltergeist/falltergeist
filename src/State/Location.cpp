@@ -517,8 +517,9 @@ namespace Falltergeist
                 it->timer.think(deltaTime);
                 if (!it->timer.enabled()) {
                     it = _timerEvents.erase(it);
+                } else {
+                    ++it;
                 }
-                ++it;
             }
         }
 
