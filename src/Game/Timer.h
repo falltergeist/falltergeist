@@ -32,6 +32,7 @@ namespace Falltergeist
                 bool _repeat = false;
                 float _interval = 0;
                 float _timeTracked = 0;
+                uint  _lastTick;
         };
     }
 }

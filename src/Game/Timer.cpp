@@ -1,5 +1,6 @@
 #include "../Event/Event.h"
 #include "../Game/Timer.h"
+#include "../Game/Game.h"
 
 namespace Falltergeist
 {
@@ -16,10 +17,10 @@ namespace Falltergeist
 
         void Timer::think(const float &deltaTime)
         {
-            if (!_enabled) {
+            if (!_enabled || 
+                Game::getInstance()->gameTime()->ticks() == _lastTick) {
                 return;
             }
-
             _timeTracked += deltaTime;
 
             if (_timeTracked >= _interval) {
@@ -38,6 +39,7 @@ namespace Falltergeist
         {
             _enabled = true;
             _timeTracked = 0;
+            _lastTick = Game::getInstance()->gameTime()->ticks();
         }
 
         void Timer::start(const float &interval, bool repeat)
