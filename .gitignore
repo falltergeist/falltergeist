@@ -20,3 +20,6 @@ CMakeSettings.json
 /cmake-build-debug
 *.dat
 .vscode/
+compile_commands.json
+.clangd/
+build.sh
