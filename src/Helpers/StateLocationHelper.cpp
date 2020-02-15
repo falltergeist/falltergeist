@@ -1,3 +1,4 @@
+#include "../Game/Game.h"
 #include "../Game/Location.h"
 #include "../Helpers/GameLocationHelper.h"
 #include "../Helpers/StateLocationHelper.h"
@@ -12,7 +13,16 @@ namespace Falltergeist
             GameLocationHelper gameLocationHelper;
             auto initialLocation = gameLocationHelper.getInitialLocation();
 
-            auto locationState = new State::Location();
+            auto game = Game::getInstance();
+
+            auto locationState = new State::Location(
+                game->player(),
+                game->mouse(),
+                game->settings(),
+                game->renderer(),
+                game->mixer(),
+                game->gameTime()
+            );
             locationState->setElevation(initialLocation->defaultElevationIndex());
             locationState->setLocation(initialLocation);
             return locationState;
