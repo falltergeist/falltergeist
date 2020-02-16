@@ -1,6 +1,5 @@
 #include "../Event/Event.h"
 #include "../Game/Timer.h"
-#include <bits/stdint-uintn.h>
 
 namespace Falltergeist
 {
