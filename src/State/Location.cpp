@@ -388,7 +388,7 @@ namespace Falltergeist
             if (event->button() == Event::Mouse::Button::LEFT) {
                 if (event->name() == "mousedown") {
                     _objectUnderCursor = object;
-                    _actionCursorTimer.start();
+                    _actionCursorTimer.start(Game::getInstance()->gameTime()->ticks());
                     _actionCursorButtonPressed = true;
                 } else if (event->name() == "mouseclick") {
                     auto icons = getCursorIconsForObject(object);
@@ -415,7 +415,7 @@ namespace Falltergeist
                     _actionCursorButtonPressed = false;
                 }
 
-                _actionCursorTimer.start();
+                _actionCursorTimer.start(Game::getInstance()->gameTime()->ticks());
             }
         }
 
@@ -509,12 +509,13 @@ namespace Falltergeist
         // timers processing
         void Location::processTimers(const float &deltaTime)
         {
-            _locationScriptTimer.think(deltaTime);
-            _actionCursorTimer.think(deltaTime);
-            _ambientSfxTimer.think(deltaTime);
+            const auto ticks = Game::getInstance()->gameTime()->ticks();
+            _locationScriptTimer.think(deltaTime, ticks);
+            _actionCursorTimer.think(deltaTime, ticks);
+            _ambientSfxTimer.think(deltaTime, ticks);
 
             for (auto it = _timerEvents.begin(); it != _timerEvents.end();) {
-                it->timer.think(deltaTime);
+                it->timer.think(deltaTime, ticks);
                 if (!it->timer.enabled()) {
                     it = _timerEvents.erase(it);
                 } else {
@@ -1156,7 +1157,7 @@ namespace Falltergeist
         void Location::addTimerEvent(Game::Object *obj, int ticks, int fixedParam)
         {
             Game::Timer timer(static_cast<float>(ticks) * 10.0f);
-            timer.start();
+            timer.start(Game::getInstance()->gameTime()->ticks());
             timer.tickHandler().add([obj, fixedParam](Event::Event *) {
                 if (obj) {
                     if (auto vm = obj->script()) {

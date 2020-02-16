@@ -11,9 +11,9 @@ namespace Falltergeist
             public:
                 explicit Timer(const float &milliseconds = 1000.0f);
 
-                void start();
+                void start(const uint32_t ticks);
 
-                void start(const float &interval, bool repeat = false);
+                void start(const uint32_t ticks, const float &interval, bool repeat = false);
 
                 void stop();
 
@@ -23,7 +23,7 @@ namespace Falltergeist
 
                 Event::Handler& tickHandler();
 
-                void think(const float &deltaTime);
+                void think(const float &deltaTime, const uint32_t ticks);
 
             private:
                 Event::Handler _tickHandler;
@@ -32,7 +32,7 @@ namespace Falltergeist
                 bool _repeat = false;
                 float _interval = 0;
                 float _timeTracked = 0;
-                uint  _lastTick;
+                uint32_t  _lastTick;
         };
     }
 }

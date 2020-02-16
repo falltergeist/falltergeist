@@ -49,7 +49,7 @@ namespace Falltergeist
 
             auto game = Game::getInstance();
             _delayTimer = std::make_unique<Game::Timer>(3000);
-            _delayTimer->start();
+            _delayTimer->start(game->gameTime()->ticks());
             _delayTimer->tickHandler().add([game](Event::Event*) {
                 game->setState(new MainMenu());
                 game->pushState(new Movie(17));
@@ -62,9 +62,10 @@ namespace Falltergeist
 
         void Start::think(const float &deltaTime)
         {
-            _delayTimer->think(deltaTime);
+            auto const game = Game::getInstance();
 
-            auto game = Game::getInstance();
+            _delayTimer->think(deltaTime, game->gameTime()->ticks());
+
             State::think(deltaTime);
             if (game->settings()->forceLocation()) {
                 auto player = std::make_unique<Game::DudeObject>();

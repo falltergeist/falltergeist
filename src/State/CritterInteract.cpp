@@ -263,7 +263,7 @@ namespace Falltergeist
             switch (_phase)
             {
                 case Phase::FIDGET:
-                    _fidgetTimer.think(deltaTime);
+                    _fidgetTimer.think(deltaTime, Game::getInstance()->gameTime()->ticks());
                     break;
                 case Phase::TALK:
                     // if playing speech - set phoneme frame

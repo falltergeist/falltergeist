@@ -1,6 +1,6 @@
 #include "../Event/Event.h"
 #include "../Game/Timer.h"
-#include "../Game/Game.h"
+#include <bits/stdint-uintn.h>
 
 namespace Falltergeist
 {
@@ -15,10 +15,9 @@ namespace Falltergeist
             return _tickHandler;
         }
 
-        void Timer::think(const float &deltaTime)
+        void Timer::think(const float &deltaTime, const uint32_t ticks)
         {
-            if (!_enabled || 
-                Game::getInstance()->gameTime()->ticks() == _lastTick) {
+            if (!_enabled || ticks == _lastTick) {
                 return;
             }
             _timeTracked += deltaTime;
@@ -35,18 +34,18 @@ namespace Falltergeist
             }
         }
 
-        void Timer::start()
+        void Timer::start(const uint32_t ticks)
         {
             _enabled = true;
             _timeTracked = 0;
-            _lastTick = Game::getInstance()->gameTime()->ticks();
+            _lastTick = ticks;
         }
 
-        void Timer::start(const float &interval, bool repeat)
+        void Timer::start(const uint32_t ticks, const float &interval, bool repeat)
         {
             _interval = interval;
             _repeat = repeat;
-            start();
+            start(ticks);
         }
 
         void Timer::stop()
