@@ -1141,7 +1141,7 @@ namespace Falltergeist
 
         void Location::addTimerEvent(Game::Object *obj, int ticks, int fixedParam)
         {
-            Game::Timer timer(static_cast<float>(ticks) * 10.0f);
+            Game::Timer timer(static_cast<float>(ticks) * 100:.0f);
             timer.start();
             timer.tickHandler().add([obj, fixedParam](Event::Event *) {
                 if (obj) {
