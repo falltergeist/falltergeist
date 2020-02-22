@@ -23,12 +23,9 @@ namespace Falltergeist
     namespace State
     {
 
-        NewGame::NewGame() : State()
+        NewGame::NewGame(std::shared_ptr<UI::IResourceManager> resourceManager) : State()
         {
-        }
-
-        NewGame::~NewGame()
-        {
+            this->resourceManager = resourceManager;
         }
 
         void NewGame::init()
@@ -43,7 +40,7 @@ namespace Falltergeist
 
             setPosition((renderer->size() - Point(640, 480)) / 2);
 
-            addUI("background", new UI::Image("art/intrface/pickchar.frm"));
+            addUI("background", resourceManager->getImage("art/intrface/pickchar.frm"));
 
             auto beginGameButton = addUI(new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, 81, 322));
             beginGameButton->mouseClickHandler().add(std::bind(&NewGame::onBeginGameButtonClick, this, std::placeholders::_1));
@@ -98,7 +95,7 @@ namespace Falltergeist
         {
             Game::getInstance()->setPlayer(std::move(_characters.at(_selectedCharacter)));
             _characters.clear();
-            Game::getInstance()->pushState(new PlayerCreate());
+            Game::getInstance()->pushState(new PlayerCreate(resourceManager));
         }
 
         void NewGame::doCreate()
@@ -106,7 +103,7 @@ namespace Falltergeist
             auto none = std::make_unique<Game::DudeObject>();
             none->loadFromGCDFile(ResourceManager::getInstance()->gcdFileType("premade/blank.gcd"));
             Game::getInstance()->setPlayer(std::move(none));
-            Game::getInstance()->pushState(new PlayerCreate());
+            Game::getInstance()->pushState(new PlayerCreate(resourceManager));
         }
 
         void NewGame::doBack()

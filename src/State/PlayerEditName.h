@@ -2,6 +2,7 @@
 
 #include <map>
 #include "../State/State.h"
+#include "../UI/IResourceManager.h"
 
 namespace Falltergeist
 {
@@ -12,11 +13,11 @@ namespace Falltergeist
     }
     namespace State
     {
-        class PlayerEditName : public State
+        class PlayerEditName final : public State
         {
             public:
-                PlayerEditName();
-                ~PlayerEditName() override;
+                PlayerEditName(std::shared_ptr<UI::IResourceManager> resourceManager);
+                virtual ~PlayerEditName() = default;
 
                 void init() override;
                 void think(const float &deltaTime) override;
@@ -32,6 +33,9 @@ namespace Falltergeist
                 UI::TextArea* _name = nullptr;
                 UI::Rectangle* _cursor = nullptr;
                 std::map<char,char> _keyCodes;
+
+            private:
+                std::shared_ptr<UI::IResourceManager> resourceManager;
         };
     }
 }

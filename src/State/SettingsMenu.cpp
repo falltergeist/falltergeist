@@ -16,13 +16,9 @@ namespace Falltergeist
 {
     namespace State
     {
-
-        SettingsMenu::SettingsMenu() : State()
+        SettingsMenu::SettingsMenu(std::shared_ptr<UI::IResourceManager> resourceManager) : State()
         {
-        }
-
-        SettingsMenu::~SettingsMenu()
-        {
+            this->resourceManager = std::move(resourceManager);
         }
 
         void SettingsMenu::init()
@@ -34,7 +30,7 @@ namespace Falltergeist
             setFullscreen(true);
 
             // background
-            auto background = new UI::Image("art/intrface/prefscrn.frm");
+            auto background = resourceManager->getImage("art/intrface/prefscrn.frm");
             Point backgroundPos = Point((Game::getInstance()->renderer()->size() - background->size()) / 2);
             int backgroundX = backgroundPos.x();
             int backgroundY = backgroundPos.y();

@@ -17,8 +17,9 @@ namespace Falltergeist
 {
     namespace State
     {
-        CritterBarter::CritterBarter() : State()
+        CritterBarter::CritterBarter(std::shared_ptr<UI::IResourceManager> resourceManager) : State()
         {
+            this->resourceManager = std::move(resourceManager);
         }
 
         CritterBarter::~CritterBarter()
@@ -43,7 +44,7 @@ namespace Falltergeist
 
             setPosition((Game::getInstance()->renderer()->size() - Point(640, 480)) / 2 + Point(0, 291));
 
-            addUI("background", new UI::Image("art/intrface/barter.frm"));
+            addUI("background", resourceManager->getImage("art/intrface/barter.frm"));
 
             auto dude = Game::getInstance()->player();
 

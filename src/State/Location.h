@@ -10,6 +10,7 @@
 #include "../Input/Mouse.h"
 #include "../State/State.h"
 #include "../UI/ImageButton.h"
+#include "../UI/IResourceManager.h"
 
 namespace Falltergeist
 {
@@ -59,7 +60,7 @@ namespace Falltergeist
          * pushed: when player starts new game or loads new game
          * popped: when player closes the game, exits to main menu or loads the game
          */
-        class Location : public State
+        class Location final : public State
         {
             public:
                 Location(
@@ -68,7 +69,8 @@ namespace Falltergeist
                     std::shared_ptr<Settings> settings,
                     std::shared_ptr<Graphics::Renderer> renderer,
                     std::shared_ptr<Audio::Mixer> audioMixer,
-                    std::shared_ptr<Game::Time> gameTime
+                    std::shared_ptr<Game::Time> gameTime,
+                    std::shared_ptr<UI::IResourceManager> resourceManager
                 );
                 ~Location() override = default;
 
@@ -139,6 +141,7 @@ namespace Falltergeist
                 std::shared_ptr<Graphics::Renderer> renderer;
                 std::shared_ptr<Audio::Mixer> audioMixer;
                 std::shared_ptr<Game::Time> gameTime;
+                std::shared_ptr<UI::IResourceManager> resourceManager;
 
             protected:
                 struct TimerEvent

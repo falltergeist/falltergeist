@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../State/State.h"
+#include "../UI/IResourceManager.h"
 
 namespace Falltergeist
 {
@@ -11,10 +12,10 @@ namespace Falltergeist
     }
     namespace State
     {
-        class ExitConfirm : public State
+        class ExitConfirm final : public State
         {
             public:
-                ExitConfirm();
+                ExitConfirm(std::shared_ptr<UI::IResourceManager> resourceManager);
                 ~ExitConfirm() override = default;
 
                 void init() override;
@@ -25,6 +26,8 @@ namespace Falltergeist
                 void onKeyDown(Event::Keyboard* event) override;
                 void onStateActivate(Event::State* event) override;
                 void onStateDeactivate(Event::State* event) override;
+            private:
+                std::shared_ptr<UI::IResourceManager> resourceManager;
         };
     }
 }

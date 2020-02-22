@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../State/State.h"
+#include "../UI/IResourceManager.h"
 
 namespace Falltergeist
 {
@@ -10,11 +11,11 @@ namespace Falltergeist
     }
     namespace State
     {
-        class PlayerEditAge : public State
+        class PlayerEditAge final: public State
         {
             public:
-                PlayerEditAge();
-                ~PlayerEditAge() override;
+                PlayerEditAge(std::shared_ptr<UI::IResourceManager> resourceManager);
+                virtual ~PlayerEditAge() = default;
 
                 void init() override;
 
@@ -29,6 +30,9 @@ namespace Falltergeist
 
             protected:
                 UI::BigCounter* _counter = nullptr;
+
+            private:
+                std::shared_ptr<UI::IResourceManager> resourceManager;
         };
     }
 }

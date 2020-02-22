@@ -15,12 +15,9 @@ namespace Falltergeist
 {
     namespace State
     {
-        WorldMap::WorldMap() : State()
+        WorldMap::WorldMap(std::shared_ptr<UI::IResourceManager> resourceManager) : State()
         {
-        }
-
-        WorldMap::~WorldMap()
-        {
+            this->resourceManager = std::move(resourceManager);
         }
 
         void WorldMap::init()
@@ -65,7 +62,7 @@ namespace Falltergeist
             // creating screen
             if (Game::getInstance()->settings()->worldMapFullscreen())
             {
-                _panel = new UI::Image("art/intrface/wminfce2.frm"); // panel small
+                _panel = resourceManager->getImage("art/intrface/wminfce2.frm"); // panel small
                 mapWidth = renderWidth - 168;
                 mapHeight = renderHeight;
                 mapMinX = 0;
@@ -73,7 +70,7 @@ namespace Falltergeist
             }
             else
             {
-                _panel = new UI::Image("art/intrface/wmapbox.frm"); // panel full
+                _panel = resourceManager->getImage("art/intrface/wmapbox.frm"); // panel full
                 mapWidth = 450;   // fallout 2 map screen width
                 mapHeight = 442;  // fallout 2 map screen height
                 mapMinX = (renderWidth - 640)/2 + 22;

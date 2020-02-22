@@ -22,8 +22,9 @@ namespace Falltergeist
 {
     namespace State
     {
-        MainMenu::MainMenu() : State()
+        MainMenu::MainMenu(std::shared_ptr<UI::IResourceManager> resourceManager) : State()
         {
+            this->resourceManager = std::move(resourceManager);
         }
 
         MainMenu::~MainMenu()
@@ -42,7 +43,7 @@ namespace Falltergeist
             auto renderer = Game::getInstance()->renderer();
             setPosition((renderer->size() - Point(640, 480)) / 2);
 
-            addUI("background", new UI::Image("art/intrface/mainmenu.frm"));
+            addUI("background", resourceManager->getImage("art/intrface/mainmenu.frm"));
 
             // intro button
             auto introButton = addUI(new UI::ImageButton(UI::ImageButton::Type::MENU_RED_CIRCLE, 30, 19));
@@ -139,7 +140,7 @@ namespace Falltergeist
 
         void MainMenu::doSettings()
         {
-            Game::getInstance()->pushState(new SettingsMenu());
+            Game::getInstance()->pushState(new SettingsMenu(resourceManager));
         }
 
         void MainMenu::doIntro()
@@ -176,7 +177,7 @@ namespace Falltergeist
         void MainMenu::onNewGameStart(Event::State* event)
         {
             fadeDoneHandler().clear();
-            Game::getInstance()->pushState(new NewGame());
+            Game::getInstance()->pushState(new NewGame(resourceManager));
         }
 
         void MainMenu::onLoadGameButtonClick(Event::Mouse* event)
@@ -187,7 +188,7 @@ namespace Falltergeist
         void MainMenu::onLoadGameStart(Event::State* event)
         {
             fadeDoneHandler().clear();
-            Game::getInstance()->pushState(new LoadGame());
+            Game::getInstance()->pushState(new LoadGame(resourceManager));
         }
 
         void MainMenu::onSettingsButtonClick(Event::Mouse* event)

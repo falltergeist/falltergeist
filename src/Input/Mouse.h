@@ -4,6 +4,7 @@
 #include <vector>
 #include "../Graphics/Point.h"
 #include "../UI/Image.h"
+#include "../UI/IResourceManager.h"
 
 namespace Falltergeist
 {
@@ -15,9 +16,9 @@ namespace Falltergeist
     {
         using Graphics::Point;
 
-        class Mouse
+        class Mouse final
         {
-        public:
+            public:
                 // TODO: need to consider getting rid of mouse cursor state stack, it's not convenient to use
                 enum class Cursor : unsigned
                 {
@@ -61,7 +62,7 @@ namespace Falltergeist
                     UNLOAD,
                     USE
                 };
-                Mouse();
+                Mouse(std::shared_ptr<UI::IResourceManager> resourceManager);
                 ~Mouse();
 
                 int x() const;
@@ -89,7 +90,8 @@ namespace Falltergeist
 
                 UI::Base* ui();
 
-            protected:
+            private:
+                std::shared_ptr<UI::IResourceManager> resourceManager;
                 Point _position {320, 240};
                 bool _visible = true;
                 Cursor _type = Cursor::NONE;

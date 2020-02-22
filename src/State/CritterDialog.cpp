@@ -23,12 +23,9 @@ namespace Falltergeist
 {
     namespace State
     {
-        CritterDialog::CritterDialog() : State()
+        CritterDialog::CritterDialog(std::shared_ptr<UI::IResourceManager> resourceManager) : State()
         {
-        }
-
-        CritterDialog::~CritterDialog()
-        {
+            this->resourceManager = std::move(resourceManager);
         }
 
         void CritterDialog::init()
@@ -41,7 +38,7 @@ namespace Falltergeist
 
             setPosition((Game::getInstance()->renderer()->size() - Point(640, 480)) / 2 + Point(0, 291));
 
-            auto background = new UI::Image("art/intrface/di_talk.frm");
+            auto background = resourceManager->getImage("art/intrface/di_talk.frm");
             addUI("background", background);
 
             auto question = new UI::TextArea("question", 140, -62);

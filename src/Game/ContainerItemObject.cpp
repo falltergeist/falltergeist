@@ -1,6 +1,7 @@
 #include "../Game/ContainerItemObject.h"
 #include "../Game/Game.h"
 #include "../State/Container.h"
+#include "../UI/ResourceManager.h"
 
 namespace Falltergeist
 {
@@ -18,7 +19,7 @@ namespace Falltergeist
 
         void ContainerItemObject::use_p_proc(CritterObject* usedBy)
         {
-            auto state = new State::Container();
+            auto state = new State::Container(std::make_shared<UI::ResourceManager>());
             state->setObject(this);
             Game::getInstance()->pushState(state);
         }

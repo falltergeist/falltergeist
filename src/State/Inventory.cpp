@@ -33,8 +33,9 @@ namespace Falltergeist
 {
     namespace State
     {
-        Inventory::Inventory() : State()
+        Inventory::Inventory(std::shared_ptr<UI::IResourceManager> resourceManager) : State()
         {
+            this->resourceManager = std::move(resourceManager);
             pushHandler().add([](Event::State* ev) {
                 Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::ACTION);
             });
@@ -60,13 +61,13 @@ namespace Falltergeist
 
             setPosition((game->renderer()->size() - Point(499, 377 + panelHeight)) / 2); // 499x377 = art/intrface/invbox.frm
 
-            addUI("background", new UI::Image("art/intrface/invbox.frm"));
+            addUI("background", resourceManager->getImage("art/intrface/invbox.frm"));
             getUI("background")->mouseClickHandler().add(std::bind(&Inventory::backgroundRightClick, this, std::placeholders::_1));
 
             addUI("button_up",   new UI::ImageButton(UI::ImageButton::Type::INVENTORY_UP_ARROW,   128, 40));
             addUI("button_down", new UI::ImageButton(UI::ImageButton::Type::INVENTORY_DOWN_ARROW, 128, 65));
-            auto buttonDownDisabled = new UI::Image("art/intrface/invdnds.frm");
-            auto buttonUpDisabled = new UI::Image("art/intrface/invupds.frm");
+            auto buttonDownDisabled = resourceManager->getImage("art/intrface/invdnds.frm");
+            auto buttonUpDisabled = resourceManager->getImage("art/intrface/invupds.frm");
             buttonUpDisabled->setPosition(Point(128, 40));
             buttonDownDisabled->setPosition(Point(128, 65));
             addUI("button_up_disabled", buttonUpDisabled);

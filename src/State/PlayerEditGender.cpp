@@ -13,12 +13,9 @@ namespace Falltergeist
 {
     namespace State
     {
-        PlayerEditGender::PlayerEditGender() : State()
+        PlayerEditGender::PlayerEditGender(std::shared_ptr<UI::IResourceManager> resourceManager) : State()
         {
-        }
-
-        PlayerEditGender::~PlayerEditGender()
-        {
+            this->resourceManager = resourceManager;
         }
 
         void PlayerEditGender::init()
@@ -33,7 +30,7 @@ namespace Falltergeist
             int bgX = bgPos.x();
             int bgY = bgPos.y();
 
-            auto bg = new UI::Image("art/intrface/charwin.frm");
+            auto bg = resourceManager->getImage("art/intrface/charwin.frm");
             bg->setPosition(bgPos + Point(236, 0));
 
             _maleImage = new UI::ImageList({
@@ -48,7 +45,7 @@ namespace Falltergeist
                                                                     }, bgX+310, bgY+2);
             _femaleImage->mouseClickHandler().add(std::bind(&PlayerEditGender::onFemaleButtonPress, this, std::placeholders::_1));
 
-            auto doneBox = new UI::Image("art/intrface/donebox.frm");
+            auto doneBox = resourceManager->getImage("art/intrface/donebox.frm");
             doneBox->setPosition(bgPos + Point(250, 42));
 
             auto doneLabel = new UI::TextArea(_t(MSG_EDITOR, 100), bgX+281, bgY+45);

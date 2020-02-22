@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../State/State.h"
+#include "../UI/IResourceManager.h"
 
 namespace Falltergeist
 {
@@ -10,10 +11,10 @@ namespace Falltergeist
     }
     namespace State
     {
-        class Inventory : public State
+        class Inventory final : public State
         {
             public:
-                Inventory();
+                Inventory(std::shared_ptr<UI::IResourceManager> resourceManager);
                 ~Inventory() override = default;
 
                 void init() override;
@@ -35,6 +36,7 @@ namespace Falltergeist
 
             private:
                 std::string _handItemSummary (Game::ItemObject* hand);
+                std::shared_ptr<UI::IResourceManager> resourceManager;
                 void _screenShow (unsigned int PID);
         };
     }

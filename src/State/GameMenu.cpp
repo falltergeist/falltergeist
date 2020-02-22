@@ -19,12 +19,9 @@ namespace Falltergeist
 {
     namespace State
     {
-        GameMenu::GameMenu() : State()
+        GameMenu::GameMenu(std::shared_ptr<UI::IResourceManager> resourceManager) : State()
         {
-        }
-
-        GameMenu::~GameMenu()
-        {
+            this->resourceManager = std::move(resourceManager);
         }
 
         void GameMenu::init()
@@ -35,7 +32,7 @@ namespace Falltergeist
             setModal(true);
             setFullscreen(false);
 
-            auto background = new UI::Image("art/intrface/opbase.frm");
+            auto background = resourceManager->getImage("art/intrface/opbase.frm");
             auto panelHeight = Game::getInstance()->locationState()->playerPanel()->size().height();
 
             auto backgroundPos = (Game::getInstance()->renderer()->size() - background->size() - Point(0, panelHeight)) / 2;
@@ -104,22 +101,22 @@ namespace Falltergeist
 
         void GameMenu::doSaveGame()
         {
-            Game::getInstance()->pushState(new SaveGame());
+            Game::getInstance()->pushState(new SaveGame(resourceManager));
         }
 
         void GameMenu::doLoadGame()
         {
-            Game::getInstance()->pushState(new LoadGame());
+            Game::getInstance()->pushState(new LoadGame(resourceManager));
         }
 
         void GameMenu::doPreferences()
         {
-            Game::getInstance()->pushState(new SettingsMenu());
+            Game::getInstance()->pushState(new SettingsMenu(resourceManager));
         }
 
         void GameMenu::doExit()
         {
-            Game::getInstance()->pushState(new ExitConfirm());
+            Game::getInstance()->pushState(new ExitConfirm(resourceManager));
         }
 
         void GameMenu::closeMenu()

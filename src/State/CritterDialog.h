@@ -2,6 +2,7 @@
 
 #include <vector>
 #include "../State/State.h"
+#include "../UI/IResourceManager.h"
 
 namespace Falltergeist
 {
@@ -19,8 +20,8 @@ namespace Falltergeist
         class CritterDialog : public State
         {
             public:
-                CritterDialog();
-                ~CritterDialog() override;
+                CritterDialog(std::shared_ptr<UI::IResourceManager> resourceManager);
+                virtual ~CritterDialog() = default;
                 void init() override;
 
                 void setQuestion(const std::string& value);
@@ -45,6 +46,9 @@ namespace Falltergeist
                 std::vector<UI::TextArea*> _answers;
 
                 void _selectAnswer(size_t i);
+
+            private:
+                std::shared_ptr<UI::IResourceManager> resourceManager;
         };
     }
 }

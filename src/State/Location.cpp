@@ -56,7 +56,8 @@ namespace Falltergeist
             std::shared_ptr<Settings> settings,
             std::shared_ptr<Graphics::Renderer> renderer,
             std::shared_ptr<Audio::Mixer> audioMixer,
-            std::shared_ptr<Game::Time> gameTime
+            std::shared_ptr<Game::Time> gameTime,
+            std::shared_ptr<UI::IResourceManager> resourceManager
         ) : State(),
             player(std::move(player)),
             mouse(std::move(mouse)),
@@ -65,6 +66,7 @@ namespace Falltergeist
             audioMixer(std::move(audioMixer)),
             gameTime(std::move(gameTime))
         {
+            this->resourceManager = std::move(resourceManager);
         }
 
         void Location::init()
@@ -202,7 +204,7 @@ namespace Falltergeist
                         if (dynamic_cast<CursorDropdown *>(Game::getInstance()->topState()) != nullptr) {
                             Game::getInstance()->popState();
                         }
-                        auto state = new CursorDropdown(std::move(icons), !_actionCursorButtonPressed);
+                        auto state = new CursorDropdown(resourceManager, std::move(icons), !_actionCursorButtonPressed);
                         state->setObject(_objectUnderCursor);
                         Game::getInstance()->pushState(state);
                     }
@@ -939,7 +941,7 @@ namespace Falltergeist
                             debug << " exitDirection: " << exitGrid->exitDirection() << std::endl << std::endl;
 
                             if (exitGrid->exitMapNumber() < 0) {
-                                auto worldMapState = new WorldMap;
+                                auto worldMapState = new WorldMap(resourceManager);
                                 // TODO delegate state manipulation to some kind of state manager
                                 Game::getInstance()->setState(worldMapState);
                                 return;
@@ -955,7 +957,7 @@ namespace Falltergeist
                             location->setDefaultElevationIndex(exitGrid->exitElevationNumber());
 
                             // TODO move this instantiation to StateLocationHelper or some kind of state manager
-                            auto state = new Location(player, mouse, settings, renderer, audioMixer, gameTime);
+                            auto state = new Location(player, mouse, settings, renderer, audioMixer, gameTime, resourceManager);
                             state->setLocation(location);
                             // TODO delegate state manipulation to some kind of state manager
                             Game::getInstance()->setState(state);

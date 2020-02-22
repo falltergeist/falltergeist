@@ -13,12 +13,9 @@ namespace Falltergeist
 {
     namespace State
     {
-        PlayerEditAge::PlayerEditAge() : State()
+        PlayerEditAge::PlayerEditAge(std::shared_ptr<UI::IResourceManager> resourceManager) : State()
         {
-        }
-
-        PlayerEditAge::~PlayerEditAge()
-        {
+            this->resourceManager = std::move(resourceManager);
         }
 
         void PlayerEditAge::init()
@@ -33,13 +30,13 @@ namespace Falltergeist
             int backgroundX = backgroundPos.x();
             int backgroundY = backgroundPos.y();
 
-            auto bg = new UI::Image("art/intrface/charwin.frm");
+            auto bg = resourceManager->getImage("art/intrface/charwin.frm");
             bg->setPosition(backgroundPos + Point(160, 0));
 
-            auto ageBox = new UI::Image("art/intrface/agebox.frm");
+            auto ageBox = resourceManager->getImage("art/intrface/agebox.frm");
             ageBox->setPosition(backgroundPos + Point(168, 10));
 
-            auto doneBox = new UI::Image("art/intrface/donebox.frm");
+            auto doneBox = resourceManager->getImage("art/intrface/donebox.frm");
             doneBox->setPosition(backgroundPos + Point(175, 40));
 
             auto decButton = new UI::ImageButton(UI::ImageButton::Type::LEFT_ARROW, backgroundX+178, backgroundY+14);
