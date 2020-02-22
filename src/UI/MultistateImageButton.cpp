@@ -13,12 +13,7 @@ namespace Falltergeist
 
     namespace UI
     {
-        MultistateImageButton::MultistateImageButton(const Point& pos) : Falltergeist::UI::Base(pos)
-        {
-            mouseClickHandler() += std::bind(&MultistateImageButton::_onMouseClick, this, std::placeholders::_1);
-        }
-
-        MultistateImageButton::MultistateImageButton(Type type, int x, int y) : Falltergeist::UI::Base(Point(x, y))
+        MultistateImageButton::MultistateImageButton(Type type, const Point& pos) : Falltergeist::UI::Base(pos)
         {
             mouseClickHandler() += std::bind(&MultistateImageButton::_onMouseClick, this, std::placeholders::_1);
             mouseUpHandler().add(std::bind(&MultistateImageButton::_onMouseUp, this, std::placeholders::_1));
@@ -53,10 +48,6 @@ namespace Falltergeist
                 default:
                     throw Exception("MultistateImageButton::MultistateImageButton(unsigned int type, x, y) - unsupported type");
             }
-        }
-
-        MultistateImageButton::~MultistateImageButton()
-        {
         }
 
         unsigned int MultistateImageButton::state() const

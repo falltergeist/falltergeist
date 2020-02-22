@@ -40,52 +40,52 @@ namespace Falltergeist
             auto settings = Game::getInstance()->settings();
 
             // Switches (big)
-            auto combatDifficultySwitch = new UI::MultistateImageButton(UI::MultistateImageButton::Type::BIG_SWITCH, backgroundX+76, backgroundY+149);
+            auto combatDifficultySwitch = new UI::MultistateImageButton(UI::MultistateImageButton::Type::BIG_SWITCH, {backgroundX + 76, backgroundY + 149});
             combatDifficultySwitch->setMaxState(3);
             combatDifficultySwitch->setState(settings->combatDifficulty());
             addUI("combat_difficulty",combatDifficultySwitch);
 
-            auto gameDifficultySwitch = new UI::MultistateImageButton(UI::MultistateImageButton::Type::BIG_SWITCH, backgroundX+76, backgroundY+71);
+            auto gameDifficultySwitch = new UI::MultistateImageButton(UI::MultistateImageButton::Type::BIG_SWITCH, {backgroundX + 76, backgroundY + 71});
             gameDifficultySwitch->setMaxState(3);
             gameDifficultySwitch->setState(settings->gameDifficulty());
             addUI("game_difficulty",gameDifficultySwitch);
 
-            auto violenceLevelSwitch = new UI::MultistateImageButton(UI::MultistateImageButton::Type::BIG_SWITCH, backgroundX+76, backgroundY+227);
+            auto violenceLevelSwitch = new UI::MultistateImageButton(UI::MultistateImageButton::Type::BIG_SWITCH, {backgroundX + 76, backgroundY + 227});
             violenceLevelSwitch->setState(settings->violenceLevel());
             addUI("violence_level",violenceLevelSwitch);
 
-            auto targetHighlightSwitch = new UI::MultistateImageButton(UI::MultistateImageButton::Type::BIG_SWITCH, backgroundX+76, backgroundY+309);
+            auto targetHighlightSwitch = new UI::MultistateImageButton(UI::MultistateImageButton::Type::BIG_SWITCH, {backgroundX + 76, backgroundY + 309});
             targetHighlightSwitch->setMaxState(3);
             targetHighlightSwitch->setState(settings->targetHighlight());
             addUI("target_highlight",targetHighlightSwitch);
 
-            auto combatLooksSwitch = new UI::MultistateImageButton(UI::MultistateImageButton::Type::BIG_SWITCH, backgroundX+76, backgroundY+387);
+            auto combatLooksSwitch = new UI::MultistateImageButton(UI::MultistateImageButton::Type::BIG_SWITCH, {backgroundX + 76, backgroundY + 387});
             combatLooksSwitch->setMaxState(2);
             combatLooksSwitch->setState(settings->combatLooks());
             addUI("combat_looks",combatLooksSwitch);
 
             // Switches (small)
-            auto combatMessagesSwitch = new UI::MultistateImageButton(UI::MultistateImageButton::Type::SMALL_SWITCH, backgroundX+299, backgroundY+74);
+            auto combatMessagesSwitch = new UI::MultistateImageButton(UI::MultistateImageButton::Type::SMALL_SWITCH, {backgroundX + 299, backgroundY + 74});
             combatMessagesSwitch->setState(settings->combatMessages());
             addUI("combat_messages",combatMessagesSwitch);
 
-            auto combatTauntsSwitch = new UI::MultistateImageButton(UI::MultistateImageButton::Type::SMALL_SWITCH, backgroundX+299, backgroundY+74+66);
+            auto combatTauntsSwitch = new UI::MultistateImageButton(UI::MultistateImageButton::Type::SMALL_SWITCH, {backgroundX + 299, backgroundY + 74 + 66});
             combatTauntsSwitch->setState(settings->combatTaunts());
             addUI("combat_taunts",combatTauntsSwitch);
 
-            auto languageFilterSwitch = new UI::MultistateImageButton(UI::MultistateImageButton::Type::SMALL_SWITCH, backgroundX+299, backgroundY+74+66*2);
+            auto languageFilterSwitch = new UI::MultistateImageButton(UI::MultistateImageButton::Type::SMALL_SWITCH, {backgroundX+299, backgroundY + 74 + 66 * 2});
             languageFilterSwitch->setState(settings->languageFilter());
             addUI("language_filter",languageFilterSwitch);
 
-            auto runningSwitch = new UI::MultistateImageButton(UI::MultistateImageButton::Type::SMALL_SWITCH, backgroundX+299, backgroundY+74+66*3);
+            auto runningSwitch = new UI::MultistateImageButton(UI::MultistateImageButton::Type::SMALL_SWITCH, {backgroundX + 299, backgroundY + 74 + 66 * 3});
             runningSwitch->setState(settings->running());
             addUI("running",runningSwitch);
 
-            auto subtitlesSwitch = new UI::MultistateImageButton(UI::MultistateImageButton::Type::SMALL_SWITCH, backgroundX+299, backgroundY+74+66*4);
+            auto subtitlesSwitch = new UI::MultistateImageButton(UI::MultistateImageButton::Type::SMALL_SWITCH, {backgroundX + 299, backgroundY + 74 + 66 * 4});
             subtitlesSwitch->setState(settings->subtitles());
             addUI("subtitles",subtitlesSwitch);
 
-            auto itemHightlightSwitch = new UI::MultistateImageButton(UI::MultistateImageButton::Type::SMALL_SWITCH, backgroundX+299, backgroundY+74+66*5);
+            auto itemHightlightSwitch = new UI::MultistateImageButton(UI::MultistateImageButton::Type::SMALL_SWITCH, {backgroundX + 299, backgroundY + 74 + 66 * 5});
             itemHightlightSwitch->setState(settings->itemHighlight());
             addUI("item_highlight",itemHightlightSwitch);
 
