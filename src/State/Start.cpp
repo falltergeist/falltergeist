@@ -42,7 +42,7 @@ namespace Falltergeist
 
             setPosition((renderer->size() - Point(640, 480)) / 2);
 
-            addUI("splash", new UI::Image("art/splash/" + splashes.at(rand() % splashes.size())));
+            addUI("splash", resourceManager->getImage("art/splash/" + splashes.at(rand() % splashes.size())));
 
             auto game = Game::getInstance();
             _delayTimer = std::make_unique<Game::Timer>(3000);

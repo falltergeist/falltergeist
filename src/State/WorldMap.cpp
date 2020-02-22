@@ -36,28 +36,28 @@ namespace Falltergeist
             unsigned int renderHeight = Game::getInstance()->renderer()->height();
 
             // loading map tiles
-            _tiles = new UI::ImageList({
-                                    "art/intrface/wrldmp00.frm",
-                                    "art/intrface/wrldmp01.frm",
-                                    "art/intrface/wrldmp02.frm",
-                                    "art/intrface/wrldmp03.frm",
-                                    "art/intrface/wrldmp04.frm",
-                                    "art/intrface/wrldmp05.frm",
-                                    "art/intrface/wrldmp06.frm",
-                                    "art/intrface/wrldmp07.frm",
-                                    "art/intrface/wrldmp08.frm",
-                                    "art/intrface/wrldmp09.frm",
-                                    "art/intrface/wrldmp10.frm",
-                                    "art/intrface/wrldmp11.frm",
-                                    "art/intrface/wrldmp12.frm",
-                                    "art/intrface/wrldmp13.frm",
-                                    "art/intrface/wrldmp14.frm",
-                                    "art/intrface/wrldmp15.frm",
-                                    "art/intrface/wrldmp16.frm",
-                                    "art/intrface/wrldmp17.frm",
-                                    "art/intrface/wrldmp18.frm",
-                                    "art/intrface/wrldmp19.frm"
-                                    }, 0, 0);
+            _tiles = new UI::ImageList({0, 0}, {
+                resourceManager->getImage("art/intrface/wrldmp00.frm"),
+                resourceManager->getImage("art/intrface/wrldmp01.frm"),
+                resourceManager->getImage("art/intrface/wrldmp02.frm"),
+                resourceManager->getImage("art/intrface/wrldmp03.frm"),
+                resourceManager->getImage("art/intrface/wrldmp04.frm"),
+                resourceManager->getImage("art/intrface/wrldmp05.frm"),
+                resourceManager->getImage("art/intrface/wrldmp06.frm"),
+                resourceManager->getImage("art/intrface/wrldmp07.frm"),
+                resourceManager->getImage("art/intrface/wrldmp08.frm"),
+                resourceManager->getImage("art/intrface/wrldmp09.frm"),
+                resourceManager->getImage("art/intrface/wrldmp10.frm"),
+                resourceManager->getImage("art/intrface/wrldmp11.frm"),
+                resourceManager->getImage("art/intrface/wrldmp12.frm"),
+                resourceManager->getImage("art/intrface/wrldmp13.frm"),
+                resourceManager->getImage("art/intrface/wrldmp14.frm"),
+                resourceManager->getImage("art/intrface/wrldmp15.frm"),
+                resourceManager->getImage("art/intrface/wrldmp16.frm"),
+                resourceManager->getImage("art/intrface/wrldmp17.frm"),
+                resourceManager->getImage("art/intrface/wrldmp18.frm"),
+                resourceManager->getImage("art/intrface/wrldmp19.frm")
+            });
 
             //auto cross = new Image("art/intrface/wmaploc.frm");
             _hotspot = imageButtonFactory->getByType(ImageButtonType::MAP_HOTSPOT, {0, 0});

@@ -63,11 +63,11 @@ namespace Falltergeist
             auto nextCharacterButton = addUI(imageButtonFactory->getByType(ImageButtonType::RIGHT_ARROW, {318, 320}));
             nextCharacterButton->mouseClickHandler().add(std::bind(&NewGame::onNextCharacterButtonClick, this, std::placeholders::_1));
 
-            addUI("images", new UI::ImageList({
-                                            "art/intrface/combat.frm",
-                                            "art/intrface/stealth.frm",
-                                            "art/intrface/diplomat.frm"
-                                            }, 27, 23));
+            addUI("images", new UI::ImageList({27, 23}, {
+                resourceManager->getImage("art/intrface/combat.frm"),
+                resourceManager->getImage("art/intrface/stealth.frm"),
+                resourceManager->getImage("art/intrface/diplomat.frm")
+            }));
 
             addUI("name", new UI::TextArea(300, 40));
 

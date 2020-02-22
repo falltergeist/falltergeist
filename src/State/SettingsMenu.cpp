@@ -309,24 +309,40 @@ namespace Falltergeist
 
             // SLIDERS
             // COMBAT SPEED SLIDER
-            auto combatSpeedSlider = new UI::Slider(backgroundX+384, backgroundY+50);
+            auto combatSpeedSlider = new UI::Slider(
+                {backgroundX + 384, backgroundY + 50},
+                std::unique_ptr<UI::Image>(resourceManager->getImage("art/intrface/prfsldon.frm")),
+                std::unique_ptr<UI::Image>(resourceManager->getImage("art/intrface/prfsldof.frm"))
+            );
             combatSpeedSlider->setMinValue(0.0);
             combatSpeedSlider->setMaxValue(50.0);
             combatSpeedSlider->setValue(settings->combatSpeed());
             addUI("combat_speed",combatSpeedSlider);
 
             // TEXT DELAY SLIDER
-            auto textDelaySlider = new UI::Slider(backgroundX+384, backgroundY+125);
+            auto textDelaySlider = new UI::Slider(
+                {backgroundX + 384, backgroundY + 125},
+                std::unique_ptr<UI::Image>(resourceManager->getImage("art/intrface/prfsldon.frm")),
+                std::unique_ptr<UI::Image>(resourceManager->getImage("art/intrface/prfsldof.frm"))
+            );
             textDelaySlider->setValue(settings->textDelay());
             addUI("text_delay",textDelaySlider);
 
             // MASTER AUDIO VOLUME SLIDER
-            auto masterAudioVolumeSlider = new UI::Slider(backgroundX+384, backgroundY+196);
+            auto masterAudioVolumeSlider = new UI::Slider(
+                {backgroundX + 384, backgroundY + 196},
+                std::unique_ptr<UI::Image>(resourceManager->getImage("art/intrface/prfsldon.frm")),
+                std::unique_ptr<UI::Image>(resourceManager->getImage("art/intrface/prfsldof.frm"))
+            );
             masterAudioVolumeSlider->setValue(settings->masterVolume());
             addUI("master_volume", masterAudioVolumeSlider);
 
             // MUSIC VOLUME SLIDER
-            auto musicVolumeSlider = new UI::Slider(backgroundX+384, backgroundY+196+51);
+            auto musicVolumeSlider = new UI::Slider(
+                {backgroundX + 384, backgroundY + 196 + 51},
+                std::unique_ptr<UI::Image>(resourceManager->getImage("art/intrface/prfsldon.frm")),
+                std::unique_ptr<UI::Image>(resourceManager->getImage("art/intrface/prfsldof.frm"))
+            );
             musicVolumeSlider->setValue(settings->musicVolume());
             addUI("music_volume", musicVolumeSlider);
             musicVolumeSlider->changeHandler().add([=](Event::Event* evt)
@@ -335,22 +351,38 @@ namespace Falltergeist
             });
 
             // SOUND EFFECTS VOLUME SLIDER
-            auto soundEffectsVolumeSlider = new UI::Slider(backgroundX+384, backgroundY+196+51*2);
+            auto soundEffectsVolumeSlider = new UI::Slider(
+                {backgroundX + 384, backgroundY + 196 + 51 * 2},
+                std::unique_ptr<UI::Image>(resourceManager->getImage("art/intrface/prfsldon.frm")),
+                std::unique_ptr<UI::Image>(resourceManager->getImage("art/intrface/prfsldof.frm"))
+            );
             soundEffectsVolumeSlider->setValue(settings->sfxVolume());
             addUI("sfx_volume", soundEffectsVolumeSlider);
 
             // SPEECH VOLUME SLIDER
-            auto speechVolumeSlider = new UI::Slider(backgroundX+384, backgroundY+196+51*3);
+            auto speechVolumeSlider = new UI::Slider(
+                {backgroundX + 384, backgroundY + 196 + 51 * 3},
+                std::unique_ptr<UI::Image>(resourceManager->getImage("art/intrface/prfsldon.frm")),
+                std::unique_ptr<UI::Image>(resourceManager->getImage("art/intrface/prfsldof.frm"))
+            );
             speechVolumeSlider->setValue(settings->voiceVolume());
             addUI("voice_volume", speechVolumeSlider);
 
             // BRIGHTNESS LEVEL SLIDER
-            auto brightnessLevelSlider = new UI::Slider(backgroundX+384, backgroundY+196+51*4);
+            auto brightnessLevelSlider = new UI::Slider(
+                {backgroundX + 384, backgroundY + 196 + 51 * 4},
+                std::unique_ptr<UI::Image>(resourceManager->getImage("art/intrface/prfsldon.frm")),
+                std::unique_ptr<UI::Image>(resourceManager->getImage("art/intrface/prfsldof.frm"))
+            );
             brightnessLevelSlider->setValue(settings->brightness());
             addUI("brightness", brightnessLevelSlider);
 
             // MOUSE SENSITIVITY SLIDER
-            auto mouseSensitivitySlider = new UI::Slider(backgroundX+384, backgroundY+196+51*5);
+            auto mouseSensitivitySlider = new UI::Slider(
+                {backgroundX + 384, backgroundY + 196 + 51 * 5},
+                std::unique_ptr<UI::Image>(resourceManager->getImage("art/intrface/prfsldon.frm")),
+                std::unique_ptr<UI::Image>(resourceManager->getImage("art/intrface/prfsldof.frm"))
+            );
             mouseSensitivitySlider->setValue(settings->mouseSensitivity());
             addUI("mouse_sensitivity",mouseSensitivitySlider);
         }

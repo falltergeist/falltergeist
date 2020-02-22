@@ -10,20 +10,12 @@ namespace Falltergeist
     {
         class Sprite;
     }
-    namespace Format
-    {
-        namespace Frm
-        {
-            class File;
-        }
-    }
     namespace UI
     {
         class Image final : public Base
         {
             public:
-                Image(const Graphics::Sprite &sprite);
-                Image(Format::Frm::File* frm, unsigned int direction);
+                Image(std::unique_ptr<Graphics::Sprite> sprite);
                 virtual ~Image() = default;
 
                 virtual void render(bool eggTransparency = false) override;
@@ -31,11 +23,12 @@ namespace Falltergeist
                 virtual void render(const Size &size, bool eggTransparency = false) override;
 
                 bool opaque(unsigned int x, unsigned int y);
-                virtual bool opaque(const Point &pos) override;
+                virtual bool opaque(const Point &position) override;
 
                 virtual Size size() const override;
+
             private:
-                Graphics::Sprite _sprite;
+                std::unique_ptr<Graphics::Sprite> sprite;
         };
     }
 }

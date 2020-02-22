@@ -6,19 +6,12 @@ namespace Falltergeist
 {
     namespace UI
     {
-        ImageList::ImageList(const Point& pos) : Falltergeist::UI::Base(pos)
+        ImageList::ImageList(const Point& pos, const std::vector<Image*> &imageList) : Falltergeist::UI::Base(pos)
         {
-        }
-
-        ImageList::ImageList(std::vector<std::string> imageList, int x, int y) : ImageList(Point(x, y))
-        {
-            for (auto& frmName : imageList) {
-                addImage(std::make_unique<Image>(frmName));
+            for (auto& image : imageList) {
+                auto imagePtr = std::unique_ptr<Image>(image);
+                addImage(imagePtr);
             }
-        }
-
-        ImageList::~ImageList()
-        {
         }
 
         unsigned int ImageList::currentImage() const
@@ -31,15 +24,10 @@ namespace Falltergeist
             _currentImage = number;
         }
 
-        void ImageList::addImage(std::unique_ptr<Image> image)
+        void ImageList::addImage(std::unique_ptr<Image> &image)
         {
             _images.push_back(std::move(image));
             _images.back()->setPosition(position());
-        }
-
-        void ImageList::addImage(const std::string& filename)
-        {
-            addImage(std::make_unique<Image>(filename));
         }
 
         const std::vector<std::unique_ptr<Image>>& ImageList::images() const

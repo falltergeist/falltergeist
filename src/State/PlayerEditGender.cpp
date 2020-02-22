@@ -37,16 +37,16 @@ namespace Falltergeist
             auto bg = resourceManager->getImage("art/intrface/charwin.frm");
             bg->setPosition(bgPos + Point(236, 0));
 
-            _maleImage = new UI::ImageList({
-                                            "art/intrface/maleoff.frm",
-                                            "art/intrface/maleon.frm"
-                                        }, bgX+260, bgY+2);
+            _maleImage = new UI::ImageList({bgX + 260, bgY +2}, {
+                resourceManager->getImage("art/intrface/maleoff.frm"),
+                resourceManager->getImage("art/intrface/maleon.frm")
+            });
             _maleImage->mouseClickHandler().add(std::bind(&PlayerEditGender::onMaleButtonPress, this, std::placeholders::_1));
 
-            _femaleImage = new UI::ImageList({
-                                                                    "art/intrface/femoff.frm",
-                                                                    "art/intrface/femon.frm"
-                                                                    }, bgX+310, bgY+2);
+            _femaleImage = new UI::ImageList({bgX + 310, bgY + 2}, {
+                resourceManager->getImage("art/intrface/femoff.frm"),
+                resourceManager->getImage("art/intrface/femon.frm")
+            });
             _femaleImage->mouseClickHandler().add(std::bind(&PlayerEditGender::onFemaleButtonPress, this, std::placeholders::_1));
 
             auto doneBox = resourceManager->getImage("art/intrface/donebox.frm");

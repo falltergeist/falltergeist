@@ -10,23 +10,16 @@ namespace Falltergeist
 {
     namespace UI
     {
-        Slider::Slider(const Point& pos) : Base(pos)
-        {
-        }
-
-        Slider::Slider(int x, int y) : Falltergeist::UI::Base(Point(x, y))
+        Slider::Slider(const Point& pos, std::unique_ptr<Image> imageOn, std::unique_ptr<Image> imageOff) : Base(pos)
         {
             mouseDragHandler().add(std::bind(&Slider::_onDrag, this, std::placeholders::_1));
             mouseDownHandler().add(std::bind(&Slider::_onLeftButtonDown, this, std::placeholders::_1));
             mouseUpHandler().add(std::bind(&Slider::_onLeftButtonUp, this, std::placeholders::_1));
-            _imageList.addImage("art/intrface/prfsldon.frm");
-            _imageList.addImage("art/intrface/prfsldof.frm");
+            imageList = std::make_unique<ImageList>(Point(0, 0), std::vector<Image*>());
+            imageList->addImage(imageOn);
+            imageList->addImage(imageOff);
             _downSound = "sound/sfx/ib1p1xx1.acm";
             _upSound = "sound/sfx/ib1lu1x1.acm";
-        }
-
-        Slider::~Slider()
-        {
         }
 
         void Slider::handle(Event::Event* event)
@@ -34,10 +27,10 @@ namespace Falltergeist
             if (auto mouseEvent = dynamic_cast<Event::Mouse*>(event)) {
                 Point ofs = mouseEvent->position() - _position;
 
-                bool opaque = _imageList.images().at(0)->opaque(mouseEvent->position() - _offset);
+                bool opaque = imageList->images().at(0)->opaque(mouseEvent->position() - _offset);
 
                 //if we are in slider coordinates and not on thumb (slider size = 218 + thumb size, thumb size = 21)
-                if (ofs.x() > 0 && ofs.x() < 239 && ofs.y() > 0 && ofs.y() < _imageList.images().at(0)->size().height() && !opaque)
+                if (ofs.x() > 0 && ofs.x() < 239 && ofs.y() > 0 && ofs.y() < imageList->images().at(0)->size().height() && !opaque)
                 {
                     //on left button up only when not dragging thumb
                     if (mouseEvent->name() == "mouseup" && mouseEvent->leftButton() && !_drag)
@@ -133,23 +126,23 @@ namespace Falltergeist
 
         void Slider::render(bool eggTransparency)
         {
-            _imageList.images().at(0)->setPosition(position());
-            _imageList.images().at(1)->setPosition(position());
+            imageList->images().at(0)->setPosition(position());
+            imageList->images().at(1)->setPosition(position());
             if (_drag) {
-                _imageList.images().at(0)->render(eggTransparency);
+                imageList->images().at(0)->render(eggTransparency);
             } else {
-                _imageList.images().at(1)->render(eggTransparency);
+                imageList->images().at(1)->render(eggTransparency);
             }
         }
 
         bool Slider::opaque(const Point &pos)
         {
-            return _imageList.images().at(0)->opaque(pos);
+            return imageList->images().at(0)->opaque(pos);
         }
 
         Size Slider::size() const
         {
-            return _imageList.images().at(0)->size();
+            return imageList->images().at(0)->size();
         }
     }
 }

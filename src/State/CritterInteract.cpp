@@ -89,7 +89,7 @@ namespace Falltergeist
             {
                 auto lst = ResourceManager::getInstance()->lstFileType("art/backgrnd/backgrnd.lst");
                 std::string bgImage = "art/backgrnd/" + lst->strings()->at(backgroundID());
-                auto bg = new UI::Image(bgImage);
+                auto bg = resourceManager->getImage(bgImage);
                 bg->setPosition({128, 15});
                 addUI(bg);
 
