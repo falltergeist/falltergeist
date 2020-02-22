@@ -10,7 +10,7 @@ namespace Falltergeist
     }
     namespace State
     {
-        class Credits : public State
+        class Credits final : public State
         {
             public:
                 Credits();

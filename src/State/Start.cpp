@@ -23,7 +23,7 @@ namespace Falltergeist
     {
         Start::Start(std::shared_ptr<UI::IResourceManager> resourceManager) : State()
         {
-            this->resourceManager = std::move(resourceManager);
+            this->resourceManager = resourceManager;
         }
 
         void Start::init()

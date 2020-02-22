@@ -6,6 +6,7 @@
 #include "../Input/Mouse.h"
 #include "../ResourceManager.h"
 #include "../State/State.h"
+#include "../UI/Factory/ImageButtonFactory.h"
 #include "../UI/Image.h"
 #include "../UI/ImageButton.h"
 #include "../UI/TextArea.h"
@@ -13,11 +14,14 @@
 
 namespace Falltergeist
 {
+    using ImageButtonType = UI::Factory::ImageButtonFactory::Type;
+
     namespace State
     {
         SaveGame::SaveGame(std::shared_ptr<UI::IResourceManager> resourceManager) : State()
         {
             this->resourceManager = resourceManager;
+            imageButtonFactory = std::make_unique<UI::Factory::ImageButtonFactory>(resourceManager);
         }
 
         void SaveGame::init()
@@ -42,17 +46,17 @@ namespace Falltergeist
             // BUTTONS
 
             // button: up arrow
-            addUI("button_up", new UI::ImageButton(UI::ImageButton::Type::SMALL_UP_ARROW, bgX+35, bgY+58));
+            addUI("button_up", imageButtonFactory->getByType(ImageButtonType::SMALL_UP_ARROW, {bgX + 35, bgY + 58}));
             // button: down arrow
-            addUI("button_down", new UI::ImageButton(UI::ImageButton::Type::SMALL_DOWN_ARROW, bgX+35, bgY+72));
+            addUI("button_down", imageButtonFactory->getByType(ImageButtonType::SMALL_DOWN_ARROW, {bgX + 35, bgY + 72}));
 
             // button: Done
-            auto doneButton = new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, bgX+391, bgY+349);
+            auto doneButton = imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {bgX + 391, bgY + 349});
             doneButton->mouseClickHandler().add(std::bind(&SaveGame::onDoneButtonClick, this, std::placeholders::_1));
             addUI(doneButton);
 
             // button: Cancel
-            auto cancelButton = new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, bgX+495, bgY+349);
+            auto cancelButton = imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {bgX + 495, bgY + 349});
             cancelButton->mouseClickHandler().add(std::bind(&SaveGame::onCancelButtonClick, this, std::placeholders::_1));
             addUI(cancelButton);
 

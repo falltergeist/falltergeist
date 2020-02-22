@@ -21,6 +21,13 @@ namespace Falltergeist
     {
         class CritterObject;
     }
+    namespace UI
+    {
+        namespace Factory
+        {
+            class ImageButtonFactory;
+        }
+    }
     namespace VM
     {
         class Script;

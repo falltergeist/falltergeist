@@ -9,6 +9,10 @@ namespace Falltergeist
 {
     namespace UI
     {
+        namespace Factory
+        {
+            class ImageButtonFactory;
+        }
         class BigCounter;
         class HiddenMask;
         class Image;
@@ -17,7 +21,7 @@ namespace Falltergeist
     }
     namespace State
     {
-        class PlayerEdit : public State
+        class PlayerEdit final : public State
         {
             public:
                 PlayerEdit(std::shared_ptr<UI::IResourceManager> resourceManager);
@@ -70,6 +74,7 @@ namespace Falltergeist
 
             private:
                 std::shared_ptr<UI::IResourceManager> resourceManager;
+                std::unique_ptr<UI::Factory::ImageButtonFactory> imageButtonFactory;
         };
     }
 }

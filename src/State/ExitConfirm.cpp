@@ -6,6 +6,7 @@
 #include "../ResourceManager.h"
 #include "../State/Location.h"
 #include "../State/MainMenu.h"
+#include "../UI/Factory/ImageButtonFactory.h"
 #include "../UI/Image.h"
 #include "../UI/ImageButton.h"
 #include "../UI/PlayerPanel.h"
@@ -13,11 +14,14 @@
 
 namespace Falltergeist
 {
+    using ImageButtonType = UI::Factory::ImageButtonFactory::Type;
+
     namespace State
     {
         ExitConfirm::ExitConfirm(std::shared_ptr<UI::IResourceManager> resourceManager) : State()
         {
-            this->resourceManager = std::move(resourceManager);
+            this->resourceManager = resourceManager;
+            imageButtonFactory = std::make_unique<UI::Factory::ImageButtonFactory>(resourceManager);
         }
 
         void ExitConfirm::init()
@@ -40,8 +44,8 @@ namespace Falltergeist
             box1->setPosition(backgroundPos + Point(38, 98));
             box2->setPosition(backgroundPos + Point(170, 98));
 
-            auto yesButton = new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, backgroundPos + Point(50, 102));
-            auto noButton = new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, backgroundPos + Point(183, 102));
+            auto yesButton = imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, backgroundPos + Point(50, 102));
+            auto noButton = imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, backgroundPos + Point(183, 102));
             yesButton->mouseClickHandler().add([this](Event::Event* event){ this->doYes(); });
             noButton->mouseClickHandler().add( [this](Event::Event* event){ this->doNo(); });
 

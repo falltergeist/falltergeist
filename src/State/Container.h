@@ -14,6 +14,13 @@ namespace Falltergeist
     {
         class ContainerItemObject;
     }
+    namespace UI
+    {
+        namespace Factory
+        {
+            class ImageButtonFactory;
+        }
+    }
     namespace State
     {
         class Container final : public State
@@ -36,6 +43,7 @@ namespace Falltergeist
             protected:
                 Game::ContainerItemObject* _object = nullptr;
                 std::shared_ptr<UI::IResourceManager> resourceManager;
+                std::unique_ptr<UI::Factory::ImageButtonFactory> imageButtonFactory;
         };
     }
 }

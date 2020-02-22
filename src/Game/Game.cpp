@@ -72,7 +72,7 @@ namespace Falltergeist
             _mixer = std::make_shared<Audio::Mixer>();
             _mixer->setMusicVolume(_settings->musicVolume());
             _mouse = std::make_shared<Input::Mouse>(uiResourceManager);
-            _fpsCounter = std::make_unique<UI::FpsCounter>(renderer()->width() - 42, 2);
+            _fpsCounter = std::make_unique<UI::FpsCounter>(Point(renderer()->width() - 42, 2));
             _fpsCounter->setWidth(42);
             _fpsCounter->setHorizontalAlign(UI::TextArea::HorizontalAlign::RIGHT);
 
@@ -471,7 +471,7 @@ namespace Falltergeist
 
         void Game::setUIResourceManager(std::shared_ptr<UI::IResourceManager> uiResourceManager)
         {
-            this->uiResourceManager = std::move(uiResourceManager);
+            this->uiResourceManager = uiResourceManager;
         }
     }
 }

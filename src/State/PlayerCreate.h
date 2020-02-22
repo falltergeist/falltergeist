@@ -9,6 +9,10 @@ namespace Falltergeist
 {
     namespace UI
     {
+        namespace Factory
+        {
+            class ImageButtonFactory;
+        }
         class BigCounter;
         class HiddenMask;
         class Image;
@@ -73,6 +77,7 @@ namespace Falltergeist
 
             private:
                 std::shared_ptr<UI::IResourceManager> resourceManager;
+                std::unique_ptr<UI::Factory::ImageButtonFactory> imageButtonFactory;
         };
     }
 }

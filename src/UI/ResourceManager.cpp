@@ -10,5 +10,10 @@ namespace Falltergeist
         {
             return new Image(Graphics::Sprite(filename));
         }
+
+        std::shared_ptr<Graphics::Sprite> ResourceManager::getSprite(const std::string &filename)
+        {
+            return std::make_shared<Graphics::Sprite>(filename);
+        }
     }
 }

@@ -19,7 +19,7 @@ namespace Falltergeist
     }
     namespace UI
     {
-        class Image : public Base
+        class Image final : public Base
         {
             public:
                 Image(const Graphics::Sprite &sprite);

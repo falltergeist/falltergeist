@@ -25,7 +25,7 @@ namespace Falltergeist
             int frames;
         } effect_t;
 
-        class Movie : public State
+        class Movie final : public State
         {
             public:
                 Movie(int id);

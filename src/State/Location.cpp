@@ -66,7 +66,7 @@ namespace Falltergeist
             audioMixer(std::move(audioMixer)),
             gameTime(std::move(gameTime))
         {
-            this->resourceManager = std::move(resourceManager);
+            this->resourceManager = resourceManager;
         }
 
         void Location::init()

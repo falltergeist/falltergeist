@@ -13,11 +13,16 @@ namespace Falltergeist
     }
     namespace UI
     {
+        namespace Factory
+        {
+            class ImageButtonFactory;
+        }
+
         class TextArea;
     }
     namespace State
     {
-        class CritterDialog : public State
+        class CritterDialog final : public State
         {
             public:
                 CritterDialog(std::shared_ptr<UI::IResourceManager> resourceManager);
@@ -49,6 +54,7 @@ namespace Falltergeist
 
             private:
                 std::shared_ptr<UI::IResourceManager> resourceManager;
+                std::unique_ptr<UI::Factory::ImageButtonFactory> imageButtonFactory;
         };
     }
 }

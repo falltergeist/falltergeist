@@ -5,6 +5,7 @@
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
 #include "../ResourceManager.h"
+#include "../UI/Factory/ImageButtonFactory.h"
 #include "../UI/TextArea.h"
 #include "../UI/ImageButton.h"
 #include "../UI/Image.h"
@@ -12,11 +13,14 @@
 
 namespace Falltergeist
 {
+    using ImageButtonType = UI::Factory::ImageButtonFactory::Type;
+
     namespace State
     {
         PlayerEditName::PlayerEditName(std::shared_ptr<UI::IResourceManager> resourceManager) : State()
         {
-            this->resourceManager = std::move(resourceManager);
+            this->resourceManager = resourceManager;
+            imageButtonFactory = std::make_unique<UI::Factory::ImageButtonFactory>(resourceManager);
         }
 
         void PlayerEditName::init()
@@ -80,7 +84,7 @@ namespace Falltergeist
             auto doneLabel = new UI::TextArea(_t(MSG_EDITOR, 100), bgX+65, bgY+43);
             doneLabel->setFont("font3.aaf", {0xb8, 0x9c, 0x28, 0xff});
 
-            auto doneButton = new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, bgX+45, bgY+43);
+            auto doneButton = imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {bgX + 45, bgY + 43});
             doneButton->mouseClickHandler().add(std::bind(&PlayerEditName::onDoneButtonClick, this, std::placeholders::_1));
 
             _name = new UI::TextArea(Game::getInstance()->player()->name(), bgX+43, bgY+15);

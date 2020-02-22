@@ -13,14 +13,6 @@ namespace Falltergeist
             setHorizontalAlign(TextArea::HorizontalAlign::RIGHT);
         }
 
-        FpsCounter::FpsCounter(int x, int y) : FpsCounter(Point(x, y))
-        {
-        }
-
-        FpsCounter::~FpsCounter()
-        {
-        }
-
         void FpsCounter::think(const float &deltaTime)
         {
             _millisecondsTracked += deltaTime;
