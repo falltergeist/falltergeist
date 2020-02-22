@@ -137,13 +137,13 @@ namespace Falltergeist
                 addUI("head",head);
             }
 
-            addUI("background", new UI::Image(Graphics::Sprite("art/intrface/alltlk.frm")));
+            addUI("background", resourceManager->getImage("art/intrface/alltlk.frm"));
 
-            auto hilight1 = new UI::Image(Graphics::Sprite("data/hilight1.png"));
+            auto hilight1 = resourceManager->getImage("data/hilight1.png");
             hilight1->setPosition({423, 20});
             addUI(hilight1);
 
-            auto hilight2 = new UI::Image(Graphics::Sprite("data/hilight2.png"));
+            auto hilight2 = resourceManager->getImage("data/hilight2.png");
             hilight2->setPosition({128, 84});
             addUI(hilight2);
 

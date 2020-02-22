@@ -30,13 +30,13 @@ namespace Falltergeist
             setModal(true);
             setFullscreen(false);
 
-            auto background = new UI::Image(Graphics::Sprite("art/intrface/lgdialog.frm"));
+            auto background = resourceManager->getImage("art/intrface/lgdialog.frm");
             auto panelHeight = Game::getInstance()->locationState()->playerPanel()->size().height();
 
             auto backgroundPos = (Game::getInstance()->renderer()->size() - background->size() - Point(0, panelHeight)) / 2;
 
-            auto box1 = new UI::Image(Graphics::Sprite("art/intrface/donebox.frm"));
-            auto box2 = new UI::Image(Graphics::Sprite("art/intrface/donebox.frm"));
+            auto box1 = resourceManager->getImage("art/intrface/donebox.frm");
+            auto box2 = resourceManager->getImage("art/intrface/donebox.frm");
             box1->setPosition(backgroundPos + Point(38, 98));
             box2->setPosition(backgroundPos + Point(170, 98));
 

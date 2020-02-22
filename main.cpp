@@ -2,7 +2,6 @@
 #include "src/Exception.h"
 #include "src/Game/Game.h"
 #include "src/Logger.h"
-#include "src/ResourceManager.h"
 #include "src/Settings.h"
 #include "src/State/Start.h"
 #include "src/UI/ResourceManager.h"
@@ -13,9 +12,12 @@ int main(int argc, char* argv[])
 {
     try
     {
+        auto uiResourceManager = std::make_shared<UI::ResourceManager>();
+
         auto game = Game::Game::getInstance();
+        game->setUIResourceManager(uiResourceManager);
         game->init(std::unique_ptr<Settings>(new Settings()));
-        game->setState(new State::Start(std::make_shared<UI::ResourceManager>()));
+        game->setState(new State::Start(uiResourceManager));
         game->run();
         game->shutdown();
         return 0;

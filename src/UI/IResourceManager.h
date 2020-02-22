@@ -17,5 +17,4 @@ namespace Falltergeist
                 virtual Image* getImage(const std::string &filename) = 0;
         };
     }
-
 }

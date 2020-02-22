@@ -136,10 +136,10 @@ namespace Falltergeist
             int deltaY = delta.y();
             if (deltaX > 0) {
                 _iconsPos.setX(_iconsPos.x() - 40 - 29 - 29);
-                _cursor = new UI::Image(Graphics::Sprite("art/intrface/actarrom.frm"));
+                _cursor = resourceManager->getImage("art/intrface/actarrom.frm");
                 _cursor->setOffset(-29, 0);
             } else {
-                _cursor = new UI::Image(Graphics::Sprite("art/intrface/actarrow.frm"));
+                _cursor = resourceManager->getImage("art/intrface/actarrow.frm");
                 _cursor->setOffset(0, 0);
             }
             if (deltaY > 0) {

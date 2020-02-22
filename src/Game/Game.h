@@ -6,6 +6,7 @@
 #include <SDL.h>
 #include "../Base/Singleton.h"
 #include "../Game/Time.h"
+#include "../UI/IResourceManager.h"
 
 namespace Falltergeist
 {
@@ -101,6 +102,7 @@ namespace Falltergeist
 
                 unsigned int frame() const;
 
+                void setUIResourceManager(std::shared_ptr<UI::IResourceManager> uiResourceManager);
             protected:
                 std::vector<int> _GVARS;
                 std::vector<std::unique_ptr<State::State>> _states;
@@ -131,6 +133,7 @@ namespace Falltergeist
                 std::vector<State::State*> _getActiveStates();
 
             private:
+                std::shared_ptr<UI::IResourceManager> uiResourceManager;
                 friend class Base::Singleton<Game>;
                 void _initGVARS();
                 std::unique_ptr<Event::Event> _createEventFromSDL(const SDL_Event& sdlEvent);

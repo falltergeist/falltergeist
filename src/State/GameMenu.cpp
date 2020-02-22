@@ -32,7 +32,7 @@ namespace Falltergeist
             setModal(true);
             setFullscreen(false);
 
-            auto background = new UI::Image(Graphics::Sprite("art/intrface/opbase.frm"));
+            auto background = resourceManager->getImage("art/intrface/opbase.frm");
             auto panelHeight = Game::getInstance()->locationState()->playerPanel()->size().height();
 
             auto backgroundPos = (Game::getInstance()->renderer()->size() - background->size() - Point(0, panelHeight)) / 2;
