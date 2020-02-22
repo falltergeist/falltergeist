@@ -42,22 +42,22 @@ namespace Falltergeist
 
             addUI("background", resourceManager->getImage("art/intrface/pickchar.frm"));
 
-            auto beginGameButton = addUI(new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, 81, 322));
+            auto beginGameButton = addUI(new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, {81, 322}));
             beginGameButton->mouseClickHandler().add(std::bind(&NewGame::onBeginGameButtonClick, this, std::placeholders::_1));
 
-            auto editButton = addUI(new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, 436, 319));
+            auto editButton = addUI(new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, {436, 319}));
             editButton->mouseClickHandler().add(std::bind(&NewGame::onEditButtonClick, this, std::placeholders::_1));
 
-            auto createButton = addUI(new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, 81, 424));
+            auto createButton = addUI(new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, {81, 424}));
             createButton->mouseClickHandler().add(std::bind(&NewGame::onCreateButtonClick, this, std::placeholders::_1));
 
-            auto backButton = addUI(new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, 461, 424));
+            auto backButton = addUI(new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, {461, 424}));
             backButton->mouseClickHandler().add(std::bind(&NewGame::onBackButtonClick, this, std::placeholders::_1));
 
-            auto prevCharacterButton = addUI(new UI::ImageButton(UI::ImageButton::Type::LEFT_ARROW, 292, 320));
+            auto prevCharacterButton = addUI(new UI::ImageButton(UI::ImageButton::Type::LEFT_ARROW, {292, 320}));
             prevCharacterButton->mouseClickHandler().add(std::bind(&NewGame::onPrevCharacterButtonClick, this, std::placeholders::_1));
 
-            auto nextCharacterButton = addUI(new UI::ImageButton(UI::ImageButton::Type::RIGHT_ARROW, 318, 320));
+            auto nextCharacterButton = addUI(new UI::ImageButton(UI::ImageButton::Type::RIGHT_ARROW, {318, 320}));
             nextCharacterButton->mouseClickHandler().add(std::bind(&NewGame::onNextCharacterButtonClick, this, std::placeholders::_1));
 
             addUI("images", new UI::ImageList({

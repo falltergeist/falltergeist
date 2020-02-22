@@ -51,7 +51,7 @@ namespace Falltergeist
             auto doneLabel = new UI::TextArea(_t(MSG_EDITOR, 100), bgX+281, bgY+45);
             doneLabel->setFont("font3.aaf", {0xb8, 0x9c, 0x28, 0xff});
 
-            auto doneButton = new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, bgX+260, bgY+45);
+            auto doneButton = new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, {bgX + 260, bgY + 45});
             doneButton->mouseClickHandler().add(std::bind(&PlayerEditGender::onDoneButtonClick, this, std::placeholders::_1));
 
             addUI(bg);

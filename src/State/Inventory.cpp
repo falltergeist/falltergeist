@@ -64,15 +64,15 @@ namespace Falltergeist
             addUI("background", resourceManager->getImage("art/intrface/invbox.frm"));
             getUI("background")->mouseClickHandler().add(std::bind(&Inventory::backgroundRightClick, this, std::placeholders::_1));
 
-            addUI("button_up",   new UI::ImageButton(UI::ImageButton::Type::INVENTORY_UP_ARROW,   128, 40));
-            addUI("button_down", new UI::ImageButton(UI::ImageButton::Type::INVENTORY_DOWN_ARROW, 128, 65));
+            addUI("button_up",   new UI::ImageButton(UI::ImageButton::Type::INVENTORY_UP_ARROW,   {128, 40}));
+            addUI("button_down", new UI::ImageButton(UI::ImageButton::Type::INVENTORY_DOWN_ARROW, {128, 65}));
             auto buttonDownDisabled = resourceManager->getImage("art/intrface/invdnds.frm");
             auto buttonUpDisabled = resourceManager->getImage("art/intrface/invupds.frm");
             buttonUpDisabled->setPosition(Point(128, 40));
             buttonDownDisabled->setPosition(Point(128, 65));
             addUI("button_up_disabled", buttonUpDisabled);
             addUI("button_down_disabled", buttonDownDisabled);
-            addUI("button_done", new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, 438, 328));
+            addUI("button_done", new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, {438, 328}));
 
             getUI("button_done")->mouseClickHandler().add(std::bind(&Inventory::onDoneButtonClick, this, std::placeholders::_1));
             getUI("button_up")->mouseClickHandler().add(  std::bind(&Inventory::onScrollUpButtonClick, this, std::placeholders::_1));

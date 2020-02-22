@@ -54,8 +54,7 @@ namespace Falltergeist
                     MAP_HOTSPOT
                 };
                 ImageButton(Type type, Point pos = Point());
-                ImageButton(Type type, int x, int y);
-                ~ImageButton() override;
+                virtual ~ImageButton() = default;
 
                 //void setState(unsigned int value);
 

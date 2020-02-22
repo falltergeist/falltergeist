@@ -56,7 +56,7 @@ namespace Falltergeist
                                     }, 0, 0);
 
             //auto cross = new Image("art/intrface/wmaploc.frm");
-            _hotspot = new UI::ImageButton(UI::ImageButton::Type::MAP_HOTSPOT, 0, 0);
+            _hotspot = new UI::ImageButton(UI::ImageButton::Type::MAP_HOTSPOT, {0, 0});
             //addUI(_hotspot);
 
             // creating screen

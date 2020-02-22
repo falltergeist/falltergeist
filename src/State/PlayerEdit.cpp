@@ -164,9 +164,9 @@ namespace Falltergeist
                 _addLabel(ss.str() + "_value",  new UI::TextArea("", backgroundX + 288, backgroundY + 179 + 13*i));
             }
 
-            _addButton("print", new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, backgroundX+345, backgroundY+454));
-            _addButton("done",  new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, backgroundX+455, backgroundY+454));
-            _addButton("cancel",new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, backgroundX+554, backgroundY+454));
+            _addButton("print", new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, {backgroundX + 345, backgroundY + 454}));
+            _addButton("done",  new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, {backgroundX + 455, backgroundY + 454}));
+            _addButton("cancel",new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, {backgroundX + 554, backgroundY + 454}));
 
             auto font3_b89c28ff = ResourceManager::getInstance()->font("font3.aaf");
             SDL_Color color = {0xb8, 0x9c, 0x28, 0xff};
@@ -330,7 +330,7 @@ namespace Falltergeist
             addUI("tab_kills_enemies", killEnemyNames);
             addUI("tab_kills_score", killEnemyScore);
 
-            auto tabsArrowUp = new UI::ImageButton(UI::ImageButton::Type::SMALL_UP_ARROW, backgroundX+317, backgroundY+363);
+            auto tabsArrowUp = new UI::ImageButton(UI::ImageButton::Type::SMALL_UP_ARROW, {backgroundX + 317, backgroundY + 363});
             tabsArrowUp->mouseClickHandler().add([=](...) {
                 switch (tabs->currentImage()) {
                 case 0: perksAndTraits->scrollUp();
@@ -343,7 +343,7 @@ namespace Falltergeist
             });
             addUI(tabsArrowUp);
 
-            auto tabsArrowDown = new UI::ImageButton(UI::ImageButton::Type::SMALL_DOWN_ARROW, backgroundX+317, backgroundY+376);
+            auto tabsArrowDown = new UI::ImageButton(UI::ImageButton::Type::SMALL_DOWN_ARROW, {backgroundX + 317, backgroundY + 376});
             tabsArrowDown->mouseClickHandler().add([=](...) {
                 switch (tabs->currentImage()) {
                 case 0: perksAndTraits->scrollDown();

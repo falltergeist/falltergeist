@@ -36,11 +36,11 @@ namespace Falltergeist
             int backgroundX = backgroundPos.x();
             int backgroundY = backgroundPos.y();
 
-            auto saveButton = new UI::ImageButton(UI::ImageButton::Type::OPTIONS_BUTTON, backgroundX+14, backgroundY+18);
-            auto loadButton = new UI::ImageButton(UI::ImageButton::Type::OPTIONS_BUTTON, backgroundX+14, backgroundY+18+37);
-            auto printToFileButton = new UI::ImageButton(UI::ImageButton::Type::OPTIONS_BUTTON, backgroundX+14, backgroundY+18+37*2);
-            auto eraseButton = new UI::ImageButton(UI::ImageButton::Type::OPTIONS_BUTTON, backgroundX+14, backgroundY+18+37*3);
-            auto doneButton = new UI::ImageButton(UI::ImageButton::Type::OPTIONS_BUTTON, backgroundX+14, backgroundY+18+37*4);
+            auto saveButton = new UI::ImageButton(UI::ImageButton::Type::OPTIONS_BUTTON, {backgroundX + 14, backgroundY + 18});
+            auto loadButton = new UI::ImageButton(UI::ImageButton::Type::OPTIONS_BUTTON, {backgroundX + 14, backgroundY + 18 + 37});
+            auto printToFileButton = new UI::ImageButton(UI::ImageButton::Type::OPTIONS_BUTTON, {backgroundX + 14, backgroundY + 18 + 37 * 2});
+            auto eraseButton = new UI::ImageButton(UI::ImageButton::Type::OPTIONS_BUTTON, {backgroundX + 14, backgroundY + 18 + 37 * 3});
+            auto doneButton = new UI::ImageButton(UI::ImageButton::Type::OPTIONS_BUTTON, {backgroundX + 14, backgroundY + 18 + 37 * 4});
 
             saveButton->mouseClickHandler().add(   std::bind(&PlayerCreateOptions::onSaveButtonClick, this, std::placeholders::_1));
             loadButton->mouseClickHandler().add(   std::bind(&PlayerCreateOptions::onLoadButtonClick, this, std::placeholders::_1));

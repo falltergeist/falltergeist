@@ -17,14 +17,6 @@ namespace Falltergeist
             _init(type);
         }
 
-        ImageButton::ImageButton(Type type, int x, int y) : ImageButton(type, Point(x, y))
-        {
-        }
-
-        ImageButton::~ImageButton()
-        {
-        }
-
         void ImageButton::_init(Type type)
         {
             switch(type)

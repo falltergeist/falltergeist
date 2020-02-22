@@ -39,11 +39,11 @@ namespace Falltergeist
             int backgroundX = backgroundPos.x();
             int backgroundY = backgroundPos.y();
 
-            auto saveGameButton    = new UI::ImageButton(UI::ImageButton::Type::OPTIONS_BUTTON, backgroundX+14, backgroundY+18);
-            auto loadGameButton    = new UI::ImageButton(UI::ImageButton::Type::OPTIONS_BUTTON, backgroundX+14, backgroundY+18+37);
-            auto preferencesButton = new UI::ImageButton(UI::ImageButton::Type::OPTIONS_BUTTON, backgroundX+14, backgroundY+18+37*2);
-            auto exitGameButton    = new UI::ImageButton(UI::ImageButton::Type::OPTIONS_BUTTON, backgroundX+14, backgroundY+18+37*3);
-            auto doneButton        = new UI::ImageButton(UI::ImageButton::Type::OPTIONS_BUTTON, backgroundX+14, backgroundY+18+37*4);
+            auto saveGameButton    = new UI::ImageButton(UI::ImageButton::Type::OPTIONS_BUTTON, {backgroundX + 14, backgroundY + 18});
+            auto loadGameButton    = new UI::ImageButton(UI::ImageButton::Type::OPTIONS_BUTTON, {backgroundX + 14, backgroundY + 18 + 37});
+            auto preferencesButton = new UI::ImageButton(UI::ImageButton::Type::OPTIONS_BUTTON, {backgroundX + 14, backgroundY + 18 + 37 * 2});
+            auto exitGameButton    = new UI::ImageButton(UI::ImageButton::Type::OPTIONS_BUTTON, {backgroundX + 14, backgroundY + 18 + 37 * 3});
+            auto doneButton        = new UI::ImageButton(UI::ImageButton::Type::OPTIONS_BUTTON, {backgroundX + 14, backgroundY + 18 + 37 * 4});
 
             preferencesButton->mouseClickHandler().add([this](Event::Event* event){ this->doPreferences(); });
             exitGameButton->mouseClickHandler().add(   [this](Event::Event* event){ this->doExit(); });

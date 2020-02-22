@@ -284,22 +284,22 @@ namespace Falltergeist
             // BUTTONS
 
             // button: Default
-            auto defaultButton = new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, backgroundX+23, backgroundY+450);
+            auto defaultButton = new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, {backgroundX + 23, backgroundY + 450});
             defaultButton->mouseClickHandler().add(std::bind(&SettingsMenu::onDefaultButtonClick, this, std::placeholders::_1));
             addUI(defaultButton);
 
             // button: Done
-            auto doneButton = new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, backgroundX+148, backgroundY+450);
+            auto doneButton = new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, {backgroundX + 148, backgroundY + 450});
             doneButton->mouseClickHandler().add([this](Event::Event* event){ this->doSave(); });
             addUI(doneButton);
 
             // button: Cancel
-            auto cancelButton = new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, backgroundX+263, backgroundY+450);
+            auto cancelButton = new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, {backgroundX + 263, backgroundY + 450});
             cancelButton->mouseClickHandler().add([this](Event::Event* event){ this->doCancel(); });
             addUI(cancelButton);
 
             // button: Affect player speed
-            auto affectPlayerSpeedCheckBox = new UI::ImageButton(UI::ImageButton::Type::CHECKBOX, backgroundX+383, backgroundY+68);
+            auto affectPlayerSpeedCheckBox = new UI::ImageButton(UI::ImageButton::Type::CHECKBOX, {backgroundX + 383, backgroundY + 68});
             affectPlayerSpeedCheckBox->setChecked(settings->playerSpeedup());
             addUI("player_speedup", affectPlayerSpeedCheckBox);
 

@@ -80,7 +80,7 @@ namespace Falltergeist
             auto doneLabel = new UI::TextArea(_t(MSG_EDITOR, 100), bgX+65, bgY+43);
             doneLabel->setFont("font3.aaf", {0xb8, 0x9c, 0x28, 0xff});
 
-            auto doneButton = new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, bgX+45, bgY+43);
+            auto doneButton = new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, {bgX + 45, bgY + 43});
             doneButton->mouseClickHandler().add(std::bind(&PlayerEditName::onDoneButtonClick, this, std::placeholders::_1));
 
             _name = new UI::TextArea(Game::getInstance()->player()->name(), bgX+43, bgY+15);

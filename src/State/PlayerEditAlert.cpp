@@ -46,7 +46,7 @@ namespace Falltergeist
             auto doneBox = resourceManager->getImage("art/intrface/donebox.frm");
             doneBox->setPosition(bgPos + Point(254, 270));
 
-            auto doneButton = new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, bgX + 264, bgY + 273);
+            auto doneButton = new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, {bgX + 264, bgY + 273});
             doneButton->mouseClickHandler().add([this](Event::Mouse* event)
             {
                 this->onDoneButtonClick(event);
