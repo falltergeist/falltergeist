@@ -2,8 +2,10 @@
 #include "src/Exception.h"
 #include "src/Game/Game.h"
 #include "src/Logger.h"
+#include "src/ResourceManager.h"
 #include "src/Settings.h"
 #include "src/State/Start.h"
+#include "src/UI/ResourceManager.h"
 
 using namespace Falltergeist;
 
@@ -13,7 +15,7 @@ int main(int argc, char* argv[])
     {
         auto game = Game::Game::getInstance();
         game->init(std::unique_ptr<Settings>(new Settings()));
-        game->setState(new State::Start());
+        game->setState(new State::Start(std::make_shared<UI::ResourceManager>()));
         game->run();
         game->shutdown();
         return 0;

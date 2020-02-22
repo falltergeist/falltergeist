@@ -19,6 +19,7 @@
 #include "../UI/Animation.h"
 #include "../UI/ImageButton.h"
 #include "../UI/PlayerPanel.h"
+#include "../UI/ResourceManager.h"
 #include "../UI/SmallCounter.h"
 #include "../UI/TextArea.h"
 
@@ -32,7 +33,8 @@ namespace Falltergeist
             auto renderer = game->renderer();
             auto mouse = game->mouse();
 
-            _background = std::make_shared<Image>("art/intrface/iface.frm");
+            resourceManager = std::make_shared<UI::ResourceManager>();
+            _background = std::shared_ptr<Image>(resourceManager->getImage("art/intrface/iface.frm"));
             _ui.push_back(_background);
 
             setX((renderer->width() - 640) / 2);
@@ -302,38 +304,38 @@ namespace Falltergeist
 
         void PlayerPanel::openGameMenu()
         {
-            Game::getInstance()->pushState(new State::GameMenu());
+            Game::getInstance()->pushState(new State::GameMenu(resourceManager));
             playWindowOpenSfx();
         }
 
         void PlayerPanel::openInventory()
         {
-            auto state = new State::Inventory();
+            auto state = new State::Inventory(resourceManager);
             Game::getInstance()->pushState(state);
             playWindowOpenSfx();
         }
 
         void PlayerPanel::openSkilldex()
         {
-            Game::getInstance()->pushState(new State::Skilldex());
+            Game::getInstance()->pushState(new State::Skilldex(resourceManager));
             playWindowOpenSfx();
         }
 
         void PlayerPanel::openMap()
         {
-            Game::getInstance()->pushState(new State::WorldMap());
+            Game::getInstance()->pushState(new State::WorldMap(resourceManager));
             playWindowOpenSfx();
         }
 
         void PlayerPanel::openCharacterScreen()
         {
-            Game::getInstance()->pushState(new State::PlayerEdit());
+            Game::getInstance()->pushState(new State::PlayerEdit(resourceManager));
             playWindowOpenSfx();
         }
 
         void PlayerPanel::openPipBoy()
         {
-            Game::getInstance()->pushState(new State::PipBoy());
+            Game::getInstance()->pushState(new State::PipBoy(resourceManager));
             playWindowOpenSfx();
         }
 
@@ -393,7 +395,7 @@ namespace Falltergeist
                 case SDLK_x:
                     if (event->controlPressed())
                     {
-                        Game::getInstance()->pushState(new State::ExitConfirm());
+                        Game::getInstance()->pushState(new State::ExitConfirm(resourceManager));
                         playWindowOpenSfx();
                     }
                 case SDLK_SLASH:
@@ -427,7 +429,7 @@ namespace Falltergeist
                     // @TODO: quick load logic
                     break;
                 case SDLK_F10:
-                    Game::getInstance()->pushState(new State::ExitConfirm());
+                    Game::getInstance()->pushState(new State::ExitConfirm(resourceManager));
                     playWindowOpenSfx();
                     break;
                 case SDLK_F12:
@@ -438,13 +440,13 @@ namespace Falltergeist
 
         void PlayerPanel::openSaveGame()
         {
-            Game::getInstance()->pushState(new State::SaveGame());
+            Game::getInstance()->pushState(new State::SaveGame(resourceManager));
             playWindowOpenSfx();
         }
 
         void PlayerPanel::openLoadGame()
         {
-            Game::getInstance()->pushState(new State::LoadGame());
+            Game::getInstance()->pushState(new State::LoadGame(resourceManager));
             playWindowOpenSfx();
         }
 

@@ -17,12 +17,9 @@ namespace Falltergeist
 {
     namespace State
     {
-        Container::Container() : State()
+        Container::Container(std::shared_ptr<UI::IResourceManager> resourceManager) : State()
         {
-        }
-
-        Container::~Container()
-        {
+            this->resourceManager = std::move(resourceManager);
         }
 
         void Container::init()
@@ -36,7 +33,7 @@ namespace Falltergeist
 
             setPosition((game->renderer()->size() - Point(537, 376)) / 2);
 
-            addUI("background", new UI::Image("art/intrface/loot.frm"));
+            addUI("background", resourceManager->getImage("art/intrface/loot.frm"));
 
             auto dude = Game::getInstance()->player();
 

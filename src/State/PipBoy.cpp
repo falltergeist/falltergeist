@@ -14,8 +14,9 @@ namespace Falltergeist
 {
     namespace State
     {
-        PipBoy::PipBoy() : State()
+        PipBoy::PipBoy(std::shared_ptr<UI::IResourceManager> resourceManager) : State()
         {
+            this->resourceManager = std::move(resourceManager);
         }
 
         PipBoy::~PipBoy()
@@ -34,7 +35,7 @@ namespace Falltergeist
             Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::BIG_ARROW);
 
             // Background
-            auto background = new UI::Image("art/intrface/pip.frm");
+            auto background = resourceManager->getImage("art/intrface/pip.frm");
             Point backgroundPos = Point((Game::getInstance()->renderer()->size() - background->size()) / 2);
             int backgroundX = backgroundPos.x();
             int backgroundY = backgroundPos.y();

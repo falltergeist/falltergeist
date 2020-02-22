@@ -22,10 +22,10 @@ namespace Falltergeist
         class Image : public Base
         {
             public:
-                Image(const std::string& filename);
+                Image(const Graphics::Sprite &sprite);
                 Image(Format::Frm::File* frm, unsigned int direction);
+                virtual ~Image() = default;
 
-                ~Image() override;
                 virtual void render(bool eggTransparency = false) override;
 
                 virtual void render(const Size &size, bool eggTransparency = false) override;

@@ -3,6 +3,7 @@
 #include "../Helpers/GameLocationHelper.h"
 #include "../Helpers/StateLocationHelper.h"
 #include "../State/Location.h"
+#include "../UI/ResourceManager.h"
 
 namespace Falltergeist
 {
@@ -21,7 +22,8 @@ namespace Falltergeist
                 game->settings(),
                 game->renderer(),
                 game->mixer(),
-                game->gameTime()
+                game->gameTime(),
+                std::make_shared<UI::ResourceManager>()
             );
             locationState->setElevation(initialLocation->defaultElevationIndex());
             locationState->setLocation(initialLocation);

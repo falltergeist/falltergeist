@@ -19,12 +19,9 @@ namespace Falltergeist
 {
     namespace State
     {
-        LoadGame::LoadGame() : State()
+        LoadGame::LoadGame(std::shared_ptr<UI::IResourceManager> resourceManager) : State()
         {
-        }
-
-        LoadGame::~LoadGame()
-        {
+            this->resourceManager = std::move(resourceManager);
         }
 
         void LoadGame::init()
@@ -39,7 +36,7 @@ namespace Falltergeist
             //auto player = Game::getInstance()->player();
 
             // background
-            auto bg = new UI::Image("art/intrface/lsgame.frm");
+            auto bg = resourceManager->getImage("art/intrface/lsgame.frm");
             Point bgPos = Point((game->renderer()->size() - bg->size()) / 2);
             auto bgX = bgPos.x();
             auto bgY = bgPos.y();

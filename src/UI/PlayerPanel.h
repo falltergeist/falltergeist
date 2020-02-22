@@ -36,6 +36,7 @@ namespace Falltergeist
                 void playWindowOpenSfx();
 
             private:
+                std::shared_ptr<UI::IResourceManager> resourceManager;
 
                 std::shared_ptr<Image> _background;
                 std::shared_ptr<SmallCounter> _hitPoints;

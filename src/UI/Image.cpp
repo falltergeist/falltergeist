@@ -1,22 +1,11 @@
-﻿#include "../Exception.h"
-#include "../UI/Image.h"
+﻿#include "../UI/Image.h"
 
 namespace Falltergeist
 {
     namespace UI
     {
-        Image::Image(const std::string& filename) : Falltergeist::UI::Base(), _sprite(filename)
+        Image::Image(const Graphics::Sprite &sprite) : Falltergeist::UI::Base(), _sprite(sprite)
         {
-        }
-
-        Image::~Image()
-        {
-        }
-
-        void Image::render(bool eggTransparency)
-        {
-            _sprite.trans(_trans);
-            _sprite.render(position().x(),position().y(), eggTransparency, light(), _outline, _lightLevel);
         }
 
         Image::Image(Format::Frm::File *frm, unsigned int direction) : Falltergeist::UI::Base(), _sprite(frm)
@@ -32,14 +21,16 @@ namespace Falltergeist
             );
         }
 
-        Size Image::size() const
+        void Image::render(bool eggTransparency)
         {
-        //    int w = _sprite.width();
-        //    int h = _sprite.height();
-        //    return Size(w,h);
-            return _sprite.size();
+            _sprite.trans(_trans);
+            _sprite.render(position().x(),position().y(), eggTransparency, light(), _outline, _lightLevel);
         }
 
+        Size Image::size() const
+        {
+            return _sprite.size();
+        }
 
         bool Image::opaque(unsigned int x, unsigned int y)
         {

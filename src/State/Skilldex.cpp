@@ -19,12 +19,9 @@ namespace Falltergeist
 {
     namespace State
     {
-        Skilldex::Skilldex() : State()
+        Skilldex::Skilldex(std::shared_ptr<UI::IResourceManager> resourceManager) : State()
         {
-        }
-
-        Skilldex::~Skilldex()
-        {
+            this->resourceManager = std::move(resourceManager);
         }
 
         void Skilldex::init()
@@ -37,7 +34,7 @@ namespace Falltergeist
 
             // original coordinates = 455x6
             // background size = 185x368
-            auto background = new UI::Image("art/intrface/skldxbox.frm");
+            auto background = resourceManager->getImage("art/intrface/skldxbox.frm");
             Graphics::Size rendSize = Game::getInstance()->renderer()->size();
             auto backgroundX = (rendSize.width() + 640 - 2 * background->size().width()) / 2;
             auto backgroundY = (rendSize.height() - 480 + 6);

@@ -1,7 +1,8 @@
 #pragma once
 
 #include <vector>
-#include "State.h"
+#include "../State/State.h"
+#include "../UI/IResourceManager.h"
 
 namespace Falltergeist
 {
@@ -11,11 +12,11 @@ namespace Falltergeist
     }
     namespace State
     {
-        class NewGame : public State
+        class NewGame final : public State
         {
             public:
-                NewGame();
-                ~NewGame() override;
+                NewGame(std::shared_ptr<UI::IResourceManager> resourceManager);
+                virtual ~NewGame() = default;
 
                 void init() override;
 
@@ -40,6 +41,9 @@ namespace Falltergeist
                 std::vector<std::unique_ptr<Game::DudeObject>> _characters;
 
                 void _changeCharacter();
+
+            private:
+                std::shared_ptr<UI::IResourceManager> resourceManager;
         };
     }
 }

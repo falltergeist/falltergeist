@@ -21,12 +21,9 @@ namespace Falltergeist
 
     namespace State
     {
-        Start::Start() : State()
+        Start::Start(std::shared_ptr<UI::IResourceManager> resourceManager) : State()
         {
-        }
-
-        Start::~Start()
-        {
+            this->resourceManager = std::move(resourceManager);
         }
 
         void Start::init()
@@ -50,8 +47,8 @@ namespace Falltergeist
             auto game = Game::getInstance();
             _delayTimer = std::make_unique<Game::Timer>(3000);
             _delayTimer->start();
-            _delayTimer->tickHandler().add([game](Event::Event*) {
-                game->setState(new MainMenu());
+            _delayTimer->tickHandler().add([game, this](Event::Event*) {
+                game->setState(new MainMenu(resourceManager));
                 game->pushState(new Movie(17));
                 game->pushState(new Movie(1));
                 game->pushState(new Movie(0));

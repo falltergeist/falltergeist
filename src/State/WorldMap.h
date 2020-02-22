@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../State/State.h"
+#include "../UI/IResourceManager.h"
 
 namespace Falltergeist
 {
@@ -12,12 +13,12 @@ namespace Falltergeist
     }
     namespace State
     {
-        class WorldMap : public State
+        class WorldMap final : public State
         {
             public:
 
-                WorldMap();
-                ~WorldMap() override;
+                WorldMap(std::shared_ptr<UI::IResourceManager> resourceManager);
+                virtual ~WorldMap() = default;
 
                 void init() override;
                 void render() override;
@@ -27,6 +28,8 @@ namespace Falltergeist
                 void onStateDeactivate(Event::State* event) override;
 
             private:
+                std::shared_ptr<UI::IResourceManager> resourceManager;
+
                 UI::Image* _panel = nullptr;
                 UI::ImageList* _tiles = nullptr;
                 UI::ImageButton* _hotspot = nullptr;

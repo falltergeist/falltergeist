@@ -3,6 +3,7 @@
 #include <map>
 #include <vector>
 #include "../State/State.h"
+#include "../UI/IResourceManager.h"
 
 namespace Falltergeist
 {
@@ -19,8 +20,8 @@ namespace Falltergeist
         class PlayerEdit : public State
         {
             public:
-                PlayerEdit();
-                ~PlayerEdit() override;
+                PlayerEdit(std::shared_ptr<UI::IResourceManager> resourceManager);
+                virtual ~PlayerEdit() = default;
 
                 void init() override;
                 void think(const float &deltaTime) override;
@@ -66,6 +67,9 @@ namespace Falltergeist
                 bool _statDecrease(unsigned int num);
                 bool _traitToggle(unsigned int num);
                 bool _skillToggle(unsigned int num);
+
+            private:
+                std::shared_ptr<UI::IResourceManager> resourceManager;
         };
     }
 }

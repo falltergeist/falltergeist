@@ -11,12 +11,9 @@ namespace Falltergeist
 {
     namespace State
     {
-        PlayerEditAlert::PlayerEditAlert() : State()
+        PlayerEditAlert::PlayerEditAlert(std::shared_ptr<UI::IResourceManager> resourceManager) : State()
         {
-        }
-
-        PlayerEditAlert::~PlayerEditAlert()
-        {
+            this->resourceManager = std::move(resourceManager);
         }
 
         void PlayerEditAlert::setMessage(const std::string& message)
@@ -32,7 +29,7 @@ namespace Falltergeist
             setFullscreen(false);
             setModal(true);
 
-            auto bg = new UI::Image("art/intrface/lgdialog.frm");
+            auto bg = resourceManager->getImage("art/intrface/lgdialog.frm");
 
             Point bgPos = Point((Game::getInstance()->renderer()->size() - Point(640, 480)) / 2);
             int bgX = bgPos.x();
@@ -46,7 +43,7 @@ namespace Falltergeist
             message->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
             message->setFont("font1.aaf", {0xff, 0x9f, 0x48, 0xff});
 
-            auto doneBox = new UI::Image("art/intrface/donebox.frm");
+            auto doneBox = resourceManager->getImage("art/intrface/donebox.frm");
             doneBox->setPosition(bgPos + Point(254, 270));
 
             auto doneButton = new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, bgX + 264, bgY + 273);

@@ -15,12 +15,9 @@ namespace Falltergeist
 {
     namespace State
     {
-        SaveGame::SaveGame() : State()
+        SaveGame::SaveGame(std::shared_ptr<UI::IResourceManager> resourceManager) : State()
         {
-        }
-
-        SaveGame::~SaveGame()
-        {
+            this->resourceManager = resourceManager;
         }
 
         void SaveGame::init()
@@ -35,7 +32,7 @@ namespace Falltergeist
             //auto player = Game::getInstance()->player();
 
             // background
-            auto bg = new UI::Image("art/intrface/lsgame.frm");
+            auto bg = resourceManager->getImage("art/intrface/lsgame.frm");
             Point bgPos = Point((game->renderer()->size() - bg->size()) / 2);
             int bgX = bgPos.x();
             int bgY = bgPos.y();

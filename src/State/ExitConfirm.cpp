@@ -15,8 +15,9 @@ namespace Falltergeist
 {
     namespace State
     {
-        ExitConfirm::ExitConfirm() : State()
+        ExitConfirm::ExitConfirm(std::shared_ptr<UI::IResourceManager> resourceManager) : State()
         {
+            this->resourceManager = std::move(resourceManager);
         }
 
         void ExitConfirm::init()
@@ -29,13 +30,13 @@ namespace Falltergeist
             setModal(true);
             setFullscreen(false);
 
-            auto background = new UI::Image("art/intrface/lgdialog.frm");
+            auto background = new UI::Image(Graphics::Sprite("art/intrface/lgdialog.frm"));
             auto panelHeight = Game::getInstance()->locationState()->playerPanel()->size().height();
 
             auto backgroundPos = (Game::getInstance()->renderer()->size() - background->size() - Point(0, panelHeight)) / 2;
 
-            auto box1 = new UI::Image("art/intrface/donebox.frm");
-            auto box2 = new UI::Image("art/intrface/donebox.frm");
+            auto box1 = new UI::Image(Graphics::Sprite("art/intrface/donebox.frm"));
+            auto box2 = new UI::Image(Graphics::Sprite("art/intrface/donebox.frm"));
             box1->setPosition(backgroundPos + Point(38, 98));
             box2->setPosition(backgroundPos + Point(170, 98));
 
@@ -72,7 +73,7 @@ namespace Falltergeist
 
         void ExitConfirm::doYes()
         {
-            Game::getInstance()->setState(new MainMenu());
+            Game::getInstance()->setState(new MainMenu(resourceManager));
         }
 
         void ExitConfirm::doNo()

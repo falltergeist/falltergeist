@@ -1,16 +1,17 @@
 #pragma once
 
 #include "../State/State.h"
+#include "../UI/IResourceManager.h"
 
 namespace Falltergeist
 {
     namespace State
     {
-        class SaveGame : public State
+        class SaveGame final : public State
         {
             public:
-                SaveGame();
-                ~SaveGame() override;
+                SaveGame(std::shared_ptr<UI::IResourceManager> resourceManager);
+                virtual ~SaveGame() = default;
 
                 void init() override;
 
@@ -20,6 +21,9 @@ namespace Falltergeist
                 void onStateActivate(Event::State* event) override;
                 void onStateDeactivate(Event::State* event) override;
                 void onKeyDown(Event::Keyboard* event) override;
+
+            private:
+                std::shared_ptr<UI::IResourceManager> resourceManager;
         };
     }
 }

@@ -15,12 +15,9 @@ namespace Falltergeist
 
     namespace State
     {
-        CritterDialogReview::CritterDialogReview() : State()
+        CritterDialogReview::CritterDialogReview(std::shared_ptr<UI::IResourceManager> resourceManager) : State()
         {
-        }
-
-        CritterDialogReview::~CritterDialogReview()
-        {
+            this->resourceManager = std::move(resourceManager);
         }
 
         void CritterDialogReview::init()
@@ -31,7 +28,7 @@ namespace Falltergeist
             setFullscreen(false);
             setModal(false);
 
-            auto background = new UI::Image("art/intrface/review.frm");
+            auto background = resourceManager->getImage("art/intrface/review.frm");
             Point backgroundPos = Point((Game::getInstance()->renderer()->size() - background->size()) / 2);
             background->setPosition(backgroundPos);
 
@@ -69,7 +66,6 @@ namespace Falltergeist
                 interact->switchSubState(CritterInteract::SubState::DIALOG);
             }
         }
-
 
         void CritterDialogReview::onUpButtonClick(Event::Mouse *event)
         {

@@ -17,12 +17,9 @@ namespace Falltergeist
 {
     namespace State
     {
-        PlayerCreateOptions::PlayerCreateOptions() : State()
+        PlayerCreateOptions::PlayerCreateOptions(std::shared_ptr<UI::IResourceManager> resourceManager) : State()
         {
-        }
-
-        PlayerCreateOptions::~PlayerCreateOptions()
-        {
+            this->resourceManager = std::move(resourceManager);
         }
 
         void PlayerCreateOptions::init()
@@ -33,7 +30,7 @@ namespace Falltergeist
             setModal(true);
             setFullscreen(false);
 
-            auto background = new UI::Image("art/intrface/opbase.frm");
+            auto background = resourceManager->getImage("art/intrface/opbase.frm");
 
             Point backgroundPos = Point((Game::getInstance()->renderer()->size() - background->size()) / 2);
             int backgroundX = backgroundPos.x();

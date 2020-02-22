@@ -14,12 +14,9 @@ namespace Falltergeist
 {
     namespace State
     {
-        PlayerEditName::PlayerEditName() : State()
+        PlayerEditName::PlayerEditName(std::shared_ptr<UI::IResourceManager> resourceManager) : State()
         {
-        }
-
-        PlayerEditName::~PlayerEditName()
-        {
+            this->resourceManager = std::move(resourceManager);
         }
 
         void PlayerEditName::init()
@@ -71,13 +68,13 @@ namespace Falltergeist
             _keyCodes.insert(std::make_pair(SDLK_9, '9'));
             _keyCodes.insert(std::make_pair(SDLK_0, '0'));
 
-            auto bg = new UI::Image("art/intrface/charwin.frm");
+            auto bg = resourceManager->getImage("art/intrface/charwin.frm");
             bg->setPosition(bgPos + Point(22, 0));
 
-            auto nameBox = new UI::Image("art/intrface/namebox.frm");
+            auto nameBox = resourceManager->getImage("art/intrface/namebox.frm");
             nameBox->setPosition(bgPos + Point(35, 10));
 
-            auto doneBox = new UI::Image("art/intrface/donebox.frm");
+            auto doneBox = resourceManager->getImage("art/intrface/donebox.frm");
             doneBox->setPosition(bgPos + Point(35, 40));
 
             auto doneLabel = new UI::TextArea(_t(MSG_EDITOR, 100), bgX+65, bgY+43);
