@@ -15,9 +15,8 @@ namespace Falltergeist
             mouseDragHandler().add(std::bind(&Slider::_onDrag, this, std::placeholders::_1));
             mouseDownHandler().add(std::bind(&Slider::_onLeftButtonDown, this, std::placeholders::_1));
             mouseUpHandler().add(std::bind(&Slider::_onLeftButtonUp, this, std::placeholders::_1));
-            imageList = std::make_unique<ImageList>(Point(0, 0), std::vector<Image*>());
-            imageList->addImage(imageOn);
-            imageList->addImage(imageOff);
+            this->imageOn = std::move(imageOn);
+            this->imageOff = std::move(imageOff);
             _downSound = "sound/sfx/ib1p1xx1.acm";
             _upSound = "sound/sfx/ib1lu1x1.acm";
         }
@@ -27,10 +26,10 @@ namespace Falltergeist
             if (auto mouseEvent = dynamic_cast<Event::Mouse*>(event)) {
                 Point ofs = mouseEvent->position() - _position;
 
-                bool opaque = imageList->images().at(0)->opaque(mouseEvent->position() - _offset);
+                bool opaque = imageOn->opaque(mouseEvent->position() - _offset);
 
                 //if we are in slider coordinates and not on thumb (slider size = 218 + thumb size, thumb size = 21)
-                if (ofs.x() > 0 && ofs.x() < 239 && ofs.y() > 0 && ofs.y() < imageList->images().at(0)->size().height() && !opaque)
+                if (ofs.x() > 0 && ofs.x() < 239 && ofs.y() > 0 && ofs.y() < imageOn->size().height() && !opaque)
                 {
                     //on left button up only when not dragging thumb
                     if (mouseEvent->name() == "mouseup" && mouseEvent->leftButton() && !_drag)
@@ -126,23 +125,23 @@ namespace Falltergeist
 
         void Slider::render(bool eggTransparency)
         {
-            imageList->images().at(0)->setPosition(position());
-            imageList->images().at(1)->setPosition(position());
+            imageOn->setPosition(position());
+            imageOff->setPosition(position());
             if (_drag) {
-                imageList->images().at(0)->render(eggTransparency);
+                imageOn->render(eggTransparency);
             } else {
-                imageList->images().at(1)->render(eggTransparency);
+                imageOff->render(eggTransparency);
             }
         }
 
         bool Slider::opaque(const Point &pos)
         {
-            return imageList->images().at(0)->opaque(pos);
+            return imageOn->opaque(pos);
         }
 
         Size Slider::size() const
         {
-            return imageList->images().at(0)->size();
+            return imageOn->size();
         }
     }
 }

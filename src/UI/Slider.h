@@ -38,7 +38,9 @@ namespace Falltergeist
                 Event::Handler& changeHandler();
 
             private:
-                std::unique_ptr<ImageList> imageList;
+                std::unique_ptr<Image> imageOn;
+                std::unique_ptr<Image> imageOff;
+
                 double _minValue = 0.0;
                 double _maxValue = 1.0;
                 double _value = 0.0;
