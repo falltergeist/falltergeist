@@ -7,6 +7,10 @@ namespace Falltergeist
 {
     namespace UI
     {
+        namespace Factory
+        {
+            class ImageButtonFactory;
+        }
         class Image;
         class ImageButton;
         class ImageList;
@@ -29,6 +33,7 @@ namespace Falltergeist
 
             private:
                 std::shared_ptr<UI::IResourceManager> resourceManager;
+                std::unique_ptr<UI::Factory::ImageButtonFactory> imageButtonFactory;
 
                 UI::Image* _panel = nullptr;
                 UI::ImageList* _tiles = nullptr;

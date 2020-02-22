@@ -11,17 +11,21 @@
 #include "../State/Location.h"
 #include "../State/SettingsMenu.h"
 #include "../UI/BigCounter.h"
+#include "../UI/Factory/ImageButtonFactory.h"
 #include "../UI/Image.h"
 #include "../UI/ImageButton.h"
 #include "../UI/TextArea.h"
 
 namespace Falltergeist
 {
+    using ImageButtonType = UI::Factory::ImageButtonFactory::Type;
+
     namespace State
     {
         Skilldex::Skilldex(std::shared_ptr<UI::IResourceManager> resourceManager) : State()
         {
-            this->resourceManager = std::move(resourceManager);
+            this->resourceManager = resourceManager;
+            imageButtonFactory = std::make_unique<UI::Factory::ImageButtonFactory>(resourceManager);
         }
 
         void Skilldex::init()
@@ -41,31 +45,31 @@ namespace Falltergeist
             background->setPosition({backgroundX, backgroundY});
 
             // buttons
-            auto sneakButton    = new UI::ImageButton(UI::ImageButton::Type::SKILLDEX_BUTTON, {backgroundX + 14, backgroundY + 44});
+            auto sneakButton    = imageButtonFactory->getByType(ImageButtonType::SKILLDEX_BUTTON, {backgroundX + 14, backgroundY + 44});
             sneakButton->mouseClickHandler().add(std::bind(&Skilldex::onSkillButtonClick, this, SKILL::SNEAK));
 
-            auto lockpickButton = new UI::ImageButton(UI::ImageButton::Type::SKILLDEX_BUTTON, {backgroundX + 14, backgroundY + 44 + 36});
+            auto lockpickButton = imageButtonFactory->getByType(ImageButtonType::SKILLDEX_BUTTON, {backgroundX + 14, backgroundY + 44 + 36});
             lockpickButton->mouseClickHandler().add(std::bind(&Skilldex::onSkillButtonClick, this, SKILL::LOCKPICK));
 
-            auto stealButton    = new UI::ImageButton(UI::ImageButton::Type::SKILLDEX_BUTTON, {backgroundX + 14, backgroundY + 44 + 36 * 2});
+            auto stealButton    = imageButtonFactory->getByType(ImageButtonType::SKILLDEX_BUTTON, {backgroundX + 14, backgroundY + 44 + 36 * 2});
             stealButton->mouseClickHandler().add(std::bind(&Skilldex::onSkillButtonClick, this, SKILL::STEAL));
 
-            auto trapsButton    = new UI::ImageButton(UI::ImageButton::Type::SKILLDEX_BUTTON, {backgroundX + 14, backgroundY + 44 + 36 * 3});
+            auto trapsButton    = imageButtonFactory->getByType(ImageButtonType::SKILLDEX_BUTTON, {backgroundX + 14, backgroundY + 44 + 36 * 3});
             trapsButton->mouseClickHandler().add(std::bind(&Skilldex::onSkillButtonClick, this, SKILL::TRAPS));
 
-            auto firstAidButton = new UI::ImageButton(UI::ImageButton::Type::SKILLDEX_BUTTON, {backgroundX + 14, backgroundY + 44 + 36 * 4});
+            auto firstAidButton = imageButtonFactory->getByType(ImageButtonType::SKILLDEX_BUTTON, {backgroundX + 14, backgroundY + 44 + 36 * 4});
             firstAidButton->mouseClickHandler().add(std::bind(&Skilldex::onSkillButtonClick, this, SKILL::FIRST_AID));
 
-            auto doctorButton   = new UI::ImageButton(UI::ImageButton::Type::SKILLDEX_BUTTON, {backgroundX + 14, backgroundY + 44 + 36 * 5});
+            auto doctorButton   = imageButtonFactory->getByType(ImageButtonType::SKILLDEX_BUTTON, {backgroundX + 14, backgroundY + 44 + 36 * 5});
             doctorButton->mouseClickHandler().add(std::bind(&Skilldex::onSkillButtonClick, this, SKILL::DOCTOR));
 
-            auto scienceButton  = new UI::ImageButton(UI::ImageButton::Type::SKILLDEX_BUTTON, {backgroundX + 14, backgroundY + 44 + 36 * 6});
+            auto scienceButton  = imageButtonFactory->getByType(ImageButtonType::SKILLDEX_BUTTON, {backgroundX + 14, backgroundY + 44 + 36 * 6});
             scienceButton->mouseClickHandler().add(std::bind(&Skilldex::onSkillButtonClick, this, SKILL::SCIENCE));
 
-            auto repairButton   = new UI::ImageButton(UI::ImageButton::Type::SKILLDEX_BUTTON, {backgroundX + 14, backgroundY + 44 + 36 * 7});
+            auto repairButton   = imageButtonFactory->getByType(ImageButtonType::SKILLDEX_BUTTON, {backgroundX + 14, backgroundY + 44 + 36 * 7});
             repairButton->mouseClickHandler().add(std::bind(&Skilldex::onSkillButtonClick, this, SKILL::REPAIR));
 
-            auto cancelButton   = new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, {backgroundX + 48, backgroundY + 338});
+            auto cancelButton   = imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {backgroundX + 48, backgroundY + 338});
             cancelButton->mouseClickHandler().add(std::bind(&Skilldex::onCancelButtonClick, this));
 
             // counters

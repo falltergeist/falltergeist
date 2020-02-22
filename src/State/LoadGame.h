@@ -11,6 +11,14 @@ namespace Falltergeist
         class Mouse;
         class State;
     }
+    namespace UI
+    {
+        namespace Factory
+        {
+            class ImageButtonFactory;
+        }
+    }
+
     namespace State
     {
         class LoadGame final : public State
@@ -31,6 +39,7 @@ namespace Falltergeist
 
             private:
                 std::shared_ptr<UI::IResourceManager> resourceManager;
+                std::unique_ptr<UI::Factory::ImageButtonFactory> imageButtonFactory;
         };
     }
 }

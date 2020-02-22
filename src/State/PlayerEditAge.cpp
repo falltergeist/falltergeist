@@ -5,17 +5,21 @@
 #include "../Graphics/Renderer.h"
 #include "../ResourceManager.h"
 #include "../UI/BigCounter.h"
+#include "../UI/Factory/ImageButtonFactory.h"
 #include "../UI/Image.h"
 #include "../UI/ImageButton.h"
 #include "../UI/TextArea.h"
 
 namespace Falltergeist
 {
+    using ImageButtonType = UI::Factory::ImageButtonFactory::Type;
+
     namespace State
     {
         PlayerEditAge::PlayerEditAge(std::shared_ptr<UI::IResourceManager> resourceManager) : State()
         {
-            this->resourceManager = std::move(resourceManager);
+            this->resourceManager = resourceManager;
+            imageButtonFactory = std::make_unique<UI::Factory::ImageButtonFactory>(resourceManager);
         }
 
         void PlayerEditAge::init()
@@ -39,13 +43,13 @@ namespace Falltergeist
             auto doneBox = resourceManager->getImage("art/intrface/donebox.frm");
             doneBox->setPosition(backgroundPos + Point(175, 40));
 
-            auto decButton = new UI::ImageButton(UI::ImageButton::Type::LEFT_ARROW, {backgroundX + 178, backgroundY + 14});
+            auto decButton = imageButtonFactory->getByType(ImageButtonType::LEFT_ARROW, {backgroundX + 178, backgroundY + 14});
             decButton->mouseClickHandler().add(std::bind(&PlayerEditAge::onDecButtonClick, this, std::placeholders::_1));
 
-            auto incButton = new UI::ImageButton(UI::ImageButton::Type::RIGHT_ARROW, {backgroundX + 262, backgroundY + 14});
+            auto incButton = imageButtonFactory->getByType(ImageButtonType::RIGHT_ARROW, {backgroundX + 262, backgroundY + 14});
             incButton->mouseClickHandler().add(std::bind(&PlayerEditAge::onIncButtonClick, this, std::placeholders::_1));
 
-            auto doneButton= new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, {backgroundX + 188, backgroundY + 43});
+            auto doneButton= imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {backgroundX + 188, backgroundY + 43});
             doneButton->mouseClickHandler().add(std::bind(&PlayerEditAge::onDoneButtonClick, this, std::placeholders::_1));
 
             auto doneLabel = new UI::TextArea(_t(MSG_EDITOR, 100), backgroundX+210, backgroundY+43);

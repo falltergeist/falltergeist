@@ -19,6 +19,7 @@
 #include "../UI/Animation.h"
 #include "../UI/AnimationFrame.h"
 #include "../UI/AnimationQueue.h"
+#include "../UI/Factory/ImageButtonFactory.h"
 #include "../Audio/Mixer.h"
 
 namespace Falltergeist
@@ -27,7 +28,7 @@ namespace Falltergeist
     {
         CritterInteract::CritterInteract(std::shared_ptr<UI::IResourceManager> resourceManager) : State()
         {
-            this->resourceManager = std::move(resourceManager);
+            this->resourceManager = resourceManager;
             _dialog = new CritterDialog(resourceManager);
             _review = new CritterDialogReview(resourceManager);
             _barter = new CritterBarter(resourceManager);

@@ -35,7 +35,9 @@ namespace Falltergeist
         {
             public:
                 State();
-                virtual ~State();
+                State(const State&) = delete;
+                State& operator=(const State&) = delete;
+                virtual ~State() = default;
 
                 template <class TUi, class ...TCtorArgs>
                 TUi* makeUI(TCtorArgs&&... args)

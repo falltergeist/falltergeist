@@ -6,6 +6,7 @@
 #include "../Settings.h"
 #include "../State/Location.h"
 #include "../State/MainMenu.h"
+#include "../UI/Factory/ImageButtonFactory.h"
 #include "../UI/Image.h"
 #include "../UI/ImageButton.h"
 #include "../UI/ImageList.h"
@@ -13,11 +14,14 @@
 
 namespace Falltergeist
 {
+    using ImageButtonType = UI::Factory::ImageButtonFactory::Type;
+
     namespace State
     {
         WorldMap::WorldMap(std::shared_ptr<UI::IResourceManager> resourceManager) : State()
         {
-            this->resourceManager = std::move(resourceManager);
+            this->resourceManager = resourceManager;
+            imageButtonFactory = std::make_unique<UI::Factory::ImageButtonFactory>(resourceManager);
         }
 
         void WorldMap::init()
@@ -56,7 +60,7 @@ namespace Falltergeist
                                     }, 0, 0);
 
             //auto cross = new Image("art/intrface/wmaploc.frm");
-            _hotspot = new UI::ImageButton(UI::ImageButton::Type::MAP_HOTSPOT, {0, 0});
+            _hotspot = imageButtonFactory->getByType(ImageButtonType::MAP_HOTSPOT, {0, 0});
             //addUI(_hotspot);
 
             // creating screen

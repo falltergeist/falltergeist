@@ -5,9 +5,17 @@
 
 namespace Falltergeist
 {
+    namespace UI
+    {
+        namespace Factory
+        {
+            class ImageButtonFactory;
+        }
+    }
+
     namespace State
     {
-        class PipBoy : public State
+        class PipBoy final: public State
         {
             public:
                 PipBoy(std::shared_ptr<UI::IResourceManager> resourceManager);
@@ -20,6 +28,7 @@ namespace Falltergeist
 
             private:
                 std::shared_ptr<UI::IResourceManager> resourceManager;
+                std::unique_ptr<UI::Factory::ImageButtonFactory> imageButtonFactory;
         };
     }
 }

@@ -5,6 +5,7 @@
 #include "../Graphics/Renderer.h"
 #include "../Input/Mouse.h"
 #include "../ResourceManager.h"
+#include "../UI/Factory/ImageButtonFactory.h"
 #include "../UI/Image.h"
 #include "../UI/ImageButton.h"
 #include "../UI/MonthCounter.h"
@@ -12,11 +13,14 @@
 
 namespace Falltergeist
 {
+    using ImageButtonType = UI::Factory::ImageButtonFactory::Type;
+
     namespace State
     {
         PipBoy::PipBoy(std::shared_ptr<UI::IResourceManager> resourceManager) : State()
         {
-            this->resourceManager = std::move(resourceManager);
+            this->resourceManager = resourceManager;
+            imageButtonFactory = std::make_unique<UI::Factory::ImageButtonFactory>(resourceManager);
         }
 
         PipBoy::~PipBoy()
@@ -42,11 +46,11 @@ namespace Falltergeist
             background->setPosition(backgroundPos);
 
             // Buttons
-            auto alarmButton = new UI::ImageButton(UI::ImageButton::Type::PIPBOY_ALARM_BUTTON, {backgroundX + 124, backgroundY + 13});
-            auto statusButton = new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, {backgroundX + 53, backgroundY + 340});
-            auto automapsButton = new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, {backgroundX + 53, backgroundY + 394});
-            auto archivesButton = new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, {backgroundX + 53, backgroundY + 423});
-            auto closeButton = new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, {backgroundX + 53, backgroundY + 448});
+            auto alarmButton = imageButtonFactory->getByType(ImageButtonType::PIPBOY_ALARM_BUTTON, {backgroundX + 124, backgroundY + 13});
+            auto statusButton = imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {backgroundX + 53, backgroundY + 340});
+            auto automapsButton = imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {backgroundX + 53, backgroundY + 394});
+            auto archivesButton = imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {backgroundX + 53, backgroundY + 423});
+            auto closeButton = imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {backgroundX + 53, backgroundY + 448});
             closeButton->mouseClickHandler().add(std::bind(&PipBoy::onCloseButtonClick, this, std::placeholders::_1));
             // Date and time
 

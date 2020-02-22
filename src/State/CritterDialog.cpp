@@ -15,6 +15,7 @@
 #include "../State/CritterDialogReview.h"
 #include "../State/Location.h"
 #include "../UI/AnimationQueue.h"
+#include "../UI/Factory/ImageButtonFactory.h"
 #include "../UI/Image.h"
 #include "../UI/TextArea.h"
 #include "../VM/Script.h"
@@ -23,9 +24,12 @@ namespace Falltergeist
 {
     namespace State
     {
+        using ImageButtonType = UI::Factory::ImageButtonFactory::Type;
+
         CritterDialog::CritterDialog(std::shared_ptr<UI::IResourceManager> resourceManager) : State()
         {
-            this->resourceManager = std::move(resourceManager);
+            this->resourceManager = resourceManager;
+            imageButtonFactory = std::make_unique<UI::Factory::ImageButtonFactory>(resourceManager);
         }
 
         void CritterDialog::init()
@@ -85,11 +89,11 @@ namespace Falltergeist
             });
 
             // Interface buttons
-            auto reviewButton = new UI::ImageButton(UI::ImageButton::Type::DIALOG_REVIEW_BUTTON, {13, 154});
+            auto reviewButton = imageButtonFactory->getByType(ImageButtonType::DIALOG_REVIEW_BUTTON, {13, 154});
             reviewButton->mouseClickHandler().add(std::bind(&CritterDialog::onReviewButtonClick, this, std::placeholders::_1));
             addUI(reviewButton);
 
-            auto barterButton = new UI::ImageButton(UI::ImageButton::Type::DIALOG_RED_BUTTON, {593, 40});
+            auto barterButton = imageButtonFactory->getByType(ImageButtonType::DIALOG_RED_BUTTON, {593, 40});
             barterButton->mouseClickHandler().add(std::bind(&CritterDialog::onBarterButtonClick, this, std::placeholders::_1));
             addUI(barterButton);
         }

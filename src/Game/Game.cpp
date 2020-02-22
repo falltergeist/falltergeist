@@ -471,7 +471,7 @@ namespace Falltergeist
 
         void Game::setUIResourceManager(std::shared_ptr<UI::IResourceManager> uiResourceManager)
         {
-            this->uiResourceManager = std::move(uiResourceManager);
+            this->uiResourceManager = uiResourceManager;
         }
     }
 }

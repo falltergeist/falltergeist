@@ -14,6 +14,7 @@
 #include "../State/PlayerEditName.h"
 #include "../State/PlayerCreateOptions.h"
 #include "../UI/BigCounter.h"
+#include "../UI/Factory/ImageButtonFactory.h"
 #include "../UI/HiddenMask.h"
 #include "../UI/Image.h"
 #include "../UI/TextArea.h"
@@ -22,12 +23,14 @@
 namespace Falltergeist
 {
     using Helpers::StateLocationHelper;
+    using ImageButtonType = UI::Factory::ImageButtonFactory::Type;
 
     namespace State
     {
         PlayerCreate::PlayerCreate(std::shared_ptr<UI::IResourceManager> resourceManager) : State()
         {
-            this->resourceManager = std::move(resourceManager);
+            this->resourceManager = resourceManager;
+            imageButtonFactory = std::make_unique<UI::Factory::ImageButtonFactory>(resourceManager);
         }
 
         void PlayerCreate::init()
@@ -59,8 +62,8 @@ namespace Falltergeist
                 _addLabel(ss.str(), new UI::TextArea("", backgroundX+104, backgroundY+46+33*i));      // stat value label
                 _addCounter(ss.str(), new UI::BigCounter({backgroundX + 59, static_cast<int>(backgroundY + 37 + 33 * i)}));       // stat value counter
                 _addMask(ss.str(), new UI::HiddenMask(133, 29, backgroundX+14, backgroundY+36+33*i)); // stat click mask
-                _addButton(ss.str() + "_increase", new UI::ImageButton(UI::ImageButton::Type::PLUS,  {backgroundX + 149, static_cast<int>(backgroundY + 38 + 33 * i)})); // stat increase button
-                _addButton(ss.str() + "_decrease", new UI::ImageButton(UI::ImageButton::Type::MINUS, {backgroundX + 149, static_cast<int>(backgroundY + 49 + 33 * i)})); // stat decrease button
+                _addButton(ss.str() + "_increase", imageButtonFactory->getByType(ImageButtonType::PLUS,  {backgroundX + 149, static_cast<int>(backgroundY + 38 + 33 * i)})); // stat increase button
+                _addButton(ss.str() + "_decrease", imageButtonFactory->getByType(ImageButtonType::MINUS, {backgroundX + 149, static_cast<int>(backgroundY + 49 + 33 * i)})); // stat decrease button
             }
 
             _addCounter("statsPoints", new UI::BigCounter({backgroundX + 126, backgroundY + 282})); // Free stats points counter
@@ -79,7 +82,7 @@ namespace Falltergeist
                 if (i <= 7)
                 {
                     _addLabel(ss.str(),  new UI::TextArea(_t(MSG_TRAITS, 100 + i), backgroundX+48, backgroundY+353+13*i)); // trate label
-                    _addButton(ss.str(), new UI::ImageButton(UI::ImageButton::Type::SKILL_TOGGLE, {backgroundX + 23, static_cast<int>(backgroundY + 352 + 13 * i)})); // trate toggle button
+                    _addButton(ss.str(), imageButtonFactory->getByType(ImageButtonType::SKILL_TOGGLE, {backgroundX + 23, static_cast<int>(backgroundY + 352 + 13 * i)})); // trate toggle button
                 }
                 //right column
                 else
@@ -88,7 +91,7 @@ namespace Falltergeist
                     label->setWidth(122);
                     label->setHorizontalAlign(UI::TextArea::HorizontalAlign::RIGHT);
                     _addLabel(ss.str(),  label); // trate label
-                    _addButton(ss.str(), new UI::ImageButton(UI::ImageButton::Type::SKILL_TOGGLE, {backgroundX + 299, static_cast<int>(backgroundY + 352 + 13 * (i - 8))})); // trate toggle button
+                    _addButton(ss.str(), imageButtonFactory->getByType(ImageButtonType::SKILL_TOGGLE, {backgroundX + 299, static_cast<int>(backgroundY + 352 + 13 * (i - 8))})); // trate toggle button
                 }
             }
 
@@ -102,7 +105,7 @@ namespace Falltergeist
                 _addTitle(ss.str(), _t(MSG_SKILLS, 100 + i));
                 _addDescription(ss.str(), _t(MSG_SKILLS, 200 + i));
                 _addImage(ss.str(),  resourceManager->getImage("art/skilldex/" + imagesSkills[i] + ".frm"));
-                _addButton(ss.str(), new UI::ImageButton(UI::ImageButton::Type::SKILL_TOGGLE, {backgroundX + 347, static_cast<int>(backgroundY + 26 + 11 * i)}));
+                _addButton(ss.str(), imageButtonFactory->getByType(ImageButtonType::SKILL_TOGGLE, {backgroundX + 347, static_cast<int>(backgroundY + 26 + 11 * i)}));
                 _addLabel(ss.str(),  new UI::TextArea(_t(MSG_SKILLS, 100 + i), backgroundX+377, backgroundY+27+11*i))->setWidth(240);
                 _addLabel(ss.str() + "_value",  new UI::TextArea("", backgroundX+577, backgroundY+27+11*i));
             }
@@ -141,9 +144,9 @@ namespace Falltergeist
                 _addLabel(ss.str() + "_value", new UI::TextArea("", backgroundX + 288, backgroundY + 179 + 13*i));
             }
 
-            _addButton("options", new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, {backgroundX + 345, backgroundY + 454}));
-            _addButton("done",    new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, {backgroundX + 455, backgroundY + 454}));
-            _addButton("cancel",  new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, {backgroundX + 554, backgroundY + 454}));
+            _addButton("options", imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {backgroundX + 345, backgroundY + 454}));
+            _addButton("done",    imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {backgroundX + 455, backgroundY + 454}));
+            _addButton("cancel",  imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {backgroundX + 554, backgroundY + 454}));
 
             auto font3_b89c28ff = ResourceManager::getInstance()->font("font3.aaf");
             SDL_Color color = {0xb8, 0x9c, 0x28, 0xff};
@@ -175,13 +178,13 @@ namespace Falltergeist
             _addImage("label_4", resourceManager->getImage("art/skilldex/skills.frm"));
 
             // Name change button
-            _addButton("name",  new UI::ImageButton(UI::ImageButton::Type::PLAYER_NAME, {backgroundX + 13, backgroundY + 0}));
+            _addButton("name",  imageButtonFactory->getByType(ImageButtonType::PLAYER_NAME, {backgroundX + 13, backgroundY + 0}));
 
             // Age change button
-            _addButton("age", new UI::ImageButton(UI::ImageButton::Type::PLAYER_AGE, {backgroundX + 156, backgroundY + 0}));
+            _addButton("age", imageButtonFactory->getByType(ImageButtonType::PLAYER_AGE, {backgroundX + 156, backgroundY + 0}));
 
             //Gender change button
-            _addButton("gender", new UI::ImageButton(UI::ImageButton::Type::PLAYER_GENDER, {backgroundX + 236, backgroundY + 0}));
+            _addButton("gender", imageButtonFactory->getByType(ImageButtonType::PLAYER_GENDER, {backgroundX + 236, backgroundY + 0}));
 
             // add buttons to the state
             for(auto it = _buttons.begin(); it != _buttons.end(); ++it)

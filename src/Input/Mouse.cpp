@@ -16,7 +16,7 @@ namespace Falltergeist
     {
         Mouse::Mouse(std::shared_ptr<UI::IResourceManager> resourceManager)
         {
-            this->resourceManager = std::move(resourceManager);
+            this->resourceManager = resourceManager;
             SDL_ShowCursor(0); // Hide cursor
         }
 

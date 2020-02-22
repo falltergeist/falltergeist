@@ -17,6 +17,7 @@
 #include "../State/Skilldex.h"
 #include "../State/WorldMap.h"
 #include "../UI/Animation.h"
+#include "../UI/Factory/ImageButtonFactory.h"
 #include "../UI/ImageButton.h"
 #include "../UI/PlayerPanel.h"
 #include "../UI/ResourceManager.h"
@@ -25,6 +26,8 @@
 
 namespace Falltergeist
 {
+    using ImageButtonType = UI::Factory::ImageButtonFactory::Type;
+
     namespace UI
     {
         PlayerPanel::PlayerPanel() : UI::Base()
@@ -34,6 +37,8 @@ namespace Falltergeist
             auto mouse = game->mouse();
 
             resourceManager = std::make_shared<UI::ResourceManager>();
+            imageButtonFactory = std::make_unique<UI::Factory::ImageButtonFactory>(resourceManager);
+
             _background = std::shared_ptr<Image>(resourceManager->getImage("art/intrface/iface.frm"));
             _ui.push_back(_background);
 
@@ -61,20 +66,20 @@ namespace Falltergeist
             });
 
             // Change hand button
-            _ui.push_back(std::make_shared<ImageButton>(ImageButton::Type::BIG_RED_CIRCLE, position() + Point(218, 5)));
+            _ui.push_back(std::shared_ptr<ImageButton>(imageButtonFactory->getByType(ImageButtonType::BIG_RED_CIRCLE, position() + Point(218, 5))));
             _ui.back()->mouseClickHandler().add([this](Event::Event* event){ this->changeHand(); });
 
             // Inventory button
-            _ui.push_back(std::make_shared<ImageButton>(ImageButton::Type::PANEL_INVENTORY, position() + Point(211, 40)));
+            _ui.push_back(std::shared_ptr<ImageButton>(imageButtonFactory->getByType(ImageButtonType::PANEL_INVENTORY, position() + Point(211, 40))));
             _ui.back()->mouseClickHandler().add([this](Event::Event* event){ this->openInventory(); });
 
             // Options button
-            _ui.push_back(std::make_shared<ImageButton>(ImageButton::Type::PANEL_OPTIONS, position() + Point(210, 61)));
+            _ui.push_back(std::shared_ptr<ImageButton>(imageButtonFactory->getByType(ImageButtonType::PANEL_OPTIONS, position() + Point(210, 61))));
             _ui.back()->mouseClickHandler().add([this](Event::Event* event){ this->openGameMenu(); });
 
             // Attack button
             _isAttackBtnPressed = false;
-            _ui.push_back(std::make_shared<ImageButton>(ImageButton::Type::PANEL_ATTACK, position() + Point(267, 25)));
+            _ui.push_back(std::shared_ptr<ImageButton>(imageButtonFactory->getByType(ImageButtonType::PANEL_ATTACK, position() + Point(267, 25))));
 
             _ui.back()->mouseDownHandler().add([this](Event::Event* event){
                 if(auto mouse = dynamic_cast<Event::Mouse*>(event))
@@ -102,25 +107,25 @@ namespace Falltergeist
             _ui.push_back(_armorClass);
 
             // Skilldex button
-            _ui.push_back(std::make_shared<ImageButton>(ImageButton::Type::BIG_RED_CIRCLE, position() + Point(523, 5)));
+            _ui.push_back(std::shared_ptr<ImageButton>(imageButtonFactory->getByType(ImageButtonType::BIG_RED_CIRCLE, position() + Point(523, 5))));
             _ui.back()->mouseClickHandler().add([this](Event::Event* event){
                 this->openSkilldex();
             });
 
             // MAP button
-            _ui.push_back(std::make_shared<ImageButton>(ImageButton::Type::PANEL_MAP, position() + Point(526, 39)));
+            _ui.push_back(std::shared_ptr<ImageButton>(imageButtonFactory->getByType(ImageButtonType::PANEL_MAP, position() + Point(526, 39))));
             _ui.back()->mouseClickHandler().add([this](Event::Event* event){
                 this->openMap();
             });
 
             // CHA button
-            _ui.push_back(std::make_shared<ImageButton>(ImageButton::Type::PANEL_CHA, position() + Point(526, 58)));
+            _ui.push_back(std::shared_ptr<ImageButton>(imageButtonFactory->getByType(ImageButtonType::PANEL_CHA, position() + Point(526, 58))));
             _ui.back()->mouseClickHandler().add([this](Event::Event* event){
                 this->openCharacterScreen();
             });
 
             // PIP button
-            _ui.push_back(std::make_shared<ImageButton>(ImageButton::Type::PANEL_PIP, position() + Point(526, 77)));
+            _ui.push_back(std::shared_ptr<ImageButton>(imageButtonFactory->getByType(ImageButtonType::PANEL_PIP, position() + Point(526, 77))));
             _ui.back()->mouseClickHandler().add([this](Event::Event* event){
                 this->openPipBoy();
             });

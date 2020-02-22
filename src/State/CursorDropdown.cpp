@@ -22,7 +22,7 @@ namespace Falltergeist
             bool onlyIcon
         ) : State()
         {
-            this->resourceManager = std::move(resourceManager);
+            this->resourceManager = resourceManager;
             if (icons.size() == 0) {
                 throw Exception("CursorDropdown::CursorDropdown() - empty icons list!");
             }

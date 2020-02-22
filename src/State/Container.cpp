@@ -9,6 +9,7 @@
 #include "../Input/Mouse.h"
 #include "../Logger.h"
 #include "../UI/Animation.h"
+#include "../UI/Factory/ImageButtonFactory.h"
 #include "../UI/Image.h"
 #include "../UI/ImageButton.h"
 #include "../UI/ItemsList.h"
@@ -17,9 +18,12 @@ namespace Falltergeist
 {
     namespace State
     {
+        using ImageButtonType = UI::Factory::ImageButtonFactory::Type;
+
         Container::Container(std::shared_ptr<UI::IResourceManager> resourceManager) : State()
         {
-            this->resourceManager = std::move(resourceManager);
+            this->resourceManager = resourceManager;
+            imageButtonFactory = std::make_unique<UI::Factory::ImageButtonFactory>(resourceManager);
         }
 
         void Container::init()
@@ -54,7 +58,7 @@ namespace Falltergeist
             objectCopy->ui()->setPosition({432, 38});
             addUI(objectCopy->ui());
 
-            addUI("button_done", new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, {478, 331}));
+            addUI("button_done", imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {478, 331}));
             getUI("button_done")->mouseClickHandler().add(std::bind(&Container::onDoneButtonClick, this, std::placeholders::_1));
 
             // TODO: disable buttons if there is nowhere to scroll
@@ -65,11 +69,11 @@ namespace Falltergeist
             dudeList->setItems(Game::getInstance()->player()->inventory());
             addUI(dudeList);
 
-            auto dudeListScrollUpButton = new UI::ImageButton(UI::ImageButton::Type::DIALOG_UP_ARROW, {127, 40});
+            auto dudeListScrollUpButton = imageButtonFactory->getByType(ImageButtonType::DIALOG_UP_ARROW, {127, 40});
             dudeListScrollUpButton->mouseClickHandler().add([=](...) { scrollUp(dudeList); });
             addUI(dudeListScrollUpButton);
 
-            auto dudeListScrollDownButton = new UI::ImageButton(UI::ImageButton::Type::DIALOG_DOWN_ARROW, {127, 66});
+            auto dudeListScrollDownButton = imageButtonFactory->getByType(ImageButtonType::DIALOG_DOWN_ARROW, {127, 66});
             dudeListScrollDownButton->mouseClickHandler().add([=](...) { scrollDown(dudeList); });
             addUI(dudeListScrollDownButton);
 
@@ -77,15 +81,15 @@ namespace Falltergeist
             containerList->setItems(object()->inventory());
             addUI(containerList);
 
-            auto containerListScrollUpButton = new UI::ImageButton(UI::ImageButton::Type::DIALOG_UP_ARROW, {379, 40});
+            auto containerListScrollUpButton = imageButtonFactory->getByType(ImageButtonType::DIALOG_UP_ARROW, {379, 40});
             containerListScrollUpButton->mouseClickHandler().add([=](...) { scrollUp(containerList); });
             addUI(containerListScrollUpButton);
 
-            auto containerListScrollDownButton = new UI::ImageButton(UI::ImageButton::Type::DIALOG_DOWN_ARROW, {379, 66});
+            auto containerListScrollDownButton = imageButtonFactory->getByType(ImageButtonType::DIALOG_DOWN_ARROW, {379, 66});
             containerListScrollDownButton->mouseClickHandler().add([=](...) { scrollDown(containerList); });
             addUI(containerListScrollDownButton);
 
-            auto btnTakeAll = new UI::ImageButton(UI::ImageButton::Type::INVENTORY_TAKE_ALL, {432, 203});
+            auto btnTakeAll = imageButtonFactory->getByType(ImageButtonType::INVENTORY_TAKE_ALL, {432, 203});
             btnTakeAll->mouseClickHandler().add([dudeList, containerList](...) {
 
                 for(const auto &i : *containerList->items()) {

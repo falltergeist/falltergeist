@@ -14,17 +14,21 @@
 #include "../State/NewGame.h"
 #include "../State/SettingsMenu.h"
 #include "../UI/Animation.h"
+#include "../UI/Factory/ImageButtonFactory.h"
 #include "../UI/Image.h"
 #include "../UI/ImageButton.h"
 #include "../UI/TextArea.h"
 
 namespace Falltergeist
 {
+    using ImageButtonType = UI::Factory::ImageButtonFactory::Type;
+
     namespace State
     {
         MainMenu::MainMenu(std::shared_ptr<UI::IResourceManager> resourceManager) : State()
         {
-            this->resourceManager = std::move(resourceManager);
+            this->resourceManager = resourceManager;
+            imageButtonFactory = std::make_unique<UI::Factory::ImageButtonFactory>(resourceManager);
         }
 
         MainMenu::~MainMenu()
@@ -46,27 +50,27 @@ namespace Falltergeist
             addUI("background", resourceManager->getImage("art/intrface/mainmenu.frm"));
 
             // intro button
-            auto introButton = addUI(new UI::ImageButton(UI::ImageButton::Type::MENU_RED_CIRCLE, {30, 19}));
+            auto introButton = addUI(imageButtonFactory->getByType(ImageButtonType::MENU_RED_CIRCLE, {30, 19}));
             introButton->mouseClickHandler().add(std::bind(&MainMenu::onIntroButtonClick, this, std::placeholders::_1));
 
             // new game button
-            auto newGameButton = addUI(new UI::ImageButton(UI::ImageButton::Type::MENU_RED_CIRCLE, {30, 19 + 41}));
+            auto newGameButton = addUI(imageButtonFactory->getByType(ImageButtonType::MENU_RED_CIRCLE, {30, 19 + 41}));
             newGameButton->mouseClickHandler().add(std::bind(&MainMenu::onNewGameButtonClick, this, std::placeholders::_1));
 
             // load game button
-            auto loadGameButton = addUI(new UI::ImageButton(UI::ImageButton::Type::MENU_RED_CIRCLE, {30, 19 + 41 * 2}));
+            auto loadGameButton = addUI(imageButtonFactory->getByType(ImageButtonType::MENU_RED_CIRCLE, {30, 19 + 41 * 2}));
             loadGameButton->mouseClickHandler().add(std::bind(&MainMenu::onLoadGameButtonClick, this, std::placeholders::_1));
 
             // settings button
-            auto settingsButton = addUI(new UI::ImageButton(UI::ImageButton::Type::MENU_RED_CIRCLE, {30, 19 + 41 * 3}));
+            auto settingsButton = addUI(imageButtonFactory->getByType(ImageButtonType::MENU_RED_CIRCLE, {30, 19 + 41 * 3}));
             settingsButton->mouseClickHandler().add(std::bind(&MainMenu::onSettingsButtonClick, this, std::placeholders::_1));
 
             // credits button
-            auto creditsButton = addUI(new UI::ImageButton(UI::ImageButton::Type::MENU_RED_CIRCLE, {30, 19 + 41 * 4}));
+            auto creditsButton = addUI(imageButtonFactory->getByType(ImageButtonType::MENU_RED_CIRCLE, {30, 19 + 41 * 4}));
             creditsButton->mouseClickHandler().add(std::bind(&MainMenu::onCreditsButtonClick, this, std::placeholders::_1));
 
             // exit button
-            auto exitButton = addUI(new UI::ImageButton(UI::ImageButton::Type::MENU_RED_CIRCLE, {30, 19 + 41 * 5}));
+            auto exitButton = addUI(imageButtonFactory->getByType(ImageButtonType::MENU_RED_CIRCLE, {30, 19 + 41 * 5}));
             exitButton->mouseClickHandler().add(std::bind(&MainMenu::onExitButtonClick, this, std::placeholders::_1));
 
             auto font4 = ResourceManager::getInstance()->font("font4.aaf");

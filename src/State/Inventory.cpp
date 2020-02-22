@@ -20,6 +20,7 @@
 #include "../State/InventoryDragItem.h"
 #include "../State/Location.h"
 #include "../UI/Animation.h"
+#include "../UI/Factory/ImageButtonFactory.h"
 #include "../UI/Image.h"
 #include "../UI/ImageButton.h"
 #include "../UI/ImageList.h"
@@ -31,11 +32,15 @@
 
 namespace Falltergeist
 {
+    using ImageButtonType = UI::Factory::ImageButtonFactory::Type;
+
     namespace State
     {
         Inventory::Inventory(std::shared_ptr<UI::IResourceManager> resourceManager) : State()
         {
-            this->resourceManager = std::move(resourceManager);
+            this->resourceManager = resourceManager;
+            imageButtonFactory = std::make_unique<UI::Factory::ImageButtonFactory>(resourceManager);
+
             pushHandler().add([](Event::State* ev) {
                 Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::ACTION);
             });
@@ -64,15 +69,15 @@ namespace Falltergeist
             addUI("background", resourceManager->getImage("art/intrface/invbox.frm"));
             getUI("background")->mouseClickHandler().add(std::bind(&Inventory::backgroundRightClick, this, std::placeholders::_1));
 
-            addUI("button_up",   new UI::ImageButton(UI::ImageButton::Type::INVENTORY_UP_ARROW,   {128, 40}));
-            addUI("button_down", new UI::ImageButton(UI::ImageButton::Type::INVENTORY_DOWN_ARROW, {128, 65}));
+            addUI("button_up",   imageButtonFactory->getByType(ImageButtonType::INVENTORY_UP_ARROW,   {128, 40}));
+            addUI("button_down", imageButtonFactory->getByType(ImageButtonType::INVENTORY_DOWN_ARROW, {128, 65}));
             auto buttonDownDisabled = resourceManager->getImage("art/intrface/invdnds.frm");
             auto buttonUpDisabled = resourceManager->getImage("art/intrface/invupds.frm");
             buttonUpDisabled->setPosition(Point(128, 40));
             buttonDownDisabled->setPosition(Point(128, 65));
             addUI("button_up_disabled", buttonUpDisabled);
             addUI("button_down_disabled", buttonDownDisabled);
-            addUI("button_done", new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, {438, 328}));
+            addUI("button_done", imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {438, 328}));
 
             getUI("button_done")->mouseClickHandler().add(std::bind(&Inventory::onDoneButtonClick, this, std::placeholders::_1));
             getUI("button_up")->mouseClickHandler().add(  std::bind(&Inventory::onScrollUpButtonClick, this, std::placeholders::_1));
