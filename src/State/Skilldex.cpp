@@ -69,28 +69,28 @@ namespace Falltergeist
             cancelButton->mouseClickHandler().add(std::bind(&Skilldex::onCancelButtonClick, this));
 
             // counters
-            auto sneakCounter    = new UI::BigCounter(backgroundX + 111, backgroundY + 48, 3);
+            auto sneakCounter    = new UI::BigCounter({backgroundX + 111, backgroundY + 48}, 3);
             sneakCounter->setNumber(Game::getInstance()->player()->skillValue(SKILL::SNEAK));
 
-            auto lockpickCounter = new UI::BigCounter(backgroundX + 111, backgroundY + 48 + 36, 3);
+            auto lockpickCounter = new UI::BigCounter({backgroundX + 111, backgroundY + 48 + 36}, 3);
             lockpickCounter->setNumber(Game::getInstance()->player()->skillValue(SKILL::LOCKPICK));
 
-            auto stealCounter    = new UI::BigCounter(backgroundX + 111, backgroundY + 48 + 36 * 2, 3);
+            auto stealCounter    = new UI::BigCounter({backgroundX + 111, backgroundY + 48 + 36 * 2}, 3);
             stealCounter->setNumber(Game::getInstance()->player()->skillValue(SKILL::STEAL));
 
-            auto trapsCounter    = new UI::BigCounter(backgroundX + 111, backgroundY + 48 + 36 * 3, 3);
+            auto trapsCounter    = new UI::BigCounter({backgroundX + 111, backgroundY + 48 + 36 * 3}, 3);
             trapsCounter->setNumber(Game::getInstance()->player()->skillValue(SKILL::TRAPS));
 
-            auto firstAidCounter = new UI::BigCounter(backgroundX + 111, backgroundY + 48 + 36 * 4, 3);
+            auto firstAidCounter = new UI::BigCounter({backgroundX + 111, backgroundY + 48 + 36 * 4}, 3);
             firstAidCounter->setNumber(Game::getInstance()->player()->skillValue(SKILL::FIRST_AID));
 
-            auto doctorCounter   = new UI::BigCounter(backgroundX + 111, backgroundY + 48 + 36 * 5, 3);
+            auto doctorCounter   = new UI::BigCounter({backgroundX + 111, backgroundY + 48 + 36 * 5}, 3);
             doctorCounter->setNumber(Game::getInstance()->player()->skillValue(SKILL::DOCTOR));
 
-            auto scienceCounter  = new UI::BigCounter(backgroundX + 111, backgroundY + 48 + 36 * 6, 3);
+            auto scienceCounter  = new UI::BigCounter({backgroundX + 111, backgroundY + 48 + 36 * 6}, 3);
             scienceCounter->setNumber(Game::getInstance()->player()->skillValue(SKILL::SCIENCE));
 
-            auto repairCounter   = new UI::BigCounter(backgroundX + 111, backgroundY + 48 + 36 * 7, 3);
+            auto repairCounter   = new UI::BigCounter({backgroundX + 111, backgroundY + 48 + 36 * 7}, 3);
             repairCounter->setNumber(Game::getInstance()->player()->skillValue(SKILL::REPAIR));
 
             // LABELS

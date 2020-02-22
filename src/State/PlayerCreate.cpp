@@ -57,13 +57,13 @@ namespace Falltergeist
                 _addDescription(ss.str(), _t(MSG_STATS, 200 + i)); // stat description
                 _addImage(ss.str(), resourceManager->getImage("art/skilldex/" + imagesStats[i] + ".frm")); // stat image
                 _addLabel(ss.str(), new UI::TextArea("", backgroundX+104, backgroundY+46+33*i));      // stat value label
-                _addCounter(ss.str(), new UI::BigCounter(backgroundX+59, backgroundY+37+33*i));       // stat value counter
+                _addCounter(ss.str(), new UI::BigCounter({backgroundX + 59, static_cast<int>(backgroundY + 37 + 33 * i)}));       // stat value counter
                 _addMask(ss.str(), new UI::HiddenMask(133, 29, backgroundX+14, backgroundY+36+33*i)); // stat click mask
                 _addButton(ss.str() + "_increase", new UI::ImageButton(UI::ImageButton::Type::PLUS,  {backgroundX + 149, static_cast<int>(backgroundY + 38 + 33 * i)})); // stat increase button
                 _addButton(ss.str() + "_decrease", new UI::ImageButton(UI::ImageButton::Type::MINUS, {backgroundX + 149, static_cast<int>(backgroundY + 49 + 33 * i)})); // stat decrease button
             }
 
-            _addCounter("statsPoints", new UI::BigCounter(backgroundX+126, backgroundY+282)); // Free stats points counter
+            _addCounter("statsPoints", new UI::BigCounter({backgroundX + 126, backgroundY + 282})); // Free stats points counter
 
             // TRAITS
             std::string imagesTraits[] =  { "fastmeta", "bruiser", "smlframe", "onehand", "finesse",  "kamikaze", "heavyhnd", "fastshot",
@@ -107,7 +107,7 @@ namespace Falltergeist
                 _addLabel(ss.str() + "_value",  new UI::TextArea("", backgroundX+577, backgroundY+27+11*i));
             }
             // Free skill points counts
-            _addCounter("skillsPoints", new UI::BigCounter(backgroundX+522, backgroundY+228));
+            _addCounter("skillsPoints", new UI::BigCounter({backgroundX + 522, backgroundY + 228}));
 
             // HEALTH CONDITION
             std::string imagesHealth[] = { "hitpoint", "poisoned", "radiated", "eyedamag", "armright", "armleft", "legright", "legleft"};

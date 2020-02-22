@@ -10,7 +10,7 @@ namespace Falltergeist
     {
         class Image;
 
-        class BigCounter : public Falltergeist::UI::Base
+        class BigCounter final : public Falltergeist::UI::Base
         {
             public:
                 enum class Color
@@ -19,9 +19,8 @@ namespace Falltergeist
                     RED
                 };
 
-                BigCounter(int x, int y, unsigned int length = 2);
                 BigCounter(const Point& pos = Point(), unsigned int length = 2);
-                ~BigCounter() override;
+                virtual ~BigCounter() = default;
 
                 BigCounter(const BigCounter&) = delete;
                 void operator=(const BigCounter&) = delete;

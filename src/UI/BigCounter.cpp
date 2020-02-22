@@ -5,10 +5,6 @@ namespace Falltergeist
 {
     namespace UI
     {
-        BigCounter::BigCounter(int x, int y, unsigned int length) : BigCounter(Point(x, y), length)
-        {
-        }
-
         BigCounter::BigCounter(const Point& pos, unsigned int length) : Base(pos)
         {
             _length = length;
@@ -16,10 +12,6 @@ namespace Falltergeist
             for (int i = 0; i < 24; i++) {
                 _rects.push_back({i*14, 0, 14, 24});
             }
-        }
-
-        BigCounter::~BigCounter()
-        {
         }
 
         void BigCounter::setNumber(unsigned int number)

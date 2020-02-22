@@ -52,7 +52,7 @@ namespace Falltergeist
 
             doneLabel->setFont("font3.aaf", {0xb8, 0x9c, 0x28, 0xff});
 
-            _counter = new UI::BigCounter(backgroundX+215, backgroundY+13);
+            _counter = new UI::BigCounter({backgroundX + 215, backgroundY + 13});
             _counter->setNumber(Game::getInstance()->player()->age());
 
             addUI(bg);

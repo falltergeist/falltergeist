@@ -14,11 +14,6 @@ namespace Falltergeist
     {
         ImageButton::ImageButton(Type type, Point pos) : Base(pos)
         {
-            _init(type);
-        }
-
-        void ImageButton::_init(Type type)
-        {
             switch(type)
             {
                 case Type::SMALL_RED_CIRCLE:

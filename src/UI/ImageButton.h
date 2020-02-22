@@ -13,7 +13,7 @@ namespace Falltergeist
     }
     namespace UI
     {
-        class ImageButton : public Falltergeist::UI::Base
+        class ImageButton final: public Falltergeist::UI::Base
         {
             public:
                 enum class Type
@@ -82,7 +82,6 @@ namespace Falltergeist
                 void _onMouseClick(Event::Mouse* event);
                 void _onMouseDown(Event::Mouse* event);
                 void _onMouseOut(Event::Mouse* event);
-                void _init(Type type);
         };
     }
 }
