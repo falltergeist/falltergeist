@@ -1,5 +1,6 @@
 #include "../Game/ArmorItemObject.h"
 #include "../Exception.h"
+#include "../UI/TextArea.h"
 
 namespace Falltergeist
 {

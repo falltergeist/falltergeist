@@ -264,9 +264,11 @@ namespace Falltergeist
             _description->setWordWrap(true);
 
             // TABS
-            UI::ImageList *tabs = new UI::ImageList({ "art/intrface/perksfdr.frm",
-                                                      "art/intrface/karmafdr.frm",
-                                                      "art/intrface/killsfdr.frm" }, backgroundX+10, backgroundY+325);
+            UI::ImageList *tabs = new UI::ImageList({backgroundX + 10, backgroundY + 325}, {
+                resourceManager->getImage("art/intrface/perksfdr.frm"),
+                resourceManager->getImage("art/intrface/karmafdr.frm"),
+                resourceManager->getImage("art/intrface/killsfdr.frm")
+            });
             tabs->mouseClickHandler().add(std::bind(&PlayerEdit::onTabClick, this, std::placeholders::_1));
             addUI("tabs", tabs);
 

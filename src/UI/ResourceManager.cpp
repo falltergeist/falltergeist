@@ -8,7 +8,7 @@ namespace Falltergeist
     {
         Image* ResourceManager::getImage(const std::string &filename)
         {
-            return new Image(Graphics::Sprite(filename));
+            return new Image(std::make_unique<Graphics::Sprite>(filename));
         }
 
         std::shared_ptr<Graphics::Sprite> ResourceManager::getSprite(const std::string &filename)

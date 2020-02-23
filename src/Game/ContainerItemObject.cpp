@@ -2,6 +2,7 @@
 #include "../Game/Game.h"
 #include "../State/Container.h"
 #include "../UI/ResourceManager.h"
+#include "../UI/TextArea.h"
 
 namespace Falltergeist
 {

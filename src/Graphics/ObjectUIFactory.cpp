@@ -27,7 +27,19 @@ namespace Falltergeist
                 return queue;
             }
 
-            return std::make_unique<UI::Image>(frm, orientation);
+            auto image = std::make_unique<UI::Image>(std::make_unique<Sprite>(frm));
+            auto direction = static_cast<unsigned>(orientation);
+            if (direction >= frm->directions().size()) {
+                //throw Exception("Image::Image(frm, direction) - direction not found: " + std::to_string(direction));
+                direction = 0;
+            }
+            auto& dir = frm->directions().at(direction);
+            image->setOffset(
+                frm->offsetX(direction) + dir.shiftX(),
+                frm->offsetY(direction) + dir.shiftY()
+            );
+
+            return image;
         }
     }
 }

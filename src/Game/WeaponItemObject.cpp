@@ -1,4 +1,5 @@
 #include "../Game/WeaponItemObject.h"
+#include "../UI/TextArea.h"
 
 namespace Falltergeist
 {

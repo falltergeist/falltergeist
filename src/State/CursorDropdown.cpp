@@ -117,9 +117,9 @@ namespace Falltergeist
                         throw Exception("CursorDropdown::init() - unknown icon type");
 
                 }
-                _activeIcons.push_back(std::make_unique<UI::Image>("art/intrface/" + activeSurface));
+                _activeIcons.push_back(std::unique_ptr<UI::Image>(resourceManager->getImage("art/intrface/" + activeSurface)));
                 _activeIcons.back()->setY(40*i);
-                _inactiveIcons.push_back(std::make_unique<UI::Image>("art/intrface/" + inactiveSurface));
+                _inactiveIcons.push_back(std::unique_ptr<UI::Image>(resourceManager->getImage("art/intrface/" + inactiveSurface)));
                 _inactiveIcons.back()->setY(40*i);
                 i++;
             }
