@@ -1,10 +1,12 @@
 #include "../Game/ExitMiscObject.h"
+#include "../UI/TextArea.h"
+#include "../VM/Script.h"
 
 namespace Falltergeist
 {
     namespace Game
     {
-        ExitMiscObject::ExitMiscObject()
+        ExitMiscObject::ExitMiscObject() : MiscObject()
         {
         }
 

@@ -14,7 +14,7 @@ namespace Falltergeist
         {
             public:
                 ContainerItemObject();
-                ~ContainerItemObject() override = default;
+                ~ContainerItemObject() = default;
 
                 std::vector<ItemObject*>* inventory();
 

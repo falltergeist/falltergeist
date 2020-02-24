@@ -474,12 +474,10 @@ namespace Falltergeist
         {
             for (auto &object: _flatObjects) {
                 object->render();
-                object->hexagon()->setInRender(object->inRender());
             }
 
             for (auto &object: _objects) {
                 object->render();
-                object->hexagon()->setInRender(object->inRender());
             }
         }
 

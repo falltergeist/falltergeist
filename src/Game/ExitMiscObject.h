@@ -10,7 +10,7 @@ namespace Falltergeist
         {
             public:
                 ExitMiscObject();
-                ~ExitMiscObject() override = default;
+                ~ExitMiscObject() = default;
 
                 int exitHexagonNumber() const;
                 void setExitHexagonNumber(int value);

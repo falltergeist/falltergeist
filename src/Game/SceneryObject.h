@@ -22,7 +22,7 @@ namespace Falltergeist
                 };
 
                 SceneryObject();
-                ~SceneryObject() override = default;
+                ~SceneryObject() = default;
 
                 char soundId() const;
                 void setSoundId(char soundId);

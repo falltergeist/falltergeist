@@ -14,6 +14,7 @@
 #include "../State/MainMenu.h"
 #include "../State/Movie.h"
 #include "../UI/Image.h"
+#include "../UI/TextArea.h"
 
 namespace Falltergeist
 {
@@ -23,7 +24,7 @@ namespace Falltergeist
     {
         Start::Start(std::shared_ptr<UI::IResourceManager> resourceManager) : State()
         {
-            this->resourceManager = resourceManager;
+            this->resourceManager = std::move(resourceManager);
         }
 
         void Start::init()
