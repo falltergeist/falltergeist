@@ -495,8 +495,8 @@ namespace Falltergeist
 
                     _orientation = hexagon()->orientationTo(movementQueue()->back());
                     auto animation = _generateMovementAnimation();
-                    animation->frameHandler().add(bind(&CritterObject::onMovementAnimationFrame, this, std::placeholders::_1));
-                    animation->animationEndedHandler().add(bind(&CritterObject::onMovementAnimationEnded, this, std::placeholders::_1));
+                    animation->frameHandler().add(std::bind(&CritterObject::onMovementAnimationFrame, this, std::placeholders::_1));
+                    animation->animationEndedHandler().add(std::bind(&CritterObject::onMovementAnimationEnded, this, std::placeholders::_1));
                     animation->play();
                     _ui = move(animation);
                 }
@@ -564,8 +564,8 @@ namespace Falltergeist
                         _orientation = nextOrientation;
                         auto newAnimation = _generateMovementAnimation();
                         newAnimation->setCurrentFrame(animation->currentFrame());
-                        newAnimation->frameHandler().add(bind(&CritterObject::onMovementAnimationFrame, this, std::placeholders::_1));
-                        newAnimation->animationEndedHandler().add(bind(&CritterObject::onMovementAnimationEnded, this, std::placeholders::_1));
+                        newAnimation->frameHandler().add(std::bind(&CritterObject::onMovementAnimationFrame, this, std::placeholders::_1));
+                        newAnimation->animationEndedHandler().add(std::bind(&CritterObject::onMovementAnimationEnded, this, std::placeholders::_1));
                         newAnimation->play();
                         animation = newAnimation.get();
                         _ui = move(newAnimation);
