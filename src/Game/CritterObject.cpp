@@ -15,12 +15,12 @@
 #include "../ResourceManager.h"
 #include "../State/Location.h"
 #include "../UI/AnimationFrame.h"
+#include "../UI/TextArea.h"
 
 namespace Falltergeist
 {
     namespace Game
     {
-        using namespace std;
         using namespace Base;
 
         CritterObject::CritterObject() : Object()
@@ -29,7 +29,7 @@ namespace Falltergeist
             _setupNextIdleAnim();
         }
 
-        vector<ItemObject*>* CritterObject::inventory()
+        std::vector<ItemObject*>* CritterObject::inventory()
         {
             return &_inventory;
         }
@@ -482,7 +482,7 @@ namespace Falltergeist
         }
 
         // TODO: probably need to remove movement queue logic to separate class.
-        vector<Hexagon*>* CritterObject::movementQueue()
+        std::vector<Hexagon*>* CritterObject::movementQueue()
         {
             return &_movementQueue;
         }
@@ -495,8 +495,8 @@ namespace Falltergeist
 
                     _orientation = hexagon()->orientationTo(movementQueue()->back());
                     auto animation = _generateMovementAnimation();
-                    animation->frameHandler().add(bind(&CritterObject::onMovementAnimationFrame, this, placeholders::_1));
-                    animation->animationEndedHandler().add(bind(&CritterObject::onMovementAnimationEnded, this, placeholders::_1));
+                    animation->frameHandler().add(bind(&CritterObject::onMovementAnimationFrame, this, std::placeholders::_1));
+                    animation->animationEndedHandler().add(bind(&CritterObject::onMovementAnimationEnded, this, std::placeholders::_1));
                     animation->play();
                     _ui = move(animation);
                 }
@@ -564,8 +564,8 @@ namespace Falltergeist
                         _orientation = nextOrientation;
                         auto newAnimation = _generateMovementAnimation();
                         newAnimation->setCurrentFrame(animation->currentFrame());
-                        newAnimation->frameHandler().add(bind(&CritterObject::onMovementAnimationFrame, this, placeholders::_1));
-                        newAnimation->animationEndedHandler().add(bind(&CritterObject::onMovementAnimationEnded, this, placeholders::_1));
+                        newAnimation->frameHandler().add(bind(&CritterObject::onMovementAnimationFrame, this, std::placeholders::_1));
+                        newAnimation->animationEndedHandler().add(bind(&CritterObject::onMovementAnimationEnded, this, std::placeholders::_1));
                         newAnimation->play();
                         animation = newAnimation.get();
                         _ui = move(newAnimation);
@@ -592,7 +592,7 @@ namespace Falltergeist
             animation->play();
         }
 
-        unique_ptr<UI::Animation> CritterObject::_generateMovementAnimation()
+        std::unique_ptr<UI::Animation> CritterObject::_generateMovementAnimation()
         {
             Graphics::CritterAnimationFactory animationFactory;
             Helpers::CritterHelper critterHelper;
@@ -612,7 +612,7 @@ namespace Falltergeist
             );
         }
 
-        UI::Animation* CritterObject::setActionAnimation(const string& action)
+        UI::Animation* CritterObject::setActionAnimation(const std::string& action)
         {
             Graphics::CritterAnimationFactory animationFactory;
             Helpers::CritterHelper critterHelper;

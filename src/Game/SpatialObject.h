@@ -10,7 +10,8 @@ namespace Falltergeist
         {
             public:
                 explicit SpatialObject(unsigned int radius);
-                ~SpatialObject() override = default;
+                ~SpatialObject() = default;
+
                 void spatial_p_proc(Object* source);
                 unsigned int radius();
 

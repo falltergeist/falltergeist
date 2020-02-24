@@ -10,7 +10,7 @@ namespace Falltergeist
         {
             public:
                 MiscObject();
-                ~MiscObject() override = default;
+                ~MiscObject() = default;
         };
     }
 }

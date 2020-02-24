@@ -3,6 +3,7 @@
 #include "../Graphics/ObjectUIFactory.h"
 #include "../ResourceManager.h"
 #include "../UI/TextArea.h"
+#include "../VM/Script.h"
 
 namespace Falltergeist
 {

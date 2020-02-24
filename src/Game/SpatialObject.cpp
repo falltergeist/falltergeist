@@ -1,5 +1,6 @@
 #include "../Game/SpatialObject.h"
 #include "../PathFinding/Hexagon.h"
+#include "../UI/TextArea.h"
 #include "../VM/Script.h"
 
 namespace Falltergeist

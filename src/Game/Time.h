@@ -6,7 +6,7 @@ namespace Falltergeist
 {
     namespace Game
     {
-        class Time
+        class Time final
         {
             public:
                 Time() = default;

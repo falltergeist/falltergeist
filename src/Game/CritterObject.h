@@ -24,7 +24,7 @@ namespace Falltergeist
             public:
 
                 CritterObject();
-                ~CritterObject() override = default;
+                ~CritterObject() = default;
 
                 std::vector<ItemObject*>* inventory(); // critter's own inventory
                 void setOrientation(Orientation value) override;

@@ -54,7 +54,7 @@ namespace Falltergeist
 
 
                 Object();
-                ~Object() override;
+                virtual ~Object() = default;
 
                 // whether this object is transparent in terms of walking through it by a critter
                 virtual bool canWalkThru() const;
@@ -231,13 +231,7 @@ namespace Falltergeist
                 Orientation _lightOrientation;
                 unsigned int _lightIntensity = 0;
                 unsigned int _lightRadius = 0;
-                virtual bool _useEggTransparency();
-
                 unsigned int _defaultFrame;
-
-            private:
-                bool _isIntersectsWithEgg();
-
         };
     }
 }

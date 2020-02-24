@@ -1,5 +1,7 @@
 #include "../Game/MiscItemObject.h"
 #include "../UI/TextArea.h"
+#include "../UI/TextArea.h"
+#include "../VM/Script.h"
 
 namespace Falltergeist
 {

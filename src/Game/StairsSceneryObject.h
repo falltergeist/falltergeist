@@ -10,7 +10,7 @@ namespace Falltergeist
         {
             public:
                 StairsSceneryObject();
-                ~StairsSceneryObject() override = default;
+                ~StairsSceneryObject() = default;
         };
     }
 }

@@ -23,7 +23,7 @@ namespace Falltergeist
         {
             public:
                 DudeObject();
-                ~DudeObject() override = default;
+                ~DudeObject() = default;
 
                 void loadFromGCDFile(Format::Gcd::File* gcd);
 

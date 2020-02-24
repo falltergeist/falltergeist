@@ -25,7 +25,7 @@ namespace Falltergeist
                 };
 
                 ItemObject();
-                virtual ~ItemObject() = default;
+                ~ItemObject() = default;
 
                 Subtype subtype() const;
 

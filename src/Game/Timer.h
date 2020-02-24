@@ -6,7 +6,7 @@ namespace Falltergeist
 {
     namespace Game
     {
-        class Timer
+        class Timer final
         {
             public:
                 explicit Timer(const float &milliseconds = 1000.0f);
