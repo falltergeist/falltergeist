@@ -23,9 +23,13 @@ namespace Falltergeist
             bool save();
             bool load();
 
-            unsigned int screenWidth() const;
+            int screenWidth() const;
 
-            unsigned int screenHeight() const;
+            int screenHeight() const;
+
+            int screenX() const;
+
+            int screenY() const;
 
             const std::string& initialLocation() const;
 
@@ -83,12 +87,16 @@ namespace Falltergeist
             unsigned int scale() const;
             void setFullscreen(bool _fullscreen);
             bool fullscreen() const;
+            bool alwaysOnTop() const;
             void setAudioBufferSize(int _audioBufferSize);
             int audioBufferSize() const;
 
         private:
-            unsigned int _screenWidth = 640;
-            unsigned int _screenHeight = 480;
+            int _screenWidth = 640;
+            int _screenHeight = 480;
+            int _screenX = -1;
+            int _screenY = -1;
+            bool _alwaysOnTop = false;
             std::string _initLocation = "klamall";
             bool _forceLocation = false;
             bool _displayFps = true;

@@ -22,11 +22,8 @@ namespace Falltergeist
 {
     namespace Graphics
     {
-        Renderer::Renderer(unsigned int width, unsigned int height)
+        Renderer::Renderer(RendererConfig cfg) : _config{cfg}
         {
-            _size.setWidth(width);
-            _size.setHeight(height);
-
             std::string message = "Renderer initialization - ";
             if (SDL_InitSubSystem(SDL_INIT_VIDEO) < 0)
             {
@@ -36,7 +33,11 @@ namespace Falltergeist
             Logger::info("VIDEO") << message + "[OK]" << std::endl;
         }
 
-        Renderer::Renderer(const Size& size) : Renderer((unsigned)size.width(), (unsigned)size.height())
+        Renderer::Renderer(int width, int height) : Renderer{ RendererConfig{ .width = width, .height = height }}
+        {
+        }
+
+        Renderer::Renderer(Size size) : Renderer{ RendererConfig{ .width = size.width(), .height = size.height() }}
         {
         }
 
@@ -60,15 +61,23 @@ namespace Falltergeist
             // Game::getInstance()->engineSettings()->setFullscreen(true);
             // Game::getInstance()->engineSettings()->setScale(1); //or 2, if fullhd device
 
-            std::string message =  "SDL_CreateWindow " + std::to_string(_size.width()) + "x" + std::to_string(_size.height()) + "x" +std::to_string(32)+ " - ";
+            std::string message =  "SDL_CreateWindow " + std::to_string(_config.width) + "x" + std::to_string(_config.height) + "x" +std::to_string(32)+ " - ";
 
             uint32_t flags = SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL;
-            if (Game::getInstance()->settings()->fullscreen())
-            {
+            if (_config.fullscreen) {
                 flags |= SDL_WINDOW_FULLSCREEN;
             }
+            if (_config.alwaysOnTop) {
+                flags |= SDL_WINDOW_ALWAYS_ON_TOP;
+            }
 
-            _sdlWindow = SDL_CreateWindow("", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, _size.width(), _size.height(), flags);
+            _sdlWindow = SDL_CreateWindow(
+                    "",
+                    _config.x,
+                    _config.y,
+                    _config.width,
+                    _config.height,
+                    flags);
             if (!_sdlWindow)
             {
                 throw Exception(message + "[FAIL]");
@@ -222,7 +231,7 @@ namespace Falltergeist
             GL_CHECK(glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6*sizeof(GLushort), indexes, GL_STATIC_DRAW));
 
             // generate projection matrix
-            _MVP = glm::ortho(0.0, (double)_size.width(), (double)_size.height(), 0.0, -1.0, 1.0);
+            _MVP = glm::ortho(0.0, static_cast<double>(_config.width), static_cast<double>(_config.height), 0.0, -1.0, 1.0);
 
             // load egg
             _egg = ResourceManager::getInstance()->texture("data/egg.png");
@@ -302,17 +311,17 @@ namespace Falltergeist
 
         int Renderer::width()
         {
-            return _size.width();
+            return _config.width;
         }
 
         int Renderer::height()
         {
-            return _size.height();
+            return _config.height;
         }
 
-        const Size& Renderer::size() const
+        const Size Renderer::size() const
         {
-            return _size;
+            return { _config.width, _config.height };
         }
 
         void Renderer::screenshot()

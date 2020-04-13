@@ -37,8 +37,11 @@ namespace Falltergeist
         auto video = file.section("video");
         video->setPropertyInt("width", _screenWidth);
         video->setPropertyInt("height", _screenHeight);
+        video->setPropertyInt("x", _screenX);
+        video->setPropertyInt("y", _screenY);
         video->setPropertyInt("scale", _scale);
         video->setPropertyBool("fullscreen", _fullscreen);
+        video->setPropertyBool("always_on_top", _alwaysOnTop);
 
         auto audio = file.section("audio");
         audio->setPropertyBool("enabled", _audioEnabled);
@@ -84,14 +87,24 @@ namespace Falltergeist
         return true;
     }
 
-    unsigned int Settings::screenWidth() const
+    int Settings::screenWidth() const
     {
         return _screenWidth;
     }
 
-    unsigned int Settings::screenHeight() const
+    int Settings::screenHeight() const
     {
         return _screenHeight;
+    }
+
+    int Settings::screenX() const
+    {
+        return _screenX;
+    }
+
+    int Settings::screenY() const
+    {
+        return _screenY;
     }
 
     bool Settings::audioEnabled() const
@@ -130,8 +143,11 @@ namespace Falltergeist
         {
             _screenWidth = video->propertyInt("width", _screenWidth);
             _screenHeight = video->propertyInt("height", _screenHeight);
+            _screenX = video->propertyInt("x", _screenX);
+            _screenY = video->propertyInt("y", _screenY);
             _scale = video->propertyInt("scale", _scale);
             _fullscreen = video->propertyBool("fullscreen", _fullscreen);
+            _alwaysOnTop = video->propertyBool("always_on_top", _alwaysOnTop);
         }
 
         auto audio = file->section("audio");
@@ -426,6 +442,11 @@ namespace Falltergeist
     bool Settings::fullscreen() const
     {
         return _fullscreen;
+    }
+
+    bool Settings::alwaysOnTop() const
+    {
+        return _alwaysOnTop;
     }
 
     void Settings::setAudioBufferSize(int _audioBufferSize)
