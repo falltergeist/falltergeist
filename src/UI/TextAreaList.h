@@ -12,7 +12,7 @@ namespace Falltergeist
         class TextAreaList : public Falltergeist::UI::Base
         {
             public:
-                TextAreaList(const Point& pos = Point());
+                TextAreaList(Point pos = Point());
                 ~TextAreaList() override;
 
                 void addArea(std::unique_ptr<TextArea> area);

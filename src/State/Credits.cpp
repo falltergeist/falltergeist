@@ -108,7 +108,7 @@ namespace Falltergeist
 
             long int _lastY = 0;
             for (size_t i = 0; i < _lines.size(); i++) {
-                auto& ui = _lines.at(i).get();
+                auto& ui = *_lines.at(i);
                 int yPosition = _linePositions[i] - static_cast<int>(_timePassed * scrollingSpeed);
                 ui.setY(yPosition);
                 _lastY = ui.y();

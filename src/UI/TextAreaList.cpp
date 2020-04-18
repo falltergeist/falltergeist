@@ -6,7 +6,7 @@ namespace Falltergeist
 {
     namespace UI
     {
-        TextAreaList::TextAreaList(const Point &pos) : Falltergeist::UI::Base(pos)
+        TextAreaList::TextAreaList(Point pos) : Falltergeist::UI::Base(pos)
         {
         }
 
