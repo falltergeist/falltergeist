@@ -12,7 +12,7 @@ namespace Falltergeist
                 ResourceManager() = default;
                 virtual ~ResourceManager() = default;
 
-                Image* getImage(const std::string &filename) override;
+                std::unique_ptr<Image> getImage(const std::string &filename) override;
                 std::shared_ptr<Graphics::Sprite> getSprite(const std::string &filename) override;
         };
     }

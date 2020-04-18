@@ -24,7 +24,7 @@ namespace Falltergeist
                 void onCreditsFadeDone(Event::State* event);
                 void onStateActivate(Event::State* event) override;
             private:
-                std::vector<UI::TextArea*> _lines;
+                std::vector<std::shared_ptr<UI::TextArea>> _lines;
                 int* _linePositions = nullptr;
                 float _timePassed = 0;
         };

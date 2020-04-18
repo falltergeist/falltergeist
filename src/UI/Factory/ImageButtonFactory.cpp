@@ -133,29 +133,29 @@ namespace Falltergeist
                 };
             }
 
-            ImageButton* ImageButtonFactory::getByType(Type type, const Graphics::Point &position)
+            std::unique_ptr<ImageButton> ImageButtonFactory::getByType(Type type, const Graphics::Point &position)
             {
                 auto buttonUpSprite = uiResourceManager->getSprite(buttonUpSpriteFilenames.at(type));
                 auto buttonDownSprite = uiResourceManager->getSprite(buttonDownSpriteFilenames.at(type));
-
-                std::string buttonDownSoundFilename;
-                if (buttonDownSoundFilenames.find(type) != buttonDownSoundFilenames.end()) {
-                    buttonDownSoundFilename = buttonDownSoundFilenames.at(type);
-                }
 
                 std::string buttonUpSoundFilename;
                 if (buttonUpSoundFilenames.find(type) != buttonUpSoundFilenames.end()) {
                     buttonUpSoundFilename = buttonUpSoundFilenames.at(type);
                 }
 
+                std::string buttonDownSoundFilename;
+                if (buttonDownSoundFilenames.find(type) != buttonDownSoundFilenames.end()) {
+                    buttonDownSoundFilename = buttonDownSoundFilenames.at(type);
+                }
+
                 bool checkboxMode = (type == Type::CHECKBOX);
 
-                return new ImageButton(
+                return std::make_unique<ImageButton>(
                     position,
                     buttonUpSprite,
                     buttonDownSprite,
-                    buttonUpSoundFilename,
-                    buttonDownSoundFilename,
+                    std::move(buttonUpSoundFilename),
+                    std::move(buttonDownSoundFilename),
                     checkboxMode
                 );
             }

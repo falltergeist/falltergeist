@@ -55,26 +55,33 @@ namespace Falltergeist
             Helpers::CritterHelper critterHelper;
             Graphics::CritterAnimationFactory animationFactory;
 
-            auto dudeCritter = animationFactory.buildStandingAnimation(
-                critterHelper.armorFID(dude.get()),
-                critterHelper.weaponId(dude.get()),
-                Game::Orientation::SC
-            );
-            dudeCritter->setPosition({30, 45});
-            addUI(dudeCritter.release());
+            {
+                auto dudeCritter = animationFactory.buildStandingAnimation(
+                        critterHelper.armorFID(dude.get()),
+                        critterHelper.weaponId(dude.get()),
+                        Game::Orientation::SC
+                );
+                dudeCritter->setPosition({30, 45});
+                addUI(std::move(dudeCritter));
+            }
 
-            auto traderCritter = animationFactory.buildStandingAnimation(
-                critterHelper.armorFID(_trader),
-                critterHelper.weaponId(_trader),
-                Game::Orientation::SC
-            );
-            traderCritter->setPosition({ 580, 45 });
-            addUI(traderCritter.release());
+            {
+                auto traderCritter = animationFactory.buildStandingAnimation(
+                        critterHelper.armorFID(_trader),
+                        critterHelper.weaponId(_trader),
+                        Game::Orientation::SC
+                );
+                traderCritter->setPosition({ 580, 45 });
+                addUI(std::move(traderCritter));
+            }
 
-            auto reaction = new UI::TextArea("", 140, -62);
-            reaction->setSize({375, 53});
-            reaction->setPadding({0, 5}, {0, 5});
-            addUI("reaction", reaction);
+            {
+                auto reaction = std::make_unique<UI::TextArea>("", 140, -62);
+                reaction->setSize({375, 53});
+                reaction->setPadding({0, 5}, {0, 5});
+                addUI("reaction", std::move(reaction));
+            }
+
 
             addUI("offerButton", imageButtonFactory->getByType(ImageButtonType::DIALOG_RED_BUTTON, {40, 162}));
             getUI("offerButton")->mouseClickHandler().add(std::bind(&CritterBarter::onOfferButtonClick, this, std::placeholders::_1));
@@ -82,84 +89,118 @@ namespace Falltergeist
             addUI("talkButton", imageButtonFactory->getByType(ImageButtonType::DIALOG_RED_BUTTON, {583, 162}));
             getUI("talkButton")->mouseClickHandler().add(std::bind(&CritterBarter::onTalkButtonClick, this, std::placeholders::_1));
 
-            auto scrollUp = [](UI::ItemsList *list) { if (list->canScrollUp()) list->scrollUp(); };
-            auto scrollDown = [](UI::ItemsList *list) { if (list->canScrollDown()) list->scrollDown(); };
+            auto scrollUp = [](UI::ItemsList& list) {
+                if (list.canScrollUp()) {
+                    list.scrollUp();
+                }
+            };
+            auto scrollDown = [](UI::ItemsList& list) {
+                if (list.canScrollDown()) {
+                    list.scrollDown();
+                }
+            };
 
-            auto mineList = new UI::ItemsList({ 104, 35 });
+            auto mineList = std::shared_ptr<UI::ItemsList>{new UI::ItemsList({ 104, 35 })};
             mineList->setSlotsNumber(3);
             mineList->setItems(Game::getInstance()->player()->inventory());
             addUI("mineList", mineList);
 
-            auto mineInventoryScrollUpButton = imageButtonFactory->getByType(ImageButtonType::DIALOG_UP_ARROW, {190, 56});
-            mineInventoryScrollUpButton->mouseClickHandler().add([=](...) { scrollUp(mineList); });
-            addUI(mineInventoryScrollUpButton);
+            {
+                auto mineInventoryScrollUpButton = imageButtonFactory->getByType(ImageButtonType::DIALOG_UP_ARROW, {190, 56});
+                mineInventoryScrollUpButton->mouseClickHandler().add([=](...) {
+                    scrollUp(*mineList);
+                });
+                addUI(std::move(mineInventoryScrollUpButton));
+            }
 
-            auto mineInventoryScrollDownButton = imageButtonFactory->getByType(ImageButtonType::DIALOG_DOWN_ARROW, {190, 82});
-            mineInventoryScrollDownButton->mouseClickHandler().add([=](...) { scrollDown(mineList); });
-            addUI(mineInventoryScrollDownButton);
+            {
+                auto mineInventoryScrollDownButton = imageButtonFactory->getByType(ImageButtonType::DIALOG_DOWN_ARROW, {190, 82});
+                mineInventoryScrollDownButton->mouseClickHandler().add([=](...) {
+                    scrollDown(*mineList);
+                });
+                addUI(std::move(mineInventoryScrollDownButton));
+            }
 
-            auto sellList = new UI::ItemsList({ 244, 20 });
+            auto sellList = std::shared_ptr<UI::ItemsList>{new UI::ItemsList({ 244, 20 })};
             sellList->setItems(&_itemsToSell);
             sellList->setSlotsNumber(3);
             addUI("sellList", sellList);
 
-            auto sellInventoryScrollUpButton = imageButtonFactory->getByType(ImageButtonType::INVENTORY_UP_ARROW, {208, 114});
-            sellInventoryScrollUpButton->mouseClickHandler().add([=](...) { scrollUp(sellList); });
-            addUI(sellInventoryScrollUpButton);
+            {
+                auto sellInventoryScrollUpButton = imageButtonFactory->getByType(ImageButtonType::INVENTORY_UP_ARROW, {208, 114});
+                sellInventoryScrollUpButton->mouseClickHandler().add([=](...) {
+                    scrollUp(*sellList);
+                });
+                addUI(std::move(sellInventoryScrollUpButton));
+            }
 
-            auto sellInventoryScrollDownButton = imageButtonFactory->getByType(ImageButtonType::INVENTORY_DOWN_ARROW, {208, 137});
-            sellInventoryScrollDownButton->mouseClickHandler().add([=](...) { scrollDown(sellList); });
-            addUI(sellInventoryScrollDownButton);
+            {
+                auto sellInventoryScrollDownButton = imageButtonFactory->getByType(ImageButtonType::INVENTORY_DOWN_ARROW, {208, 137});
+                sellInventoryScrollDownButton->mouseClickHandler().add([=](...) {
+                    scrollDown(*sellList);
+                });
+                addUI(std::move(sellInventoryScrollDownButton));
+            }
 
-            auto theirsList = new UI::ItemsList({ 470, 35 });
+            auto theirsList = std::shared_ptr<UI::ItemsList>{new UI::ItemsList({ 470, 35 })};
             theirsList->setItems(trader()->inventory());
             theirsList->setSlotsNumber(3);
             addUI("theirsList", theirsList);
 
-            auto theirsInventoryScrollUpButton = imageButtonFactory->getByType(ImageButtonType::DIALOG_UP_ARROW, {421, 56});
-            theirsInventoryScrollUpButton->mouseClickHandler().add([=](...) { scrollUp(theirsList); });
-            addUI(theirsInventoryScrollUpButton);
+            {
+                auto theirsInventoryScrollUpButton = imageButtonFactory->getByType(ImageButtonType::DIALOG_UP_ARROW, {421, 56});
+                theirsInventoryScrollUpButton->mouseClickHandler().add([=](...) {
+                    scrollUp(*theirsList);
+                });
+                addUI(std::move(theirsInventoryScrollUpButton));
+            }
 
-            auto theirsInventoryScrollDownButton = imageButtonFactory->getByType(ImageButtonType::DIALOG_DOWN_ARROW, {421, 82});
-            theirsInventoryScrollDownButton->mouseClickHandler().add([=](...) { scrollDown(theirsList); });
-            addUI(theirsInventoryScrollDownButton);
+            {
+                auto theirsInventoryScrollDownButton = imageButtonFactory->getByType(ImageButtonType::DIALOG_DOWN_ARROW, {421, 82});
+                theirsInventoryScrollDownButton->mouseClickHandler().add([=](...) {
+                    scrollDown(*theirsList);
+                });
+                addUI(std::move(theirsInventoryScrollDownButton));
+            }
 
-            auto buyList = new UI::ItemsList({ 330, 20 });
+            auto buyList = std::shared_ptr<UI::ItemsList>{new UI::ItemsList({ 330, 20 })};
             buyList->setItems(&_itemsToBuy);
             buyList->setSlotsNumber(3);
             addUI("buyList", buyList);
 
-            auto buyInventoryScrollUpButton = imageButtonFactory->getByType(ImageButtonType::INVENTORY_UP_ARROW, {413, 114});
-            buyInventoryScrollUpButton->mouseClickHandler().add([=](...) { scrollUp(buyList); });
-            addUI(buyInventoryScrollUpButton);
+            {
+                auto buyInventoryScrollUpButton = imageButtonFactory->getByType(ImageButtonType::INVENTORY_UP_ARROW, {413, 114});
+                buyInventoryScrollUpButton->mouseClickHandler().add([=](...) {
+                    scrollUp(*buyList);
+                });
+                addUI(std::move(buyInventoryScrollUpButton));
+            }
 
-            auto buyInventoryScrollDownButton = imageButtonFactory->getByType(ImageButtonType::INVENTORY_DOWN_ARROW, {413, 137});
-            buyInventoryScrollDownButton->mouseClickHandler().add([=](...) { scrollDown(buyList); });
-            addUI(buyInventoryScrollDownButton);
+            {
+                auto buyInventoryScrollDownButton = imageButtonFactory->getByType(ImageButtonType::INVENTORY_DOWN_ARROW, {413, 137});
+                buyInventoryScrollDownButton->mouseClickHandler().add([=](...) {
+                    scrollDown(*buyList);
+                });
+                addUI(std::move(buyInventoryScrollDownButton));
+            }
 
-            auto sellPriceText = new UI::TextArea("$0", 246, 168);
-            sellPriceText->setColor({ 255, 255, 255, 0 });
-            addUI("sellPriceText", sellPriceText);
-
-            auto buyPriceText = new UI::TextArea("$0", 334, 168);
-            buyPriceText->setColor({ 255, 255, 255, 0 });
-            addUI("buyPriceText", buyPriceText);
-
-            mineList->itemDragStopHandler().add([sellList](Event::Mouse* event){ sellList->onItemDragStop(event); });
-            sellList->itemDragStopHandler().add([mineList](Event::Mouse* event){ mineList->onItemDragStop(event); });
-            sellList->itemsListModifiedHandler().add([this, sellPriceText](Event::Event*)
-                {
+            {
+                auto sellPriceText = std::shared_ptr<UI::TextArea>{new UI::TextArea("$0", 246, 168)};
+                sellPriceText->setColor({255, 255, 255, 0});
+                sellList->itemsListModifiedHandler().add([this, sellPriceText](Event::Event*) {
                     _sellPriceTotal = 0;
                     for (const auto &v : _itemsToSell) {
                         _sellPriceTotal += v->price() * v->amount();
                     }
                     sellPriceText->setText("$" + std::to_string(_sellPriceTotal));
                 });
+                addUI("sellPriceText", sellPriceText);
+            }
 
-            theirsList->itemDragStopHandler().add([buyList](Event::Mouse* event){ buyList->onItemDragStop(event); });
-            buyList->itemDragStopHandler().add([theirsList](Event::Mouse* event){ theirsList->onItemDragStop(event); });
-            buyList->itemsListModifiedHandler().add([this, buyPriceText](Event::Event*)
-                {
+            {
+                auto buyPriceText = std::shared_ptr<UI::TextArea>{new UI::TextArea("$0", 334, 168)};
+                buyPriceText->setColor({ 255, 255, 255, 0 });
+                buyList->itemsListModifiedHandler().add([this, buyPriceText](Event::Event*) {
                     _buyPriceTotal = 0;
                     for (const auto &v : _itemsToBuy) {
                         // TODO: apply barter skill + Master Trader perk + Reaction (mood?) modifier
@@ -167,21 +208,35 @@ namespace Falltergeist
                     }
                     buyPriceText->setText("$" + std::to_string(_buyPriceTotal));
                 });
+                addUI("buyPriceText", buyPriceText);
+            }
 
+            mineList->itemDragStopHandler().add([=](Event::Mouse* event){
+                sellList->onItemDragStop(event);
+            });
+            sellList->itemDragStopHandler().add([=](Event::Mouse* event){
+                mineList->onItemDragStop(event);
+            });
+            theirsList->itemDragStopHandler().add([=](Event::Mouse* event){
+                buyList->onItemDragStop(event);
+            });
+            buyList->itemDragStopHandler().add([=](Event::Mouse* event){
+                theirsList->onItemDragStop(event);
+            });
         }
 
         void CritterBarter::resetTransaction()
         {
-            dynamic_cast<UI::TextArea*>(getUI("sellPriceText"))->setText("$0");
-            dynamic_cast<UI::TextArea*>(getUI("buyPriceText"))->setText("$0");
+            getUI<UI::TextArea>("sellPriceText")->setText("$0");
+            getUI<UI::TextArea>("buyPriceText")->setText("$0");
 
             _itemsToSell.clear();
-            dynamic_cast<UI::ItemsList*>(getUI("mineList"))->setItems(Game::getInstance()->player()->inventory());
-            dynamic_cast<UI::ItemsList*>(getUI("sellList"))->setItems(&_itemsToSell);
+            getUI<UI::ItemsList>("mineList")->setItems(Game::getInstance()->player()->inventory());
+            getUI<UI::ItemsList>("sellList")->setItems(&_itemsToSell);
 
             _itemsToBuy.clear();
-            dynamic_cast<UI::ItemsList*>(getUI("theirsList"))->setItems(_trader->inventory());
-            dynamic_cast<UI::ItemsList*>(getUI("buyList"))->setItems(&_itemsToBuy);
+            getUI<UI::ItemsList>("theirsList")->setItems(_trader->inventory());
+            getUI<UI::ItemsList>("buyList")->setItems(&_itemsToBuy);
 
             _sellPriceTotal = 0;
             _buyPriceTotal = 0;
@@ -189,7 +244,7 @@ namespace Falltergeist
 
         void CritterBarter::onOfferButtonClick(Event::Mouse*)
         {
-            auto reaction = dynamic_cast<UI::TextArea*>(getUI("reaction"));
+            auto reaction = getUI<UI::TextArea>("reaction");
 
             try {
                 if (_sellPriceTotal == 0 && _buyPriceTotal == 0) {
@@ -238,7 +293,7 @@ namespace Falltergeist
             for (const auto &v : _itemsToBuy)
                 _trader->inventory()->push_back(v);
 
-            dynamic_cast<UI::TextArea*>(getUI("reaction"))->setText("");
+            getUI<UI::TextArea>("reaction")->setText("");
 
             resetTransaction();
         }

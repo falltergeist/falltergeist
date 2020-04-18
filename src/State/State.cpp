@@ -92,51 +92,23 @@ namespace Falltergeist
             _modal = value;
         }
 
-        // TODO: change to accept unique_ptr
-        UI::Base* State::addUI(UI::Base* ui)
+        void State::addUI(std::shared_ptr<UI::Base> ui)
         {
             // Add to UI state position
             ui->setPosition(ui->position() - ui->offset() + position());
-
-            _ui.push_back(std::unique_ptr<UI::Base>(ui));
-            return ui;
+            _ui.emplace_back(std::move(ui));
         }
 
-        UI::Base* State::addUI(const std::string& name, UI::Base* ui)
+        void State::addUI(std::string name, std::shared_ptr<UI::Base> ui)
         {
             addUI(ui);
-            _labeledUI.insert(std::pair<std::string, UI::Base*>(name, ui));
-            return ui;
+            _labeledUI.insert({ std::move(name), std::move(ui) });
         }
 
-        void State::addUI(const std::vector<UI::Base*>& uis)
+        std::shared_ptr<UI::Base> State::getUIInternal(const std::string& name) const
         {
-            for (auto ui : uis) {
-                addUI(ui);
-            }
-        }
-
-        UI::TextArea* State::getTextArea(const std::string& name)
-        {
-            return dynamic_cast<UI::TextArea*>(getUI(name));
-        }
-
-        UI::ImageList* State::getImageList(const std::string& name)
-        {
-            return dynamic_cast<UI::ImageList*>(getUI(name));
-        }
-
-        UI::SmallCounter* State::getSmallCounter(const std::string& name)
-        {
-            return dynamic_cast<UI::SmallCounter*>(getUI(name));
-        }
-
-        UI::Base* State::getUI(const std::string& name)
-        {
-            if (_labeledUI.find(name) != _labeledUI.end()) {
-                return _labeledUI.at(name);
-            }
-            return nullptr;
+            auto it = _labeledUI.find(name);
+            return it != _labeledUI.end() ? it->second : std::shared_ptr<UI::Base>{nullptr};
         }
 
         void State::handle(Event::Event* event)

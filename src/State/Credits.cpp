@@ -1,3 +1,4 @@
+#include <memory>
 #include <sstream>
 #include "../State/Credits.h"
 #include "../CrossPlatform.h"
@@ -81,13 +82,13 @@ namespace Falltergeist
                     line = "    ";
                 }
 
-                auto tx = new UI::TextArea(line, 0, y);
+                auto tx = std::make_shared<UI::TextArea>(line, 0, y);
                 tx->setFont(cur_font, cur_color);
                 tx->setSize({640, 0});
                 tx->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
-                addUI(tx);
-                _lines.push_back(tx);
                 y += tx->textSize().height() + cur_font->verticalGap() + additionalGap;
+                addUI(tx);
+                _lines.emplace_back(std::move(tx));
             }
 
             _linePositions = new int[_lines.size()];
@@ -107,10 +108,10 @@ namespace Falltergeist
 
             long int _lastY = 0;
             for (size_t i = 0; i < _lines.size(); i++) {
-                auto ui = _lines.at(i);
+                auto& ui = _lines.at(i).get();
                 int yPosition = _linePositions[i] - static_cast<int>(_timePassed * scrollingSpeed);
-                ui->setY(yPosition);
-                _lastY = ui->y();
+                ui.setY(yPosition);
+                _lastY = ui.y();
             }
 
             if (_lastY < -30) {

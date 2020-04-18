@@ -39,24 +39,23 @@ namespace Falltergeist
                 State& operator=(const State&) = delete;
                 virtual ~State() = default;
 
-                template <class TUi, class ...TCtorArgs>
-                TUi* makeUI(TCtorArgs&&... args)
+                template<class T, class ...TCtorArgs, typename = std::enable_if_t<std::is_base_of<UI::Base, T>::value>>
+                std::shared_ptr<T> makeUI(TCtorArgs&&... args)
                 {
-                    TUi* ptr = new TUi(std::forward<TCtorArgs>(args)...);
-                    _ui.emplace_back(ptr);
-                    return ptr;
+                    auto p = std::make_shared(std::forward<TCtorArgs>(args)...);
+                    addUI(p);
+                    return p;
                 }
 
-                UI::Base* addUI(UI::Base* ui);
-                UI::Base* addUI(const std::string& name, UI::Base* ui);
-                void addUI(const std::vector<UI::Base*>& uis);
+                void addUI(std::shared_ptr<UI::Base> ui);
+                void addUI(std::string name, std::shared_ptr<UI::Base> ui);
+
+                template<typename T = UI::Base, typename = std::enable_if_t<std::is_base_of<UI::Base, T>::value>>
+                std::shared_ptr<T> getUI(const std::string& name) const {
+                    return std::dynamic_pointer_cast<T>(getUIInternal(name));
+                }
+
                 void popUI();
-
-                UI::Base* getUI(const std::string& name);
-
-                UI::TextArea* getTextArea(const std::string& name);
-                UI::ImageList* getImageList(const std::string& name);
-                UI::SmallCounter* getSmallCounter(const std::string& name);
 
                 // @todo: remove getters/setters for x, y?
                 virtual int x() const;
@@ -126,11 +125,13 @@ namespace Falltergeist
 
                 void scriptFade(VM::Script* script, bool in);
 
+            private:
+                std::shared_ptr<UI::Base> getUIInternal(const std::string& name) const;
 
             protected:
-                std::vector<std::unique_ptr<UI::Base>> _ui;
-                std::vector<std::unique_ptr<UI::Base>> _uiToDelete;
-                std::map<std::string, UI::Base*> _labeledUI;
+                std::vector<std::shared_ptr<UI::Base>> _ui;
+                std::vector<std::shared_ptr<UI::Base>> _uiToDelete;
+                std::map<std::string, std::shared_ptr<UI::Base>> _labeledUI;
 
                 Point _position;
 
@@ -140,8 +141,13 @@ namespace Falltergeist
                 bool _fullscreen = true; // prevents render all states before this one
                 bool _initialized = false;
 
-                Event::StateHandler _activateHandler, _deactivateHandler, _fadeDoneHandler, _pushHandler, _popHandler;
-                Event::KeyboardHandler _keyDownHandler, _keyUpHandler;
+                Event::StateHandler _activateHandler;
+                Event::StateHandler _deactivateHandler;
+                Event::StateHandler _fadeDoneHandler;
+                Event::StateHandler _pushHandler;
+                Event::StateHandler _popHandler;
+                Event::KeyboardHandler _keyDownHandler;
+                Event::KeyboardHandler _keyUpHandler;
         };
     }
 }
