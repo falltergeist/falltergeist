@@ -26,12 +26,13 @@ namespace Falltergeist
 {
     namespace State
     {
-        CritterInteract::CritterInteract(std::shared_ptr<UI::IResourceManager> resourceManager) : State()
+        CritterInteract::CritterInteract(std::shared_ptr<UI::IResourceManager> _resourceManager) :
+            State{},
+            resourceManager{std::move(_resourceManager)},
+            _dialog{new CritterDialog{resourceManager}},
+            _barter{new CritterBarter{resourceManager}},
+            _review{new CritterDialogReview{resourceManager}}
         {
-            this->resourceManager = resourceManager;
-            _dialog = new CritterDialog(resourceManager);
-            _review = new CritterDialogReview(resourceManager);
-            _barter = new CritterBarter(resourceManager);
             // pre-init review, so we can push questions/answers to it.
             _review->init();
         }
@@ -77,7 +78,10 @@ namespace Falltergeist
 
         void CritterInteract::init()
         {
-            if (_initialized) return;
+            if (_initialized) {
+                return;
+            }
+
             State::init();
 
             setFullscreen(false);
@@ -87,11 +91,13 @@ namespace Falltergeist
 
             if (backgroundID() >= 0 && headID() >= 0)
             {
-                auto lst = ResourceManager::getInstance()->lstFileType("art/backgrnd/backgrnd.lst");
-                std::string bgImage = "art/backgrnd/" + lst->strings()->at(backgroundID());
-                auto bg = resourceManager->getImage(bgImage);
-                bg->setPosition({128, 15});
-                addUI(bg);
+                {
+                    auto lst = ResourceManager::getInstance()->lstFileType("art/backgrnd/backgrnd.lst");
+                    std::string bgImage = "art/backgrnd/" + lst->strings()->at(backgroundID());
+                    auto bg = resourceManager->getImage(bgImage);
+                    bg->setPosition({128, 15});
+                    addUI(std::move(bg));
+                }
 
                 auto headlst = ResourceManager::getInstance()->lstFileType("art/heads/heads.lst");
                 std::string headImage = headlst->strings()->at(headID());
@@ -120,7 +126,7 @@ namespace Falltergeist
                             break;
                     }
                     headImage += "f" + std::to_string(fidget)+".frm";
-                    auto head = dynamic_cast<UI::AnimationQueue*>(getUI("head"));
+                    auto head = getUI<UI::AnimationQueue>("head");
                     head->clear();
                     head->animations().push_back(std::make_unique<UI::Animation>("art/heads/" + headImage));
 
@@ -130,23 +136,28 @@ namespace Falltergeist
                 });
                 headImage+="gf1.frm";
 
-                auto head = new UI::AnimationQueue();
-                head->animations().push_back(std::make_unique<UI::Animation>("art/heads/" + headImage));
+                {
+                    auto head = makeNamedUI<UI::AnimationQueue>("head");
+                    head->animations().push_back(std::make_unique<UI::Animation>("art/heads/" + headImage));
 
-                int offset = 388/2 - head->currentAnimation()->width()/2;
-                head->setPosition({128+offset, 15});
-                addUI("head",head);
+                    int offset = 388/2 - head->currentAnimation()->width()/2;
+                    head->setPosition({128+offset, 15});
+                }
             }
 
             addUI("background", resourceManager->getImage("art/intrface/alltlk.frm"));
 
-            auto hilight1 = resourceManager->getImage("data/hilight1.png");
-            hilight1->setPosition({423, 20});
-            addUI(hilight1);
+            {
+                auto hilight1 = resourceManager->getImage("data/hilight1.png");
+                hilight1->setPosition({423, 20});
+                addUI(std::move(hilight1));
+            }
 
-            auto hilight2 = resourceManager->getImage("data/hilight2.png");
-            hilight2->setPosition({128, 84});
-            addUI(hilight2);
+            {
+                auto hilight2 = resourceManager->getImage("data/hilight2.png");
+                hilight2->setPosition({128, 84});
+                addUI(std::move(hilight2));
+            }
 
             // Centering camera on critter position
             auto locationState = Game::getInstance()->locationState();
@@ -227,7 +238,7 @@ namespace Falltergeist
             _phase = Phase::TALK;
 
             _lips = ResourceManager::getInstance()->lipFileType("sound/speech/"+_headName+"/"+speech+".lip");
-            auto head = dynamic_cast<UI::AnimationQueue*>(getUI("head"));
+            auto head = getUI<UI::AnimationQueue>("head");
             head->stop();
             head->clear();
             std::string headImage = _headName;
@@ -274,7 +285,7 @@ namespace Falltergeist
                     if (_nextIndex < _lips->phonemes().size() && SDL_GetTicks()-_startTime>=_lips->timestamps().at(_nextIndex))
                     {
                         //set frame
-                        auto head = dynamic_cast<UI::AnimationQueue*>(getUI("head"));
+                        auto head = getUI<UI::AnimationQueue>("head");
                         head->currentAnimation()->setCurrentFrame(_phonemeToFrame(_lips->phonemes().at(_nextIndex)));
                         _nextIndex++;
                     }
@@ -376,7 +387,7 @@ namespace Falltergeist
             if (headID()!=-1 && newmood != _mood)
             {
 
-                auto head = dynamic_cast<UI::AnimationQueue *>(getUI("head"));
+                auto head = getUI<UI::AnimationQueue>("head");
                 std::string headImage = _headName;
                 switch (_mood)
                 {
@@ -425,8 +436,7 @@ namespace Falltergeist
 
         void CritterInteract::onMoodTransitionEnded(Event::Event *event)
         {
-            auto head = dynamic_cast<UI::AnimationQueue *>(getUI("head"));
-            head->animationEndedHandler().clear();
+            getUI<UI::AnimationQueue>("head")->animationEndedHandler().clear();
             script()->run();
         }
     }

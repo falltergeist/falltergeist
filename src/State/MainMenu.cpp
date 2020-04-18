@@ -38,7 +38,10 @@ namespace Falltergeist
 
         void MainMenu::init()
         {
-            if (_initialized) return;
+            if (_initialized) {
+                return;
+            }
+
             State::init();
 
             setModal(true);
@@ -50,75 +53,79 @@ namespace Falltergeist
             addUI("background", resourceManager->getImage("art/intrface/mainmenu.frm"));
 
             // intro button
-            auto introButton = addUI(imageButtonFactory->getByType(ImageButtonType::MENU_RED_CIRCLE, {30, 19}));
-            introButton->mouseClickHandler().add(std::bind(&MainMenu::onIntroButtonClick, this, std::placeholders::_1));
+            addUI(imageButtonFactory->getByType(ImageButtonType::MENU_RED_CIRCLE, {30, 19}))
+                ->mouseClickHandler().add(std::bind(&MainMenu::onIntroButtonClick, this, std::placeholders::_1));
 
             // new game button
-            auto newGameButton = addUI(imageButtonFactory->getByType(ImageButtonType::MENU_RED_CIRCLE, {30, 19 + 41}));
-            newGameButton->mouseClickHandler().add(std::bind(&MainMenu::onNewGameButtonClick, this, std::placeholders::_1));
+            addUI(imageButtonFactory->getByType(ImageButtonType::MENU_RED_CIRCLE, {30, 19 + 41}))
+                ->mouseClickHandler().add(std::bind(&MainMenu::onNewGameButtonClick, this, std::placeholders::_1));
 
             // load game button
-            auto loadGameButton = addUI(imageButtonFactory->getByType(ImageButtonType::MENU_RED_CIRCLE, {30, 19 + 41 * 2}));
-            loadGameButton->mouseClickHandler().add(std::bind(&MainMenu::onLoadGameButtonClick, this, std::placeholders::_1));
+            addUI(imageButtonFactory->getByType(ImageButtonType::MENU_RED_CIRCLE, {30, 19 + 41 * 2}))
+                ->mouseClickHandler().add(std::bind(&MainMenu::onLoadGameButtonClick, this, std::placeholders::_1));
 
             // settings button
-            auto settingsButton = addUI(imageButtonFactory->getByType(ImageButtonType::MENU_RED_CIRCLE, {30, 19 + 41 * 3}));
-            settingsButton->mouseClickHandler().add(std::bind(&MainMenu::onSettingsButtonClick, this, std::placeholders::_1));
+            addUI(imageButtonFactory->getByType(ImageButtonType::MENU_RED_CIRCLE, {30, 19 + 41 * 3}))
+                ->mouseClickHandler().add(std::bind(&MainMenu::onSettingsButtonClick, this, std::placeholders::_1));
 
             // credits button
-            auto creditsButton = addUI(imageButtonFactory->getByType(ImageButtonType::MENU_RED_CIRCLE, {30, 19 + 41 * 4}));
-            creditsButton->mouseClickHandler().add(std::bind(&MainMenu::onCreditsButtonClick, this, std::placeholders::_1));
+            addUI(imageButtonFactory->getByType(ImageButtonType::MENU_RED_CIRCLE, {30, 19 + 41 * 4}))
+                ->mouseClickHandler().add(std::bind(&MainMenu::onCreditsButtonClick, this, std::placeholders::_1));
 
             // exit button
-            auto exitButton = addUI(imageButtonFactory->getByType(ImageButtonType::MENU_RED_CIRCLE, {30, 19 + 41 * 5}));
-            exitButton->mouseClickHandler().add(std::bind(&MainMenu::onExitButtonClick, this, std::placeholders::_1));
+            addUI(imageButtonFactory->getByType(ImageButtonType::MENU_RED_CIRCLE, {30, 19 + 41 * 5}))
+                ->mouseClickHandler().add(std::bind(&MainMenu::onExitButtonClick, this, std::placeholders::_1));
 
             auto font4 = ResourceManager::getInstance()->font("font4.aaf");
             SDL_Color color = {0xb8, 0x9c, 0x28, 0xff};
 
             // "Intro" label
-            auto introButtonLabel = new UI::TextArea("INTRO", 50, 20);
-            introButtonLabel->setFont(font4, color);
-            introButtonLabel->setWidth(150);
-            introButtonLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
+            {
+                auto& introButtonLabel = *makeUI<UI::TextArea>("INTRO", 50, 20);
+                introButtonLabel.setFont(font4, color);
+                introButtonLabel.setWidth(150);
+                introButtonLabel.setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
+            }
 
             // "New Game" label
-            auto newGameButtonLabel = new UI::TextArea("NEW GAME", 50, 20 + 41);
-            newGameButtonLabel->setFont(font4, color);
-            newGameButtonLabel->setWidth(150);
-            newGameButtonLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
+            {
+                auto& newGameButtonLabel = *makeUI<UI::TextArea>("NEW GAME", 50, 20 + 41);
+                newGameButtonLabel.setFont(font4, color);
+                newGameButtonLabel.setWidth(150);
+                newGameButtonLabel.setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
+            }
 
             // "Load Game" label
-            auto loadGameButtonLabel = new UI::TextArea("LOAD GAME", 50, 20 + 41*2);
-            loadGameButtonLabel->setFont(font4, color);
-            loadGameButtonLabel->setWidth(150);
-            loadGameButtonLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
+            {
+                auto& loadGameButtonLabel = *makeUI<UI::TextArea>("LOAD GAME", 50, 20 + 41*2);
+                loadGameButtonLabel.setFont(font4, color);
+                loadGameButtonLabel.setWidth(150);
+                loadGameButtonLabel.setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
+            }
 
             // "Options" label
-            auto optionsButtonLabel = new UI::TextArea("OPTIONS", 50, 20 + 41*3);
-            optionsButtonLabel->setFont(font4, color);
-            optionsButtonLabel->setWidth(150);
-            optionsButtonLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
+            {
+                auto& optionsButtonLabel = *makeUI<UI::TextArea>("OPTIONS", 50, 20 + 41*3);
+                optionsButtonLabel.setFont(font4, color);
+                optionsButtonLabel.setWidth(150);
+                optionsButtonLabel.setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
+            }
 
             // "Credits" label
-            auto creditsButtonLabel = new UI::TextArea("CREDITS", 50, 20 + 41*4);
-            creditsButtonLabel->setFont(font4, color);
-            creditsButtonLabel->setWidth(150);
-            creditsButtonLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
+            {
+                auto& creditsButtonLabel = *makeUI<UI::TextArea>("CREDITS", 50, 20 + 41*4);
+                creditsButtonLabel.setFont(font4, color);
+                creditsButtonLabel.setWidth(150);
+                creditsButtonLabel.setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
+            }
 
             // "Exit" label
-            auto exitButtonLabel = new UI::TextArea("EXIT", 50, 20 + 41*5);
-            exitButtonLabel->setFont(font4, color);
-            exitButtonLabel->setWidth(150);
-            exitButtonLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
-
-            // Text areas
-            addUI(introButtonLabel);
-            addUI(newGameButtonLabel);
-            addUI(loadGameButtonLabel);
-            addUI(optionsButtonLabel);
-            addUI(creditsButtonLabel);
-            addUI(exitButtonLabel);
+            {
+                auto& exitButtonLabel = *makeUI<UI::TextArea>("EXIT", 50, 20 + 41*5);
+                exitButtonLabel.setFont(font4, color);
+                exitButtonLabel.setWidth(150);
+                exitButtonLabel.setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
+            }
         }
 
         void MainMenu::doExit()

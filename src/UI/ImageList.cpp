@@ -6,11 +6,12 @@ namespace Falltergeist
 {
     namespace UI
     {
-        ImageList::ImageList(const Point& pos, const std::vector<Image*> &imageList) : Falltergeist::UI::Base(pos)
+        ImageList::ImageList(Point pos, std::vector<std::unique_ptr<Image>> imageList) :
+            Falltergeist::UI::Base{pos},
+            _images{std::move(imageList)}
         {
-            for (auto& image : imageList) {
-                auto imagePtr = std::unique_ptr<Image>(image);
-                addImage(imagePtr);
+            for (auto& image : _images) {
+                image->setPosition(position());
             }
         }
 

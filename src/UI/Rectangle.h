@@ -11,7 +11,7 @@ namespace Falltergeist
         class Rectangle final : public Base
         {
             public:
-                Rectangle(const Point& pos, const Size& size, SDL_Color color);
+                Rectangle(Point pos, Size size, SDL_Color color);
                 void render(bool eggTransparency = false) override;
 
                 bool opaque(unsigned int x, unsigned int y);

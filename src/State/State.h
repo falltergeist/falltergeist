@@ -42,13 +42,49 @@ namespace Falltergeist
                 template<class T, class ...TCtorArgs, typename = std::enable_if_t<std::is_base_of<UI::Base, T>::value>>
                 std::shared_ptr<T> makeUI(TCtorArgs&&... args)
                 {
-                    auto p = std::make_shared(std::forward<TCtorArgs>(args)...);
+                    auto p = std::make_shared<T>(std::forward<TCtorArgs>(args)...);
                     addUI(p);
                     return p;
                 }
 
-                void addUI(std::shared_ptr<UI::Base> ui);
-                void addUI(std::string name, std::shared_ptr<UI::Base> ui);
+                template<class T, class ...TCtorArgs, typename = std::enable_if_t<std::is_base_of<UI::Base, T>::value>>
+                std::shared_ptr<T> makeNamedUI(std::string name, TCtorArgs&&... args)
+                {
+                    auto p = std::make_shared<T>(std::forward<TCtorArgs>(args)...);
+                    addUI(std::move(name), p);
+                    return p;
+                }
+
+                template<class T, typename = std::enable_if_t<std::is_base_of<UI::Base, T>::value>>
+                std::shared_ptr<T>  addUI(std::shared_ptr<T> ui)
+                {
+                    // Add to UI state position
+                    ui->setPosition(ui->position() - ui->offset() + position());
+                    _ui.emplace_back(ui);
+                    return ui;
+                }
+
+                template<class T, typename = std::enable_if_t<std::is_base_of<UI::Base, T>::value>>
+                std::shared_ptr<T>  addUI(std::unique_ptr<T> ui)
+                {
+                    return addUI(std::shared_ptr<T>{std::move(ui)});
+                }
+
+                template<class T, typename = std::enable_if_t<std::is_base_of<UI::Base, T>::value>>
+                std::shared_ptr<T> addUI(std::string name, std::shared_ptr<T> ui)
+                {
+                    auto ret = addUI(ui);
+                    _labeledUI.insert({ std::move(name), std::move(ui) });
+                    return ret;
+                }
+
+                template<class T, typename = std::enable_if_t<std::is_base_of<UI::Base, T>::value>>
+                std::shared_ptr<T> addUI(std::string name, std::unique_ptr<T> ui)
+                {
+                    auto ret = addUI(std::shared_ptr<T>{std::move(ui)});
+                    _labeledUI.insert({ std::move(name), ret });
+                    return ret;
+                }
 
                 template<typename T = UI::Base, typename = std::enable_if_t<std::is_base_of<UI::Base, T>::value>>
                 std::shared_ptr<T> getUI(const std::string& name) const {

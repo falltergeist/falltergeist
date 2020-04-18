@@ -22,30 +22,32 @@ namespace Falltergeist
 
     namespace State
     {
-        LoadGame::LoadGame(std::shared_ptr<UI::IResourceManager> resourceManager) : State()
+        LoadGame::LoadGame(std::shared_ptr<UI::IResourceManager> _resourceManager) :
+            State{},
+            resourceManager{std::move(_resourceManager)},
+            imageButtonFactory{std::make_unique<UI::Factory::ImageButtonFactory>(resourceManager)}
         {
-            this->resourceManager = resourceManager;
-            imageButtonFactory = std::make_unique<UI::Factory::ImageButtonFactory>(resourceManager);
         }
 
         void LoadGame::init()
         {
-            if (_initialized) return;
+            if (_initialized) {
+                return;
+            }
+
             State::init();
 
             setModal(true);
             setFullscreen(true);
 
             auto game = Game::getInstance();
-            //auto player = Game::getInstance()->player();
 
             // background
-            auto bg = resourceManager->getImage("art/intrface/lsgame.frm");
+            auto bg = addUI(resourceManager->getImage("art/intrface/lsgame.frm"));
             Point bgPos = Point((game->renderer()->size() - bg->size()) / 2);
             auto bgX = bgPos.x();
             auto bgY = bgPos.y();
             bg->setPosition(bgPos);
-            addUI(bg);
 
             // BUTTONS
 
@@ -55,14 +57,16 @@ namespace Falltergeist
             addUI("button_down", imageButtonFactory->getByType(ImageButtonType::SMALL_DOWN_ARROW, {bgX + 35, bgY + 72}));
 
             // button: Done
-            auto doneButton = imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {bgX + 391, bgY + 349});
-            doneButton->mouseClickHandler().add(std::bind(&LoadGame::onDoneButtonClick, this, std::placeholders::_1));
-            addUI(doneButton);
+            addUI(imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {bgX + 391, bgY + 349}))
+                ->mouseClickHandler().add([this](Event::Mouse* event) {
+                    this->onDoneButtonClick(event);
+                });
 
             // button: Cancel
-            auto cancelButton = imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {bgX + 495, bgY + 349});
-            cancelButton->mouseClickHandler().add([this](Event::Event* event){ this->doCancel(); });
-            addUI(cancelButton);
+            addUI(imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {bgX + 495, bgY + 349}))
+                ->mouseClickHandler().add([this](Event::Event* event){
+                    this->doCancel();
+                });
 
             // LABELS
 
@@ -70,19 +74,16 @@ namespace Falltergeist
             SDL_Color color = {0x90, 0x78, 0x24, 0xff};
 
             // LOAD GAME LABEL
-            auto saveGameLabel = new UI::TextArea(_t(MSG_LOAD_SAVE, 110), bgX+48, bgY+27);
-            saveGameLabel->setFont(font3_907824ff, color);
-            addUI(saveGameLabel);
+            makeUI<UI::TextArea>(_t(MSG_LOAD_SAVE, 110), bgX+48, bgY+27)
+                    ->setFont(font3_907824ff, color);
 
             // DONE BUTTON LABEL
-            auto doneButtonLabel = new UI::TextArea(_t(MSG_OPTIONS, 300), bgX+410, bgY+348);
-            doneButtonLabel->setFont(font3_907824ff, color);
-            addUI(doneButtonLabel);
+            makeUI<UI::TextArea>(_t(MSG_OPTIONS, 300), bgX+410, bgY+348)
+                    ->setFont(font3_907824ff, color);
 
             // CANCEL BUTTON LABEL
-            auto cancelButtonLabel = new UI::TextArea(_t(MSG_OPTIONS, 121), bgX+515, bgY+348);
-            cancelButtonLabel->setFont(font3_907824ff, color);
-            addUI(cancelButtonLabel);
+            makeUI<UI::TextArea>(_t(MSG_OPTIONS, 121), bgX+515, bgY+348)
+                    ->setFont(font3_907824ff, color);
         }
 
         void LoadGame::onDoneButtonClick(Event::Mouse* event)

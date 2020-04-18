@@ -92,19 +92,6 @@ namespace Falltergeist
             _modal = value;
         }
 
-        void State::addUI(std::shared_ptr<UI::Base> ui)
-        {
-            // Add to UI state position
-            ui->setPosition(ui->position() - ui->offset() + position());
-            _ui.emplace_back(std::move(ui));
-        }
-
-        void State::addUI(std::string name, std::shared_ptr<UI::Base> ui)
-        {
-            addUI(ui);
-            _labeledUI.insert({ std::move(name), std::move(ui) });
-        }
-
         std::shared_ptr<UI::Base> State::getUIInternal(const std::string& name) const
         {
             auto it = _labeledUI.find(name);

@@ -19,7 +19,7 @@ namespace Falltergeist
         class ItemsList : public Falltergeist::UI::Base
         {
             public:
-                ItemsList(const Point& pos);
+                ItemsList(Point pos);
 
                 void setItems(std::vector<Game::ItemObject*>* items);
                 std::vector<Game::ItemObject*>* items();

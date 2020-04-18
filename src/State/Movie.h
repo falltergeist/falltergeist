@@ -29,7 +29,7 @@ namespace Falltergeist
         {
             public:
                 Movie(int id);
-                ~Movie() override;
+                virtual ~Movie() override = default;
 
                 void init() override;
                 void think(const float &deltaTime) override;

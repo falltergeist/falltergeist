@@ -35,7 +35,7 @@ namespace Falltergeist
             /**
              * Creates empty TextArea at the given position.
              */
-            TextArea(const Point& pos = Point());
+            TextArea(Point pos = Point());
 
             /**
              * Creates empty TextArea at the given position.
@@ -45,12 +45,12 @@ namespace Falltergeist
             /**
              * Creates TextArea with given text at the given position.
              */
-            TextArea(const std::string& text, const Point& pos = Point());
+            TextArea(std::string text, Point pos = Point());
 
             /**
              * Creates TextArea with given text at the given position.
              */
-            TextArea(const std::string& text, int x, int y);
+            TextArea(std::string text, int x, int y);
 
             /**
              * Creates TextArea as copy of another TextArea, placed at the given position (0,0 by default).

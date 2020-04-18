@@ -25,7 +25,7 @@ namespace Falltergeist
                     DRAG
                 };
 
-                InventoryItem(Game::ItemObject* item, const Point& pos = Point());
+                InventoryItem(Game::ItemObject* item, Point pos = Point());
                 ~InventoryItem() override;
 
                 Type type() const;

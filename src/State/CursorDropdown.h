@@ -51,7 +51,7 @@ namespace Falltergeist
                 int _currentIcon = 0;
                 std::vector<std::unique_ptr<UI::Base>> _activeIcons;
                 std::vector<std::unique_ptr<UI::Base>> _inactiveIcons;
-                UI::Base* _cursor = nullptr;
+                std::shared_ptr<UI::Base> _cursor = nullptr;
                 Point _iconsPos;
                 bool _deactivated = false;
                 unsigned int _initialMouseStack;

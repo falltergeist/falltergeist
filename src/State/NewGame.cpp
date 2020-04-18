@@ -25,15 +25,19 @@ namespace Falltergeist
     namespace State
     {
 
-        NewGame::NewGame(std::shared_ptr<UI::IResourceManager> resourceManager) : State()
+        NewGame::NewGame(std::shared_ptr<UI::IResourceManager> _resourceManager) :
+            State{},
+            resourceManager{_resourceManager},
+            imageButtonFactory{std::make_unique<UI::Factory::ImageButtonFactory>(_resourceManager)}
         {
-            this->resourceManager = resourceManager;
-            imageButtonFactory = std::make_unique<UI::Factory::ImageButtonFactory>(resourceManager);
         }
 
         void NewGame::init()
         {
-            if (_initialized) return;
+            if (_initialized) {
+                return;
+            }
+
             State::init();
 
             setFullscreen(true);
@@ -44,45 +48,53 @@ namespace Falltergeist
             setPosition((renderer->size() - Point(640, 480)) / 2);
 
             addUI("background", resourceManager->getImage("art/intrface/pickchar.frm"));
-
-            auto beginGameButton = addUI(imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {81, 322}));
-            beginGameButton->mouseClickHandler().add(std::bind(&NewGame::onBeginGameButtonClick, this, std::placeholders::_1));
-
-            auto editButton = addUI(imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {436, 319}));
-            editButton->mouseClickHandler().add(std::bind(&NewGame::onEditButtonClick, this, std::placeholders::_1));
-
-            auto createButton = addUI(imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {81, 424}));
-            createButton->mouseClickHandler().add(std::bind(&NewGame::onCreateButtonClick, this, std::placeholders::_1));
-
-            auto backButton = addUI(imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {461, 424}));
-            backButton->mouseClickHandler().add(std::bind(&NewGame::onBackButtonClick, this, std::placeholders::_1));
-
-            auto prevCharacterButton = addUI(imageButtonFactory->getByType(ImageButtonType::LEFT_ARROW, {292, 320}));
-            prevCharacterButton->mouseClickHandler().add(std::bind(&NewGame::onPrevCharacterButtonClick, this, std::placeholders::_1));
-
-            auto nextCharacterButton = addUI(imageButtonFactory->getByType(ImageButtonType::RIGHT_ARROW, {318, 320}));
-            nextCharacterButton->mouseClickHandler().add(std::bind(&NewGame::onNextCharacterButtonClick, this, std::placeholders::_1));
-
-            addUI("images", new UI::ImageList({27, 23}, {
+            addUI(imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {81, 322}))
+                ->mouseClickHandler().add([this](Event::Mouse* e) {
+                    this->onBeginGameButtonClick(e);
+                });
+            addUI(imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {436, 319}))
+                ->mouseClickHandler().add([this](Event::Mouse* e) {
+                    this->onEditButtonClick(e);
+                });
+            addUI(imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {81, 424}))
+                ->mouseClickHandler().add([this](Event::Mouse* e) {
+                    this->onCreateButtonClick(e);
+                });
+            addUI(imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {461, 424}))
+                ->mouseClickHandler().add([this](Event::Mouse* e) {
+                    this->onBackButtonClick(e);
+                });
+            addUI(imageButtonFactory->getByType(ImageButtonType::LEFT_ARROW, {292, 320}))
+                ->mouseClickHandler().add([this](Event::Mouse* e) {
+                    this->onPrevCharacterButtonClick(e);
+                });
+            addUI(imageButtonFactory->getByType(ImageButtonType::RIGHT_ARROW, {318, 320}))
+                ->mouseClickHandler().add([this](Event::Mouse* e) {
+                    this->onNextCharacterButtonClick(e);
+                });
+            makeNamedUI<UI::ImageList>("images", Point{27, 23}, std::vector<std::unique_ptr<UI::Image>>{
                 resourceManager->getImage("art/intrface/combat.frm"),
                 resourceManager->getImage("art/intrface/stealth.frm"),
                 resourceManager->getImage("art/intrface/diplomat.frm")
-            }));
+            });
+            makeNamedUI<UI::TextArea>("name", 300, 40);
 
-            addUI("name", new UI::TextArea(300, 40));
+            {
+                auto& stats1 = *makeNamedUI<UI::TextArea>("stats_1", 0, 70);
+                stats1.setWidth(362);
+                stats1.setHorizontalAlign(UI::TextArea::HorizontalAlign::RIGHT);
+            }
 
-            addUI("stats_1", new UI::TextArea(0, 70));
-            getTextArea("stats_1")->setWidth(362);
-            getTextArea("stats_1")->setHorizontalAlign(UI::TextArea::HorizontalAlign::RIGHT);
+            makeNamedUI<UI::TextArea>("stats_2", 374, 70);
+            makeNamedUI<UI::TextArea>("bio", 437, 40);
 
-            addUI("stats_2", new UI::TextArea(374, 70));
-            addUI("bio",     new UI::TextArea(437, 40));
+            {
+                auto& stats3 = *makeNamedUI<UI::TextArea>("stats_3", 294, 150);
+                stats3.setWidth(85);
+                stats3.setHorizontalAlign(UI::TextArea::HorizontalAlign::RIGHT);
+            }
 
-            addUI("stats_3", new UI::TextArea(294, 150));
-            getTextArea("stats_3")->setWidth(85);
-            getTextArea("stats_3")->setHorizontalAlign(UI::TextArea::HorizontalAlign::RIGHT);
-
-            addUI("stats3_values", new UI::TextArea(383, 150));
+            makeNamedUI<UI::TextArea>("stats3_values", 383, 150);
         }
 
         void NewGame::doBeginGame()
@@ -165,58 +177,64 @@ namespace Falltergeist
 
         void NewGame::_changeCharacter()
         {
-            auto& dude = _characters.at(_selectedCharacter);
-           *getTextArea("stats_1") = "";
-           *getTextArea("stats_1")
-                << _t(MSG_STATS, 100) << " " << (dude->stat(STAT::STRENGTH)     < 10 ? "0" : "") << dude->stat(STAT::STRENGTH)     << "\n"
-                << _t(MSG_STATS, 101) << " " << (dude->stat(STAT::PERCEPTION)   < 10 ? "0" : "") << dude->stat(STAT::PERCEPTION)   << "\n"
-                << _t(MSG_STATS, 102) << " " << (dude->stat(STAT::ENDURANCE)    < 10 ? "0" : "") << dude->stat(STAT::ENDURANCE)    << "\n"
-                << _t(MSG_STATS, 103) << " " << (dude->stat(STAT::CHARISMA)     < 10 ? "0" : "") << dude->stat(STAT::CHARISMA)     << "\n"
-                << _t(MSG_STATS, 104) << " " << (dude->stat(STAT::INTELLIGENCE) < 10 ? "0" : "") << dude->stat(STAT::INTELLIGENCE) << "\n"
-                << _t(MSG_STATS, 105) << " " << (dude->stat(STAT::AGILITY)      < 10 ? "0" : "") << dude->stat(STAT::AGILITY)      << "\n"
-                << _t(MSG_STATS, 106) << " " << (dude->stat(STAT::LUCK)         < 10 ? "0" : "") << dude->stat(STAT::LUCK)         << "\n";
+            auto& dude = *_characters.at(_selectedCharacter);
+            auto& stats1 = *getUI<UI::TextArea>("stats_1");
+            stats1 = "";
+            stats1
+                << _t(MSG_STATS, 100) << " " << (dude.stat(STAT::STRENGTH)     < 10 ? "0" : "") << dude.stat(STAT::STRENGTH)     << "\n"
+                << _t(MSG_STATS, 101) << " " << (dude.stat(STAT::PERCEPTION)   < 10 ? "0" : "") << dude.stat(STAT::PERCEPTION)   << "\n"
+                << _t(MSG_STATS, 102) << " " << (dude.stat(STAT::ENDURANCE)    < 10 ? "0" : "") << dude.stat(STAT::ENDURANCE)    << "\n"
+                << _t(MSG_STATS, 103) << " " << (dude.stat(STAT::CHARISMA)     < 10 ? "0" : "") << dude.stat(STAT::CHARISMA)     << "\n"
+                << _t(MSG_STATS, 104) << " " << (dude.stat(STAT::INTELLIGENCE) < 10 ? "0" : "") << dude.stat(STAT::INTELLIGENCE) << "\n"
+                << _t(MSG_STATS, 105) << " " << (dude.stat(STAT::AGILITY)      < 10 ? "0" : "") << dude.stat(STAT::AGILITY)      << "\n"
+                << _t(MSG_STATS, 106) << " " << (dude.stat(STAT::LUCK)         < 10 ? "0" : "") << dude.stat(STAT::LUCK)         << "\n";
 
-            *getTextArea("stats_2") = "";
-            *getTextArea("stats_2")
-                << _t(MSG_STATS, dude->stat(STAT::STRENGTH)     + 300) << "\n"
-                << _t(MSG_STATS, dude->stat(STAT::PERCEPTION)   + 300) << "\n"
-                << _t(MSG_STATS, dude->stat(STAT::ENDURANCE)    + 300) << "\n"
-                << _t(MSG_STATS, dude->stat(STAT::CHARISMA)     + 300) << "\n"
-                << _t(MSG_STATS, dude->stat(STAT::INTELLIGENCE) + 300) << "\n"
-                << _t(MSG_STATS, dude->stat(STAT::AGILITY)      + 300) << "\n"
-                << _t(MSG_STATS, dude->stat(STAT::LUCK)         + 300) << "\n";
+            auto& stats2 = *getUI<UI::TextArea>("stats_2");
+            stats2 = "";
+            stats2
+                << _t(MSG_STATS, dude.stat(STAT::STRENGTH)     + 300) << "\n"
+                << _t(MSG_STATS, dude.stat(STAT::PERCEPTION)   + 300) << "\n"
+                << _t(MSG_STATS, dude.stat(STAT::ENDURANCE)    + 300) << "\n"
+                << _t(MSG_STATS, dude.stat(STAT::CHARISMA)     + 300) << "\n"
+                << _t(MSG_STATS, dude.stat(STAT::INTELLIGENCE) + 300) << "\n"
+                << _t(MSG_STATS, dude.stat(STAT::AGILITY)      + 300) << "\n"
+                << _t(MSG_STATS, dude.stat(STAT::LUCK)         + 300) << "\n";
 
-            getTextArea("bio")->setText(dude->biography());
-            getTextArea("name")->setText(dude->name());
-            getImageList("images")->setCurrentImage(_selectedCharacter);
+            getUI<UI::TextArea>("bio")->setText(dude.biography());
+            getUI<UI::TextArea>("name")->setText(dude.name());
+            getUI<UI::ImageList>("images")->setCurrentImage(_selectedCharacter);
 
-            std::string stats3  = _t(MSG_MISC,  16)  + "\n"    // Hit Points
-                                + _t(MSG_STATS, 109) + "\n"     // Armor Class
-                                + _t(MSG_MISC,  15)  + "\n"     // Action Points
-                                + _t(MSG_STATS, 111) + "\n";    // Melee Damage
+            std::stringstream stats3;
+            stats3 << _t(MSG_MISC,  16)  << "\n"  // Hit Points
+                   << _t(MSG_STATS, 109) << "\n"  // Armor Class
+                   << _t(MSG_MISC,  15)  << "\n"  // Action Points
+                   << _t(MSG_STATS, 111) << "\n"; // Melee Damage
 
-            std::string stats3_values   = std::to_string(dude->hitPointsMax()) + "/" + std::to_string(dude->hitPointsMax()) + "\n"
-                                        + std::to_string(dude->armorClass())   + "\n"
-                                        + std::to_string(dude->actionPoints()) + "\n"
-                                        + std::to_string(dude->meleeDamage())  + "\n";
+            std::stringstream stats3_values;
+            stats3_values << dude.hitPoints() << "/" << dude.hitPointsMax() << "\n"
+                          << dude.armorClass() << "\n"
+                          << dude.actionPoints() << "\n"
+                          << dude.meleeDamage() << "\n";
 
-            for (unsigned i = (unsigned)SKILL::SMALL_GUNS; i <= (unsigned)SKILL::OUTDOORSMAN; i++)
+            for (auto i = (unsigned)SKILL::SMALL_GUNS; i <= (unsigned)SKILL::OUTDOORSMAN; i++)
             {
-                if (dude->skillTagged((SKILL)i))
+                if (dude.skillTagged((SKILL)i))
                 {
-                    stats3 += "\n" + _t(MSG_SKILLS, 100 + i);
-                    stats3_values += "\n" + std::to_string(dude->skillValue((SKILL)i)) + "%";
+                    stats3 << "\n" << _t(MSG_SKILLS, 100 + i);
+                    stats3_values << "\n" << dude.skillValue((SKILL)i) << "%";
                 }
             }
-            for (unsigned i = (unsigned)TRAIT::FAST_METABOLISM; i <= (unsigned)TRAIT::GIFTED; i++)
+
+            for (auto i = (unsigned)TRAIT::FAST_METABOLISM; i <= (unsigned)TRAIT::GIFTED; i++)
             {
-                if (dude->traitTagged((TRAIT)i))
+                if (dude.traitTagged((TRAIT)i))
                 {
-                    stats3 += "\n" + _t(MSG_TRAITS, 100 + i);
+                    stats3 << "\n" << _t(MSG_TRAITS, 100 + i);
                 }
             }
-            getTextArea("stats_3")->setText(stats3);
-            getTextArea("stats3_values")->setText(stats3_values);
+
+            getUI<UI::TextArea>("stats_3")->setText(stats3.str());
+            getUI<UI::TextArea>("stats3_values")->setText(stats3_values.str());
         }
 
         void NewGame::onEditButtonClick(Event::Mouse* event)

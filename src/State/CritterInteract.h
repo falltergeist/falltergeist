@@ -103,6 +103,8 @@ namespace Falltergeist
                 void transition(Reaction reaction);
                 void onMoodTransitionEnded(Event::Event* event);
 
+            private:
+                std::shared_ptr<UI::IResourceManager> resourceManager;
 
             protected:
                 Point _oldCameraCenter;
@@ -127,8 +129,6 @@ namespace Falltergeist
                 CritterDialogReview* _review;
 
                 SubState _state = SubState::NONE;
-            private:
-                std::shared_ptr<UI::IResourceManager> resourceManager;
         };
     }
 }

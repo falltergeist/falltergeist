@@ -18,7 +18,7 @@ namespace Falltergeist
     {
         using Graphics::Rect;
 
-        ItemsList::ItemsList(const Point& pos) : Falltergeist::UI::Base(pos)
+        ItemsList::ItemsList(Point pos) : Falltergeist::UI::Base(pos)
         {
             mouseDownHandler().add( std::bind(&ItemsList::onMouseLeftDown, this, std::placeholders::_1));
             mouseDragStartHandler().add(std::bind(&ItemsList::onMouseDragStart, this, std::placeholders::_1));

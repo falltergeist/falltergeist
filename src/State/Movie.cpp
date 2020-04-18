@@ -21,18 +21,16 @@ namespace Falltergeist
 {
     namespace State
     {
-        Movie::Movie(int id) : State()
-        {
-            _id = id;
-        }
-
-        Movie::~Movie()
+        Movie::Movie(int id) : State{}, _id{id}
         {
         }
 
         void Movie::init()
         {
-            if (_initialized) return;
+            if (_initialized) {
+                return;
+            }
+
             State::init();
 
             setFullscreen(true);
@@ -85,15 +83,17 @@ namespace Falltergeist
                 _subs = ResourceManager::getInstance()->sveFileType(subfile);
                 if (_subs) _hasSubs = true;
             }
-            addUI("movie", new UI::MvePlayer(ResourceManager::getInstance()->mveFileType(movie)));
+
+            makeNamedUI<UI::MvePlayer>("movie", ResourceManager::getInstance()->mveFileType(movie));
 
             auto font0_ffffffff = ResourceManager::getInstance()->font("font1.aaf");
-            auto subLabel = new UI::TextArea("", 0, 320+35);
 
-            subLabel->setFont(font0_ffffffff, {0xFF, 0xFF, 0xFF, 0xFF});
-            subLabel->setWidth(640);
-            subLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
-            addUI("subs",subLabel);
+            {
+                auto& subLabel = *makeNamedUI<UI::TextArea>("subs", "", 0, 320+35);
+                subLabel.setFont(font0_ffffffff, {0xFF, 0xFF, 0xFF, 0xFF});
+                subLabel.setWidth(640);
+                subLabel.setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
+            }
 
             if (_hasSubs)
                 _nextSubLine = _subs->getSubLine(0);
@@ -109,11 +109,13 @@ namespace Falltergeist
                 return;
             }
 
-            unsigned int frame = dynamic_cast<UI::MvePlayer*>(getUI("movie"))->frame();
+            unsigned int frame = getUI<UI::MvePlayer>("movie")->frame();
             if ( frame >= _nextSubLine.first)
             {
-                dynamic_cast<UI::TextArea*>(getUI("subs"))->setText(_nextSubLine.second);
-                if (_hasSubs) _nextSubLine = _subs->getSubLine(dynamic_cast<UI::MvePlayer*>(getUI("movie"))->frame());
+                getUI<UI::TextArea>("subs")->setText(_nextSubLine.second);
+                if (_hasSubs) {
+                    _nextSubLine = _subs->getSubLine(getUI<UI::MvePlayer>("movie")->frame());
+                }
             }
             if (_effect_index<_effects.size() && frame>=_effects[_effect_index].frame)
             {
@@ -130,10 +132,10 @@ namespace Falltergeist
 
             if (!_started)
             {
-                Game::getInstance()->mixer()->playMovieMusic(dynamic_cast<UI::MvePlayer*>(getUI("movie")));
+                Game::getInstance()->mixer()->playMovieMusic(getUI<UI::MvePlayer>("movie").get());
                 _started = true;
             }
-            if ((dynamic_cast<UI::MvePlayer*>(getUI("movie")))->finished())
+            if (getUI<UI::MvePlayer>("movie")->finished())
             {
                 this->onVideoFinished();
             }

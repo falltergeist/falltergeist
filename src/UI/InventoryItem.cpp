@@ -17,7 +17,7 @@ namespace Falltergeist
     {
         using Graphics::Rect;
 
-        InventoryItem::InventoryItem(Game::ItemObject *item, const Point& pos) : Falltergeist::UI::Base(pos)
+        InventoryItem::InventoryItem(Game::ItemObject *item, Point pos) : Falltergeist::UI::Base(pos)
         {
             _item = item;
             mouseDownHandler().add(std::bind(&InventoryItem::onMouseLeftDown, this, std::placeholders::_1));

@@ -6,7 +6,7 @@ namespace Falltergeist
 {
     namespace UI
     {
-        Rectangle::Rectangle(const Point &pos, const Size &size, SDL_Color color) : Base(pos), _size(size), _color(color)
+        Rectangle::Rectangle(Point pos, Size size, SDL_Color color) : Base(pos), _size(size), _color(color)
         {
         }
 

@@ -1136,7 +1136,7 @@ namespace Falltergeist
 
         UI::PlayerPanel *Location::playerPanel()
         {
-            return _playerPanel;
+            return _playerPanel.get();
         }
 
         void Location::addTimerEvent(Game::Object *obj, int ticks, int fixedParam)

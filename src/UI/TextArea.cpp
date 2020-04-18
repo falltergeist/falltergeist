@@ -15,23 +15,22 @@ namespace Falltergeist
     {
         using Graphics::Rect;
 
-        TextArea::TextArea(const Point& pos) : Base(pos)
+        TextArea::TextArea(Point pos) : Base(pos)
         {
             _timestampCreated = SDL_GetTicks();
-
         }
 
         TextArea::TextArea(int x, int y) : TextArea(Point(x, y))
         {
         }
 
-        TextArea::TextArea(const std::string& text, const Point& pos) : Base(pos)
+        TextArea::TextArea(std::string text, Point pos) : Base(pos)
         {
             _timestampCreated = SDL_GetTicks();
-            setText(text);
+            setText(std::move(text));
         }
 
-        TextArea::TextArea(const std::string& text, int x, int y) : TextArea(text, Point(x, y))
+        TextArea::TextArea(std::string text, int x, int y) : TextArea(std::move(text), Point(x, y))
         {
         }
 

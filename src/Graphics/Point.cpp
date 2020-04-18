@@ -34,6 +34,12 @@ namespace Falltergeist
             _y = y;
         }
 
+        Point Point::operator +(Point rhs) const
+        {
+            rhs += *this;
+            return rhs;
+        }
+
         Point& Point::operator +=(const Point& rhs)
         {
             _x += rhs._x;
@@ -72,13 +78,7 @@ namespace Falltergeist
             return !(*this == rhs);
         }
 
-        Point operator +(Point lhs, const Point& rhs)
-        {
-            lhs += rhs;
-            return lhs;
-        }
-
-        Point operator -(Point lhs, const Point& rhs)
+        Point operator -(Point lhs, Point rhs)
         {
             lhs -= rhs;
             return lhs;
@@ -99,6 +99,11 @@ namespace Falltergeist
         Point Point::add(const Point& rhs) const
         {
             return *this + rhs;
+        }
+
+        Point Point::add(int x, int y) const
+        {
+            return add({x, y});
         }
 
         Point Point::sub(const Point& rhs) const

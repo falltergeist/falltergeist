@@ -176,7 +176,7 @@ namespace Falltergeist
                 Game::Object* _objectUnderCursor = nullptr;
                 Game::Object* _actionCursorLastObject = nullptr;
                 bool _actionCursorButtonPressed = false;
-                UI::PlayerPanel* _playerPanel;
+                std::shared_ptr<UI::PlayerPanel> _playerPanel;
 
                 SKILL _skillInUse = SKILL::NONE;
 
