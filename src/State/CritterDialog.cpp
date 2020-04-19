@@ -1,4 +1,4 @@
-#include <algorithm>
+﻿#include <algorithm>
 #include <vector>
 #include "../functions.h"
 #include "../State/CritterDialog.h"
@@ -103,7 +103,7 @@ namespace Falltergeist
         void CritterDialog::setQuestion(const std::string& value)
         {
             auto game = Game::getInstance();
-            auto dialog = dynamic_cast<CritterInteract*>(game->topState(1));
+            auto dialog = dynamic_cast<CritterInteract*>(&game->topState(1));
 
             dialog->dialogReview()->addQuestion(std::string("  ") + value);
 
@@ -147,7 +147,7 @@ namespace Falltergeist
 
         void CritterDialog::onReviewButtonClick(Event::Mouse* event)
         {
-            if (auto interact = dynamic_cast<CritterInteract*>(Game::getInstance()->topState(1)))
+            if (auto interact = dynamic_cast<CritterInteract*>(&Game::getInstance()->topState(1)))
             {
                 interact->switchSubState(CritterInteract::SubState::REVIEW);
             }
@@ -155,7 +155,7 @@ namespace Falltergeist
 
         void CritterDialog::onBarterButtonClick(Event::Mouse* event)
         {
-            if (auto interact = dynamic_cast<CritterInteract*>(Game::getInstance()->topState(1)))
+            if (auto interact = dynamic_cast<CritterInteract*>(&Game::getInstance()->topState(1)))
             {
                 if (interact->critter()->canTrade()) {
                     interact->switchSubState(CritterInteract::SubState::BARTER);
@@ -209,7 +209,7 @@ namespace Falltergeist
             if (i >= _answers.size()) throw Exception("No answer with number " + std::to_string(i));
 
             auto game = Game::getInstance();
-            auto dialog = dynamic_cast<CritterInteract*>(game->topState(1));
+            auto dialog = dynamic_cast<CritterInteract*>(&game->topState(1));
 
             dialog->dialogReview()->addAnswer(_answers.at(i)->text().substr(1));
 

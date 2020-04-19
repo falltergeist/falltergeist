@@ -309,38 +309,37 @@ namespace Falltergeist
 
         void PlayerPanel::openGameMenu()
         {
-            Game::getInstance()->pushState(new State::GameMenu(resourceManager));
+            Game::getInstance()->pushState(std::make_unique<State::GameMenu>(resourceManager));
             playWindowOpenSfx();
         }
 
         void PlayerPanel::openInventory()
         {
-            auto state = new State::Inventory(resourceManager);
-            Game::getInstance()->pushState(state);
+            Game::getInstance()->pushState(std::make_unique<State::Inventory>(resourceManager));
             playWindowOpenSfx();
         }
 
         void PlayerPanel::openSkilldex()
         {
-            Game::getInstance()->pushState(new State::Skilldex(resourceManager));
+            Game::getInstance()->pushState(std::make_unique<State::Skilldex>(resourceManager));
             playWindowOpenSfx();
         }
 
         void PlayerPanel::openMap()
         {
-            Game::getInstance()->pushState(new State::WorldMap(resourceManager));
+            Game::getInstance()->pushState(std::make_unique<State::WorldMap>(resourceManager));
             playWindowOpenSfx();
         }
 
         void PlayerPanel::openCharacterScreen()
         {
-            Game::getInstance()->pushState(new State::PlayerEdit(resourceManager));
+            Game::getInstance()->pushState(std::make_unique<State::PlayerEdit>(resourceManager));
             playWindowOpenSfx();
         }
 
         void PlayerPanel::openPipBoy()
         {
-            Game::getInstance()->pushState(new State::PipBoy(resourceManager));
+            Game::getInstance()->pushState(std::make_unique<State::PipBoy>(resourceManager));
             playWindowOpenSfx();
         }
 
@@ -400,7 +399,7 @@ namespace Falltergeist
                 case SDLK_x:
                     if (event->controlPressed())
                     {
-                        Game::getInstance()->pushState(new State::ExitConfirm(resourceManager));
+                        Game::getInstance()->pushState(std::make_unique<State::ExitConfirm>(resourceManager));
                         playWindowOpenSfx();
                     }
                 case SDLK_SLASH:
@@ -434,7 +433,7 @@ namespace Falltergeist
                     // @TODO: quick load logic
                     break;
                 case SDLK_F10:
-                    Game::getInstance()->pushState(new State::ExitConfirm(resourceManager));
+                    Game::getInstance()->pushState(std::make_unique<State::ExitConfirm>(resourceManager));
                     playWindowOpenSfx();
                     break;
                 case SDLK_F12:
@@ -445,13 +444,13 @@ namespace Falltergeist
 
         void PlayerPanel::openSaveGame()
         {
-            Game::getInstance()->pushState(new State::SaveGame(resourceManager));
+            Game::getInstance()->pushState(std::make_unique<State::SaveGame>(resourceManager));
             playWindowOpenSfx();
         }
 
         void PlayerPanel::openLoadGame()
         {
-            Game::getInstance()->pushState(new State::LoadGame(resourceManager));
+            Game::getInstance()->pushState(std::make_unique<State::LoadGame>(resourceManager));
             playWindowOpenSfx();
         }
 

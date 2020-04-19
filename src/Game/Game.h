@@ -1,12 +1,13 @@
 #pragma once
 
+#include "../Base/Singleton.h"
+#include "../Game/Time.h"
+#include "../UI/IResourceManager.h"
+
 #include <memory>
 #include <string>
 #include <vector>
 #include <SDL.h>
-#include "../Base/Singleton.h"
-#include "../Game/Time.h"
-#include "../UI/IResourceManager.h"
 
 namespace Falltergeist
 {
@@ -58,14 +59,17 @@ namespace Falltergeist
                 static Game* getInstance();
 
                 void shutdown();
+
+                void setState(std::unique_ptr<State::State> state);
+                void pushState(std::unique_ptr<State::State> state);
+                void pushSharedState(std::shared_ptr<State::State> state);
+
                 /**
                  * Returns pointer to a state at the top of stack.
                  * @param offset optional offset (1 means second from the top, and so on)
                  */
-                State::State* topState(unsigned offset = 0) const;
-                void pushState(State::State* state);
-                void setState(std::unique_ptr<State::State> state);
-                void popState(bool doDelete = true);
+                State::State& topState(unsigned offset = 0) const;
+                void popState();
 
                 void run();
                 void quit();
@@ -103,10 +107,11 @@ namespace Falltergeist
                 unsigned int frame() const;
 
                 void setUIResourceManager(std::shared_ptr<UI::IResourceManager> uiResourceManager);
-            protected:
+
+            private:
                 std::vector<int> _GVARS;
-                std::vector<std::unique_ptr<State::State>> _states;
-                std::vector<std::unique_ptr<State::State>> _statesForDelete;
+                std::vector<std::shared_ptr<State::State>> _states;
+                std::vector<std::shared_ptr<State::State>> _statesForDelete;
 
                 std::shared_ptr<Time> _gameTime;
 
@@ -132,7 +137,6 @@ namespace Falltergeist
                 std::vector<State::State*> _getVisibleStates();
                 std::vector<State::State*> _getActiveStates();
 
-            private:
                 std::shared_ptr<UI::IResourceManager> uiResourceManager;
                 friend class Base::Singleton<Game>;
                 void _initGVARS();

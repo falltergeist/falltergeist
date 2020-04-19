@@ -75,7 +75,7 @@ namespace Falltergeist
 
         void CritterDialogReview::onDoneButtonClick(Event::Mouse* event)
         {
-            if (auto interact = dynamic_cast<CritterInteract*>(Game::getInstance()->topState(1)))
+            if (auto interact = dynamic_cast<CritterInteract*>(&Game::getInstance()->topState(1)))
             {
                 interact->switchSubState(CritterInteract::SubState::DIALOG);
             }

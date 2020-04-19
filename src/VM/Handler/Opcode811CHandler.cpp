@@ -42,7 +42,7 @@ namespace Falltergeist {
             void Opcode811C::_run() {
                 Logger::debug("SCRIPT") << "[811C] [?] gsay_start" << std::endl;
 
-                if (auto interact = dynamic_cast<Falltergeist::State::CritterInteract *>(Game::getInstance()->topState())) {
+                if (auto interact = dynamic_cast<Falltergeist::State::CritterInteract*>(&Game::getInstance()->topState())) {
                     interact->dialogReview()->setCritterName(_script->owner()->scrName());
                     interact->switchSubState(State::CritterInteract::SubState::DIALOG);
                 }

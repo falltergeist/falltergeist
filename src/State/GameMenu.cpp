@@ -129,22 +129,22 @@ namespace Falltergeist
 
         void GameMenu::doSaveGame()
         {
-            Game::getInstance()->pushState(new SaveGame(resourceManager));
+            Game::getInstance()->pushState(std::make_unique<SaveGame>(resourceManager));
         }
 
         void GameMenu::doLoadGame()
         {
-            Game::getInstance()->pushState(new LoadGame(resourceManager));
+            Game::getInstance()->pushState(std::make_unique<LoadGame>(resourceManager));
         }
 
         void GameMenu::doPreferences()
         {
-            Game::getInstance()->pushState(new SettingsMenu(resourceManager));
+            Game::getInstance()->pushState(std::make_unique<SettingsMenu>(resourceManager));
         }
 
         void GameMenu::doExit()
         {
-            Game::getInstance()->pushState(new ExitConfirm(resourceManager));
+            Game::getInstance()->pushState(std::make_unique<ExitConfirm>(resourceManager));
         }
 
         void GameMenu::closeMenu()

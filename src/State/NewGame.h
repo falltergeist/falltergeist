@@ -3,13 +3,10 @@
 #include <vector>
 #include "../State/State.h"
 #include "../UI/IResourceManager.h"
+#include "../Game/DudeObject.h"
 
 namespace Falltergeist
 {
-    namespace Game
-    {
-        class DudeObject;
-    }
     namespace UI
     {
         namespace Factory

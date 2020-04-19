@@ -58,7 +58,7 @@ namespace Falltergeist {
                 }
                 auto iq = dataStack->popInteger();
                 auto game = Game::getInstance();
-                auto dialog = dynamic_cast<State::CritterDialog *>(game->topState());
+                auto dialog = dynamic_cast<State::CritterDialog *>(&game->topState());
                 if (iq >= 0) {
                     if (game->player()->stat(STAT::INTELLIGENCE) >= iq) {
                         dialog->reactions()->push_back(reaction);

@@ -39,8 +39,7 @@ namespace Falltergeist {
             void Opcode8115::_run() {
                 Logger::debug("SCRIPT") << "[8115] [*] void playMovie(int movie)" << std::endl;
                 int movie = _script->dataStack()->popInteger();
-                auto state = new State::Movie(movie);
-                Game::Game::getInstance()->pushState(state);
+                Game::Game::getInstance()->pushState(std::make_unique<State::Movie>(movie));
             }
         }
     }

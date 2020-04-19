@@ -50,9 +50,9 @@ namespace Falltergeist
             _delayTimer->start();
             _delayTimer->tickHandler().add([game, this](Event::Event*) {
                 game->setState(std::make_unique<MainMenu>(resourceManager));
-                game->pushState(new Movie(17));
-                game->pushState(new Movie(1));
-                game->pushState(new Movie(0));
+                game->pushState(std::make_unique<Movie>(17));
+                game->pushState(std::make_unique<Movie>(1));
+                game->pushState(std::make_unique<Movie>(0));
             });
 
             Game::getInstance()->mouse()->setState(Input::Mouse::Cursor::WAIT);

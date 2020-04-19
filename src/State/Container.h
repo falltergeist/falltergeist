@@ -2,6 +2,7 @@
 
 #include "../State/State.h"
 #include "../UI/IResourceManager.h"
+#include "../UI/Factory/ImageButtonFactory.h"
 
 namespace Falltergeist
 {
@@ -13,13 +14,6 @@ namespace Falltergeist
     namespace Game
     {
         class ContainerItemObject;
-    }
-    namespace UI
-    {
-        namespace Factory
-        {
-            class ImageButtonFactory;
-        }
     }
     namespace State
     {

@@ -43,8 +43,8 @@ namespace Falltergeist {
                 Logger::debug("SCRIPT") << "[8136] [=] void gfade_out(int time)" << std::endl
                                         << "    time = " << time << std::endl;
 
-                auto state = Game::getInstance()->topState();
-                state->scriptFade(_script, false);
+                auto& state = Game::getInstance()->topState();
+                state.scriptFade(_script, false);
                 throw HaltException();
             }
         }

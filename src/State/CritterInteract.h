@@ -3,6 +3,9 @@
 #include "../State/State.h"
 #include "../Game/Timer.h"
 #include "../UI/IResourceManager.h"
+#include "CritterDialog.h"
+#include "CritterBarter.h"
+#include "CritterDialogReview.h"
 
 namespace Falltergeist
 {
@@ -34,10 +37,6 @@ namespace Falltergeist
     }
     namespace State
     {
-        class CritterDialog;
-        class CritterBarter;
-        class CritterDialogReview;
-
         class CritterInteract final : public State
         {
             public:
@@ -96,9 +95,7 @@ namespace Falltergeist
 
                 void playSpeech(const std::string& speech);
 
-                CritterDialog* dialog();
                 CritterDialogReview* dialogReview();
-                CritterBarter* barter();
                 void switchSubState(SubState state);
                 void transition(Reaction reaction);
                 void onMoodTransitionEnded(Event::Event* event);
@@ -124,9 +121,9 @@ namespace Falltergeist
                 int32_t _badFidgets;
                 Game::Timer _fidgetTimer;
 
-                CritterDialog* _dialog;
-                CritterBarter* _barter;
-                CritterDialogReview* _review;
+                std::shared_ptr<CritterDialog> _dialog;
+                std::shared_ptr<CritterBarter> _barter;
+                std::shared_ptr<CritterDialogReview> _review;
 
                 SubState _state = SubState::NONE;
         };

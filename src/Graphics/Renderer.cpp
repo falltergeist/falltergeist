@@ -251,8 +251,8 @@ namespace Falltergeist
                     _fadeAlpha = (_fadeAlpha <= 0 ? 0 : 255);
                     _fadeDone = true;
 
-                    auto state = Game::getInstance()->topState();
-                    state->emitEvent(std::make_unique<Event::State>("fadedone"), state->fadeDoneHandler());
+                    auto& state = Game::getInstance()->topState();
+                    state.emitEvent(std::make_unique<Event::State>("fadedone"), state.fadeDoneHandler());
                     return;
                 }
             }

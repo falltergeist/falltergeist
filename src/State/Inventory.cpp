@@ -403,7 +403,7 @@ namespace Falltergeist
             if (Game::getInstance()->mouse()->state() == Input::Mouse::Cursor::HAND)
             {
                 auto itemUi = dynamic_cast<UI::ImageList*>(event->target());
-                Game::getInstance()->pushState(new InventoryDragItem(itemUi));
+                Game::getInstance()->pushState(std::make_unique<InventoryDragItem>(itemUi));
             }
             else
             {
@@ -417,7 +417,7 @@ namespace Falltergeist
             if (Game::getInstance()->mouse()->state() == Input::Mouse::Cursor::HAND)
             {
                 auto itemUi = dynamic_cast<UI::ImageList*>(event->target());
-                Game::getInstance()->pushState(new InventoryDragItem(itemUi));
+                Game::getInstance()->pushState(std::make_unique<InventoryDragItem>(itemUi));
             }
             else
             {
@@ -431,7 +431,7 @@ namespace Falltergeist
             if (Game::getInstance()->mouse()->state() == Input::Mouse::Cursor::HAND)
             {
                 auto itemUi = dynamic_cast<UI::ImageList*>(event->target());
-                Game::getInstance()->pushState(new InventoryDragItem(itemUi));
+                Game::getInstance()->pushState(std::make_unique<InventoryDragItem>(itemUi));
             }
             else
             {

@@ -151,7 +151,7 @@ namespace Falltergeist
 
         void MainMenu::doSettings()
         {
-            Game::getInstance()->pushState(new SettingsMenu(resourceManager));
+            Game::getInstance()->pushState(std::make_unique<SettingsMenu>(resourceManager));
         }
 
         void MainMenu::doIntro()
@@ -188,7 +188,7 @@ namespace Falltergeist
         void MainMenu::onNewGameStart(Event::State* event)
         {
             fadeDoneHandler().clear();
-            Game::getInstance()->pushState(new NewGame(resourceManager));
+            Game::getInstance()->pushState(std::make_unique<NewGame>(resourceManager));
         }
 
         void MainMenu::onLoadGameButtonClick(Event::Mouse* event)
@@ -199,7 +199,7 @@ namespace Falltergeist
         void MainMenu::onLoadGameStart(Event::State* event)
         {
             fadeDoneHandler().clear();
-            Game::getInstance()->pushState(new LoadGame(resourceManager));
+            Game::getInstance()->pushState(std::make_unique<LoadGame>(resourceManager));
         }
 
         void MainMenu::onSettingsButtonClick(Event::Mouse* event)
@@ -215,8 +215,8 @@ namespace Falltergeist
         void MainMenu::onIntroStart(Event::State* event)
         {
             fadeDoneHandler().clear();
-            Game::getInstance()->pushState(new Movie(17));
-            Game::getInstance()->pushState(new Movie(1));
+            Game::getInstance()->pushState(std::make_unique<Movie>(17));
+            Game::getInstance()->pushState(std::make_unique<Movie>(1));
         }
 
         void MainMenu::onCreditsButtonClick(Event::Mouse* event)
@@ -227,7 +227,7 @@ namespace Falltergeist
         void MainMenu::onCreditsStart(Event::State* event)
         {
             fadeDoneHandler().clear();
-            Game::getInstance()->pushState(new Credits());
+            Game::getInstance()->pushState(std::make_unique<Credits>());
         }
 
         void MainMenu::onKeyDown(Event::Keyboard* event)

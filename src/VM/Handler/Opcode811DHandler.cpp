@@ -40,12 +40,12 @@ namespace Falltergeist {
 
             void Opcode811D::_run() {
                 Logger::debug("SCRIPT") << "[811D] [?] gsay_end" << std::endl;
-                auto dialog = dynamic_cast<State::CritterDialog *>(Game::getInstance()->topState());
+                auto dialog = dynamic_cast<State::CritterDialog *>(&Game::getInstance()->topState());
                 if (dialog->hasAnswers()) {
                     _script->dataStack()->push(0); // function return value
                     throw HaltException();
                 }
-                if (auto interact = dynamic_cast<Falltergeist::State::CritterInteract *>(Game::getInstance()->topState(
+                if (auto interact = dynamic_cast<Falltergeist::State::CritterInteract *>(&Game::getInstance()->topState(
                         1))) {
                     interact->switchSubState(State::CritterInteract::SubState::NONE);
                 }

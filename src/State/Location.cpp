@@ -201,12 +201,12 @@ namespace Falltergeist
                     auto icons = getCursorIconsForObject(_objectUnderCursor);
                     if (!icons.empty()) {
                         // TODO delegate state manipulation to some kind of state manager
-                        if (dynamic_cast<CursorDropdown *>(Game::getInstance()->topState()) != nullptr) {
+                        if (dynamic_cast<CursorDropdown *>(&Game::getInstance()->topState()) != nullptr) {
                             Game::getInstance()->popState();
                         }
-                        auto state = new CursorDropdown(resourceManager, std::move(icons), !_actionCursorButtonPressed);
+                        auto state = std::make_unique<CursorDropdown>(resourceManager, std::move(icons), !_actionCursorButtonPressed);
                         state->setObject(_objectUnderCursor);
-                        Game::getInstance()->pushState(state);
+                        Game::getInstance()->pushState(std::move(state));
                     }
                 }
                 _actionCursorButtonPressed = false;

@@ -41,9 +41,6 @@ namespace Falltergeist
         {
             auto camera = Game::getInstance()->locationState()->camera();
             camera->setCenter(_oldCameraCenter);
-            delete _dialog;
-            delete _review;
-            delete _barter;
         }
 
         void CritterInteract::onStateActivate(Event::State* event)
@@ -300,19 +297,9 @@ namespace Falltergeist
             }
         }
 
-        CritterDialog* CritterInteract::dialog()
-        {
-            return _dialog;
-        }
-
         CritterDialogReview* CritterInteract::dialogReview()
         {
-            return _review;
-        }
-
-        CritterBarter* CritterInteract::barter()
-        {
-            return _barter;
+            return _review.get();
         }
 
         void CritterInteract::switchSubState(CritterInteract::SubState state)
@@ -322,19 +309,19 @@ namespace Falltergeist
             _fidgetTimer.start(0);
             if (_state!=SubState::NONE)
             {
-                Game::getInstance()->popState(false);
+                Game::getInstance()->popState();
             }
             _state = state;
             switch (state)
             {
                 case SubState::DIALOG:
-                    Game::getInstance()->pushState(_dialog);
+                    Game::getInstance()->pushSharedState(_dialog);
                     break;
                 case SubState::BARTER:
-                    Game::getInstance()->pushState(_barter);
+                    Game::getInstance()->pushSharedState(_barter);
                     break;
                 case SubState::REVIEW:
-                    Game::getInstance()->pushState(_review);
+                    Game::getInstance()->pushSharedState(_review);
                     break;
                 default:
                     break;

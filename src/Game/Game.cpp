@@ -110,29 +110,32 @@ namespace Falltergeist
             _settings.reset();
         }
 
-        void Game::pushState(State::State* state)
+        void Game::pushState(std::unique_ptr<State::State> state)
         {
-            _states.push_back(std::unique_ptr<State::State>(state));
-            if (!state->initialized()) {
-                state->init();
-            }
-            state->emitEvent(std::make_unique<Event::State>("push"), state->pushHandler());
-            state->setActive(true);
-            state->emitEvent(std::make_unique<Event::State>("activate"), state->activateHandler());
+            this->pushSharedState(std::move(state));
         }
 
-        void Game::popState(bool doDelete)
+        void Game::pushSharedState(std::shared_ptr<State::State> state)
+        {
+            _states.push_back(state);
+
+            auto& st = *_states.back();
+            if (not st.initialized()) {
+                st.init();
+            }
+            st.emitEvent(std::make_unique<Event::State>("push"), state->pushHandler());
+            st.setActive(true);
+            st.emitEvent(std::make_unique<Event::State>("activate"), state->activateHandler());
+        }
+
+        void Game::popState()
         {
             if (_states.empty()) {
                 return;
             }
 
             State::State* state = _states.back().get();
-            if (doDelete) {
-                _statesForDelete.emplace_back(std::move(_states.back()));
-            } else {
-                _states.back().release();
-            }
+            _statesForDelete.emplace_back(std::move(_states.back()));
             _states.pop_back();
             state->setActive(false);
             state->emitEvent(std::make_unique<Event::State>("deactivate"), state->deactivateHandler());
@@ -144,7 +147,7 @@ namespace Falltergeist
             while (not _states.empty()) {
                 popState();
             }
-            pushState(state.release());
+            pushState(std::move(state));
         }
 
         void Game::run()
@@ -235,9 +238,13 @@ namespace Falltergeist
             }
         }
 
-        State::State* Game::topState(unsigned offset) const
+        State::State& Game::topState(unsigned offset) const
         {
-            return (_states.rbegin() + offset)->get();
+            if (offset >= _states.size()) {
+                throw std::runtime_error{"invalid offset specified when getting topState"};
+            }
+            auto last = _states.size()-1;
+            return *_states[last-offset];
         }
 
         std::vector<State::State*> Game::_getVisibleStates()
