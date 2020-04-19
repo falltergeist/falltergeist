@@ -62,10 +62,10 @@ namespace Falltergeist
             addUI(bg);
             addUI(ageBox);
             addUI(doneBox);
-            addUI(incButton);
-            addUI(decButton);
+            addUI(std::move(incButton));
+            addUI(std::move(decButton));
             addUI(doneLabel);
-            addUI(doneButton);
+            addUI(std::move(doneButton));
             addUI(_counter);
 
         }

@@ -89,11 +89,11 @@ namespace Falltergeist
 
             addUI(background);
 
-            addUI(saveButton);
-            addUI(loadButton);
-            addUI(printToFileButton);
-            addUI(eraseButton);
-            addUI(doneButton);
+            addUI(std::move(saveButton));
+            addUI(std::move(loadButton));
+            addUI(std::move(printToFileButton));
+            addUI(std::move(eraseButton));
+            addUI(std::move(doneButton));
 
             addUI(saveButtonLabel);
             addUI(loadButtonLabel);

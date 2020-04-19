@@ -6,9 +6,9 @@ namespace Falltergeist
 {
     namespace UI
     {
-        std::unique_ptr<Image> ResourceManager::getImage(const std::string &filename)
+        std::shared_ptr<Image> ResourceManager::getImage(const std::string &filename)
         {
-            return std::make_unique<Image>(std::make_unique<Graphics::Sprite>(filename));
+            return std::make_shared<Image>(std::make_unique<Graphics::Sprite>(filename));
         }
 
         std::shared_ptr<Graphics::Sprite> ResourceManager::getSprite(const std::string &filename)

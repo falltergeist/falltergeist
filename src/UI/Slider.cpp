@@ -10,15 +10,16 @@ namespace Falltergeist
 {
     namespace UI
     {
-        Slider::Slider(const Point& pos, std::unique_ptr<Image> imageOn, std::unique_ptr<Image> imageOff) : Base(pos)
+        Slider::Slider(Point pos, std::shared_ptr<Image> _imageOn, std::shared_ptr<Image> _imageOff) :
+            Base{pos},
+            imageOn{std::move(_imageOn)},
+            imageOff{std::move(_imageOff)},
+            _downSound{"sound/sfx/ib1p1xx1.acm"},
+            _upSound{"sound/sfx/ib1lu1x1.acm"}
         {
             mouseDragHandler().add(std::bind(&Slider::_onDrag, this, std::placeholders::_1));
             mouseDownHandler().add(std::bind(&Slider::_onLeftButtonDown, this, std::placeholders::_1));
             mouseUpHandler().add(std::bind(&Slider::_onLeftButtonUp, this, std::placeholders::_1));
-            this->imageOn = std::move(imageOn);
-            this->imageOff = std::move(imageOff);
-            _downSound = "sound/sfx/ib1p1xx1.acm";
-            _upSound = "sound/sfx/ib1lu1x1.acm";
         }
 
         void Slider::handle(Event::Event* event)

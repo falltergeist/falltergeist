@@ -15,7 +15,7 @@ namespace Falltergeist
         class Slider : public Falltergeist::UI::Base
         {
             public:
-                Slider(const Point& pos, std::unique_ptr<Image> imageOn, std::unique_ptr<Image> imageOff);
+                Slider(Point pos, std::shared_ptr<Image> imageOn, std::shared_ptr<Image> imageOff);
                 virtual ~Slider() = default;
 
                 void handle(Event::Event* event) override;
@@ -38,8 +38,8 @@ namespace Falltergeist
                 Event::Handler& changeHandler();
 
             private:
-                std::unique_ptr<Image> imageOn;
-                std::unique_ptr<Image> imageOff;
+                std::shared_ptr<Image> imageOn;
+                std::shared_ptr<Image> imageOff;
 
                 double _minValue = 0.0;
                 double _maxValue = 1.0;

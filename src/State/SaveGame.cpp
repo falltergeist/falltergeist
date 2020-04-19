@@ -53,12 +53,12 @@ namespace Falltergeist
             // button: Done
             auto doneButton = imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {bgX + 391, bgY + 349});
             doneButton->mouseClickHandler().add(std::bind(&SaveGame::onDoneButtonClick, this, std::placeholders::_1));
-            addUI(doneButton);
+            addUI(std::move(doneButton));
 
             // button: Cancel
             auto cancelButton = imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {bgX + 495, bgY + 349});
             cancelButton->mouseClickHandler().add(std::bind(&SaveGame::onCancelButtonClick, this, std::placeholders::_1));
-            addUI(cancelButton);
+            addUI(std::move(cancelButton));
 
             // LABELS
             std::string font3_907824ff = "font3.aaf";

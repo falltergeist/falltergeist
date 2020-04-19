@@ -19,7 +19,7 @@ namespace Falltergeist
                     RED
                 };
 
-                BigCounter(const Point& pos = Point(), unsigned int length = 2);
+                BigCounter(Point pos = Point(), unsigned int length = 2);
                 virtual ~BigCounter() = default;
 
                 BigCounter(const BigCounter&) = delete;

@@ -60,7 +60,7 @@ namespace Falltergeist
 
             addUI(bg);
             addUI(doneBox);
-            addUI(doneButton);
+            addUI(std::move(doneButton));
             addUI(doneLabel);
             addUI(_maleImage);
             addUI(_femaleImage);

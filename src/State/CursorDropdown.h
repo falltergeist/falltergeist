@@ -49,8 +49,8 @@ namespace Falltergeist
                 int _initialX;
                 int _initialY;
                 int _currentIcon = 0;
-                std::vector<std::unique_ptr<UI::Base>> _activeIcons;
-                std::vector<std::unique_ptr<UI::Base>> _inactiveIcons;
+                std::vector<std::shared_ptr<UI::Base>> _activeIcons;
+                std::vector<std::shared_ptr<UI::Base>> _inactiveIcons;
                 std::shared_ptr<UI::Base> _cursor = nullptr;
                 Point _iconsPos;
                 bool _deactivated = false;

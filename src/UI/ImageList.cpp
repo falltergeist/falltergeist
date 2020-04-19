@@ -6,7 +6,7 @@ namespace Falltergeist
 {
     namespace UI
     {
-        ImageList::ImageList(Point pos, std::vector<std::unique_ptr<Image>> imageList) :
+        ImageList::ImageList(Point pos, std::vector<std::shared_ptr<Image>> imageList) :
             Falltergeist::UI::Base{pos},
             _images{std::move(imageList)}
         {
@@ -31,7 +31,7 @@ namespace Falltergeist
             _images.back()->setPosition(position());
         }
 
-        const std::vector<std::unique_ptr<Image>>& ImageList::images() const
+        const std::vector<std::shared_ptr<Image>>& ImageList::images() const
         {
             return _images;
         }

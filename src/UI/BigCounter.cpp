@@ -5,7 +5,7 @@ namespace Falltergeist
 {
     namespace UI
     {
-        BigCounter::BigCounter(const Point& pos, unsigned int length) : Base(pos)
+        BigCounter::BigCounter(Point pos, unsigned int length) : Base(pos)
         {
             _length = length;
             _sprite = std::make_shared<Graphics::Sprite>("art/intrface/bignum.frm");

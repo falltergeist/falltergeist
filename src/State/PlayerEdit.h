@@ -47,25 +47,25 @@ namespace Falltergeist
                 void onKeyDown(Event::Keyboard* event) override;
 
             protected:
-                UI::TextArea* _selectedLabel = nullptr;
-                UI::TextArea* _title = nullptr;
-                UI::TextArea* _description = nullptr;
-                UI::Image* _selectedImage = nullptr;
-                std::map<std::string, UI::TextArea*> _labels;
-                std::map<std::string, UI::BigCounter*> _counters;
-                std::map<std::string, UI::ImageButton*> _buttons;
-                std::map<std::string, UI::HiddenMask*> _masks;
+                std::shared_ptr<UI::TextArea> _selectedLabel = nullptr;
+                std::shared_ptr<UI::TextArea> _title = nullptr;
+                std::shared_ptr<UI::TextArea> _description = nullptr;
+                std::shared_ptr<UI::Image> _selectedImage = nullptr;
+                std::map<std::string, std::shared_ptr<UI::TextArea>> _labels;
+                std::map<std::string, std::shared_ptr<UI::BigCounter>> _counters;
+                std::map<std::string, std::shared_ptr<UI::ImageButton>> _buttons;
+                std::map<std::string, std::shared_ptr<UI::HiddenMask>> _masks;
                 std::map<std::string, std::string> _titles;
                 std::map<std::string, std::string> _descriptions;
-                std::map<std::string, UI::Image*> _images;
+                std::map<std::string, std::shared_ptr<UI::Image>> _images;
 
-                UI::TextArea* _addLabel(const std::string& name, UI::TextArea* label);
-                UI::ImageButton* _addButton(const std::string& name, UI::ImageButton* button);
-                UI::BigCounter* _addCounter(const std::string& name, UI::BigCounter* counter);
-                UI::HiddenMask* _addMask(const std::string& name, UI::HiddenMask* mask);
+                std::shared_ptr<UI::TextArea> _addLabel(std::string name, std::shared_ptr<UI::TextArea> label);
+                std::shared_ptr<UI::ImageButton> _addButton(std::string name, std::shared_ptr<UI::ImageButton> button);
+                std::shared_ptr<UI::BigCounter> _addCounter(std::string name, std::shared_ptr<UI::BigCounter> counter);
+                std::shared_ptr<UI::HiddenMask> _addMask(std::string name, std::shared_ptr<UI::HiddenMask> mask);
                 void _addTitle(const std::string& name, std::string title);
                 void _addDescription(const std::string& name, std::string description);
-                void _addImage(const std::string& name, UI::Image* image);
+                void _addImage(const std::string& name, std::shared_ptr<UI::Image> image);
 
                 bool _statIncrease(unsigned int num);
                 bool _statDecrease(unsigned int num);

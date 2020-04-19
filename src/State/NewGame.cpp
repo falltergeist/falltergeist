@@ -72,7 +72,7 @@ namespace Falltergeist
                 ->mouseClickHandler().add([this](Event::Mouse* e) {
                     this->onNextCharacterButtonClick(e);
                 });
-            makeNamedUI<UI::ImageList>("images", Point{27, 23}, std::vector<std::unique_ptr<UI::Image>>{
+            makeNamedUI<UI::ImageList>("images", Point{27, 23}, std::vector<std::shared_ptr<UI::Image>>{
                 resourceManager->getImage("art/intrface/combat.frm"),
                 resourceManager->getImage("art/intrface/stealth.frm"),
                 resourceManager->getImage("art/intrface/diplomat.frm")

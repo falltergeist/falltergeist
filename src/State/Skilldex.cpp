@@ -161,15 +161,15 @@ namespace Falltergeist
 
             // add all buttons and labels and counters
             addUI(background);
-            addUI(sneakButton);
-            addUI(lockpickButton);
-            addUI(stealButton);
-            addUI(trapsButton);
-            addUI(firstAidButton);
-            addUI(doctorButton);
-            addUI(scienceButton);
-            addUI(repairButton);
-            addUI(cancelButton);
+            addUI(std::move(sneakButton));
+            addUI(std::move(lockpickButton));
+            addUI(std::move(stealButton));
+            addUI(std::move(trapsButton));
+            addUI(std::move(firstAidButton));
+            addUI(std::move(doctorButton));
+            addUI(std::move(scienceButton));
+            addUI(std::move(repairButton));
+            addUI(std::move(cancelButton));
             addUI(skilldexLabel);
             addUI(sneakLabel);
             addUI(lockpickLabel);

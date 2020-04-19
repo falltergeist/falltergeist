@@ -94,91 +94,95 @@ namespace Falltergeist
 
         void Mouse::_setType(Cursor state)
         {
-            if (this->state() == state) return;
-            _ui.reset(nullptr);
+            if (this->state() == state) {
+                return;
+            }
+
+            _ui = nullptr;
+
             switch (state)
             {
                 case Cursor::BIG_ARROW:
-                    _ui = std::unique_ptr<UI::Image>(resourceManager->getImage("art/intrface/stdarrow.frm"));
+                    _ui = resourceManager->getImage("art/intrface/stdarrow.frm");
                     break;
                 case Cursor::SCROLL_W:
-                    _ui = std::unique_ptr<UI::Image>(resourceManager->getImage("art/intrface/scrwest.frm"));
+                    _ui = resourceManager->getImage("art/intrface/scrwest.frm");
                     _ui->setOffset(0, -_ui->size().height() / 2);
                     break;
                 case Cursor::SCROLL_W_X:
-                    _ui = std::unique_ptr<UI::Image>(resourceManager->getImage("art/intrface/scrwx.frm"));
+                    _ui = resourceManager->getImage("art/intrface/scrwx.frm");
                     _ui->setOffset(0, -_ui->size().height() / 2);
                     break;
                 case Cursor::SCROLL_N:
-                    _ui = std::unique_ptr<UI::Image>(resourceManager->getImage("art/intrface/scrnorth.frm"));
+                    _ui = resourceManager->getImage("art/intrface/scrnorth.frm");
                     _ui->setOffset( -_ui->size().width() / 2, 0);
                     break;
                 case Cursor::SCROLL_N_X:
-                    _ui = std::unique_ptr<UI::Image>(resourceManager->getImage("art/intrface/scrnx.frm"));
+                    _ui = resourceManager->getImage("art/intrface/scrnx.frm");
                     _ui->setOffset( -_ui->size().width() / 2, 0);
                     break;
                 case Cursor::SCROLL_S:
-                    _ui = std::unique_ptr<UI::Image>(resourceManager->getImage("art/intrface/scrsouth.frm"));
+                    _ui = resourceManager->getImage("art/intrface/scrsouth.frm");
                     _ui->setOffset( -_ui->size().width() / 2, -_ui->size().height());
                     break;
                 case Cursor::SCROLL_S_X:
-                    _ui = std::unique_ptr<UI::Image>(resourceManager->getImage("art/intrface/scrsx.frm"));
+                    _ui = resourceManager->getImage("art/intrface/scrsx.frm");
                     _ui->setOffset(-_ui->size().width() / 2, -_ui->size().height());
                     break;
                 case Cursor::SCROLL_E:
-                    _ui = std::unique_ptr<UI::Image>(resourceManager->getImage("art/intrface/screast.frm"));
+                    _ui = resourceManager->getImage("art/intrface/screast.frm");
                     _ui->setOffset( -_ui->size().width(), -_ui->size().height() / 2);
                     break;
                 case Cursor::SCROLL_E_X:
-                    _ui = std::unique_ptr<UI::Image>(resourceManager->getImage("art/intrface/screx.frm"));
+                    _ui = resourceManager->getImage("art/intrface/screx.frm");
                     _ui->setOffset(-_ui->size().width(), -_ui->size().height() / 2);
                     break;
                 case Cursor::SCROLL_NW:
-                    _ui = std::unique_ptr<UI::Image>(resourceManager->getImage("art/intrface/scrnwest.frm"));
+                    _ui = resourceManager->getImage("art/intrface/scrnwest.frm");
                     break;
                 case Cursor::SCROLL_NW_X:
-                    _ui = std::unique_ptr<UI::Image>(resourceManager->getImage("art/intrface/scrnwx.frm"));
+                    _ui = resourceManager->getImage("art/intrface/scrnwx.frm");
                     break;
                 case Cursor::SCROLL_SW:
-                    _ui = std::unique_ptr<UI::Image>(resourceManager->getImage("art/intrface/scrswest.frm"));
+                    _ui = resourceManager->getImage("art/intrface/scrswest.frm");
                     _ui->setOffset(0, -_ui->size().height());
                     break;
                 case Cursor::SCROLL_SW_X:
-                    _ui = std::unique_ptr<UI::Image>(resourceManager->getImage("art/intrface/scrswx.frm"));
+                    _ui = resourceManager->getImage("art/intrface/scrswx.frm");
                     _ui->setOffset(0, -_ui->size().height());
                     break;
                 case Cursor::SCROLL_NE:
-                    _ui = std::unique_ptr<UI::Image>(resourceManager->getImage("art/intrface/scrneast.frm"));
+                    _ui = resourceManager->getImage("art/intrface/scrneast.frm");
                     _ui->setOffset(-_ui->size().width(), 0);
                     break;
                 case Cursor::SCROLL_NE_X:
-                    _ui = std::unique_ptr<UI::Image>(resourceManager->getImage("art/intrface/scrnex.frm"));
+                    _ui = resourceManager->getImage("art/intrface/scrnex.frm");
                     _ui->setOffset(-_ui->size().width(), 0);
                     break;
                 case Cursor::SCROLL_SE:
-                    _ui = std::unique_ptr<UI::Image>(resourceManager->getImage("art/intrface/scrseast.frm"));
+                    _ui = resourceManager->getImage("art/intrface/scrseast.frm");
                     _ui->setOffset(-_ui->size().width(), -_ui->size().height());
                     break;
                 case Cursor::SCROLL_SE_X:
-                    _ui = std::unique_ptr<UI::Image>(resourceManager->getImage("art/intrface/scrsex.frm"));
+                    _ui = resourceManager->getImage("art/intrface/scrsex.frm");
                     _ui->setOffset(-_ui->size().width(), -_ui->size().height());
                     break;
                 case Cursor::HEXAGON_RED:
-                    _ui = std::unique_ptr<UI::Image>(resourceManager->getImage("art/intrface/msef000.frm"));
+                    _ui = resourceManager->getImage("art/intrface/msef000.frm");
                     _ui->setOffset(- _ui->size().width() / 2, - _ui->size().height() / 2);
                     break;
                 case Cursor::ACTION:
-                    _ui = std::unique_ptr<UI::Image>(resourceManager->getImage("art/intrface/actarrow.frm"));
+                    _ui = resourceManager->getImage("art/intrface/actarrow.frm");
                     break;
                 case Cursor::HAND:
-                    _ui = std::unique_ptr<UI::Image>(resourceManager->getImage("art/intrface/hand.frm"));
+                    _ui = resourceManager->getImage("art/intrface/hand.frm");
                     break;
                 case Cursor::SMALL_DOWN_ARROW:
-                    _ui = std::unique_ptr<UI::Image>(resourceManager->getImage("art/intrface/sdnarrow.frm"));
+                    _ui = resourceManager->getImage("art/intrface/sdnarrow.frm");
                     _ui->setOffset(-5, -10);
                     break;
                 case Cursor::SMALL_UP_ARROW:
-                    _ui = std::unique_ptr<UI::Image>(resourceManager->getImage("art/intrface/suparrow.frm"));
+                    _ui = resourceManager->getImage("art/intrface/suparrow.frm");
                     _ui->setOffset(-5, 0);
                     break;
                 case Cursor::WAIT:
@@ -193,7 +197,7 @@ namespace Falltergeist
                 }
                 case Cursor::USE:
                 {
-                    _ui = std::unique_ptr<UI::Image>(resourceManager->getImage("art/intrface/crossuse.frm"));
+                    _ui = resourceManager->getImage("art/intrface/crossuse.frm");
                     _ui->setOffset(-10, -10);
                     break;
                 }

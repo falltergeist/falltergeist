@@ -39,7 +39,9 @@ namespace Falltergeist
                 State& operator=(const State&) = delete;
                 virtual ~State() = default;
 
-                template<class T, class ...TCtorArgs, typename = std::enable_if_t<std::is_base_of<UI::Base, T>::value>>
+                template<class T,
+                        class ...TCtorArgs,
+                        typename = std::enable_if_t<std::is_base_of<UI::Base, T>::value>>
                 std::shared_ptr<T> makeUI(TCtorArgs&&... args)
                 {
                     auto p = std::make_shared<T>(std::forward<TCtorArgs>(args)...);
@@ -47,7 +49,9 @@ namespace Falltergeist
                     return p;
                 }
 
-                template<class T, class ...TCtorArgs, typename = std::enable_if_t<std::is_base_of<UI::Base, T>::value>>
+                template<class T,
+                        class ...TCtorArgs,
+                        typename = std::enable_if_t<std::is_base_of<UI::Base, T>::value>>
                 std::shared_ptr<T> makeNamedUI(std::string name, TCtorArgs&&... args)
                 {
                     auto p = std::make_shared<T>(std::forward<TCtorArgs>(args)...);
@@ -55,7 +59,16 @@ namespace Falltergeist
                     return p;
                 }
 
-                template<class T, typename = std::enable_if_t<std::is_base_of<UI::Base, T>::value>>
+                template<class T,
+                        typename = std::enable_if_t<std::is_base_of<UI::Base, T>::value>>
+                std::shared_ptr<T> addUI(T* ui) {
+                    // TODO: this is a temporary API-compatible version of addUI that allows existing code to compile
+                    // TODO: ideally, the existing code should be refactored to use smart pointers (the other overloads)
+                    return this->addUI(std::shared_ptr<T>{ui});
+                }
+
+                template<class T,
+                        typename = std::enable_if_t<std::is_base_of<UI::Base, T>::value>>
                 std::shared_ptr<T>  addUI(std::shared_ptr<T> ui)
                 {
                     // Add to UI state position
@@ -64,21 +77,24 @@ namespace Falltergeist
                     return ui;
                 }
 
-                template<class T, typename = std::enable_if_t<std::is_base_of<UI::Base, T>::value>>
+                template<class T,
+                        typename = std::enable_if_t<std::is_base_of<UI::Base, T>::value>>
                 std::shared_ptr<T>  addUI(std::unique_ptr<T> ui)
                 {
                     return addUI(std::shared_ptr<T>{std::move(ui)});
                 }
 
-                template<class T, typename = std::enable_if_t<std::is_base_of<UI::Base, T>::value>>
+                template<class T,
+                        typename = std::enable_if_t<std::is_base_of<UI::Base, T>::value>>
                 std::shared_ptr<T> addUI(std::string name, std::shared_ptr<T> ui)
                 {
                     auto ret = addUI(ui);
-                    _labeledUI.insert({ std::move(name), std::move(ui) });
+                    _labeledUI.insert({ std::move(name), ui });
                     return ret;
                 }
 
-                template<class T, typename = std::enable_if_t<std::is_base_of<UI::Base, T>::value>>
+                template<class T,
+                        typename = std::enable_if_t<std::is_base_of<UI::Base, T>::value>>
                 std::shared_ptr<T> addUI(std::string name, std::unique_ptr<T> ui)
                 {
                     auto ret = addUI(std::shared_ptr<T>{std::move(ui)});
@@ -86,7 +102,16 @@ namespace Falltergeist
                     return ret;
                 }
 
-                template<typename T = UI::Base, typename = std::enable_if_t<std::is_base_of<UI::Base, T>::value>>
+                template<class T,
+                        typename = std::enable_if_t<std::is_base_of<UI::Base, T>::value>>
+                std::shared_ptr<T> addUI(std::string name, T* ui) {
+                    // TODO: this is a temporary API-compatible version of addUI that allows existing code to compile
+                    // TODO: ideally, the existing code should be refactored to use smart pointers (the other overloads)
+                    return this->addUI(std::move(name), std::shared_ptr<T>{ui});
+                }
+
+                template<typename T = UI::Base,
+                        typename = std::enable_if_t<std::is_base_of<UI::Base, T>::value>>
                 std::shared_ptr<T> getUI(const std::string& name) const {
                     return std::dynamic_pointer_cast<T>(getUIInternal(name));
                 }

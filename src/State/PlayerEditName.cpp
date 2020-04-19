@@ -96,7 +96,7 @@ namespace Falltergeist
             addUI(nameBox);
             addUI(doneBox);
             addUI(doneLabel);
-            addUI(doneButton);
+            addUI(std::move(doneButton));
             addUI(_name);
             addUI(_cursor);
         }

@@ -35,9 +35,9 @@ namespace Falltergeist
                 std::shared_ptr<UI::IResourceManager> resourceManager;
                 std::unique_ptr<UI::Factory::ImageButtonFactory> imageButtonFactory;
 
-                UI::Image* _panel = nullptr;
-                UI::ImageList* _tiles = nullptr;
-                UI::ImageButton* _hotspot = nullptr;
+                std::shared_ptr<UI::Image> _panel = nullptr;
+                std::shared_ptr<UI::ImageList> _tiles = nullptr;
+                std::shared_ptr<UI::ImageButton> _hotspot = nullptr;
 
                 // temporary!
                 // @todo: move it to other place!

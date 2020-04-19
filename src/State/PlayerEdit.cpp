@@ -59,9 +59,9 @@ namespace Falltergeist
                 _addTitle(ss.str(), _t(MSG_STATS, 100 + i));       // stat title
                 _addDescription(ss.str(), _t(MSG_STATS, 200 + i)); // stat description
                 _addImage(ss.str(), resourceManager->getImage("art/skilldex/" + imagesStats[i] + ".frm")); // stat image
-                _addLabel(ss.str(), new UI::TextArea(backgroundX+104, backgroundY+46+33*i));          // stat value label
-                _addCounter(ss.str(), new UI::BigCounter({backgroundX + 59, static_cast<int>(backgroundY + 37 + 33 * i)}));       // stat value counter
-                _addMask(ss.str(), new UI::HiddenMask(133, 29, backgroundX+14, backgroundY+36+33*i)); // stat click mask
+                _addLabel(ss.str(), std::make_shared<UI::TextArea>(backgroundX+104, backgroundY+46+33*i));          // stat value label
+                _addCounter(ss.str(), std::make_shared<UI::BigCounter>(Point{backgroundX + 59, static_cast<int>(backgroundY + 37 + 33 * i)}));       // stat value counter
+                _addMask(ss.str(), std::make_shared<UI::HiddenMask>(133, 29, backgroundX+14, backgroundY+36+33*i)); // stat click mask
             }
 
             // LEVEL window
@@ -117,7 +117,7 @@ namespace Falltergeist
                         tmp << expNext;
                         break;
                 }
-                _addLabel(ss.str(), new UI::TextArea(tmp.str(), backgroundX + 32, backgroundY + 280 + 11*i));            // stat value label
+                _addLabel(ss.str(), std::make_shared<UI::TextArea>(tmp.str(), backgroundX + 32, backgroundY + 280 + 11*i));            // stat value label
             }
 
             // SKILLS
@@ -130,16 +130,16 @@ namespace Falltergeist
                 _addTitle(ss.str(), _t(MSG_SKILLS, 100 + i));
                 _addDescription(ss.str(), _t(MSG_SKILLS, 200 + i));
                 _addImage(ss.str(),  resourceManager->getImage("art/skilldex/" + imagesSkills[i] + ".frm"));
-                _addLabel(ss.str(),  new UI::TextArea(_t(MSG_SKILLS, 100 + i), backgroundX+377, backgroundY+27+11*i))->setWidth(240);
-                _addLabel(ss.str() + "_value",  new UI::TextArea("", backgroundX+577, backgroundY+27+11*i));
+                _addLabel(ss.str(),  std::make_shared<UI::TextArea>(_t(MSG_SKILLS, 100 + i), backgroundX+377, backgroundY+27+11*i))->setWidth(240);
+                _addLabel(ss.str() + "_value",  std::make_shared<UI::TextArea>("", backgroundX+577, backgroundY+27+11*i));
             }
             // Free skill points counts
-            _addCounter("skillsPoints", new UI::BigCounter({backgroundX + 522, backgroundY + 228}));
+            _addCounter("skillsPoints", std::make_shared<UI::BigCounter>(backgroundPos.add(522, 228)));
 
             // HEALTH CONDITION
             std::string imagesHealth[] = { "hitpoint", "poisoned", "radiated", "eyedamag", "armright", "armleft", "legright", "legleft"};
             _addTitle("health_1", _t(MSG_EDITOR, 300));
-            _addLabel("health_1", new UI::TextArea(_t(MSG_EDITOR, 300), backgroundX+194, backgroundY+46)); //health
+            _addLabel("health_1", std::make_shared<UI::TextArea>(_t(MSG_EDITOR, 300), backgroundX+194, backgroundY+46)); //health
             _addDescription("health_1", _t(MSG_STATS, 207));
             _addImage("health_1", resourceManager->getImage("art/skilldex/" + imagesHealth[0] + ".frm"));
 
@@ -149,7 +149,7 @@ namespace Falltergeist
                 ss << "health_" << (i+2);
                 _addTitle(ss.str(), _t(MSG_EDITOR, 312 + i));
                 _addDescription(ss.str(), _t(MSG_EDITOR, 400 + i));
-                _addLabel(ss.str(), new UI::TextArea(_t(MSG_EDITOR, 312+i), backgroundX+194, backgroundY+46+13*(i+1)))->setFont("font1.aaf", {0x18, 0x30, 0x18, 0xff});
+                _addLabel(ss.str(), std::make_shared<UI::TextArea>(_t(MSG_EDITOR, 312+i), backgroundX+194, backgroundY+46+13*(i+1)))->setFont("font1.aaf", {0x18, 0x30, 0x18, 0xff});
                 _addImage(ss.str(), resourceManager->getImage("art/skilldex/" + imagesHealth[i+1] + ".frm"));
             }
 
@@ -164,8 +164,8 @@ namespace Falltergeist
                 _addTitle(ss.str(), _t(MSG_STATS, params[i]));
                 _addDescription(ss.str(), _t(MSG_STATS, params[i] + 100));
                 _addImage(ss.str(), resourceManager->getImage("art/skilldex/" + imagesParams[i] + ".frm"));
-                _addLabel(ss.str(), new UI::TextArea(_t(MSG_EDITOR, labels[i]), backgroundX + 194, backgroundY + 179 + 13*i));
-                _addLabel(ss.str() + "_value",  new UI::TextArea("", backgroundX + 288, backgroundY + 179 + 13*i));
+                _addLabel(ss.str(), std::make_shared<UI::TextArea>(_t(MSG_EDITOR, labels[i]), backgroundX + 194, backgroundY + 179 + 13*i));
+                _addLabel(ss.str() + "_value",  std::make_shared<UI::TextArea>("", backgroundX + 288, backgroundY + 179 + 13*i));
             }
 
             _addButton("print", imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {backgroundX + 345, backgroundY + 454}));
@@ -175,18 +175,18 @@ namespace Falltergeist
             auto font3_b89c28ff = ResourceManager::getInstance()->font("font3.aaf");
             SDL_Color color = {0xb8, 0x9c, 0x28, 0xff};
 
-            _addLabel("print", new UI::TextArea(_t(MSG_EDITOR, 103), backgroundX+365, backgroundY+453))->setFont(font3_b89c28ff, color);
-            _addLabel("next",  new UI::TextArea(_t(MSG_EDITOR, 100), backgroundX+473, backgroundY+453))->setFont(font3_b89c28ff, color);
-            _addLabel("cancel",new UI::TextArea(_t(MSG_EDITOR, 102), backgroundX+571, backgroundY+453))->setFont(font3_b89c28ff, color);
-            auto label = _addLabel("name", new UI::TextArea(Game::getInstance()->player()->name(), backgroundX+17, backgroundY+7));
+            _addLabel("print", std::make_shared<UI::TextArea>(_t(MSG_EDITOR, 103), backgroundX+365, backgroundY+453))->setFont(font3_b89c28ff, color);
+            _addLabel("next",  std::make_shared<UI::TextArea>(_t(MSG_EDITOR, 100), backgroundX+473, backgroundY+453))->setFont(font3_b89c28ff, color);
+            _addLabel("cancel",std::make_shared<UI::TextArea>(_t(MSG_EDITOR, 102), backgroundX+571, backgroundY+453))->setFont(font3_b89c28ff, color);
+            auto label = _addLabel("name", std::make_shared<UI::TextArea>(Game::getInstance()->player()->name(), backgroundX+17, backgroundY+7));
             label->setWidth(150);
             label->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
             label->setFont(font3_b89c28ff, color);
-            _addLabel("age",     new UI::TextArea(_t(MSG_EDITOR, 104), backgroundX+163, backgroundY+7))->setFont(font3_b89c28ff, color);
-            _addLabel("gender",  new UI::TextArea(_t(MSG_EDITOR, Game::getInstance()->player()->gender() == GENDER::MALE ? 107 : 108), backgroundX+250, backgroundY+7))->setFont(font3_b89c28ff, color);
+            _addLabel("age",     std::make_shared<UI::TextArea>(_t(MSG_EDITOR, 104), backgroundX+163, backgroundY+7))->setFont(font3_b89c28ff, color);
+            _addLabel("gender",  std::make_shared<UI::TextArea>(_t(MSG_EDITOR, Game::getInstance()->player()->gender() == GENDER::MALE ? 107 : 108), backgroundX+250, backgroundY+7))->setFont(font3_b89c28ff, color);
 
-            _addLabel("label_1", new UI::TextArea(_t(MSG_EDITOR, 112), backgroundX+398, backgroundY+233))->setFont(font3_b89c28ff, color); // skill points on tag skills place!
-            _addLabel("label_3", new UI::TextArea(_t(MSG_EDITOR, 117), backgroundX+383, backgroundY+5))->setFont(font3_b89c28ff, color);  // skills
+            _addLabel("label_1", std::make_shared<UI::TextArea>(_t(MSG_EDITOR, 112), backgroundX+398, backgroundY+233))->setFont(font3_b89c28ff, color); // skill points on tag skills place!
+            _addLabel("label_3", std::make_shared<UI::TextArea>(_t(MSG_EDITOR, 117), backgroundX+383, backgroundY+5))->setFont(font3_b89c28ff, color);  // skills
 
             _addTitle("label_1", _t(MSG_EDITOR, 112));
             _addTitle("label_2", _t(MSG_EDITOR, 146));
@@ -251,14 +251,14 @@ namespace Falltergeist
             _selectedLabel = _labels.at("stats_1");
             _selectedImage->setPosition(backgroundPos + Point(480, 310));
 
-            _title = new UI::TextArea("", backgroundX+350, backgroundY+275);
+            _title = std::make_shared<UI::TextArea>("", backgroundX+350, backgroundY+275);
             _title->setFont("font2.aaf", {0,0,0,0xff});
             addUI(_title);
 
             auto line = new UI::Rectangle(backgroundPos + Point(350, 300), Graphics::Size(270, 2), { 0x00, 0x00, 0x00, 0xff });
             addUI(line);
 
-            _description = new UI::TextArea("", backgroundX+350, backgroundY+315);
+            _description = std::make_shared<UI::TextArea>("", backgroundX+350, backgroundY+315);
             _description->setFont("font1.aaf", {0,0,0,0xff});
             _description->setSize({140, 120});
             _description->setWordWrap(true);
@@ -276,7 +276,7 @@ namespace Falltergeist
             for (unsigned int i = 0; i < 3; i++) {
                 auto tab = addUI("tab_" + std::to_string(i),
                                      new UI::TextArea(_t(MSG_EDITOR, 109+i), backgroundX+10+35+(100*i), backgroundY+325+7+(i == 0 ? -1 : 1)));
-                dynamic_cast<UI::TextArea*>(tab)->setFont(font3_b89c28ff, color);
+                tab->setFont(font3_b89c28ff, color);
             }
 
             Point tabContentPos = tabs->position() + Point(25, 45);
@@ -336,70 +336,74 @@ namespace Falltergeist
             addUI("tab_kills_enemies", killEnemyNames);
             addUI("tab_kills_score", killEnemyScore);
 
-            auto tabsArrowUp = imageButtonFactory->getByType(ImageButtonType::SMALL_UP_ARROW, {backgroundX + 317, backgroundY + 363});
-            tabsArrowUp->mouseClickHandler().add([=](...) {
-                switch (tabs->currentImage()) {
-                case 0: perksAndTraits->scrollUp();
-                    break;
-                case 1: karma->scrollUp();
-                    break;
-                case 2: killEnemyNames->scrollUp(); killEnemyScore->scrollUp();
-                    break;
-                }
-            });
-            addUI(tabsArrowUp);
+            {
+                auto tabsArrowUp = imageButtonFactory->getByType(ImageButtonType::SMALL_UP_ARROW, {backgroundX + 317, backgroundY + 363});
+                tabsArrowUp->mouseClickHandler().add([=](...) {
+                    switch (tabs->currentImage()) {
+                        case 0: perksAndTraits->scrollUp();
+                            break;
+                        case 1: karma->scrollUp();
+                            break;
+                        case 2: killEnemyNames->scrollUp(); killEnemyScore->scrollUp();
+                            break;
+                    }
+                });
+                addUI(std::move(tabsArrowUp));
+            }
 
-            auto tabsArrowDown = imageButtonFactory->getByType(ImageButtonType::SMALL_DOWN_ARROW, {backgroundX + 317, backgroundY + 376});
-            tabsArrowDown->mouseClickHandler().add([=](...) {
-                switch (tabs->currentImage()) {
-                case 0: perksAndTraits->scrollDown();
-                    break;
-                case 1: karma->scrollDown();
-                    break;
-                case 2: killEnemyNames->scrollDown(); killEnemyScore->scrollDown();
-                    break;
-                }
-            });
-            addUI(tabsArrowDown);
+            {
+                auto tabsArrowDown = imageButtonFactory->getByType(ImageButtonType::SMALL_DOWN_ARROW, {backgroundX + 317, backgroundY + 376});
+                tabsArrowDown->mouseClickHandler().add([=](...) {
+                    switch (tabs->currentImage()) {
+                        case 0: perksAndTraits->scrollDown();
+                            break;
+                        case 1: karma->scrollDown();
+                            break;
+                        case 2: killEnemyNames->scrollDown(); killEnemyScore->scrollDown();
+                            break;
+                    }
+                });
+                addUI(std::move(tabsArrowDown));
+            }
         }
 
-        UI::TextArea* PlayerEdit::_addLabel(const std::string& name, UI::TextArea* label)
+        std::shared_ptr<UI::TextArea> PlayerEdit::_addLabel(std::string name, std::shared_ptr<UI::TextArea> label)
         {
-            _labels.insert(std::pair<std::string,UI::TextArea*>(name, label));
+            _labels.insert({ std::move(name), label });
             return label;
         }
 
-        UI::ImageButton* PlayerEdit::_addButton(const std::string& name, UI::ImageButton* button)
+        std::shared_ptr<UI::ImageButton> PlayerEdit::_addButton(std::string name, std::shared_ptr<UI::ImageButton> button)
         {
-            _buttons.insert(std::pair<std::string,UI::ImageButton*>(name, button));
+            _buttons.insert({ std::move(name), button });
             return button;
         }
 
-        UI::BigCounter* PlayerEdit::_addCounter(const std::string& name, UI::BigCounter* counter)
+        std::shared_ptr<UI::BigCounter> PlayerEdit::_addCounter(std::string name, std::shared_ptr<UI::BigCounter> counter)
         {
-            _counters.insert(std::pair<std::string,UI::BigCounter*>(name, counter));
+            _counters.insert({ std::move(name), counter });
             return counter;
         }
 
-        UI::HiddenMask* PlayerEdit::_addMask(const std::string& name, UI::HiddenMask* mask)
+        std::shared_ptr<UI::HiddenMask> PlayerEdit::_addMask(std::string name, std::shared_ptr<UI::HiddenMask> mask)
         {
-            _masks.insert(std::pair<std::string,UI::HiddenMask*>(name, mask));
+            _masks.insert({ std::move(name), mask });
             return mask;
         }
 
         void PlayerEdit::_addTitle(const std::string& name, std::string title)
         {
-            _titles.insert(std::pair<std::string,std::string>(name, title));
+            _titles.insert({ name, std::move(title) });
         }
 
         void PlayerEdit::_addDescription(const std::string& name, std::string description)
         {
-            _descriptions.insert(std::pair<std::string,std::string>(name, description));
+            _descriptions.insert({ name, std::move(description) });
         }
 
-        void PlayerEdit::_addImage(const std::string& name, UI::Image* image)
+        void PlayerEdit::_addImage(const std::string& name, std::shared_ptr<UI::Image> image)
         {
-            _images.insert(std::pair<std::string, UI::Image*>(name, image));
+            _images.insert({ name, std::move(image) });
         }
 
         void PlayerEdit::think(const float &deltaTime)
@@ -534,7 +538,7 @@ namespace Falltergeist
 
             for(auto it = _buttons.begin(); it != _buttons.end(); ++it)
             {
-                if (it->second == sender)
+                if (it->second.get() == sender)
                 {
                     std::string name = it->first;
 
@@ -551,7 +555,7 @@ namespace Falltergeist
             {
                 std::string name = it->first;
         //        if (it->second.get() == event->target())
-                if (it->second == event->target())
+                if (it->second.get() == event->target())
                 {
                     // name.find("traits_") == 0 ||
                     if (name.find("stats_") == 0 || name.find("skills_") == 0 || name.find("health_") == 0 || name.find("params_") == 0 || name.find("label_") == 0 || name.find("level_") == 0 )
@@ -573,7 +577,7 @@ namespace Falltergeist
         {
             for(auto it = _masks.begin(); it != _masks.end(); ++it)
             {
-                if (it->second == event->target())
+                if (it->second.get() == event->target())
                 {
                     std::string name = it->first;
                     if (name.find("stats_") == 0)
@@ -592,7 +596,7 @@ namespace Falltergeist
          */
         void PlayerEdit::onTabClick(Event::Mouse* event)
         {
-            auto tabs = dynamic_cast<UI::ImageList*>(getUI("tabs"));
+            auto tabs = getUI<UI::ImageList>("tabs");
             unsigned int clickX = static_cast<unsigned>(event->position().x() - tabs->position().x());
 
             for (unsigned int i = 0, tabEnd = 0; i < 3; i++) {
@@ -600,7 +604,7 @@ namespace Falltergeist
                 // selected width = 120, unselected width = 100
                 tabEnd += (i == tabs->currentImage() ? 120 : 100);
 
-                auto tab = dynamic_cast<UI::TextArea*>(getUI("tab_" + std::to_string(i)));
+                auto tab = getUI<UI::TextArea>("tab_" + std::to_string(i));
                 const auto tabsY = tabs->position().y() + 7;
 
                 // Slightly raise the selected tab and lower the others
