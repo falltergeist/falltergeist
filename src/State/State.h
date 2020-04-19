@@ -71,8 +71,7 @@ namespace Falltergeist
                         typename = std::enable_if_t<std::is_base_of<UI::Base, T>::value>>
                 std::shared_ptr<T>  addUI(std::shared_ptr<T> ui)
                 {
-                    // Add to UI state position
-                    ui->setPosition(ui->position() - ui->offset() + position());
+                    // ui->setPosition(ui->position() - ui->offset() + position());  // TODO: unsure why this is needed
                     _ui.emplace_back(ui);
                     return ui;
                 }

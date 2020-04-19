@@ -336,12 +336,6 @@ namespace Falltergeist
 
         void Location::initializePlayerTestAppareance(std::shared_ptr<Game::DudeObject> player) const
         {
-            static bool equipped;
-            if (equipped) {
-                return;
-            }
-
-            equipped = true;
             player->setArmorSlot(nullptr);
             auto powerArmor = (Game::ItemObject*) Game::ObjectFactory::getInstance()->createObject(PID_POWERED_ARMOR);
             auto leatherJacket = (Game::ItemObject*) Game::ObjectFactory::getInstance()->createObject(PID_LEATHER_JACKET);
@@ -357,7 +351,7 @@ namespace Falltergeist
             player->inventory()->push_back(purpleRobe);
             player->setLeftHandSlot(miniGun);
             player->setRightHandSlot(spear);
-            player->setActionAnimation("aa")->stop();
+            player->setActionAnimation("aa")->stop();  // TODO: this is important, because the player's FID isn't initialized: will segfault otherwise
             player->setPID(0x01000001);
         }
 
