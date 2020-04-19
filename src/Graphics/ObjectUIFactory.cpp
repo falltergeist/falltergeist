@@ -1,3 +1,4 @@
+#include <sstream>
 #include "../Graphics/ObjectUIFactory.h"
 #include "../ResourceManager.h"
 #include "../Format/Frm/File.h"
@@ -13,7 +14,9 @@ namespace Falltergeist
         {
             auto frm = ResourceManager::getInstance()->frmFileType(fid);
             if (!frm) {
-                return nullptr;
+                std::stringstream ss;
+                ss << fid << ": invalid fid passed to buildByFID";
+                throw std::runtime_error{ss.str()};
             }
 
             if (frm->framesPerDirection() > 1 || frm->directions().size() > 1) {

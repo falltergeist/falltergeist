@@ -146,11 +146,6 @@ namespace Falltergeist
             return _ui.get();
         }
 
-        void Object::setUI(UI::Base *ui)
-        {
-            _ui.reset(ui);
-        }
-
         void Object::_generateUi()
         {
             Graphics::ObjectUIFactory uiFactory;

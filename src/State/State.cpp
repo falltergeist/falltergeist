@@ -133,11 +133,10 @@ namespace Falltergeist
 
         void State::popUI()
         {
-            if (_ui.size() == 0) {
-                return;
+            if (not _ui.empty()) {
+                _uiToDelete.emplace_back(std::move(_ui.back()));
+                _ui.pop_back();
             }
-            _uiToDelete.emplace_back(std::move(_ui.back()));
-            _ui.pop_back();
         }
 
         void State::onStateActivate(Event::State* event)

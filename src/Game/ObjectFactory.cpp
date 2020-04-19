@@ -21,6 +21,26 @@
 #include "../ResourceManager.h"
 #include "../VM/Script.h"
 
+namespace {
+    void trySetNameAndDescription(
+            Falltergeist::Format::Pro::File& p,
+            Falltergeist::Format::Msg::File& f,
+            Falltergeist::Game::Object& o) {
+
+        auto msgId = p.messageId();
+        if (f.hasMessage(msgId)) {
+            auto msgText = f.message(msgId)->text();
+            o.setName(msgText);
+        }
+
+        auto descMsgId = msgId + 1;
+        if (f.hasMessage(descMsgId)) {
+            auto descMsg = f.message(descMsgId)->text();
+            o.setDescription(descMsg);
+        }
+    }
+}
+
 namespace Falltergeist
 {
     namespace Game
@@ -105,24 +125,14 @@ namespace Falltergeist
                     ((ItemObject*)object)->setInventoryFID(proto->inventoryFID());
                     ((ItemObject*)object)->setPrice(proto->basePrice());
                     auto msg = ResourceManager::getInstance()->msgFileType("text/english/game/pro_item.msg");
-                    try
-                    {
-                        object->setName(msg->message(proto->messageId())->text());
-                        object->setDescription(msg->message(proto->messageId() + 1)->text());
-                    }
-                    catch (const Exception&) {}
+                    trySetNameAndDescription(*proto, *msg, *object);
                     break;
                 }
                 case OBJECT_TYPE::CRITTER:
                 {
                     object = new CritterObject();
                     auto msg = ResourceManager::getInstance()->msgFileType("text/english/game/pro_crit.msg");
-                    try
-                    {
-                        object->setName(msg->message(proto->messageId())->text());
-                        object->setDescription(msg->message(proto->messageId() + 1)->text());
-                    }
-                    catch (const Exception&) {}
+                    trySetNameAndDescription(*proto, *msg, *object);
 
                     for (unsigned i = (unsigned)STAT::STRENGTH; i <= (unsigned)STAT::LUCK; i++)
                     {
@@ -184,12 +194,7 @@ namespace Falltergeist
                         }
                     }
                     auto msg = ResourceManager::getInstance()->msgFileType("text/english/game/pro_scen.msg");
-                    try
-                    {
-                        object->setName(msg->message(proto->messageId())->text());
-                        object->setDescription(msg->message(proto->messageId() + 1)->text());
-                    }
-                    catch (const Exception&) {}
+                    trySetNameAndDescription(*proto, *msg, *object);
 
                     ((SceneryObject*)object)->setSoundId((char)proto->soundId());
 
@@ -222,12 +227,7 @@ namespace Falltergeist
                 {
                     object = new WallObject();
                     auto msg = ResourceManager::getInstance()->msgFileType("text/english/game/pro_wall.msg");
-                    try
-                    {
-                        object->setName(msg->message(proto->messageId())->text());
-                        object->setDescription(msg->message(proto->messageId() + 1)->text());
-                    }
-                    catch (const Exception&) {}
+                    trySetNameAndDescription(*proto, *msg, *object);
 
                     //first two bytes are orientation. second two - unknown
                     unsigned short orientation = proto->flagsExt() >> 16;
@@ -279,14 +279,11 @@ namespace Falltergeist
                     }
 
                     auto msg = ResourceManager::getInstance()->msgFileType("text/english/game/pro_misc.msg");
-                    try
-                    {
-                        object->setName(msg->message(proto->messageId())->text());
-                        object->setDescription(msg->message(proto->messageId() + 1)->text());
-                    }
-                    catch (const Exception&) {}
+                    trySetNameAndDescription(*proto, *msg, *object);
                     break;
                 }
+                default:
+                    throw std::runtime_error{"Unknown object type encountered when loading an object"};
             }
             object->setPID(PID);
             object->setFID(proto->FID());
@@ -296,6 +293,11 @@ namespace Falltergeist
             {
                 auto intFile = ResourceManager::getInstance()->intFileType(proto->scriptId());
                 if (intFile) object->setScript(new VM::Script(intFile, object));
+            }
+
+            // Defensive programming: there is a chance that object was not set above
+            if (object == 0) {
+                throw std::runtime_error{"Error loading an object: this is a programmer error"};
             }
 
             return object;

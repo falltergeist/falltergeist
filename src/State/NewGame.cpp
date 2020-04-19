@@ -280,20 +280,26 @@ namespace Falltergeist
 
         void NewGame::onStateActivate(Event::State* event)
         {
-            auto combat = std::make_unique<Game::DudeObject>();
-            combat->loadFromGCDFile(ResourceManager::getInstance()->gcdFileType("premade/combat.gcd"));
-            combat->setBiography(ResourceManager::getInstance()->bioFileType("premade/combat.bio")->text());
-            _characters.emplace_back(std::move(combat));
+            {
+                auto combat = std::make_unique<Game::DudeObject>();
+                combat->loadFromGCDFile(ResourceManager::getInstance()->gcdFileType("premade/combat.gcd"));
+                combat->setBiography(ResourceManager::getInstance()->bioFileType("premade/combat.bio")->text());
+                _characters.emplace_back(std::move(combat));
+            }
 
-            auto stealth = std::make_unique<Game::DudeObject>();
-            stealth->loadFromGCDFile(ResourceManager::getInstance()->gcdFileType("premade/stealth.gcd"));
-            stealth->setBiography(ResourceManager::getInstance()->bioFileType("premade/stealth.bio")->text());
-            _characters.emplace_back(std::move(stealth));
+            {
+                auto stealth = std::make_unique<Game::DudeObject>();
+                stealth->loadFromGCDFile(ResourceManager::getInstance()->gcdFileType("premade/stealth.gcd"));
+                stealth->setBiography(ResourceManager::getInstance()->bioFileType("premade/stealth.bio")->text());
+                _characters.emplace_back(std::move(stealth));
+            }
 
-            auto diplomat = std::make_unique<Game::DudeObject>();
-            diplomat->loadFromGCDFile(ResourceManager::getInstance()->gcdFileType("premade/diplomat.gcd"));
-            diplomat->setBiography(ResourceManager::getInstance()->bioFileType("premade/diplomat.bio")->text());
-            _characters.emplace_back(std::move(diplomat));
+            {
+                auto diplomat = std::make_unique<Game::DudeObject>();
+                diplomat->loadFromGCDFile(ResourceManager::getInstance()->gcdFileType("premade/diplomat.gcd"));
+                diplomat->setBiography(ResourceManager::getInstance()->bioFileType("premade/diplomat.bio")->text());
+                _characters.emplace_back(std::move(diplomat));
+            }
 
             _changeCharacter();
 

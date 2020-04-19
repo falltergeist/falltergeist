@@ -17,12 +17,7 @@ namespace Falltergeist
                 animName += action;
             }
 
-            auto animation = std::make_unique<UI::Animation>("art/critters/" + animName + ".frm", orientation);
-            // TODO move it elsewhere
-            //animation->animationEndedHandler().add([&animation](Event::Event* event) {
-            //    animation->setCurrentFrame(0);
-            //});
-            return animation;
+            return std::make_unique<UI::Animation>("art/critters/" + animName + ".frm", orientation);
         }
 
         std::unique_ptr<UI::Animation> CritterAnimationFactory::buildActionAnimation(uint32_t armorFID, uint32_t weaponId, uint32_t action, Game::Orientation orientation)

@@ -141,7 +141,6 @@ namespace Falltergeist
 
                 // ActiveUI used to display object on screen and capture mouse events
                 UI::Base* ui() const;
-                void setUI(UI::Base* ui);
 
                 // Hexagon of object current position
                 Hexagon* hexagon() const;

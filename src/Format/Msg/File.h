@@ -20,6 +20,7 @@ namespace Falltergeist
                 public:
                     File(Dat::Stream&& stream);
 
+                    bool hasMessage(unsigned int number);
                     Message* message(unsigned int number);
 
                 private:

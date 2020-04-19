@@ -89,7 +89,18 @@ namespace Falltergeist
                         return &message;
                     }
                 }
-                throw Exception("File::message() - number is out of range: " + std::to_string(number));
+                throw std::runtime_error("File::message() - number is out of range: " + std::to_string(number));
+            }
+
+            bool File::hasMessage(unsigned int number) {
+                for (auto& message : _messages)
+                {
+                    if (message.number() == number)
+                    {
+                        return true;
+                    }
+                }
+                return false;
             }
         }
     }

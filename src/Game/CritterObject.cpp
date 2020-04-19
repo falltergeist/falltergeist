@@ -498,7 +498,7 @@ namespace Falltergeist
                     animation->frameHandler().add(std::bind(&CritterObject::onMovementAnimationFrame, this, std::placeholders::_1));
                     animation->animationEndedHandler().add(std::bind(&CritterObject::onMovementAnimationEnded, this, std::placeholders::_1));
                     animation->play();
-                    _ui = move(animation);
+                    _ui = std::move(animation);
                 }
             } else {
                 auto anim = (UI::Animation*)ui();
@@ -567,9 +567,9 @@ namespace Falltergeist
                         newAnimation->frameHandler().add(std::bind(&CritterObject::onMovementAnimationFrame, this, std::placeholders::_1));
                         newAnimation->animationEndedHandler().add(std::bind(&CritterObject::onMovementAnimationEnded, this, std::placeholders::_1));
                         newAnimation->play();
+                        curFrameOfs = newAnimation->frameOffset();
                         animation = newAnimation.get();
                         _ui = move(newAnimation);
-                        curFrameOfs = animation->frameOffset();
 
                         // on turns, center frames on current hex
                         ofs -= curFrameOfs;
@@ -624,8 +624,8 @@ namespace Falltergeist
                 orientation()
             );
             animation->play();
-            _ui.reset(animation.get());
-            return animation.release();
+            _ui = std::move(animation);
+            return reinterpret_cast<UI::Animation*>(_ui.get());
         }
 
         bool CritterObject::canTrade() const
@@ -836,7 +836,9 @@ namespace Falltergeist
 
         UI::Animation* CritterObject::animation()
         {
-            return dynamic_cast<UI::Animation*>(ui());
+            auto e = ui();
+            auto cst = dynamic_cast<UI::Animation*>(e);
+            return cst;
         }
     }
 }
