@@ -75,7 +75,7 @@ namespace Falltergeist
 
         void ExitConfirm::doYes()
         {
-            Game::getInstance()->setState(new MainMenu(resourceManager));
+            Game::getInstance()->setState(std::make_unique<MainMenu>(resourceManager));
         }
 
         void ExitConfirm::doNo()

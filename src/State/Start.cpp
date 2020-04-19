@@ -49,7 +49,7 @@ namespace Falltergeist
             _delayTimer = std::make_unique<Game::Timer>(3000);
             _delayTimer->start();
             _delayTimer->tickHandler().add([game, this](Event::Event*) {
-                game->setState(new MainMenu(resourceManager));
+                game->setState(std::make_unique<MainMenu>(resourceManager));
                 game->pushState(new Movie(17));
                 game->pushState(new Movie(1));
                 game->pushState(new Movie(0));

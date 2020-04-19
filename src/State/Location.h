@@ -1,7 +1,5 @@
 #pragma once
 
-#include <list>
-#include <memory>
 #include "../Format/Map/File.h"
 #include "../Game/DudeObject.h"
 #include "../Game/Object.h"
@@ -11,6 +9,12 @@
 #include "../State/State.h"
 #include "../UI/ImageButton.h"
 #include "../UI/IResourceManager.h"
+#include "../PathFinding/HexagonGrid.h"
+#include "LocationCamera.h"
+#include "../UI/TextArea.h"
+
+#include <list>
+#include <memory>
 
 namespace Falltergeist
 {
@@ -47,8 +51,6 @@ namespace Falltergeist
         class StackValue;
     }
     class Hexagon;
-    class HexagonGrid;
-    class LocationCamera;
     class Settings;
 
     namespace State

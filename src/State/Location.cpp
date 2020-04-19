@@ -933,9 +933,9 @@ namespace Falltergeist
                             debug << " exitDirection: " << exitGrid->exitDirection() << std::endl << std::endl;
 
                             if (exitGrid->exitMapNumber() < 0) {
-                                auto worldMapState = new WorldMap(resourceManager);
+                                auto worldMapState = std::make_unique<WorldMap>(resourceManager);
                                 // TODO delegate state manipulation to some kind of state manager
-                                Game::getInstance()->setState(worldMapState);
+                                Game::getInstance()->setState(std::move(worldMapState));
                                 return;
                             }
 
@@ -949,10 +949,17 @@ namespace Falltergeist
                             location->setDefaultElevationIndex(exitGrid->exitElevationNumber());
 
                             // TODO move this instantiation to StateLocationHelper or some kind of state manager
-                            auto state = new Location(player, mouse, settings, renderer, audioMixer, gameTime, resourceManager);
+                            auto state = std::make_unique<Location>(
+                                    player,
+                                    mouse,
+                                    settings,
+                                    renderer,
+                                    audioMixer,
+                                    gameTime,
+                                    resourceManager);
                             state->setLocation(location);
                             // TODO delegate state manipulation to some kind of state manager
-                            Game::getInstance()->setState(state);
+                            Game::getInstance()->setState(std::move(state));
 
                             return;
                         }

@@ -64,7 +64,7 @@ namespace Falltergeist
                  */
                 State::State* topState(unsigned offset = 0) const;
                 void pushState(State::State* state);
-                void setState(State::State* state);
+                void setState(std::unique_ptr<State::State> state);
                 void popState(bool doDelete = true);
 
                 void run();

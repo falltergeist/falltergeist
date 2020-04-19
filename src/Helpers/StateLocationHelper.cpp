@@ -9,14 +9,14 @@ namespace Falltergeist
 {
     namespace Helpers
     {
-        State::Location* StateLocationHelper::getInitialLocationState() const
+        std::unique_ptr<State::Location> StateLocationHelper::getInitialLocationState() const
         {
             GameLocationHelper gameLocationHelper;
             auto initialLocation = gameLocationHelper.getInitialLocation();
 
             auto game = Game::getInstance();
 
-            auto locationState = new State::Location(
+            auto locationState = std::make_unique<State::Location>(
                 game->player(),
                 game->mouse(),
                 game->settings(),

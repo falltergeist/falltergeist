@@ -2,15 +2,12 @@
 
 #include "../State/State.h"
 #include "../UI/IResourceManager.h"
+#include "../UI/Factory/ImageButtonFactory.h"
 
 namespace Falltergeist
 {
     namespace UI
     {
-        namespace Factory
-        {
-            class ImageButtonFactory;
-        }
         class Image;
         class ImageButton;
         class ImageList;

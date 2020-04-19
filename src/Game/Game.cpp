@@ -139,12 +139,12 @@ namespace Falltergeist
             state->emitEvent(std::make_unique<Event::State>("pop"), state->popHandler());
         }
 
-        void Game::setState(State::State* state)
+        void Game::setState(std::unique_ptr<State::State> state)
         {
-            while (!_states.empty()) {
+            while (not _states.empty()) {
                 popState();
             }
-            pushState(state);
+            pushState(state.release());
         }
 
         void Game::run()
