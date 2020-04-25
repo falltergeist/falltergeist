@@ -87,12 +87,12 @@ namespace Falltergeist
         return true;
     }
 
-    int Settings::screenWidth() const
+    unsigned int Settings::screenWidth() const
     {
         return _screenWidth;
     }
 
-    int Settings::screenHeight() const
+    unsigned int Settings::screenHeight() const
     {
         return _screenHeight;
     }

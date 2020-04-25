@@ -25,8 +25,8 @@ namespace Falltergeist
         } while (0)
 
         struct RendererConfig {
-            int width;
-            int height;
+            unsigned int width;
+            unsigned int height;
             int x = SDL_WINDOWPOS_CENTERED;
             int y = SDL_WINDOWPOS_CENTERED;
             bool fullscreen = false;

@@ -25,21 +25,21 @@
 
 namespace
 {
-    Falltergeist::Graphics::RendererConfig cfg_from_settings(const Falltergeist::Settings& settings)
+    Falltergeist::Graphics::RendererConfig configFromSettings(const Falltergeist::Settings& settings)
     {
-        Falltergeist::Graphics::RendererConfig cfg{
+        Falltergeist::Graphics::RendererConfig config{
                 .width = settings.screenWidth(),
                 .height = settings.screenHeight(),
                 .fullscreen = settings.fullscreen(),
                 .alwaysOnTop = settings.alwaysOnTop(),
         };
         if (settings.screenX() >= 0) {
-            cfg.x = settings.screenX();
+            config.x = settings.screenX();
         }
         if (settings.screenY() >= 0) {
-            cfg.y = settings.screenY();
+            config.y = settings.screenY();
         }
-        return cfg;
+        return config;
     }
 }
 
@@ -74,7 +74,7 @@ namespace Falltergeist
 
             _eventDispatcher = std::make_unique<Event::Dispatcher>();
 
-            _renderer = std::make_shared<Graphics::Renderer>(cfg_from_settings(*_settings));
+            _renderer = std::make_shared<Graphics::Renderer>(configFromSettings(*_settings));
 
             Logger::info("GAME") << CrossPlatform::getVersion() << std::endl;
             Logger::info("GAME") << "Opensource Fallout 2 game engine" << std::endl;

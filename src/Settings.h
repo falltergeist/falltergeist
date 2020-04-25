@@ -23,9 +23,9 @@ namespace Falltergeist
             bool save();
             bool load();
 
-            int screenWidth() const;
+            unsigned int screenWidth() const;
 
-            int screenHeight() const;
+            unsigned int screenHeight() const;
 
             int screenX() const;
 
@@ -92,8 +92,8 @@ namespace Falltergeist
             int audioBufferSize() const;
 
         private:
-            int _screenWidth = 640;
-            int _screenHeight = 480;
+            unsigned int _screenWidth = 640;
+            unsigned int _screenHeight = 480;
             int _screenX = -1;
             int _screenY = -1;
             bool _alwaysOnTop = false;
