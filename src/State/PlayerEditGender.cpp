@@ -16,15 +16,19 @@ namespace Falltergeist
 
     namespace State
     {
-        PlayerEditGender::PlayerEditGender(std::shared_ptr<UI::IResourceManager> resourceManager) : State()
+        PlayerEditGender::PlayerEditGender(std::shared_ptr<UI::IResourceManager> _resourceManager) :
+            State{},
+            resourceManager{std::move(_resourceManager)},
+            imageButtonFactory{std::make_unique<UI::Factory::ImageButtonFactory>(resourceManager)}
         {
-            this->resourceManager = resourceManager;
-            imageButtonFactory = std::make_unique<UI::Factory::ImageButtonFactory>(resourceManager);
         }
 
         void PlayerEditGender::init()
         {
-            if (_initialized) return;
+            if (_initialized) {
+                return;
+            }
+
             State::init();
 
             setFullscreen(false);
@@ -34,36 +38,46 @@ namespace Falltergeist
             int bgX = bgPos.x();
             int bgY = bgPos.y();
 
-            auto bg = resourceManager->getImage("art/intrface/charwin.frm");
-            bg->setPosition(bgPos + Point(236, 0));
+            {
+                auto& bg = *addUI(resourceManager->getImage("art/intrface/charwin.frm"));
+                bg.setPosition(bgPos.add(236, 0));
+            }
 
-            _maleImage = new UI::ImageList({bgX + 260, bgY +2}, {
-                resourceManager->getImage("art/intrface/maleoff.frm"),
-                resourceManager->getImage("art/intrface/maleon.frm")
-            });
-            _maleImage->mouseClickHandler().add(std::bind(&PlayerEditGender::onMaleButtonPress, this, std::placeholders::_1));
+            {
+                _maleImage = makeUI<UI::ImageList>(
+                        bgPos.add(260, 2),
+                        std::vector<std::shared_ptr<UI::Image>> {
+                                resourceManager->getImage("art/intrface/maleoff.frm"),
+                                resourceManager->getImage("art/intrface/maleon.frm")
+                        });
+                _maleImage->mouseClickHandler().add(std::bind(&PlayerEditGender::onMaleButtonPress, this, std::placeholders::_1));
+            }
 
-            _femaleImage = new UI::ImageList({bgX + 310, bgY + 2}, {
-                resourceManager->getImage("art/intrface/femoff.frm"),
-                resourceManager->getImage("art/intrface/femon.frm")
-            });
-            _femaleImage->mouseClickHandler().add(std::bind(&PlayerEditGender::onFemaleButtonPress, this, std::placeholders::_1));
+            {
+                _femaleImage = makeUI<UI::ImageList>(
+                        bgPos.add(310, 2),
+                        std::vector<std::shared_ptr<UI::Image>>{
+                                resourceManager->getImage("art/intrface/femoff.frm"),
+                                resourceManager->getImage("art/intrface/femon.frm")
+                        });
+                _femaleImage->mouseClickHandler().add(std::bind(&PlayerEditGender::onFemaleButtonPress, this, std::placeholders::_1));
+            }
 
-            auto doneBox = resourceManager->getImage("art/intrface/donebox.frm");
-            doneBox->setPosition(bgPos + Point(250, 42));
+            {
+                auto& doneBox = *addUI(resourceManager->getImage("art/intrface/donebox.frm"));
+                doneBox.setPosition(bgPos.add(250, 42));
+            }
 
-            auto doneLabel = new UI::TextArea(_t(MSG_EDITOR, 100), bgX+281, bgY+45);
-            doneLabel->setFont("font3.aaf", {0xb8, 0x9c, 0x28, 0xff});
+            {
+                auto& doneLabel = *makeUI<UI::TextArea>(_t(MSG_EDITOR, 100), bgX+281, bgY+45);
+                doneLabel.setFont("font3.aaf", {0xb8, 0x9c, 0x28, 0xff});
+            }
 
-            auto doneButton = imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {bgX + 260, bgY + 45});
-            doneButton->mouseClickHandler().add(std::bind(&PlayerEditGender::onDoneButtonClick, this, std::placeholders::_1));
+            {
+                auto& doneButton = *addUI(imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {bgX + 260, bgY + 45}));
+                doneButton.mouseClickHandler().add(std::bind(&PlayerEditGender::onDoneButtonClick, this, std::placeholders::_1));
+            }
 
-            addUI(bg);
-            addUI(doneBox);
-            addUI(std::move(doneButton));
-            addUI(doneLabel);
-            addUI(_maleImage);
-            addUI(_femaleImage);
             setGender(Game::getInstance()->player()->gender());
         }
 

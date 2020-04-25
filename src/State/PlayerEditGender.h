@@ -31,8 +31,8 @@ namespace Falltergeist
                 void setGender(GENDER gender);
 
             protected:
-                UI::ImageList* _maleImage = nullptr;
-                UI::ImageList* _femaleImage = nullptr;
+                std::shared_ptr<UI::ImageList> _maleImage = nullptr;
+                std::shared_ptr<UI::ImageList> _femaleImage = nullptr;
                 GENDER _gender = GENDER::MALE;
 
             private:

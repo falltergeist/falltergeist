@@ -16,58 +16,62 @@ namespace Falltergeist
 
     namespace State
     {
-        PlayerEditAge::PlayerEditAge(std::shared_ptr<UI::IResourceManager> resourceManager) : State()
+        PlayerEditAge::PlayerEditAge(std::shared_ptr<UI::IResourceManager> _resourceManager) :
+            State{},
+            resourceManager(std::move(_resourceManager)),
+            imageButtonFactory{std::make_unique<UI::Factory::ImageButtonFactory>(resourceManager)}
         {
-            this->resourceManager = resourceManager;
-            imageButtonFactory = std::make_unique<UI::Factory::ImageButtonFactory>(resourceManager);
         }
 
         void PlayerEditAge::init()
         {
-            if (_initialized) return;
+            if (_initialized) {
+                return;
+            }
             State::init();
 
             setFullscreen(false);
             setModal(true);
 
-            Point backgroundPos = Point((Game::getInstance()->renderer()->size() - Point(640, 480)) / 2);
-            int backgroundX = backgroundPos.x();
-            int backgroundY = backgroundPos.y();
+            Point bgPos = Point((Game::getInstance()->renderer()->size() - Point(640, 480)) / 2);
 
-            auto bg = resourceManager->getImage("art/intrface/charwin.frm");
-            bg->setPosition(backgroundPos + Point(160, 0));
+            {
+                auto& bg = *addUI(resourceManager->getImage("art/intrface/charwin.frm"));
+                bg.setPosition(bgPos.add(160, 0));
+            }
 
-            auto ageBox = resourceManager->getImage("art/intrface/agebox.frm");
-            ageBox->setPosition(backgroundPos + Point(168, 10));
+            {
+                auto& ageBox = *addUI(resourceManager->getImage("art/intrface/agebox.frm"));
+                ageBox.setPosition(bgPos.add(168, 10));
+            }
 
-            auto doneBox = resourceManager->getImage("art/intrface/donebox.frm");
-            doneBox->setPosition(backgroundPos + Point(175, 40));
+            {
+                auto& doneBox = *addUI(resourceManager->getImage("art/intrface/donebox.frm"));
+                doneBox.setPosition(bgPos.add(175, 40));
+            }
 
-            auto decButton = imageButtonFactory->getByType(ImageButtonType::LEFT_ARROW, {backgroundX + 178, backgroundY + 14});
-            decButton->mouseClickHandler().add(std::bind(&PlayerEditAge::onDecButtonClick, this, std::placeholders::_1));
+            {
+                auto& decButton = *addUI(imageButtonFactory->getByType(ImageButtonType::LEFT_ARROW, bgPos.add(178, 14)));
+                decButton.mouseClickHandler().add(std::bind(&PlayerEditAge::onDecButtonClick, this, std::placeholders::_1));
+            }
 
-            auto incButton = imageButtonFactory->getByType(ImageButtonType::RIGHT_ARROW, {backgroundX + 262, backgroundY + 14});
-            incButton->mouseClickHandler().add(std::bind(&PlayerEditAge::onIncButtonClick, this, std::placeholders::_1));
+            {
+                auto& incButton = *addUI(imageButtonFactory->getByType(ImageButtonType::RIGHT_ARROW, bgPos.add(262, 14)));
+                incButton.mouseClickHandler().add(std::bind(&PlayerEditAge::onIncButtonClick, this, std::placeholders::_1));
+            }
 
-            auto doneButton= imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {backgroundX + 188, backgroundY + 43});
-            doneButton->mouseClickHandler().add(std::bind(&PlayerEditAge::onDoneButtonClick, this, std::placeholders::_1));
+            {
+                auto& doneButton = *addUI(imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, bgPos.add(188, 43)));
+                doneButton.mouseClickHandler().add(std::bind(&PlayerEditAge::onDoneButtonClick, this, std::placeholders::_1));
+            }
 
-            auto doneLabel = new UI::TextArea(_t(MSG_EDITOR, 100), backgroundX+210, backgroundY+43);
+            {
+                auto& doneLabel = *makeUI<UI::TextArea>(_t(MSG_EDITOR, 100), bgPos.add(210, 43));
+                doneLabel.setFont("font3.aaf", {0xb8, 0x9c, 0x28, 0xff});
+            }
 
-            doneLabel->setFont("font3.aaf", {0xb8, 0x9c, 0x28, 0xff});
-
-            _counter = new UI::BigCounter({backgroundX + 215, backgroundY + 13});
+            _counter = makeUI<UI::BigCounter>(bgPos.add(215, 13));
             _counter->setNumber(Game::getInstance()->player()->age());
-
-            addUI(bg);
-            addUI(ageBox);
-            addUI(doneBox);
-            addUI(std::move(incButton));
-            addUI(std::move(decButton));
-            addUI(doneLabel);
-            addUI(std::move(doneButton));
-            addUI(_counter);
-
         }
 
         void PlayerEditAge::onDecButtonClick(Event::Mouse* event)

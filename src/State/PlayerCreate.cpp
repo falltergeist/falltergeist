@@ -222,8 +222,10 @@ namespace Falltergeist
             _title->setFont("font2.aaf", {0,0,0,0xff});
             addUI(_title);
 
-            auto line = new UI::Rectangle(backgroundPos + Point(350, 300), Graphics::Size(270, 2), { 0x00, 0x00, 0x00, 0xff });
-            addUI(line);
+            makeUI<UI::Rectangle>(
+                    backgroundPos + Point(350, 300),
+                    Graphics::Size(270, 2),
+                    SDL_Color{ 0x00, 0x00, 0x00, 0xff });
 
             _description = std::make_shared<UI::TextArea>("", backgroundX+350, backgroundY+315);
             _description->setFont("font1.aaf", {0,0,0,0xff});

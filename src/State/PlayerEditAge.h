@@ -33,7 +33,7 @@ namespace Falltergeist
                 void onKeyDown(Event::Keyboard* event) override;
 
             protected:
-                UI::BigCounter* _counter = nullptr;
+                std::shared_ptr<UI::BigCounter> _counter = nullptr;
 
             private:
                 std::shared_ptr<UI::IResourceManager> resourceManager;

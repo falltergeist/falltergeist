@@ -69,7 +69,7 @@ namespace Falltergeist
 
                 template<class T,
                         typename = std::enable_if_t<std::is_base_of<UI::Base, T>::value>>
-                std::shared_ptr<T>  addUI(std::shared_ptr<T> ui)
+                std::shared_ptr<T> addUI(std::shared_ptr<T> ui)
                 {
                     // ui->setPosition(ui->position() - ui->offset() + position());  // TODO: unsure why this is needed
                     _ui.emplace_back(ui);
@@ -78,7 +78,7 @@ namespace Falltergeist
 
                 template<class T,
                         typename = std::enable_if_t<std::is_base_of<UI::Base, T>::value>>
-                std::shared_ptr<T>  addUI(std::unique_ptr<T> ui)
+                std::shared_ptr<T> addUI(std::unique_ptr<T> ui)
                 {
                     return addUI(std::shared_ptr<T>{std::move(ui)});
                 }

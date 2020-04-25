@@ -27,7 +27,9 @@ namespace Falltergeist
 
         void PlayerEditAlert::init()
         {
-            if (_initialized) return;
+            if (_initialized) {
+                return;
+            }
             State::init();
 
             setFullscreen(false);
@@ -39,31 +41,32 @@ namespace Falltergeist
             int bgX = bgPos.x();
             int bgY = bgPos.y();
 
-            bg->setPosition(bgPos + Point(164, 173));
-
-
-            auto message = new UI::TextArea(_message.c_str(), bgPos + Point(194, 213));
-            message->setWidth(250);
-            message->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
-            message->setFont("font1.aaf", {0xff, 0x9f, 0x48, 0xff});
-
-            auto doneBox = resourceManager->getImage("art/intrface/donebox.frm");
-            doneBox->setPosition(bgPos + Point(254, 270));
-
-            auto doneButton = imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {bgX + 264, bgY + 273});
-            doneButton->mouseClickHandler().add([this](Event::Mouse* event)
-            {
-                this->onDoneButtonClick(event);
-            });
-
-            auto doneLabel = new UI::TextArea(_t(MSG_EDITOR, 100), bgX + 284, bgY + 273);
-            doneLabel->setFont("font3.aaf", {0xb8, 0x9c, 0x28, 0xff});
-
+            bg->setPosition(bgPos.add(164, 173));
             addUI(bg);
-            addUI(message);
-            addUI(doneBox);
-            addUI(std::move(doneButton));
-            addUI(doneLabel);
+
+            {
+                auto& message = *makeUI<UI::TextArea>(_message.c_str(), bgPos.add(194, 213));
+                message.setWidth(250);
+                message.setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
+                message.setFont("font1.aaf", {0xff, 0x9f, 0x48, 0xff});
+            }
+
+            {
+                auto& doneBox = *addUI(resourceManager->getImage("art/intrface/donebox.frm"));
+                doneBox.setPosition(bgPos + Point(254, 270));
+            }
+
+            {
+                auto& doneButton = *addUI(imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {bgX + 264, bgY + 273}));
+                doneButton.mouseClickHandler().add([this](Event::Mouse* event) {
+                                                        this->onDoneButtonClick(event);
+                                                    });
+            }
+
+            {
+                auto& doneLabel = *makeUI<UI::TextArea>(_t(MSG_EDITOR, 100), bgX + 284, bgY + 273);
+                doneLabel.setFont("font3.aaf", {0xb8, 0x9c, 0x28, 0xff});
+            }
         }
 
         void PlayerEditAlert::onDoneButtonClick(Event::Mouse* event)
