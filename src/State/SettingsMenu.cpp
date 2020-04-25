@@ -1,4 +1,5 @@
 #include "../State/SettingsMenu.h"
+
 #include "../Audio/Mixer.h"
 #include "../functions.h"
 #include "../Game/Game.h"
@@ -19,10 +20,11 @@ namespace Falltergeist
 
     namespace State
     {
-        SettingsMenu::SettingsMenu(std::shared_ptr<UI::IResourceManager> resourceManager) : State()
+        SettingsMenu::SettingsMenu(std::shared_ptr<UI::IResourceManager> _resourceManager) :
+            State{},
+            resourceManager{std::move(_resourceManager)},
+            imageButtonFactory{std::make_unique<UI::Factory::ImageButtonFactory>(resourceManager)}
         {
-            this->resourceManager = resourceManager;
-            imageButtonFactory = std::make_unique<UI::Factory::ImageButtonFactory>(resourceManager);
         }
 
         void SettingsMenu::init()
@@ -81,48 +83,62 @@ namespace Falltergeist
             }
 
             {
-                auto combatLooksSwitch = new UI::MultistateImageButton(UI::MultistateImageButton::Type::BIG_SWITCH, {backgroundX + 76, backgroundY + 387});
+                auto combatLooksSwitch = makeNamedUI<UI::MultistateImageButton>(
+                        "combat_looks",
+                        UI::MultistateImageButton::Type::BIG_SWITCH,
+                        Point{backgroundX + 76, backgroundY + 387});
                 combatLooksSwitch->setMaxState(2);
                 combatLooksSwitch->setState(settings->combatLooks());
-                addUI("combat_looks", combatLooksSwitch);
             }
 
             // Switches (small)
 
             {
-                auto combatMessagesSwitch = new UI::MultistateImageButton(UI::MultistateImageButton::Type::SMALL_SWITCH, {backgroundX + 299, backgroundY + 74});
+                auto combatMessagesSwitch = makeNamedUI<UI::MultistateImageButton>(
+                        "combat_messages",
+                        UI::MultistateImageButton::Type::SMALL_SWITCH,
+                        Point{backgroundX + 299, backgroundY + 74});
                 combatMessagesSwitch->setState(settings->combatMessages());
-                addUI("combat_messages", combatMessagesSwitch);
             }
 
             {
-                auto combatTauntsSwitch = new UI::MultistateImageButton(UI::MultistateImageButton::Type::SMALL_SWITCH, {backgroundX + 299, backgroundY + 74 + 66});
+                auto combatTauntsSwitch = makeNamedUI<UI::MultistateImageButton>(
+                        "combat_taunts",
+                        UI::MultistateImageButton::Type::SMALL_SWITCH,
+                        Point{backgroundX + 299, backgroundY + 74 + 66});
                 combatTauntsSwitch->setState(settings->combatTaunts());
-                addUI("combat_taunts", combatTauntsSwitch);
             }
 
             {
-                auto languageFilterSwitch = new UI::MultistateImageButton(UI::MultistateImageButton::Type::SMALL_SWITCH, {backgroundX+299, backgroundY + 74 + 66 * 2});
+                auto languageFilterSwitch = makeNamedUI<UI::MultistateImageButton>(
+                        "language_filter",
+                        UI::MultistateImageButton::Type::SMALL_SWITCH,
+                        Point{backgroundX+299, backgroundY + 74 + 66 * 2});
                 languageFilterSwitch->setState(settings->languageFilter());
-                addUI("language_filter", languageFilterSwitch);
             }
 
             {
-                auto runningSwitch = new UI::MultistateImageButton(UI::MultistateImageButton::Type::SMALL_SWITCH, {backgroundX + 299, backgroundY + 74 + 66 * 3});
+                auto runningSwitch = makeNamedUI<UI::MultistateImageButton>(
+                        "running",
+                        UI::MultistateImageButton::Type::SMALL_SWITCH,
+                        Point{backgroundX + 299, backgroundY + 74 + 66 * 3});
                 runningSwitch->setState(settings->running());
-                addUI("running", runningSwitch);
             }
 
             {
-                auto subtitlesSwitch = new UI::MultistateImageButton(UI::MultistateImageButton::Type::SMALL_SWITCH, {backgroundX + 299, backgroundY + 74 + 66 * 4});
+                auto subtitlesSwitch = makeNamedUI<UI::MultistateImageButton>(
+                        "subtitles",
+                        UI::MultistateImageButton::Type::SMALL_SWITCH,
+                        Point{backgroundX + 299, backgroundY + 74 + 66 * 4});
                 subtitlesSwitch->setState(settings->subtitles());
-                addUI("subtitles", subtitlesSwitch);
             }
 
             {
-                auto itemHightlightSwitch = new UI::MultistateImageButton(UI::MultistateImageButton::Type::SMALL_SWITCH, {backgroundX + 299, backgroundY + 74 + 66 * 5});
+                auto itemHightlightSwitch = makeNamedUI<UI::MultistateImageButton>(
+                        "item_highlight",
+                        UI::MultistateImageButton::Type::SMALL_SWITCH,
+                        Point{backgroundX + 299, backgroundY + 74 + 66 * 5});
                 itemHightlightSwitch->setState(settings->itemHighlight());
-                addUI("item_highlight", itemHightlightSwitch);
             }
 
             // LABELS
@@ -350,7 +366,8 @@ namespace Falltergeist
             // SLIDERS
             // COMBAT SPEED SLIDER
             {
-                auto combatSpeedSlider = new UI::Slider(
+                auto combatSpeedSlider = makeNamedUI<UI::Slider>(
+                        "combat_speed",
                         backgroundPos.add(384, 50),
                         resourceManager->getImage("art/intrface/prfsldon.frm"),
                         resourceManager->getImage("art/intrface/prfsldof.frm")
@@ -358,36 +375,36 @@ namespace Falltergeist
                 combatSpeedSlider->setMinValue(0.0);
                 combatSpeedSlider->setMaxValue(50.0);
                 combatSpeedSlider->setValue(settings->combatSpeed());
-                addUI("combat_speed", combatSpeedSlider);
             }
 
 
             // TEXT DELAY SLIDER
             {
-                auto textDelaySlider = new UI::Slider(
-                        {backgroundX + 384, backgroundY + 125},
+                auto textDelaySlider = makeNamedUI<UI::Slider>(
+                        "text_delay",
+                        Point{backgroundX + 384, backgroundY + 125},
                         resourceManager->getImage("art/intrface/prfsldon.frm"),
                         resourceManager->getImage("art/intrface/prfsldof.frm")
                 );
                 textDelaySlider->setValue(settings->textDelay());
-                addUI("text_delay", textDelaySlider);
             }
 
             // MASTER AUDIO VOLUME SLIDER
             {
-                auto masterAudioVolumeSlider = new UI::Slider(
-                        {backgroundX + 384, backgroundY + 196},
+                auto masterAudioVolumeSlider = makeNamedUI<UI::Slider>(
+                        "master_volume",
+                        Point{backgroundX + 384, backgroundY + 196},
                         resourceManager->getImage("art/intrface/prfsldon.frm"),
                         resourceManager->getImage("art/intrface/prfsldof.frm")
                 );
                 masterAudioVolumeSlider->setValue(settings->masterVolume());
-                addUI("master_volume", masterAudioVolumeSlider);
             }
 
             // MUSIC VOLUME SLIDER
             {
-                auto musicVolumeSlider = new UI::Slider(
-                        {backgroundX + 384, backgroundY + 196 + 51},
+                auto musicVolumeSlider = makeNamedUI<UI::Slider>(
+                        "music_volume",
+                        Point{backgroundX + 384, backgroundY + 196 + 51},
                         resourceManager->getImage("art/intrface/prfsldon.frm"),
                         resourceManager->getImage("art/intrface/prfsldof.frm")
                 );
@@ -395,51 +412,50 @@ namespace Falltergeist
                 musicVolumeSlider->changeHandler().add([=](Event::Event* evt) {
                     Game::getInstance()->mixer()->setMusicVolume(musicVolumeSlider->value());
                 });
-                addUI("music_volume", musicVolumeSlider);
             }
 
             // SOUND EFFECTS VOLUME SLIDER
             {
-                auto soundEffectsVolumeSlider = new UI::Slider(
-                        {backgroundX + 384, backgroundY + 196 + 51 * 2},
+                auto soundEffectsVolumeSlider = makeNamedUI<UI::Slider>(
+                        "sfx_volume",
+                        Point{backgroundX + 384, backgroundY + 196 + 51 * 2},
                         resourceManager->getImage("art/intrface/prfsldon.frm"),
                         resourceManager->getImage("art/intrface/prfsldof.frm")
                 );
                 soundEffectsVolumeSlider->setValue(settings->sfxVolume());
-                addUI("sfx_volume", soundEffectsVolumeSlider);
             }
 
             // SPEECH VOLUME SLIDER
             {
-                auto speechVolumeSlider = new UI::Slider(
-                        {backgroundX + 384, backgroundY + 196 + 51 * 3},
+                auto speechVolumeSlider = makeNamedUI<UI::Slider>(
+                        "voice_volume",
+                        Point{backgroundX + 384, backgroundY + 196 + 51 * 3},
                         resourceManager->getImage("art/intrface/prfsldon.frm"),
                         resourceManager->getImage("art/intrface/prfsldof.frm")
                 );
                 speechVolumeSlider->setValue(settings->voiceVolume());
-                addUI("voice_volume", speechVolumeSlider);
             }
 
             // BRIGHTNESS LEVEL SLIDER
             {
-                auto brightnessLevelSlider = new UI::Slider(
-                        {backgroundX + 384, backgroundY + 196 + 51 * 4},
+                auto brightnessLevelSlider = makeNamedUI<UI::Slider>(
+                        "brightness",
+                        Point{backgroundX + 384, backgroundY + 196 + 51 * 4},
                         resourceManager->getImage("art/intrface/prfsldon.frm"),
                         resourceManager->getImage("art/intrface/prfsldof.frm")
                 );
                 brightnessLevelSlider->setValue(settings->brightness());
-                addUI("brightness", brightnessLevelSlider);
             }
 
             // MOUSE SENSITIVITY SLIDER
             {
-                auto mouseSensitivitySlider = new UI::Slider(
-                        {backgroundX + 384, backgroundY + 196 + 51 * 5},
+                auto mouseSensitivitySlider = makeNamedUI<UI::Slider>(
+                        "mouse_sensitivity",
+                        Point{backgroundX + 384, backgroundY + 196 + 51 * 5},
                         resourceManager->getImage("art/intrface/prfsldon.frm"),
                         resourceManager->getImage("art/intrface/prfsldof.frm")
                 );
                 mouseSensitivitySlider->setValue(settings->mouseSensitivity());
-                addUI("mouse_sensitivity",mouseSensitivitySlider);
             }
         }
 

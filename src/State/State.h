@@ -101,14 +101,6 @@ namespace Falltergeist
                     return ret;
                 }
 
-                template<class T,
-                        typename = std::enable_if_t<std::is_base_of<UI::Base, T>::value>>
-                std::shared_ptr<T> addUI(std::string name, T* ui) {
-                    // TODO: this is a temporary API-compatible version of addUI that allows existing code to compile
-                    // TODO: ideally, the existing code should be refactored to use smart pointers (the other overloads)
-                    return this->addUI(std::move(name), std::shared_ptr<T>{ui});
-                }
-
                 template<typename T = UI::Base,
                         typename = std::enable_if_t<std::is_base_of<UI::Base, T>::value>>
                 std::shared_ptr<T> getUI(const std::string& name) const {

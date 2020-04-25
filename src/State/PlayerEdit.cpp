@@ -1,3 +1,4 @@
+#include <memory>
 #include <sstream>
 
 #include "../State/PlayerEdit.h"
@@ -255,8 +256,10 @@ namespace Falltergeist
             _title->setFont("font2.aaf", {0,0,0,0xff});
             addUI(_title);
 
-            auto line = new UI::Rectangle(backgroundPos + Point(350, 300), Graphics::Size(270, 2), { 0x00, 0x00, 0x00, 0xff });
-            addUI(line);
+            makeUI<UI::Rectangle>(
+                    backgroundPos + Point(350, 300),
+                    Graphics::Size(270, 2),
+                    SDL_Color{ 0x00, 0x00, 0x00, 0xff });
 
             _description = std::make_shared<UI::TextArea>("", backgroundX+350, backgroundY+315);
             _description->setFont("font1.aaf", {0,0,0,0xff});
@@ -264,25 +267,30 @@ namespace Falltergeist
             _description->setWordWrap(true);
 
             // TABS
-            UI::ImageList *tabs = new UI::ImageList({backgroundX + 10, backgroundY + 325}, {
-                resourceManager->getImage("art/intrface/perksfdr.frm"),
-                resourceManager->getImage("art/intrface/karmafdr.frm"),
-                resourceManager->getImage("art/intrface/killsfdr.frm")
-            });
+            auto tabs = makeNamedUI<UI::ImageList>(
+                    "tabs",
+                    Point{backgroundX + 10, backgroundY + 325},
+                    std::vector<std::shared_ptr<UI::Image>>{
+                            {resourceManager->getImage("art/intrface/perksfdr.frm")},
+                            {resourceManager->getImage("art/intrface/karmafdr.frm")},
+                            {resourceManager->getImage("art/intrface/killsfdr.frm")}
+                    });
             tabs->mouseClickHandler().add(std::bind(&PlayerEdit::onTabClick, this, std::placeholders::_1));
-            addUI("tabs", tabs);
 
             // Tab labels: perks, karma, kills
             for (unsigned int i = 0; i < 3; i++) {
-                auto tab = addUI("tab_" + std::to_string(i),
-                                     new UI::TextArea(_t(MSG_EDITOR, 109+i), backgroundX+10+35+(100*i), backgroundY+325+7+(i == 0 ? -1 : 1)));
+                auto tab = makeNamedUI<UI::TextArea>(
+                        "tab_" + std::to_string(i),
+                        _t(MSG_EDITOR, 109+i),
+                        backgroundX+10+35+(100*i),
+                        backgroundY+325+7+(i == 0 ? -1 : 1));
                 tab->setFont(font3_b89c28ff, color);
             }
 
             Point tabContentPos = tabs->position() + Point(25, 45);
 
             // Perks and traits
-            auto perksAndTraits = new UI::TextAreaList(tabContentPos);
+            auto perksAndTraits = makeNamedUI<UI::TextAreaList>("tab_perks", tabContentPos);
             perksAndTraits->setSize({ 0, 100 });
 
             auto traits = new UI::TextArea(_t(MSG_EDITOR, 156), {0, 0});
@@ -294,47 +302,53 @@ namespace Falltergeist
             {
                 if (player->traitTagged(static_cast<TRAIT>(i)))
                 {
-                    perksAndTraits->addArea(std::unique_ptr<UI::TextArea>(new UI::TextArea(_t(MSG_TRAITS, 100 + i), {0,0})));
+                    perksAndTraits->addArea(std::make_unique<UI::TextArea>(
+                            _t(MSG_TRAITS, 100 + i),
+                            Point{0,0}));
                 }
             }
 
-            auto perks = new UI::TextArea(_t(MSG_EDITOR, 109), {0, 0});
-            perks->setWidth(270);
-            perks->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
-            perksAndTraits->addArea(std::unique_ptr<UI::TextArea>(perks));
-
-            addUI("tab_perks", perksAndTraits);
+            {
+                auto perks = std::make_unique<UI::TextArea>(
+                        _t(MSG_EDITOR, 109),
+                        Point{0, 0});
+                perks->setWidth(270);
+                perks->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
+                perksAndTraits->addArea(std::move(perks));
+            }
 
             // Karma overview
-            auto karma = new UI::TextAreaList(tabContentPos);
+            auto karma = makeNamedUI<UI::TextAreaList>("tab_karma", tabContentPos);
             karma->setSize({ 0, 100 });
             karma->setVisible(false);
+            karma->addArea(std::make_unique<UI::TextArea>(
+                    _t(MSG_EDITOR, 125),
+                    Point{0, 0}));
 
-            karma->addArea(std::unique_ptr<UI::TextArea>(new UI::TextArea(_t(MSG_EDITOR, 125), {0, 0})));
-
-            auto reputation = new UI::TextArea(_t(MSG_EDITOR, 4000), {0, 0});
-            reputation->setWidth(270);
-            reputation->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
-            karma->addArea(std::unique_ptr<UI::TextArea>(reputation));
-
-            addUI("tab_karma", karma);
+            {
+                auto reputation = new UI::TextArea(_t(MSG_EDITOR, 4000), {0, 0});
+                reputation->setWidth(270);
+                reputation->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
+                karma->addArea(std::unique_ptr<UI::TextArea>(reputation));
+            }
 
             // Killing statistics
-            auto killEnemyNames = new UI::TextAreaList(tabContentPos);
-            auto killEnemyScore = new UI::TextAreaList(tabContentPos + Point(270, 0));
+            auto killEnemyNames = makeNamedUI<UI::TextAreaList>("tab_kills_enemies", tabContentPos);
             killEnemyNames->setSize({ 0, 100 });
-            killEnemyScore->setSize({ 0, 100 });
             killEnemyNames->setVisible(false);
+
+            auto killEnemyScore = makeNamedUI<UI::TextAreaList>(
+                    "tab_kills_score",
+                    tabContentPos + Point(270, 0));
+            killEnemyScore->setSize({ 0, 100 });
             killEnemyScore->setVisible(false);
+
 
             // TODO: _underline_. Just for testing. Real kill stats should be stored in a map inside DudeObject(?)
             for (unsigned int i = 0; i < 19; i++) {
                 killEnemyNames->addArea(std::unique_ptr<UI::TextArea>(new UI::TextArea(_t(MSG_PROTO, 1450+i), {0, 0})));
                 killEnemyScore->addArea(std::unique_ptr<UI::TextArea>(new UI::TextArea(std::to_string(i), {0, 0})));
             }
-
-            addUI("tab_kills_enemies", killEnemyNames);
-            addUI("tab_kills_score", killEnemyScore);
 
             {
                 auto tabsArrowUp = imageButtonFactory->getByType(ImageButtonType::SMALL_UP_ARROW, {backgroundX + 317, backgroundY + 363});
