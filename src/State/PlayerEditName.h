@@ -34,8 +34,8 @@ namespace Falltergeist
 
             protected:
                 float _blinkingCursorMillisecondsTracked = 0;
-                UI::TextArea* _name = nullptr;
-                UI::Rectangle* _cursor = nullptr;
+                std::shared_ptr<UI::TextArea> _name = nullptr;
+                std::shared_ptr<UI::Rectangle> _cursor = nullptr;
                 std::map<char,char> _keyCodes;
 
             private:

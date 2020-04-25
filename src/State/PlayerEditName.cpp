@@ -17,15 +17,18 @@ namespace Falltergeist
 
     namespace State
     {
-        PlayerEditName::PlayerEditName(std::shared_ptr<UI::IResourceManager> resourceManager) : State()
+        PlayerEditName::PlayerEditName(std::shared_ptr<UI::IResourceManager> _resourceManager) :
+            State{},
+            resourceManager{std::move(_resourceManager)},
+            imageButtonFactory{std::make_unique<UI::Factory::ImageButtonFactory>(resourceManager)}
         {
-            this->resourceManager = resourceManager;
-            imageButtonFactory = std::make_unique<UI::Factory::ImageButtonFactory>(resourceManager);
         }
 
         void PlayerEditName::init()
         {
-            if (_initialized) return;
+            if (_initialized) {
+                return;
+            }
             State::init();
 
             setFullscreen(false);
@@ -72,33 +75,35 @@ namespace Falltergeist
             _keyCodes.insert(std::make_pair(SDLK_9, '9'));
             _keyCodes.insert(std::make_pair(SDLK_0, '0'));
 
-            auto bg = resourceManager->getImage("art/intrface/charwin.frm");
-            bg->setPosition(bgPos + Point(22, 0));
+            {
+                auto& bg = *addUI(resourceManager->getImage("art/intrface/charwin.frm"));
+                bg.setPosition(bgPos + Point(22, 0));
+            }
 
-            auto nameBox = resourceManager->getImage("art/intrface/namebox.frm");
-            nameBox->setPosition(bgPos + Point(35, 10));
+            {
+                auto& nameBox = *addUI(resourceManager->getImage("art/intrface/namebox.frm"));
+                nameBox.setPosition(bgPos + Point(35, 10));
+            }
 
-            auto doneBox = resourceManager->getImage("art/intrface/donebox.frm");
-            doneBox->setPosition(bgPos + Point(35, 40));
+            {
+                auto& doneBox = *addUI(resourceManager->getImage("art/intrface/donebox.frm"));
+                doneBox.setPosition(bgPos + Point(35, 40));
+            }
 
-            auto doneLabel = new UI::TextArea(_t(MSG_EDITOR, 100), bgX+65, bgY+43);
-            doneLabel->setFont("font3.aaf", {0xb8, 0x9c, 0x28, 0xff});
+            {
+                auto& doneLabel = *makeUI<UI::TextArea>(_t(MSG_EDITOR, 100), bgX+65, bgY+43);
+                doneLabel.setFont("font3.aaf", {0xb8, 0x9c, 0x28, 0xff});
+            }
 
-            auto doneButton = imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {bgX + 45, bgY + 43});
-            doneButton->mouseClickHandler().add(std::bind(&PlayerEditName::onDoneButtonClick, this, std::placeholders::_1));
+            {
+                auto& doneButton = *addUI(imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {bgX + 45, bgY + 43}));
+                doneButton.mouseClickHandler().add(std::bind(&PlayerEditName::onDoneButtonClick, this, std::placeholders::_1));
+            }
 
-            _name = new UI::TextArea(Game::getInstance()->player()->name(), bgX+43, bgY+15);
+            _name = makeUI<UI::TextArea>(Game::getInstance()->player()->name(), bgX+43, bgY+15);
             _name->keyDownHandler().add([this](Event::Event* event){ this->onTextAreaKeyDown(dynamic_cast<Event::Keyboard*>(event)); });
 
-            _cursor = new UI::Rectangle(bgPos + Point(83, 15) ,{5,8}, {0x3F, 0xF8, 0x00, 0xFF});
-
-            addUI(bg);
-            addUI(nameBox);
-            addUI(doneBox);
-            addUI(doneLabel);
-            addUI(std::move(doneButton));
-            addUI(_name);
-            addUI(_cursor);
+            _cursor = makeUI<UI::Rectangle>(bgPos + Point(83, 15) , UI::Size{5,8}, SDL_Color{0x3F, 0xF8, 0x00, 0xFF});
         }
 
         void PlayerEditName::onTextAreaKeyDown(Event::Keyboard* event)

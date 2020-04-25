@@ -490,22 +490,22 @@ namespace Falltergeist
         //    });
         //}
 
-        UI::TextArea* SettingsMenu::_addLabel(const std::string& name, UI::TextArea* label)
+        std::shared_ptr<UI::TextArea> SettingsMenu::_addLabel(const std::string& name, std::shared_ptr<UI::TextArea> label)
         {
             _labels.insert(std::make_pair(name, label));
             return label;
         }
 
-        UI::TextArea* SettingsMenu::_addTextArea(const std::string& message, unsigned int x, unsigned int y)
+        std::shared_ptr<UI::TextArea> SettingsMenu::_addTextArea(const std::string& message, unsigned int x, unsigned int y)
         {
-            auto textArea = new UI::TextArea(message, x, y);
+            auto textArea = makeUI<UI::TextArea>(message, x, y);
             addUI(textArea);
             return textArea;
         }
 
-        UI::TextArea* SettingsMenu::_addTextArea(UI::TextArea* parent, unsigned int x, unsigned int y)
+        std::shared_ptr<UI::TextArea> SettingsMenu::_addTextArea(std::shared_ptr<UI::TextArea> parent, unsigned int x, unsigned int y)
         {
-            auto textArea = new UI::TextArea(*parent, Point(x, y));
+            auto textArea = makeUI<UI::TextArea>(*parent, Point(x, y));
             addUI(textArea);
             return textArea;
         }

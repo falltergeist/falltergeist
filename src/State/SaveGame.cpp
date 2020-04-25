@@ -18,10 +18,11 @@ namespace Falltergeist
 
     namespace State
     {
-        SaveGame::SaveGame(std::shared_ptr<UI::IResourceManager> resourceManager) : State()
+        SaveGame::SaveGame(std::shared_ptr<UI::IResourceManager> _resourceManager) :
+            State{},
+            resourceManager{std::move(_resourceManager)},
+            imageButtonFactory{std::make_unique<UI::Factory::ImageButtonFactory>(resourceManager)}
         {
-            this->resourceManager = resourceManager;
-            imageButtonFactory = std::make_unique<UI::Factory::ImageButtonFactory>(resourceManager);
         }
 
         void SaveGame::init()
@@ -65,19 +66,22 @@ namespace Falltergeist
             SDL_Color color = {0x90, 0x78, 0x24, 0xff};
 
             // SAVE GAME LABEL
-            auto saveGameLabel = new UI::TextArea(_t(MSG_LOAD_SAVE, 109), bgX+48, bgY+27);
-            saveGameLabel->setFont(font3_907824ff, color);
-            addUI(saveGameLabel);
+            {
+                auto saveGameLabel = makeUI<UI::TextArea>(_t(MSG_LOAD_SAVE, 109), bgX+48, bgY+27);
+                saveGameLabel->setFont(font3_907824ff, color);
+            }
 
             // DONE BUTTON LABEL
-            auto doneButtonLabel = new UI::TextArea(_t(MSG_OPTIONS, 300), bgX+410, bgY+348);
-            doneButtonLabel->setFont(font3_907824ff, color);
-            addUI(doneButtonLabel);
+            {
+                auto doneButtonLabel = makeUI<UI::TextArea>(_t(MSG_OPTIONS, 300), bgX+410, bgY+348);
+                doneButtonLabel->setFont(font3_907824ff, color);
+            }
 
             // CANCEL BUTTON LABEL
-            auto cancelButtonLabel = new UI::TextArea(_t(MSG_OPTIONS, 121), bgX+515, bgY+348);
-            cancelButtonLabel->setFont(font3_907824ff, color);
-            addUI(cancelButtonLabel);
+            {
+                auto cancelButtonLabel = makeUI<UI::TextArea>(_t(MSG_OPTIONS, 121), bgX+515, bgY+348);
+                cancelButtonLabel->setFont(font3_907824ff, color);
+            }
         }
 
         void SaveGame::onDoneButtonClick(Event::Mouse* event)
