@@ -17,17 +17,17 @@ namespace Falltergeist
     namespace State
     {
         CursorDropdown::CursorDropdown(
-            std::shared_ptr<UI::IResourceManager> resourceManager,
+            std::shared_ptr<UI::IResourceManager> _resourceManager,
             std::vector<Input::Mouse::Icon>&& icons,
-            bool onlyIcon
-        ) : State()
+            bool onlyIcon) :
+            State{},
+            resourceManager{std::move(_resourceManager)},
+            _icons{std::move(icons)},
+            _onlyShowIcon{onlyIcon}
         {
-            this->resourceManager = resourceManager;
-            if (icons.size() == 0) {
+            if (_icons.empty()) {
                 throw Exception("CursorDropdown::CursorDropdown() - empty icons list!");
             }
-            _icons = icons;
-            _onlyShowIcon = onlyIcon;
             if (onlyIcon && _icons.size() > 1) {
                 _icons.resize(1);
             }
@@ -38,8 +38,10 @@ namespace Falltergeist
             if (_initialized) {
                 return;
             }
+
             State::init();
             setFullscreen(false);
+
             if (!_onlyShowIcon) {
                 setModal(true);
             }
@@ -146,7 +148,7 @@ namespace Falltergeist
                 _iconsPos.setY(_iconsPos.y() - deltaY);
             }
             _cursor->setPosition({_initialX, _initialY});
-            addUI(_cursor);
+            addSharedUI(_cursor);
 
             if (!_onlyShowIcon) {
                 if (deltaY > 0) {

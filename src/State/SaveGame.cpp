@@ -42,7 +42,7 @@ namespace Falltergeist
             int bgX = bgPos.x();
             int bgY = bgPos.y();
             bg->setPosition(bgPos);
-            addUI(bg);
+            addSharedUI(bg);
 
             // BUTTONS
 
@@ -67,20 +67,20 @@ namespace Falltergeist
 
             // SAVE GAME LABEL
             {
-                auto saveGameLabel = makeUI<UI::TextArea>(_t(MSG_LOAD_SAVE, 109), bgX+48, bgY+27);
-                saveGameLabel->setFont(font3_907824ff, color);
+                auto& saveGameLabel = makeUI<UI::TextArea>(_t(MSG_LOAD_SAVE, 109), bgX+48, bgY+27);
+                saveGameLabel.setFont(font3_907824ff, color);
             }
 
             // DONE BUTTON LABEL
             {
-                auto doneButtonLabel = makeUI<UI::TextArea>(_t(MSG_OPTIONS, 300), bgX+410, bgY+348);
-                doneButtonLabel->setFont(font3_907824ff, color);
+                auto& doneButtonLabel = makeUI<UI::TextArea>(_t(MSG_OPTIONS, 300), bgX+410, bgY+348);
+                doneButtonLabel.setFont(font3_907824ff, color);
             }
 
             // CANCEL BUTTON LABEL
             {
-                auto cancelButtonLabel = makeUI<UI::TextArea>(_t(MSG_OPTIONS, 121), bgX+515, bgY+348);
-                cancelButtonLabel->setFont(font3_907824ff, color);
+                auto& cancelButtonLabel = makeUI<UI::TextArea>(_t(MSG_OPTIONS, 121), bgX+515, bgY+348);
+                cancelButtonLabel.setFont(font3_907824ff, color);
             }
         }
 

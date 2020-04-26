@@ -36,11 +36,11 @@ namespace Falltergeist
 
     namespace State
     {
-        Inventory::Inventory(std::shared_ptr<UI::IResourceManager> resourceManager) : State()
+        Inventory::Inventory(std::shared_ptr<UI::IResourceManager> _resourceManager) :
+            State{},
+            resourceManager{std::move(_resourceManager)},
+            imageButtonFactory{std::make_unique<UI::Factory::ImageButtonFactory>(resourceManager)}
         {
-            this->resourceManager = resourceManager;
-            imageButtonFactory = std::make_unique<UI::Factory::ImageButtonFactory>(resourceManager);
-
             pushHandler().add([](Event::State* ev) {
                 Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::ACTION);
             });
@@ -70,28 +70,28 @@ namespace Falltergeist
             setPosition((game->renderer()->size() - Point(499, 377 + panelHeight)) / 2); // 499x377 = art/intrface/invbox.frm
 
             addUI("background", resourceManager->getImage("art/intrface/invbox.frm"))
-                ->mouseClickHandler().add([this](Event::Mouse* e) {
+                .mouseClickHandler().add([this](Event::Mouse* e) {
                     this->backgroundRightClick(e);
                 });
 
             addUI("button_up",   imageButtonFactory->getByType(ImageButtonType::INVENTORY_UP_ARROW,   {128, 40}))
-                ->mouseClickHandler().add([this](Event::Mouse* e) {
+                .mouseClickHandler().add([this](Event::Mouse* e) {
                     this->onScrollUpButtonClick(e);
                 });
 
             addUI("button_down", imageButtonFactory->getByType(ImageButtonType::INVENTORY_DOWN_ARROW, {128, 65}))
-                ->mouseClickHandler().add([this](Event::Mouse* e) {
+                .mouseClickHandler().add([this](Event::Mouse* e) {
                     this->onScrollDownButtonClick(e);
                 });
 
             addUI("button_up_disabled", resourceManager->getImage("art/intrface/invdnds.frm"))
-                ->setPosition({128, 40});
+                .setPosition({128, 40});
 
             addUI("button_down_disabled", resourceManager->getImage("art/intrface/invupds.frm"))
-                ->setPosition({128, 65});
+                .setPosition({128, 65});
 
             addUI("button_done", imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {438, 328}))
-                ->mouseClickHandler().add([this](Event::Mouse* e) {
+                .mouseClickHandler().add([this](Event::Mouse* e) {
                     this->onDoneButtonClick(e);
                 });
 
@@ -136,7 +136,7 @@ namespace Falltergeist
                 ss << player->hitPoints();
                 ss << "/";
                 ss << player->hitPointsMax();
-                auto& hpui = *makeNamedUI<UI::TextArea>("hitPointsLabel", ss.str(), screenPos.add({94, 20}));
+                auto& hpui = makeNamedUI<UI::TextArea>("hitPointsLabel", ss.str(), screenPos.add({94, 20}));
                 hpui.setWidth(46);
                 hpui.setHorizontalAlign(UI::TextArea::HorizontalAlign::RIGHT);
             }
@@ -145,7 +145,7 @@ namespace Falltergeist
             {
                 std::stringstream ss;
                 ss << player->armorClass();
-                auto& armorClassLabel = *makeNamedUI<UI::TextArea>("armorClassLabel", ss.str(), screenPos.add({94, 30}));
+                auto& armorClassLabel = makeNamedUI<UI::TextArea>("armorClassLabel", ss.str(), screenPos.add({94, 30}));
                 armorClassLabel.setWidth(46);
                 armorClassLabel.setHorizontalAlign(UI::TextArea::HorizontalAlign::RIGHT);
             }
@@ -171,7 +171,7 @@ namespace Falltergeist
                     ss << player->damageThreshold(DAMAGE::PLASMA) <<"/\n";
                     ss << player->damageThreshold(DAMAGE::EXPLOSIVE) <<"/";
                 }
-                auto& damageThresholdLabel = *makeNamedUI<UI::TextArea>("damageThresholdLabel", ss.str(), screenPos.add({94, 40}));
+                auto& damageThresholdLabel = makeNamedUI<UI::TextArea>("damageThresholdLabel", ss.str(), screenPos.add({94, 40}));
                 damageThresholdLabel.setWidth(26);
                 damageThresholdLabel.setHorizontalAlign(UI::TextArea::HorizontalAlign::RIGHT);
             }
@@ -220,7 +220,7 @@ namespace Falltergeist
 
             // label: weight
             {
-                auto& weightLabel = *makeNamedUI<UI::TextArea>(
+                auto& weightLabel = makeNamedUI<UI::TextArea>(
                         "weightLabel",
                         std::to_string(weight),
                         screenPos.add({70, 180}));
@@ -257,7 +257,7 @@ namespace Falltergeist
 
             // screen info
             {
-                auto& screenLabel = *makeNamedUI<UI::TextArea>(
+                auto& screenLabel = makeNamedUI<UI::TextArea>(
                         "screenLabel",
                         "",
                         screenPos.add({0, 20}));
@@ -266,7 +266,7 @@ namespace Falltergeist
                 screenLabel.setWordWrap(true);
             }
 
-            auto& inventoryList = *makeNamedUI<UI::ItemsList>("inventory_list", Point{40, 40});
+            auto& inventoryList = makeNamedUI<UI::ItemsList>("inventory_list", Point{40, 40});
             inventoryList.setItems(game->player()->inventory());
 
             // TODO: this is a rotating animation in the vanilla engine
@@ -280,14 +280,14 @@ namespace Falltergeist
                         critterHelper.armorFID(dude.get()),
                         critterHelper.weaponId(dude.get()),
                         Game::Orientation::SC
-                ))->setPosition({188, 52});
+                )).setPosition({188, 52});
             }
 
             // BIG ICONS
 
             // icon: armor
             {
-                auto& inventoryItem = *makeUI<UI::InventoryItem>(playerArmor, Point{154, 183});
+                auto& inventoryItem = makeUI<UI::InventoryItem>(playerArmor, Point{154, 183});
                 inventoryItem.setType(UI::InventoryItem::Type::SLOT);
                 inventoryItem.itemDragStopHandler().add([&](Event::Mouse* event){
                     inventoryList.onItemDragStop(event);
@@ -299,7 +299,7 @@ namespace Falltergeist
 
             // icon: left hand
             {
-                auto& inventoryItem = *makeUI<UI::InventoryItem>(leftHand, Point{154, 286});
+                auto& inventoryItem = makeUI<UI::InventoryItem>(leftHand, Point{154, 286});
                 inventoryItem.setType(UI::InventoryItem::Type::SLOT);
                 inventoryItem.itemDragStopHandler().add([&](Event::Mouse* event){
                     inventoryList.onItemDragStop(event, HAND::LEFT);
@@ -311,7 +311,7 @@ namespace Falltergeist
 
             // icon: right hand
             {
-                auto& inventoryItem = *makeUI<UI::InventoryItem>(rightHand, Point{247, 286});
+                auto& inventoryItem = makeUI<UI::InventoryItem>(rightHand, Point{247, 286});
                 inventoryItem.setType(UI::InventoryItem::Type::SLOT);
                 inventoryItem.itemDragStopHandler().add([&](Event::Mouse* event){
                     inventoryList.onItemDragStop(event, HAND::RIGHT);

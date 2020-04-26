@@ -27,15 +27,19 @@ namespace Falltergeist
 
     namespace State
     {
-        PlayerCreate::PlayerCreate(std::shared_ptr<UI::IResourceManager> resourceManager) : State()
+        PlayerCreate::PlayerCreate(std::shared_ptr<UI::IResourceManager> _resourceManager) :
+            State{},
+            resourceManager{std::move(_resourceManager)},
+            imageButtonFactory{std::make_unique<UI::Factory::ImageButtonFactory>(resourceManager)}
         {
-            this->resourceManager = resourceManager;
-            imageButtonFactory = std::make_unique<UI::Factory::ImageButtonFactory>(resourceManager);
         }
 
         void PlayerCreate::init()
         {
-            if (_initialized) return;
+            if (_initialized) {
+                return;
+            }
+
             State::init();
 
             setFullscreen(true);
@@ -47,7 +51,7 @@ namespace Falltergeist
             int backgroundX = backgroundPos.x();
             int backgroundY = backgroundPos.y();
             background->setPosition(backgroundPos);
-            addUI("bg",background);
+            addUI("bg", background);
 
             // STATS
             std::string imagesStats[] = { "strength", "perceptn", "endur", "charisma", "intel", "agility", "luck"};
@@ -190,7 +194,7 @@ namespace Falltergeist
             for(auto it = _buttons.begin(); it != _buttons.end(); ++it)
             {
                 it->second->mouseClickHandler().add(std::bind(&PlayerCreate::onButtonClick, this, std::placeholders::_1));
-                addUI(it->second);
+                addSharedUI(it->second);
             }
 
             // add labels to the state
@@ -198,20 +202,20 @@ namespace Falltergeist
             for(auto it = _labels.rbegin(); it != _labels.rend(); ++it)
             {
                 it->second->mouseDownHandler().add(std::bind(&PlayerCreate::onLabelClick, this, std::placeholders::_1));
-                addUI(it->second);
+                addSharedUI(it->second);
             }
 
             // add counters to the state
             for(auto it = _counters.begin(); it != _counters.end(); ++it)
             {
-                addUI(it->second);
+                addSharedUI(it->second);
             }
 
             // add hidden masks
             for(auto it = _masks.begin(); it != _masks.end(); ++it)
             {
                 it->second->mouseDownHandler().add(std::bind(&PlayerCreate::onMaskClick, this, std::placeholders::_1));
-                addUI(it->second);
+                addSharedUI(it->second);
             }
 
             _selectedImage = _images.at("stats_1");
@@ -220,7 +224,7 @@ namespace Falltergeist
 
             _title = std::make_shared<UI::TextArea>("", backgroundX+350, backgroundY+275);
             _title->setFont("font2.aaf", {0,0,0,0xff});
-            addUI(_title);
+            addSharedUI(_title);
 
             makeUI<UI::Rectangle>(
                     backgroundPos + Point(350, 300),

@@ -17,10 +17,11 @@ namespace Falltergeist
 
     namespace State
     {
-        PipBoy::PipBoy(std::shared_ptr<UI::IResourceManager> resourceManager) : State()
+        PipBoy::PipBoy(std::shared_ptr<UI::IResourceManager> _resourceManager) :
+            State{},
+            resourceManager{std::move(_resourceManager)},
+            imageButtonFactory{std::make_unique<UI::Factory::ImageButtonFactory>(resourceManager)}
         {
-            this->resourceManager = resourceManager;
-            imageButtonFactory = std::make_unique<UI::Factory::ImageButtonFactory>(resourceManager);
         }
 
         PipBoy::~PipBoy()
@@ -42,7 +43,7 @@ namespace Falltergeist
             Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::BIG_ARROW);
 
             // Background
-            auto& background = *addUI(resourceManager->getImage("art/intrface/pip.frm"));
+            auto& background = addUI(resourceManager->getImage("art/intrface/pip.frm"));
             Point bgPos = Point((Game::getInstance()->renderer()->size() - background.size()) / 2);
             background.setPosition(bgPos);
 
@@ -52,7 +53,7 @@ namespace Falltergeist
             addUI(imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, bgPos.add(53, 394)));
             addUI(imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, bgPos.add(53, 432)));
             addUI(imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, bgPos.add(53, 448)))
-                ->mouseClickHandler().add(std::bind(&PipBoy::onCloseButtonClick, this, std::placeholders::_1));
+                .mouseClickHandler().add(std::bind(&PipBoy::onCloseButtonClick, this, std::placeholders::_1));
 
             // Date and time
 
@@ -60,7 +61,7 @@ namespace Falltergeist
             auto gameTime = Game::getInstance()->gameTime();
 
             {
-                auto& day = *makeUI<UI::SmallCounter>(bgPos.add(21, 17));
+                auto& day = makeUI<UI::SmallCounter>(bgPos.add(21, 17));
                 day.setLength(2);
                 day.setNumber(gameTime->day());
                 day.setColor(UI::SmallCounter::Color::WHITE);
@@ -72,7 +73,7 @@ namespace Falltergeist
             bgPos.add(46, 18));
 
             {
-                auto& year = *makeUI<UI::SmallCounter>(bgPos.add(84, 17));
+                auto& year = makeUI<UI::SmallCounter>(bgPos.add(84, 17));
                 year.setLength(4);
                 year.setNumber(gameTime->year());
                 year.setColor(UI::SmallCounter::Color::WHITE);
@@ -80,7 +81,7 @@ namespace Falltergeist
             }
 
             {
-                auto& time = *makeUI<UI::SmallCounter>(bgPos.add(160, 17));
+                auto& time = makeUI<UI::SmallCounter>(bgPos.add(160, 17));
                 time.setLength(4);
                 time.setNumber((gameTime->hours() * 100) + gameTime->minutes());
                 time.setColor(UI::SmallCounter::Color::WHITE);

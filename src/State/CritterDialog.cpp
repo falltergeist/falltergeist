@@ -48,35 +48,35 @@ namespace Falltergeist
 
             addUI("background", resourceManager->getImage("art/intrface/di_talk.frm"));
 
-            auto question = makeNamedUI<UI::TextArea>("question", 140, -62);
+            auto& question = makeNamedUI<UI::TextArea>("question", 140, -62);
             //auto question = new UI::TextArea("question", 140, -62);
-            question->setSize({375, 53});
+            question.setSize({375, 53});
             // TODO: maybe padding properties should be removed from TextArea to simplify it. Use invisible panel for mouse interactions.
-            question->setPadding({0, 5}, {0, 5});
-            question->setWordWrap(true);
+            question.setPadding({0, 5}, {0, 5});
+            question.setWordWrap(true);
 
             // TODO: maybe move text scrolling into separate UI? Though it is only in two places and works slightly differently...
-            question->mouseClickHandler().add([question](Event::Mouse* event) {
-                Point relPos = event->position() - question->position();
-                if (relPos.y() < (question->size().height() / 2))
+            question.mouseClickHandler().add([&](Event::Mouse* event) {
+                Point relPos = event->position() - question.position();
+                if (relPos.y() < (question.size().height() / 2))
                 {
-                    if (question->lineOffset() > 0)
+                    if (question.lineOffset() > 0)
                     {
-                        question->setLineOffset(question->lineOffset() - 4);
+                        question.setLineOffset(question.lineOffset() - 4);
                     }
                 }
-                else if (question->lineOffset() < question->numLines() - 4)
+                else if (question.lineOffset() < question.numLines() - 4)
                 {
-                    question->setLineOffset(question->lineOffset() + 4);
+                    question.setLineOffset(question.lineOffset() + 4);
                 }
             });
 
-            question->mouseMoveHandler().add([question](Event::Mouse* event) {
-                if (question->numLines() > 4)
+            question.mouseMoveHandler().add([&](Event::Mouse* event) {
+                if (question.numLines() > 4)
                 {
                     auto mouse = Game::getInstance()->mouse();
-                    Point relPos = event->position() - question->position();
-                    auto state = relPos.y() < (question->size().height() / 2)
+                    Point relPos = event->position() - question.position();
+                    auto state = relPos.y() < (question.size().height() / 2)
                         ? Input::Mouse::Cursor::SMALL_UP_ARROW
                         : Input::Mouse::Cursor::SMALL_DOWN_ARROW;
 
@@ -87,16 +87,16 @@ namespace Falltergeist
                 }
             });
 
-            question->mouseOutHandler().add([](Event::Mouse* event) {
+            question.mouseOutHandler().add([](Event::Mouse* event) {
                 Game::getInstance()->mouse()->setState(Input::Mouse::Cursor::BIG_ARROW);
             });
 
             // Interface buttons
-            auto reviewButton = addUI(imageButtonFactory->getByType(ImageButtonType::DIALOG_REVIEW_BUTTON, {13, 154}));
-            reviewButton->mouseClickHandler().add(std::bind(&CritterDialog::onReviewButtonClick, this, std::placeholders::_1));
+            auto& reviewButton = addUI(imageButtonFactory->getByType(ImageButtonType::DIALOG_REVIEW_BUTTON, {13, 154}));
+            reviewButton.mouseClickHandler().add(std::bind(&CritterDialog::onReviewButtonClick, this, std::placeholders::_1));
 
             auto barterButton = addUI(imageButtonFactory->getByType(ImageButtonType::DIALOG_RED_BUTTON, {593, 40}));
-            barterButton->mouseClickHandler().add(std::bind(&CritterDialog::onBarterButtonClick, this, std::placeholders::_1));
+            barterButton.mouseClickHandler().add(std::bind(&CritterDialog::onBarterButtonClick, this, std::placeholders::_1));
         }
 
         // TODO: add auto-text scrolling after 10 seconds (when it's longer than 4 lines)
@@ -245,7 +245,7 @@ namespace Falltergeist
                 y += answer->textSize().height() + 5;
             }
 
-            auto answer = makeUI<UI::TextArea>(line, 140, y);
+            auto answer = makeSharedUI<UI::TextArea>(line, 140, y);
             answer->setWordWrap(true);
             answer->setSize({370, 0});
 

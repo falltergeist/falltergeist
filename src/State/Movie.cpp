@@ -89,7 +89,7 @@ namespace Falltergeist
             auto font0_ffffffff = ResourceManager::getInstance()->font("font1.aaf");
 
             {
-                auto& subLabel = *makeNamedUI<UI::TextArea>("subs", "", 0, 320+35);
+                auto& subLabel = makeNamedUI<UI::TextArea>("subs", "", 0, 320+35);
                 subLabel.setFont(font0_ffffffff, {0xFF, 0xFF, 0xFF, 0xFF});
                 subLabel.setWidth(640);
                 subLabel.setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);

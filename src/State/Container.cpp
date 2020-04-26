@@ -20,15 +20,18 @@ namespace Falltergeist
     {
         using ImageButtonType = UI::Factory::ImageButtonFactory::Type;
 
-        Container::Container(std::shared_ptr<UI::IResourceManager> resourceManager) : State()
+        Container::Container(std::shared_ptr<UI::IResourceManager> _resourceManager) :
+            State{},
+            resourceManager{std::move(_resourceManager)},
+            imageButtonFactory{std::make_unique<UI::Factory::ImageButtonFactory>(resourceManager)}
         {
-            this->resourceManager = resourceManager;
-            imageButtonFactory = std::make_unique<UI::Factory::ImageButtonFactory>(resourceManager);
         }
 
         void Container::init()
         {
-            if (_initialized) return;
+            if (_initialized) {
+                return;
+            }
 
             setModal(true);
             setFullscreen(false);
@@ -45,13 +48,12 @@ namespace Falltergeist
             Graphics::CritterAnimationFactory animationFactory;
 
             {
-                auto dudeCritter = animationFactory.buildStandingAnimation(
+                auto& dudeCritter = addUI(animationFactory.buildStandingAnimation(
                         critterHelper.armorFID(dude.get()),
                         critterHelper.weaponId(dude.get()),
                         Game::Orientation::SC
-                );
-                dudeCritter->setPosition({56, 47});
-                addUI(std::move(dudeCritter));
+                ));
+                dudeCritter.setPosition({56, 47});
             }
 
             {
@@ -61,8 +63,6 @@ namespace Falltergeist
                 objectCopy->ui()->setPosition({432, 38});
                 addUI(std::unique_ptr<UI::Base>{objectCopy->ui()});
             }
-
-
 
             addUI("button_done", imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {478, 331}));
             getUI("button_done")->mouseClickHandler().add(std::bind(&Container::onDoneButtonClick, this, std::placeholders::_1));
@@ -80,64 +80,63 @@ namespace Falltergeist
                 }
             };
 
-            auto dudeList = std::shared_ptr<UI::ItemsList>{new UI::ItemsList({174, 35})};
-            dudeList->setItems(Game::getInstance()->player()->inventory());
+            auto& dudeList = makeUI<UI::ItemsList>(Point{174, 35});
+            dudeList.setItems(Game::getInstance()->player()->inventory());
 
             {
                 auto dudeListScrollUpButton = imageButtonFactory->getByType(ImageButtonType::DIALOG_UP_ARROW, {127, 40});
-                dudeListScrollUpButton->mouseClickHandler().add([=](...) {
-                    scrollUp(*dudeList);
+                dudeListScrollUpButton->mouseClickHandler().add([&](...) {
+                    scrollUp(dudeList);
                 });
                 addUI(std::move(dudeListScrollUpButton));
             }
 
             {
                 auto dudeListScrollDownButton = imageButtonFactory->getByType(ImageButtonType::DIALOG_DOWN_ARROW, {127, 66});
-                dudeListScrollDownButton->mouseClickHandler().add([=](...) {
-                    scrollDown(*dudeList);
+                dudeListScrollDownButton->mouseClickHandler().add([&](...) {
+                    scrollDown(dudeList);
                 });
                 addUI(std::move(dudeListScrollDownButton));
             }
 
-            auto containerList = std::shared_ptr<UI::ItemsList>{new UI::ItemsList({292, 35})};
-            containerList->setItems(object()->inventory());
-            addUI(containerList);
+            auto& containerList = makeUI<UI::ItemsList>(Point{292, 35});
+            containerList.setItems(object()->inventory());
 
             {
                 auto containerListScrollUpButton = imageButtonFactory->getByType(ImageButtonType::DIALOG_UP_ARROW, {379, 40});
-                containerListScrollUpButton->mouseClickHandler().add([=](...) {
-                    scrollUp(*containerList);
+                containerListScrollUpButton->mouseClickHandler().add([&](...) {
+                    scrollUp(containerList);
                 });
                 addUI(std::move(containerListScrollUpButton));
             }
 
             {
                 auto containerListScrollDownButton = imageButtonFactory->getByType(ImageButtonType::DIALOG_DOWN_ARROW, {379, 66});
-                containerListScrollDownButton->mouseClickHandler().add([=](...) {
-                    scrollDown(*containerList);
+                containerListScrollDownButton->mouseClickHandler().add([&](...) {
+                    scrollDown(containerList);
                 });
                 addUI(std::move(containerListScrollDownButton));
             }
 
             {
                 auto btnTakeAll = imageButtonFactory->getByType(ImageButtonType::INVENTORY_TAKE_ALL, {432, 203});
-                btnTakeAll->mouseClickHandler().add([=](...) {
+                btnTakeAll->mouseClickHandler().add([&](...) {
 
-                    for (const auto &i : *containerList->items()) {
-                        dudeList->items()->push_back(i);
+                    for (const auto &i : *containerList.items()) {
+                        dudeList.items()->push_back(i);
                     }
-                    containerList->items()->clear();
-                    containerList->update();
-                    dudeList->update();
+                    containerList.items()->clear();
+                    containerList.update();
+                    dudeList.update();
                 });
                 addUI(std::move(btnTakeAll));
             }
 
-            dudeList->itemDragStopHandler().add([containerList](Event::Mouse* event){
-                containerList->onItemDragStop(event);
+            dudeList.itemDragStopHandler().add([&](Event::Mouse* event){
+                containerList.onItemDragStop(event);
             });
-            containerList->itemDragStopHandler().add([dudeList](Event::Mouse* event){
-                dudeList->onItemDragStop(event);
+            containerList.itemDragStopHandler().add([&](Event::Mouse* event){
+                dudeList.onItemDragStop(event);
             });
         }
 

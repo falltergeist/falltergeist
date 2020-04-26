@@ -1,7 +1,7 @@
 #pragma once
 
-#include <memory>
 #include "../Event/Handler.h"
+#include <memory>
 
 namespace Falltergeist
 {

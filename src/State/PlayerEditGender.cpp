@@ -39,12 +39,12 @@ namespace Falltergeist
             int bgY = bgPos.y();
 
             {
-                auto& bg = *addUI(resourceManager->getImage("art/intrface/charwin.frm"));
+                auto& bg = *addSharedUI(resourceManager->getImage("art/intrface/charwin.frm"));
                 bg.setPosition(bgPos.add(236, 0));
             }
 
             {
-                _maleImage = makeUI<UI::ImageList>(
+                _maleImage = makeSharedUI<UI::ImageList>(
                         bgPos.add(260, 2),
                         std::vector<std::shared_ptr<UI::Image>> {
                                 resourceManager->getImage("art/intrface/maleoff.frm"),
@@ -54,7 +54,7 @@ namespace Falltergeist
             }
 
             {
-                _femaleImage = makeUI<UI::ImageList>(
+                _femaleImage = makeSharedUI<UI::ImageList>(
                         bgPos.add(310, 2),
                         std::vector<std::shared_ptr<UI::Image>>{
                                 resourceManager->getImage("art/intrface/femoff.frm"),
@@ -64,17 +64,17 @@ namespace Falltergeist
             }
 
             {
-                auto& doneBox = *addUI(resourceManager->getImage("art/intrface/donebox.frm"));
+                auto& doneBox = *addSharedUI(resourceManager->getImage("art/intrface/donebox.frm"));
                 doneBox.setPosition(bgPos.add(250, 42));
             }
 
             {
-                auto& doneLabel = *makeUI<UI::TextArea>(_t(MSG_EDITOR, 100), bgX+281, bgY+45);
+                auto& doneLabel = makeUI<UI::TextArea>(_t(MSG_EDITOR, 100), bgX+281, bgY+45);
                 doneLabel.setFont("font3.aaf", {0xb8, 0x9c, 0x28, 0xff});
             }
 
             {
-                auto& doneButton = *addUI(imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {bgX + 260, bgY + 45}));
+                auto& doneButton = addUI(imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {bgX + 260, bgY + 45}));
                 doneButton.mouseClickHandler().add(std::bind(&PlayerEditGender::onDoneButtonClick, this, std::placeholders::_1));
             }
 

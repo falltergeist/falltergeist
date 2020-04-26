@@ -42,10 +42,12 @@ namespace Falltergeist
                 void onStateActivate(Event::State* event) override;
                 void onStateDeactivate(Event::State* event) override;
 
+            private:
+                std::shared_ptr<UI::IResourceManager> resourceManager;
             protected:
                 Game::Object* _object = nullptr;
-                bool _onlyShowIcon;
                 std::vector<Input::Mouse::Icon> _icons;
+                bool _onlyShowIcon;
                 int _initialX;
                 int _initialY;
                 int _currentIcon = 0;
@@ -59,8 +61,6 @@ namespace Falltergeist
                 Event::MouseHandler _mouseDownHandler, _mouseUpHandler, _mouseMoveHandler;
 
                 void showMenu();
-            private:
-                std::shared_ptr<UI::IResourceManager> resourceManager;
         };
     }
 }

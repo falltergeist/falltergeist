@@ -43,11 +43,11 @@ namespace Falltergeist
             auto game = Game::getInstance();
 
             // background
-            auto bg = addUI(resourceManager->getImage("art/intrface/lsgame.frm"));
-            Point bgPos = Point((game->renderer()->size() - bg->size()) / 2);
+            auto& bg = addUI(resourceManager->getImage("art/intrface/lsgame.frm"));
+            Point bgPos = Point((game->renderer()->size() - bg.size()) / 2);
             auto bgX = bgPos.x();
             auto bgY = bgPos.y();
-            bg->setPosition(bgPos);
+            bg.setPosition(bgPos);
 
             // BUTTONS
 
@@ -58,13 +58,13 @@ namespace Falltergeist
 
             // button: Done
             addUI(imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {bgX + 391, bgY + 349}))
-                ->mouseClickHandler().add([this](Event::Mouse* event) {
+                .mouseClickHandler().add([this](Event::Mouse* event) {
                     this->onDoneButtonClick(event);
                 });
 
             // button: Cancel
             addUI(imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {bgX + 495, bgY + 349}))
-                ->mouseClickHandler().add([this](Event::Event* event){
+                .mouseClickHandler().add([this](Event::Event* event){
                     this->doCancel();
                 });
 
@@ -75,15 +75,15 @@ namespace Falltergeist
 
             // LOAD GAME LABEL
             makeUI<UI::TextArea>(_t(MSG_LOAD_SAVE, 110), bgX+48, bgY+27)
-                    ->setFont(font3_907824ff, color);
+                    .setFont(font3_907824ff, color);
 
             // DONE BUTTON LABEL
             makeUI<UI::TextArea>(_t(MSG_OPTIONS, 300), bgX+410, bgY+348)
-                    ->setFont(font3_907824ff, color);
+                    .setFont(font3_907824ff, color);
 
             // CANCEL BUTTON LABEL
             makeUI<UI::TextArea>(_t(MSG_OPTIONS, 121), bgX+515, bgY+348)
-                    ->setFont(font3_907824ff, color);
+                    .setFont(font3_907824ff, color);
         }
 
         void LoadGame::onDoneButtonClick(Event::Mouse* event)

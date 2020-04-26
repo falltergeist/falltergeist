@@ -48,28 +48,29 @@ namespace Falltergeist
             setPosition((renderer->size() - Point(640, 480)) / 2);
 
             addUI("background", resourceManager->getImage("art/intrface/pickchar.frm"));
+
             addUI(imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {81, 322}))
-                ->mouseClickHandler().add([this](Event::Mouse* e) {
+                .mouseClickHandler().add([this](Event::Mouse* e) {
                     this->onBeginGameButtonClick(e);
                 });
             addUI(imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {436, 319}))
-                ->mouseClickHandler().add([this](Event::Mouse* e) {
+                .mouseClickHandler().add([this](Event::Mouse* e) {
                     this->onEditButtonClick(e);
                 });
             addUI(imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {81, 424}))
-                ->mouseClickHandler().add([this](Event::Mouse* e) {
+                .mouseClickHandler().add([this](Event::Mouse* e) {
                     this->onCreateButtonClick(e);
                 });
             addUI(imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {461, 424}))
-                ->mouseClickHandler().add([this](Event::Mouse* e) {
+                .mouseClickHandler().add([this](Event::Mouse* e) {
                     this->onBackButtonClick(e);
                 });
             addUI(imageButtonFactory->getByType(ImageButtonType::LEFT_ARROW, {292, 320}))
-                ->mouseClickHandler().add([this](Event::Mouse* e) {
+                .mouseClickHandler().add([this](Event::Mouse* e) {
                     this->onPrevCharacterButtonClick(e);
                 });
             addUI(imageButtonFactory->getByType(ImageButtonType::RIGHT_ARROW, {318, 320}))
-                ->mouseClickHandler().add([this](Event::Mouse* e) {
+                .mouseClickHandler().add([this](Event::Mouse* e) {
                     this->onNextCharacterButtonClick(e);
                 });
             makeNamedUI<UI::ImageList>("images", Point{27, 23}, std::vector<std::shared_ptr<UI::Image>>{
@@ -80,7 +81,7 @@ namespace Falltergeist
             makeNamedUI<UI::TextArea>("name", 300, 40);
 
             {
-                auto& stats1 = *makeNamedUI<UI::TextArea>("stats_1", 0, 70);
+                auto& stats1 = makeNamedUI<UI::TextArea>("stats_1", 0, 70);
                 stats1.setWidth(362);
                 stats1.setHorizontalAlign(UI::TextArea::HorizontalAlign::RIGHT);
             }
@@ -89,7 +90,7 @@ namespace Falltergeist
             makeNamedUI<UI::TextArea>("bio", 437, 40);
 
             {
-                auto& stats3 = *makeNamedUI<UI::TextArea>("stats_3", 294, 150);
+                auto& stats3 = makeNamedUI<UI::TextArea>("stats_3", 294, 150);
                 stats3.setWidth(85);
                 stats3.setHorizontalAlign(UI::TextArea::HorizontalAlign::RIGHT);
             }

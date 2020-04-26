@@ -22,9 +22,10 @@ namespace Falltergeist
 
     namespace State
     {
-        Start::Start(std::shared_ptr<UI::IResourceManager> resourceManager) : State()
+        Start::Start(std::shared_ptr<UI::IResourceManager> _resourceManager) :
+            State{},
+            resourceManager{std::move(_resourceManager)}
         {
-            this->resourceManager = std::move(resourceManager);
         }
 
         void Start::init()
@@ -32,6 +33,7 @@ namespace Falltergeist
             if (_initialized) {
                 return;
             }
+
             State::init();
 
             setModal(true);

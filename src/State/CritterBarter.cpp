@@ -20,10 +20,11 @@ namespace Falltergeist
     {
         using ImageButtonType = UI::Factory::ImageButtonFactory::Type;
 
-        CritterBarter::CritterBarter(std::shared_ptr<UI::IResourceManager> resourceManager) : State()
+        CritterBarter::CritterBarter(std::shared_ptr<UI::IResourceManager> _resourceManager) :
+            State{},
+            resourceManager{std::move(_resourceManager)},
+            imageButtonFactory{std::make_unique<UI::Factory::ImageButtonFactory>(resourceManager)}
         {
-            this->resourceManager = resourceManager;
-            imageButtonFactory = std::make_unique<UI::Factory::ImageButtonFactory>(resourceManager);
         }
 
         CritterBarter::~CritterBarter()
@@ -82,7 +83,6 @@ namespace Falltergeist
                 addUI("reaction", std::move(reaction));
             }
 
-
             addUI("offerButton", imageButtonFactory->getByType(ImageButtonType::DIALOG_RED_BUTTON, {40, 162}));
             getUI("offerButton")->mouseClickHandler().add(std::bind(&CritterBarter::onOfferButtonClick, this, std::placeholders::_1));
 
@@ -103,7 +103,7 @@ namespace Falltergeist
             auto mineList = std::shared_ptr<UI::ItemsList>{new UI::ItemsList({ 104, 35 })};
             mineList->setSlotsNumber(3);
             mineList->setItems(Game::getInstance()->player()->inventory());
-            addUI("mineList", mineList);
+            addSharedUI("mineList", mineList);
 
             {
                 auto mineInventoryScrollUpButton = imageButtonFactory->getByType(ImageButtonType::DIALOG_UP_ARROW, {190, 56});
@@ -124,7 +124,7 @@ namespace Falltergeist
             auto sellList = std::shared_ptr<UI::ItemsList>{new UI::ItemsList({ 244, 20 })};
             sellList->setItems(&_itemsToSell);
             sellList->setSlotsNumber(3);
-            addUI("sellList", sellList);
+            addSharedUI("sellList", sellList);
 
             {
                 auto sellInventoryScrollUpButton = imageButtonFactory->getByType(ImageButtonType::INVENTORY_UP_ARROW, {208, 114});
@@ -145,7 +145,7 @@ namespace Falltergeist
             auto theirsList = std::shared_ptr<UI::ItemsList>{new UI::ItemsList({ 470, 35 })};
             theirsList->setItems(trader()->inventory());
             theirsList->setSlotsNumber(3);
-            addUI("theirsList", theirsList);
+            addSharedUI("theirsList", theirsList);
 
             {
                 auto theirsInventoryScrollUpButton = imageButtonFactory->getByType(ImageButtonType::DIALOG_UP_ARROW, {421, 56});
@@ -166,7 +166,7 @@ namespace Falltergeist
             auto buyList = std::shared_ptr<UI::ItemsList>{new UI::ItemsList({ 330, 20 })};
             buyList->setItems(&_itemsToBuy);
             buyList->setSlotsNumber(3);
-            addUI("buyList", buyList);
+            addSharedUI("buyList", buyList);
 
             {
                 auto buyInventoryScrollUpButton = imageButtonFactory->getByType(ImageButtonType::INVENTORY_UP_ARROW, {413, 114});
@@ -185,30 +185,28 @@ namespace Falltergeist
             }
 
             {
-                auto sellPriceText = std::shared_ptr<UI::TextArea>{new UI::TextArea("$0", 246, 168)};
-                sellPriceText->setColor({255, 255, 255, 0});
-                sellList->itemsListModifiedHandler().add([this, sellPriceText](Event::Event*) {
+                auto& sellPriceText = makeNamedUI<UI::TextArea>("sellPriceText","$0", 246, 168);
+                sellPriceText.setColor({255, 255, 255, 0});
+                sellList->itemsListModifiedHandler().add([&](Event::Event*) {
                     _sellPriceTotal = 0;
                     for (const auto &v : _itemsToSell) {
                         _sellPriceTotal += v->price() * v->amount();
                     }
-                    sellPriceText->setText("$" + std::to_string(_sellPriceTotal));
+                    sellPriceText.setText("$" + std::to_string(_sellPriceTotal));
                 });
-                addUI("sellPriceText", sellPriceText);
             }
 
             {
-                auto buyPriceText = std::shared_ptr<UI::TextArea>{new UI::TextArea("$0", 334, 168)};
-                buyPriceText->setColor({ 255, 255, 255, 0 });
-                buyList->itemsListModifiedHandler().add([this, buyPriceText](Event::Event*) {
+                auto& buyPriceText = makeNamedUI<UI::TextArea>("buyPriceText", "$0", 334, 168);
+                buyPriceText.setColor({ 255, 255, 255, 0 });
+                buyList->itemsListModifiedHandler().add([&](Event::Event*) {
                     _buyPriceTotal = 0;
                     for (const auto &v : _itemsToBuy) {
                         // TODO: apply barter skill + Master Trader perk + Reaction (mood?) modifier
                         _buyPriceTotal += v->price() * v->amount();
                     }
-                    buyPriceText->setText("$" + std::to_string(_buyPriceTotal));
+                    buyPriceText.setText("$" + std::to_string(_buyPriceTotal));
                 });
-                addUI("buyPriceText", buyPriceText);
             }
 
             mineList->itemDragStopHandler().add([=](Event::Mouse* event){

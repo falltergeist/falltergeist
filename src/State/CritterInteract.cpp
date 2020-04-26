@@ -1,5 +1,3 @@
-#include <cstdio>
-#include <memory>
 #include "../State/CritterInteract.h"
 #include "../Format/Lst/File.h"
 #include "../Format/Lip/File.h"
@@ -21,6 +19,9 @@
 #include "../UI/AnimationQueue.h"
 #include "../UI/Factory/ImageButtonFactory.h"
 #include "../Audio/Mixer.h"
+
+#include <cstdio>
+#include <memory>
 
 namespace Falltergeist
 {
@@ -93,7 +94,7 @@ namespace Falltergeist
                     std::string bgImage = "art/backgrnd/" + lst->strings()->at(backgroundID());
                     auto bg = resourceManager->getImage(bgImage);
                     bg->setPosition({128, 15});
-                    addUI(std::move(bg));
+                    addSharedUI(std::move(bg));
                 }
 
                 auto headlst = ResourceManager::getInstance()->lstFileType("art/heads/heads.lst");
@@ -134,26 +135,24 @@ namespace Falltergeist
                 headImage+="gf1.frm";
 
                 {
-                    auto head = makeNamedUI<UI::AnimationQueue>("head");
-                    head->animations().push_back(std::make_unique<UI::Animation>("art/heads/" + headImage));
+                    auto& head = makeNamedUI<UI::AnimationQueue>("head");
+                    head.animations().push_back(std::make_unique<UI::Animation>("art/heads/" + headImage));
 
-                    int offset = 388/2 - head->currentAnimation()->width()/2;
-                    head->setPosition({128+offset, 15});
+                    int offset = 388/2 - head.currentAnimation()->width()/2;
+                    head.setPosition({128+offset, 15});
                 }
             }
 
             addUI("background", resourceManager->getImage("art/intrface/alltlk.frm"));
 
             {
-                auto hilight1 = resourceManager->getImage("data/hilight1.png");
-                hilight1->setPosition({423, 20});
-                addUI(std::move(hilight1));
+                auto& hilight1 = addUI(resourceManager->getImage("data/hilight1.png"));
+                hilight1.setPosition({423, 20});
             }
 
             {
-                auto hilight2 = resourceManager->getImage("data/hilight2.png");
-                hilight2->setPosition({128, 84});
-                addUI(std::move(hilight2));
+                auto& hilight2 = addUI(resourceManager->getImage("data/hilight2.png"));
+                hilight2.setPosition({128, 84});
             }
 
             // Centering camera on critter position

@@ -57,16 +57,16 @@ namespace Falltergeist
             std::shared_ptr<Graphics::Renderer> renderer,
             std::shared_ptr<Audio::Mixer> audioMixer,
             std::shared_ptr<Game::Time> gameTime,
-            std::shared_ptr<UI::IResourceManager> resourceManager
+            std::shared_ptr<UI::IResourceManager> _resourceManager
         ) : State(),
             player(std::move(player)),
             mouse(std::move(mouse)),
             settings(std::move(settings)),
             renderer(std::move(renderer)),
             audioMixer(std::move(audioMixer)),
-            gameTime(std::move(gameTime))
+            gameTime(std::move(gameTime)),
+            resourceManager{std::move(_resourceManager)}
         {
-            this->resourceManager = resourceManager;
         }
 
         void Location::init()
@@ -180,7 +180,7 @@ namespace Falltergeist
 
             initLight();
 
-            _playerPanel = makeUI<UI::PlayerPanel>();
+            _playerPanel = makeSharedUI<UI::PlayerPanel>();
 
             _mouseDownHandler.add(std::bind(&Location::onMouseDown, this, std::placeholders::_1));
             _mouseUpHandler.add(std::bind(&Location::onMouseUp, this, std::placeholders::_1));

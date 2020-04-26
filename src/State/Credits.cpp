@@ -87,7 +87,7 @@ namespace Falltergeist
                 tx->setSize({640, 0});
                 tx->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
                 y += tx->textSize().height() + cur_font->verticalGap() + additionalGap;
-                addUI(tx);
+                addSharedUI(tx);
                 _lines.emplace_back(std::move(tx));
             }
 

@@ -35,35 +35,30 @@ namespace Falltergeist
             setFullscreen(false);
             setModal(false);
 
-            auto background = resourceManager->getImage("art/intrface/review.frm");
-            Point backgroundPos = Point((Game::getInstance()->renderer()->size() - background->size()) / 2);
-            background->setPosition(backgroundPos);
-            addUI(std::move(background));
+            auto& background = addUI(resourceManager->getImage("art/intrface/review.frm"));
+            Point backgroundPos = Point((Game::getInstance()->renderer()->size() - background.size()) / 2);
+            background.setPosition(backgroundPos);
 
             // Interface buttons
 
             {
-                auto doneButton = imageButtonFactory->getByType(ImageButtonType::DIALOG_DONE_BUTTON, backgroundPos + Point(500, 398));
-                doneButton->mouseClickHandler().add(std::bind(&CritterDialogReview::onDoneButtonClick, this, std::placeholders::_1));
-                addUI(std::move(doneButton));
+                auto& doneButton = addUI(imageButtonFactory->getByType(ImageButtonType::DIALOG_DONE_BUTTON, backgroundPos + Point(500, 398)));
+                doneButton.mouseClickHandler().add(std::bind(&CritterDialogReview::onDoneButtonClick, this, std::placeholders::_1));
             }
 
             {
-                auto upButton = imageButtonFactory->getByType(ImageButtonType::DIALOG_BIG_UP_ARROW, backgroundPos + Point(476, 154));
-                upButton->mouseClickHandler().add(std::bind(&CritterDialogReview::onUpButtonClick, this, std::placeholders::_1));
-                addUI(std::move(upButton));
+                auto& upButton = addUI(imageButtonFactory->getByType(ImageButtonType::DIALOG_BIG_UP_ARROW, backgroundPos + Point(476, 154)));
+                upButton.mouseClickHandler().add(std::bind(&CritterDialogReview::onUpButtonClick, this, std::placeholders::_1));
             }
 
             {
-                auto downButton = imageButtonFactory->getByType(ImageButtonType::DIALOG_BIG_DOWN_ARROW, backgroundPos + Point(476, 192));
-                downButton->mouseClickHandler().add(std::bind(&CritterDialogReview::onDownButtonClick, this, std::placeholders::_1));
-                addUI(std::move(downButton));
+                auto& downButton = addUI(imageButtonFactory->getByType(ImageButtonType::DIALOG_BIG_DOWN_ARROW, backgroundPos + Point(476, 192)));
+                downButton.mouseClickHandler().add(std::bind(&CritterDialogReview::onDownButtonClick, this, std::placeholders::_1));
             }
 
             {
-                auto list = std::make_unique<UI::TextAreaList>(Point{88, 76});
-                list->setSize(Size(340,340));
-                addUI("list", std::move(list));
+                auto& list = makeNamedUI<UI::TextAreaList>("list", Point{88, 76});
+                list.setSize(Size(340,340));
             }
         }
 

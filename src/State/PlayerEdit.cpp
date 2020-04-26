@@ -1,6 +1,3 @@
-#include <memory>
-#include <sstream>
-
 #include "../State/PlayerEdit.h"
 #include "../Font.h"
 #include "../functions.h"
@@ -20,21 +17,28 @@
 #include "../UI/TextAreaList.h"
 #include "../UI/Rectangle.h"
 
+#include <memory>
+#include <sstream>
+
 namespace Falltergeist
 {
     using ImageButtonType = UI::Factory::ImageButtonFactory::Type;
 
     namespace State
     {
-        PlayerEdit::PlayerEdit(std::shared_ptr<UI::IResourceManager> resourceManager) : State()
+        PlayerEdit::PlayerEdit(std::shared_ptr<UI::IResourceManager> _resourceManager) :
+            State{},
+            resourceManager{std::move(_resourceManager)},
+            imageButtonFactory{std::make_unique<UI::Factory::ImageButtonFactory>(resourceManager)}
         {
-            this->resourceManager = resourceManager;
-            imageButtonFactory = std::make_unique<UI::Factory::ImageButtonFactory>(resourceManager);
         }
 
         void PlayerEdit::init()
         {
-            if (_initialized) return;
+            if (_initialized) {
+                return;
+            }
+
             State::init();
 
             setModal(true);
@@ -48,7 +52,7 @@ namespace Falltergeist
             int backgroundX = backgroundPos.x();
             int backgroundY = backgroundPos.y();
             background->setPosition(backgroundPos);
-            addUI("bg",background);
+            addSharedUI("bg", background);
 
             // STATS
             std::string imagesStats[] = { "strength", "perceptn", "endur", "charisma", "intel", "agility", "luck"};
@@ -206,25 +210,25 @@ namespace Falltergeist
             //_addButton("name",  std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_PLAYER_NAME, backgroundX+13, backgroundY+0)));
             auto nameLabel = resourceManager->getImage("art/intrface/nameoff.frm");
             nameLabel->setPosition(backgroundPos + Point(13, 0));
-            addUI(nameLabel);
+            addSharedUI(nameLabel);
 
             // Age label -- ex Age change button
             //_addButton("age",  std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_PLAYER_AGE, backgroundX+156, backgroundY+0)));
             auto ageLabel = resourceManager->getImage("art/intrface/ageoff.frm");
             ageLabel->setPosition(backgroundPos + Point(156, 0));
-            addUI(ageLabel);
+            addSharedUI(ageLabel);
 
             // Gender label -- ex Gender change button
             //_addButton("gender",  std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_PLAYER_GENDER, backgroundX+236, backgroundY+0)));
             auto genderLabel = resourceManager->getImage("art/intrface/sexoff.frm");
             genderLabel->setPosition(backgroundPos + Point(236, 0));
-            addUI(genderLabel);
+            addSharedUI(genderLabel);
 
             // add buttons to the state
             for(auto it = _buttons.begin(); it != _buttons.end(); ++it)
             {
                 it->second->mouseClickHandler().add(std::bind(&PlayerEdit::onButtonClick, this, std::placeholders::_1));
-                addUI(it->second);
+                addSharedUI(it->second);
             }
 
             // add labels to the state
@@ -232,20 +236,20 @@ namespace Falltergeist
             for(auto it = _labels.rbegin(); it != _labels.rend(); ++it)
             {
                 it->second->mouseDownHandler().add(std::bind(&PlayerEdit::onLabelClick, this, std::placeholders::_1));
-                addUI(it->second);
+                addSharedUI(it->second);
             }
 
             // add counters to the state
             for(auto it = _counters.begin(); it != _counters.end(); ++it)
             {
-                addUI(it->second);
+                addSharedUI(it->second);
             }
 
             // add hidden masks
             for(auto it = _masks.begin(); it != _masks.end(); ++it)
             {
                 it->second->mouseDownHandler().add(std::bind(&PlayerEdit::onMaskClick, this, std::placeholders::_1));
-                addUI(it->second);
+                addSharedUI(it->second);
             }
 
             _selectedImage = _images.at("stats_1");
@@ -254,7 +258,7 @@ namespace Falltergeist
 
             _title = std::make_shared<UI::TextArea>("", backgroundX+350, backgroundY+275);
             _title->setFont("font2.aaf", {0,0,0,0xff});
-            addUI(_title);
+            addSharedUI(_title);
 
             makeUI<UI::Rectangle>(
                     backgroundPos + Point(350, 300),
@@ -267,7 +271,7 @@ namespace Falltergeist
             _description->setWordWrap(true);
 
             // TABS
-            auto tabs = makeNamedUI<UI::ImageList>(
+            auto& tabs = makeNamedUI<UI::ImageList>(
                     "tabs",
                     Point{backgroundX + 10, backgroundY + 325},
                     std::vector<std::shared_ptr<UI::Image>>{
@@ -275,34 +279,34 @@ namespace Falltergeist
                             {resourceManager->getImage("art/intrface/karmafdr.frm")},
                             {resourceManager->getImage("art/intrface/killsfdr.frm")}
                     });
-            tabs->mouseClickHandler().add(std::bind(&PlayerEdit::onTabClick, this, std::placeholders::_1));
+            tabs.mouseClickHandler().add(std::bind(&PlayerEdit::onTabClick, this, std::placeholders::_1));
 
             // Tab labels: perks, karma, kills
             for (unsigned int i = 0; i < 3; i++) {
-                auto tab = makeNamedUI<UI::TextArea>(
+                auto& tab = makeNamedUI<UI::TextArea>(
                         "tab_" + std::to_string(i),
                         _t(MSG_EDITOR, 109+i),
                         backgroundX+10+35+(100*i),
                         backgroundY+325+7+(i == 0 ? -1 : 1));
-                tab->setFont(font3_b89c28ff, color);
+                tab.setFont(font3_b89c28ff, color);
             }
 
-            Point tabContentPos = tabs->position() + Point(25, 45);
+            Point tabContentPos = tabs.position() + Point(25, 45);
 
             // Perks and traits
-            auto perksAndTraits = makeNamedUI<UI::TextAreaList>("tab_perks", tabContentPos);
-            perksAndTraits->setSize({ 0, 100 });
+            auto& perksAndTraits = makeNamedUI<UI::TextAreaList>("tab_perks", tabContentPos);
+            perksAndTraits.setSize({ 0, 100 });
 
             auto traits = new UI::TextArea(_t(MSG_EDITOR, 156), {0, 0});
             traits->setWidth(270);
             traits->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
-            perksAndTraits->addArea(std::unique_ptr<UI::TextArea>(traits));
+            perksAndTraits.addArea(std::unique_ptr<UI::TextArea>(traits));
 
             for (unsigned i = static_cast<unsigned>(TRAIT::FAST_METABOLISM); i <= static_cast<unsigned>(TRAIT::GIFTED); i++)
             {
                 if (player->traitTagged(static_cast<TRAIT>(i)))
                 {
-                    perksAndTraits->addArea(std::make_unique<UI::TextArea>(
+                    perksAndTraits.addArea(std::make_unique<UI::TextArea>(
                             _t(MSG_TRAITS, 100 + i),
                             Point{0,0}));
                 }
@@ -314,14 +318,14 @@ namespace Falltergeist
                         Point{0, 0});
                 perks->setWidth(270);
                 perks->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
-                perksAndTraits->addArea(std::move(perks));
+                perksAndTraits.addArea(std::move(perks));
             }
 
             // Karma overview
-            auto karma = makeNamedUI<UI::TextAreaList>("tab_karma", tabContentPos);
-            karma->setSize({ 0, 100 });
-            karma->setVisible(false);
-            karma->addArea(std::make_unique<UI::TextArea>(
+            auto& karma = makeNamedUI<UI::TextAreaList>("tab_karma", tabContentPos);
+            karma.setSize({ 0, 100 });
+            karma.setVisible(false);
+            karma.addArea(std::make_unique<UI::TextArea>(
                     _t(MSG_EDITOR, 125),
                     Point{0, 0}));
 
@@ -329,36 +333,40 @@ namespace Falltergeist
                 auto reputation = new UI::TextArea(_t(MSG_EDITOR, 4000), {0, 0});
                 reputation->setWidth(270);
                 reputation->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
-                karma->addArea(std::unique_ptr<UI::TextArea>(reputation));
+                karma.addArea(std::unique_ptr<UI::TextArea>(reputation));
             }
 
             // Killing statistics
-            auto killEnemyNames = makeNamedUI<UI::TextAreaList>("tab_kills_enemies", tabContentPos);
-            killEnemyNames->setSize({ 0, 100 });
-            killEnemyNames->setVisible(false);
+            auto& killEnemyNames = makeNamedUI<UI::TextAreaList>("tab_kills_enemies", tabContentPos);
+            killEnemyNames.setSize({ 0, 100 });
+            killEnemyNames.setVisible(false);
 
-            auto killEnemyScore = makeNamedUI<UI::TextAreaList>(
+            auto& killEnemyScore = makeNamedUI<UI::TextAreaList>(
                     "tab_kills_score",
                     tabContentPos + Point(270, 0));
-            killEnemyScore->setSize({ 0, 100 });
-            killEnemyScore->setVisible(false);
+            killEnemyScore.setSize({ 0, 100 });
+            killEnemyScore.setVisible(false);
 
 
             // TODO: _underline_. Just for testing. Real kill stats should be stored in a map inside DudeObject(?)
             for (unsigned int i = 0; i < 19; i++) {
-                killEnemyNames->addArea(std::unique_ptr<UI::TextArea>(new UI::TextArea(_t(MSG_PROTO, 1450+i), {0, 0})));
-                killEnemyScore->addArea(std::unique_ptr<UI::TextArea>(new UI::TextArea(std::to_string(i), {0, 0})));
+                killEnemyNames.addArea(std::unique_ptr<UI::TextArea>(new UI::TextArea(_t(MSG_PROTO, 1450+i), {0, 0})));
+                killEnemyScore.addArea(std::unique_ptr<UI::TextArea>(new UI::TextArea(std::to_string(i), {0, 0})));
             }
 
             {
                 auto tabsArrowUp = imageButtonFactory->getByType(ImageButtonType::SMALL_UP_ARROW, {backgroundX + 317, backgroundY + 363});
-                tabsArrowUp->mouseClickHandler().add([=](...) {
-                    switch (tabs->currentImage()) {
-                        case 0: perksAndTraits->scrollUp();
+                tabsArrowUp->mouseClickHandler().add([&](...) {
+                    switch (tabs.currentImage()) {
+                        case 0:
+                            perksAndTraits.scrollUp();
                             break;
-                        case 1: karma->scrollUp();
+                        case 1:
+                            karma.scrollUp();
                             break;
-                        case 2: killEnemyNames->scrollUp(); killEnemyScore->scrollUp();
+                        case 2:
+                            killEnemyNames.scrollUp();
+                            killEnemyScore.scrollUp();
                             break;
                     }
                 });
@@ -367,13 +375,17 @@ namespace Falltergeist
 
             {
                 auto tabsArrowDown = imageButtonFactory->getByType(ImageButtonType::SMALL_DOWN_ARROW, {backgroundX + 317, backgroundY + 376});
-                tabsArrowDown->mouseClickHandler().add([=](...) {
-                    switch (tabs->currentImage()) {
-                        case 0: perksAndTraits->scrollDown();
+                tabsArrowDown->mouseClickHandler().add([&](...) {
+                    switch (tabs.currentImage()) {
+                        case 0:
+                            perksAndTraits.scrollDown();
                             break;
-                        case 1: karma->scrollDown();
+                        case 1:
+                            karma.scrollDown();
                             break;
-                        case 2: killEnemyNames->scrollDown(); killEnemyScore->scrollDown();
+                        case 2:
+                            killEnemyNames.scrollDown();
+                            killEnemyScore.scrollDown();
                             break;
                     }
                 });
