@@ -20,3 +20,9 @@ CMakeSettings.json
 /cmake-build-debug
 *.dat
 .vscode/
+/conan.lock
+/conan_imports_manifest.txt
+/conanbuildinfo.cmake
+/conanbuildinfo.txt
+/conaninfo.txt
+/graph_info.json
