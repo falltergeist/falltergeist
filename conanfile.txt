@@ -5,6 +5,7 @@ sdl2_image/2.0.5@bincrafters/stable
 sdl2_mixer/2.0.4@bincrafters/stable
 glew/2.1.0@bincrafters/stable
 glm/0.9.9.5@g-truc/stable
+libiconv/1.16@_/_
 
 [generators]
 cmake
