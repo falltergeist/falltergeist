@@ -44,8 +44,8 @@ namespace Falltergeist
                     GLES2
                 };
 
-                Renderer(RendererConfig cfg);
-                Renderer(int width, int height);
+                Renderer(const RendererConfig& cfg);
+                Renderer(unsigned int width, unsigned int height);
                 Renderer(Size size);
                 ~Renderer();
 

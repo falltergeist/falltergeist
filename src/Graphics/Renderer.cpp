@@ -22,7 +22,7 @@ namespace Falltergeist
 {
     namespace Graphics
     {
-        Renderer::Renderer(RendererConfig cfg) : _config{cfg}
+        Renderer::Renderer(const RendererConfig& cfg) : _config{cfg}
         {
             std::string message = "Renderer initialization - ";
             if (SDL_InitSubSystem(SDL_INIT_VIDEO) < 0)
@@ -33,11 +33,23 @@ namespace Falltergeist
             Logger::info("VIDEO") << message + "[OK]" << std::endl;
         }
 
-        Renderer::Renderer(int width, int height) : Renderer{ RendererConfig{ .width = width, .height = height }}
+        Renderer::Renderer(unsigned int width, unsigned int height) :
+            Renderer {
+                RendererConfig {
+                    .width = width,
+                    .height = height
+                }
+            }
         {
         }
 
-        Renderer::Renderer(Size size) : Renderer{ RendererConfig{ .width = size.width(), .height = size.height() }}
+        Renderer::Renderer(Size size) :
+            Renderer {
+                RendererConfig {
+                    .width = static_cast<unsigned int>(size.width()),
+                    .height = static_cast<unsigned int>(size.height())
+                }
+            }
         {
         }
 
