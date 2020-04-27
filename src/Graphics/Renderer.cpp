@@ -321,19 +321,22 @@ namespace Falltergeist
             SDL_GL_SwapWindow(_sdlWindow);
         }
 
-        int Renderer::width()
+        unsigned int Renderer::width() const
         {
             return _config.width;
         }
 
-        int Renderer::height()
+        unsigned int Renderer::height() const
         {
             return _config.height;
         }
 
-        const Size Renderer::size() const
+        Size Renderer::size() const
         {
-            return { _config.width, _config.height };
+            return {
+                static_cast<int>(_config.width),
+                static_cast<int>(_config.height)
+            };
         }
 
         void Renderer::screenshot()
@@ -381,9 +384,9 @@ namespace Falltergeist
             glReadBuffer(GL_BACK);
             glReadPixels(0, 0, width(), height(), GL_RGBA, GL_UNSIGNED_BYTE, srcPixels.data());
 
-            for (int y = 0; y < height(); ++y)
+            for (int y = 0; y < static_cast<int>(height()); ++y)
             {
-                for (int x = 0; x < width(); ++x)
+                for (int x = 0; x < static_cast<int>(width()); ++x)
                 {
                     uint8_t* pDestPix = &destPixels[((width() * y) + x) * 4];
                     uint8_t* pSrcPix = &srcPixels[((width() * ((height() - 1) - y)) + x) * 4];

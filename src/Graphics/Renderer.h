@@ -55,9 +55,9 @@ namespace Falltergeist
                 void endFrame();
                 void think(const float &deltaTime);
 
-                int width();
-                int height();
-                const Size size() const;
+                unsigned int width() const;
+                unsigned int height() const;
+                Size size() const;
 
                 float scaleX();
                 float scaleY();
