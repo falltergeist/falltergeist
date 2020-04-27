@@ -17,11 +17,11 @@ https://falltergeist.org/
 
 ### Linux
 
-```
+```console
 cmake . && make
 ```
 
-### Windows (Visual Studio)
+### Windows (Visual Studio x64)
 
 You could add dependencies manually but it is easier to use [Conan](https://docs.conan.io/en/latest/howtos/vs2017_cmake.html). 
 
@@ -34,16 +34,18 @@ os_build=Windows
 arch=x86_64
 arch_build=x86_64
 compiler=Visual Studio
-compiler.version=16
-build_type=Debug
+compiler.version=16 (*** or 15 here if VS2017)
+build_type=Debug (*** or Release here)
 ```
 
 Then open 'Developer PowerShell for Visual Studio' and execute the following commands:
 
-```
-conan install . --build missing
-cmake .
-devenv /build Debug falltergeist.sln
+```cmd
+mkdir build
+cd build
+conan install .. --build missing
+cmake .. -G “Visual Studio 16 2017 Win64” (*** or 15 here if VS2017)
+devenv /build Debug falltergeist.sln (*** or Release here)
 ```
 (or open and build the solution in Visual Studio instead of running the devenv command)
 
