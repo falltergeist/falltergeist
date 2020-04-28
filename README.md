@@ -34,9 +34,10 @@ os_build=Windows
 arch=x86_64
 arch_build=x86_64
 compiler=Visual Studio
-compiler.version=16 (*** or 15 here if VS2017)
-build_type=Debug (*** or Release here)
+compiler.version=16
+build_type=Debug
 ```
+If using VS2017 or building on Release then use: `compiler.version=15`, or `build_type=Release` respectively.
 
 Then open 'Developer PowerShell for Visual Studio' and execute the following commands:
 
@@ -44,10 +45,11 @@ Then open 'Developer PowerShell for Visual Studio' and execute the following com
 mkdir build
 cd build
 conan install .. --build missing
-cmake .. -G “Visual Studio 16 2017 Win64” (*** or 15 here if VS2017)
-devenv /build Debug falltergeist.sln (*** or Release here)
+cmake .. -G “Visual Studio 16 2019 Win64”
+devenv /build Debug falltergeist.sln
 ```
-(or open and build the solution in Visual Studio instead of running the devenv command)
+Or open and build the solution in Visual Studio instead of running the devenv command.
+If using VS2017 or building on Release then use: `“Visual Studio 15 2017 Win64”`, or `devenv /build Debug` respectively.
 
 
 ## Running
