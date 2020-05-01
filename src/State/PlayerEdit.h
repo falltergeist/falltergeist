@@ -21,7 +21,6 @@ namespace Falltergeist
     }
     namespace State
     {
-
         struct PerkEligibility
         {
             PERK perk;

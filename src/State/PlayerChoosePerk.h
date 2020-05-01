@@ -36,7 +36,6 @@ namespace Falltergeist
                 void onCancelButtonClick(Event::Mouse* event);
 
             protected:
-
                 UI::TextAreaList *_perkNames = nullptr;
                 UI::TextAreaList *_perkRanks = nullptr;
 
