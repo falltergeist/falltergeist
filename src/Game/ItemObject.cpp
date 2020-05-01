@@ -1,10 +1,9 @@
 #include <memory>
 #include "../Game/ItemObject.h"
-#include "../Graphics/Texture.h"
+#include "../Graphics/ObjectUIFactory.h"
 #include "../ResourceManager.h"
-#include "../UI/Animation.h"
-#include "../UI/Image.h"
 #include "../UI/TextArea.h"
+#include "../VM/Script.h"
 
 namespace Falltergeist
 {
@@ -15,10 +14,6 @@ namespace Falltergeist
         ItemObject::ItemObject() : Object()
         {
             _type = Type::ITEM;
-        }
-
-        ItemObject::~ItemObject()
-        {
         }
 
         unsigned int ItemObject::amount() const
@@ -62,7 +57,7 @@ namespace Falltergeist
             _inventoryFID = value;
         }
 
-        UI::Image* ItemObject::inventoryDragUi() const
+        UI::Base* ItemObject::inventoryDragUi() const
         {
             return _inventoryDragUi.get();
         }
@@ -82,12 +77,12 @@ namespace Falltergeist
             return _volume;
         }
 
-        UI::Image* ItemObject::inventoryUi() const
+        UI::Base* ItemObject::inventoryUi() const
         {
             return _inventoryUi.get();
         }
 
-        UI::Image* ItemObject::inventorySlotUi() const
+        UI::Base* ItemObject::inventorySlotUi() const
         {
             return _inventorySlotUi.get();
         }
@@ -100,10 +95,12 @@ namespace Falltergeist
                 return;
             }
 
+            Graphics::ObjectUIFactory uiFactory;
+
             // Big unscaled image of item
-            _inventoryDragUi = std::make_unique<UI::Image>(ResourceManager::getInstance()->FIDtoFrmName(inventoryFID()));
-            _inventoryUi = std::make_unique<UI::Image>(ResourceManager::getInstance()->FIDtoFrmName(inventoryFID()));
-            _inventorySlotUi = std::make_unique<UI::Image>(ResourceManager::getInstance()->FIDtoFrmName(inventoryFID()));
+            _inventoryDragUi = uiFactory.buildByFID(inventoryFID());
+            _inventoryUi = uiFactory.buildByFID(inventoryFID());
+            _inventorySlotUi = uiFactory.buildByFID(inventoryFID());
             _inventoryAmountUi = std::make_unique<UI::TextArea>("x" + std::to_string(_amount), inventorySlotUi()->position());
             _inventoryAmountUi->setColor({ 255, 255, 255, 0 });
         }

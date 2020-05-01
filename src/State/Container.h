@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../State/State.h"
+#include "../UI/IResourceManager.h"
 
 namespace Falltergeist
 {
@@ -13,13 +14,20 @@ namespace Falltergeist
     {
         class ContainerItemObject;
     }
+    namespace UI
+    {
+        namespace Factory
+        {
+            class ImageButtonFactory;
+        }
+    }
     namespace State
     {
-        class Container : public State
+        class Container final : public State
         {
             public:
-                Container();
-                ~Container() override;
+                Container(std::shared_ptr<UI::IResourceManager> resourceManager);
+                virtual ~Container() = default;
 
                 void init() override;
 
@@ -34,6 +42,8 @@ namespace Falltergeist
 
             protected:
                 Game::ContainerItemObject* _object = nullptr;
+                std::shared_ptr<UI::IResourceManager> resourceManager;
+                std::unique_ptr<UI::Factory::ImageButtonFactory> imageButtonFactory;
         };
     }
 }

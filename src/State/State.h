@@ -35,7 +35,9 @@ namespace Falltergeist
         {
             public:
                 State();
-                virtual ~State();
+                State(const State&) = delete;
+                State& operator=(const State&) = delete;
+                virtual ~State() = default;
 
                 template <class TUi, class ...TCtorArgs>
                 TUi* makeUI(TCtorArgs&&... args)
@@ -88,7 +90,7 @@ namespace Falltergeist
                  * @brief Process all real-time logic of this state.
                  * This method is called after handle() but before render() in the main loop.
                  */
-                virtual void think();
+                virtual void think(const float &deltaTime);
                 /**
                  * @brief Renders all visible objects of this state on screen.
                  * This method is called last in the main loop (after handle() and think()).

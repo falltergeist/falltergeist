@@ -10,8 +10,9 @@
 #include "../Game/Object.h"
 #include "../Game/ObjectFactory.h"
 #include "../Game/WeaponItemObject.h"
-#include "../Graphics/Renderer.h"
+#include "../Graphics/CritterAnimationFactory.h"
 #include "../Graphics/Size.h"
+#include "../Helpers/CritterHelper.h"
 #include "../Input/Mouse.h"
 #include "../ResourceManager.h"
 #include "../State/State.h"
@@ -19,6 +20,7 @@
 #include "../State/InventoryDragItem.h"
 #include "../State/Location.h"
 #include "../UI/Animation.h"
+#include "../UI/Factory/ImageButtonFactory.h"
 #include "../UI/Image.h"
 #include "../UI/ImageButton.h"
 #include "../UI/ImageList.h"
@@ -30,28 +32,25 @@
 
 namespace Falltergeist
 {
+    using ImageButtonType = UI::Factory::ImageButtonFactory::Type;
+
     namespace State
     {
-        Inventory::Inventory() : State()
+        Inventory::Inventory(std::shared_ptr<UI::IResourceManager> resourceManager) : State()
         {
-            pushHandler().add([this](Event::State* ev)
-                {
-                    Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::ACTION);
-                });
-            popHandler().add([this](Event::State* ev)
-                {
-                    // If hand cursor now
-                    if (Game::getInstance()->mouse()->state() == Input::Mouse::Cursor::HAND)
-                    {
-                        Game::getInstance()->mouse()->popState();
-                    }
+            this->resourceManager = resourceManager;
+            imageButtonFactory = std::make_unique<UI::Factory::ImageButtonFactory>(resourceManager);
+
+            pushHandler().add([](Event::State* ev) {
+                Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::ACTION);
+            });
+            popHandler().add([](Event::State* ev) {
+                // If hand cursor now
+                if (Game::getInstance()->mouse()->state() == Input::Mouse::Cursor::HAND) {
                     Game::getInstance()->mouse()->popState();
-                });
-        }
-
-        Inventory::~Inventory()
-        {
-
+                }
+                Game::getInstance()->mouse()->popState();
+            });
         }
 
         void Inventory::init()
@@ -67,18 +66,18 @@ namespace Falltergeist
 
             setPosition((game->renderer()->size() - Point(499, 377 + panelHeight)) / 2); // 499x377 = art/intrface/invbox.frm
 
-            addUI("background", new UI::Image("art/intrface/invbox.frm"));
+            addUI("background", resourceManager->getImage("art/intrface/invbox.frm"));
             getUI("background")->mouseClickHandler().add(std::bind(&Inventory::backgroundRightClick, this, std::placeholders::_1));
 
-            addUI("button_up",   new UI::ImageButton(UI::ImageButton::Type::INVENTORY_UP_ARROW,   128, 40));
-            addUI("button_down", new UI::ImageButton(UI::ImageButton::Type::INVENTORY_DOWN_ARROW, 128, 65));
-            auto buttonDownDisabled = new UI::Image("art/intrface/invdnds.frm");
-            auto buttonUpDisabled = new UI::Image("art/intrface/invupds.frm");
+            addUI("button_up",   imageButtonFactory->getByType(ImageButtonType::INVENTORY_UP_ARROW,   {128, 40}));
+            addUI("button_down", imageButtonFactory->getByType(ImageButtonType::INVENTORY_DOWN_ARROW, {128, 65}));
+            auto buttonDownDisabled = resourceManager->getImage("art/intrface/invdnds.frm");
+            auto buttonUpDisabled = resourceManager->getImage("art/intrface/invupds.frm");
             buttonUpDisabled->setPosition(Point(128, 40));
             buttonDownDisabled->setPosition(Point(128, 65));
             addUI("button_up_disabled", buttonUpDisabled);
             addUI("button_down_disabled", buttonDownDisabled);
-            addUI("button_done", new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, 438, 328));
+            addUI("button_done", imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {438, 328}));
 
             getUI("button_done")->mouseClickHandler().add(std::bind(&Inventory::onDoneButtonClick, this, std::placeholders::_1));
             getUI("button_up")->mouseClickHandler().add(  std::bind(&Inventory::onScrollUpButtonClick, this, std::placeholders::_1));
@@ -242,9 +241,18 @@ namespace Falltergeist
             addUI("inventory_list", inventoryList);
 
             // TODO: this is a rotating animation in the vanilla engine
-            auto dudeCritter = Game::getInstance()->player()->generateAnimation("aa", Game::Orientation::SC);
+            auto dude = Game::getInstance()->player();
+
+            Helpers::CritterHelper critterHelper;
+            Graphics::CritterAnimationFactory animationFactory;
+
+            auto dudeCritter = animationFactory.buildStandingAnimation(
+                critterHelper.armorFID(dude.get()),
+                critterHelper.weaponId(dude.get()),
+                Game::Orientation::SC
+            );
             dudeCritter->setPosition({188, 52});
-            addUI(dudeCritter);
+            addUI(dudeCritter.release());
 
             // BIG ICONS
             // icon: armor

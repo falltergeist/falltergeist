@@ -1,56 +1,27 @@
-/*
- * Copyright 2012-2018 Falltergeist Developers.
- *
- * This file is part of Falltergeist.
- *
- * Falltergeist is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Falltergeist is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
- */
+#pragma once
 
-#ifndef FALLTERGEIST_UI_RECTANGLE_H
-#define FALLTERGEIST_UI_RECTANGLE_H
-
-// C++ standard includes
-
-// Falltergeist includes
+#include <SDL.h>
 #include "../Graphics/Point.h"
 #include "../UI/Base.h"
 
-// Third party includes
-#include <SDL.h>
-
 namespace Falltergeist
 {
-namespace UI
-{
+    namespace UI
+    {
+        class Rectangle final : public Base
+        {
+            public:
+                Rectangle(const Point& pos, const Size& size, SDL_Color color);
+                void render(bool eggTransparency = false) override;
 
-class Rectangle : public Base
-{
-public:
+                bool opaque(unsigned int x, unsigned int y);
+                bool opaque(const Point &pos) override;
 
-    Rectangle(const Point& pos, const Size& size, SDL_Color color);
-    virtual void render(bool eggTransparency = false) override;
+                Size size() const override;
 
-    bool opaque(unsigned int x, unsigned int y);
-    virtual bool opaque(const Point &pos) override;
-
-    virtual Size size() const override;
-
-private:
-    Size _size;
-    SDL_Color _color;
-};
-
+            private:
+                Size _size;
+                SDL_Color _color;
+        };
+    }
 }
-}
-#endif //FALLTERGEIST_UI_RECTANGLE_H

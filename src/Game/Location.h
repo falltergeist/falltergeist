@@ -1,34 +1,9 @@
-/*
- * Copyright 2012-2018 Falltergeist Developers.
- *
- * This file is part of Falltergeist.
- *
- * Falltergeist is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Falltergeist is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
- */
+#pragma once
 
-#ifndef FALLTERGEIST_GAME_LOCATION_H
-#define FALLTERGEIST_GAME_LOCATION_H
-
-// C++ standard includes
 #include <memory>
 #include <map>
 #include <string>
 #include <vector>
-
-// Falltergeist includes
-
-// Third party includes
 
 namespace Falltergeist
 {
@@ -54,7 +29,7 @@ namespace Falltergeist
          * It combines properties from MAPS.TXT and *.map files
          * It also has Game::LocationElevation instancess as its childs
          */
-        class Location
+        class Location final
         {
             public:
                 Location();
@@ -183,4 +158,3 @@ namespace Falltergeist
         };
     }
 }
-#endif // FALLTERGEIST_GAME_LOCATION_H

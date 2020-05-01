@@ -10,6 +10,7 @@
 #include "../Input/Mouse.h"
 #include "../ResourceManager.h"
 #include "../State/State.h"
+#include "../UI/Factory/ImageButtonFactory.h"
 #include "../UI/Image.h"
 #include "../UI/ImageButton.h"
 #include "../UI/ImageList.h"
@@ -17,14 +18,14 @@
 
 namespace Falltergeist
 {
+    using ImageButtonType = UI::Factory::ImageButtonFactory::Type;
+
     namespace State
     {
-        LoadGame::LoadGame() : State()
+        LoadGame::LoadGame(std::shared_ptr<UI::IResourceManager> resourceManager) : State()
         {
-        }
-
-        LoadGame::~LoadGame()
-        {
+            this->resourceManager = resourceManager;
+            imageButtonFactory = std::make_unique<UI::Factory::ImageButtonFactory>(resourceManager);
         }
 
         void LoadGame::init()
@@ -39,7 +40,7 @@ namespace Falltergeist
             //auto player = Game::getInstance()->player();
 
             // background
-            auto bg = new UI::Image("art/intrface/lsgame.frm");
+            auto bg = resourceManager->getImage("art/intrface/lsgame.frm");
             Point bgPos = Point((game->renderer()->size() - bg->size()) / 2);
             auto bgX = bgPos.x();
             auto bgY = bgPos.y();
@@ -49,17 +50,17 @@ namespace Falltergeist
             // BUTTONS
 
             // button: up arrow
-            addUI("button_up", new UI::ImageButton(UI::ImageButton::Type::SMALL_UP_ARROW, bgX+35, bgY+58));
+            addUI("button_up", imageButtonFactory->getByType(ImageButtonType::SMALL_UP_ARROW, {bgX + 35, bgY + 58}));
             // button: down arrow
-            addUI("button_down", new UI::ImageButton(UI::ImageButton::Type::SMALL_DOWN_ARROW, bgX+35, bgY+72));
+            addUI("button_down", imageButtonFactory->getByType(ImageButtonType::SMALL_DOWN_ARROW, {bgX + 35, bgY + 72}));
 
             // button: Done
-            auto doneButton = new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, bgX+391, bgY+349);
+            auto doneButton = imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {bgX + 391, bgY + 349});
             doneButton->mouseClickHandler().add(std::bind(&LoadGame::onDoneButtonClick, this, std::placeholders::_1));
             addUI(doneButton);
 
             // button: Cancel
-            auto cancelButton = new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, bgX+495, bgY+349);
+            auto cancelButton = imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {bgX + 495, bgY + 349});
             cancelButton->mouseClickHandler().add([this](Event::Event* event){ this->doCancel(); });
             addUI(cancelButton);
 

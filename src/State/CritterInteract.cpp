@@ -19,17 +19,19 @@
 #include "../UI/Animation.h"
 #include "../UI/AnimationFrame.h"
 #include "../UI/AnimationQueue.h"
+#include "../UI/Factory/ImageButtonFactory.h"
 #include "../Audio/Mixer.h"
 
 namespace Falltergeist
 {
     namespace State
     {
-        CritterInteract::CritterInteract() : State()
+        CritterInteract::CritterInteract(std::shared_ptr<UI::IResourceManager> resourceManager) : State()
         {
-            _dialog=new CritterDialog();
-            _review=new CritterDialogReview();
-            _barter=new CritterBarter();
+            this->resourceManager = resourceManager;
+            _dialog = new CritterDialog(resourceManager);
+            _review = new CritterDialogReview(resourceManager);
+            _barter = new CritterBarter(resourceManager);
             // pre-init review, so we can push questions/answers to it.
             _review->init();
         }
@@ -87,7 +89,7 @@ namespace Falltergeist
             {
                 auto lst = ResourceManager::getInstance()->lstFileType("art/backgrnd/backgrnd.lst");
                 std::string bgImage = "art/backgrnd/" + lst->strings()->at(backgroundID());
-                auto bg = new UI::Image(bgImage);
+                auto bg = resourceManager->getImage(bgImage);
                 bg->setPosition({128, 15});
                 addUI(bg);
 
@@ -136,14 +138,14 @@ namespace Falltergeist
                 addUI("head",head);
             }
 
-            addUI("background", new UI::Image("art/intrface/alltlk.frm"));
+            addUI("background", resourceManager->getImage("art/intrface/alltlk.frm"));
 
-            auto hilight1 = new UI::Image("data/hilight1.png");
-            hilight1->setPosition({423,20});
+            auto hilight1 = resourceManager->getImage("data/hilight1.png");
+            hilight1->setPosition({423, 20});
             addUI(hilight1);
 
-            auto hilight2 = new UI::Image("data/hilight2.png");
-            hilight2->setPosition({128,84});
+            auto hilight2 = resourceManager->getImage("data/hilight2.png");
+            hilight2->setPosition({128, 84});
             addUI(hilight2);
 
             // Centering camera on critter position
@@ -255,15 +257,15 @@ namespace Falltergeist
             return 0;
         }
 
-        void CritterInteract::think()
+        void CritterInteract::think(const float &deltaTime)
         {
-            State::think();
+            State::think(deltaTime);
 
             // switch state
             switch (_phase)
             {
                 case Phase::FIDGET:
-                    _fidgetTimer.think();
+                    _fidgetTimer.think(deltaTime);
                     break;
                 case Phase::TALK:
                     // if playing speech - set phoneme frame

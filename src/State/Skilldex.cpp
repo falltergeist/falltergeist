@@ -11,20 +11,21 @@
 #include "../State/Location.h"
 #include "../State/SettingsMenu.h"
 #include "../UI/BigCounter.h"
+#include "../UI/Factory/ImageButtonFactory.h"
 #include "../UI/Image.h"
 #include "../UI/ImageButton.h"
 #include "../UI/TextArea.h"
 
 namespace Falltergeist
 {
+    using ImageButtonType = UI::Factory::ImageButtonFactory::Type;
+
     namespace State
     {
-        Skilldex::Skilldex() : State()
+        Skilldex::Skilldex(std::shared_ptr<UI::IResourceManager> resourceManager) : State()
         {
-        }
-
-        Skilldex::~Skilldex()
-        {
+            this->resourceManager = resourceManager;
+            imageButtonFactory = std::make_unique<UI::Factory::ImageButtonFactory>(resourceManager);
         }
 
         void Skilldex::init()
@@ -37,63 +38,63 @@ namespace Falltergeist
 
             // original coordinates = 455x6
             // background size = 185x368
-            auto background = new UI::Image("art/intrface/skldxbox.frm");
+            auto background = resourceManager->getImage("art/intrface/skldxbox.frm");
             Graphics::Size rendSize = Game::getInstance()->renderer()->size();
             auto backgroundX = (rendSize.width() + 640 - 2 * background->size().width()) / 2;
             auto backgroundY = (rendSize.height() - 480 + 6);
             background->setPosition({backgroundX, backgroundY});
 
             // buttons
-            auto sneakButton    = new UI::ImageButton(UI::ImageButton::Type::SKILLDEX_BUTTON, backgroundX+14, backgroundY+44);
+            auto sneakButton    = imageButtonFactory->getByType(ImageButtonType::SKILLDEX_BUTTON, {backgroundX + 14, backgroundY + 44});
             sneakButton->mouseClickHandler().add(std::bind(&Skilldex::onSkillButtonClick, this, SKILL::SNEAK));
 
-            auto lockpickButton = new UI::ImageButton(UI::ImageButton::Type::SKILLDEX_BUTTON, backgroundX+14, backgroundY+44+36);
+            auto lockpickButton = imageButtonFactory->getByType(ImageButtonType::SKILLDEX_BUTTON, {backgroundX + 14, backgroundY + 44 + 36});
             lockpickButton->mouseClickHandler().add(std::bind(&Skilldex::onSkillButtonClick, this, SKILL::LOCKPICK));
 
-            auto stealButton    = new UI::ImageButton(UI::ImageButton::Type::SKILLDEX_BUTTON, backgroundX+14, backgroundY+44+36*2);
+            auto stealButton    = imageButtonFactory->getByType(ImageButtonType::SKILLDEX_BUTTON, {backgroundX + 14, backgroundY + 44 + 36 * 2});
             stealButton->mouseClickHandler().add(std::bind(&Skilldex::onSkillButtonClick, this, SKILL::STEAL));
 
-            auto trapsButton    = new UI::ImageButton(UI::ImageButton::Type::SKILLDEX_BUTTON, backgroundX+14, backgroundY+44+36*3);
+            auto trapsButton    = imageButtonFactory->getByType(ImageButtonType::SKILLDEX_BUTTON, {backgroundX + 14, backgroundY + 44 + 36 * 3});
             trapsButton->mouseClickHandler().add(std::bind(&Skilldex::onSkillButtonClick, this, SKILL::TRAPS));
 
-            auto firstAidButton = new UI::ImageButton(UI::ImageButton::Type::SKILLDEX_BUTTON, backgroundX+14, backgroundY+44+36*4);
+            auto firstAidButton = imageButtonFactory->getByType(ImageButtonType::SKILLDEX_BUTTON, {backgroundX + 14, backgroundY + 44 + 36 * 4});
             firstAidButton->mouseClickHandler().add(std::bind(&Skilldex::onSkillButtonClick, this, SKILL::FIRST_AID));
 
-            auto doctorButton   = new UI::ImageButton(UI::ImageButton::Type::SKILLDEX_BUTTON, backgroundX+14, backgroundY+44+36*5);
+            auto doctorButton   = imageButtonFactory->getByType(ImageButtonType::SKILLDEX_BUTTON, {backgroundX + 14, backgroundY + 44 + 36 * 5});
             doctorButton->mouseClickHandler().add(std::bind(&Skilldex::onSkillButtonClick, this, SKILL::DOCTOR));
 
-            auto scienceButton  = new UI::ImageButton(UI::ImageButton::Type::SKILLDEX_BUTTON, backgroundX+14, backgroundY+44+36*6);
+            auto scienceButton  = imageButtonFactory->getByType(ImageButtonType::SKILLDEX_BUTTON, {backgroundX + 14, backgroundY + 44 + 36 * 6});
             scienceButton->mouseClickHandler().add(std::bind(&Skilldex::onSkillButtonClick, this, SKILL::SCIENCE));
 
-            auto repairButton   = new UI::ImageButton(UI::ImageButton::Type::SKILLDEX_BUTTON, backgroundX+14, backgroundY+44+36*7);
+            auto repairButton   = imageButtonFactory->getByType(ImageButtonType::SKILLDEX_BUTTON, {backgroundX + 14, backgroundY + 44 + 36 * 7});
             repairButton->mouseClickHandler().add(std::bind(&Skilldex::onSkillButtonClick, this, SKILL::REPAIR));
 
-            auto cancelButton   = new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, backgroundX+48, backgroundY+338);
+            auto cancelButton   = imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {backgroundX + 48, backgroundY + 338});
             cancelButton->mouseClickHandler().add(std::bind(&Skilldex::onCancelButtonClick, this));
 
             // counters
-            auto sneakCounter    = new UI::BigCounter(backgroundX + 111, backgroundY + 48, 3);
+            auto sneakCounter    = new UI::BigCounter({backgroundX + 111, backgroundY + 48}, 3);
             sneakCounter->setNumber(Game::getInstance()->player()->skillValue(SKILL::SNEAK));
 
-            auto lockpickCounter = new UI::BigCounter(backgroundX + 111, backgroundY + 48 + 36, 3);
+            auto lockpickCounter = new UI::BigCounter({backgroundX + 111, backgroundY + 48 + 36}, 3);
             lockpickCounter->setNumber(Game::getInstance()->player()->skillValue(SKILL::LOCKPICK));
 
-            auto stealCounter    = new UI::BigCounter(backgroundX + 111, backgroundY + 48 + 36 * 2, 3);
+            auto stealCounter    = new UI::BigCounter({backgroundX + 111, backgroundY + 48 + 36 * 2}, 3);
             stealCounter->setNumber(Game::getInstance()->player()->skillValue(SKILL::STEAL));
 
-            auto trapsCounter    = new UI::BigCounter(backgroundX + 111, backgroundY + 48 + 36 * 3, 3);
+            auto trapsCounter    = new UI::BigCounter({backgroundX + 111, backgroundY + 48 + 36 * 3}, 3);
             trapsCounter->setNumber(Game::getInstance()->player()->skillValue(SKILL::TRAPS));
 
-            auto firstAidCounter = new UI::BigCounter(backgroundX + 111, backgroundY + 48 + 36 * 4, 3);
+            auto firstAidCounter = new UI::BigCounter({backgroundX + 111, backgroundY + 48 + 36 * 4}, 3);
             firstAidCounter->setNumber(Game::getInstance()->player()->skillValue(SKILL::FIRST_AID));
 
-            auto doctorCounter   = new UI::BigCounter(backgroundX + 111, backgroundY + 48 + 36 * 5, 3);
+            auto doctorCounter   = new UI::BigCounter({backgroundX + 111, backgroundY + 48 + 36 * 5}, 3);
             doctorCounter->setNumber(Game::getInstance()->player()->skillValue(SKILL::DOCTOR));
 
-            auto scienceCounter  = new UI::BigCounter(backgroundX + 111, backgroundY + 48 + 36 * 6, 3);
+            auto scienceCounter  = new UI::BigCounter({backgroundX + 111, backgroundY + 48 + 36 * 6}, 3);
             scienceCounter->setNumber(Game::getInstance()->player()->skillValue(SKILL::SCIENCE));
 
-            auto repairCounter   = new UI::BigCounter(backgroundX + 111, backgroundY + 48 + 36 * 7, 3);
+            auto repairCounter   = new UI::BigCounter({backgroundX + 111, backgroundY + 48 + 36 * 7}, 3);
             repairCounter->setNumber(Game::getInstance()->player()->skillValue(SKILL::REPAIR));
 
             // LABELS

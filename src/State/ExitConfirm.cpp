@@ -1,21 +1,3 @@
-/*
- * Copyright 2012-2018 Falltergeist Developers.
- *
- * This file is part of Falltergeist.
- *
- * Falltergeist is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Falltergeist is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
- */
 #include "../State/ExitConfirm.h"
 #include "../functions.h"
 #include "../Game/Game.h"
@@ -24,6 +6,7 @@
 #include "../ResourceManager.h"
 #include "../State/Location.h"
 #include "../State/MainMenu.h"
+#include "../UI/Factory/ImageButtonFactory.h"
 #include "../UI/Image.h"
 #include "../UI/ImageButton.h"
 #include "../UI/PlayerPanel.h"
@@ -31,36 +14,38 @@
 
 namespace Falltergeist
 {
+    using ImageButtonType = UI::Factory::ImageButtonFactory::Type;
+
     namespace State
     {
-        ExitConfirm::ExitConfirm() : State()
+        ExitConfirm::ExitConfirm(std::shared_ptr<UI::IResourceManager> resourceManager) : State()
         {
-        }
-
-        ExitConfirm::~ExitConfirm()
-        {
+            this->resourceManager = resourceManager;
+            imageButtonFactory = std::make_unique<UI::Factory::ImageButtonFactory>(resourceManager);
         }
 
         void ExitConfirm::init()
         {
-            if (_initialized) return;
+            if (_initialized) {
+                return;
+            }
             State::init();
 
             setModal(true);
             setFullscreen(false);
 
-            auto background = new UI::Image("art/intrface/lgdialog.frm");
+            auto background = resourceManager->getImage("art/intrface/lgdialog.frm");
             auto panelHeight = Game::getInstance()->locationState()->playerPanel()->size().height();
 
             auto backgroundPos = (Game::getInstance()->renderer()->size() - background->size() - Point(0, panelHeight)) / 2;
 
-            auto box1 = new UI::Image("art/intrface/donebox.frm");
-            auto box2 = new UI::Image("art/intrface/donebox.frm");
+            auto box1 = resourceManager->getImage("art/intrface/donebox.frm");
+            auto box2 = resourceManager->getImage("art/intrface/donebox.frm");
             box1->setPosition(backgroundPos + Point(38, 98));
             box2->setPosition(backgroundPos + Point(170, 98));
 
-            auto yesButton = new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, backgroundPos + Point(50, 102));
-            auto noButton = new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, backgroundPos + Point(183, 102));
+            auto yesButton = imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, backgroundPos + Point(50, 102));
+            auto noButton = imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, backgroundPos + Point(183, 102));
             yesButton->mouseClickHandler().add([this](Event::Event* event){ this->doYes(); });
             noButton->mouseClickHandler().add( [this](Event::Event* event){ this->doNo(); });
 
@@ -92,7 +77,7 @@ namespace Falltergeist
 
         void ExitConfirm::doYes()
         {
-            Game::getInstance()->setState(new MainMenu());
+            Game::getInstance()->setState(new MainMenu(resourceManager));
         }
 
         void ExitConfirm::doNo()

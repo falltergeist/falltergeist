@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../State/State.h"
+#include "../UI/IResourceManager.h"
 
 namespace Falltergeist
 {
@@ -10,13 +11,21 @@ namespace Falltergeist
         class Mouse;
         class State;
     }
+    namespace UI
+    {
+        namespace Factory
+        {
+            class ImageButtonFactory;
+        }
+    }
+
     namespace State
     {
-        class LoadGame : public State
+        class LoadGame final : public State
         {
             public:
-                LoadGame();
-                ~LoadGame() override;
+                LoadGame(std::shared_ptr<UI::IResourceManager> resourceManager);
+                virtual ~LoadGame() = default;
 
                 void init() override;
 
@@ -27,6 +36,10 @@ namespace Falltergeist
                 void onStateActivate(Event::State* event) override;
                 void onStateDeactivate(Event::State* event) override;
                 void onKeyDown(Event::Keyboard* event) override;
+
+            private:
+                std::shared_ptr<UI::IResourceManager> resourceManager;
+                std::unique_ptr<UI::Factory::ImageButtonFactory> imageButtonFactory;
         };
     }
 }
