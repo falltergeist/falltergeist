@@ -1,94 +1,58 @@
-/*
- * Copyright 2012-2018 Falltergeist Developers.
- *
- * This file is part of Falltergeist.
- *
- * Falltergeist is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Falltergeist is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
- */
+#pragma once
 
-#ifndef FALLTERGEIST_UI_SMALLCOUNTER_H
-#define FALLTERGEIST_UI_SMALLCOUNTER_H
-
-// C++ standard includes
 #include <memory>
-
-// Falltergeist includes
 #include "../Graphics/Sprite.h"
 #include "../UI/Base.h"
 
-// Third party includes
-
 namespace Falltergeist
 {
-namespace UI
-{
-
-class Image;
-
-class SmallCounter : public Falltergeist::UI::Base
-{
-public:
-    enum Color
+    namespace UI
     {
-        WHITE = 1,
-        YELLOW,
-        RED
-    };
-    enum Type
-    {
-        UNSIGNED = 0,
-        SIGNED
-    };
+        class Image;
 
-    SmallCounter(const Point& pos);
-    ~SmallCounter() override;
+        class SmallCounter final : public Falltergeist::UI::Base
+        {
+            public:
+                enum Color
+                {
+                    WHITE = 1,
+                    YELLOW,
+                    RED
+                };
+                enum Type
+                {
+                    UNSIGNED = 0,
+                    SIGNED
+                };
 
-    Color color() const;
-    void setColor(Color color);
+                SmallCounter(const Point& pos);
+                SmallCounter(const SmallCounter&) = delete;
+                void operator=(const SmallCounter&) = delete;
+                virtual ~SmallCounter() = default;
 
-    unsigned int length() const;
-    void setLength(unsigned int length);
+                Color color() const;
+                void setColor(Color color);
 
-    signed int number() const;
-    void setNumber(signed int number);
+                unsigned int length() const;
+                void setLength(unsigned int length);
 
-    Type type() const;
-    void setType(Type type);
+                signed int number() const;
+                void setNumber(signed int number);
 
-protected:
-    Color _color = Color::WHITE;
-    signed int _number = 0;
-    std::string _numberText = "";
-    unsigned int _length = 3;
-    Type _type = Type::UNSIGNED;
-    std::shared_ptr<Graphics::Sprite> _sprite;
-    std::vector<SDL_Rect> _rects;
+                Type type() const;
+                void setType(Type type);
 
+                void render(bool eggTransparency) override;
+                bool opaque(const Point &pos) override;
 
-public:
-    virtual void render(bool eggTransparency) override;
-
-    virtual bool opaque(const Point &pos) override;
-
-private:
-    // Hide unused field from childs.
-
-    SmallCounter(const SmallCounter&) = delete;
-    void operator=(const SmallCounter&) = delete;
-
-};
-
+            private:
+                Color _color = Color::WHITE;
+                signed int _number = 0;
+                std::string _numberText = "";
+                unsigned int _length = 3;
+                Type _type = Type::UNSIGNED;
+                std::shared_ptr<Graphics::Sprite> _sprite;
+                std::vector<SDL_Rect> _rects;
+        };
+    }
 }
-}
-#endif // FALLTERGEIST_UI_SMALLCOUNTER_H

@@ -2,6 +2,7 @@
 
 #include <vector>
 #include "../State/State.h"
+#include "../UI/IResourceManager.h"
 
 namespace Falltergeist
 {
@@ -13,14 +14,19 @@ namespace Falltergeist
     }
     namespace UI
     {
+        namespace Factory
+        {
+            class ImageButtonFactory;
+        }
+
         class ItemsList;
     }
     namespace State
     {
-        class CritterBarter : public State
+        class CritterBarter final : public State
         {
             public:
-                CritterBarter();
+                CritterBarter(std::shared_ptr<UI::IResourceManager> resourceManager);
                 ~CritterBarter() override;
 
                 void init() override;
@@ -41,6 +47,10 @@ namespace Falltergeist
                 Game::CritterObject* _trader = nullptr;
                 std::vector<Game::ItemObject*> _itemsToSell;
                 std::vector<Game::ItemObject*> _itemsToBuy;
+
+            private:
+                std::shared_ptr<UI::IResourceManager> resourceManager;
+                std::unique_ptr<UI::Factory::ImageButtonFactory> imageButtonFactory;
         };
     }
 }

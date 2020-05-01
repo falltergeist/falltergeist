@@ -63,7 +63,7 @@ namespace Falltergeist {
                 if (item->hexagon()) {
                     auto location = Game::Game::getInstance()->locationState();
                     if (location) {
-                        location->moveObjectToHexagon(item, nullptr);
+                        location->removeObjectFromMap(item);
                     }
                 }
             }

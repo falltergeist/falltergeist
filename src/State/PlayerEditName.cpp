@@ -1,10 +1,11 @@
-#include <ctype.h>
+#include <cstdint>
 #include "../State/PlayerEditName.h"
 #include "../functions.h"
 #include "../Game/DudeObject.h"
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
 #include "../ResourceManager.h"
+#include "../UI/Factory/ImageButtonFactory.h"
 #include "../UI/TextArea.h"
 #include "../UI/ImageButton.h"
 #include "../UI/Image.h"
@@ -12,14 +13,14 @@
 
 namespace Falltergeist
 {
+    using ImageButtonType = UI::Factory::ImageButtonFactory::Type;
+
     namespace State
     {
-        PlayerEditName::PlayerEditName() : State()
+        PlayerEditName::PlayerEditName(std::shared_ptr<UI::IResourceManager> resourceManager) : State()
         {
-        }
-
-        PlayerEditName::~PlayerEditName()
-        {
+            this->resourceManager = resourceManager;
+            imageButtonFactory = std::make_unique<UI::Factory::ImageButtonFactory>(resourceManager);
         }
 
         void PlayerEditName::init()
@@ -71,21 +72,19 @@ namespace Falltergeist
             _keyCodes.insert(std::make_pair(SDLK_9, '9'));
             _keyCodes.insert(std::make_pair(SDLK_0, '0'));
 
-            _timer = SDL_GetTicks();
-
-            auto bg = new UI::Image("art/intrface/charwin.frm");
+            auto bg = resourceManager->getImage("art/intrface/charwin.frm");
             bg->setPosition(bgPos + Point(22, 0));
 
-            auto nameBox = new UI::Image("art/intrface/namebox.frm");
+            auto nameBox = resourceManager->getImage("art/intrface/namebox.frm");
             nameBox->setPosition(bgPos + Point(35, 10));
 
-            auto doneBox = new UI::Image("art/intrface/donebox.frm");
+            auto doneBox = resourceManager->getImage("art/intrface/donebox.frm");
             doneBox->setPosition(bgPos + Point(35, 40));
 
             auto doneLabel = new UI::TextArea(_t(MSG_EDITOR, 100), bgX+65, bgY+43);
             doneLabel->setFont("font3.aaf", {0xb8, 0x9c, 0x28, 0xff});
 
-            auto doneButton = new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, bgX+45, bgY+43);
+            auto doneButton = imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {bgX + 45, bgY + 43});
             doneButton->mouseClickHandler().add(std::bind(&PlayerEditName::onDoneButtonClick, this, std::placeholders::_1));
 
             _name = new UI::TextArea(Game::getInstance()->player()->name(), bgX+43, bgY+15);
@@ -158,14 +157,15 @@ namespace Falltergeist
             doDone();
         }
 
-        void PlayerEditName::think()
+        void PlayerEditName::think(const float &deltaTime)
         {
             int bgX = (Game::getInstance()->renderer()->width() - 640) / 2;
-            State::think();
-            if (SDL_GetTicks() - _timer > 300)
-            {
+            State::think(deltaTime);
+
+            _blinkingCursorMillisecondsTracked += deltaTime;
+            if (_blinkingCursorMillisecondsTracked >= 300.0f) {
+                _blinkingCursorMillisecondsTracked -= 300.0f;
                 _cursor->setVisible(!_cursor->visible());
-                _timer = SDL_GetTicks();
             }
             _cursor->setPosition({bgX + _name->textSize().width() + 45, _cursor->position().y()});
         }

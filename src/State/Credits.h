@@ -10,14 +10,14 @@ namespace Falltergeist
     }
     namespace State
     {
-        class Credits : public State
+        class Credits final : public State
         {
             public:
                 Credits();
                 ~Credits() override;
 
                 void init() override;
-                void think() override;
+                void think(const float &deltaTime) override;
                 void handle(Event::Event* event) override;
 
                 void onCreditsFinished();
@@ -25,7 +25,8 @@ namespace Falltergeist
                 void onStateActivate(Event::State* event) override;
             private:
                 std::vector<UI::TextArea*> _lines;
-                unsigned long int _lastTicks;
+                int* _linePositions = nullptr;
+                float _timePassed = 0;
         };
     }
 }

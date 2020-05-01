@@ -22,6 +22,10 @@ namespace Falltergeist
 
         Credits::~Credits()
         {
+            if (_linePositions != nullptr) {
+                delete[] _linePositions;
+                _linePositions = nullptr;
+            }
         }
 
         void Credits::init()
@@ -85,43 +89,34 @@ namespace Falltergeist
                 _lines.push_back(tx);
                 y += tx->textSize().height() + cur_font->verticalGap() + additionalGap;
             }
-            _lastTicks=SDL_GetTicks();
-        }
 
-        void Credits::think()
-        {
-            State::think();
+            _linePositions = new int[_lines.size()];
 
-            unsigned long int nt = SDL_GetTicks();
-            if (nt - _lastTicks > 50)
-            {
-                _position.ry() -= 1;
-                long int _lastY = 0;
-                for (auto ui: _lines)
-                {
-                    ui->setY(ui->y()-1);
-
-                    if ( (ui->y() > -30) && (ui->y() < (int)(Game::getInstance()->renderer()->height()+10) ) )
-                    {
-                        ui->setVisible(true);
-                    }
-                    else
-                    {
-                        ui->setVisible(false);
-                    }
-
-                    _lastY = ui->y();
-                }
-
-                _lastTicks=nt;
-
-                if (_lastY < -30)
-                {
-                    this->onCreditsFinished();
-                }
+            for (size_t i = 0; i < _lines.size(); i++) {
+                _linePositions[i] = _lines.at(i)->y();
             }
         }
 
+        void Credits::think(const float &deltaTime)
+        {
+            State::think(deltaTime);
+
+            auto scrollingSpeed = 1.0f / 33.0f;
+
+            _timePassed += deltaTime;
+
+            long int _lastY = 0;
+            for (size_t i = 0; i < _lines.size(); i++) {
+                auto ui = _lines.at(i);
+                int yPosition = _linePositions[i] - static_cast<int>(_timePassed * scrollingSpeed);
+                ui->setY(yPosition);
+                _lastY = ui->y();
+            }
+
+            if (_lastY < -30) {
+                this->onCreditsFinished();
+            }
+        }
 
         void Credits::handle(Event::Event* event)
         {
