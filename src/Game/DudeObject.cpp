@@ -99,6 +99,19 @@ namespace Falltergeist
             _skillsPoints = value;
         }
 
+        /**
+         * @return current rank of the \p perk or zero if the player doesn't have the perk
+         */
+        int DudeObject::perk(PERK perk) const
+        {
+            return _perks.at(static_cast<unsigned>(perk));
+        }
+
+        void DudeObject::addPerk(PERK perk)
+        {
+            _perks[static_cast<unsigned>(perk)]++;
+        }
+
         int DudeObject::hitPointsMax() const
         {
             int value = 15;

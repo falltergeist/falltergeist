@@ -359,6 +359,9 @@ namespace Falltergeist
             player->setRightHandSlot(spear);
             player->setActionAnimation("aa")->stop();
             player->setPID(0x01000001);
+
+            player->setLevel(12);
+            player->addPerk(PERK::SWIFT_LEARNER);
         }
 
         std::vector<Input::Mouse::Icon> Location::getCursorIconsForObject(Game::Object *object)
