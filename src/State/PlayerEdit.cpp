@@ -372,7 +372,7 @@ namespace Falltergeist
             addUI(tabsArrowDown);
 
             // TEST PERK LEVELLING
-             Game::getInstance()->pushState(new PlayerChoosePerk());
+            Game::getInstance()->pushState(new PlayerChoosePerk(resourceManager));
         }
 
         UI::TextArea* PlayerEdit::_addLabel(const std::string& name, UI::TextArea* label)

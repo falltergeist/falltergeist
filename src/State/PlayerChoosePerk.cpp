@@ -9,19 +9,22 @@
 #include "../UI/TextAreaList.h"
 #include "../UI/ImageButton.h"
 #include "../UI/Image.h"
+#include "../UI/Factory/ImageButtonFactory.h"
 #include "../UI/Rectangle.h"
+#include "../UI/ResourceManager.h"
 
 namespace Falltergeist
 {
+    using ImageButtonType = UI::Factory::ImageButtonFactory::Type;
+
     namespace State
     {
-        PlayerChoosePerk::PlayerChoosePerk() : State()
+        PlayerChoosePerk::PlayerChoosePerk(std::shared_ptr<UI::IResourceManager> resourceManager) : State()
         {
-            _bgPos = Point((Game::getInstance()->renderer()->size() - Point(640, 480)) / 2);
-        }
+            this->resourceManager = resourceManager;
+            imageButtonFactory = std::make_unique<UI::Factory::ImageButtonFactory>(resourceManager);
 
-        PlayerChoosePerk::~PlayerChoosePerk()
-        {
+            _bgPos = Point((Game::getInstance()->renderer()->size() - Point(640, 480)) / 2);
         }
 
         void PlayerChoosePerk::init()
@@ -34,19 +37,19 @@ namespace Falltergeist
             int bgX = _bgPos.x();
             int bgY = _bgPos.y();
 
-            auto bg = new UI::Image("art/intrface/perkwin.frm");
+            auto bg = resourceManager->getImage("art/intrface/perkwin.frm");
             bg->setPosition(_bgPos + Point(30, 95));
 
             auto pickPerkLabel = new UI::TextArea(_t(MSG_EDITOR, 152), bgX+80, bgY+112);
             pickPerkLabel->setFont("font3.aaf", {0xb8, 0x9c, 0x28, 0xff});
 
-            auto doneButton = new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, bgX+78, bgY+282);
+            auto doneButton = imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {bgX+78, bgY+282});
             doneButton->mouseClickHandler().add(std::bind(&PlayerChoosePerk::onDoneButtonClick, this, std::placeholders::_1));
 
             auto doneLabel = new UI::TextArea(_t(MSG_EDITOR, 100), bgX+98, bgY+282);
             doneLabel->setFont("font3.aaf", {0xb8, 0x9c, 0x28, 0xff});
 
-            auto cancelButton = new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, bgX+183, bgY+282);
+            auto cancelButton = imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {bgX+183, bgY+282});
             cancelButton->mouseClickHandler().add(std::bind(&PlayerChoosePerk::onCancelButtonClick, this, std::placeholders::_1));
 
             auto cancelLabel = new UI::TextArea(_t(MSG_EDITOR, 102), bgX+203, bgY+282);
@@ -57,7 +60,7 @@ namespace Falltergeist
             _perkNames->setSize({ 0, 140 });
             _perkRanks->setSize({ 0, 140 });
 
-            auto scrollUp = new UI::ImageButton(UI::ImageButton::Type::SMALL_UP_ARROW, bgX+55, bgY+140);
+            auto scrollUp = imageButtonFactory->getByType(ImageButtonType::SMALL_UP_ARROW, {bgX+55, bgY+140});
             scrollUp->mouseClickHandler().add([=](...) {
                 if (--_selectedIndex < 0) _selectedIndex = 0;
 
@@ -67,7 +70,7 @@ namespace Falltergeist
                 selectPerk(_selectedIndex);
             });
 
-            auto scrollDown = new UI::ImageButton(UI::ImageButton::Type::SMALL_DOWN_ARROW, bgX+55, bgY+153);
+            auto scrollDown = imageButtonFactory->getByType(ImageButtonType::SMALL_DOWN_ARROW, {bgX+55, bgY+153});
             scrollDown->mouseClickHandler().add([=](...) {
                 int limit = static_cast<int>(_perkNames->textAreas().size()) - 1;
                 if (++_selectedIndex > limit) _selectedIndex = limit;
@@ -126,7 +129,7 @@ namespace Falltergeist
 
                     _perksList.push_back(perk.perk);
 
-                    _images.push_back(std::make_shared<UI::Image>("art/skilldex/" + perk.image + ".frm"));
+                    _images.push_back(std::shared_ptr<UI::Image>(resourceManager->getImage("art/skilldex/" + perk.image + ".frm")));
                 }
             }
 
