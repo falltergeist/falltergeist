@@ -18,7 +18,7 @@ namespace Falltergeist
         {
             public:
                 DoorSceneryObject();
-                ~DoorSceneryObject() override = default;
+                ~DoorSceneryObject() = default;
 
                 bool opened() const;
                 void setOpened(bool value);

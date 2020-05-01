@@ -2,15 +2,24 @@
 
 #include <memory>
 #include "../State/State.h"
+#include "../UI/IResourceManager.h"
 
 namespace Falltergeist
 {
+    namespace UI
+    {
+        namespace Factory
+        {
+            class ImageButtonFactory;
+        }
+    }
+
     namespace State
     {
-        class MainMenu : public State
+        class MainMenu final : public State
         {
             public:
-                MainMenu();
+                MainMenu(std::shared_ptr<UI::IResourceManager> resourceManager);
                 ~MainMenu() override;
 
                 void init() override;
@@ -36,6 +45,10 @@ namespace Falltergeist
                 void onLoadGameStart(Event::State* event);
                 void onIntroStart(Event::State* event);
                 void onCreditsStart(Event::State* event);
+
+            private:
+                std::shared_ptr<UI::IResourceManager> resourceManager;
+                std::unique_ptr<UI::Factory::ImageButtonFactory> imageButtonFactory;
         };
     }
 }

@@ -3,11 +3,16 @@
 #include <map>
 #include <vector>
 #include "../State/State.h"
+#include "../UI/IResourceManager.h"
 
 namespace Falltergeist
 {
     namespace UI
     {
+        namespace Factory
+        {
+            class ImageButtonFactory;
+        }
         class BigCounter;
         class HiddenMask;
         class Image;
@@ -16,14 +21,14 @@ namespace Falltergeist
     }
     namespace State
     {
-        class PlayerEdit : public State
+        class PlayerEdit final : public State
         {
             public:
-                PlayerEdit();
-                ~PlayerEdit() override;
+                PlayerEdit(std::shared_ptr<UI::IResourceManager> resourceManager);
+                virtual ~PlayerEdit() = default;
 
                 void init() override;
-                void think() override;
+                void think(const float &deltaTime) override;
                 void render() override;
 
                 void onMaskClick(Event::Mouse* event);
@@ -66,6 +71,10 @@ namespace Falltergeist
                 bool _statDecrease(unsigned int num);
                 bool _traitToggle(unsigned int num);
                 bool _skillToggle(unsigned int num);
+
+            private:
+                std::shared_ptr<UI::IResourceManager> resourceManager;
+                std::unique_ptr<UI::Factory::ImageButtonFactory> imageButtonFactory;
         };
     }
 }

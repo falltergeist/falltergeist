@@ -6,6 +6,7 @@
 #include "../Input/Mouse.h"
 #include "../ResourceManager.h"
 #include "../Settings.h"
+#include "../UI/Factory/ImageButtonFactory.h"
 #include "../UI/Image.h"
 #include "../UI/ImageButton.h"
 #include "../UI/MultistateImageButton.h"
@@ -14,15 +15,14 @@
 
 namespace Falltergeist
 {
+    using ImageButtonType = UI::Factory::ImageButtonFactory::Type;
+
     namespace State
     {
-
-        SettingsMenu::SettingsMenu() : State()
+        SettingsMenu::SettingsMenu(std::shared_ptr<UI::IResourceManager> resourceManager) : State()
         {
-        }
-
-        SettingsMenu::~SettingsMenu()
-        {
+            this->resourceManager = resourceManager;
+            imageButtonFactory = std::make_unique<UI::Factory::ImageButtonFactory>(resourceManager);
         }
 
         void SettingsMenu::init()
@@ -34,7 +34,7 @@ namespace Falltergeist
             setFullscreen(true);
 
             // background
-            auto background = new UI::Image("art/intrface/prefscrn.frm");
+            auto background = resourceManager->getImage("art/intrface/prefscrn.frm");
             Point backgroundPos = Point((Game::getInstance()->renderer()->size() - background->size()) / 2);
             int backgroundX = backgroundPos.x();
             int backgroundY = backgroundPos.y();
@@ -44,52 +44,52 @@ namespace Falltergeist
             auto settings = Game::getInstance()->settings();
 
             // Switches (big)
-            auto combatDifficultySwitch = new UI::MultistateImageButton(UI::MultistateImageButton::Type::BIG_SWITCH, backgroundX+76, backgroundY+149);
+            auto combatDifficultySwitch = new UI::MultistateImageButton(UI::MultistateImageButton::Type::BIG_SWITCH, {backgroundX + 76, backgroundY + 149});
             combatDifficultySwitch->setMaxState(3);
             combatDifficultySwitch->setState(settings->combatDifficulty());
             addUI("combat_difficulty",combatDifficultySwitch);
 
-            auto gameDifficultySwitch = new UI::MultistateImageButton(UI::MultistateImageButton::Type::BIG_SWITCH, backgroundX+76, backgroundY+71);
+            auto gameDifficultySwitch = new UI::MultistateImageButton(UI::MultistateImageButton::Type::BIG_SWITCH, {backgroundX + 76, backgroundY + 71});
             gameDifficultySwitch->setMaxState(3);
             gameDifficultySwitch->setState(settings->gameDifficulty());
             addUI("game_difficulty",gameDifficultySwitch);
 
-            auto violenceLevelSwitch = new UI::MultistateImageButton(UI::MultistateImageButton::Type::BIG_SWITCH, backgroundX+76, backgroundY+227);
+            auto violenceLevelSwitch = new UI::MultistateImageButton(UI::MultistateImageButton::Type::BIG_SWITCH, {backgroundX + 76, backgroundY + 227});
             violenceLevelSwitch->setState(settings->violenceLevel());
             addUI("violence_level",violenceLevelSwitch);
 
-            auto targetHighlightSwitch = new UI::MultistateImageButton(UI::MultistateImageButton::Type::BIG_SWITCH, backgroundX+76, backgroundY+309);
+            auto targetHighlightSwitch = new UI::MultistateImageButton(UI::MultistateImageButton::Type::BIG_SWITCH, {backgroundX + 76, backgroundY + 309});
             targetHighlightSwitch->setMaxState(3);
             targetHighlightSwitch->setState(settings->targetHighlight());
             addUI("target_highlight",targetHighlightSwitch);
 
-            auto combatLooksSwitch = new UI::MultistateImageButton(UI::MultistateImageButton::Type::BIG_SWITCH, backgroundX+76, backgroundY+387);
+            auto combatLooksSwitch = new UI::MultistateImageButton(UI::MultistateImageButton::Type::BIG_SWITCH, {backgroundX + 76, backgroundY + 387});
             combatLooksSwitch->setMaxState(2);
             combatLooksSwitch->setState(settings->combatLooks());
             addUI("combat_looks",combatLooksSwitch);
 
             // Switches (small)
-            auto combatMessagesSwitch = new UI::MultistateImageButton(UI::MultistateImageButton::Type::SMALL_SWITCH, backgroundX+299, backgroundY+74);
+            auto combatMessagesSwitch = new UI::MultistateImageButton(UI::MultistateImageButton::Type::SMALL_SWITCH, {backgroundX + 299, backgroundY + 74});
             combatMessagesSwitch->setState(settings->combatMessages());
             addUI("combat_messages",combatMessagesSwitch);
 
-            auto combatTauntsSwitch = new UI::MultistateImageButton(UI::MultistateImageButton::Type::SMALL_SWITCH, backgroundX+299, backgroundY+74+66);
+            auto combatTauntsSwitch = new UI::MultistateImageButton(UI::MultistateImageButton::Type::SMALL_SWITCH, {backgroundX + 299, backgroundY + 74 + 66});
             combatTauntsSwitch->setState(settings->combatTaunts());
             addUI("combat_taunts",combatTauntsSwitch);
 
-            auto languageFilterSwitch = new UI::MultistateImageButton(UI::MultistateImageButton::Type::SMALL_SWITCH, backgroundX+299, backgroundY+74+66*2);
+            auto languageFilterSwitch = new UI::MultistateImageButton(UI::MultistateImageButton::Type::SMALL_SWITCH, {backgroundX+299, backgroundY + 74 + 66 * 2});
             languageFilterSwitch->setState(settings->languageFilter());
             addUI("language_filter",languageFilterSwitch);
 
-            auto runningSwitch = new UI::MultistateImageButton(UI::MultistateImageButton::Type::SMALL_SWITCH, backgroundX+299, backgroundY+74+66*3);
+            auto runningSwitch = new UI::MultistateImageButton(UI::MultistateImageButton::Type::SMALL_SWITCH, {backgroundX + 299, backgroundY + 74 + 66 * 3});
             runningSwitch->setState(settings->running());
             addUI("running",runningSwitch);
 
-            auto subtitlesSwitch = new UI::MultistateImageButton(UI::MultistateImageButton::Type::SMALL_SWITCH, backgroundX+299, backgroundY+74+66*4);
+            auto subtitlesSwitch = new UI::MultistateImageButton(UI::MultistateImageButton::Type::SMALL_SWITCH, {backgroundX + 299, backgroundY + 74 + 66 * 4});
             subtitlesSwitch->setState(settings->subtitles());
             addUI("subtitles",subtitlesSwitch);
 
-            auto itemHightlightSwitch = new UI::MultistateImageButton(UI::MultistateImageButton::Type::SMALL_SWITCH, backgroundX+299, backgroundY+74+66*5);
+            auto itemHightlightSwitch = new UI::MultistateImageButton(UI::MultistateImageButton::Type::SMALL_SWITCH, {backgroundX + 299, backgroundY + 74 + 66 * 5});
             itemHightlightSwitch->setState(settings->itemHighlight());
             addUI("item_highlight",itemHightlightSwitch);
 
@@ -288,45 +288,61 @@ namespace Falltergeist
             // BUTTONS
 
             // button: Default
-            auto defaultButton = new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, backgroundX+23, backgroundY+450);
+            auto defaultButton = imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {backgroundX + 23, backgroundY + 450});
             defaultButton->mouseClickHandler().add(std::bind(&SettingsMenu::onDefaultButtonClick, this, std::placeholders::_1));
             addUI(defaultButton);
 
             // button: Done
-            auto doneButton = new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, backgroundX+148, backgroundY+450);
+            auto doneButton = imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {backgroundX + 148, backgroundY + 450});
             doneButton->mouseClickHandler().add([this](Event::Event* event){ this->doSave(); });
             addUI(doneButton);
 
             // button: Cancel
-            auto cancelButton = new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, backgroundX+263, backgroundY+450);
+            auto cancelButton = imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {backgroundX + 263, backgroundY + 450});
             cancelButton->mouseClickHandler().add([this](Event::Event* event){ this->doCancel(); });
             addUI(cancelButton);
 
             // button: Affect player speed
-            auto affectPlayerSpeedCheckBox = new UI::ImageButton(UI::ImageButton::Type::CHECKBOX, backgroundX+383, backgroundY+68);
+            auto affectPlayerSpeedCheckBox = imageButtonFactory->getByType(ImageButtonType::CHECKBOX, {backgroundX + 383, backgroundY + 68});
             affectPlayerSpeedCheckBox->setChecked(settings->playerSpeedup());
             addUI("player_speedup", affectPlayerSpeedCheckBox);
 
             // SLIDERS
             // COMBAT SPEED SLIDER
-            auto combatSpeedSlider = new UI::Slider(backgroundX+384, backgroundY+50);
+            auto combatSpeedSlider = new UI::Slider(
+                {backgroundX + 384, backgroundY + 50},
+                std::unique_ptr<UI::Image>(resourceManager->getImage("art/intrface/prfsldon.frm")),
+                std::unique_ptr<UI::Image>(resourceManager->getImage("art/intrface/prfsldof.frm"))
+            );
             combatSpeedSlider->setMinValue(0.0);
             combatSpeedSlider->setMaxValue(50.0);
             combatSpeedSlider->setValue(settings->combatSpeed());
             addUI("combat_speed",combatSpeedSlider);
 
             // TEXT DELAY SLIDER
-            auto textDelaySlider = new UI::Slider(backgroundX+384, backgroundY+125);
+            auto textDelaySlider = new UI::Slider(
+                {backgroundX + 384, backgroundY + 125},
+                std::unique_ptr<UI::Image>(resourceManager->getImage("art/intrface/prfsldon.frm")),
+                std::unique_ptr<UI::Image>(resourceManager->getImage("art/intrface/prfsldof.frm"))
+            );
             textDelaySlider->setValue(settings->textDelay());
             addUI("text_delay",textDelaySlider);
 
             // MASTER AUDIO VOLUME SLIDER
-            auto masterAudioVolumeSlider = new UI::Slider(backgroundX+384, backgroundY+196);
+            auto masterAudioVolumeSlider = new UI::Slider(
+                {backgroundX + 384, backgroundY + 196},
+                std::unique_ptr<UI::Image>(resourceManager->getImage("art/intrface/prfsldon.frm")),
+                std::unique_ptr<UI::Image>(resourceManager->getImage("art/intrface/prfsldof.frm"))
+            );
             masterAudioVolumeSlider->setValue(settings->masterVolume());
             addUI("master_volume", masterAudioVolumeSlider);
 
             // MUSIC VOLUME SLIDER
-            auto musicVolumeSlider = new UI::Slider(backgroundX+384, backgroundY+196+51);
+            auto musicVolumeSlider = new UI::Slider(
+                {backgroundX + 384, backgroundY + 196 + 51},
+                std::unique_ptr<UI::Image>(resourceManager->getImage("art/intrface/prfsldon.frm")),
+                std::unique_ptr<UI::Image>(resourceManager->getImage("art/intrface/prfsldof.frm"))
+            );
             musicVolumeSlider->setValue(settings->musicVolume());
             addUI("music_volume", musicVolumeSlider);
             musicVolumeSlider->changeHandler().add([=](Event::Event* evt)
@@ -335,29 +351,40 @@ namespace Falltergeist
             });
 
             // SOUND EFFECTS VOLUME SLIDER
-            auto soundEffectsVolumeSlider = new UI::Slider(backgroundX+384, backgroundY+196+51*2);
+            auto soundEffectsVolumeSlider = new UI::Slider(
+                {backgroundX + 384, backgroundY + 196 + 51 * 2},
+                std::unique_ptr<UI::Image>(resourceManager->getImage("art/intrface/prfsldon.frm")),
+                std::unique_ptr<UI::Image>(resourceManager->getImage("art/intrface/prfsldof.frm"))
+            );
             soundEffectsVolumeSlider->setValue(settings->sfxVolume());
             addUI("sfx_volume", soundEffectsVolumeSlider);
 
             // SPEECH VOLUME SLIDER
-            auto speechVolumeSlider = new UI::Slider(backgroundX+384, backgroundY+196+51*3);
+            auto speechVolumeSlider = new UI::Slider(
+                {backgroundX + 384, backgroundY + 196 + 51 * 3},
+                std::unique_ptr<UI::Image>(resourceManager->getImage("art/intrface/prfsldon.frm")),
+                std::unique_ptr<UI::Image>(resourceManager->getImage("art/intrface/prfsldof.frm"))
+            );
             speechVolumeSlider->setValue(settings->voiceVolume());
             addUI("voice_volume", speechVolumeSlider);
 
             // BRIGHTNESS LEVEL SLIDER
-            auto brightnessLevelSlider = new UI::Slider(backgroundX+384, backgroundY+196+51*4);
+            auto brightnessLevelSlider = new UI::Slider(
+                {backgroundX + 384, backgroundY + 196 + 51 * 4},
+                std::unique_ptr<UI::Image>(resourceManager->getImage("art/intrface/prfsldon.frm")),
+                std::unique_ptr<UI::Image>(resourceManager->getImage("art/intrface/prfsldof.frm"))
+            );
             brightnessLevelSlider->setValue(settings->brightness());
             addUI("brightness", brightnessLevelSlider);
 
             // MOUSE SENSITIVITY SLIDER
-            auto mouseSensitivitySlider = new UI::Slider(backgroundX+384, backgroundY+196+51*5);
+            auto mouseSensitivitySlider = new UI::Slider(
+                {backgroundX + 384, backgroundY + 196 + 51 * 5},
+                std::unique_ptr<UI::Image>(resourceManager->getImage("art/intrface/prfsldon.frm")),
+                std::unique_ptr<UI::Image>(resourceManager->getImage("art/intrface/prfsldof.frm"))
+            );
             mouseSensitivitySlider->setValue(settings->mouseSensitivity());
             addUI("mouse_sensitivity",mouseSensitivitySlider);
-        }
-
-        void SettingsMenu::think()
-        {
-            State::think();
         }
 
         //IniFileSection SettingsMenu::_getSettings()

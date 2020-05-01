@@ -10,7 +10,7 @@ namespace Falltergeist
     }
     namespace State
     {
-        class InventoryDragItem : public State
+        class InventoryDragItem final : public State
         {
             public:
                 InventoryDragItem(UI::ImageList* itemUi);

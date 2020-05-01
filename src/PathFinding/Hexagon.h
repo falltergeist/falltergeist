@@ -27,16 +27,6 @@ namespace Falltergeist
             const Point& position() const;
             void setPosition(const Point& pos);
 
-            inline bool inRender()
-            {
-                return _inRender;
-            }
-
-            inline void setInRender(bool value)
-            {
-                _inRender = value;
-            }
-
             inline unsigned int number()
             {
                 return _number;
@@ -112,8 +102,6 @@ namespace Falltergeist
             int _cubeZ = 0;
 
             unsigned int _heuristic = 0;
-
-            bool _inRender = false;
 
             unsigned int _light = 655;
     };

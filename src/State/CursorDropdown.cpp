@@ -16,8 +16,13 @@ namespace Falltergeist
 {
     namespace State
     {
-        CursorDropdown::CursorDropdown(std::vector<Input::Mouse::Icon>&& icons, bool onlyIcon) : State()
+        CursorDropdown::CursorDropdown(
+            std::shared_ptr<UI::IResourceManager> resourceManager,
+            std::vector<Input::Mouse::Icon>&& icons,
+            bool onlyIcon
+        ) : State()
         {
+            this->resourceManager = resourceManager;
             if (icons.size() == 0) {
                 throw Exception("CursorDropdown::CursorDropdown() - empty icons list!");
             }
@@ -26,10 +31,6 @@ namespace Falltergeist
             if (onlyIcon && _icons.size() > 1) {
                 _icons.resize(1);
             }
-        }
-
-        CursorDropdown::~CursorDropdown()
-        {
         }
 
         void CursorDropdown::init()
@@ -116,9 +117,9 @@ namespace Falltergeist
                         throw Exception("CursorDropdown::init() - unknown icon type");
 
                 }
-                _activeIcons.push_back(std::make_unique<UI::Image>("art/intrface/" + activeSurface));
+                _activeIcons.push_back(std::unique_ptr<UI::Image>(resourceManager->getImage("art/intrface/" + activeSurface)));
                 _activeIcons.back()->setY(40*i);
-                _inactiveIcons.push_back(std::make_unique<UI::Image>("art/intrface/" + inactiveSurface));
+                _inactiveIcons.push_back(std::unique_ptr<UI::Image>(resourceManager->getImage("art/intrface/" + inactiveSurface)));
                 _inactiveIcons.back()->setY(40*i);
                 i++;
             }
@@ -135,10 +136,10 @@ namespace Falltergeist
             int deltaY = delta.y();
             if (deltaX > 0) {
                 _iconsPos.setX(_iconsPos.x() - 40 - 29 - 29);
-                _cursor = new UI::Image("art/intrface/actarrom.frm");
+                _cursor = resourceManager->getImage("art/intrface/actarrom.frm");
                 _cursor->setOffset(-29, 0);
             } else {
-                _cursor = new UI::Image("art/intrface/actarrow.frm");
+                _cursor = resourceManager->getImage("art/intrface/actarrow.frm");
                 _cursor->setOffset(0, 0);
             }
             if (deltaY > 0) {
@@ -181,9 +182,9 @@ namespace Falltergeist
             }
         }
 
-        void CursorDropdown::think()
+        void CursorDropdown::think(const float &deltaTime)
         {
-            State::think();
+            State::think(deltaTime);
 
             auto game = Game::getInstance();
 

@@ -13,6 +13,8 @@ Under development
 - [feature] Optimisations & code readability improvements to hexagon logic (AdamFx990)
 - [feature] Added missing tabs for perks, karma and kills in the Character window (JanSimek)
 - [feature][#476] Automated Appveyor Windows builds (JanSimek, burner1024)
+- [feature] Added timediff to gameloop in order to make things to be independent from SDL ticks (alexeevdv)
+- [feature] Extract UI generation logic from game objects (alexeevdv)
 
 0.3.1 (2018-01-14)
 =======================

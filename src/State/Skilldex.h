@@ -2,16 +2,25 @@
 
 #include "../Format/Enums.h"
 #include "../State/State.h"
+#include "../UI/IResourceManager.h"
 
 namespace Falltergeist
 {
+    namespace UI
+    {
+        namespace Factory
+        {
+            class ImageButtonFactory;
+        }
+    }
+
     namespace State
     {
-        class Skilldex : public State
+        class Skilldex final : public State
         {
             public:
-                Skilldex();
-                ~Skilldex() override;
+                Skilldex(std::shared_ptr<UI::IResourceManager> resourceManager);
+                virtual ~Skilldex() = default;
 
                 void init() override;
 
@@ -21,6 +30,10 @@ namespace Falltergeist
 
                 void onCancelButtonClick();
                 void onSkillButtonClick(SKILL skill);
+
+            private:
+                std::shared_ptr<UI::IResourceManager> resourceManager;
+                std::unique_ptr<UI::Factory::ImageButtonFactory> imageButtonFactory;
         };
     }
 }

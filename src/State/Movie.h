@@ -25,14 +25,14 @@ namespace Falltergeist
             int frames;
         } effect_t;
 
-        class Movie : public State
+        class Movie final : public State
         {
             public:
                 Movie(int id);
                 ~Movie() override;
 
                 void init() override;
-                void think() override;
+                void think(const float &deltaTime) override;
                 void handle(Event::Event* event) override;
 
                 void onVideoFinished();

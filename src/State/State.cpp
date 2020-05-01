@@ -25,19 +25,15 @@ namespace Falltergeist
             });
         }
 
-        State::~State()
-        {
-        }
-
         void State::init()
         {
             _initialized = true;
         }
 
-        void State::think()
+        void State::think(const float &deltaTime)
         {
             for (auto& ui : _ui) {
-                ui->think();
+                ui->think(deltaTime);
             }
         }
 
