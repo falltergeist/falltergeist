@@ -10,7 +10,7 @@ namespace Falltergeist
     {
         class Image;
 
-        class SmallCounter : public Falltergeist::UI::Base
+        class SmallCounter final : public Falltergeist::UI::Base
         {
             public:
                 enum Color
@@ -27,8 +27,8 @@ namespace Falltergeist
 
                 SmallCounter(const Point& pos);
                 SmallCounter(const SmallCounter&) = delete;
-                ~SmallCounter() override;
                 void operator=(const SmallCounter&) = delete;
+                virtual ~SmallCounter() = default;
 
                 Color color() const;
                 void setColor(Color color);

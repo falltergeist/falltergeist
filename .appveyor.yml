@@ -1,0 +1,58 @@
+shallow_clone: true
+
+build:
+  verbosity: detailed
+
+cache: C:\Tools\vcpkg\installed\
+
+environment:
+  matrix:
+    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+      CMAKE_GENERATOR: Visual Studio 15 2017
+      VCPKG_TRIPLET_NAME: x86-windows
+    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+      CMAKE_GENERATOR: Visual Studio 15 2017 Win64
+      VCPKG_TRIPLET_NAME: x64-windows
+
+configuration:
+  - Release
+#  - Debug
+
+init:
+  - ps: echo "-------------------- BEGIN SYSTEM INFORMATION --------------------"
+  - ps: echo CMAKE_GENERATOR=$env:CMAKE_GENERATOR
+  - ps: echo VCPKG_TRIPLET_NAME=$env:VCPKG_TRIPLET_NAME
+  - ps: cmake --version
+  - ps: git config --global core.autocrlf input
+  - ps: echo CONFIGURATION=$env:CONFIGURATION
+  - ps: echo "--------------------  END SYSTEM INFORMATION  --------------------"
+
+install:
+  - ps: vcpkg install 
+              sdl2:$env:VCPKG_TRIPLET_NAME
+              sdl2-image:$env:VCPKG_TRIPLET_NAME
+              sdl2-mixer:$env:VCPKG_TRIPLET_NAME
+              zlib:$env:VCPKG_TRIPLET_NAME
+              glew:$env:VCPKG_TRIPLET_NAME
+              glm:$env:VCPKG_TRIPLET_NAME
+  - ps: vcpkg list
+
+build_script:
+  - cmd: mkdir build && cd build
+  - cmd: cmake -G"%CMAKE_GENERATOR%" -DCMAKE_TOOLCHAIN_FILE=c:/tools/vcpkg/scripts/buildsystems/vcpkg.cmake ..
+  - cmd: cmake --build . --config "%CONFIGURATION%"
+
+after_build:
+  - cmd: cpack -c "%CONFIGURATION%"
+
+artifacts:
+  - path: build/falltergeist-*.zip
+
+#deploy:
+#  - provider: GitHub
+#    artifact: build/falltergeist-*.zip
+#    draft: false
+#    prerelease: false
+#    on:
+#      branch: master
+#      appveyor_repo_tag: true

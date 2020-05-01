@@ -2,6 +2,7 @@
 
 #include "../State/State.h"
 #include "../Game/Timer.h"
+#include "../UI/IResourceManager.h"
 
 namespace Falltergeist
 {
@@ -20,6 +21,13 @@ namespace Falltergeist
     {
         class CritterObject;
     }
+    namespace UI
+    {
+        namespace Factory
+        {
+            class ImageButtonFactory;
+        }
+    }
     namespace VM
     {
         class Script;
@@ -30,7 +38,7 @@ namespace Falltergeist
         class CritterBarter;
         class CritterDialogReview;
 
-        class CritterInteract : public State
+        class CritterInteract final : public State
         {
             public:
                 enum class Phase {
@@ -58,9 +66,9 @@ namespace Falltergeist
                     REVIEW,
                     CONTROL
                 };
-                void think(uint32_t nanosecondsPassed) override;
+                void think(const float &deltaTime) override;
 
-                CritterInteract();
+                CritterInteract(std::shared_ptr<UI::IResourceManager> resourceManager);
                 ~CritterInteract() override;
 
                 void init() override;
@@ -96,7 +104,7 @@ namespace Falltergeist
                 void onMoodTransitionEnded(Event::Event* event);
 
 
-        protected:
+            protected:
                 Point _oldCameraCenter;
                 int _backgroundID = -1;
                 int _headID = -1;
@@ -119,7 +127,8 @@ namespace Falltergeist
                 CritterDialogReview* _review;
 
                 SubState _state = SubState::NONE;
-
+            private:
+                std::shared_ptr<UI::IResourceManager> resourceManager;
         };
     }
 }

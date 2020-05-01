@@ -54,7 +54,7 @@ namespace Falltergeist
 
             _eventDispatcher = std::make_unique<Event::Dispatcher>();
 
-            _renderer = std::make_unique<Graphics::Renderer>(_settings->screenWidth(), _settings->screenHeight());
+            _renderer = std::make_shared<Graphics::Renderer>(_settings->screenWidth(), _settings->screenHeight());
 
             Logger::info("GAME") << CrossPlatform::getVersion() << std::endl;
             Logger::info("GAME") << "Opensource Fallout 2 game engine" << std::endl;
@@ -69,10 +69,10 @@ namespace Falltergeist
             std::string version = CrossPlatform::getVersion();
             renderer()->setCaption(version.c_str());
 
-            _mixer = std::make_unique<Audio::Mixer>();
+            _mixer = std::make_shared<Audio::Mixer>();
             _mixer->setMusicVolume(_settings->musicVolume());
-            _mouse = std::make_unique<Input::Mouse>();
-            _fpsCounter = std::make_unique<UI::FpsCounter>(renderer()->width() - 42, 2);
+            _mouse = std::make_shared<Input::Mouse>(uiResourceManager);
+            _fpsCounter = std::make_unique<UI::FpsCounter>(Point(renderer()->width() - 42, 2));
             _fpsCounter->setWidth(42);
             _fpsCounter->setHorizontalAlign(UI::TextArea::HorizontalAlign::RIGHT);
 
@@ -83,6 +83,7 @@ namespace Falltergeist
             _mousePosition->setWidth(55);
             _mousePosition->setHorizontalAlign(UI::TextArea::HorizontalAlign::RIGHT);
             _animatedPalette = std::make_unique<Graphics::AnimatedPalette>();
+            _gameTime = std::make_shared<Time>();
             _currentTime = std::make_unique<UI::TextArea>("", renderer()->size() - Point(150, 10));
             _currentTime->setWidth(150);
             _currentTime->setHorizontalAlign(UI::TextArea::HorizontalAlign::RIGHT);
@@ -150,12 +151,26 @@ namespace Falltergeist
         {
             Logger::info("GAME") << "Starting main loop" << std::endl;
             _frame = 0;
+
+            uint32_t FPS = 60;
+            uint32_t frameDelay = 1000 / FPS;
+
+            uint32_t frameStart = 0;
+            uint32_t frameTime = 0;
             while (!_quit) {
+                frameStart = SDL_GetTicks();
+
                 handle();
-                think(CrossPlatform::nanosecondsPassed());
+                think(frameTime);
                 render();
                 _statesForDelete.clear();
                 _frame++;
+
+                frameTime = SDL_GetTicks() - frameStart;
+                if (frameDelay > frameTime) {
+                    SDL_Delay(frameDelay - frameTime);
+                    frameTime += (frameDelay - frameTime);
+                }
             }
             Logger::info("GAME") << "Stopping main loop" << std::endl;
         }
@@ -170,14 +185,14 @@ namespace Falltergeist
             _player = std::move(player);
         }
 
-        std::shared_ptr<DudeObject> Game::player()
+        std::shared_ptr<DudeObject> Game::player() const
         {
             return _player;
         }
 
-        Input::Mouse* Game::mouse() const
+        std::shared_ptr<Input::Mouse> Game::mouse() const
         {
-            return _mouse.get();
+            return _mouse;
         }
 
         State::Location* Game::locationState()
@@ -273,14 +288,14 @@ namespace Falltergeist
             return subset;
         }
 
-        Graphics::Renderer* Game::renderer()
+        std::shared_ptr<Graphics::Renderer> Game::renderer() const
         {
-            return _renderer.get();
+            return _renderer;
         }
 
-        Settings* Game::settings() const
+        std::shared_ptr<Settings> Game::settings() const
         {
-            return _settings.get();
+            return _settings;
         }
 
         // TODO: probably need to move this to factory class
@@ -375,26 +390,29 @@ namespace Falltergeist
             }
         }
 
-        void Game::think(uint32_t nanosecondsPassed)
+        void Game::think(const float &deltaTime)
         {
-            _fpsCounter->think(nanosecondsPassed);
-            _mouse->think(nanosecondsPassed);
+            _fpsCounter->think(deltaTime);
+            _mouse->think(deltaTime);
 
-            _animatedPalette->think(nanosecondsPassed);
+            _animatedPalette->think(deltaTime);
 
             *_mousePosition = "";
             *_mousePosition << mouse()->position().x() << " : " << mouse()->position().y();
 
             *_currentTime = "";
-            *_currentTime << _gameTime.year()  << "-" << _gameTime.month()   << "-" << _gameTime.day() << " "
-                          << _gameTime.hours() << ":" << _gameTime.minutes() << ":" << _gameTime.seconds() << " " << _gameTime.ticks();
+            *_currentTime << _gameTime->year()  << "-" << _gameTime->month()   << "-" << _gameTime->day() << " "
+                          << _gameTime->hours() << ":" << _gameTime->minutes() << ":" << _gameTime->seconds() << " " << _gameTime->ticks();
+
+            // TODO get rid of time in Renderer. It should know nothing about time
+            _renderer->think(deltaTime);
 
             if (_renderer->fading()) {
                 return;
             }
 
             for (auto state : _getActiveStates()) {
-                state->think(nanosecondsPassed);
+                state->think(deltaTime);
             }
             // process custom events
             _eventDispatcher->processScheduledEvents();
@@ -431,14 +449,14 @@ namespace Falltergeist
             return _animatedPalette.get();
         }
 
-        Time* Game::gameTime()
+        std::shared_ptr<Time> Game::gameTime() const
         {
-            return &_gameTime;
+            return _gameTime;
         }
 
-        Audio::Mixer* Game::mixer()
+        std::shared_ptr<Audio::Mixer> Game::mixer() const
         {
-            return _mixer.get();
+            return _mixer;
         }
 
         Event::Dispatcher* Game::eventDispatcher()
@@ -449,6 +467,11 @@ namespace Falltergeist
         unsigned int Game::frame() const
         {
             return _frame;
+        }
+
+        void Game::setUIResourceManager(std::shared_ptr<UI::IResourceManager> uiResourceManager)
+        {
+            this->uiResourceManager = uiResourceManager;
         }
     }
 }

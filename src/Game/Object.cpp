@@ -12,6 +12,7 @@
 #include "../Game/Defines.h"
 #include "../Game/DudeObject.h"
 #include "../Game/Game.h"
+#include "../Game/Helper/EggHelper.h"
 #include "../Game/Object.h"
 #include "../Graphics/ObjectUIFactory.h"
 #include "../PathFinding/HexagonGrid.h"
@@ -31,10 +32,6 @@ namespace Falltergeist
     namespace Game
     {
         Object::Object() : Event::EventTarget(Game::getInstance()->eventDispatcher())
-        {
-        }
-
-        Object::~Object()
         {
         }
 
@@ -65,7 +62,6 @@ namespace Falltergeist
             _FID = value;
             _generateUi();
         }
-
 
         int Object::SID() const
         {
@@ -225,16 +221,6 @@ namespace Falltergeist
             _floatMessage = std::move(message);
         }
 
-        static bool to_right_of(const Point &p1, const Point &p2)
-        {
-            return (double) (p2.x() - p1.x()) <= ((double) (p2.y() - p1.y()) * (4.0 / 3.0));
-        }
-
-        static bool in_front_of(const Point &p1, const Point &p2)
-        {
-            return (double) (p2.x() - p1.x()) <= ((double) (p2.y() - p1.y()) * -4.0);
-        }
-
         void Object::renderText()
         {
             auto message = floatMessage();
@@ -274,58 +260,15 @@ namespace Falltergeist
             setInRender(true);
             _ui->setLight(true);
             _ui->setLightLevel(hexagon()->light());
-            _ui->render(_useEggTransparency() && _isIntersectsWithEgg());
+
+            static Helper::EggHelper eggHelper; // TODO remove it when render logic is extracted from object
+            _ui->render(eggHelper.isTransparentForEgg(this, Game::getInstance()->player()));
         }
 
-
-        bool Object::_isIntersectsWithEgg()
-        {
-            //only walls and scenery are affected by egg
-            if (_type != Type::WALL && _type != Type::SCENERY) {
-                return false;
-            }
-            auto dude = Game::getInstance()->player();
-            Hexagon *dudeHex;
-
-            if (dude->movementQueue()->size()) {
-                dudeHex = dude->movementQueue()->back();
-            } else {
-                dudeHex = dude->hexagon();
-            }
-
-            auto objPos = hexagon()->position();
-            auto dudePos = dudeHex->position();
-
-            bool noBlockTrans = false;
-            bool transparent;
-
-            switch (_lightOrientation) {
-                case Orientation::EW:
-                case Orientation::WC:
-                    transparent = in_front_of(objPos, dudePos);
-                    noBlockTrans = to_right_of(objPos, dudePos);
-                    break;
-                case Orientation::NC:
-                    transparent = (to_right_of(dudePos, objPos) | in_front_of(objPos, dudePos));
-                    break;
-                case Orientation::SC:
-                    transparent = (in_front_of(objPos, dudePos) && to_right_of(dudePos, objPos));
-                    break;
-                default:
-                    transparent = to_right_of(dudePos, objPos);
-                    noBlockTrans = in_front_of(dudePos, objPos);
-                    break;
-            }
-
-            return (noBlockTrans && wallTransEnd())
-                   ? false
-                   : transparent;
-        }
-
-        void Object::think(uint32_t nanosecondsPassed)
+        void Object::think(const float &deltaTime)
         {
             if (_ui) {
-                _ui->think(nanosecondsPassed);
+                _ui->think(deltaTime);
             }
         }
 
@@ -574,11 +517,6 @@ namespace Falltergeist
                     anim->currentAnimation()->setCurrentFrame(_defaultFrame);
                 }
             }
-        }
-
-        bool Object::_useEggTransparency()
-        {
-            return false;
         }
 
         void Object::renderOutline(int type)

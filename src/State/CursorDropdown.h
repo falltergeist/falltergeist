@@ -4,6 +4,7 @@
 #include <vector>
 #include "../Input/Mouse.h"
 #include "../State/State.h"
+#include "../UI/IResourceManager.h"
 
 namespace Falltergeist
 {
@@ -18,14 +19,18 @@ namespace Falltergeist
     }
     namespace State
     {
-        class CursorDropdown : public State
+        class CursorDropdown final : public State
         {
             public:
-                CursorDropdown(std::vector<Input::Mouse::Icon>&& icons, bool onlyIcon = false);
-                ~CursorDropdown() override;
+                CursorDropdown(
+                    std::shared_ptr<UI::IResourceManager> resourceManager,
+                    std::vector<Input::Mouse::Icon>&& icons,
+                    bool onlyIcon = false
+                );
+                virtual ~CursorDropdown() = default;
 
                 void init() override;
-                void think(uint32_t nanosecondsPassed) override;
+                void think(const float &deltaTime) override;
                 void handle(Event::Event* event) override;
                 void render() override;
 
@@ -54,6 +59,8 @@ namespace Falltergeist
                 Event::MouseHandler _mouseDownHandler, _mouseUpHandler, _mouseMoveHandler;
 
                 void showMenu();
+            private:
+                std::shared_ptr<UI::IResourceManager> resourceManager;
         };
     }
 }

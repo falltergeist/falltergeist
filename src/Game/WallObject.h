@@ -13,10 +13,7 @@ namespace Falltergeist
         {
             public:
                 WallObject();
-                ~WallObject() override = default;
-
-            protected:
-                bool _useEggTransparency() override;
+                ~WallObject() = default;
         };
     }
 }

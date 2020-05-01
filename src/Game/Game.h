@@ -6,6 +6,7 @@
 #include <SDL.h>
 #include "../Base/Singleton.h"
 #include "../Game/Time.h"
+#include "../UI/IResourceManager.h"
 
 namespace Falltergeist
 {
@@ -77,43 +78,44 @@ namespace Falltergeist
                 /**
                  * @brief Process real-time logic.
                  */
-                void think(uint32_t nanosecondsPassed);
+                void think(const float &deltaTime);
                 /**
                  * @brief Render the game.
                  */
                 void render();
 
                 void setPlayer(std::shared_ptr<DudeObject> player);
-                std::shared_ptr<DudeObject> player();
+                std::shared_ptr<DudeObject> player() const;
 
-                Input::Mouse* mouse() const;
-                Graphics::Renderer* renderer();
-                Time* gameTime();
+                std::shared_ptr<Input::Mouse> mouse() const;
+                std::shared_ptr<Graphics::Renderer> renderer() const;
+                std::shared_ptr<Time> gameTime() const;
                 State::Location* locationState();
-                Audio::Mixer* mixer();
+                std::shared_ptr<Audio::Mixer> mixer() const;
                 Event::Dispatcher* eventDispatcher();
 
                 void setGVAR(unsigned int number, int value);
                 int GVAR(unsigned int number);
 
-                Settings* settings() const;
+                std::shared_ptr<Settings> settings() const;
                 Graphics::AnimatedPalette* animatedPalette();
 
                 unsigned int frame() const;
 
+                void setUIResourceManager(std::shared_ptr<UI::IResourceManager> uiResourceManager);
             protected:
                 std::vector<int> _GVARS;
                 std::vector<std::unique_ptr<State::State>> _states;
                 std::vector<std::unique_ptr<State::State>> _statesForDelete;
 
-                Time _gameTime;
+                std::shared_ptr<Time> _gameTime;
 
                 unsigned int _frame = 0;
 
-                std::unique_ptr<Graphics::Renderer> _renderer;
-                std::unique_ptr<Audio::Mixer> _mixer;
-                std::unique_ptr<Input::Mouse> _mouse;
-                std::unique_ptr<Settings> _settings;
+                std::shared_ptr<Graphics::Renderer> _renderer;
+                std::shared_ptr<Audio::Mixer> _mixer;
+                std::shared_ptr<Input::Mouse> _mouse;
+                std::shared_ptr<Settings> _settings;
                 std::unique_ptr<Graphics::AnimatedPalette> _animatedPalette;
                 std::unique_ptr<Event::Dispatcher> _eventDispatcher;
 
@@ -131,6 +133,7 @@ namespace Falltergeist
                 std::vector<State::State*> _getActiveStates();
 
             private:
+                std::shared_ptr<UI::IResourceManager> uiResourceManager;
                 friend class Base::Singleton<Game>;
                 void _initGVARS();
                 std::unique_ptr<Event::Event> _createEventFromSDL(const SDL_Event& sdlEvent);

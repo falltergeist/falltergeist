@@ -75,7 +75,7 @@ namespace Falltergeist
         class Shader;
     }
 
-    class ResourceManager
+    class ResourceManager final
     {
         public:
             static ResourceManager* getInstance();

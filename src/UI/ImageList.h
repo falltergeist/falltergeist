@@ -12,12 +12,10 @@ namespace Falltergeist
         class ImageList : public Falltergeist::UI::Base
         {
             public:
-                ImageList(const Point& pos = Point());
-                ImageList(std::vector<std::string> imageList, int x, int y);
-                ~ImageList() override;
+                ImageList(const Point& pos, const std::vector<Image*> &imageList);
+                virtual ~ImageList() = default;
 
-                void addImage(std::unique_ptr<Image> image);
-                void addImage(const std::string& filename);
+                void addImage(std::unique_ptr<Image> &image);
                 void setCurrentImage(unsigned int number);
                 unsigned int currentImage() const;
                 const std::vector<std::unique_ptr<Image>>& images() const;

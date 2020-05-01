@@ -1,16 +1,25 @@
 #pragma once
 
 #include "../State/State.h"
+#include "../UI/IResourceManager.h"
 
 namespace Falltergeist
 {
+    namespace UI
+    {
+        namespace Factory
+        {
+            class ImageButtonFactory;
+        }
+    }
+
     namespace State
     {
-        class CritterDialogReview : public State
+        class CritterDialogReview final : public State
         {
             public:
-                CritterDialogReview();
-                ~CritterDialogReview() override;
+                CritterDialogReview(std::shared_ptr<UI::IResourceManager> resourceManager);
+                virtual ~CritterDialogReview() = default;
 
                 void init() override;
 
@@ -24,9 +33,11 @@ namespace Falltergeist
 
                 void addAnswer(const std::string& value);
                 void addQuestion(const std::string& value);
+
             private:
                 std::string _critterName;
-
+                std::shared_ptr<UI::IResourceManager> resourceManager;
+                std::unique_ptr<UI::Factory::ImageButtonFactory> imageButtonFactory;
         };
     }
 }

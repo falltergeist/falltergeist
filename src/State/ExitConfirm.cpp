@@ -6,6 +6,7 @@
 #include "../ResourceManager.h"
 #include "../State/Location.h"
 #include "../State/MainMenu.h"
+#include "../UI/Factory/ImageButtonFactory.h"
 #include "../UI/Image.h"
 #include "../UI/ImageButton.h"
 #include "../UI/PlayerPanel.h"
@@ -13,10 +14,14 @@
 
 namespace Falltergeist
 {
+    using ImageButtonType = UI::Factory::ImageButtonFactory::Type;
+
     namespace State
     {
-        ExitConfirm::ExitConfirm() : State()
+        ExitConfirm::ExitConfirm(std::shared_ptr<UI::IResourceManager> resourceManager) : State()
         {
+            this->resourceManager = resourceManager;
+            imageButtonFactory = std::make_unique<UI::Factory::ImageButtonFactory>(resourceManager);
         }
 
         void ExitConfirm::init()
@@ -29,18 +34,18 @@ namespace Falltergeist
             setModal(true);
             setFullscreen(false);
 
-            auto background = new UI::Image("art/intrface/lgdialog.frm");
+            auto background = resourceManager->getImage("art/intrface/lgdialog.frm");
             auto panelHeight = Game::getInstance()->locationState()->playerPanel()->size().height();
 
             auto backgroundPos = (Game::getInstance()->renderer()->size() - background->size() - Point(0, panelHeight)) / 2;
 
-            auto box1 = new UI::Image("art/intrface/donebox.frm");
-            auto box2 = new UI::Image("art/intrface/donebox.frm");
+            auto box1 = resourceManager->getImage("art/intrface/donebox.frm");
+            auto box2 = resourceManager->getImage("art/intrface/donebox.frm");
             box1->setPosition(backgroundPos + Point(38, 98));
             box2->setPosition(backgroundPos + Point(170, 98));
 
-            auto yesButton = new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, backgroundPos + Point(50, 102));
-            auto noButton = new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, backgroundPos + Point(183, 102));
+            auto yesButton = imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, backgroundPos + Point(50, 102));
+            auto noButton = imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, backgroundPos + Point(183, 102));
             yesButton->mouseClickHandler().add([this](Event::Event* event){ this->doYes(); });
             noButton->mouseClickHandler().add( [this](Event::Event* event){ this->doNo(); });
 
@@ -72,7 +77,7 @@ namespace Falltergeist
 
         void ExitConfirm::doYes()
         {
-            Game::getInstance()->setState(new MainMenu());
+            Game::getInstance()->setState(new MainMenu(resourceManager));
         }
 
         void ExitConfirm::doNo()

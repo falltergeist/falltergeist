@@ -19,7 +19,7 @@ namespace Falltergeist
         {
         }
 
-        void HiddenMask::think(uint32_t nanosecondsPassed)
+        void HiddenMask::think(const float &deltaTime)
         {
         }
 

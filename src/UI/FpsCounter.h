@@ -6,18 +6,17 @@ namespace Falltergeist
 {
     namespace UI
     {
-        class FpsCounter : public TextArea
+        class FpsCounter final : public TextArea
         {
             public:
-                FpsCounter(const Point& pos = Point(598, 2));
-                FpsCounter(int x, int y);
-                ~FpsCounter() override;
+                FpsCounter(const Point& pos);
+                virtual ~FpsCounter() = default;
 
-                void think(uint32_t nanosecondsPassed) override;
+                void think(const float &deltaTime) override;
                 unsigned int frames();
 
-            protected:
-                uint32_t _nanosecondsTracked = 0;
+            private:
+                float _millisecondsTracked = 0;
                 uint32_t _frames = 0;
         };
     }

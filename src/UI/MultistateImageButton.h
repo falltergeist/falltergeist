@@ -17,7 +17,7 @@ namespace Falltergeist
         class ImageList;
         class Image;
 
-        class MultistateImageButton : public Falltergeist::UI::Base
+        class MultistateImageButton final : public UI::Base
         {
             public:
                 enum class Mode
@@ -30,9 +30,8 @@ namespace Falltergeist
                     BIG_SWITCH = 1,
                     SMALL_SWITCH
                 };
-                MultistateImageButton(const Point& pos);
-                MultistateImageButton(Type type, int x, int y);
-                ~MultistateImageButton() override;
+                MultistateImageButton(Type type, const Point& pos);
+                virtual ~MultistateImageButton() = default;
 
                 unsigned int state() const;
                 void setState(unsigned int state);

@@ -28,6 +28,7 @@
 #include "../../Logger.h"
 #include "../../State/CritterDialog.h"
 #include "../../State/CritterInteract.h"
+#include "../../UI/ResourceManager.h"
 #include "../../VM/Script.h"
 
 // Third party includes
@@ -61,7 +62,7 @@ namespace Falltergeist {
                         mood = State::CritterInteract::Mood::GOOD;
                     }
                 }
-                auto interact = new State::CritterInteract();
+                auto interact = new State::CritterInteract(std::make_shared<UI::ResourceManager>());
                 interact->setBackgroundID(backgroundID);
                 interact->setHeadID(headID);
                 interact->setMood(mood);

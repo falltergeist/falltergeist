@@ -1,5 +1,7 @@
 #pragma once
 
+#include <array>
+
 #include "../Game/CritterObject.h"
 #include "../Graphics/Point.h"
 
@@ -23,7 +25,7 @@ namespace Falltergeist
         {
             public:
                 DudeObject();
-                ~DudeObject() override = default;
+                ~DudeObject() = default;
 
                 void loadFromGCDFile(Format::Gcd::File* gcd);
 
@@ -38,6 +40,9 @@ namespace Falltergeist
 
                 int skillsPoints() const;
                 void setSkillsPoints(int value);
+
+                int perk(PERK perk) const;
+                void addPerk(PERK perk);
 
                 int level() const;
                 void setLevel(int value);
@@ -67,6 +72,7 @@ namespace Falltergeist
                 int _experience = 0;
                 int _statsPoints = 0;
                 int _skillsPoints = 3;
+                std::array<int, static_cast<unsigned>(PERK::PERK_COUNT)> _perks {};
                 std::string _biography;
                 void _generateUi() override;
         };

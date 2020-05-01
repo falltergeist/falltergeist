@@ -3,11 +3,16 @@
 #include <map>
 #include <vector>
 #include "../State/State.h"
+#include "../UI/IResourceManager.h"
 
 namespace Falltergeist
 {
     namespace UI
     {
+        namespace Factory
+        {
+            class ImageButtonFactory;
+        }
         class BigCounter;
         class HiddenMask;
         class Image;
@@ -16,14 +21,23 @@ namespace Falltergeist
     }
     namespace State
     {
-        class PlayerEdit : public State
+        struct PerkEligibility
+        {
+            PERK perk;
+            int maxRank;
+            int minLevel;
+            std::function<bool()> otherRequirements;
+            std::string image;
+        };
+
+        class PlayerEdit final : public State
         {
             public:
-                PlayerEdit();
-                ~PlayerEdit() override;
+                PlayerEdit(std::shared_ptr<UI::IResourceManager> resourceManager);
+                virtual ~PlayerEdit() = default;
 
                 void init() override;
-                void think(uint32_t nanosecondsPassed) override;
+                void think(const float &deltaTime) override;
                 void render() override;
 
                 void onMaskClick(Event::Mouse* event);
@@ -40,6 +54,8 @@ namespace Falltergeist
                 void onStateActivate(Event::State* event) override;
                 void onStateDeactivate(Event::State* event) override;
                 void onKeyDown(Event::Keyboard* event) override;
+
+                std::array<PerkEligibility, 77> getSelectablePerks() const;
 
             protected:
                 UI::TextArea* _selectedLabel = nullptr;
@@ -66,6 +82,10 @@ namespace Falltergeist
                 bool _statDecrease(unsigned int num);
                 bool _traitToggle(unsigned int num);
                 bool _skillToggle(unsigned int num);
+
+            private:
+                std::shared_ptr<UI::IResourceManager> resourceManager;
+                std::unique_ptr<UI::Factory::ImageButtonFactory> imageButtonFactory;
         };
     }
 }

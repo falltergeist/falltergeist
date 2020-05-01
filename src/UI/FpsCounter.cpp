@@ -7,28 +7,18 @@ namespace Falltergeist
     {
         FpsCounter::FpsCounter(const Point& pos) : TextArea(pos)
         {
-            _nanosecondsTracked = 0;
+            _millisecondsTracked = 0;
             setText("0");
             setWidth(40);
             setHorizontalAlign(TextArea::HorizontalAlign::RIGHT);
         }
 
-        FpsCounter::FpsCounter(int x, int y) : FpsCounter(Point(x, y))
+        void FpsCounter::think(const float &deltaTime)
         {
-        }
+            _millisecondsTracked += deltaTime;
 
-        FpsCounter::~FpsCounter()
-        {
-        }
-
-        void FpsCounter::think(uint32_t nanosecondsPassed)
-        {
-            _nanosecondsTracked += nanosecondsPassed;
-
-            uint32_t nanosecondsInOneSecond = 1e9;
-
-            if (_nanosecondsTracked >= nanosecondsInOneSecond) { // 1 seconds
-                _nanosecondsTracked -= nanosecondsInOneSecond;
+            if (_millisecondsTracked >= 1000.0f) {
+                _millisecondsTracked -= 1000.0f;
                 setText(std::to_string(_frames));
                 _frames = 0;
             } else {
