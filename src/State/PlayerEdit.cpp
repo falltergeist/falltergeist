@@ -1,6 +1,5 @@
 #include <sstream>
 
-#include "../State/PlayerEdit.h"
 #include "../Font.h"
 #include "../functions.h"
 #include "../Game/DudeObject.h"
@@ -9,7 +8,9 @@
 #include "../Input/Mouse.h"
 #include "../ResourceManager.h"
 #include "../State/Location.h"
+#include "../State/PlayerEdit.h"
 #include "../State/PlayerEditAlert.h"
+#include "../State/PlayerChoosePerk.h"
 #include "../UI/BigCounter.h"
 #include "../UI/Factory/ImageButtonFactory.h"
 #include "../UI/HiddenMask.h"
@@ -37,7 +38,7 @@ namespace Falltergeist
             State::init();
 
             setModal(true);
-            setFullscreen(true);
+            setFullscreen(false);
 
             auto player = Game::getInstance()->player();
 
@@ -303,6 +304,14 @@ namespace Falltergeist
             perks->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
             perksAndTraits->addArea(std::unique_ptr<UI::TextArea>(perks));
 
+            for (unsigned i = static_cast<unsigned>(PERK::AWARENESS); i < static_cast<unsigned>(PERK::PERK_COUNT); i++)
+            {
+                if (player->perk(static_cast<PERK>(i)) > 0)
+                {
+                    perksAndTraits->addArea(std::unique_ptr<UI::TextArea>(new UI::TextArea(_t(MSG_PERK, 101 + i), {0,0})));
+                }
+            }
+
             addUI("tab_perks", perksAndTraits);
 
             // Karma overview
@@ -361,6 +370,9 @@ namespace Falltergeist
                 }
             });
             addUI(tabsArrowDown);
+
+            // TEST PERK LEVELLING
+             Game::getInstance()->pushState(new PlayerChoosePerk());
         }
 
         UI::TextArea* PlayerEdit::_addLabel(const std::string& name, UI::TextArea* label)
@@ -592,7 +604,7 @@ namespace Falltergeist
          */
         void PlayerEdit::onTabClick(Event::Mouse* event)
         {
-            auto tabs = dynamic_cast<UI::ImageList*>(getUI("tabs"));
+            auto tabs = getImageList("tabs");
             unsigned int clickX = static_cast<unsigned>(event->position().x() - tabs->position().x());
 
             for (unsigned int i = 0, tabEnd = 0; i < 3; i++) {
@@ -600,7 +612,7 @@ namespace Falltergeist
                 // selected width = 120, unselected width = 100
                 tabEnd += (i == tabs->currentImage() ? 120 : 100);
 
-                auto tab = dynamic_cast<UI::TextArea*>(getUI("tab_" + std::to_string(i)));
+                auto tab = getTextArea("tab_" + std::to_string(i));
                 const auto tabsY = tabs->position().y() + 7;
 
                 // Slightly raise the selected tab and lower the others
@@ -632,7 +644,7 @@ namespace Falltergeist
         {
             // @TODO: implement
         }
-
+        
         void PlayerEdit::onStateActivate(Event::State* event)
         {
             Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::BIG_ARROW);
@@ -670,6 +682,126 @@ namespace Falltergeist
             _selectedImage->render();
             _description->setPosition(backgroundPos + Point(350, 315));
             _description->render();
+        }
+
+        std::array<PerkEligibility, 77> PlayerEdit::getSelectablePerks() const
+        {
+            auto player = Game::getInstance()->player();
+
+            return {{
+                // perk | maximum ranks | level requirement | other requirements | image filename
+                { PERK::AWARENESS,          1, 3, [player]() { return player->stat(STAT::PERCEPTION) >= 5;      }, "AWARENES" },
+                { PERK::BONUS_HTH_ATTACKS,  1,15, [player]() { return player->stat(STAT::AGILITY) >= 6;         }, "HND2HND" },
+                { PERK::BONUS_HTH_DAMAGE,   3, 3, [player]() { return player->stat(STAT::STRENGTH) >= 6
+                                                               && player->stat(STAT::AGILITY) >= 6;             }, "DAMAGE" },
+                { PERK::BONUS_MOVE,         2, 6, [player]() { return player->stat(STAT::AGILITY) >= 5;         }, "BONUSMVE" },
+                { PERK::BONUS_RANGED_DAMAGE,2, 6, [player]() { return player->stat(STAT::AGILITY) >= 6
+                                                               && player->stat(STAT::LUCK) >= 6;                }, "BONUSRNG" },
+                { PERK::BONUS_RATE_OF_FIRE, 1,15, [player]() { return player->stat(STAT::PERCEPTION) >= 6
+                                                               && player->stat(STAT::INTELLIGENCE) >= 6
+                                                               && player->stat(STAT::AGILITY) >= 7;             }, "BONUSRAT" },
+                { PERK::EARLIER_SEQUENCE,   3, 3, [player]() { return player->stat(STAT::PERCEPTION) >= 6;      }, "EARLYSEQ" },
+                { PERK::FASTER_HEALING,     3, 3, [player]() { return player->stat(STAT::ENDURANCE) >= 6;       }, "HEALRATE" },
+                { PERK::MORE_CRITICALS,     3, 6, [player]() { return player->stat(STAT::LUCK) >= 6;            }, "MORECRIT" },
+                { PERK::NIGHT_VISION,       1, 3, [player]() { return player->stat(STAT::PERCEPTION) >= 6;      }, "NIGHTVIZ" },
+                { PERK::PRESENCE,           3, 3, [player]() { return player->stat(STAT::CHARISMA) >= 6;        }, "PRESENCE" },
+                { PERK::RAD_RESISTANCE,     2, 6, [player]() { return player->stat(STAT::ENDURANCE) >= 6
+                                                               && player->stat(STAT::INTELLIGENCE) >= 4;        }, "RADRESIS" },
+                { PERK::TOUGHNESS,          3, 3, [player]() { return player->stat(STAT::ENDURANCE) >= 6
+                                                               && player->stat(STAT::LUCK) >= 6;                }, "TOUGHNES" },
+                { PERK::STRONG_BACK,        3, 3, [player]() { return player->stat(STAT::STRENGTH) >= 6
+                                                               && player->stat(STAT::ENDURANCE) >= 6;           }, "PACKANIM" },
+                { PERK::SHARPSHOOTER,       1, 9, [player]() { return player->stat(STAT::PERCEPTION) >= 7
+                                                               && player->stat(STAT::INTELLIGENCE) >= 6;        }, "SHARPSHT" },
+                { PERK::SILENT_RUNNING,     1, 6, [player]() { return player->stat(STAT::AGILITY) >= 6
+                                                               && player->skillValue(SKILL::SNEAK) >= 50;       }, "SILNTRUN" },
+                { PERK::SURVIVALIST,        1, 3, [player]() { return player->stat(STAT::ENDURANCE) >= 6
+                                                               && player->stat(STAT::INTELLIGENCE) >= 6
+                                                               && player->skillValue(SKILL::UNARMED) >= 40;     }, "SURVIVAL"   },
+                { PERK::MASTER_TRADER,      1,12, [player]() { return player->stat(STAT::CHARISMA) >= 7
+                                                               && player->skillValue(SKILL::BARTER) >= 75;      }, "MSTRTRAD"   },
+                { PERK::EDUCATED,           3, 6, [player]() { return player->stat(STAT::INTELLIGENCE) >= 6;    }, "EDUCATED"   },
+                { PERK::HEALER,             3, 2, [player]() { return player->stat(STAT::PERCEPTION) >= 7
+                                                               && player->stat(STAT::INTELLIGENCE) >= 5
+                                                               && player->stat(STAT::AGILITY) >= 6
+                                                               && player->skillValue(SKILL::FIRST_AID) >= 40;   }, "HEALER"     },
+                { PERK::FORTUNE_FINDER,     1, 6, [player]() { return player->stat(STAT::LUCK) >= 8;            }, "FORTUNFD"   },
+                { PERK::BETTER_CRITICALS,   1, 9, [player]() { return player->stat(STAT::PERCEPTION) >= 6
+                                                               && player->stat(STAT::AGILITY) >= 4
+                                                               && player->stat(STAT::LUCK) >= 6;                }, "BETRCRIT"   },
+                { PERK::EMPATHY,            1, 6, [player]() { return player->stat(STAT::PERCEPTION) >= 7
+                                                               && player->stat(STAT::INTELLIGENCE) >= 5;        }, "EMPATHY"    },
+                { PERK::SLAYER,             1,24, [player]() { return player->stat(STAT::STRENGTH) >= 8
+                                                               && player->stat(STAT::AGILITY) >= 8
+                                                               && player->skillValue(SKILL::UNARMED) >= 80;     }, "SLAYER"     },
+                { PERK::SNIPER,             1,24, [player]() { return player->stat(STAT::PERCEPTION) >= 8
+                                                               && player->stat(STAT::AGILITY) >= 8
+                                                               && player->skillValue(SKILL::SMALL_GUNS) >= 80;  }, "SNIPER"     },
+                { PERK::SILENT_DEATH,       1,18, [player]() { return player->stat(STAT::AGILITY) == 10
+                                                               && player->skillValue(SKILL::SNEAK) >= 80
+                                                               && player->skillValue(SKILL::UNARMED) >= 80;     }, "SILENTD"    },
+                { PERK::ACTION_BOY,         2,12, [player]() { return player->stat(STAT::AGILITY) >= 5;         }, "ACTION"     },
+                { PERK::LIFEGIVER,          2,12, [player]() { return player->stat(STAT::ENDURANCE) >= 4;       }, "LIFEGIVR"   },
+                { PERK::DODGER,             1, 9, [player]() { return player->stat(STAT::AGILITY) >= 6;         }, "DODGER"     },
+                { PERK::SNAKEATER,          2, 6, [player]() { return player->stat(STAT::ENDURANCE) >= 3;       }, "SNAKEEAT"   },
+                { PERK::MR_FIXIT,           1,12, [player]() { return player->skillValue(SKILL::SCIENCE) >= 40
+                                                               || player->skillValue(SKILL::REPAIR) >= 80;      }, "MRFIXIT"    },
+                { PERK::MEDIC,              1,12, [player]() { return player->skillValue(SKILL::FIRST_AID) >= 40
+                                                               || player->skillValue(SKILL::DOCTOR) >= 40;      }, "MEDIC"      },
+                { PERK::MASTER_THIEF,       1,12, [player]() { return player->skillValue(SKILL::LOCKPICK) >= 50
+                                                               || player->skillValue(SKILL::STEAL) >= 50;       }, "MTRTHIEF"   },
+                { PERK::SPEAKER,            1, 9, [player]() { return player->skillValue(SKILL::DOCTOR) >= 40;  }, "SPEAKER"    },
+                { PERK::HEAVE_HO,           3, 6, [player]() { return player->stat(STAT::STRENGTH) < 9;         }, "HEAVEHO"    },
+                { PERK::PICKPOCKET,         1,15, [player]() { return player->stat(STAT::AGILITY) >= 8
+                                                               || player->skillValue(SKILL::STEAL) >= 80;       }, "PICKPOCK"   },
+                { PERK::GHOST,              1, 6, [player]() { return player->skillValue(SKILL::SNEAK) >= 60;   }, "GHOST"      },
+                { PERK::CULT_OF_PERSONALITY,1,12, [player]() { return player->stat(STAT::CHARISMA) == 10;       }, "CULTOPER"   },
+                { PERK::SCROUNGER,          1, 9, [player]() { return player->stat(STAT::LUCK) >= 8;            }, "SCROUNGR"   },
+                { PERK::EXPLORER,           1, 9, [player]() { return true;                                     }, "EXPLORER"   },
+                { PERK::PATHFINDER,         2, 6, [player]() { return player->stat(STAT::ENDURANCE) >= 6
+                                                               || player->skillValue(SKILL::OUTDOORSMAN) >= 40; }, "PATHFNDR"   },
+                { PERK::SCOUT,              1, 3, [player]() { return player->stat(STAT::PERCEPTION) >= 7;      }, "SCOUT"      },
+                { PERK::MYSTERIOUS_STRANGER,1, 9, [player]() { return player->stat(STAT::LUCK) >= 4;            }, "STRANGER"   },
+                { PERK::RANGER,             1, 6, [player]() { return player->stat(STAT::PERCEPTION) >= 6;      }, "RANGER"     },
+                { PERK::QUICK_POCKETS,      1, 3, [player]() { return player->stat(STAT::AGILITY) >= 5;         }, "QUIKPOCK"   },
+                { PERK::SMOOTH_TALKER,      3, 3, [player]() { return player->stat(STAT::INTELLIGENCE) >= 4;    }, "SMOOTHTK"   },
+                { PERK::SWIFT_LEARNER,      3, 3, [player]() { return player->stat(STAT::INTELLIGENCE) >= 4;    }, "SWFTLERN"   },
+                { PERK::TAG,                1,12, [player]() { return true;                                     }, "TAG"        },
+                { PERK::MUTATE,             1, 9, [player]() { return true;                                     }, "MUTATE"     },
+                { PERK::ADRENALINE_RUSH,    1, 6, [player]() { return player->stat(STAT::STRENGTH) <= 10;       }, "ADRNRUSH"   },
+                { PERK::CAUTIOUS_NATURE,    1, 3, [player]() { return player->stat(STAT::PERCEPTION) >= 6;      }, "CAUTIOUS"   },
+                { PERK::COMPREHENSION,      1, 3, [player]() { return player->stat(STAT::INTELLIGENCE) >= 6;    }, "INTEL"      }, // FIXME: meimage na?
+                { PERK::DEMOLITION_EXPERT,  1, 9, [player]() { return player->stat(STAT::AGILITY) >= 4
+                                                               || player->skillValue(SKILL::TRAPS) >= 75;       }, "GUNBIG"     },
+                { PERK::GAMBLER,            1, 6, [player]() { return player->skillValue(SKILL::GAMBLING) >= 50;}, "GAMBLING"   },
+                { PERK::GAIN_STRENGTH,      1,12, [player]() { return player->stat(STAT::STRENGTH) < 10;        }, "STRENGTH"   },
+                { PERK::GAIN_PERCEPTION,    1,12, [player]() { return player->stat(STAT::PERCEPTION) < 10;      }, "PERCEPTN"   },
+                { PERK::GAIN_ENDURANCE,     1,12, [player]() { return player->stat(STAT::ENDURANCE) < 10;       }, "ENDUR"      },
+                { PERK::GAIN_CHARISMA,      1,12, [player]() { return player->stat(STAT::CHARISMA) < 10;        }, "CHARISMA"   },
+                { PERK::GAIN_INTELLIGENCE,  1,12, [player]() { return player->stat(STAT::INTELLIGENCE) < 10;    }, "INTEL"      },
+                { PERK::GAIN_AGILITY,       1,12, [player]() { return player->stat(STAT::AGILITY) < 10;         }, "AGILITY"    },
+                { PERK::GAIN_LUCK,          1,12, [player]() { return player->stat(STAT::LUCK) < 10;            }, "LUCK"       },
+                { PERK::HARMLESS,           1, 6, [player]() { return player->skillValue(SKILL::STEAL) >= 50;   }, "HARMLESS"   }, // TODO: && karma >= 50
+                { PERK::HERE_AND_NOW,       1, 3, [player]() { return true;                                     }, "HERE&NOW"   },
+                { PERK::HTH_EVADE,          1,12, [player]() { return player->skillValue(SKILL::UNARMED) >= 75; }, "H2HEVADE"   },
+                { PERK::KAMA_SUTRA_MASTER,  1, 3, [player]() { return player->stat(STAT::ENDURANCE) >= 5
+                                                               && player->stat(STAT::AGILITY) >= 5;             }, "KMASUTRA"   },
+                { PERK::KARMA_BEACON,       1, 9, [player]() { return player->stat(STAT::CHARISMA) >= 6;        }, "KARMABCN"   },
+                { PERK::LIGHT_STEP,         1, 9, [player]() { return player->stat(STAT::AGILITY) >= 5
+                                                               && player->stat(STAT::LUCK) >= 5;                }, "LITESTEP"   },
+                { PERK::LIVING_ANATOMY,     1,12, [player]() { return player->skillValue(SKILL::DOCTOR) >= 60;  }, "LVNGANAT"   },
+                { PERK::MAGNETIC_PERSONALITY,1,6, [player]() { return player->stat(STAT::CHARISMA) < 10;        }, "MAGPERS"    },
+                { PERK::NEGOTIATOR,         1, 6, [player]() { return player->skillValue(SKILL::BARTER) >= 50
+                                                               && player->skillValue(SKILL::SPEECH) >= 50;      }, "SPEECH"     }, // FIXME: image name?
+                { PERK::PACK_RAT,           1, 6, [player]() { return true;                                     }, "PACKRAT"    },
+                { PERK::PYROMANIAC,         1, 9, [player]() { return player->skillValue(SKILL::BIG_GUNS) >= 75;}, "PYROMNAC"   },
+                { PERK::QUICK_RECOVERY,     1, 6, [player]() { return player->stat(STAT::AGILITY) >= 5;         }, "QWKRECOV"   },
+                { PERK::SALESMAN,           1, 6, [player]() { return player->skillValue(SKILL::BARTER) >= 50;  }, "BARTER"     },
+                { PERK::STONEWALL,          1, 3, [player]() { return player->stat(STAT::STRENGTH) >= 6;        }, "STONWALL"   },
+                { PERK::THIEF,              1, 3, [player]() { return true;                                     }, "STEAL"      },
+                { PERK::WEAPON_HANDLING,    1,12, [player]() { return player->stat(STAT::STRENGTH) <= 7
+                                                               && player->stat(STAT::AGILITY) >= 5;             }, "WEPNHAND"   }
+            }};
         }
     }
 }
