@@ -12,6 +12,7 @@ Under development
 - [feature] Doors can't be opened if they're locked (AdamFx990)
 - [feature] Optimisations & code readability improvements to hexagon logic (AdamFx990)
 - [feature] Added missing tabs for perks, karma and kills in the Character window (JanSimek)
+- [feature][#476] Automated Appveyor Windows builds (JanSimek, burner1024)
 - [feature] Added timediff to gameloop in order to make things to be independent from SDL ticks (alexeevdv)
 - [feature] Extract UI generation logic from game objects (alexeevdv)
 
