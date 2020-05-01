@@ -8,10 +8,9 @@ namespace Falltergeist
 {
     namespace UI
     {
-        class Rectangle : public Base
+        class Rectangle final : public Base
         {
             public:
-
                 Rectangle(const Point& pos, const Size& size, SDL_Color color);
                 void render(bool eggTransparency = false) override;
 

@@ -13,7 +13,7 @@ namespace Falltergeist
         {
             public:
                 WeaponItemObject();
-                ~WeaponItemObject() override = default;
+                ~WeaponItemObject() = default;
 
                 unsigned int animationCode() const;
                 void setAnimationCode(unsigned int value);

@@ -29,7 +29,7 @@ namespace Falltergeist
          * It combines properties from MAPS.TXT and *.map files
          * It also has Game::LocationElevation instancess as its childs
          */
-        class Location
+        class Location final
         {
             public:
                 Location();

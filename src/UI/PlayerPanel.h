@@ -13,11 +13,15 @@ namespace Falltergeist
     }
     namespace UI
     {
+        namespace Factory
+        {
+            class ImageButtonFactory;
+        }
         class Image;
         class SmallCounter;
         class TextArea;
 
-        class PlayerPanel : public UI::Base
+        class PlayerPanel final : public UI::Base
         {
             public:
                 PlayerPanel();
@@ -27,7 +31,7 @@ namespace Falltergeist
 
                 void render(bool eggTransparency = false) override;
                 void handle(Event::Event *event) override;
-                void think(uint32_t nanosecondsPassed) override;
+                void think(const float &deltaTime) override;
 
                 virtual bool opaque(const Point &pos) override;
 
@@ -36,6 +40,8 @@ namespace Falltergeist
                 void playWindowOpenSfx();
 
             private:
+                std::shared_ptr<UI::IResourceManager> resourceManager;
+                std::unique_ptr<UI::Factory::ImageButtonFactory> imageButtonFactory;
 
                 std::shared_ptr<Image> _background;
                 std::shared_ptr<SmallCounter> _hitPoints;

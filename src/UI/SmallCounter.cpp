@@ -23,10 +23,6 @@ namespace Falltergeist
             }
         }
 
-        SmallCounter::~SmallCounter()
-        {
-        }
-
         void SmallCounter::setLength(unsigned int length)
         {
             _length = length;

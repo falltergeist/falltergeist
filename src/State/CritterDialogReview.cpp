@@ -4,6 +4,7 @@
 #include "../Graphics/Renderer.h"
 #include "../Graphics/Size.h"
 #include "../State/CritterInteract.h"
+#include "../UI/Factory/ImageButtonFactory.h"
 #include "../UI/Image.h"
 #include "../UI/ImageButton.h"
 #include "../UI/TextArea.h"
@@ -12,15 +13,14 @@
 namespace Falltergeist
 {
     using Graphics::Size;
+    using ImageButtonType = UI::Factory::ImageButtonFactory::Type;
 
     namespace State
     {
-        CritterDialogReview::CritterDialogReview() : State()
+        CritterDialogReview::CritterDialogReview(std::shared_ptr<UI::IResourceManager> resourceManager) : State()
         {
-        }
-
-        CritterDialogReview::~CritterDialogReview()
-        {
+            this->resourceManager = resourceManager;
+            imageButtonFactory = std::make_unique<UI::Factory::ImageButtonFactory>(resourceManager);
         }
 
         void CritterDialogReview::init()
@@ -31,18 +31,18 @@ namespace Falltergeist
             setFullscreen(false);
             setModal(false);
 
-            auto background = new UI::Image("art/intrface/review.frm");
+            auto background = resourceManager->getImage("art/intrface/review.frm");
             Point backgroundPos = Point((Game::getInstance()->renderer()->size() - background->size()) / 2);
             background->setPosition(backgroundPos);
 
             // Interface buttons
-            auto doneButton = new UI::ImageButton(UI::ImageButton::Type::DIALOG_DONE_BUTTON, backgroundPos + Point(500, 398));
+            auto doneButton = imageButtonFactory->getByType(ImageButtonType::DIALOG_DONE_BUTTON, backgroundPos + Point(500, 398));
             doneButton->mouseClickHandler().add(std::bind(&CritterDialogReview::onDoneButtonClick, this, std::placeholders::_1));
 
-            auto upButton = new UI::ImageButton(UI::ImageButton::Type::DIALOG_BIG_UP_ARROW, backgroundPos + Point(476, 154));
+            auto upButton = imageButtonFactory->getByType(ImageButtonType::DIALOG_BIG_UP_ARROW, backgroundPos + Point(476, 154));
             upButton->mouseClickHandler().add(std::bind(&CritterDialogReview::onUpButtonClick, this, std::placeholders::_1));
 
-            auto downButton = new UI::ImageButton(UI::ImageButton::Type::DIALOG_BIG_DOWN_ARROW, backgroundPos + Point(476, 192));
+            auto downButton = imageButtonFactory->getByType(ImageButtonType::DIALOG_BIG_DOWN_ARROW, backgroundPos + Point(476, 192));
             downButton->mouseClickHandler().add(std::bind(&CritterDialogReview::onDownButtonClick, this, std::placeholders::_1));
 
             addUI(background);
@@ -53,7 +53,6 @@ namespace Falltergeist
             list->setSize(Size(340,340));
             addUI("list",list);
         }
-
 
         void CritterDialogReview::onStateActivate(Event::State *event)
         {
@@ -70,7 +69,6 @@ namespace Falltergeist
             }
         }
 
-
         void CritterDialogReview::onUpButtonClick(Event::Mouse *event)
         {
             auto list = dynamic_cast<UI::TextAreaList*>(getUI("list"));
@@ -82,7 +80,6 @@ namespace Falltergeist
             auto list = dynamic_cast<UI::TextAreaList*>(getUI("list"));
             list->scrollDown(4);
         }
-
 
         void CritterDialogReview::setCritterName(const std::string &value)
         {

@@ -1,62 +1,41 @@
-﻿#include "../Exception.h"
-#include "../UI/Image.h"
+﻿#include "../UI/Image.h"
 
 namespace Falltergeist
 {
     namespace UI
     {
-        Image::Image(const std::string& filename) : Falltergeist::UI::Base(), _sprite(filename)
+        Image::Image(std::unique_ptr<Graphics::Sprite> sprite) : Falltergeist::UI::Base()
         {
-        }
-
-        Image::~Image()
-        {
+            this->sprite = std::move(sprite);
         }
 
         void Image::render(bool eggTransparency)
         {
-            _sprite.trans(_trans);
-            _sprite.render(position().x(),position().y(), eggTransparency, light(), _outline, _lightLevel);
-        }
-
-        Image::Image(Format::Frm::File *frm, unsigned int direction) : Falltergeist::UI::Base(), _sprite(frm)
-        {
-            if (direction >= frm->directions().size()) {
-                //throw Exception("Image::Image(frm, direction) - direction not found: " + std::to_string(direction));
-                direction = 0;
-            }
-            auto& dir = frm->directions().at(direction);
-            setOffset(
-                frm->offsetX(direction) + dir.shiftX(),
-                frm->offsetY(direction) + dir.shiftY()
-            );
+            sprite->trans(_trans);
+            sprite->render(position().x(),position().y(), eggTransparency, light(), _outline, _lightLevel);
         }
 
         Size Image::size() const
         {
-        //    int w = _sprite.width();
-        //    int h = _sprite.height();
-        //    return Size(w,h);
-            return _sprite.size();
+            return sprite->size();
         }
-
 
         bool Image::opaque(unsigned int x, unsigned int y)
         {
-            return _sprite.opaque(x, y);
+            return sprite->opaque(x, y);
         }
 
-        bool Image::opaque(const Point &pos)
+        bool Image::opaque(const Point &position)
         {
-            if (pos.x() < 0 || pos.y() < 0) {
+            if (position.x() < 0 || position.y() < 0) {
                 return false;
             }
-            return opaque((unsigned)pos.x(), (unsigned)pos.y());
+            return opaque((unsigned)position.x(), (unsigned)position.y());
         }
 
         void Image::render(const Size &size, bool eggTransparency)
         {
-            _sprite.renderScaled(position().x(), position().y(), size.width(), size.height(), eggTransparency, light(), _outline);
+            sprite->renderScaled(position().x(), position().y(), size.width(), size.height(), eggTransparency, light(), _outline);
         }
     }
 }

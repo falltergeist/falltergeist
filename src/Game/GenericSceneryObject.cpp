@@ -1,4 +1,6 @@
 #include "../Game/GenericSceneryObject.h"
+#include "../UI/TextArea.h"
+#include "../VM/Script.h"
 
 namespace Falltergeist
 {
@@ -7,11 +9,6 @@ namespace Falltergeist
         GenericSceneryObject::GenericSceneryObject() : SceneryObject()
         {
             _subtype = Subtype::GENERIC;
-        }
-
-        bool GenericSceneryObject::_useEggTransparency()
-        {
-            return (_trans == Graphics::TransFlags::Trans::DEFAULT);
         }
     }
 }

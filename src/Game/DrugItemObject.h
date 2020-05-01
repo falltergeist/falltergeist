@@ -14,7 +14,7 @@ namespace Falltergeist
         {
             public:
                 DrugItemObject();
-                ~DrugItemObject() override = default;
+                ~DrugItemObject() = default;
         };
     }
 }

@@ -101,9 +101,13 @@ namespace Falltergeist
                 _nextSubLine = std::pair<int,std::string>(999999,"");
         }
 
-        void Movie::think(uint32_t nanosecondsPassed)
+        void Movie::think(const float &deltaTime)
         {
-            State::think(nanosecondsPassed);
+            State::think(deltaTime);
+
+            if (!_active) {
+                return;
+            }
 
             unsigned int frame = dynamic_cast<UI::MvePlayer*>(getUI("movie"))->frame();
             if ( frame >= _nextSubLine.first)

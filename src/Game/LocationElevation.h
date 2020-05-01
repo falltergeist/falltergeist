@@ -19,7 +19,7 @@ namespace Falltergeist
          * This class represents each elevation of game location
          * It contains information about tiles and game objects
          */
-        class LocationElevation
+        class LocationElevation final
         {
             public:
                 LocationElevation();

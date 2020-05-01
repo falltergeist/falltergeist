@@ -15,7 +15,7 @@ namespace Falltergeist
             public:
 
                 ArmorItemObject();
-                ~ArmorItemObject() override = default;
+                ~ArmorItemObject() = default;
 
                 int damageResist(DAMAGE type) const; // damage resistance bonus of the armor
                 void setDamageResist(DAMAGE type, int value);

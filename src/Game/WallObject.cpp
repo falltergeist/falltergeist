@@ -1,4 +1,6 @@
 #include "../Game/WallObject.h"
+#include "../UI/TextArea.h"
+#include "../VM/Script.h"
 
 namespace Falltergeist
 {
@@ -7,11 +9,6 @@ namespace Falltergeist
         WallObject::WallObject() : Object()
         {
             _type = Type::WALL;
-        }
-
-        bool WallObject::_useEggTransparency()
-        {
-            return (_trans == Graphics::TransFlags::Trans::DEFAULT);
         }
     }
 }

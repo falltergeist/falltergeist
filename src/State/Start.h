@@ -1,23 +1,25 @@
 #pragma once
 
-#include "../Game/CountdownTimer.h"
+#include "../Game/Timer.h"
 #include "../State/State.h"
+#include "../UI/IResourceManager.h"
 
 namespace Falltergeist
 {
     namespace State
     {
-        class Start : public State
+        class Start final : public State
         {
             public:
-                Start();
-                ~Start() override;
+                Start(std::shared_ptr<UI::IResourceManager> resourceManager);
+                virtual ~Start() = default;
 
-                void think(uint32_t nanosecondsPassed) override;
+                void think(const float &deltaTime) override;
                 void init() override;
 
-            protected:
-                std::unique_ptr<Game::CountdownTimer> _delayTimer;
+            private:
+                std::unique_ptr<Game::Timer> _delayTimer;
+                std::shared_ptr<UI::IResourceManager> resourceManager;
         };
     }
 }

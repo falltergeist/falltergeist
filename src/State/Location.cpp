@@ -50,20 +50,23 @@ namespace Falltergeist
         const int Location::DROPDOWN_DELAY = 350;
         const int Location::KEYBOARD_SCROLL_STEP = 35;
 
-        Location::Location() : State()
+        Location::Location(
+            std::shared_ptr<Game::DudeObject> player,
+            std::shared_ptr<Input::Mouse> mouse,
+            std::shared_ptr<Settings> settings,
+            std::shared_ptr<Graphics::Renderer> renderer,
+            std::shared_ptr<Audio::Mixer> audioMixer,
+            std::shared_ptr<Game::Time> gameTime,
+            std::shared_ptr<UI::IResourceManager> resourceManager
+        ) : State(),
+            player(std::move(player)),
+            mouse(std::move(mouse)),
+            settings(std::move(settings)),
+            renderer(std::move(renderer)),
+            audioMixer(std::move(audioMixer)),
+            gameTime(std::move(gameTime))
         {
-            auto game = Game::getInstance();
-            game->mouse()->setState(Input::Mouse::Cursor::ACTION);
-
-            _camera = std::make_unique<LocationCamera>(game->renderer()->size(), Point(0, 0));
-
-            _hexagonInfo = std::make_unique<UI::TextArea>("", game->renderer()->width() - 135, 25);
-            _hexagonInfo->setWidth(135);
-            _hexagonInfo->setHorizontalAlign(UI::TextArea::HorizontalAlign::RIGHT);
-        }
-
-        Location::~Location()
-        {
+            this->resourceManager = resourceManager;
         }
 
         void Location::init()
@@ -73,10 +76,16 @@ namespace Falltergeist
             }
             State::init();
 
+            mouse->setState(Input::Mouse::Cursor::ACTION);
+
+            _camera = std::make_unique<LocationCamera>(renderer->size(), Point(0, 0));
+
+            _hexagonInfo = std::make_unique<UI::TextArea>("", renderer->width() - 135, 25);
+            _hexagonInfo->setWidth(135);
+            _hexagonInfo->setHorizontalAlign(UI::TextArea::HorizontalAlign::RIGHT);
+
             setFullscreen(true);
             setModal(true);
-
-            auto game = Game::getInstance();
 
             _objects.clear();
             _flatObjects.clear();
@@ -154,7 +163,6 @@ namespace Falltergeist
                 _objects.emplace_back(object);
             }
 
-            auto player = Game::getInstance()->player();
             initializePlayerTestAppareance(player);
             player->setOrientation(_location->defaultOrientation());
 
@@ -178,25 +186,25 @@ namespace Falltergeist
             _mouseUpHandler.add(std::bind(&Location::onMouseUp, this, std::placeholders::_1));
             _mouseMoveHandler.add(std::bind(&Location::onMouseMove, this, std::placeholders::_1));
 
-
             // action cursor stuff
             _actionCursorTimer.setInterval((unsigned) DROPDOWN_DELAY);
-            _actionCursorTimer.tickHandler().add([this, game](Event::Event *) {
+            _actionCursorTimer.tickHandler().add([this](Event::Event *) {
                 if (!_objectUnderCursor) {
                     return;
                 }
 
-                if (_actionCursorButtonPressed || game->mouse()->state() == Input::Mouse::Cursor::ACTION) {
+                if (_actionCursorButtonPressed || mouse->state() == Input::Mouse::Cursor::ACTION) {
                     if (!_actionCursorButtonPressed && (_actionCursorLastObject != _objectUnderCursor)) {
                         _objectUnderCursor->look_at_p_proc();
                         _actionCursorLastObject = _objectUnderCursor;
                     }
                     auto icons = getCursorIconsForObject(_objectUnderCursor);
                     if (!icons.empty()) {
-                        if (dynamic_cast<CursorDropdown *>(game->topState()) != nullptr) {
-                            game->popState();
+                        // TODO delegate state manipulation to some kind of state manager
+                        if (dynamic_cast<CursorDropdown *>(Game::getInstance()->topState()) != nullptr) {
+                            Game::getInstance()->popState();
                         }
-                        auto state = new CursorDropdown(std::move(icons), !_actionCursorButtonPressed);
+                        auto state = new CursorDropdown(resourceManager, std::move(icons), !_actionCursorButtonPressed);
                         state->setObject(_objectUnderCursor);
                         Game::getInstance()->pushState(state);
                     }
@@ -204,12 +212,21 @@ namespace Falltergeist
                 _actionCursorButtonPressed = false;
             });
 
+            _locationScriptTimer.start(10000.0f, true);
+            _locationScriptTimer.tickHandler().add([this](Event::Event*) {
+                if (_location->script()) {
+                    _location->script()->call("map_update_p_proc");
+                }
+                for (auto &object : _objects) {
+                    object->map_update_p_proc();
+                }
+                player->map_update_p_proc();
+            });
         }
 
         void Location::onStateActivate(Event::State *event)
         {
             // correct position of "red hexagon" after popups
-            auto mouse = Game::getInstance()->mouse();
             auto hexagon = hexagonGrid()->hexagonAt(mouse->position() + _camera->topLeft());
             if (mouse->state() == Input::Mouse::Cursor::HEXAGON_RED && hexagon) {
                 mouse->ui()->setPosition(hexagon->position() - _camera->topLeft());
@@ -238,9 +255,9 @@ namespace Falltergeist
             if (it != maps.end()) {
                 _currentMap = static_cast<unsigned>(it - maps.begin());
 
-                if (!it->music.empty() && Game::getInstance()->settings()->musicVolume() > 0.0001) {
+                if (!it->music.empty() && settings->musicVolume() > 0.0001) {
                     Logger::info("Location") << "Playing music " << it->music << std::endl;
-                    Game::getInstance()->mixer()->playACMMusic(it->music + ".acm");
+                    audioMixer->playACMMusic(it->music + ".acm");
                 } else {
                     Logger::info("Location") << "Map " << mapShortName << " has no music." << std::endl;
                 }
@@ -255,7 +272,7 @@ namespace Falltergeist
                         }
                         if (it != _ambientSfx.cend()) {
                             Logger::info("Location") << "Playing ambient sfx " << it->first << std::endl;
-                            Game::getInstance()->mixer()->playACMSound("sound/sfx/" + it->first + ".acm");
+                            audioMixer->playACMSound("sound/sfx/" + it->first + ".acm");
                         } else {
                             Logger::error("Location") << "Could not match ambient sfx for map " << mapShortName
                                                       << " with " << rnd << std::endl;
@@ -277,10 +294,6 @@ namespace Falltergeist
             }
             std::vector<GLuint> indexes;
             for (auto hexagon : _hexagonGrid->hexagons()) {
-                /*if (!Rect::inRect(hexagon->position()-camera()->topLeft(),Size(Game::getInstance()->renderer()->width(),Game::getInstance()->renderer()->height())))
-                {
-                    continue;
-                }*/
                 bool doup = true;
                 bool dodown = true;
                 if (hexagon->number() % 200 == 0) {
@@ -440,7 +453,7 @@ namespace Falltergeist
         void Location::renderTestingOutline() const
         {
             // just for testing
-            if (Game::getInstance()->settings()->targetHighlight()) {
+            if (settings->targetHighlight()) {
                 for (auto &object: _objects) {
                     if (dynamic_cast<Game::CritterObject *>(object.get())) {
                         if (!dynamic_cast<Game::DudeObject *>(object.get())) {
@@ -454,8 +467,8 @@ namespace Falltergeist
         // render hex object outline
         void Location::renderCursorOutline() const
         {
-            if (Game::getInstance()->mouse()->state() == Input::Mouse::Cursor::HEXAGON_RED) {
-                Game::getInstance()->mouse()->renderOutline();
+            if (mouse->state() == Input::Mouse::Cursor::HEXAGON_RED) {
+                mouse->renderOutline();
             }
         }
 
@@ -464,12 +477,10 @@ namespace Falltergeist
         {
             for (auto &object: _flatObjects) {
                 object->render();
-                object->hexagon()->setInRender(object->inRender());
             }
 
             for (auto &object: _objects) {
                 object->render();
-                object->hexagon()->setInRender(object->inRender());
             }
         }
 
@@ -483,61 +494,42 @@ namespace Falltergeist
         // render hex cursor
         void Location::renderCursor() const
         {
-            if (Game::getInstance()->mouse()->state() == Input::Mouse::Cursor::HEXAGON_RED) {
-                Game::getInstance()->mouse()->render();
+            if (mouse->state() == Input::Mouse::Cursor::HEXAGON_RED) {
+                mouse->render();
             }
         }
 
-        void Location::think(uint32_t nanosecondsPassed)
+        void Location::think(const float &deltaTime)
         {
-            Game::getInstance()->gameTime()->think(nanosecondsPassed);
-            thinkObjects(nanosecondsPassed);
-            auto player = Game::getInstance()->player();
-            player->think(nanosecondsPassed);
-            performScrolling(nanosecondsPassed);
+            gameTime->think(deltaTime);
+            thinkObjects(deltaTime);
+            player->think(deltaTime);
+            performScrolling(deltaTime);
             if (_locationEnter) {
                 _locationEnter = false;
-                firstLocationEnter(nanosecondsPassed);
-            } else {
-                updateLocation(nanosecondsPassed);
+                firstLocationEnter(deltaTime);
             }
-            processTimers(nanosecondsPassed);
-            State::think(nanosecondsPassed);
+            processTimers(deltaTime);
+            State::think(deltaTime);
         }
 
         // timers processing
-        void Location::processTimers(uint32_t nanosecondsPassed)
+        void Location::processTimers(const float &deltaTime)
         {
-            _actionCursorTimer.think(nanosecondsPassed);
-            _ambientSfxTimer.think(nanosecondsPassed);
+            _locationScriptTimer.think(deltaTime);
+            _actionCursorTimer.think(deltaTime);
+            _ambientSfxTimer.think(deltaTime);
 
             for (auto it = _timerEvents.begin(); it != _timerEvents.end();) {
-                it->timer.think(nanosecondsPassed);
+                it->timer.think(deltaTime);
                 if (!it->timer.enabled()) {
                     it = _timerEvents.erase(it);
                 } else ++it;
             }
         }
 
-        void Location::updateLocation(uint32_t nanosecondsPassed)
+        void Location::firstLocationEnter(const float &deltaTime) const
         {
-            // TODO use nanoseconds
-            auto player = Game::getInstance()->player();
-            if (_scriptsTicks + 10000 < SDL_GetTicks()) {
-                _scriptsTicks = SDL_GetTicks();
-                if (_location->script()) {
-                    _location->script()->call("map_update_p_proc");
-                }
-                for (auto &object : _objects) {
-                    object->map_update_p_proc();
-                }
-                player->map_update_p_proc();
-            }
-        }
-
-        void Location::firstLocationEnter(uint32_t nanosecondsPassed) const
-        {
-            auto player = Game::getInstance()->player();
             if (_location->script()) {
                 _location->script()->initialize();
             }
@@ -569,78 +561,66 @@ namespace Falltergeist
             }
         }
 
-        void Location::performScrolling(uint32_t nanosecondsPassed)
+        void Location::performScrolling(const float &deltaTime)
         {
-            // TODO use nanosecondsPassed
-            // location scrolling
-            if (this->_scrollTicks + 10 < SDL_GetTicks()) {
-                this->_scrollTicks = SDL_GetTicks();
-                int scrollDelta = 5;
+            float scrollSpeed = 5.0f /* pixels */ / 10.0f /* ms */;
+            int scrollDelta = scrollSpeed * deltaTime;
 
-                //Game::getInstance()->mouse()->setType(Mouse::ACTION);
+            Point pScrollDelta = Point(
+                this->_scrollLeft ? -scrollDelta : (this->_scrollRight ? scrollDelta : 0),
+                this->_scrollTop ? -scrollDelta : (this->_scrollBottom ? scrollDelta : 0)
+            );
+            this->_camera->setCenter(this->_camera->center() + pScrollDelta);
 
-                Point pScrollDelta = Point(
-                    this->_scrollLeft ? -scrollDelta : (this->_scrollRight ? scrollDelta : 0),
-                    this->_scrollTop ? -scrollDelta : (this->_scrollBottom ? scrollDelta : 0)
-                );
-                this->_camera->setCenter(this->_camera->center() + pScrollDelta);
-
-                auto mouse = Game::getInstance()->mouse();
-
-                // if scrolling is active
-                if (this->_scrollLeft || this->_scrollRight || this->_scrollTop || this->_scrollBottom) {
-                    Input::Mouse::Cursor state;
-                    if (this->_scrollLeft) {
-                        state = Input::Mouse::Cursor::SCROLL_W;
-                    }
-                    if (this->_scrollRight) {
-                        state = Input::Mouse::Cursor::SCROLL_E;
-                    }
-                    if (this->_scrollTop) {
-                        state = Input::Mouse::Cursor::SCROLL_N;
-                    }
-                    if (this->_scrollBottom) {
-                        state = Input::Mouse::Cursor::SCROLL_S;
-                    }
-                    if (this->_scrollLeft && this->_scrollTop) {
-                        state = Input::Mouse::Cursor::SCROLL_NW;
-                    }
-                    if (this->_scrollLeft && this->_scrollBottom) {
-                        state = Input::Mouse::Cursor::SCROLL_SW;
-                    }
-                    if (this->_scrollRight && this->_scrollTop) {
-                        state = Input::Mouse::Cursor::SCROLL_NE;
-                    }
-                    if (this->_scrollRight && this->_scrollBottom) {
-                        state = Input::Mouse::Cursor::SCROLL_SE;
-                    }
-                    if (mouse->state() != state) {
-                        if (mouse->scrollState()) {
-                            mouse->popState();
-                        }
-                        mouse->pushState(state);
-                    }
-                } else {
+            // if scrolling is active
+            if (this->_scrollLeft || this->_scrollRight || this->_scrollTop || this->_scrollBottom) {
+                Input::Mouse::Cursor state;
+                if (this->_scrollLeft) {
+                    state = Input::Mouse::Cursor::SCROLL_W;
+                }
+                if (this->_scrollRight) {
+                    state = Input::Mouse::Cursor::SCROLL_E;
+                }
+                if (this->_scrollTop) {
+                    state = Input::Mouse::Cursor::SCROLL_N;
+                }
+                if (this->_scrollBottom) {
+                    state = Input::Mouse::Cursor::SCROLL_S;
+                }
+                if (this->_scrollLeft && this->_scrollTop) {
+                    state = Input::Mouse::Cursor::SCROLL_NW;
+                }
+                if (this->_scrollLeft && this->_scrollBottom) {
+                    state = Input::Mouse::Cursor::SCROLL_SW;
+                }
+                if (this->_scrollRight && this->_scrollTop) {
+                    state = Input::Mouse::Cursor::SCROLL_NE;
+                }
+                if (this->_scrollRight && this->_scrollBottom) {
+                    state = Input::Mouse::Cursor::SCROLL_SE;
+                }
+                if (mouse->state() != state) {
                     if (mouse->scrollState()) {
                         mouse->popState();
                     }
+                    mouse->pushState(state);
                 }
-
+            } else {
+                if (mouse->scrollState()) {
+                    mouse->popState();
+                }
             }
         }
 
-        void Location::thinkObjects(uint32_t nanosecondsPassed) const
+        void Location::thinkObjects(const float &deltaTime) const
         {
             for (auto &object : _objects) {
-                object->think(nanosecondsPassed);
+                object->think(deltaTime);
             }
         }
 
         void Location::toggleCursorMode()
         {
-            auto game = Game::getInstance();
-            auto mouse = game->mouse();
-
             // Just for testing. This case should never happen in real life
             if (mouse->state() == Input::Mouse::Cursor::NONE) {
                 mouse->pushState(Input::Mouse::Cursor::ACTION);
@@ -678,7 +658,6 @@ namespace Falltergeist
 
             if (auto mouseEvent = dynamic_cast<Event::Mouse *>(event)) {
                 using Mouse = Event::Mouse;
-                auto mouse = Game::getInstance()->mouse();
 
                 if (mouseEvent->originalType() == Mouse::Type::BUTTON_DOWN) {
                     emitEvent(std::make_unique<Event::Mouse>(*mouseEvent), _mouseDownHandler);
@@ -690,17 +669,6 @@ namespace Falltergeist
 
                 if (mouseEvent->originalType() == Mouse::Type::MOVE) {
                     emitEvent(std::make_unique<Event::Mouse>(*mouseEvent), _mouseMoveHandler);
-
-                    if (mouse->state() == Input::Mouse::Cursor::ACTION) {
-                        // optimization to prevent FPS drops on mouse move
-                        // TODO: replace with a Timer?
-                        auto ticks = SDL_GetTicks();
-                        if (ticks - _mouseMoveTicks < 50) {
-                            event->setHandled(true);
-                        } else {
-                            _mouseMoveTicks = ticks;
-                        }
-                    }
                 }
 
                 // let event fall down to all objects when using action cursor and within active view
@@ -768,18 +736,15 @@ namespace Falltergeist
         {
             // Player movement
             if (event->leftButton()) {
-                auto game = Game::getInstance();
-                auto mouse = game->mouse();
                 if (mouse->state() == Input::Mouse::Cursor::HEXAGON_RED) {
                     // Here goes the movement
                     auto hexagon = hexagonGrid()->hexagonAt(mouse->position() + _camera->topLeft());
                     if (hexagon) {
-                        auto player = game->player();
                         auto path = hexagonGrid()->findPath(player->hexagon(), hexagon);
                         if (path.size()) {
                             player->stopMovement();
                             player->setRunning((_lastClickedTile != 0 && hexagon->number() == _lastClickedTile) ||
-                                               (event->shiftPressed() != game->settings()->running()));
+                                               (event->shiftPressed() != settings->running()));
                             for (auto pathHexagon : path) {
                                 player->movementQueue()->push_back(pathHexagon);
                             }
@@ -801,7 +766,7 @@ namespace Falltergeist
                     // TODO: Animate
 
                     // Use
-                    object->use_skill_on_p_proc(skillInUse(), object, Game::getInstance()->player().get());
+                    object->use_skill_on_p_proc(skillInUse(), object, player.get());
                     mouse->setState(Input::Mouse::Cursor::ACTION);
                 }
             }
@@ -809,7 +774,6 @@ namespace Falltergeist
 
         void Location::onMouseMove(Event::Mouse *mouseEvent)
         {
-            auto mouse = Game::getInstance()->mouse();
             auto hexagon = hexagonGrid()->hexagonAt(mouse->position() + _camera->topLeft());
             if (mouse->states()->empty()) {
                 mouse->setState(Input::Mouse::Cursor::ACTION);
@@ -819,7 +783,6 @@ namespace Falltergeist
             }
 
             int scrollArea = 8;
-            auto renderer = Game::getInstance()->renderer();
             Point mpos = mouse->position();
             _scrollLeft = (mpos.x() < scrollArea);
             _scrollRight = (mpos.x() > renderer->width() - scrollArea);
@@ -832,8 +795,7 @@ namespace Falltergeist
                         std::to_string((unsigned int) (hexagon->number() / 200)) + "\n";
                 text += "Hex coords: " + std::to_string(hexagon->position().x()) + "," +
                         std::to_string(hexagon->position().y()) + "\n";
-                auto dude = Game::getInstance()->player();
-                auto hex = dude->hexagon();
+                auto hex = player->hexagon();
                 text += "Hex delta:\n dx=" + std::to_string(hex->cubeX() - hexagon->cubeX()) + "\n dy=" +
                         std::to_string(hex->cubeY() - hexagon->cubeY()) + "\n dz=" +
                         std::to_string(hex->cubeZ() - hexagon->cubeZ()) + "\n";
@@ -851,19 +813,17 @@ namespace Falltergeist
             }
 
             if (event->keyCode() == SDLK_COMMA) {
-                auto player = Game::getInstance()->player();
                 // rotate left
                 player->setOrientation(player->orientation() + 5);
             }
 
             if (event->keyCode() == SDLK_PERIOD) {
-                auto player = Game::getInstance()->player();
                 // rotate right
                 player->setOrientation(player->orientation() + 1);
             }
 
             if (event->keyCode() == SDLK_HOME) {
-                centerCameraAtHexagon(Game::getInstance()->player()->hexagon());
+                centerCameraAtHexagon(player->hexagon());
             }
 
             // @TODO: SDLK_PLUS || SDLK_KP_PLUS - increase brightness
@@ -899,17 +859,14 @@ namespace Falltergeist
             // Find path to object
             auto hexagon = object->hexagon();
 
-            for (auto adjacentHex : hexagon->neighbors())
-            {
-                auto game = Game::getInstance();
-                auto player = game->player();
-
-                if (!adjacentHex->canWalkThru()) continue;
+            for (auto adjacentHex : hexagon->neighbors()) {
+                if (!adjacentHex->canWalkThru()) {
+                    continue;
+                }
 
                 auto path = hexagonGrid()->findPath(player->hexagon(), adjacentHex);
 
-                if(path.size())
-                {
+                if (path.size()) {
                     /* Remove the last hexagon from the path so the player stops on
                     an adjacent tile (rather than on the tile the object occupies) */
                     path.pop_back();
@@ -918,8 +875,7 @@ namespace Falltergeist
                     player->setRunning(true);
 
                     // Move!
-                    for (auto pathHexagon : path)
-                    {
+                    for (auto pathHexagon : path) {
                         player->movementQueue()->push_back(pathHexagon);
                     }
                     // The player was able to move to an adjacent tile
@@ -986,7 +942,8 @@ namespace Falltergeist
                             debug << " exitDirection: " << exitGrid->exitDirection() << std::endl << std::endl;
 
                             if (exitGrid->exitMapNumber() < 0) {
-                                auto worldMapState = new WorldMap;
+                                auto worldMapState = new WorldMap(resourceManager);
+                                // TODO delegate state manipulation to some kind of state manager
                                 Game::getInstance()->setState(worldMapState);
                                 return;
                             }
@@ -1000,8 +957,10 @@ namespace Falltergeist
                             location->setDefaultOrientation(exitGrid->exitDirection());
                             location->setDefaultElevationIndex(exitGrid->exitElevationNumber());
 
-                            auto state = new Location();
+                            // TODO move this instantiation to StateLocationHelper or some kind of state manager
+                            auto state = new Location(player, mouse, settings, renderer, audioMixer, gameTime, resourceManager);
                             state->setLocation(location);
+                            // TODO delegate state manipulation to some kind of state manager
                             Game::getInstance()->setState(state);
 
                             return;
@@ -1126,11 +1085,11 @@ namespace Falltergeist
 
                 case Mouse::Icon::USE:
                 {
-                    auto player = Game::getInstance()->player();
                     auto animation = player->setActionAnimation("al");
                     // Move to object
-                    animation->actionFrameHandler().add([object, player](Event::Event *event) {
-                        object->onUseAnimationActionFrame(event, player.get());
+                    auto playerObject = player;
+                    animation->actionFrameHandler().add([object, playerObject](Event::Event *event) {
+                        object->onUseAnimationActionFrame(event, playerObject.get());
                     });
                     break;
                 }
@@ -1183,9 +1142,9 @@ namespace Falltergeist
             return _playerPanel;
         }
 
-        void Location::addTimerEvent(Game::Object *obj, int delay, int fixedParam)
+        void Location::addTimerEvent(Game::Object *obj, int ticks, int fixedParam)
         {
-            Game::GameTimer timer((unsigned) delay);
+            Game::Timer timer(static_cast<float>(ticks) * 100.0f);
             timer.start();
             timer.tickHandler().add([obj, fixedParam](Event::Event *) {
                 if (obj) {
@@ -1200,16 +1159,20 @@ namespace Falltergeist
 
         void Location::removeTimerEvent(Game::Object *obj)
         {
-            _timerEvents.remove_if([=](Location::TimerEvent &item) { return item.object == obj; });
+            _timerEvents.erase(std::remove_if(_timerEvents.begin(), _timerEvents.end(),
+                [=](Location::TimerEvent &item) {
+                    return item.object == obj;
+                }
+            ), _timerEvents.end());
         }
 
         void Location::removeTimerEvent(Game::Object *obj, int fixedParam)
         {
-            _timerEvents.remove_if(
+            _timerEvents.erase(std::remove_if(_timerEvents.begin(), _timerEvents.end(),
                 [=](Location::TimerEvent &item) {
                     return item.object == obj && item.fixedParam == fixedParam;
                 }
-            );
+            ), _timerEvents.end());
         }
 
         unsigned int Location::lightLevel()
@@ -1289,8 +1252,6 @@ namespace Falltergeist
 
         Game::Object* Location::getGameObjectUnderCursor()
         {
-            auto mouse = Game::getInstance()->mouse();
-
             for (auto it = _objects.rbegin(); it != _objects.rend(); ++it) {
                 auto object = (*it).get();
                 if (!object->inRender()) {

@@ -7,7 +7,7 @@ namespace Falltergeist
         /**
          * represents orientation in hexagonal space
          */
-        class Orientation
+        class Orientation final
         {
             public:
                 enum

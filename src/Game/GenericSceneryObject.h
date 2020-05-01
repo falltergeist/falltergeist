@@ -10,10 +10,7 @@ namespace Falltergeist
         {
             public:
                 GenericSceneryObject();
-                ~GenericSceneryObject() override = default;
-
-            protected:
-                bool _useEggTransparency() override;
+                ~GenericSceneryObject() = default;
         };
     }
 }

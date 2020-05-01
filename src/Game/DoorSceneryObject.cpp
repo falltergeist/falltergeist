@@ -6,6 +6,7 @@
 #include "../State/Location.h"
 #include "../UI/Animation.h"
 #include "../UI/AnimationQueue.h"
+#include "../UI/TextArea.h"
 
 namespace Falltergeist
 {

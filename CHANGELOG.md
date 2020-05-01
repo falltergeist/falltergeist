@@ -2,6 +2,7 @@ Under development
 =======================
 - [bugfix] Opcode810D (obj_carrying_pid_obj) checks containers as well (JanSimek)
 - [bugfix] Fix linking release builds on Windows and prevent closing console after a crash (JanSimek)
+- [bugfix] Fix crash when erasing timer on newr1 map
 - [feature] Search data files in parent dir too (alexeevdv)
 - [feature] Basic barter system (Zervox, JanSimek)
 - [feature] Fix and update Travis build (JanSimek)
@@ -12,6 +13,7 @@ Under development
 - [feature] Doors can't be opened if they're locked (AdamFx990)
 - [feature] Optimisations & code readability improvements to hexagon logic (AdamFx990)
 - [feature] Added missing tabs for perks, karma and kills in the Character window (JanSimek)
+- [feature][#476] Automated Appveyor Windows builds (JanSimek, burner1024)
 - [feature] Added timediff to gameloop in order to make things to be independent from SDL ticks (alexeevdv)
 - [feature] Extract UI generation logic from game objects (alexeevdv)
 

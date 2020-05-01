@@ -4,13 +4,13 @@ namespace Falltergeist
 {
     namespace Game
     {
-        void Time::think(uint32_t nanosecondsPassed)
+        void Time::think(const float &deltaTime)
         {
-            _nanoseconds+= nanosecondsPassed;
+            _milliseconds += deltaTime;
 
-            while (_nanoseconds >= 1000) {
-                _nanoseconds-= 1000;
-                _increaseMicroseconds();
+            while (_milliseconds >= 1000.0f) {
+                _milliseconds -= 1000.0f;
+                _increaseSeconds();
             }
         }
 
@@ -26,15 +26,7 @@ namespace Falltergeist
             }
         }
 
-        void Time::_increaseMicroseconds()
-        {
-            _microseconds++;
-            if (_microseconds >= 1000) {
-                _microseconds -= 1000;
-                _increaseMilliseconds();
-            }
-        }
-
+        // TODO pass number of ms as param
         void Time::_increaseMilliseconds()
         {
             _milliseconds++;
@@ -131,16 +123,6 @@ namespace Falltergeist
         unsigned int Time::ticks()
         {
             return _ticks;
-        }
-
-        uint32_t Time::nanoseconds()
-        {
-            return _nanoseconds;
-        }
-
-        uint32_t Time::microseconds()
-        {
-            return _microseconds;
         }
 
         uint32_t Time::milliseconds()

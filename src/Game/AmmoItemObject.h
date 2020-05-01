@@ -10,7 +10,7 @@ namespace Falltergeist
         {
             public:
                 AmmoItemObject();
-                ~AmmoItemObject() override = default;
+                ~AmmoItemObject() = default;
         };
     }
 }

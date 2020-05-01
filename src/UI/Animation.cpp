@@ -87,7 +87,7 @@ namespace Falltergeist
             return _animationFrames;
         }
 
-        void Animation::think(uint32_t nanosecondsPassed)
+        void Animation::think(const float &deltaTime)
         {
             if (!_animation) {
                 return;

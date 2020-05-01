@@ -10,7 +10,7 @@ namespace Falltergeist
         {
             public:
                 KeyItemObject();
-                ~KeyItemObject() override = default;
+                ~KeyItemObject() = default;
         };
     }
 }
