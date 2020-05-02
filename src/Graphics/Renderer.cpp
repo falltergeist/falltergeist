@@ -59,22 +59,26 @@ namespace Falltergeist
             std::string message =  "SDL_CreateWindow " + std::to_string(_rendererConfig->width()) + "x" + std::to_string(_rendererConfig->height()) + "x" + std::to_string(32) + " - ";
 
             uint32_t flags = SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL;
+
             if (_rendererConfig->isFullscreen()) {
                 flags |= SDL_WINDOW_FULLSCREEN;
             }
-            if (_rendererConfig->isAlwaysOnTop()) {
+
+            if (_rendererConfig->isAlwaysOnTop() && isAlwaysOnTopSupported()) {
+                const uint32_t SDL_WINDOW_ALWAYS_ON_TOP = 0x00008000; // Copied from SDL_WindowFlags::SDL_WINDOW_ALWAYS_ON_TOP
                 flags |= SDL_WINDOW_ALWAYS_ON_TOP;
             }
 
             _sdlWindow = SDL_CreateWindow(
-                    "",
-                    _rendererConfig->x(),
-                    _rendererConfig->y(),
-                    _rendererConfig->width(),
-                    _rendererConfig->height(),
-                    flags);
-            if (!_sdlWindow)
-            {
+                "",
+                _rendererConfig->x(),
+                _rendererConfig->y(),
+                _rendererConfig->width(),
+                _rendererConfig->height(),
+                flags
+            );
+
+            if (!_sdlWindow) {
                 throw Exception(message + "[FAIL]");
             }
 
@@ -509,6 +513,21 @@ namespace Falltergeist
         Renderer::RenderPath Renderer::renderPath()
         {
             return _renderpath;
+        }
+
+        bool Renderer::isAlwaysOnTopSupported()
+        {
+            SDL_version linkedSDLVersion;
+            SDL_GetVersion(&linkedSDLVersion);
+            uint32_t sdlVersion = (linkedSDLVersion.major * 10000) + (linkedSDLVersion.minor * 100) + linkedSDLVersion.patch;
+
+            // SDL_WINDOW_ALWAYS_ON_TOP is available on X11 only, >= SDL 2.0.5
+            if (sdlVersion >= 20005) {
+                // TODO check X11
+                return true;
+            }
+
+            return false;
         }
     }
 }
