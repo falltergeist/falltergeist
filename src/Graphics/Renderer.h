@@ -24,6 +24,15 @@ namespace Falltergeist
             } \
         } while (0)
 
+        struct RendererConfig {
+            unsigned int width;
+            unsigned int height;
+            int x = SDL_WINDOWPOS_CENTERED;
+            int y = SDL_WINDOWPOS_CENTERED;
+            bool fullscreen = false;
+            bool alwaysOnTop = false;
+        };
+
         class Renderer
         {
             public:
@@ -35,8 +44,9 @@ namespace Falltergeist
                     GLES2
                 };
 
+                Renderer(const RendererConfig& cfg);
                 Renderer(unsigned int width, unsigned int height);
-                Renderer(const Size& size);
+                Renderer(Size size);
                 ~Renderer();
 
                 void init();
@@ -45,9 +55,9 @@ namespace Falltergeist
                 void endFrame();
                 void think(const float &deltaTime);
 
-                int width();
-                int height();
-                const Size& size() const;
+                unsigned int width() const;
+                unsigned int height() const;
+                Size size() const;
 
                 float scaleX();
                 float scaleY();
@@ -80,7 +90,7 @@ namespace Falltergeist
                 RenderPath renderPath();
 
             protected:
-                Size _size;
+                RendererConfig _config;
                 RenderPath _renderpath = RenderPath::OGL21;
 
                 short _fadeStep = 0;
