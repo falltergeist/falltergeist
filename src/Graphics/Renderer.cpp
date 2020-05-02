@@ -93,16 +93,14 @@ namespace Falltergeist
             SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
             _glcontext = SDL_GL_CreateContext(_sdlWindow);
 
-            if (!_glcontext)
-            {
+            if (!_glcontext) {
                 // ok, try and create 2.1 context then
                 SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, 0);
                 SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
                 SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
                 _glcontext = SDL_GL_CreateContext(_sdlWindow);
 
-                if (!_glcontext)
-                {
+                if (!_glcontext) {
                     throw Exception(message + "[FAIL]");
                 }
             }
@@ -132,21 +130,15 @@ namespace Falltergeist
         */
 
             char *version_string = (char*)glGetString(GL_VERSION);
-            if (version_string[0]-'0' >=3) //we have atleast gl 3.0
-            {
+            if (version_string[0]-'0' >=3) { //we have at least gl 3.0
                 glGetIntegerv(GL_MAJOR_VERSION, &_major);
                 glGetIntegerv(GL_MINOR_VERSION, &_minor);
-                if (_major==3 && _minor<2) // anything lower 3.2
-                {
+                if (_major == 3 && _minor < 2) { // anything lower 3.2
                     _renderpath = RenderPath::OGL21;
-                }
-                else
-                {
+                } else {
                     _renderpath = RenderPath::OGL32;
                 }
-            }
-            else
-            {
+            } else {
                 _major = version_string[0]-'0';
                 _minor = version_string[2]-'0';
                 _renderpath = RenderPath::OGL21;
@@ -157,8 +149,7 @@ namespace Falltergeist
             Logger::info("RENDERER") << "Renderer: " << glGetString(GL_RENDERER) << std::endl;
             Logger::info("RENDERER") << "Version string: " << glGetString(GL_VERSION) << std::endl;
             Logger::info("RENDERER") << "Vendor: " << glGetString(GL_VENDOR) << std::endl;
-            switch (_renderpath)
-            {
+            switch (_renderpath) {
                 case RenderPath::OGL21:
                     Logger::info("RENDERER") << "Render path: OpenGL 2.1"  << std::endl;
                     break;
@@ -173,33 +164,36 @@ namespace Falltergeist
 
             message =  "Init GLEW - ";
             glewExperimental = GL_TRUE;
-            GLenum err = glewInit();
+            GLenum glewError = glewInit();
             glGetError(); // glew sometimes throws bad enum, so clean it
-            if (GLEW_OK != err)
-            {
-                throw Exception(message + "[FAIL]: " + std::string((char*)glewGetErrorString(err)));
+
+            switch (glewError) {
+                #ifdef GLEW_ERROR_NO_GLX_DISPLAY
+                // Wayland: https://github.com/nigels-com/glew/issues/172
+                case GLEW_ERROR_NO_GLX_DISPLAY:
+                    break;
+                #endif
+                case GLEW_OK:
+                    break;
+                default:
+                    throw Exception(message + "[FAIL]: " + std::string((char*)glewGetErrorString(glewError)));
             }
+
             Logger::info("RENDERER") << message + "[OK]" << std::endl;
             Logger::info("RENDERER") << "Using GLEW " << glewGetString(GLEW_VERSION) << std::endl;
 
             Logger::info("RENDERER") << "Extensions: " << std::endl;
 
-            if (_renderpath==RenderPath::OGL32)
-            {
+            if (_renderpath == RenderPath::OGL32) {
                 GLint count;
                 glGetIntegerv(GL_NUM_EXTENSIONS, &count);
 
-                GLint i;
-                for (i = 0; i < count; i++)
-                {
+                for (GLint i = 0; i < count; i++) {
                     Logger::info("RENDERER") << (const char *) glGetStringi(GL_EXTENSIONS, i) << std::endl;
                 }
-            }
-            else
-            {
+            } else {
                 Logger::info("RENDERER") << (const char *) glGetString(GL_EXTENSIONS) << std::endl;
             }
-
 
             Logger::info("RENDERER") << "Loading default shaders" << std::endl;
             ResourceManager::getInstance()->shader("default");
@@ -212,11 +206,9 @@ namespace Falltergeist
 
             Logger::info("RENDERER") << "Generating buffers" << std::endl;
 
-            if (_renderpath==RenderPath::OGL32)
-            {
+            if (_renderpath == RenderPath::OGL32) {
                 // generate VBOs for verts and tex
                 GL_CHECK(glGenVertexArrays(1, &_vao));
-
                 GL_CHECK(glBindVertexArray(_vao));
             }
 
@@ -241,8 +233,6 @@ namespace Falltergeist
 
             // load egg
             _egg = ResourceManager::getInstance()->texture("data/egg.png");
-
-
         }
 
         void Renderer::think(const float &deltaTime)
