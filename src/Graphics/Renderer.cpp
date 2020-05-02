@@ -175,6 +175,11 @@ namespace Falltergeist
             glewExperimental = GL_TRUE;
             GLenum err = glewInit();
             glGetError(); // glew sometimes throws bad enum, so clean it
+            #ifdef GLEW_ERROR_NO_GLX_DISPLAY
+            if (GLEW_ERROR_NO_GLX_DISPLAY == err) {
+               // Wayland: https://github.com/nigels-com/glew/issues/172
+            } else
+            #endif
             if (GLEW_OK != err)
             {
                 throw Exception(message + "[FAIL]: " + std::string((char*)glewGetErrorString(err)));
