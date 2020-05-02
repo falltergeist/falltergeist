@@ -6,6 +6,7 @@
 #include <glm/glm.hpp>
 #include <GL/glew.h>
 #include <SDL.h>
+#include "../Graphics/IRendererConfig.h"
 #include "../Graphics/Point.h"
 #include "../Graphics/Size.h"
 
@@ -24,15 +25,6 @@ namespace Falltergeist
             } \
         } while (0)
 
-        struct RendererConfig {
-            unsigned int width;
-            unsigned int height;
-            int x = SDL_WINDOWPOS_CENTERED;
-            int y = SDL_WINDOWPOS_CENTERED;
-            bool fullscreen = false;
-            bool alwaysOnTop = false;
-        };
-
         class Renderer
         {
             public:
@@ -44,9 +36,7 @@ namespace Falltergeist
                     GLES2
                 };
 
-                Renderer(const RendererConfig& cfg);
-                Renderer(unsigned int width, unsigned int height);
-                Renderer(Size size);
+                Renderer(std::unique_ptr<IRendererConfig> rendererConfig);
                 ~Renderer();
 
                 void init();
@@ -90,7 +80,6 @@ namespace Falltergeist
                 RenderPath renderPath();
 
             protected:
-                RendererConfig _config;
                 RenderPath _renderpath = RenderPath::OGL21;
 
                 short _fadeStep = 0;
@@ -117,6 +106,9 @@ namespace Falltergeist
                 int32_t _maxTexSize;
 
                 Texture* _egg;
+
+            private:
+                std::unique_ptr<IRendererConfig> _rendererConfig;
         };
     }
 }

@@ -10,6 +10,7 @@
 #include "../Game/Game.h"
 #include "../Graphics/Point.h"
 #include "../Graphics/Renderer.h"
+#include "../Graphics/IRendererConfig.h"
 #include "../Graphics/Shader.h"
 #include "../Graphics/Texture.h"
 #include "../Input/Mouse.h"
@@ -22,8 +23,10 @@ namespace Falltergeist
 {
     namespace Graphics
     {
-        Renderer::Renderer(const RendererConfig& cfg) : _config{cfg}
+        Renderer::Renderer(std::unique_ptr<IRendererConfig> rendererConfig)
         {
+            _rendererConfig = std::move(rendererConfig);
+
             std::string message = "Renderer initialization - ";
             if (SDL_InitSubSystem(SDL_INIT_VIDEO) < 0)
             {
@@ -31,26 +34,6 @@ namespace Falltergeist
                 throw Exception(SDL_GetError());
             }
             Logger::info("VIDEO") << message + "[OK]" << std::endl;
-        }
-
-        Renderer::Renderer(unsigned int width, unsigned int height) :
-            Renderer {
-                RendererConfig {
-                    .width = width,
-                    .height = height
-                }
-            }
-        {
-        }
-
-        Renderer::Renderer(Size size) :
-            Renderer {
-                RendererConfig {
-                    .width = static_cast<unsigned int>(size.width()),
-                    .height = static_cast<unsigned int>(size.height())
-                }
-            }
-        {
         }
 
         Renderer::~Renderer()
@@ -73,22 +56,22 @@ namespace Falltergeist
             // Game::getInstance()->engineSettings()->setFullscreen(true);
             // Game::getInstance()->engineSettings()->setScale(1); //or 2, if fullhd device
 
-            std::string message =  "SDL_CreateWindow " + std::to_string(_config.width) + "x" + std::to_string(_config.height) + "x" +std::to_string(32)+ " - ";
+            std::string message =  "SDL_CreateWindow " + std::to_string(_rendererConfig->width()) + "x" + std::to_string(_rendererConfig->height()) + "x" + std::to_string(32) + " - ";
 
             uint32_t flags = SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL;
-            if (_config.fullscreen) {
+            if (_rendererConfig->isFullscreen()) {
                 flags |= SDL_WINDOW_FULLSCREEN;
             }
-            if (_config.alwaysOnTop) {
+            if (_rendererConfig->isAlwaysOnTop()) {
                 flags |= SDL_WINDOW_ALWAYS_ON_TOP;
             }
 
             _sdlWindow = SDL_CreateWindow(
                     "",
-                    _config.x,
-                    _config.y,
-                    _config.width,
-                    _config.height,
+                    _rendererConfig->x(),
+                    _rendererConfig->y(),
+                    _rendererConfig->width(),
+                    _rendererConfig->height(),
                     flags);
             if (!_sdlWindow)
             {
@@ -243,7 +226,14 @@ namespace Falltergeist
             GL_CHECK(glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6*sizeof(GLushort), indexes, GL_STATIC_DRAW));
 
             // generate projection matrix
-            _MVP = glm::ortho(0.0, static_cast<double>(_config.width), static_cast<double>(_config.height), 0.0, -1.0, 1.0);
+            _MVP = glm::ortho(
+                0.0,
+                static_cast<double>(_rendererConfig->width()),
+                static_cast<double>(_rendererConfig->height()),
+                0.0,
+                -1.0,
+                1.0
+            );
 
             // load egg
             _egg = ResourceManager::getInstance()->texture("data/egg.png");
@@ -323,19 +313,19 @@ namespace Falltergeist
 
         unsigned int Renderer::width() const
         {
-            return _config.width;
+            return _rendererConfig->width();
         }
 
         unsigned int Renderer::height() const
         {
-            return _config.height;
+            return _rendererConfig->height();
         }
 
         Size Renderer::size() const
         {
             return {
-                static_cast<int>(_config.width),
-                static_cast<int>(_config.height)
+                static_cast<int>(_rendererConfig->width()),
+                static_cast<int>(_rendererConfig->height())
             };
         }
 

@@ -6,6 +6,7 @@
 #include <SDL.h>
 #include "../Base/Singleton.h"
 #include "../Game/Time.h"
+#include "../Graphics/IRendererConfig.h"
 #include "../UI/IResourceManager.h"
 
 namespace Falltergeist
@@ -137,6 +138,7 @@ namespace Falltergeist
                 friend class Base::Singleton<Game>;
                 void _initGVARS();
                 std::unique_ptr<Event::Event> _createEventFromSDL(const SDL_Event& sdlEvent);
+                std::unique_ptr<Graphics::IRendererConfig> createRendererConfigFromSettings();
 
                 Game();
                 ~Game();

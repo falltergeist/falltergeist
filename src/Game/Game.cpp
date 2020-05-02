@@ -14,6 +14,7 @@
 #include "../Game/Time.h"
 #include "../Graphics/AnimatedPalette.h"
 #include "../Graphics/Renderer.h"
+#include "../Graphics/RendererConfig.h"
 #include "../Input/Mouse.h"
 #include "../Logger.h"
 #include "../ResourceManager.h"
@@ -22,26 +23,6 @@
 #include "../State/Location.h"
 #include "../UI/FpsCounter.h"
 #include "../UI/TextArea.h"
-
-namespace
-{
-    Falltergeist::Graphics::RendererConfig configFromSettings(const Falltergeist::Settings& settings)
-    {
-        Falltergeist::Graphics::RendererConfig config{
-                .width = settings.screenWidth(),
-                .height = settings.screenHeight(),
-                .fullscreen = settings.fullscreen(),
-                .alwaysOnTop = settings.alwaysOnTop(),
-        };
-        if (settings.screenX() >= 0) {
-            config.x = settings.screenX();
-        }
-        if (settings.screenY() >= 0) {
-            config.y = settings.screenY();
-        }
-        return config;
-    }
-}
 
 namespace Falltergeist
 {
@@ -74,7 +55,7 @@ namespace Falltergeist
 
             _eventDispatcher = std::make_unique<Event::Dispatcher>();
 
-            _renderer = std::make_shared<Graphics::Renderer>(configFromSettings(*_settings));
+            _renderer = std::make_shared<Graphics::Renderer>(createRendererConfigFromSettings());
 
             Logger::info("GAME") << CrossPlatform::getVersion() << std::endl;
             Logger::info("GAME") << "Opensource Fallout 2 game engine" << std::endl;
@@ -492,6 +473,28 @@ namespace Falltergeist
         void Game::setUIResourceManager(std::shared_ptr<UI::IResourceManager> uiResourceManager)
         {
             this->uiResourceManager = uiResourceManager;
+        }
+
+        std::unique_ptr<Graphics::IRendererConfig> Game::createRendererConfigFromSettings()
+        {
+            int32_t x = SDL_WINDOWPOS_CENTERED;
+            if (_settings->screenX() >= 0) {
+                x = _settings->screenX();
+            }
+
+            int32_t y = SDL_WINDOWPOS_CENTERED;
+            if (_settings->screenY() >= 0) {
+                y = _settings->screenY();
+            }
+
+            return std::make_unique<Graphics::RendererConfig>(
+                _settings->screenWidth(),
+                _settings->screenHeight(),
+                x,
+                y,
+                _settings->fullscreen(),
+                _settings->alwaysOnTop()
+            );
         }
     }
 }
