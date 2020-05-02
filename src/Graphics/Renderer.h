@@ -109,7 +109,6 @@ namespace Falltergeist
 
             private:
                 std::unique_ptr<IRendererConfig> _rendererConfig;
-                bool isAlwaysOnTopSupported();
         };
     }
 }
