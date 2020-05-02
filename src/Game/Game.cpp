@@ -14,6 +14,7 @@
 #include "../Game/Time.h"
 #include "../Graphics/AnimatedPalette.h"
 #include "../Graphics/Renderer.h"
+#include "../Graphics/RendererConfig.h"
 #include "../Input/Mouse.h"
 #include "../Logger.h"
 #include "../ResourceManager.h"
@@ -54,7 +55,7 @@ namespace Falltergeist
 
             _eventDispatcher = std::make_unique<Event::Dispatcher>();
 
-            _renderer = std::make_shared<Graphics::Renderer>(_settings->screenWidth(), _settings->screenHeight());
+            _renderer = std::make_shared<Graphics::Renderer>(createRendererConfigFromSettings());
 
             Logger::info("GAME") << CrossPlatform::getVersion() << std::endl;
             Logger::info("GAME") << "Opensource Fallout 2 game engine" << std::endl;
@@ -472,6 +473,28 @@ namespace Falltergeist
         void Game::setUIResourceManager(std::shared_ptr<UI::IResourceManager> uiResourceManager)
         {
             this->uiResourceManager = uiResourceManager;
+        }
+
+        std::unique_ptr<Graphics::IRendererConfig> Game::createRendererConfigFromSettings()
+        {
+            int32_t x = SDL_WINDOWPOS_CENTERED;
+            if (_settings->screenX() >= 0) {
+                x = _settings->screenX();
+            }
+
+            int32_t y = SDL_WINDOWPOS_CENTERED;
+            if (_settings->screenY() >= 0) {
+                y = _settings->screenY();
+            }
+
+            return std::make_unique<Graphics::RendererConfig>(
+                _settings->screenWidth(),
+                _settings->screenHeight(),
+                x,
+                y,
+                _settings->fullscreen(),
+                _settings->alwaysOnTop()
+            );
         }
     }
 }

@@ -10,6 +10,7 @@
 #include "../Game/Game.h"
 #include "../Graphics/Point.h"
 #include "../Graphics/Renderer.h"
+#include "../Graphics/IRendererConfig.h"
 #include "../Graphics/Shader.h"
 #include "../Graphics/Texture.h"
 #include "../Input/Mouse.h"
@@ -22,10 +23,9 @@ namespace Falltergeist
 {
     namespace Graphics
     {
-        Renderer::Renderer(unsigned int width, unsigned int height)
+        Renderer::Renderer(std::unique_ptr<IRendererConfig> rendererConfig)
         {
-            _size.setWidth(width);
-            _size.setHeight(height);
+            _rendererConfig = std::move(rendererConfig);
 
             std::string message = "Renderer initialization - ";
             if (SDL_InitSubSystem(SDL_INIT_VIDEO) < 0)
@@ -34,10 +34,6 @@ namespace Falltergeist
                 throw Exception(SDL_GetError());
             }
             Logger::info("VIDEO") << message + "[OK]" << std::endl;
-        }
-
-        Renderer::Renderer(const Size& size) : Renderer((unsigned)size.width(), (unsigned)size.height())
-        {
         }
 
         Renderer::~Renderer()
@@ -60,17 +56,29 @@ namespace Falltergeist
             // Game::getInstance()->engineSettings()->setFullscreen(true);
             // Game::getInstance()->engineSettings()->setScale(1); //or 2, if fullhd device
 
-            std::string message =  "SDL_CreateWindow " + std::to_string(_size.width()) + "x" + std::to_string(_size.height()) + "x" +std::to_string(32)+ " - ";
+            std::string message =  "SDL_CreateWindow " + std::to_string(_rendererConfig->width()) + "x" + std::to_string(_rendererConfig->height()) + "x" + std::to_string(32) + " - ";
 
             uint32_t flags = SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL;
-            if (Game::getInstance()->settings()->fullscreen())
-            {
+
+            if (_rendererConfig->isFullscreen()) {
                 flags |= SDL_WINDOW_FULLSCREEN;
             }
 
-            _sdlWindow = SDL_CreateWindow("", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, _size.width(), _size.height(), flags);
-            if (!_sdlWindow)
-            {
+            if (_rendererConfig->isAlwaysOnTop()) {
+                // SDL_WINDOW_ALWAYS_ON_TOP is available on X11 only, >= SDL 2.0.5
+                flags |= 0x00008000; // Copied from SDL_WindowFlags::SDL_WINDOW_ALWAYS_ON_TOP
+            }
+
+            _sdlWindow = SDL_CreateWindow(
+                "",
+                _rendererConfig->x(),
+                _rendererConfig->y(),
+                _rendererConfig->width(),
+                _rendererConfig->height(),
+                flags
+            );
+
+            if (!_sdlWindow) {
                 throw Exception(message + "[FAIL]");
             }
 
@@ -222,7 +230,14 @@ namespace Falltergeist
             GL_CHECK(glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6*sizeof(GLushort), indexes, GL_STATIC_DRAW));
 
             // generate projection matrix
-            _MVP = glm::ortho(0.0, (double)_size.width(), (double)_size.height(), 0.0, -1.0, 1.0);
+            _MVP = glm::ortho(
+                0.0,
+                static_cast<double>(_rendererConfig->width()),
+                static_cast<double>(_rendererConfig->height()),
+                0.0,
+                -1.0,
+                1.0
+            );
 
             // load egg
             _egg = ResourceManager::getInstance()->texture("data/egg.png");
@@ -300,19 +315,22 @@ namespace Falltergeist
             SDL_GL_SwapWindow(_sdlWindow);
         }
 
-        int Renderer::width()
+        unsigned int Renderer::width() const
         {
-            return _size.width();
+            return _rendererConfig->width();
         }
 
-        int Renderer::height()
+        unsigned int Renderer::height() const
         {
-            return _size.height();
+            return _rendererConfig->height();
         }
 
-        const Size& Renderer::size() const
+        Size Renderer::size() const
         {
-            return _size;
+            return {
+                static_cast<int>(_rendererConfig->width()),
+                static_cast<int>(_rendererConfig->height())
+            };
         }
 
         void Renderer::screenshot()
@@ -360,9 +378,9 @@ namespace Falltergeist
             glReadBuffer(GL_BACK);
             glReadPixels(0, 0, width(), height(), GL_RGBA, GL_UNSIGNED_BYTE, srcPixels.data());
 
-            for (int y = 0; y < height(); ++y)
+            for (int y = 0; y < static_cast<int>(height()); ++y)
             {
-                for (int x = 0; x < width(); ++x)
+                for (int x = 0; x < static_cast<int>(width()); ++x)
                 {
                     uint8_t* pDestPix = &destPixels[((width() * y) + x) * 4];
                     uint8_t* pSrcPix = &srcPixels[((width() * ((height() - 1) - y)) + x) * 4];
