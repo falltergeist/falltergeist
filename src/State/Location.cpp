@@ -1217,7 +1217,11 @@ namespace Falltergeist
         Game::Object *Location::addObject(unsigned int PID, unsigned int position, unsigned int elevation)
         {
             auto object = Game::ObjectFactory::getInstance()->createObject(PID);
-            _objects.emplace_back(object);
+
+            // FIXME: This prevents the default destructor of shared_ptr from leaving a dangling pointer
+            //        in removeObjectFromMap() - until we get rid of raw pointers.
+            _objects.emplace_back(std::shared_ptr<Game::Object>(std::shared_ptr<Game::Object>{}, object));
+
             moveObjectToHexagon(object, hexagonGrid()->at(position));
             object->setElevation(elevation);
             return object;
