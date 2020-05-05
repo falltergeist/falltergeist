@@ -1,3 +1,4 @@
+#include "../Game/Component/Lockable.h"
 #include "../Game/DoorSceneryObject.h"
 #include "../Audio/Mixer.h"
 #include "../Event/Event.h"
@@ -19,30 +20,21 @@ namespace Falltergeist
 
         bool DoorSceneryObject::opened() const
         {
-            return _opened;
+            return getComponent<Component::Lockable>()->isOpened();
         }
 
         void DoorSceneryObject::setOpened(bool value)
         {
+            auto lockable = getComponent<Component::Lockable>();
             // Don't change if door is locked.
-            if (!_locked) {
-                _opened = value;
-                setCanLightThru(_opened);
+            if (!lockable->isLocked()) {
+                value ? lockable->open() : lockable->close();
+                setCanLightThru(value);
 
                 if (auto queue = dynamic_cast<UI::AnimationQueue*>(this->ui())) {
                     queue->currentAnimation()->setReverse(value);
                 }
             }
-        }
-
-        bool DoorSceneryObject::locked() const
-        {
-            return _locked;
-        }
-
-        void DoorSceneryObject::setLocked(bool value)
-        {
-            _locked = value;
         }
 
         void DoorSceneryObject::use_p_proc(CritterObject* usedBy)
@@ -73,7 +65,7 @@ namespace Falltergeist
 
         bool DoorSceneryObject::canWalkThru() const
         {
-            return opened();
+            return getComponent<Component::Lockable>()->isOpened();
         }
 
         void DoorSceneryObject::onOpeningAnimationEnded(Event::Event* event)

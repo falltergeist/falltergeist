@@ -9,6 +9,7 @@
 #include "../Format/Txt/MapsFile.h"
 #include "../Format/Gam/File.h"
 #include "../functions.h"
+#include "../Game/Component/Lockable.h"
 #include "../Game/ContainerItemObject.h"
 #include "../Game/Defines.h"
 #include "../Game/DoorSceneryObject.h"
@@ -366,9 +367,7 @@ namespace Falltergeist
             std::vector<Input::Mouse::Icon> icons;
             if (object->script() && object->script()->hasFunction("use_p_proc")) {
                 icons.push_back(Input::Mouse::Icon::USE);
-            } else if (dynamic_cast<Game::DoorSceneryObject *>(object)) {
-                icons.push_back(Input::Mouse::Icon::USE);
-            } else if (dynamic_cast<Game::ContainerItemObject *>(object)) {
+            } else if (object->hasComponent<Game::Component::Lockable>()) {
                 icons.push_back(Input::Mouse::Icon::USE);
             }
 

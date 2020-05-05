@@ -23,8 +23,8 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../../Game/ContainerItemObject.h"
-#include "../../Game/DoorSceneryObject.h"
+#include "../../Game/Component/Lockable.h"
+#include "../../Game/Object.h"
 #include "../../Logger.h"
 #include "../../VM/Script.h"
 
@@ -43,10 +43,8 @@ namespace Falltergeist {
                     _error("obj_is_open: object is NULL");
                 }
                 // @TODO: need some refactoring to get rid of this ugly if-elses
-                if (auto door = dynamic_cast<Game::DoorSceneryObject *>(object)) {
-                    _script->dataStack()->push(door->opened());
-                } else if (auto container = dynamic_cast<Game::ContainerItemObject *>(object)) {
-                    _script->dataStack()->push(container->opened());
+                if (auto lockable = object->getComponent<Game::Component::Lockable>()) {
+                    _script->dataStack()->push(lockable->isOpened());
                 } else {
                     _error("obj_is_open: object is not openable type!");
                 }

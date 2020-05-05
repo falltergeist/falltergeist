@@ -4,6 +4,7 @@
 #include <string>
 #include "../Event/EventTarget.h"
 #include "../Format/Enums.h"
+#include "../Game/Entity.h"
 #include "../Game/Orientation.h"
 #include "../Graphics/TransFlags.h"
 #include "../UI/Base.h"
@@ -37,7 +38,7 @@ namespace Falltergeist
     {
         class CritterObject;
 
-        class Object : public Event::EventTarget
+        class Object : public Event::EventTarget, public Entity
         {
             public:
                 // Object type as defined in prototype

@@ -20,16 +20,8 @@ namespace Falltergeist
 
                 void use_p_proc(CritterObject* usedBy) override;
 
-                bool locked() const;
-                void setLocked(bool locked);
-
-                bool opened() const;
-                void setOpened(bool opened);
-
             protected:
                 std::vector<ItemObject*> _inventory;
-                bool _opened = false;
-                bool _locked = false;
         };
     }
 }
