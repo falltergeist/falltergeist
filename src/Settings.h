@@ -18,6 +18,7 @@ namespace Falltergeist
         public:
 
             Settings();
+            Settings(bool loadFromFile);
             ~Settings();
 
             bool save();
