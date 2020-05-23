@@ -66,7 +66,8 @@ ResourceManager::ResourceManager()
 // static
 ResourceManager* ResourceManager::getInstance()
 {
-    return Base::Singleton<ResourceManager>::get();
+    static ResourceManager manager;
+    return &manager;
 }
 
 void ResourceManager::_loadStreamForFile(string filename, std::function<void(Dat::Stream&&)> callback) {

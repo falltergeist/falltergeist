@@ -27,7 +27,8 @@ namespace Falltergeist
     {
         ObjectFactory* ObjectFactory::getInstance()
         {
-            return Base::Singleton<ObjectFactory>::get();
+            static ObjectFactory factory;
+            return &factory;
         }
 
         std::shared_ptr<Object> ObjectFactory::createObject(unsigned int PID)

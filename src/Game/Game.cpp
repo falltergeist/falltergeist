@@ -41,7 +41,8 @@ namespace Falltergeist
 
         Game* Game::getInstance()
         {
-            return Base::Singleton<Game>::get();
+            static Game game;
+            return &game;
         }
 
         void Game::init(std::unique_ptr<Settings> settings)
