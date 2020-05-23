@@ -55,8 +55,8 @@ namespace Falltergeist
                 //parse ini
                 moviecfg->stream().setPosition(0);
                 std::istream str(&moviecfg->stream());
-                auto inifile = new Ini::Parser(str);
-                auto ini = inifile->parse();
+                Ini::Parser inifile(str);
+                auto ini = inifile.parse();
                 int total_effects = ini->section("info")->propertyInt("total_effects",0);
                 auto effect_frames = ini->section("info")->propertyArray("effect_frames");
                 for (int i =0;i<total_effects;i++)

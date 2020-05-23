@@ -33,7 +33,9 @@ namespace Falltergeist
 
         MainMenu::~MainMenu()
         {
-            Game::getInstance()->mixer()->stopMusic();
+            if (Game::getInstance()->mixer()) {
+                Game::getInstance()->mixer()->stopMusic();
+            }
         }
 
         void MainMenu::init()

@@ -255,7 +255,7 @@ namespace Falltergeist
                             srcrect.h = 8;
                             srcrect.x = x*8;
                             srcrect.y = y*8;
-                            SDL_BlitSurface(_backBuf, &srcrect, _currentBuf, &srcrect);
+                            SDL_BlitSurface(_backBuf, &srcrect, _currentBuf, &srcrect); // Conditional jump or move depends on uninitialised value(s)
                             break;
                         case 0x1:
                             //copy from back-back buff -> copy from current frame -> do nothing
