@@ -63,6 +63,7 @@ namespace Falltergeist
             auto nextCharacterButton = addUI(imageButtonFactory->getByType(ImageButtonType::RIGHT_ARROW, {318, 320}));
             nextCharacterButton->mouseClickHandler().add(std::bind(&NewGame::onNextCharacterButtonClick, this, std::placeholders::_1));
 
+            // if fade time divisor is set to 512, these make the screen not show up at all on first try, but _only_ when running with ASAN...?
             addUI("images", new UI::ImageList({27, 23}, {
                 resourceManager->getImage("art/intrface/combat.frm"),
                 resourceManager->getImage("art/intrface/stealth.frm"),
