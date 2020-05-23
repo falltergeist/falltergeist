@@ -187,7 +187,7 @@ namespace Falltergeist
             _mood = mood;
         }
 
-        std::shared_ptr<Game::CritterObject> CritterInteract::critter()
+        const std::shared_ptr<Game::CritterObject> &CritterInteract::critter()
         {
             return _critter;
         }

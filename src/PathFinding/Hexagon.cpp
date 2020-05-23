@@ -41,7 +41,7 @@ namespace Falltergeist
         return true;
     }
 
-    Game::Orientation Hexagon::orientationTo(std::shared_ptr<Hexagon> hexagon)
+    Game::Orientation Hexagon::orientationTo(const std::shared_ptr<Hexagon> &hexagon)
     {
         Point delta = hexagon->position() - _position;
         int dx = delta.x();

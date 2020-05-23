@@ -197,7 +197,7 @@ namespace Falltergeist
             _wallTransEnd = value;
         }
 
-        std::shared_ptr<Hexagon> Object::hexagon() const
+        const std::shared_ptr<Hexagon> &Object::hexagon() const
         {
             if (this->position() < 0) {
                 return nullptr;

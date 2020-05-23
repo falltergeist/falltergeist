@@ -144,7 +144,7 @@ namespace Falltergeist
                 void setUI(UI::Base* ui);
 
                 // Hexagon of object current position
-                std::shared_ptr<Hexagon> hexagon() const;
+                const std::shared_ptr<Hexagon> &hexagon() const;
                 void setHexagon(const std::shared_ptr<Hexagon> &hexagon);
 
                 // TextArea, currently floating above the object

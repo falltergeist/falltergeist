@@ -96,6 +96,9 @@ else()
 	add_definitions(-Wall)
 endif()
 
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=undefined")
 if (CONAN_LIBS)
 	target_link_libraries(falltergeist ${CONAN_LIBS})
 else()

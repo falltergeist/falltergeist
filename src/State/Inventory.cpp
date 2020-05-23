@@ -36,7 +36,7 @@ namespace Falltergeist
 
     namespace State
     {
-        Inventory::Inventory(std::shared_ptr<UI::IResourceManager> resourceManager) : State()
+        Inventory::Inventory(const std::shared_ptr<UI::IResourceManager> &resourceManager) : State()
         {
             this->resourceManager = resourceManager;
             imageButtonFactory = std::make_unique<UI::Factory::ImageButtonFactory>(resourceManager);
@@ -437,7 +437,7 @@ namespace Falltergeist
         //    //Game::getInstance()->states()->back()->ui()->push_back(dragUi);
         //}
 
-        std::string Inventory::_handItemSummary (std::shared_ptr<Game::ItemObject> hand)
+        std::string Inventory::_handItemSummary (const std::shared_ptr<Game::ItemObject> &hand)
         {
             std::stringstream ss;
             if (hand)

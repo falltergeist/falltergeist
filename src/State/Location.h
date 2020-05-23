@@ -84,8 +84,8 @@ namespace Falltergeist
                 HexagonGrid* hexagonGrid();
                 LocationCamera* camera();
 
-                std::shared_ptr<Game::Location> location();
-                void setLocation(std::shared_ptr<Game::Location> location);
+                const std::shared_ptr<Game::Location> &location();
+                void setLocation(const std::shared_ptr<Game::Location> &location);
 
                 unsigned int elevation() const;
                 void setElevation(unsigned int elevation);
@@ -110,8 +110,8 @@ namespace Falltergeist
                 void removeTimerEvent(Game::Object* obj, int fixedParam);
 
                 void onBackgroundClick(Event::Mouse* event);
-                void onObjectMouseEvent(Event::Mouse* event, std::shared_ptr<Game::Object> object);
-                void onObjectHover(Event::Mouse* event, std::shared_ptr<Game::Object> object);
+                void onObjectMouseEvent(Event::Mouse* event, const std::shared_ptr<Game::Object> &object);
+                void onObjectHover(Event::Mouse* event, const std::shared_ptr<Game::Object> &object);
                 void onKeyDown(Event::Keyboard* event) override;
                 void onMouseUp(Event::Mouse* event);
                 void onMouseDown(Event::Mouse* event);

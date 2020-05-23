@@ -23,10 +23,10 @@ namespace Falltergeist
 
             unsigned int distance(Hexagon *from, Hexagon *to);
             std::shared_ptr<Hexagon> hexagonAt(const Graphics::Point& pos);
-            std::shared_ptr<Hexagon> at(size_t index);
+            const std::shared_ptr<Falltergeist::Hexagon> &at(size_t index);
             HexagonVector findPath(Hexagon* from, Hexagon* to);
-            std::shared_ptr<Hexagon> hexInDirection(std::shared_ptr<Hexagon> from, unsigned short rotation, unsigned int distance);
-            HexagonVector ring(std::shared_ptr<Hexagon> from, unsigned int radius);
+            std::shared_ptr<Hexagon> hexInDirection(const std::shared_ptr<Hexagon> &from, unsigned short rotation, unsigned int distance);
+            HexagonVector ring(const std::shared_ptr<Hexagon> &from, unsigned int radius);
             void initLight(const std::shared_ptr<Hexagon> &hex, bool add = true);
 
         protected:

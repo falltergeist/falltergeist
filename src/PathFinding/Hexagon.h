@@ -88,7 +88,7 @@ namespace Falltergeist
 
             std::list<std::shared_ptr<Game::Object>>* objects();
 
-            Game::Orientation orientationTo(std::shared_ptr<Hexagon> hexagon);
+            Game::Orientation orientationTo(const std::shared_ptr<Hexagon> &hexagon);
 
         protected:
             std::array<Hexagon*, HEX_SIDES> _neighbors = {};

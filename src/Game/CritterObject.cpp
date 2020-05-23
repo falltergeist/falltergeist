@@ -39,12 +39,12 @@ namespace Falltergeist
             Object::setOrientation(value);
         }
 
-        std::shared_ptr<ArmorItemObject> CritterObject::armorSlot() const
+        const std::shared_ptr<ArmorItemObject> &CritterObject::armorSlot() const
         {
             return _armorSlot;
         }
 
-        void CritterObject::setArmorSlot(std::shared_ptr<ArmorItemObject> object)
+        void CritterObject::setArmorSlot(const std::shared_ptr<ArmorItemObject> &object)
         {
             if (object) {
                 setFID((_gender == GENDER::FEMALE) ? object->femaleFID() : object->maleFID());
@@ -54,22 +54,22 @@ namespace Falltergeist
             _armorSlot = object;
         }
 
-        std::shared_ptr<ItemObject> CritterObject::leftHandSlot() const
+        const std::shared_ptr<ItemObject> &CritterObject::leftHandSlot() const
         {
             return _leftHandSlot;
         }
 
-        void CritterObject::setLeftHandSlot(std::shared_ptr<ItemObject> object)
+        void CritterObject::setLeftHandSlot(const std::shared_ptr<ItemObject> &object)
         {
             _leftHandSlot = object;
         }
 
-        std::shared_ptr<ItemObject> CritterObject::rightHandSlot() const
+        const std::shared_ptr<ItemObject> &CritterObject::rightHandSlot() const
         {
             return _rightHandSlot;
         }
 
-        void CritterObject::setRightHandSlot(std::shared_ptr<ItemObject> object)
+        void CritterObject::setRightHandSlot(const std::shared_ptr<ItemObject> &object)
         {
             _rightHandSlot = object;
         }
@@ -443,7 +443,7 @@ namespace Falltergeist
             _currentHand = value;
         }
 
-        std::shared_ptr<ItemObject> CritterObject::currentHandSlot() const
+        const std::shared_ptr<ItemObject> &CritterObject::currentHandSlot() const
         {
             return currentHand() == HAND::RIGHT ? rightHandSlot() : leftHandSlot();
         }

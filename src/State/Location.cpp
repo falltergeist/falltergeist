@@ -169,7 +169,7 @@ namespace Falltergeist
             // Player script
             player->setScript(new VM::Script(ResourceManager::getInstance()->intFileType(0), player));
 
-            auto hexagon = hexagonGrid()->at(_location->defaultPosition());
+            std::shared_ptr<Hexagon> hexagon = hexagonGrid()->at(_location->defaultPosition());
             _objects.emplace_back(player);
             moveObjectToHexagon(player, hexagon);
 
@@ -227,7 +227,7 @@ namespace Falltergeist
         void Location::onStateActivate(Event::State *event)
         {
             // correct position of "red hexagon" after popups
-            auto hexagon = hexagonGrid()->hexagonAt(mouse->position() + _camera->topLeft());
+            std::shared_ptr<Hexagon> hexagon = hexagonGrid()->hexagonAt(mouse->position() + _camera->topLeft());
             if (mouse->state() == Input::Mouse::Cursor::HEXAGON_RED && hexagon) {
                 mouse->ui()->setPosition(hexagon->position() - _camera->topLeft());
             }
@@ -239,9 +239,9 @@ namespace Falltergeist
             _actionCursorTimer.stop();
         }
 
-        void Location::setLocation(std::shared_ptr<Game::Location> location)
+        void Location::setLocation(const std::shared_ptr<Game::Location> &location)
         {
-            _location = std::move(location);
+            _location = location;
         }
 
         void Location::loadAmbient(const std::string &name)
@@ -387,7 +387,7 @@ namespace Falltergeist
         }
 
 
-        void Location::onObjectMouseEvent(Event::Mouse *event, std::shared_ptr<Game::Object> object)
+        void Location::onObjectMouseEvent(Event::Mouse *event, const std::shared_ptr<Game::Object> &object)
         {
             if (!object) {
                 return;
@@ -410,7 +410,7 @@ namespace Falltergeist
             }
         }
 
-        void Location::onObjectHover(Event::Mouse *event, std::shared_ptr<Game::Object> object)
+        void Location::onObjectHover(Event::Mouse *event, const std::shared_ptr<Game::Object> &object)
         {
             if (event->name() == "mouseout") {
                 if (_objectUnderCursor == object) {
@@ -1227,7 +1227,7 @@ namespace Falltergeist
             return _currentMap;
         }
 
-        std::shared_ptr<Falltergeist::Game::Location> Location::location()
+        const std::shared_ptr<Game::Location> &Location::location()
         {
             return _location;
         }

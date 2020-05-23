@@ -20,7 +20,7 @@ namespace Falltergeist
     {
         using ImageButtonType = UI::Factory::ImageButtonFactory::Type;
 
-        CritterBarter::CritterBarter(std::shared_ptr<UI::IResourceManager> resourceManager) : State()
+        CritterBarter::CritterBarter(const std::shared_ptr<UI::IResourceManager> &resourceManager) : State()
         {
             this->resourceManager = resourceManager;
             imageButtonFactory = std::make_unique<UI::Factory::ImageButtonFactory>(resourceManager);
@@ -235,7 +235,7 @@ namespace Falltergeist
             resetTransaction();
         }
 
-        std::shared_ptr<Game::CritterObject> CritterBarter::trader()
+        const std::shared_ptr<Game::CritterObject> &CritterBarter::trader()
         {
             return _trader;
         }

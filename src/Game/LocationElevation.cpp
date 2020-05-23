@@ -33,12 +33,12 @@ namespace Falltergeist
             _canRestHere = value;
         }
 
-        std::shared_ptr<UI::TileMap> LocationElevation::floor()
+        const std::shared_ptr<UI::TileMap> &LocationElevation::floor()
         {
             return _floor;
         }
 
-        std::shared_ptr<UI::TileMap> LocationElevation::roof()
+        const std::shared_ptr<UI::TileMap> &LocationElevation::roof()
         {
             return _roof;
         }

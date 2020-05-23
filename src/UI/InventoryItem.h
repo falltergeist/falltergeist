@@ -29,14 +29,14 @@ namespace Falltergeist
                     DRAG
                 };
 
-                InventoryItem(std::shared_ptr<Game::ItemObject> item, const Point& pos = Point());
+                InventoryItem(const std::shared_ptr<Game::ItemObject> &item, const Point& pos = Point());
                 ~InventoryItem() override;
 
                 Type type() const;
                 void setType(Type value);
 
-                std::shared_ptr<Game::ItemObject> item();
-                void setItem(std::shared_ptr<Game::ItemObject> item);
+                const std::shared_ptr<Game::ItemObject> &item();
+                void setItem(const std::shared_ptr<Game::ItemObject> &item);
 
                 void render(bool eggTransparency = false) override;
                 Size size() const override;

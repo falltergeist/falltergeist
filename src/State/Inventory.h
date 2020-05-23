@@ -21,7 +21,7 @@ namespace Falltergeist
         class Inventory final : public State
         {
             public:
-                Inventory(std::shared_ptr<UI::IResourceManager> resourceManager);
+                Inventory(const std::shared_ptr<UI::IResourceManager> &resourceManager);
                 Inventory(const Inventory&) = delete;
                 Inventory& operator=(const Inventory&) = delete;
                 ~Inventory() override = default;
@@ -44,7 +44,7 @@ namespace Falltergeist
                 void onInventoryModified();
 
             private:
-                std::string _handItemSummary (std::shared_ptr<Game::ItemObject> hand);
+                std::string _handItemSummary (const std::shared_ptr<Game::ItemObject> &hand);
                 std::shared_ptr<UI::IResourceManager> resourceManager;
                 std::unique_ptr<UI::Factory::ImageButtonFactory> imageButtonFactory;
                 void _screenShow (unsigned int PID);

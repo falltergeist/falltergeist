@@ -62,7 +62,7 @@ namespace Falltergeist
 
                 Format::Int::File *script();
 
-                std::shared_ptr<Game::Object> owner();
+                const std::shared_ptr<Game::Object> &owner();
 
                 unsigned int programCounter();
 
@@ -88,18 +88,18 @@ namespace Falltergeist
 
                 VM::Script *setTargetObject(const std::shared_ptr<Game::Object> &targetObject);
 
-                std::shared_ptr<Falltergeist::Game::Object> targetObject() const;
+                const std::shared_ptr<Falltergeist::Game::Object> &targetObject() const;
 
                 VM::Script *setSourceObject(const std::shared_ptr<Game::Object> &sourceObject);
 
-                std::shared_ptr<Falltergeist::Game::Object> sourceObject() const;
+                const std::shared_ptr<Falltergeist::Game::Object> &sourceObject() const;
 
                 SKILL usedSkill() const;
 
                 VM::Script *setUsedSkill(SKILL skill);
 
             protected:
-                std::weak_ptr<Game::Object> _owner;
+                std::shared_ptr<Game::Object> _owner;
                 std::shared_ptr<Game::Object> _sourceObject;
                 std::shared_ptr<Game::Object> _targetObject;
                 SKILL _usedSkill = SKILL::NONE;

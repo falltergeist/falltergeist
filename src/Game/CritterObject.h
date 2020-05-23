@@ -31,16 +31,16 @@ namespace Falltergeist
 
                 std::vector<std::shared_ptr<Hexagon>>* movementQueue();
 
-                std::shared_ptr<ArmorItemObject> armorSlot() const;
-                void setArmorSlot(std::shared_ptr<ArmorItemObject> object);
+                const std::shared_ptr<ArmorItemObject> &armorSlot() const;
+                void setArmorSlot(const std::shared_ptr<ArmorItemObject> &object);
 
-                std::shared_ptr<ItemObject> leftHandSlot() const;
-                void setLeftHandSlot(std::shared_ptr<ItemObject> object);
+                const std::shared_ptr<ItemObject> &leftHandSlot() const;
+                void setLeftHandSlot(const std::shared_ptr<ItemObject> &object);
 
-                std::shared_ptr<ItemObject> rightHandSlot() const;
-                void setRightHandSlot(std::shared_ptr<ItemObject> object);
+                const std::shared_ptr<ItemObject> &rightHandSlot() const;
+                void setRightHandSlot(const std::shared_ptr<ItemObject> &object);
 
-                std::shared_ptr<ItemObject> currentHandSlot() const;
+                const std::shared_ptr<ItemObject> &currentHandSlot() const;
 
                 GENDER gender() const;
                 void setGender(GENDER value);
@@ -215,9 +215,9 @@ namespace Falltergeist
                 std::vector<std::shared_ptr<ItemObject>> _inventory;
                 std::vector<std::shared_ptr<Hexagon>> _movementQueue;
 
-                std::shared_ptr<ArmorItemObject> _armorSlot = 0;
-                std::shared_ptr<ItemObject> _leftHandSlot = 0;
-                std::shared_ptr<ItemObject> _rightHandSlot = 0;
+                std::shared_ptr<ArmorItemObject> _armorSlot;
+                std::shared_ptr<ItemObject> _leftHandSlot;
+                std::shared_ptr<ItemObject> _rightHandSlot;
 
                 virtual std::unique_ptr<UI::Animation> _generateMovementAnimation();
                 void _setupNextIdleAnim();

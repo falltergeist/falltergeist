@@ -82,7 +82,7 @@ namespace Falltergeist
                 Mood mood();
                 void setMood(Mood mood);
 
-                std::shared_ptr<Game::CritterObject> critter();
+                const std::shared_ptr<Game::CritterObject> &critter();
                 void setCritter(const std::shared_ptr<Game::CritterObject> &critter);
 
                 int msgFileID();

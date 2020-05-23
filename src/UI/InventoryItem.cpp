@@ -17,7 +17,7 @@ namespace Falltergeist
     {
         using Graphics::Rect;
 
-        InventoryItem::InventoryItem(std::shared_ptr<Game::ItemObject> item, const Point& pos) : Falltergeist::UI::Base(pos)
+        InventoryItem::InventoryItem(const std::shared_ptr<Game::ItemObject> &item, const Point& pos) : Falltergeist::UI::Base(pos)
         {
             _item = item;
             mouseDownHandler().add(std::bind(&InventoryItem::onMouseLeftDown, this, std::placeholders::_1));
@@ -102,12 +102,12 @@ namespace Falltergeist
             }
         }
 
-        std::shared_ptr<Game::ItemObject> InventoryItem::item()
+        const std::shared_ptr<Game::ItemObject> &InventoryItem::item()
         {
             return _item;
         }
 
-        void InventoryItem::setItem(std::shared_ptr<Game::ItemObject> item)
+        void InventoryItem::setItem(const std::shared_ptr<Game::ItemObject> &item)
         {
             _item = item;
         }

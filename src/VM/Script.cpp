@@ -174,9 +174,9 @@ namespace Falltergeist
             return &_LVARS;
         }
 
-        std::shared_ptr<Game::Object> Script::owner()
+        const std::shared_ptr<Game::Object> &Script::owner()
         {
-            return _owner.lock();
+            return _owner;
         }
 
         bool Script::initialized()
@@ -216,7 +216,7 @@ namespace Falltergeist
             return this;
         }
 
-        std::shared_ptr<Game::Object> Script::targetObject() const
+        const std::shared_ptr<Game::Object> &Script::targetObject() const
         {
             return _targetObject;
         }
@@ -227,7 +227,7 @@ namespace Falltergeist
             return this;
         }
 
-        std::shared_ptr<Game::Object> Script::sourceObject() const
+        const std::shared_ptr<Game::Object> &Script::sourceObject() const
         {
             return _sourceObject;
         }

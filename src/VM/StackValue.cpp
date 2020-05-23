@@ -82,10 +82,11 @@ namespace Falltergeist
             return _stringValue;
         }
 
-        std::shared_ptr<Game::Object> StackValue::objectValue() const
+        const std::shared_ptr<Game::Object> &StackValue::objectValue() const
         {
             if (_type == Type::INTEGER && _intValue == 0) {
-                return nullptr;
+                static const std::shared_ptr<Game::Object> null; // want a constref for return value
+                return null;
             }
             if (_type != Type::OBJECT) {
                 throw ErrorException(std::string("StackValue::objectValue() - stack value is not an object, it is ") +
