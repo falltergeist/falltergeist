@@ -497,7 +497,7 @@ string ResourceManager::FIDtoFrmName(unsigned int FID)
     return typeArtDescription.prefixPath + frmName;
 }
 
-void ResourceManager::shutdown()
+ResourceManager::~ResourceManager()
 {
     unloadResources();
 }

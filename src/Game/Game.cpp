@@ -105,10 +105,11 @@ namespace Falltergeist
         void Game::shutdown()
         {
             _mixer.reset();
-            ResourceManager::getInstance()->shutdown();
+            _mouse.reset();
             while (!_states.empty()) {
                 popState();
             }
+            _statesForDelete.clear();
             _settings.reset();
         }
 

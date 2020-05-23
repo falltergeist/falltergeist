@@ -118,7 +118,8 @@ namespace Falltergeist
             void unloadResources();
             std::string FIDtoFrmName(unsigned int FID);
             Game::Location* gameLocation(unsigned int number);
-            void shutdown();
+
+            ~ResourceManager();
 
         private:
             std::vector<std::unique_ptr<Format::Dat::File>> _datFiles;
