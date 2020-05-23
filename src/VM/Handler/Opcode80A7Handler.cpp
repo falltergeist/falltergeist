@@ -47,7 +47,7 @@ namespace Falltergeist {
                 auto elevation = _script->dataStack()->popInteger();
                 auto position = _script->dataStack()->popInteger();
                 auto game = Game::getInstance();
-                Game::Object *found = nullptr;
+                std::shared_ptr<Game::Object> found = nullptr;
                 for (auto object : *game->locationState()->hexagonGrid()->at(position)->objects()) {
                     if (object->PID() == PID && object->elevation() == elevation) {
                         found = object;

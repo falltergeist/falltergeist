@@ -51,7 +51,7 @@ namespace Falltergeist {
                     {
                         auto state = Game::Game::getInstance()->locationState();
                         if (state) {
-                            state->removeTimerEvent(arg1.objectValue(), arg2.integerValue());
+                            state->removeTimerEvent(arg1.objectValue().get(), arg2.integerValue());
                         }
                         break;
                     }

@@ -47,7 +47,7 @@ namespace Falltergeist
          * @brief Returns array of game objects
          * @return Game objects
          */
-        std::vector<Object*>* LocationElevation::objects()
+        std::vector<std::shared_ptr<Object>>* LocationElevation::objects()
         {
             return &_objects;
         }

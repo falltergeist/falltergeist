@@ -39,7 +39,7 @@ namespace Falltergeist {
             void Opcode810C::_run() {
                 int direction = _script->dataStack()->popInteger();
                 int animation = _script->dataStack()->popInteger();
-                auto object = static_cast<Game::Object *>(_script->dataStack()->popObject());
+                auto object = std::static_pointer_cast<Game::Object>(_script->dataStack()->popObject());
 
                 Logger::debug("SCRIPT") << "[810C] [*] void anim(GameCritterObject* who, int animation, int direction)"
                                         << std::endl

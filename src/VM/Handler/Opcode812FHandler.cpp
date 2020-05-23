@@ -40,9 +40,9 @@ namespace Falltergeist {
                 Logger::debug("SCRIPT") << "[812F] [+] void obj_unlock(GameObject* object)" << std::endl;
                 auto object = _script->dataStack()->popObject();
                 if (object) {
-                    if (auto door = dynamic_cast<Game::DoorSceneryObject *>(object)) {
+                    if (auto door = std::dynamic_pointer_cast<Game::DoorSceneryObject>(object)) {
                         door->setLocked(false);
-                    } else if (auto container = dynamic_cast<Game::ContainerItemObject *>(object)) {
+                    } else if (auto container = std::dynamic_pointer_cast<Game::ContainerItemObject>(object)) {
                         container->setLocked(false);
                     } else {
                         _warning("obj_unlock: object is not door or container");

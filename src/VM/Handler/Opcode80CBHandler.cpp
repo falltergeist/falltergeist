@@ -49,12 +49,12 @@ namespace Falltergeist {
                 if (!object) {
                     _error("set_critter_stat(who, num, value) - who is null");
                 }
-                auto critter = dynamic_cast<Game::CritterObject *>(object);
+                auto critter = std::dynamic_pointer_cast<Game::CritterObject>(object);
                 if (!critter) {
                     _error("set_critter_stat(who, num, value) - who is not a critter");
                 }
                 critter->setStat((STAT) number, value);
-                if (dynamic_cast<Game::DudeObject *>(critter)) {
+                if (std::dynamic_pointer_cast<Game::DudeObject>(critter)) {
                     _script->dataStack()->push(3); // for dude
                 } else {
                     _script->dataStack()->push(-1); // for critter

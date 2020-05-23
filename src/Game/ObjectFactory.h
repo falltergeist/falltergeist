@@ -1,5 +1,11 @@
 #pragma once
 
+// C++ standard includes
+
+#include <memory>
+
+// Falltergeist includes
+
 #include "../Base/Singleton.h"
 
 namespace Falltergeist
@@ -12,7 +18,7 @@ namespace Falltergeist
         {
             public:
                 static ObjectFactory* getInstance();
-                Object* createObject(unsigned int PID);
+                std::shared_ptr<Object> createObject(unsigned int PID);
 
             private:
                 friend class Base::Singleton<ObjectFactory>;

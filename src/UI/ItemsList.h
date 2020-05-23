@@ -21,10 +21,10 @@ namespace Falltergeist
             public:
                 ItemsList(const Point& pos);
 
-                void setItems(std::vector<Game::ItemObject*>* items);
-                std::vector<Game::ItemObject*>* items();
+                void setItems(std::vector<std::shared_ptr<Game::ItemObject>>* items);
+                std::vector<std::shared_ptr<Game::ItemObject>>* items();
 
-                std::vector<std::unique_ptr<InventoryItem>>& inventoryItems();
+                std::vector<std::shared_ptr<InventoryItem>>& inventoryItems();
                 InventoryItem* draggedItem();
 
                 void update();
@@ -60,9 +60,9 @@ namespace Falltergeist
                 virtual bool opaque(const Point &pos) override;
 
             private:
-                std::vector<Game::ItemObject*>* _items = nullptr;
+                std::vector<std::shared_ptr<Game::ItemObject>>* _items = nullptr;
                 InventoryItem* _draggedItem = nullptr;
-                std::vector<std::unique_ptr<InventoryItem>> _inventoryItems;
+                std::vector<std::shared_ptr<InventoryItem>> _inventoryItems;
                 InventoryItem::Type _type = InventoryItem::Type::INVENTORY;
                 unsigned int _slotsNumber = 7; // Height of widget in items
                 unsigned int _slotOffset = 0;

@@ -38,10 +38,10 @@ namespace Falltergeist {
 
             void Opcode80F1::_run() {
                 Logger::debug("SCRIPT") << "[80F1] [=] void rm_timer_event (void* obj)" << std::endl;
-                Game::Object *object = _script->dataStack()->popObject();
+                std::shared_ptr<Game::Object> object = _script->dataStack()->popObject();
                 auto state = Game::Game::getInstance()->locationState();
                 if (state) {
-                    state->removeTimerEvent(object);
+                    state->removeTimerEvent(object.get());
                 }
             }
         }

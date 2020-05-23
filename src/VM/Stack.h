@@ -29,7 +29,7 @@ namespace Falltergeist
 
                 void push(float value);
 
-                void push(Game::Object *value);
+                void push(const std::shared_ptr<Game::Object> &value);
 
                 void push(const std::string &value);
 
@@ -41,7 +41,7 @@ namespace Falltergeist
 
                 std::string popString();
 
-                Game::Object *popObject();
+                std::shared_ptr<Game::Object> popObject();
 
                 bool popLogical();
 

@@ -15,7 +15,7 @@ namespace Falltergeist
         return _neighbors;
     }
 
-    std::list<Game::Object*>* Hexagon::objects()
+    std::list<std::shared_ptr<Game::Object>>* Hexagon::objects()
     {
         return &_objects;
     }
@@ -33,7 +33,7 @@ namespace Falltergeist
     bool Hexagon::canWalkThru()
     {
         // Search hex for any blocking objects...
-        for (const auto object : _objects) {
+        for (const std::shared_ptr<Game::Object> &object : _objects) {
             if (!object->canWalkThru()) {
                 return false;
             }
@@ -41,7 +41,7 @@ namespace Falltergeist
         return true;
     }
 
-    Game::Orientation Hexagon::orientationTo(Hexagon *hexagon)
+    Game::Orientation Hexagon::orientationTo(std::shared_ptr<Hexagon> hexagon)
     {
         Point delta = hexagon->position() - _position;
         int dx = delta.x();

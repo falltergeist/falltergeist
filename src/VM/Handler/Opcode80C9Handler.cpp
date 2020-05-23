@@ -46,13 +46,13 @@ namespace Falltergeist {
             void Opcode80C9::_run() {
                 Logger::debug("SCRIPT") << "[80C9] [+] int obj_item_subtype(GameItemObject* object)" << std::endl;
                 auto object = _script->dataStack()->popObject();
-                if (dynamic_cast<Game::ArmorItemObject *>(object)) _script->dataStack()->push(0);
-                else if (dynamic_cast<Game::ContainerItemObject *>(object)) _script->dataStack()->push(1);
-                else if (dynamic_cast<Game::DrugItemObject *>(object)) _script->dataStack()->push(2);
-                else if (dynamic_cast<Game::WeaponItemObject *>(object)) _script->dataStack()->push(3);
-                else if (dynamic_cast<Game::AmmoItemObject *>(object)) _script->dataStack()->push(4);
-                else if (dynamic_cast<Game::MiscItemObject *>(object)) _script->dataStack()->push(5);
-                else if (dynamic_cast<Game::KeyItemObject *>(object)) _script->dataStack()->push(6);
+                if (std::dynamic_pointer_cast<Game::ArmorItemObject>(object)) _script->dataStack()->push(0);
+                else if (std::dynamic_pointer_cast<Game::ContainerItemObject>(object)) _script->dataStack()->push(1);
+                else if (std::dynamic_pointer_cast<Game::DrugItemObject>(object)) _script->dataStack()->push(2);
+                else if (std::dynamic_pointer_cast<Game::WeaponItemObject>(object)) _script->dataStack()->push(3);
+                else if (std::dynamic_pointer_cast<Game::AmmoItemObject>(object)) _script->dataStack()->push(4);
+                else if (std::dynamic_pointer_cast<Game::MiscItemObject>(object)) _script->dataStack()->push(5);
+                else if (std::dynamic_pointer_cast<Game::KeyItemObject>(object)) _script->dataStack()->push(6);
                 else _script->dataStack()->push(-1);
             }
         }

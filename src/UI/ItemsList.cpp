@@ -26,13 +26,13 @@ namespace Falltergeist
             mouseDragStopHandler().add( std::bind(&ItemsList::onMouseDragStop, this, std::placeholders::_1));
         }
 
-        void ItemsList::setItems(std::vector<Game::ItemObject*>* items)
+        void ItemsList::setItems(std::vector<std::shared_ptr<Game::ItemObject>>* items)
         {
             _items = items;
             update();
         }
 
-        std::vector<Game::ItemObject*>* ItemsList::items()
+        std::vector<std::shared_ptr<Game::ItemObject>>* ItemsList::items()
         {
             return _items;
         }
@@ -42,7 +42,7 @@ namespace Falltergeist
             _inventoryItems.clear();
 
             for (unsigned int i = _slotOffset; i < items()->size() && i != _slotOffset + _slotsNumber; i++) {
-                _inventoryItems.push_back(std::unique_ptr<InventoryItem>(new InventoryItem(items()->at(i))));
+                _inventoryItems.push_back(std::make_shared<InventoryItem>(items()->at(i)));
             }
         }
 
@@ -63,7 +63,7 @@ namespace Falltergeist
             }
         }
 
-        std::vector<std::unique_ptr<InventoryItem>>& ItemsList::inventoryItems()
+        std::vector<std::shared_ptr<InventoryItem>>& ItemsList::inventoryItems()
         {
             return _inventoryItems;
         }
@@ -125,10 +125,10 @@ namespace Falltergeist
                 // @todo create addItem method
                 this->addItem(inventoryItem, 1);
 
-                if (dynamic_cast<Game::ArmorItemObject*>(inventoryItem->item()) && inventoryItem->type() == InventoryItem::Type::SLOT) {
+                if (std::dynamic_pointer_cast<Game::ArmorItemObject>(inventoryItem->item()) && inventoryItem->type() == InventoryItem::Type::SLOT) {
                     Game::getInstance()->player()->setArmorSlot(nullptr);
                 }
-                inventoryItem->setItem(0);
+                inventoryItem->setItem(nullptr);
             }
         }
 
@@ -143,7 +143,7 @@ namespace Falltergeist
                     } else {
                         Game::getInstance()->player()->setRightHandSlot(nullptr);
                     }
-                    inventoryItem->setItem(0);
+                    inventoryItem->setItem(nullptr);
                 }
             }
         }
@@ -163,7 +163,7 @@ namespace Falltergeist
         void ItemsList::removeItem(InventoryItem* item, unsigned int amount)
         {
             for (auto it = _items->begin(); it != _items->end(); ++it) {
-                Game::ItemObject* object = *it;
+                std::shared_ptr<Game::ItemObject> object = *it;
                 if (object == item->item()) {
                     _items->erase(it);
                     break;

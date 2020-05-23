@@ -43,7 +43,7 @@ namespace Falltergeist {
                         << "[8106] [=] void* (int) critter_inven_obj(GameCritterObject* critter, int where)"
                         << std::endl;
                 auto where = _script->dataStack()->popInteger();
-                auto critter = dynamic_cast<Game::CritterObject *>(_script->dataStack()->popObject());
+                auto critter = std::dynamic_pointer_cast<Game::CritterObject>(_script->dataStack()->popObject());
                 switch (where) {
                     case 0: // ARMOR SLOT
                         _script->dataStack()->push(critter->armorSlot());

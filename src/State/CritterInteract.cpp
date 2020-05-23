@@ -187,12 +187,12 @@ namespace Falltergeist
             _mood = mood;
         }
 
-        Game::CritterObject* CritterInteract::critter()
+        std::shared_ptr<Game::CritterObject> CritterInteract::critter()
         {
             return _critter;
         }
 
-        void CritterInteract::setCritter(Game::CritterObject* critter)
+        void CritterInteract::setCritter(const std::shared_ptr<Game::CritterObject> &critter)
         {
             _critter = critter;
         }

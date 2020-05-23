@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <memory>
 #include "../Game/ItemObject.h"
 
 namespace Falltergeist
@@ -16,9 +17,9 @@ namespace Falltergeist
                 ContainerItemObject();
                 ~ContainerItemObject() = default;
 
-                std::vector<ItemObject*>* inventory();
+                std::vector<std::shared_ptr<ItemObject>>* inventory();
 
-                void use_p_proc(CritterObject* usedBy) override;
+                void use_p_proc(const std::shared_ptr<CritterObject> &usedBy) override;
 
                 bool locked() const;
                 void setLocked(bool locked);
@@ -27,7 +28,7 @@ namespace Falltergeist
                 void setOpened(bool opened);
 
             protected:
-                std::vector<ItemObject*> _inventory;
+                std::vector<std::shared_ptr<ItemObject>> _inventory;
                 bool _opened = false;
                 bool _locked = false;
         };

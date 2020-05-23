@@ -36,7 +36,7 @@ namespace Falltergeist {
             }
 
             void Opcode8123::_run() {
-                auto critter = dynamic_cast<Game::CritterObject *>(_script->dataStack()->popObject());
+                auto critter = std::dynamic_pointer_cast<Game::CritterObject>(_script->dataStack()->popObject());
                 auto value = critter->poisonLevel();
                 _script->dataStack()->push(value);
                 Logger::debug("SCRIPT") << "[8123] [+] int value = GetPoison(GameCritterObject* critter)" << std::endl

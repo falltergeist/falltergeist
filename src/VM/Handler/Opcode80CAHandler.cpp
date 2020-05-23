@@ -44,7 +44,7 @@ namespace Falltergeist {
                 if (!object) {
                     _error("get_critter_stat(who, stat) - who is NULL");
                 }
-                auto critter = dynamic_cast<Game::CritterObject *>(object);
+                auto critter = std::dynamic_pointer_cast<Game::CritterObject>(object);
                 if (!critter) {
                     _error("get_critter_stat(who, stat) - who is not a critter");
                 }

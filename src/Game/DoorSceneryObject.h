@@ -28,7 +28,7 @@ namespace Falltergeist
 
                 bool canWalkThru() const override;
 
-                void use_p_proc(CritterObject* usedBy) override;
+                void use_p_proc(const std::shared_ptr<CritterObject> &usedBy) override;
 
                 void onOpeningAnimationEnded(Event::Event* event);
                 void onClosingAnimationEnded(Event::Event* event);

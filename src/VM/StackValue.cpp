@@ -34,7 +34,7 @@ namespace Falltergeist
             _stringValue = value;
         }
 
-        StackValue::StackValue(Game::Object *value)
+        StackValue::StackValue(const std::shared_ptr<Game::Object> &value)
         {
             //throw Exception("StackValue::StackValue(Game::GameObject*) - null object value is not allowed, use integer 0");
             _type = Type::OBJECT;
@@ -82,7 +82,7 @@ namespace Falltergeist
             return _stringValue;
         }
 
-        Game::Object *StackValue::objectValue() const
+        std::shared_ptr<Game::Object> StackValue::objectValue() const
         {
             if (_type == Type::INTEGER && _intValue == 0) {
                 return nullptr;

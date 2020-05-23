@@ -14,20 +14,20 @@ namespace Falltergeist
 
     class HexagonGrid
     {
-        using HexagonVector = std::vector<std::unique_ptr<Hexagon>>;
+        using HexagonVector = std::vector<std::shared_ptr<Hexagon>>;
 
         public:
             HexagonGrid();
             ~HexagonGrid();
             Base::vector_ptr_decorator<Hexagon> hexagons();
 
-            unsigned int distance(Hexagon* from, Hexagon* to);
-            Hexagon* hexagonAt(const Graphics::Point& pos);
-            Hexagon* at(size_t index);
-            std::vector<Hexagon*> findPath(Hexagon* from, Hexagon* to);
-            Hexagon* hexInDirection(Hexagon* from, unsigned short rotation, unsigned int distance);
-            std::vector<Hexagon*> ring(Hexagon* from, unsigned int radius);
-            void initLight(Hexagon* hex, bool add = true);
+            unsigned int distance(Hexagon *from, Hexagon *to);
+            std::shared_ptr<Hexagon> hexagonAt(const Graphics::Point& pos);
+            std::shared_ptr<Hexagon> at(size_t index);
+            HexagonVector findPath(Hexagon* from, Hexagon* to);
+            std::shared_ptr<Hexagon> hexInDirection(std::shared_ptr<Hexagon> from, unsigned short rotation, unsigned int distance);
+            HexagonVector ring(std::shared_ptr<Hexagon> from, unsigned int radius);
+            void initLight(const std::shared_ptr<Hexagon> &hex, bool add = true);
 
         protected:
             HexagonVector _hexagons; // The 200x200 grid

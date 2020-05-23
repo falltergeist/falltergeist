@@ -28,14 +28,6 @@ namespace Falltergeist
 
         CritterBarter::~CritterBarter()
         {
-            for (auto p : _itemsToSell) {
-                delete p;
-            }
-            for (auto p : _itemsToBuy) {
-                delete p;
-            }
-            _itemsToSell.clear();
-            _itemsToBuy.clear();
         }
 
         void CritterBarter::init()
@@ -64,8 +56,8 @@ namespace Falltergeist
             addUI(dudeCritter.release());
 
             auto traderCritter = animationFactory.buildStandingAnimation(
-                critterHelper.armorFID(_trader),
-                critterHelper.weaponId(_trader),
+                critterHelper.armorFID(_trader.get()),
+                critterHelper.weaponId(_trader.get()),
                 Game::Orientation::SC
             );
             traderCritter->setPosition({ 580, 45 });
@@ -243,12 +235,12 @@ namespace Falltergeist
             resetTransaction();
         }
 
-        Game::CritterObject *CritterBarter::trader()
+        std::shared_ptr<Game::CritterObject> CritterBarter::trader()
         {
             return _trader;
         }
 
-        void CritterBarter::setTrader(Game::CritterObject *trader)
+        void CritterBarter::setTrader(const std::shared_ptr<Game::CritterObject> &trader)
         {
             _trader = trader;
         }

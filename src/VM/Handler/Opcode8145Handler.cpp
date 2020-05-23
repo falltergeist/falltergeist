@@ -37,7 +37,7 @@ namespace Falltergeist {
 
             void Opcode8145::_run() {
                 Logger::debug("SCRIPT") << "[8145] [=] void use_obj_on_obj(void* item, void* target)" << std::endl;
-                auto selfCritter = dynamic_cast<Game::CritterObject *>(_script->owner());
+                auto selfCritter = std::dynamic_pointer_cast<Game::CritterObject>(_script->owner());
                 if (!selfCritter) {
                     _error("use_obj_on_obj: owner is not a critter!");
                 }

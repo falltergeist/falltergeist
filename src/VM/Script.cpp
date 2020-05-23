@@ -21,7 +21,7 @@ namespace Falltergeist
 {
     namespace VM
     {
-        Script::Script(Format::Int::File *script, Game::Object *owner)
+        Script::Script(Format::Int::File *script, const std::shared_ptr<Game::Object> &owner)
         {
             _owner = owner;
             _script = script;
@@ -30,7 +30,7 @@ namespace Falltergeist
             }
         }
 
-        Script::Script(const std::string &filename, Game::Object *owner)
+        Script::Script(const std::string &filename, const std::shared_ptr<Game::Object> &owner)
         {
             _owner = owner;
             _script = ResourceManager::getInstance()->intFileType(filename);
@@ -174,9 +174,9 @@ namespace Falltergeist
             return &_LVARS;
         }
 
-        Game::Object *Script::owner()
+        std::shared_ptr<Game::Object> Script::owner()
         {
-            return _owner;
+            return _owner.lock();
         }
 
         bool Script::initialized()
@@ -210,24 +210,24 @@ namespace Falltergeist
             return _fixedParam;
         }
 
-        Script *Script::setTargetObject(Game::Object *targetObject)
+        Script *Script::setTargetObject(const std::shared_ptr<Game::Object> &targetObject)
         {
             this->_targetObject = targetObject;
             return this;
         }
 
-        Game::Object *Script::targetObject() const
+        std::shared_ptr<Game::Object> Script::targetObject() const
         {
             return _targetObject;
         }
 
-        Script *Script::setSourceObject(Game::Object *sourceObject)
+        Script *Script::setSourceObject(const std::shared_ptr<Game::Object> &sourceObject)
         {
             this->_sourceObject = sourceObject;
             return this;
         }
 
-        Game::Object *Script::sourceObject() const
+        std::shared_ptr<Game::Object> Script::sourceObject() const
         {
             return _sourceObject;
         }

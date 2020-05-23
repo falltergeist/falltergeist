@@ -45,7 +45,7 @@ namespace Falltergeist {
                 }
                 auto object = _script->dataStack()->popObject();
                 int value = 0;
-                if (auto critter = dynamic_cast<Game::CritterObject *>(object)) {
+                if (auto critter = std::dynamic_pointer_cast<Game::CritterObject>(object)) {
                     value = critter->skillValue((SKILL) skill);
                     _script->dataStack()->push(value);
                 } else {

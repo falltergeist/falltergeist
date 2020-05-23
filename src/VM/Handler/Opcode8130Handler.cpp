@@ -43,9 +43,9 @@ namespace Falltergeist {
                     _error("obj_is_open: object is NULL");
                 }
                 // @TODO: need some refactoring to get rid of this ugly if-elses
-                if (auto door = dynamic_cast<Game::DoorSceneryObject *>(object)) {
+                if (auto door = std::dynamic_pointer_cast<Game::DoorSceneryObject>(object)) {
                     _script->dataStack()->push(door->opened());
-                } else if (auto container = dynamic_cast<Game::ContainerItemObject *>(object)) {
+                } else if (auto container = std::dynamic_pointer_cast<Game::ContainerItemObject>(object)) {
                     _script->dataStack()->push(container->opened());
                 } else {
                     _error("obj_is_open: object is not openable type!");

@@ -7,6 +7,8 @@
 #include "../../Format/Dat/Stream.h"
 #include "Unpacker.h"
 
+#include <iostream>
+
 namespace Falltergeist
 {
     namespace Format
@@ -173,7 +175,8 @@ namespace Falltergeist
             int ValueUnpacker::linearFill(int pass, int ind)
             {
                 int mask = (1 << ind) - 1;
-                short *lb_ptr = _buffMiddle + ((-1ul) << unsigned(ind - 1));
+                short *lb_ptr = _buffMiddle + ((-1l) << (unsigned)(ind - 1));
+//                std::cout << "pass: " << pass << " ind " << ind << " mask " << mask << std::endl;
 
                 for (int i = 0; i < _subblocks; i++) {
                     _blockPtr[i * _sbSize + pass] = lb_ptr[_getBits(ind) & mask];

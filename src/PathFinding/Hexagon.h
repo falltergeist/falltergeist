@@ -86,13 +86,13 @@ namespace Falltergeist
 
             std::array<Hexagon*, HEX_SIDES>& neighbors();
 
-            std::list<Game::Object*>* objects();
+            std::list<std::shared_ptr<Game::Object>>* objects();
 
-            Game::Orientation orientationTo(Hexagon *hexagon);
+            Game::Orientation orientationTo(std::shared_ptr<Hexagon> hexagon);
 
         protected:
             std::array<Hexagon*, HEX_SIDES> _neighbors = {};
-            std::list<Game::Object*> _objects;
+            std::list<std::shared_ptr<Game::Object>> _objects;
             unsigned int _number = 0; // position in hexagonal grid
 
             Point _position;

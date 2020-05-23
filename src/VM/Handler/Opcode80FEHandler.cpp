@@ -44,7 +44,7 @@ namespace Falltergeist {
                 if (!object) {
                     _error("radiation_dec - object is NULL");
                 }
-                auto critter = dynamic_cast<Game::CritterObject *>(object);
+                auto critter = std::dynamic_pointer_cast<Game::CritterObject>(object);
                 if (critter) {
                     critter->setRadiationLevel(critter->radiationLevel() - amount);
                 } else {

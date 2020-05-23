@@ -1,5 +1,9 @@
 #pragma once
 
+// C++ standard includes
+#include <memory>
+
+// Falltergeist includes
 #include "../Format/Enums.h"
 #include "../UI/Base.h"
 
@@ -25,14 +29,14 @@ namespace Falltergeist
                     DRAG
                 };
 
-                InventoryItem(Game::ItemObject* item, const Point& pos = Point());
+                InventoryItem(std::shared_ptr<Game::ItemObject> item, const Point& pos = Point());
                 ~InventoryItem() override;
 
                 Type type() const;
                 void setType(Type value);
 
-                Game::ItemObject* item();
-                void setItem(Game::ItemObject* item);
+                std::shared_ptr<Game::ItemObject> item();
+                void setItem(std::shared_ptr<Game::ItemObject> item);
 
                 void render(bool eggTransparency = false) override;
                 Size size() const override;
@@ -50,7 +54,7 @@ namespace Falltergeist
                 Event::MouseHandler& itemDragStopHandler();
 
             private:
-                Game::ItemObject* _item = nullptr;
+                std::shared_ptr<Game::ItemObject> _item;
                 Type _type = Type::INVENTORY;
                 Type _oldType = Type::INVENTORY;
 

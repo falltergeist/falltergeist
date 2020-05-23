@@ -12,7 +12,7 @@ namespace Falltergeist
                 explicit SpatialObject(unsigned int radius);
                 ~SpatialObject() = default;
 
-                void spatial_p_proc(Object* source);
+                void spatial_p_proc(const std::shared_ptr<Object> &source);
                 unsigned int radius();
 
             private:

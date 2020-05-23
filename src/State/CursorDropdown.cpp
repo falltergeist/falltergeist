@@ -156,12 +156,12 @@ namespace Falltergeist
             }
         }
 
-        Game::Object* CursorDropdown::object()
+        std::shared_ptr<Game::Object> CursorDropdown::object()
         {
             return _object;
         }
 
-        void CursorDropdown::setObject(Game::Object* object)
+        void CursorDropdown::setObject(const std::shared_ptr<Game::Object> &object)
         {
             _object = object;
         }
@@ -269,7 +269,7 @@ namespace Falltergeist
             auto game = Game::getInstance();
             game->popState();
             if (!_onlyShowIcon) {
-                game->locationState()->handleAction(object(), _icons.at(_currentIcon));
+                game->locationState()->handleAction(object().get(), _icons.at(_currentIcon));
                 event->setHandled(true);
             }
         }

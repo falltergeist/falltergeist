@@ -109,5 +109,11 @@ namespace Falltergeist
         {
             return _subtype;
         }
+
+        // need out-of-line declaration for std::unique_ptr to be happy with other forward declarations
+        Falltergeist::Game::ItemObject::~ItemObject()
+        {
+        }
+
     }
 }

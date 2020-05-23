@@ -11,7 +11,7 @@ namespace Falltergeist
         {
         }
 
-        void SpatialObject::spatial_p_proc(Object *source)
+        void SpatialObject::spatial_p_proc(const std::shared_ptr<Object> &source)
         {
             if (_script && _script->hasFunction("spatial_p_proc")) {
                 _script

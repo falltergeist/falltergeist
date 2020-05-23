@@ -33,7 +33,7 @@ namespace Falltergeist
                 }
 
                 // calculate if dude egg intersects with object
-                Hexagon *dudeHex;
+                std::shared_ptr<Hexagon> dudeHex;
                 if (dude->movementQueue()->size()) {
                     dudeHex = dude->movementQueue()->back();
                 } else {

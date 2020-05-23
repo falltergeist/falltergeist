@@ -130,9 +130,9 @@ namespace Falltergeist
             armorClassLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::RIGHT);
 
             // armorSlot, leftHand, rightHand
-            Game::ArmorItemObject* armorSlot = player->armorSlot();
-            Game::ItemObject* leftHand = player->leftHandSlot();
-            Game::ItemObject* rightHand = player->rightHandSlot();
+            std::shared_ptr<Game::ArmorItemObject> armorSlot = player->armorSlot();
+            std::shared_ptr<Game::ItemObject> leftHand = player->leftHandSlot();
+            std::shared_ptr<Game::ItemObject> rightHand = player->rightHandSlot();
 
 
             // label: damage treshold levels
@@ -437,7 +437,7 @@ namespace Falltergeist
         //    //Game::getInstance()->states()->back()->ui()->push_back(dragUi);
         //}
 
-        std::string Inventory::_handItemSummary (Game::ItemObject* hand)
+        std::string Inventory::_handItemSummary (std::shared_ptr<Game::ItemObject> hand)
         {
             std::stringstream ss;
             if (hand)
@@ -446,7 +446,7 @@ namespace Falltergeist
                 // is it weapon
                 if (hand->subtype() == Game::ItemObject::Subtype::WEAPON)
                 {
-                    auto weapon = dynamic_cast<Game::WeaponItemObject*>(hand);
+                    auto weapon = std::dynamic_pointer_cast<Game::WeaponItemObject>(hand);
                     ss << "Dmg: " << weapon->damageMin() << "-" << weapon->damageMax() << " ";
                     ss << "Rng: " << weapon->rangePrimary();
                     // has it ammo?

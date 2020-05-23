@@ -13,12 +13,12 @@ namespace Falltergeist
             _subtype = Subtype::CONTAINER;
         }
 
-        std::vector<ItemObject*>* ContainerItemObject::inventory()
+        std::vector<std::shared_ptr<ItemObject>>* ContainerItemObject::inventory()
         {
             return &_inventory;
         }
 
-        void ContainerItemObject::use_p_proc(CritterObject* usedBy)
+        void ContainerItemObject::use_p_proc(const std::shared_ptr<CritterObject> &usedBy)
         {
             auto state = new State::Container(std::make_shared<UI::ResourceManager>());
             state->setObject(this);

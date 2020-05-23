@@ -17,7 +17,7 @@ namespace Falltergeist
     {
         using Graphics::Rect;
 
-        InventoryItem::InventoryItem(Game::ItemObject *item, const Point& pos) : Falltergeist::UI::Base(pos)
+        InventoryItem::InventoryItem(std::shared_ptr<Game::ItemObject> item, const Point& pos) : Falltergeist::UI::Base(pos)
         {
             _item = item;
             mouseDownHandler().add(std::bind(&InventoryItem::onMouseLeftDown, this, std::placeholders::_1));
@@ -102,12 +102,12 @@ namespace Falltergeist
             }
         }
 
-        Game::ItemObject* InventoryItem::item()
+        std::shared_ptr<Game::ItemObject> InventoryItem::item()
         {
             return _item;
         }
 
-        void InventoryItem::setItem(Game::ItemObject* item)
+        void InventoryItem::setItem(std::shared_ptr<Game::ItemObject> item)
         {
             _item = item;
         }
@@ -161,7 +161,7 @@ namespace Falltergeist
                     itemsList->addItem(this, 1);
                 }
                 this->setItem(itemObject);
-                if (auto armor = dynamic_cast<Game::ArmorItemObject*>(itemObject)) {
+                if (auto armor = std::dynamic_pointer_cast<Game::ArmorItemObject>(itemObject)) {
                     Game::getInstance()->player()->setArmorSlot(armor);
                 }
             }

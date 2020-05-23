@@ -19,28 +19,28 @@ namespace Falltergeist
         /**
          * Critter refers to player, all NPCs, creatures, robots, etc - all movable and shootable objects.
          */
-        class CritterObject : public Object
+        class CritterObject : public Object, public std::enable_shared_from_this<CritterObject>
         {
             public:
 
                 CritterObject();
                 ~CritterObject() = default;
 
-                std::vector<ItemObject*>* inventory(); // critter's own inventory
+                std::vector<std::shared_ptr<ItemObject>>* inventory(); // critter's own inventory
                 void setOrientation(Orientation value) override;
 
-                std::vector<Hexagon*>* movementQueue();
+                std::vector<std::shared_ptr<Hexagon>>* movementQueue();
 
-                ArmorItemObject* armorSlot() const;
-                void setArmorSlot(ArmorItemObject* object);
+                std::shared_ptr<ArmorItemObject> armorSlot() const;
+                void setArmorSlot(std::shared_ptr<ArmorItemObject> object);
 
-                ItemObject* leftHandSlot() const;
-                void setLeftHandSlot(ItemObject* object);
+                std::shared_ptr<ItemObject> leftHandSlot() const;
+                void setLeftHandSlot(std::shared_ptr<ItemObject> object);
 
-                ItemObject* rightHandSlot() const;
-                void setRightHandSlot(ItemObject* object);
+                std::shared_ptr<ItemObject> rightHandSlot() const;
+                void setRightHandSlot(std::shared_ptr<ItemObject> object);
 
-                ItemObject* currentHandSlot() const;
+                std::shared_ptr<ItemObject> currentHandSlot() const;
 
                 GENDER gender() const;
                 void setGender(GENDER value);
@@ -120,7 +120,7 @@ namespace Falltergeist
                 virtual void combat_p_proc();
                 virtual void critter_p_proc();
                 virtual void talk_p_proc();
-                void use_skill_on_p_proc(SKILL skill, Object* objectUsed, CritterObject* usedBy) override;
+                void use_skill_on_p_proc(SKILL skill, const std::shared_ptr<Object> &objectUsed, const std::shared_ptr<CritterObject> &usedBy) override;
                 virtual void is_dropping_p_proc();
 
                 void think(const float &deltaTime) override;
@@ -212,12 +212,12 @@ namespace Falltergeist
                 std::vector<int> _traitsTagged = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
                 std::vector<int> _damageResist = {0, 0, 0, 0, 0, 0, 0, 0, 0};
                 std::vector<int> _damageThreshold = {0, 0, 0, 0, 0, 0, 0, 0, 0};
-                std::vector<ItemObject*> _inventory;
-                std::vector<Hexagon*> _movementQueue;
+                std::vector<std::shared_ptr<ItemObject>> _inventory;
+                std::vector<std::shared_ptr<Hexagon>> _movementQueue;
 
-                ArmorItemObject* _armorSlot = 0;
-                ItemObject* _leftHandSlot = 0;
-                ItemObject* _rightHandSlot = 0;
+                std::shared_ptr<ArmorItemObject> _armorSlot = 0;
+                std::shared_ptr<ItemObject> _leftHandSlot = 0;
+                std::shared_ptr<ItemObject> _rightHandSlot = 0;
 
                 virtual std::unique_ptr<UI::Animation> _generateMovementAnimation();
                 void _setupNextIdleAnim();

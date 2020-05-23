@@ -29,7 +29,7 @@ namespace Falltergeist
         {
             for (unsigned int hx = 0; hx != GRID_WIDTH; ++hx, ++index) // columns
             {
-                _hexagons.emplace_back(std::make_unique<Hexagon>(index));
+                _hexagons.emplace_back(std::make_shared<Hexagon>(index));
                 auto& hexagon = _hexagons.back();
                 // Calculate hex's actual position
                 const bool oddCol = hx & 1;
@@ -97,12 +97,12 @@ namespace Falltergeist
 
     HexagonGrid::~HexagonGrid() {}
 
-    Hexagon* HexagonGrid::at(size_t index)
+    std::shared_ptr<Hexagon> HexagonGrid::at(size_t index)
     {
-        return _hexagons.at(index).get();
+        return _hexagons.at(index);
     }
 
-    Hexagon* HexagonGrid::hexagonAt(const Point& pos)
+    std::shared_ptr<Hexagon> HexagonGrid::hexagonAt(const Point& pos)
     {
         for (auto& hexagon : _hexagons)
         {
@@ -112,7 +112,7 @@ namespace Falltergeist
                 pos.y() >= hexPos.y() - 8 &&
                 pos.y() <  hexPos.y() + 4)
             {
-                return hexagon.get();
+                return hexagon;
             }
         }
         return nullptr;
@@ -123,10 +123,10 @@ namespace Falltergeist
         return Base::vector_ptr_decorator<Hexagon>(_hexagons);
     }
 
-    std::vector<Hexagon*> HexagonGrid::findPath(Hexagon* from, Hexagon* to)
+    HexagonGrid::HexagonVector HexagonGrid::findPath(Hexagon* from, Hexagon* to)
     {
         Hexagon* current = nullptr;
-        std::vector<Hexagon*> result;
+        HexagonVector result;
         std::priority_queue<Hexagon*, std::vector<Hexagon*>, HeuristicComparison> unvisited;
         unsigned int cameFrom[GRID_HEIGHT * GRID_WIDTH]  = {};
         unsigned int costSoFar[GRID_HEIGHT * GRID_WIDTH] = {};
@@ -181,19 +181,19 @@ namespace Falltergeist
 
         while (current->number() != from->number())
         {
-            result.push_back(current);
+            result.push_back(std::make_shared<Hexagon>(*current));
             current = _hexagons.at(cameFrom[current->number()]).get();
         }
 
         return result;
     }
 
-    unsigned int HexagonGrid::distance(Hexagon* from, Hexagon* to)
+    unsigned int HexagonGrid::distance(Hexagon *from, Hexagon *to)
     {
         return (std::abs(from->cubeX() - to->cubeX()) + std::abs(from->cubeY() - to->cubeY()) + std::abs(from->cubeZ() - to->cubeZ())) / 2;
     }
 
-    Hexagon* HexagonGrid::hexInDirection(Hexagon* from, unsigned short rotation, unsigned int distance)
+    std::shared_ptr<Hexagon> HexagonGrid::hexInDirection(std::shared_ptr<Hexagon> from, unsigned short rotation, unsigned int distance)
     {
         if (distance == 0 || rotation > 5)
         {
@@ -243,9 +243,9 @@ namespace Falltergeist
 
     }
 
-    std::vector<Hexagon*> HexagonGrid::ring(Hexagon* from, unsigned int radius)
+    std::vector<std::shared_ptr<Hexagon>> HexagonGrid::ring(std::shared_ptr<Hexagon> from, unsigned int radius)
     {
-        std::vector<Hexagon*> result;
+        std::vector<std::shared_ptr<Hexagon>> result;
 
         if (radius == 0)
         {
@@ -254,7 +254,7 @@ namespace Falltergeist
         }
 
         unsigned int dir = 0;
-        Hexagon* current = hexInDirection(from, dir, radius);
+        std::shared_ptr<Hexagon> current = hexInDirection(from, dir, radius);
         dir = 2;
         for (unsigned int d = 0; d < 6; d++)
         {
@@ -272,7 +272,7 @@ namespace Falltergeist
         return result;
     }
 
-    void HexagonGrid::initLight(Hexagon *hex, bool add)
+    void HexagonGrid::initLight(const std::shared_ptr<Hexagon> &hex, bool add)
     {
         auto objectsAtHex = hex->objects();
         for (auto it = objectsAtHex->begin(); it != objectsAtHex->end(); ++it)
@@ -588,7 +588,7 @@ namespace Falltergeist
                                 if (!curObject->canLightThru())
                                 {
                                     // if wall -> check light orientation
-                                    if (auto wall = dynamic_cast<Game::WallObject*>(curObject))
+                                    if (auto wall = std::dynamic_pointer_cast<Game::WallObject>(curObject))
                                     {
                                         if (wall->lightOrientation() == Game::Orientation::EW || wall->lightOrientation() == Game::Orientation::EC)
                                         {
