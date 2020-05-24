@@ -222,7 +222,7 @@ namespace Falltergeist
             });
 
             _locationScriptTimer.start(10000.0f, true);
-            _locationScriptTimer.tickHandler().add([&](Event::Event*) {
+            _locationScriptTimer.tickHandler().add([this, dude](Event::Event*) {
                 if (_location->script()) {
                     _location->script()->call("map_update_p_proc");
                 }
