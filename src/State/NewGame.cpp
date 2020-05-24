@@ -31,6 +31,8 @@ namespace Falltergeist
             imageButtonFactory = std::make_unique<UI::Factory::ImageButtonFactory>(resourceManager);
         }
 
+        NewGame::~NewGame() {  }
+
         void NewGame::init()
         {
             if (_initialized) return;
@@ -99,7 +101,7 @@ namespace Falltergeist
         {
             Game::getInstance()->setPlayer(std::move(_characters.at(_selectedCharacter)));
             _characters.clear();
-            Game::getInstance()->pushState(new PlayerCreate(resourceManager));
+            Game::getInstance()->pushState(std::make_unique<PlayerCreate>(resourceManager));
         }
 
         void NewGame::doCreate()
@@ -107,7 +109,7 @@ namespace Falltergeist
             auto none = std::make_unique<Game::DudeObject>();
             none->loadFromGCDFile(ResourceManager::getInstance()->gcdFileType("premade/blank.gcd"));
             Game::getInstance()->setPlayer(std::move(none));
-            Game::getInstance()->pushState(new PlayerCreate(resourceManager));
+            Game::getInstance()->pushState(std::make_unique<PlayerCreate>(resourceManager));
         }
 
         void NewGame::doBack()

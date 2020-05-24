@@ -197,7 +197,7 @@ namespace Falltergeist
                 std::vector<Input::Mouse::Icon> getCursorIconsForObject(Game::Object* object);
 
                 unsigned int _lightLevel = 0x10000;
-                Falltergeist::Graphics::Lightmap* _lightmap;
+                std::shared_ptr<Falltergeist::Graphics::Lightmap> _lightmap;
 
                 std::vector<std::shared_ptr<Game::SpatialObject>> _spatials;
 

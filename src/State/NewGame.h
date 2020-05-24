@@ -23,7 +23,9 @@ namespace Falltergeist
         {
             public:
                 NewGame(std::shared_ptr<UI::IResourceManager> resourceManager);
-                virtual ~NewGame() = default;
+
+                // Need out of line to get unique_ptr to work with gcc's STL
+                virtual ~NewGame();
 
                 void init() override;
 

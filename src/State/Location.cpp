@@ -206,9 +206,9 @@ namespace Falltergeist
                         if (dynamic_cast<CursorDropdown *>(Game::getInstance()->topState()) != nullptr) {
                             Game::getInstance()->popState();
                         }
-                        auto state = new CursorDropdown(resourceManager, std::move(icons), !_actionCursorButtonPressed);
+                        auto state = std::make_unique<CursorDropdown>(resourceManager, std::move(icons), !_actionCursorButtonPressed);
                         state->setObject(_objectUnderCursor);
-                        Game::getInstance()->pushState(state);
+                        Game::getInstance()->pushState(std::move(state));
                     }
                 }
                 _actionCursorButtonPressed = false;
@@ -333,7 +333,7 @@ namespace Falltergeist
                     }
                 }
             }
-            _lightmap = new Graphics::Lightmap(_vertices, indexes);
+            _lightmap = std::make_shared<Graphics::Lightmap>(_vertices, indexes);
         }
 
         void Location::initializePlayerTestAppareance(std::shared_ptr<Game::DudeObject> player) const
@@ -941,9 +941,9 @@ namespace Falltergeist
                             debug << " exitDirection: " << exitGrid->exitDirection() << std::endl << std::endl;
 
                             if (exitGrid->exitMapNumber() < 0) {
-                                auto worldMapState = new WorldMap(resourceManager);
+                                auto worldMapState = std::make_unique<WorldMap>(resourceManager);
                                 // TODO delegate state manipulation to some kind of state manager
-                                Game::getInstance()->setState(worldMapState);
+                                Game::getInstance()->setState(std::move(worldMapState));
                                 return;
                             }
 
@@ -957,10 +957,10 @@ namespace Falltergeist
                             location->setDefaultElevationIndex(exitGrid->exitElevationNumber());
 
                             // TODO move this instantiation to StateLocationHelper or some kind of state manager
-                            auto state = new Location(player, mouse, settings, renderer, audioMixer, gameTime, resourceManager);
+                            auto state = std::make_unique<Location>(player, mouse, settings, renderer, audioMixer, gameTime, resourceManager);
                             state->setLocation(location);
                             // TODO delegate state manipulation to some kind of state manager
-                            Game::getInstance()->setState(state);
+                            Game::getInstance()->setState(std::move(state));
 
                             return;
                         }
@@ -1189,12 +1189,12 @@ namespace Falltergeist
 
         void Location::initLight()
         {
-            for (auto hex: _hexagonGrid->hexagons()) {
+            for (Hexagon *hex: _hexagonGrid->hexagons()) {
                 hex->setLight(655);
             }
 
-            for (auto hex: _hexagonGrid->hexagons()) {
-                _hexagonGrid->initLight(std::make_shared<Hexagon>(*hex));
+            for (Hexagon *hex: _hexagonGrid->hexagons()) {
+                _hexagonGrid->initLight(hex);
             }
 
             std::vector<float> lights;

@@ -97,7 +97,7 @@ namespace Falltergeist
 
     HexagonGrid::~HexagonGrid() {}
 
-    const std::shared_ptr<Hexagon> &HexagonGrid::at(size_t index)
+    const std::shared_ptr<Hexagon> &HexagonGrid::at(size_t index) const
     {
         return _hexagons.at(index);
     }
@@ -193,7 +193,7 @@ namespace Falltergeist
         return (std::abs(from->cubeX() - to->cubeX()) + std::abs(from->cubeY() - to->cubeY()) + std::abs(from->cubeZ() - to->cubeZ())) / 2;
     }
 
-    std::shared_ptr<Hexagon> HexagonGrid::hexInDirection(const std::shared_ptr<Hexagon> &from, unsigned short rotation, unsigned int distance)
+    Hexagon *HexagonGrid::hexInDirection(Hexagon *from, unsigned short rotation, unsigned int distance) const
     {
         if (distance == 0 || rotation > 5)
         {
@@ -239,13 +239,13 @@ namespace Falltergeist
         {
             return nullptr;
         }
-        return at(index);
+        return at(index).get();
 
     }
 
-    std::vector<std::shared_ptr<Hexagon>> HexagonGrid::ring(const std::shared_ptr<Hexagon> &from, unsigned int radius)
+    std::vector<Hexagon*> HexagonGrid::ring(Hexagon *from, unsigned int radius) const
     {
-        std::vector<std::shared_ptr<Hexagon>> result;
+        std::vector<Hexagon*> result;
 
         if (radius == 0)
         {
@@ -254,7 +254,7 @@ namespace Falltergeist
         }
 
         unsigned int dir = 0;
-        std::shared_ptr<Hexagon> current = hexInDirection(from, dir, radius);
+        Hexagon *current = hexInDirection(from, dir, radius);
         dir = 2;
         for (unsigned int d = 0; d < 6; d++)
         {
@@ -272,7 +272,7 @@ namespace Falltergeist
         return result;
     }
 
-    void HexagonGrid::initLight(const std::shared_ptr<Hexagon> &hex, bool add)
+    void HexagonGrid::initLight(Hexagon *hex, bool add) const
     {
         auto objectsAtHex = hex->objects();
         for (auto it = objectsAtHex->begin(); it != objectsAtHex->end(); ++it)

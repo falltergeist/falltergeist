@@ -57,7 +57,7 @@ namespace Falltergeist
                 // load objects
                 for (auto &mapObject : mapElevation.objects()) {
 
-                    auto object = gameObjectHelper.createFromMapObject(mapObject);
+                    std::shared_ptr<Game::Object> object = gameObjectHelper.createFromMapObject(mapObject);
                     if (!object) {
                         // TODO: add some logging
                         continue;

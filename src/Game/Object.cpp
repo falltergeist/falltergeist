@@ -200,7 +200,8 @@ namespace Falltergeist
         const std::shared_ptr<Hexagon> &Object::hexagon() const
         {
             if (this->position() < 0) {
-                return nullptr;
+                static const std::shared_ptr<Hexagon> null;
+                return null;
             }
 
             return Game::getInstance()->locationState()->hexagonGrid()->at(this->position());

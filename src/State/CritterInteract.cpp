@@ -21,6 +21,7 @@
 #include "../UI/AnimationQueue.h"
 #include "../UI/Factory/ImageButtonFactory.h"
 #include "../Audio/Mixer.h"
+#include "../Logger.h"
 
 namespace Falltergeist
 {
@@ -288,23 +289,44 @@ namespace Falltergeist
 
         CritterDialog* CritterInteract::dialog()
         {
-            if (_state != SubState::DIALOG) {
-                return nullptr;
+            if (_dialog) {
+                return _dialog.get();
             }
-            if (!_dialog) {
+            if (_state == SubState::DIALOG) {
+                return dynamic_cast<CritterDialog*>(Game::getInstance()->topState(0));
             }
 
-            return _dialog.get();
+            Logger::error("CRITTERINTERACT") << "Asked for dialog, "
+                "but we're not in dialog state and don't have our own object" << std::endl;
+            return nullptr;
         }
 
         CritterDialogReview* CritterInteract::dialogReview()
         {
-            return _review.get();
+            if (_review) {
+                return _review.get();
+            }
+            if (_state == SubState::REVIEW) {
+                return dynamic_cast<CritterDialogReview*>(Game::getInstance()->topState(0));
+            }
+
+            Logger::error("CRITTERINTERACT") << "Asked for dialog review, "
+                "but we're not in review state and don't have our own object" << std::endl;
+            return nullptr;
         }
 
         CritterBarter* CritterInteract::barter()
         {
-            return _barter.get();
+            if (_barter) {
+                return _barter.get();
+            }
+            if (_state == SubState::BARTER) {
+                return dynamic_cast<CritterBarter*>(Game::getInstance()->topState(0));
+            }
+
+            Logger::error("CRITTERINTERACT") << "Asked for dialog barter, "
+                "but we're not in barter state and don't have our own object" << std::endl;
+            return nullptr;
         }
 
         void CritterInteract::switchSubState(CritterInteract::SubState state)
@@ -317,20 +339,32 @@ namespace Falltergeist
                 Game::getInstance()->popState(false);
             }
 
+            // TODO: These are unique pointers and we should really be owned by the Game instance, not CritterInteract
             switch (_state)
             {
                 case SubState::DIALOG:
-                    _dialog = std::unique_ptr<CritterDialog>(static_cast<CritterDialog*>(Game::getInstance()->popState().release()));
+                    _dialog = std::unique_ptr<CritterDialog>(dynamic_cast<CritterDialog*>(Game::getInstance()->popState().release()));
                     break;
                 case SubState::BARTER:
-                    _barter = std::unique_ptr<CritterBarter>(static_cast<CritterBarter*>(Game::getInstance()->popState().release()));
+                    _barter = std::unique_ptr<CritterBarter>(dynamic_cast<CritterBarter*>(Game::getInstance()->popState().release()));
                     break;
                 case SubState::REVIEW:
-                    _review = std::unique_ptr<CritterDialogReview>(static_cast<CritterDialogReview*>(Game::getInstance()->popState().release()));
+                    _review = std::unique_ptr<CritterDialogReview>(dynamic_cast<CritterDialogReview*>(Game::getInstance()->popState().release()));
                     break;
                 default:
                     break;
             }
+
+            if (!_dialog) {
+                Logger::error("CRITTERINTERACT") << "Switching substate, but we didn't get our dialog back" << std::endl;
+            }
+            if (!_barter) {
+                Logger::error("CRITTERINTERACT") << "Switching substate, but we didn't get our barter back" << std::endl;
+            }
+            if (!_review) {
+                Logger::error("CRITTERINTERACT") << "Switching substate, but we didn't get our review back" << std::endl;
+            }
+
             _state = state;
             switch (state)
             {
@@ -344,6 +378,7 @@ namespace Falltergeist
                     Game::getInstance()->pushState(std::move(_review));
                     break;
                 default:
+                    Logger::warning("CRITTERINTERACT") << "Switching to unkown substate " << int(state) << std::endl;
                     break;
             }
         }
