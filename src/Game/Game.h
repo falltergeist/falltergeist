@@ -63,9 +63,9 @@ namespace Falltergeist
                  * @param offset optional offset (1 means second from the top, and so on)
                  */
                 State::State* topState(unsigned offset = 0) const;
-                void pushState(State::State* state);
-                void setState(State::State* state);
-                void popState(bool doDelete = true);
+                void pushState(std::unique_ptr<State::State> state);
+                void setState(std::unique_ptr<State::State> state);
+                std::unique_ptr<State::State> popState(bool doDelete = true);
 
                 void run();
                 void quit();

@@ -69,6 +69,8 @@ namespace Falltergeist
             this->resourceManager = resourceManager;
         }
 
+        Location::~Location() {  }
+
         void Location::init()
         {
             if (initialized()) {

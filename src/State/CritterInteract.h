@@ -122,9 +122,9 @@ namespace Falltergeist
                 int32_t _badFidgets;
                 Game::Timer _fidgetTimer;
 
-                CritterDialog* _dialog;
-                CritterBarter* _barter;
-                CritterDialogReview* _review;
+                std::unique_ptr<CritterDialog> _dialog;
+                std::unique_ptr<CritterBarter> _barter;
+                std::unique_ptr<CritterDialogReview> _review;
 
                 SubState _state = SubState::NONE;
             private:

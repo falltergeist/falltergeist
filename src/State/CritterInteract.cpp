@@ -29,9 +29,9 @@ namespace Falltergeist
         CritterInteract::CritterInteract(std::shared_ptr<UI::IResourceManager> resourceManager) : State()
         {
             this->resourceManager = resourceManager;
-            _dialog = new CritterDialog(resourceManager);
-            _review = new CritterDialogReview(resourceManager);
-            _barter = new CritterBarter(resourceManager);
+            _dialog = std::make_unique<CritterDialog>(resourceManager);
+            _review = std::make_unique<CritterDialogReview>(resourceManager);
+            _barter = std::make_unique<CritterBarter>(resourceManager);
             // pre-init review, so we can push questions/answers to it.
             _review->init();
         }
@@ -40,9 +40,6 @@ namespace Falltergeist
         {
             auto camera = Game::getInstance()->locationState()->camera();
             camera->setCenter(_oldCameraCenter);
-            delete _dialog;
-            delete _review;
-            delete _barter;
         }
 
         void CritterInteract::onStateActivate(Event::State* event)
@@ -291,17 +288,23 @@ namespace Falltergeist
 
         CritterDialog* CritterInteract::dialog()
         {
-            return _dialog;
+            if (_state != SubState::DIALOG) {
+                return nullptr;
+            }
+            if (!_dialog) {
+            }
+
+            return _dialog.get();
         }
 
         CritterDialogReview* CritterInteract::dialogReview()
         {
-            return _review;
+            return _review.get();
         }
 
         CritterBarter* CritterInteract::barter()
         {
-            return _barter;
+            return _barter.get();
         }
 
         void CritterInteract::switchSubState(CritterInteract::SubState state)
@@ -313,17 +316,32 @@ namespace Falltergeist
             {
                 Game::getInstance()->popState(false);
             }
+
+            switch (_state)
+            {
+                case SubState::DIALOG:
+                    _dialog = std::unique_ptr<CritterDialog>(static_cast<CritterDialog*>(Game::getInstance()->popState().release()));
+                    break;
+                case SubState::BARTER:
+                    _barter = std::unique_ptr<CritterBarter>(static_cast<CritterBarter*>(Game::getInstance()->popState().release()));
+                    break;
+                case SubState::REVIEW:
+                    _review = std::unique_ptr<CritterDialogReview>(static_cast<CritterDialogReview*>(Game::getInstance()->popState().release()));
+                    break;
+                default:
+                    break;
+            }
             _state = state;
             switch (state)
             {
                 case SubState::DIALOG:
-                    Game::getInstance()->pushState(_dialog);
+                    Game::getInstance()->pushState(std::move(_dialog));
                     break;
                 case SubState::BARTER:
-                    Game::getInstance()->pushState(_barter);
+                    Game::getInstance()->pushState(std::move(_barter));
                     break;
                 case SubState::REVIEW:
-                    Game::getInstance()->pushState(_review);
+                    Game::getInstance()->pushState(std::move(_review));
                     break;
                 default:
                     break;

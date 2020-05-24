@@ -27,7 +27,9 @@ namespace Falltergeist
         {
             public:
                 Container(std::shared_ptr<UI::IResourceManager> resourceManager);
-                virtual ~Container() = default;
+
+                // Need out of line to get unique_ptr to work with gcc's STL
+                virtual ~Container();
 
                 void init() override;
 

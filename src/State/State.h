@@ -37,7 +37,9 @@ namespace Falltergeist
                 State();
                 State(const State&) = delete;
                 State& operator=(const State&) = delete;
-                virtual ~State() = default;
+
+                // Need out of line to get unique_ptr to work with gcc's STL
+                virtual ~State();
 
                 template <class TUi, class ...TCtorArgs>
                 TUi* makeUI(TCtorArgs&&... args)

@@ -20,9 +20,9 @@ namespace Falltergeist
 
         void ContainerItemObject::use_p_proc(const std::shared_ptr<CritterObject> &usedBy)
         {
-            auto state = new State::Container(std::make_shared<UI::ResourceManager>());
+            std::unique_ptr<State::Container> state = std::make_unique<State::Container>(std::make_shared<UI::ResourceManager>());
             state->setObject(this);
-            Game::getInstance()->pushState(state);
+            Game::getInstance()->pushState(std::move(state));
         }
 
         void ContainerItemObject::setLocked(bool locked)

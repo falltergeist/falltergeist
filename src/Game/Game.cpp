@@ -113,41 +113,46 @@ namespace Falltergeist
             _settings.reset();
         }
 
-        void Game::pushState(State::State* state)
+        void Game::pushState(std::unique_ptr<State::State> state)
         {
-            _states.push_back(std::unique_ptr<State::State>(state));
             if (!state->initialized()) {
                 state->init();
             }
             state->emitEvent(std::make_unique<Event::State>("push"), state->pushHandler());
             state->setActive(true);
             state->emitEvent(std::make_unique<Event::State>("activate"), state->activateHandler());
+            _states.push_back(std::move(state));
         }
 
-        void Game::popState(bool doDelete)
+        std::unique_ptr<State::State> Game::popState(bool doDelete)
         {
             if (_states.empty()) {
-                return;
+                return nullptr;
             }
 
             State::State* state = _states.back().get();
+            std::unique_ptr<State::State> ret;
             if (doDelete) {
                 _statesForDelete.emplace_back(std::move(_states.back()));
+                state = _statesForDelete.back().get();
             } else {
-                _states.back().release();
+                ret = std::move(_states.back());
+                state = ret.get();
             }
             _states.pop_back();
             state->setActive(false);
             state->emitEvent(std::make_unique<Event::State>("deactivate"), state->deactivateHandler());
             state->emitEvent(std::make_unique<Event::State>("pop"), state->popHandler());
+
+            return ret;
         }
 
-        void Game::setState(State::State* state)
+        void Game::setState(std::unique_ptr<State::State> state)
         {
             while (!_states.empty()) {
                 popState();
             }
-            pushState(state);
+            pushState(std::move(state));
         }
 
         void Game::run()

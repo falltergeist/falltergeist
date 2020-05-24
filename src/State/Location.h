@@ -72,7 +72,9 @@ namespace Falltergeist
                     std::shared_ptr<Game::Time> gameTime,
                     std::shared_ptr<UI::IResourceManager> resourceManager
                 );
-                ~Location() override = default;
+
+                // Need out of line to get unique_ptr to work with gcc's STL
+                ~Location() override;
 
                 void init() override;
                 void think(const float &deltaTime) override;

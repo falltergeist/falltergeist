@@ -137,5 +137,8 @@ namespace Falltergeist
                 Game::getInstance()->popState();
             }
         }
+
+        Falltergeist::State::Container::~Container() { }
+
     }
 }
