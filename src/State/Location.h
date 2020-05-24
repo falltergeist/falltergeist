@@ -112,8 +112,8 @@ namespace Falltergeist
                 void removeTimerEvent(Game::Object* obj, int fixedParam);
 
                 void onBackgroundClick(Event::Mouse* event);
-                void onObjectMouseEvent(Event::Mouse* event, const std::shared_ptr<Game::Object> &object);
-                void onObjectHover(Event::Mouse* event, const std::shared_ptr<Game::Object> &object);
+                void onObjectMouseEvent(Event::Mouse* event, const std::weak_ptr<Game::Object> &weakObject);
+                void onObjectHover(Event::Mouse* event, const std::weak_ptr<Game::Object> &object);
                 void onKeyDown(Event::Keyboard* event) override;
                 void onMouseUp(Event::Mouse* event);
                 void onMouseDown(Event::Mouse* event);

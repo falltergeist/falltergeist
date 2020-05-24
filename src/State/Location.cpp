@@ -101,18 +101,20 @@ namespace Falltergeist
             camera()->setCenter(hexagonGrid()->at(_location->defaultPosition())->position());
 
             // @todo remove old objects from hexagonal grid
-            for (auto &object : *elevation->objects()) {
+            for (const std::shared_ptr<Game::Object> &object : *elevation->objects()) {
 
                 auto hexagon = hexagonGrid()->at(object->position());
                 moveObjectToHexagon(object, hexagon, false);
 
+
                 if (object->ui()) {
+                    std::weak_ptr<Game::Object> weakObject = object;
                     object->ui()->mouseDownHandler().add(
                         std::bind(
                             &Location::onObjectMouseEvent,
                             this,
                             std::placeholders::_1,
-                            object
+                            weakObject
                         )
                     );
                     object->ui()->mouseClickHandler().add(
@@ -120,7 +122,7 @@ namespace Falltergeist
                             &Location::onObjectMouseEvent,
                             this,
                             std::placeholders::_1,
-                            object
+                            weakObject
                         )
                     );
                     object->ui()->mouseInHandler().add(
@@ -128,7 +130,7 @@ namespace Falltergeist
                             &Location::onObjectHover,
                             this,
                             std::placeholders::_1,
-                            object
+                            weakObject
                         )
                     );
                     // TODO: get rid of mousemove handler?
@@ -137,7 +139,7 @@ namespace Falltergeist
                             &Location::onObjectHover,
                             this,
                             std::placeholders::_1,
-                            object
+                            weakObject
                         )
                     );
                     object->ui()->mouseOutHandler().add(
@@ -145,7 +147,7 @@ namespace Falltergeist
                             &Location::onObjectHover,
                             this,
                             std::placeholders::_1,
-                            object
+                            weakObject
                         )
                     );
                 }
@@ -399,8 +401,9 @@ namespace Falltergeist
         }
 
 
-        void Location::onObjectMouseEvent(Event::Mouse *event, const std::shared_ptr<Game::Object> &object)
+        void Location::onObjectMouseEvent(Event::Mouse *event, const std::weak_ptr<Game::Object> &weakObject)
         {
+            std::shared_ptr<Game::Object> object = weakObject.lock();
             if (!object) {
                 return;
             }
@@ -422,15 +425,16 @@ namespace Falltergeist
             }
         }
 
-        void Location::onObjectHover(Event::Mouse *event, const std::shared_ptr<Game::Object> &object)
+        void Location::onObjectHover(Event::Mouse *event, const std::weak_ptr<Game::Object> &object)
         {
+            std::shared_ptr<Game::Object> hoveredObject = object.lock();
             if (event->name() == "mouseout") {
-                if (_objectUnderCursor == object) {
+                if (!hoveredObject || _objectUnderCursor == hoveredObject) {
                     _objectUnderCursor = nullptr;
                 }
             } else {
                 if (_objectUnderCursor == nullptr || event->name() == "mousein") {
-                    _objectUnderCursor = object;
+                    _objectUnderCursor = hoveredObject;
                     _actionCursorButtonPressed = false;
                 }
 
@@ -623,7 +627,7 @@ namespace Falltergeist
 
             // if scrolling is active
             if (this->_scrollLeft || this->_scrollRight || this->_scrollTop || this->_scrollBottom) {
-                Input::Mouse::Cursor state;
+                Input::Mouse::Cursor state = Input::Mouse::Cursor::NONE;
                 if (this->_scrollLeft) {
                     state = Input::Mouse::Cursor::SCROLL_W;
                 }
