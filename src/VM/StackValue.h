@@ -48,7 +48,7 @@ namespace Falltergeist
                 std::string stringValue() const;
 
                 // returns object pointer or throws exception if it's not object
-                const std::shared_ptr<Game::Object> &objectValue() const;
+                std::shared_ptr<Falltergeist::Game::Object> objectValue() const;
 
                 // converts value of any type to string representation
                 std::string toString() const;
@@ -68,7 +68,7 @@ namespace Falltergeist
                     int32_t _intValue;
                     float _floatValue;
                 };
-                std::shared_ptr<Game::Object> _objectValue;
+                std::weak_ptr<Game::Object> _objectValue;
                 std::string _stringValue;
         };
     }

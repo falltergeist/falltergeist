@@ -14,8 +14,8 @@ namespace Falltergeist
             {
                 public:
                     Elevation();
-                    std::vector<std::shared_ptr<Object>>& objects();
-                    const std::vector<std::shared_ptr<Object>>& objects() const;
+                    std::vector<std::unique_ptr<Object>>& objects();
+                    const std::vector<std::unique_ptr<Object>>& objects() const;
                     std::vector<uint16_t>& floorTiles();
                     const std::vector<uint16_t>& floorTiles() const;
                     std::vector<uint16_t>& roofTiles();
@@ -24,7 +24,7 @@ namespace Falltergeist
                 protected:
                     std::vector<uint16_t> _floorTiles;
                     std::vector<uint16_t> _roofTiles;
-                    std::vector<std::shared_ptr<Object>> _objects;
+                    std::vector<std::unique_ptr<Object>> _objects;
             };
         }
     }

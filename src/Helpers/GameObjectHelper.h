@@ -22,7 +22,7 @@ namespace Falltergeist
         {
             public:
                 GameObjectHelper() = default;
-                std::shared_ptr<Game::Object> createFromMapObject(const std::shared_ptr<Format::Map::Object> &mapObject) const;
+                std::shared_ptr<Game::Object> createFromMapObject(const std::unique_ptr<Falltergeist::Format::Map::Object> &mapObject) const;
                 std::shared_ptr<Game::Object> createFromMapSpatialScript(const Format::Map::Script& mapScript) const;
         };
     }

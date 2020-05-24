@@ -70,7 +70,8 @@ namespace Falltergeist
             Logger::debug("SCRIPT") << "Function ended" << std::endl;
 
             // reset special script arguments
-            _sourceObject = _targetObject = nullptr;
+            _sourceObject.reset();
+            _targetObject.reset();
             _actionUsed = _fixedParam = 0;
         }
 
@@ -174,9 +175,9 @@ namespace Falltergeist
             return &_LVARS;
         }
 
-        const std::shared_ptr<Game::Object> &Script::owner()
+        std::shared_ptr<Game::Object> Script::owner()
         {
-            return _owner;
+            return _owner.lock();
         }
 
         bool Script::initialized()
@@ -216,9 +217,9 @@ namespace Falltergeist
             return this;
         }
 
-        const std::shared_ptr<Game::Object> &Script::targetObject() const
+        std::shared_ptr<Game::Object> Script::targetObject() const
         {
-            return _targetObject;
+            return _targetObject.lock();
         }
 
         Script *Script::setSourceObject(const std::shared_ptr<Game::Object> &sourceObject)
@@ -227,9 +228,9 @@ namespace Falltergeist
             return this;
         }
 
-        const std::shared_ptr<Game::Object> &Script::sourceObject() const
+        std::shared_ptr<Game::Object> Script::sourceObject() const
         {
-            return _sourceObject;
+            return _sourceObject.lock();
         }
 
         size_t Script::DVARbase()

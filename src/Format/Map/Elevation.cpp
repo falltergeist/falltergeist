@@ -10,12 +10,12 @@ namespace Falltergeist
             {
             }
 
-            std::vector<std::shared_ptr<Object>>& Elevation::objects()
+            std::vector<std::unique_ptr<Object>>& Elevation::objects()
             {
                 return _objects;
             }
 
-            const std::vector<std::shared_ptr<Object>>& Elevation::objects() const
+            const std::vector<std::unique_ptr<Object>>& Elevation::objects() const
             {
                 return _objects;
             }

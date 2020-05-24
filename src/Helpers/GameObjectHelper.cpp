@@ -38,9 +38,9 @@ namespace Falltergeist
             return object;
         }
 
-        std::shared_ptr<Game::Object> GameObjectHelper::createFromMapObject(const std::shared_ptr<Format::Map::Object> &mapObject) const
+        std::shared_ptr<Game::Object> GameObjectHelper::createFromMapObject(const std::unique_ptr<Format::Map::Object> &mapObject) const
         {
-            auto object = Game::ObjectFactory::getInstance()->createObject(mapObject->PID());
+            std::shared_ptr<Game::Object> object = Game::ObjectFactory::getInstance()->createObject(mapObject->PID());
             if (!object) {
                 Logger::error() << "Location::setLocation() - can't create object with PID: " << mapObject->PID() << std::endl;
                 return nullptr;

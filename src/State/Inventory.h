@@ -21,7 +21,7 @@ namespace Falltergeist
         class Inventory final : public State
         {
             public:
-                Inventory(const std::shared_ptr<UI::IResourceManager> &resourceManager);
+                Inventory(std::shared_ptr<UI::IResourceManager> resourceManager);
                 Inventory(const Inventory&) = delete;
                 Inventory& operator=(const Inventory&) = delete;
                 ~Inventory() override = default;

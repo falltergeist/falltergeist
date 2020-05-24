@@ -199,11 +199,15 @@ namespace Falltergeist
 
         const std::shared_ptr<Hexagon> &Object::hexagon() const
         {
+            static const std::shared_ptr<Hexagon> null;
             if (this->position() < 0) {
-                static const std::shared_ptr<Hexagon> null;
                 return null;
             }
 
+            if (!Game::getInstance()->locationState()) {
+                Logger::warning("OBJECT") << "Game not initialized yet, but we already have a position" << std::endl;
+                return null;
+            }
             return Game::getInstance()->locationState()->hexagonGrid()->at(this->position());
         }
 

@@ -15,8 +15,8 @@ namespace Falltergeist
         {
             public:
                 GameLocationHelper() = default;
-                std::shared_ptr<Game::Location> getByName(const std::string& name) const;
-                std::shared_ptr<Game::Location> getInitialLocation() const;
+                std::unique_ptr<Game::Location> getByName(const std::string& name) const;
+                std::unique_ptr<Game::Location> getInitialLocation() const;
         };
     }
 }

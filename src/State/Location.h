@@ -86,8 +86,8 @@ namespace Falltergeist
                 HexagonGrid* hexagonGrid();
                 LocationCamera* camera();
 
-                const std::shared_ptr<Game::Location> &location();
-                void setLocation(const std::shared_ptr<Game::Location> &location);
+                const std::unique_ptr<Game::Location> &location();
+                void setLocation(std::unique_ptr<Game::Location> location);
 
                 unsigned int elevation() const;
                 void setElevation(unsigned int elevation);
@@ -137,7 +137,7 @@ namespace Falltergeist
                 void setSkillInUse(SKILL skill);
 
             private:
-                std::shared_ptr<Game::DudeObject> player;
+                std::weak_ptr<Game::DudeObject> player;
                 std::shared_ptr<Input::Mouse> mouse;
                 std::shared_ptr<Settings> settings;
                 std::shared_ptr<Graphics::Renderer> renderer;
@@ -169,7 +169,7 @@ namespace Falltergeist
                 std::unique_ptr<LocationCamera> _camera;
                 std::map<std::string, VM::StackValue> _EVARS;
 
-                std::shared_ptr<Falltergeist::Game::Location> _location;
+                std::unique_ptr<Falltergeist::Game::Location> _location;
                 unsigned int _elevation = 0;
 
                 bool _locationEnter = true;
@@ -187,8 +187,8 @@ namespace Falltergeist
                 bool _scrollTop = false;
                 bool _scrollBottom = false;
 
-                std::list<std::shared_ptr<Game::Object>> _objects;
-                std::list<std::shared_ptr<Game::Object>> _flatObjects;
+                std::list<std::weak_ptr<Game::Object>> _objects;
+                std::list<std::weak_ptr<Game::Object>> _flatObjects;
 
                 std::unique_ptr<UI::TextArea> _hexagonInfo;
 

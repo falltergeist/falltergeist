@@ -12,7 +12,7 @@ namespace Falltergeist
         std::unique_ptr<State::Location> StateLocationHelper::getInitialLocationState() const
         {
             GameLocationHelper gameLocationHelper;
-            auto initialLocation = gameLocationHelper.getInitialLocation();
+            std::unique_ptr<Game::Location> initialLocation = gameLocationHelper.getInitialLocation();
 
             auto game = Game::getInstance();
 
@@ -23,10 +23,11 @@ namespace Falltergeist
                 game->renderer(),
                 game->mixer(),
                 game->gameTime(),
-                std::make_shared<UI::ResourceManager>()
+                std::make_unique<UI::ResourceManager>()
             );
+
             locationState->setElevation(initialLocation->defaultElevationIndex());
-            locationState->setLocation(initialLocation);
+            locationState->setLocation(std::move(initialLocation));
             return locationState;
         }
     }

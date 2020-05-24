@@ -52,7 +52,7 @@ namespace Falltergeist
             GameObjectHelper gameObjectHelper;
 
             for (auto &mapElevation : mapFile->elevations()) {
-                auto elevation = std::make_shared<LocationElevation>();
+                auto elevation = std::make_unique<LocationElevation>();
 
                 // load objects
                 for (auto &mapObject : mapElevation.objects()) {
@@ -84,7 +84,7 @@ namespace Falltergeist
                     }
                 }
 
-                elevations()->push_back(elevation);
+                _elevations.push_back(std::move(elevation));
             }
 
             // load spatial objects(scripts)
@@ -289,7 +289,7 @@ namespace Falltergeist
          * @brief Returns location elevations
          * @return Elevations
          */
-        std::vector<std::shared_ptr<LocationElevation>>* Location::elevations()
+        std::vector<std::unique_ptr<LocationElevation> > *Location::elevations()
         {
             return &_elevations;
         }
