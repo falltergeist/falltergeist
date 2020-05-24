@@ -226,12 +226,7 @@ namespace Falltergeist
                 if (_location->script()) {
                     _location->script()->call("map_update_p_proc");
                 }
-                for (auto &weakObject : _objects) {
-                    std::shared_ptr<Game::Object> object = weakObject.lock();
-                    if (!object) {
-                        Logger::warning("LOCATION") << "Got deleted object" << std::endl;
-                        continue;
-                    }
+                for (const std::shared_ptr<Game::Object> &object : _objects) {
                     object->map_update_p_proc();
                 }
                 dude->map_update_p_proc();
@@ -467,12 +462,7 @@ namespace Falltergeist
         {
             // just for testing
             if (settings->targetHighlight()) {
-                for (auto &weakObject: _objects) {
-                    std::shared_ptr<Game::Object> object = weakObject.lock();
-                    if (!object) {
-                        Logger::warning("LOCATION") << "Got deleted object" << std::endl;
-                        continue;
-                    }
+                for ( const std::shared_ptr<Game::Object> &object: _objects) {
                     if (dynamic_cast<Game::CritterObject *>(object.get())) {
                         if (!dynamic_cast<Game::DudeObject *>(object.get())) {
                             object->renderOutline(1);
@@ -493,33 +483,18 @@ namespace Falltergeist
         //render only flat objects first
         void Location::renderObjects() const
         {
-            for (auto &weakObject: _flatObjects) {
-                std::shared_ptr<Game::Object> object = weakObject.lock();
-                if (!object) {
-                    Logger::warning("LOCATION") << "Got deleted object" << std::endl;
-                    continue;
-                }
+            for (const auto &object: _flatObjects) {
                 object->render();
             }
 
-            for (auto &weakObject: _objects) {
-                std::shared_ptr<Game::Object> object = weakObject.lock();
-                if (!object) {
-                    Logger::warning("LOCATION") << "Got deleted object" << std::endl;
-                    continue;
-                }
+            for (const auto &object: _objects) {
                 object->render();
             }
         }
 
         void Location::renderObjectsText() const
         {
-            for (auto &weakObject: _objects) {
-                std::shared_ptr<Game::Object> object = weakObject.lock();
-                if (!object) {
-                    Logger::warning("LOCATION") << "Got deleted object" << std::endl;
-                    continue;
-                }
+            for (const auto &object: _objects) {
                 object->renderText();
             }
         }
@@ -572,12 +547,7 @@ namespace Falltergeist
                 _location->script()->initialize();
             }
 
-            for (auto &weakObject : _objects) {
-                std::shared_ptr<Game::Object> object = weakObject.lock();
-                if (!object) {
-                    Logger::warning("LOCATION") << "Got deleted object" << std::endl;
-                    continue;
-                }
+            for (const auto &object : _objects) {
                 if (object->script()) {
                     object->script()->initialize();
                 }
@@ -605,12 +575,7 @@ namespace Falltergeist
             // when script is called
             dude->map_enter_p_proc();
             for (auto it = _objects.rbegin(); it != _objects.rend(); ++it) {
-                std::shared_ptr<Game::Object> object = it->lock();
-                if (!object) {
-                    Logger::warning("LOCATION") << "Got deleted object" << std::endl;
-                    continue;
-                }
-                object->map_enter_p_proc();
+                (*it)->map_enter_p_proc();
             }
         }
 
@@ -667,12 +632,7 @@ namespace Falltergeist
 
         void Location::thinkObjects(const float &deltaTime) const
         {
-            for (auto &weakObject : _objects) {
-                std::shared_ptr<Game::Object> object = weakObject.lock();
-                if (!object) {
-                    Logger::warning("LOCATION") << "Got deleted object" << std::endl;
-                    continue;
-                }
+            for (const auto &object : _objects) {
                 object->think(deltaTime);
             }
         }
@@ -744,11 +704,7 @@ namespace Falltergeist
         void Location::handleByGameObjects(Event::Mouse *event)
         {
             for (auto it = _objects.rbegin(); it != _objects.rend(); ++it) {
-                std::shared_ptr<Game::Object> object = it->lock();
-                if (!object) {
-                    Logger::warning("LOCATION") << "Got deleted object" << std::endl;
-                    continue;
-                }
+                std::shared_ptr<Game::Object> object = *it;
                 if (event->handled()) {
                     return;
                 }
@@ -760,11 +716,7 @@ namespace Falltergeist
 
             // sadly, flat objects do handle events.
             for (auto it = _flatObjects.rbegin(); it != _flatObjects.rend(); ++it) {
-                std::shared_ptr<Game::Object> object = it->lock();
-                if (!object) {
-                    Logger::warning("LOCATION") << "Got deleted object" << std::endl;
-                    continue;
-                }
+                std::shared_ptr<Game::Object> object = *it;
                 if (event->handled()) {
                     return;
                 }
@@ -1006,10 +958,10 @@ namespace Falltergeist
 
         void Location::moveObjectToHexagon(const std::shared_ptr<Game::Object> &object, const std::shared_ptr<Hexagon> &hexagon, bool update)
         {
-            const auto &elevation = _location->elevations()->at(_elevation);
+            const std::unique_ptr<Game::LocationElevation> &elevation = _location->elevations()->at(_elevation);
 
             if (object->position() >= 0) {
-                auto oldHexagon = _hexagonGrid->at(object->position());
+                const std::shared_ptr<Hexagon> &oldHexagon = _hexagonGrid->at(object->position());
                 if (update) {
                     //_hexagonGrid->initLight(oldHexagon, false);
                 }
@@ -1080,42 +1032,16 @@ namespace Falltergeist
 
             // TODO: recreate _objects array for rendering/handling
             if (update) {
-                std::list<std::shared_ptr<Game::Object>> objects;
-                for (const std::weak_ptr<Game::Object> &ptr : _objects) {
-                    std::shared_ptr<Game::Object> object = ptr.lock();
-                    if (!object) {
-                        Logger::warning("LOCATION") << "Lost object" << std::endl;
-                        continue;
-                    }
-                    objects.push_back(object);
-                }
-                objects.sort(
+                _objects.sort(
                         [](std::shared_ptr<Game::Object> &obj1, std::shared_ptr<Game::Object> &obj2) -> bool {
                             return obj1->hexagon()->number() < obj2->hexagon()->number();
                         }
                 );
-                _objects.clear();
-                for (const std::shared_ptr<Game::Object> &object : objects) {
-                    _objects.push_back(object);
-                }
-                std::list<std::shared_ptr<Game::Object>> flatObjects;
-                for (const std::weak_ptr<Game::Object> &ptr : _flatObjects) {
-                    std::shared_ptr<Game::Object> object = ptr.lock();
-                    if (!object) {
-                        Logger::warning("LOCATION") << "Lost flat object" << std::endl;
-                        continue;
-                    }
-                    flatObjects.push_back(object);
-                }
-                flatObjects.sort(
+                _flatObjects.sort(
                         [](std::shared_ptr<Game::Object> &obj1, std::shared_ptr<Game::Object> &obj2) -> bool {
                             return obj1->hexagon()->number() < obj2->hexagon()->number();
                         }
                 );
-                _flatObjects.clear();
-                for (const std::shared_ptr<Game::Object> &object : flatObjects) {
-                    _flatObjects.push_back(object);
-                }
                 if (hexagon) {
                     initLight();
                     /*_hexagonGrid->initLight(hexagon, true);
@@ -1169,18 +1095,10 @@ namespace Falltergeist
                 _objectUnderCursor = nullptr;
             }
 
-            std::list<std::weak_ptr<Game::Object>>::iterator it;
-            for (it = _objects.begin(); it!=_objects.end(); it++) {
-                if (it->lock() == object) {
-                    it = _objects.erase(it);
-                }
+            auto it = std::find(_objects.begin(), _objects.end(), object);
+            if (it != _objects.end()) {
+                _objects.erase(it);
             }
-//            auto it = std::find(_objects.begin(), _objects.end(), [&](const std::weak_ptr<Game::Object> &weak) {
-//                return weak.lock() == object;
-//            });
-//            if (it != _objects.end()) {
-//                _objects.erase(it);
-//            }
         }
 
         void Location::destroyObject(const std::shared_ptr<Game::Object> &object)
@@ -1336,7 +1254,7 @@ namespace Falltergeist
             }
 
             std::vector<float> lights;
-            for (auto hex: _hexagonGrid->hexagons()) {
+            for (Hexagon *hex: _hexagonGrid->hexagons()) {
                 int lightLevel;
 
                 unsigned int light = hex->light();
@@ -1384,12 +1302,7 @@ namespace Falltergeist
 
         std::shared_ptr<Game::Object> Location::getGameObjectUnderCursor()
         {
-            for (auto it = _objects.rbegin(); it != _objects.rend(); ++it) {
-                std::shared_ptr<Game::Object> object = it->lock();
-                if (!object) {
-                    Logger::warning("LOCATION") << "Got deleted object" << std::endl;
-                    continue;
-                }
+            for (const std::shared_ptr<Game::Object> &object : _objects) {
                 if (!object->inRender()) {
                     continue;
                 }

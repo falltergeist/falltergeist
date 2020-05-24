@@ -187,8 +187,8 @@ namespace Falltergeist
                 bool _scrollTop = false;
                 bool _scrollBottom = false;
 
-                std::list<std::weak_ptr<Game::Object>> _objects;
-                std::list<std::weak_ptr<Game::Object>> _flatObjects;
+                std::list<std::shared_ptr<Game::Object>> _objects;
+                std::list<std::shared_ptr<Game::Object>> _flatObjects;
 
                 std::unique_ptr<UI::TextArea> _hexagonInfo;
 

@@ -90,7 +90,7 @@ namespace Falltergeist
                 std::shared_ptr<Input::Mouse> mouse() const;
                 std::shared_ptr<Graphics::Renderer> renderer() const;
                 std::shared_ptr<Time> gameTime() const;
-                State::Location* locationState();
+                std::shared_ptr<State::Location> locationState();
                 std::shared_ptr<Audio::Mixer> mixer() const;
                 Event::Dispatcher* eventDispatcher();
 
@@ -107,6 +107,7 @@ namespace Falltergeist
                 std::vector<int> _GVARS;
                 std::vector<std::shared_ptr<State::State>> _states;
                 std::vector<std::shared_ptr<State::State>> _statesForDelete;
+                std::weak_ptr<State::Location> _locationState;
 
                 std::shared_ptr<Time> _gameTime;
 

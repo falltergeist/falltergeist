@@ -274,10 +274,9 @@ namespace Falltergeist
 
     void HexagonGrid::initLight(Hexagon *hex, bool add) const
     {
-        auto objectsAtHex = hex->objects();
-        for (auto it = objectsAtHex->begin(); it != objectsAtHex->end(); ++it)
+//        for (auto it = objectsAtHex->begin(); it != objectsAtHex->end(); ++it)
+        for (const std::shared_ptr<Game::Object> &object : *hex->objects())
         {
-            auto object = *it;
             if (object->lightIntensity()>0 && object->lightRadius()>0)
             {
                 // 36 hexes per direction

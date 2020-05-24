@@ -100,7 +100,6 @@ namespace Falltergeist
         Game::~Game()
         {
             shutdown();
-            std::cout << "================ game dying ===================" << std::endl;
         }
 
         void Game::shutdown()
@@ -119,6 +118,15 @@ namespace Falltergeist
             if (!state->initialized()) {
                 state->init();
             }
+            std::shared_ptr<State::Location> location = std::dynamic_pointer_cast<State::Location>(state);
+            if (location) {
+                if (_locationState.lock())  {
+                    Logger::warning("GAME") << "duplicate location state";
+                }
+
+                _locationState = location;
+            }
+
             state->emitEvent(std::make_unique<Event::State>("push"), state->pushHandler());
             state->setActive(true);
             state->emitEvent(std::make_unique<Event::State>("activate"), state->activateHandler());
@@ -204,15 +212,9 @@ namespace Falltergeist
             return _mouse;
         }
 
-        State::Location* Game::locationState()
+        std::shared_ptr<State::Location> Game::locationState()
         {
-            for (auto& state : _states) {
-                auto location = dynamic_cast<State::Location*>(state.get());
-                if (location) {
-                    return location;
-                }
-            }
-            return nullptr;
+            return _locationState.lock();
         }
 
         void Game::setGVAR(unsigned int number, int value)
