@@ -114,7 +114,7 @@ namespace Falltergeist
             _settings.reset();
         }
 
-        void Game::pushState(std::unique_ptr<State::State> state)
+        void Game::pushState(std::shared_ptr<State::State> state)
         {
             if (!state->initialized()) {
                 state->init();
@@ -125,14 +125,14 @@ namespace Falltergeist
             _states.push_back(std::move(state));
         }
 
-        std::unique_ptr<State::State> Game::popState(bool doDelete)
+        std::shared_ptr<State::State> Game::popState(bool doDelete)
         {
             if (_states.empty()) {
                 return nullptr;
             }
 
             State::State* state = _states.back().get();
-            std::unique_ptr<State::State> ret;
+            std::shared_ptr<State::State> ret;
             if (doDelete) {
                 _statesForDelete.emplace_back(std::move(_states.back()));
                 state = _statesForDelete.back().get();
@@ -148,7 +148,7 @@ namespace Falltergeist
             return ret;
         }
 
-        void Game::setState(std::unique_ptr<State::State> state)
+        void Game::setState(std::shared_ptr<State::State> state)
         {
             while (!_states.empty()) {
                 popState();

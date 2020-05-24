@@ -30,9 +30,9 @@ namespace Falltergeist
         CritterInteract::CritterInteract(std::shared_ptr<UI::IResourceManager> resourceManager) : State()
         {
             this->resourceManager = resourceManager;
-            _dialog = std::make_unique<CritterDialog>(resourceManager);
-            _review = std::make_unique<CritterDialogReview>(resourceManager);
-            _barter = std::make_unique<CritterBarter>(resourceManager);
+            _dialog = std::make_shared<CritterDialog>(resourceManager);
+            _review = std::make_shared<CritterDialogReview>(resourceManager);
+            _barter = std::make_shared<CritterBarter>(resourceManager);
             // pre-init review, so we can push questions/answers to it.
             _review->init();
         }
@@ -339,43 +339,19 @@ namespace Falltergeist
                 Game::getInstance()->popState(false);
             }
 
-            // TODO: These are unique pointers and we should really be owned by the Game instance, not CritterInteract
-            switch (_state)
-            {
-                case SubState::DIALOG:
-                    _dialog = std::unique_ptr<CritterDialog>(dynamic_cast<CritterDialog*>(Game::getInstance()->popState().release()));
-                    break;
-                case SubState::BARTER:
-                    _barter = std::unique_ptr<CritterBarter>(dynamic_cast<CritterBarter*>(Game::getInstance()->popState().release()));
-                    break;
-                case SubState::REVIEW:
-                    _review = std::unique_ptr<CritterDialogReview>(dynamic_cast<CritterDialogReview*>(Game::getInstance()->popState().release()));
-                    break;
-                default:
-                    break;
-            }
-
-            if (!_dialog) {
-                Logger::error("CRITTERINTERACT") << "Switching substate, but we didn't get our dialog back" << std::endl;
-            }
-            if (!_barter) {
-                Logger::error("CRITTERINTERACT") << "Switching substate, but we didn't get our barter back" << std::endl;
-            }
-            if (!_review) {
-                Logger::error("CRITTERINTERACT") << "Switching substate, but we didn't get our review back" << std::endl;
-            }
 
             _state = state;
+            // TODO: These should be unique pointers and should really be owned by the Game instance, not CritterInteract
             switch (state)
             {
                 case SubState::DIALOG:
-                    Game::getInstance()->pushState(std::move(_dialog));
+                    Game::getInstance()->pushState(_dialog);
                     break;
                 case SubState::BARTER:
-                    Game::getInstance()->pushState(std::move(_barter));
+                    Game::getInstance()->pushState(_barter);
                     break;
                 case SubState::REVIEW:
-                    Game::getInstance()->pushState(std::move(_review));
+                    Game::getInstance()->pushState(_review);
                     break;
                 default:
                     Logger::warning("CRITTERINTERACT") << "Switching to unkown substate " << int(state) << std::endl;

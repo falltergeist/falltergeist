@@ -63,9 +63,9 @@ namespace Falltergeist
                  * @param offset optional offset (1 means second from the top, and so on)
                  */
                 State::State* topState(unsigned offset = 0) const;
-                void pushState(std::unique_ptr<State::State> state);
-                void setState(std::unique_ptr<State::State> state);
-                std::unique_ptr<State::State> popState(bool doDelete = true);
+                void pushState(std::shared_ptr<State::State> state);
+                void setState(std::shared_ptr<State::State> state);
+                std::shared_ptr<State::State> popState(bool doDelete = true);
 
                 void run();
                 void quit();
@@ -105,8 +105,8 @@ namespace Falltergeist
                 void setUIResourceManager(std::shared_ptr<UI::IResourceManager> uiResourceManager);
             protected:
                 std::vector<int> _GVARS;
-                std::vector<std::unique_ptr<State::State>> _states;
-                std::vector<std::unique_ptr<State::State>> _statesForDelete;
+                std::vector<std::shared_ptr<State::State>> _states;
+                std::vector<std::shared_ptr<State::State>> _statesForDelete;
 
                 std::shared_ptr<Time> _gameTime;
 

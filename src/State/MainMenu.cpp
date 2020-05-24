@@ -146,7 +146,7 @@ namespace Falltergeist
 
         void MainMenu::doSettings()
         {
-            Game::getInstance()->pushState(std::make_unique<SettingsMenu>(resourceManager));
+            Game::getInstance()->pushState(std::make_shared<SettingsMenu>(resourceManager));
         }
 
         void MainMenu::doIntro()
@@ -183,7 +183,7 @@ namespace Falltergeist
         void MainMenu::onNewGameStart(Event::State* event)
         {
             fadeDoneHandler().clear();
-            Game::getInstance()->pushState(std::make_unique<NewGame>(resourceManager));
+            Game::getInstance()->pushState(std::make_shared<NewGame>(resourceManager));
         }
 
         void MainMenu::onLoadGameButtonClick(Event::Mouse* event)
@@ -194,7 +194,7 @@ namespace Falltergeist
         void MainMenu::onLoadGameStart(Event::State* event)
         {
             fadeDoneHandler().clear();
-            Game::getInstance()->pushState(std::make_unique<LoadGame>(resourceManager));
+            Game::getInstance()->pushState(std::make_shared<LoadGame>(resourceManager));
         }
 
         void MainMenu::onSettingsButtonClick(Event::Mouse* event)
@@ -210,8 +210,8 @@ namespace Falltergeist
         void MainMenu::onIntroStart(Event::State* event)
         {
             fadeDoneHandler().clear();
-            Game::getInstance()->pushState(std::make_unique<Movie>(17));
-            Game::getInstance()->pushState(std::make_unique<Movie>(1));
+            Game::getInstance()->pushState(std::make_shared<Movie>(17));
+            Game::getInstance()->pushState(std::make_shared<Movie>(1));
         }
 
         void MainMenu::onCreditsButtonClick(Event::Mouse* event)
@@ -222,7 +222,7 @@ namespace Falltergeist
         void MainMenu::onCreditsStart(Event::State* event)
         {
             fadeDoneHandler().clear();
-            Game::getInstance()->pushState(std::make_unique<Credits>());
+            Game::getInstance()->pushState(std::make_shared<Credits>());
         }
 
         void MainMenu::onKeyDown(Event::Keyboard* event)
