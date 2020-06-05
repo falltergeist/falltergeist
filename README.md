@@ -39,6 +39,11 @@ build_type=Debug
 ```
 If using VS2017 or building on Release then use: `compiler.version=15`, or `build_type=Release` respectively.
 
+To be able to download conan SDL2 packages, further configure your conan instance by introducing a new remote:
+```cmd
+conan remote add bincrafters "https://api.bintray.com/conan/bincrafters/public-conan"
+```
+
 Then open 'Developer PowerShell for Visual Studio' and execute the following commands:
 
 ```cmd
