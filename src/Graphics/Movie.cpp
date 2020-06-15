@@ -8,6 +8,8 @@ namespace Falltergeist
 {
     namespace Graphics
     {
+        using Game::Game;
+
         Movie::Movie()
         {
             // 640x320

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "../ILogger.h"
 #include "../State/State.h"
 #include "../UI/IResourceManager.h"
 
@@ -23,7 +24,7 @@ namespace Falltergeist
         class ExitConfirm final : public State
         {
             public:
-                ExitConfirm(std::shared_ptr<UI::IResourceManager> resourceManager);
+                ExitConfirm(std::shared_ptr<UI::IResourceManager> resourceManager, std::shared_ptr<ILogger> logger);
                 ~ExitConfirm() override = default;
 
                 void init() override;
@@ -35,6 +36,7 @@ namespace Falltergeist
                 void onStateActivate(Event::State* event) override;
                 void onStateDeactivate(Event::State* event) override;
             private:
+                std::shared_ptr<ILogger> logger;
                 std::shared_ptr<UI::IResourceManager> resourceManager;
                 std::unique_ptr<UI::Factory::ImageButtonFactory> imageButtonFactory;
         };

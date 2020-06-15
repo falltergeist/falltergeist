@@ -1,5 +1,6 @@
 #pragma once
 
+#include "../ILogger.h"
 #include "../State/State.h"
 #include "../UI/IResourceManager.h"
 
@@ -18,7 +19,7 @@ namespace Falltergeist
         class GameMenu final : public State
         {
             public:
-                GameMenu(std::shared_ptr<UI::IResourceManager> resourceManager);
+                GameMenu(std::shared_ptr<UI::IResourceManager> resourceManager, std::shared_ptr<ILogger> logger);
                 virtual ~GameMenu() = default;
 
                 void init() override;
@@ -34,6 +35,7 @@ namespace Falltergeist
                 void onStateDeactivate(Event::State* event) override;
 
             private:
+                std::shared_ptr<ILogger> logger;
                 std::shared_ptr<UI::IResourceManager> resourceManager;
                 std::unique_ptr<UI::Factory::ImageButtonFactory> imageButtonFactory;
         };

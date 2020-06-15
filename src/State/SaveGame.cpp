@@ -32,7 +32,7 @@ namespace Falltergeist
             setModal(true);
             setFullscreen(true);
 
-            auto game = Game::getInstance();
+            auto game = Game::Game::getInstance();
             //auto player = Game::getInstance()->player();
 
             // background
@@ -82,22 +82,22 @@ namespace Falltergeist
 
         void SaveGame::onDoneButtonClick(Event::Mouse* event)
         {
-            Game::getInstance()->popState();
+            Game::Game::getInstance()->popState();
         }
 
         void SaveGame::onCancelButtonClick(Event::Mouse* event)
         {
-            Game::getInstance()->popState();
+            Game::Game::getInstance()->popState();
         }
 
         void SaveGame::onStateActivate(Event::State* event)
         {
-            Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::BIG_ARROW);
+            Game::Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::BIG_ARROW);
         }
 
         void SaveGame::onStateDeactivate(Event::State* event)
         {
-            Game::getInstance()->mouse()->popState();
+            Game::Game::getInstance()->mouse()->popState();
         }
 
         void SaveGame::onKeyDown(Event::Keyboard* event)
@@ -105,7 +105,7 @@ namespace Falltergeist
             switch (event->keyCode())
             {
                 case SDLK_ESCAPE:
-                    Game::getInstance()->popState();
+                    Game::Game::getInstance()->popState();
                     break;
             }
         }

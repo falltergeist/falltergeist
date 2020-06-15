@@ -7,6 +7,8 @@ namespace Falltergeist
 {
     namespace Graphics
     {
+        using Game::Game;
+
         Lightmap::Lightmap(std::vector<glm::vec2> coords, std::vector<GLuint> indexes)
         {
             if (Game::getInstance()->renderer()->renderPath() == Renderer::RenderPath::OGL32)

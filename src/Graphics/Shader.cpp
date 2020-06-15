@@ -12,6 +12,8 @@ namespace Falltergeist
 {
     namespace Graphics
     {
+        using Game::Game;
+
         Shader::Shader(std::string fname)
         {
             _load(fname);

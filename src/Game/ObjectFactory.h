@@ -1,6 +1,7 @@
 #pragma once
 
-#include "../Base/Singleton.h"
+#include <memory>
+#include "../ILogger.h"
 
 namespace Falltergeist
 {
@@ -11,16 +12,11 @@ namespace Falltergeist
         class ObjectFactory
         {
             public:
-                static ObjectFactory* getInstance();
-                Object* createObject(unsigned int PID);
-
-            private:
-                friend class Base::Singleton<ObjectFactory>;
-
-                ObjectFactory() = default;
+                ObjectFactory(std::shared_ptr<ILogger> logger);
                 ~ObjectFactory() = default;
-                ObjectFactory(ObjectFactory const&) = delete;
-                void operator=(ObjectFactory const&) = delete;
+                Object* createObjectByPID(unsigned int PID);
+            private:
+                std::shared_ptr<ILogger> logger;
         };
     }
 }

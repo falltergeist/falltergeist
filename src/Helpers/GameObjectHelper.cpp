@@ -17,6 +17,11 @@ namespace Falltergeist
 {
     namespace Helpers
     {
+        GameObjectHelper::GameObjectHelper(std::shared_ptr<ILogger> logger)
+        {
+            this->logger = std::move(logger);
+        }
+
         Game::Object* GameObjectHelper::createFromMapSpatialScript(const Format::Map::Script& mapScript) const
         {
             auto tile = mapScript.spatialTile();
@@ -36,9 +41,11 @@ namespace Falltergeist
 
         Game::Object* GameObjectHelper::createFromMapObject(const std::unique_ptr<Format::Map::Object> &mapObject) const
         {
-            auto object = Game::ObjectFactory::getInstance()->createObject(mapObject->PID());
+            Game::ObjectFactory objectFactory(logger);
+
+            auto object = objectFactory.createObjectByPID(mapObject->PID());
             if (!object) {
-                Logger::error() << "Location::setLocation() - can't create object with PID: " << mapObject->PID() << std::endl;
+                Logger::error("") << "Location::setLocation() - can't create object with PID: " << mapObject->PID() << std::endl;
                 return nullptr;
             }
 
@@ -64,9 +71,9 @@ namespace Falltergeist
 
             if (auto container = dynamic_cast<Game::ContainerItemObject *>(object)) {
                 for (auto &child : mapObject->children()) {
-                    auto item = dynamic_cast<Game::ItemObject *>(Game::ObjectFactory::getInstance()->createObject(child->PID()));
+                    auto item = dynamic_cast<Game::ItemObject *>(objectFactory.createObjectByPID(child->PID()));
                     if (!item) {
-                        Logger::error() << "Location::setLocation() - can't create object with PID: " << child->PID() << std::endl;
+                        Logger::error("") << "Location::setLocation() - can't create object with PID: " << child->PID() << std::endl;
                         return nullptr;
                     }
                     item->setAmount(child->ammount());
@@ -77,10 +84,10 @@ namespace Falltergeist
             // TODO: use common interface...
             if (auto critter = dynamic_cast<Game::CritterObject *>(object)) {
                 for (auto &child : mapObject->children()) {
-                    auto item = dynamic_cast<Game::ItemObject *>(Game::ObjectFactory::getInstance()->createObject(
+                    auto item = dynamic_cast<Game::ItemObject *>(objectFactory.createObjectByPID(
                             child->PID()));
                     if (!item) {
-                        Logger::error() << "Location::setLocation() - can't create object with PID: "
+                        Logger::error("") << "Location::setLocation() - can't create object with PID: "
                                         << child->PID() << std::endl;
                         return nullptr;
                     }

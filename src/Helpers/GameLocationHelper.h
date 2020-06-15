@@ -2,6 +2,7 @@
 
 #include <memory>
 #include <string>
+#include "../ILogger.h"
 
 namespace Falltergeist
 {
@@ -14,9 +15,12 @@ namespace Falltergeist
         class GameLocationHelper
         {
             public:
-                GameLocationHelper() = default;
+                GameLocationHelper(std::shared_ptr<ILogger> logger);
                 std::shared_ptr<Game::Location> getByName(const std::string& name) const;
                 std::shared_ptr<Game::Location> getInitialLocation() const;
+
+            private:
+                std::shared_ptr<ILogger> logger;
         };
     }
 }

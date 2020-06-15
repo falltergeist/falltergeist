@@ -10,6 +10,8 @@ namespace Falltergeist
 {
     namespace Graphics
     {
+        using Game::Game;
+
         TextArea::TextArea()
         {
             if (Game::getInstance()->renderer()->renderPath() == Renderer::RenderPath::OGL32)

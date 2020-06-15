@@ -12,7 +12,7 @@ namespace Falltergeist
 
         void Rectangle::render(bool eggTransparency)
         {
-            Game::getInstance()->renderer()->drawRect(position(),_size, _color);
+            Game::Game::getInstance()->renderer()->drawRect(position(),_size, _color);
         }
 
         bool Rectangle::opaque(unsigned int x, unsigned int y)

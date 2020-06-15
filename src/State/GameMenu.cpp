@@ -22,10 +22,11 @@ namespace Falltergeist
 
     namespace State
     {
-        GameMenu::GameMenu(std::shared_ptr<UI::IResourceManager> resourceManager) : State()
+        GameMenu::GameMenu(std::shared_ptr<UI::IResourceManager> resourceManager, std::shared_ptr<ILogger> logger) : State()
         {
-            this->resourceManager = resourceManager;
-            imageButtonFactory = std::make_unique<UI::Factory::ImageButtonFactory>(resourceManager);
+            this->resourceManager = std::move(resourceManager);
+            this->logger = std::move(logger);
+            imageButtonFactory = std::make_unique<UI::Factory::ImageButtonFactory>(this->resourceManager);
         }
 
         void GameMenu::init()
@@ -37,9 +38,9 @@ namespace Falltergeist
             setFullscreen(false);
 
             auto background = resourceManager->getImage("art/intrface/opbase.frm");
-            auto panelHeight = Game::getInstance()->locationState()->playerPanel()->size().height();
+            auto panelHeight = Game::Game::getInstance()->locationState()->playerPanel()->size().height();
 
-            auto backgroundPos = (Game::getInstance()->renderer()->size() - background->size() - Point(0, panelHeight)) / 2;
+            auto backgroundPos = (Game::Game::getInstance()->renderer()->size() - background->size() - Point(0, panelHeight)) / 2;
             int backgroundX = backgroundPos.x();
             int backgroundY = backgroundPos.y();
 
@@ -105,37 +106,37 @@ namespace Falltergeist
 
         void GameMenu::doSaveGame()
         {
-            Game::getInstance()->pushState(new SaveGame(resourceManager));
+            Game::Game::getInstance()->pushState(new SaveGame(resourceManager));
         }
 
         void GameMenu::doLoadGame()
         {
-            Game::getInstance()->pushState(new LoadGame(resourceManager));
+            Game::Game::getInstance()->pushState(new LoadGame(resourceManager));
         }
 
         void GameMenu::doPreferences()
         {
-            Game::getInstance()->pushState(new SettingsMenu(resourceManager));
+            Game::Game::getInstance()->pushState(new SettingsMenu(resourceManager));
         }
 
         void GameMenu::doExit()
         {
-            Game::getInstance()->pushState(new ExitConfirm(resourceManager));
+            Game::Game::getInstance()->pushState(new ExitConfirm(resourceManager, logger));
         }
 
         void GameMenu::closeMenu()
         {
-            Game::getInstance()->popState();
+            Game::Game::getInstance()->popState();
         }
 
         void GameMenu::onStateActivate(Event::State* event)
         {
-            Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::BIG_ARROW);
+            Game::Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::BIG_ARROW);
         }
 
         void GameMenu::onStateDeactivate(Event::State* event)
         {
-            Game::getInstance()->mouse()->popState();
+            Game::Game::getInstance()->mouse()->popState();
         }
 
         void GameMenu::onKeyDown(Event::Keyboard* event)

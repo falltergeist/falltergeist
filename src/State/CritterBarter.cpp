@@ -46,11 +46,11 @@ namespace Falltergeist
             setFullscreen(false);
             setModal(false);
 
-            setPosition((Game::getInstance()->renderer()->size() - Point(640, 480)) / 2 + Point(0, 291));
+            setPosition((Game::Game::getInstance()->renderer()->size() - Point(640, 480)) / 2 + Point(0, 291));
 
             addUI("background", resourceManager->getImage("art/intrface/barter.frm"));
 
-            auto dude = Game::getInstance()->player();
+            auto dude = Game::Game::getInstance()->player();
 
             Helpers::CritterHelper critterHelper;
             Graphics::CritterAnimationFactory animationFactory;
@@ -87,7 +87,7 @@ namespace Falltergeist
 
             auto mineList = new UI::ItemsList({ 104, 35 });
             mineList->setSlotsNumber(3);
-            mineList->setItems(Game::getInstance()->player()->inventory());
+            mineList->setItems(Game::Game::getInstance()->player()->inventory());
             addUI("mineList", mineList);
 
             auto mineInventoryScrollUpButton = imageButtonFactory->getByType(ImageButtonType::DIALOG_UP_ARROW, {190, 56});
@@ -176,7 +176,7 @@ namespace Falltergeist
             dynamic_cast<UI::TextArea*>(getUI("buyPriceText"))->setText("$0");
 
             _itemsToSell.clear();
-            dynamic_cast<UI::ItemsList*>(getUI("mineList"))->setItems(Game::getInstance()->player()->inventory());
+            dynamic_cast<UI::ItemsList*>(getUI("mineList"))->setItems(Game::Game::getInstance()->player()->inventory());
             dynamic_cast<UI::ItemsList*>(getUI("sellList"))->setItems(&_itemsToSell);
 
             _itemsToBuy.clear();
@@ -201,7 +201,7 @@ namespace Falltergeist
                         _trader->inventory()->push_back(v);
 
                     for (const auto &v : _itemsToBuy)
-                        Game::getInstance()->player()->inventory()->push_back(v);
+                        Game::Game::getInstance()->player()->inventory()->push_back(v);
 
                     resetTransaction();
 
@@ -215,7 +215,7 @@ namespace Falltergeist
 
         void CritterBarter::onTalkButtonClick(Event::Mouse*)
         {
-            if (auto interact = dynamic_cast<CritterInteract*>(Game::getInstance()->topState(1))) {
+            if (auto interact = dynamic_cast<CritterInteract*>(Game::Game::getInstance()->topState(1))) {
                 interact->switchSubState(CritterInteract::SubState::DIALOG);
             }
         }
@@ -233,7 +233,7 @@ namespace Falltergeist
         void CritterBarter::onStateDeactivate(Event::State*)
         {
             for (const auto &v : _itemsToSell)
-                Game::getInstance()->player()->inventory()->push_back(v);
+                Game::Game::getInstance()->player()->inventory()->push_back(v);
 
             for (const auto &v : _itemsToBuy)
                 _trader->inventory()->push_back(v);

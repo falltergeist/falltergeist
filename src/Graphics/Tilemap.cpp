@@ -11,6 +11,8 @@ namespace Falltergeist
 {
     namespace Graphics
     {
+        using Game::Game;
+
         Tilemap::Tilemap(std::vector<glm::vec2> coords, std::vector<glm::vec2> textureCoords)
         {
             if (Game::getInstance()->renderer()->renderPath() == Renderer::RenderPath::OGL32)

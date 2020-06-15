@@ -72,7 +72,7 @@ namespace Falltergeist
             };
         }
 
-        return "[UNKOWN]";
+        return "[UNKNOWN]";
     }
 
     std::ostream &Logger::debug(const std::string &subsystem)
@@ -98,6 +98,31 @@ namespace Falltergeist
     std::ostream &Logger::critical(const std::string &subsystem)
     {
         return log(Logger::Level::LOG_CRITICAL, subsystem);
+    }
+
+    std::ostream& Logger::debug()
+    {
+        return log(Logger::Level::LOG_DEBUG, "");
+    }
+
+    std::ostream& Logger::info()
+    {
+        return log(Logger::Level::LOG_INFO, "");
+    }
+
+    std::ostream& Logger::warning()
+    {
+        return log(Logger::Level::LOG_WARNING, "");
+    }
+
+    std::ostream& Logger::error()
+    {
+        return log(Logger::Level::LOG_ERROR, "");
+    }
+
+    std::ostream& Logger::critical()
+    {
+        return log(Logger::Level::LOG_CRITICAL, "");
     }
 
     void Logger::useColors(bool useColors)
@@ -131,7 +156,7 @@ namespace Falltergeist
         }
         else
         {
-            warning() << "Unknown level " << level << " ignored";
+            warning("") << "Unknown level " << level << " ignored";
             return;
         }
 

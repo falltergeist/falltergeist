@@ -25,12 +25,12 @@ namespace Falltergeist
 {
     namespace Game
     {
-        ObjectFactory* ObjectFactory::getInstance()
+        ObjectFactory::ObjectFactory(std::shared_ptr<ILogger> logger)
         {
-            return Base::Singleton<ObjectFactory>::get();
+            this->logger = std::move(logger);
         }
 
-        Object* ObjectFactory::createObject(unsigned int PID)
+        Object* ObjectFactory::createObjectByPID(unsigned int PID)
         {
             auto proto = ResourceManager::getInstance()->proFileType(PID);
             Object* object = 0;
@@ -158,7 +158,7 @@ namespace Falltergeist
                     {
                         case SCENERY_TYPE::DOOR:
                         {
-                            object = new DoorSceneryObject();
+                            object = new DoorSceneryObject(logger);
                             break;
                         }
                         case SCENERY_TYPE::ELEVATOR:

@@ -33,13 +33,13 @@ namespace Falltergeist
             setModal(true);
             setFullscreen(false);
 
-            auto game = Game::getInstance();
+            auto game = Game::Game::getInstance();
 
             setPosition((game->renderer()->size() - Point(537, 376)) / 2);
 
             addUI("background", resourceManager->getImage("art/intrface/loot.frm"));
 
-            auto dude = Game::getInstance()->player();
+            auto dude = Game::Game::getInstance()->player();
 
             Helpers::CritterHelper critterHelper;
             Graphics::CritterAnimationFactory animationFactory;
@@ -66,7 +66,7 @@ namespace Falltergeist
             auto scrollDown = [](UI::ItemsList *list) { if (list->canScrollDown()) list->scrollDown(); };
 
             auto dudeList = new UI::ItemsList({174, 35});
-            dudeList->setItems(Game::getInstance()->player()->inventory());
+            dudeList->setItems(Game::Game::getInstance()->player()->inventory());
             addUI(dudeList);
 
             auto dudeListScrollUpButton = imageButtonFactory->getByType(ImageButtonType::DIALOG_UP_ARROW, {127, 40});
@@ -117,24 +117,24 @@ namespace Falltergeist
 
         void Container::onDoneButtonClick(Event::Mouse*)
         {
-            Game::getInstance()->popState();
+            Game::Game::getInstance()->popState();
         }
 
         void Container::onStateActivate(Event::State*)
         {
-            Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::BIG_ARROW);
+            Game::Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::BIG_ARROW);
         }
 
         void Container::onStateDeactivate(Event::State*)
         {
-            Game::getInstance()->mouse()->popState();
+            Game::Game::getInstance()->mouse()->popState();
         }
 
         void Container::onKeyDown(Event::Keyboard* event)
         {
             if (event->keyCode() == SDLK_ESCAPE)
             {
-                Game::getInstance()->popState();
+                Game::Game::getInstance()->popState();
             }
         }
     }

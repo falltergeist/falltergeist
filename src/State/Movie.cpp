@@ -38,8 +38,8 @@ namespace Falltergeist
             setFullscreen(true);
             setModal(true);
 
-            Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::NONE);
-            auto renderer = Game::getInstance()->renderer();
+            Game::Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::NONE);
+            auto renderer = Game::Game::getInstance()->renderer();
             setPosition((renderer->size() - Point(640, 320)) / 2);
 
             auto lst = ResourceManager::getInstance()->lstFileType("data/movies.lst");
@@ -119,18 +119,18 @@ namespace Falltergeist
             {
                 if (_effects[_effect_index].direction < 0)
                 {
-                    Game::getInstance()->renderer()->fadeIn(_effects[_effect_index].r, _effects[_effect_index].g, _effects[_effect_index].b, _effects[_effect_index].frames, true);
+                    Game::Game::getInstance()->renderer()->fadeIn(_effects[_effect_index].r, _effects[_effect_index].g, _effects[_effect_index].b, _effects[_effect_index].frames, true);
                 }
                 else
                 {
-                    Game::getInstance()->renderer()->fadeOut(_effects[_effect_index].r, _effects[_effect_index].g, _effects[_effect_index].b, _effects[_effect_index].frames, true);
+                    Game::Game::getInstance()->renderer()->fadeOut(_effects[_effect_index].r, _effects[_effect_index].g, _effects[_effect_index].b, _effects[_effect_index].frames, true);
                 }
                 _effect_index++;
             }
 
             if (!_started)
             {
-                Game::getInstance()->mixer()->playMovieMusic(dynamic_cast<UI::MvePlayer*>(getUI("movie")));
+                Game::Game::getInstance()->mixer()->playMovieMusic(dynamic_cast<UI::MvePlayer*>(getUI("movie")));
                 _started = true;
             }
             if ((dynamic_cast<UI::MvePlayer*>(getUI("movie")))->finished())
@@ -161,17 +161,17 @@ namespace Falltergeist
 
         void Movie::onVideoFinished()
         {
-            Game::getInstance()->mixer()->stopMusic();
-            Game::getInstance()->mouse()->popState();
+            Game::Game::getInstance()->mixer()->stopMusic();
+            Game::Game::getInstance()->mouse()->popState();
 
             // without this the location will be absolutely dark if you didn't interrupted movie play
-            if (Game::getInstance()->locationState())
+            if (Game::Game::getInstance()->locationState())
             {
                 fadeDoneHandler().clear();
-                Game::getInstance()->renderer()->fadeIn(255, 255, 255, 500);
+                Game::Game::getInstance()->renderer()->fadeIn(255, 255, 255, 500);
             }
 
-            Game::getInstance()->popState();
+            Game::Game::getInstance()->popState();
         }
     }
 }

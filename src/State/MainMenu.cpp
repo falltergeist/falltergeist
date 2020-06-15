@@ -25,15 +25,16 @@ namespace Falltergeist
 
     namespace State
     {
-        MainMenu::MainMenu(std::shared_ptr<UI::IResourceManager> resourceManager) : State()
+        MainMenu::MainMenu(std::shared_ptr<UI::IResourceManager> resourceManager, std::shared_ptr<ILogger> logger) : State()
         {
-            this->resourceManager = resourceManager;
-            imageButtonFactory = std::make_unique<UI::Factory::ImageButtonFactory>(resourceManager);
+            this->resourceManager = std::move(resourceManager);
+            this->logger = std::move(logger);
+            imageButtonFactory = std::make_unique<UI::Factory::ImageButtonFactory>(this->resourceManager);
         }
 
         MainMenu::~MainMenu()
         {
-            Game::getInstance()->mixer()->stopMusic();
+            Game::Game::getInstance()->mixer()->stopMusic();
         }
 
         void MainMenu::init()
@@ -44,7 +45,7 @@ namespace Falltergeist
             setModal(true);
             setFullscreen(true);
 
-            auto renderer = Game::getInstance()->renderer();
+            auto renderer = Game::Game::getInstance()->renderer();
             setPosition((renderer->size() - Point(640, 480)) / 2);
 
             addUI("background", resourceManager->getImage("art/intrface/mainmenu.frm"));
@@ -125,40 +126,40 @@ namespace Falltergeist
         {
             fadeDoneHandler().clear();
             fadeDoneHandler().add([this](Event::Event* event){ this->onExitStart(dynamic_cast<Event::State*>(event)); });
-            Game::getInstance()->renderer()->fadeOut(0,0,0,1000);
+            Game::Game::getInstance()->renderer()->fadeOut(0,0,0,1000);
         }
 
         void MainMenu::doNewGame()
         {
             fadeDoneHandler().clear();
             fadeDoneHandler().add([this](Event::Event* event){ this->onNewGameStart(dynamic_cast<Event::State*>(event)); });
-            Game::getInstance()->renderer()->fadeOut(0,0,0,1000);
+            Game::Game::getInstance()->renderer()->fadeOut(0,0,0,1000);
         }
 
         void MainMenu::doLoadGame()
         {
             fadeDoneHandler().clear();
             fadeDoneHandler().add([this](Event::Event* event){ this->onLoadGameStart(dynamic_cast<Event::State*>(event)); });
-            Game::getInstance()->renderer()->fadeOut(0,0,0,1000);
+            Game::Game::getInstance()->renderer()->fadeOut(0,0,0,1000);
         }
 
         void MainMenu::doSettings()
         {
-            Game::getInstance()->pushState(new SettingsMenu(resourceManager));
+            Game::Game::getInstance()->pushState(new SettingsMenu(resourceManager));
         }
 
         void MainMenu::doIntro()
         {
             fadeDoneHandler().clear();
             fadeDoneHandler().add([this](Event::Event* event){ this->onIntroStart(dynamic_cast<Event::State*>(event)); });
-            Game::getInstance()->renderer()->fadeOut(0,0,0,1000);
+            Game::Game::getInstance()->renderer()->fadeOut(0,0,0,1000);
         }
 
         void MainMenu::doCredits()
         {
             fadeDoneHandler().clear();
             fadeDoneHandler().add([this](Event::Event* event){ this->onCreditsStart(dynamic_cast<Event::State*>(event)); });
-            Game::getInstance()->renderer()->fadeOut(0,0,0,1000);
+            Game::Game::getInstance()->renderer()->fadeOut(0,0,0,1000);
         }
 
         void MainMenu::onExitButtonClick(Event::Mouse* event)
@@ -169,8 +170,8 @@ namespace Falltergeist
         void MainMenu::onExitStart(Event::State* event)
         {
             fadeDoneHandler().clear();
-            Game::getInstance()->mixer()->stopMusic();
-            Game::getInstance()->quit();
+            Game::Game::getInstance()->mixer()->stopMusic();
+            Game::Game::getInstance()->quit();
         }
 
         void MainMenu::onNewGameButtonClick(Event::Mouse* event)
@@ -181,7 +182,7 @@ namespace Falltergeist
         void MainMenu::onNewGameStart(Event::State* event)
         {
             fadeDoneHandler().clear();
-            Game::getInstance()->pushState(new NewGame(resourceManager));
+            Game::Game::getInstance()->pushState(new NewGame(resourceManager, logger));
         }
 
         void MainMenu::onLoadGameButtonClick(Event::Mouse* event)
@@ -192,7 +193,7 @@ namespace Falltergeist
         void MainMenu::onLoadGameStart(Event::State* event)
         {
             fadeDoneHandler().clear();
-            Game::getInstance()->pushState(new LoadGame(resourceManager));
+            Game::Game::getInstance()->pushState(new LoadGame(resourceManager));
         }
 
         void MainMenu::onSettingsButtonClick(Event::Mouse* event)
@@ -208,8 +209,8 @@ namespace Falltergeist
         void MainMenu::onIntroStart(Event::State* event)
         {
             fadeDoneHandler().clear();
-            Game::getInstance()->pushState(new Movie(17));
-            Game::getInstance()->pushState(new Movie(1));
+            Game::Game::getInstance()->pushState(new Movie(17));
+            Game::Game::getInstance()->pushState(new Movie(1));
         }
 
         void MainMenu::onCreditsButtonClick(Event::Mouse* event)
@@ -220,7 +221,7 @@ namespace Falltergeist
         void MainMenu::onCreditsStart(Event::State* event)
         {
             fadeDoneHandler().clear();
-            Game::getInstance()->pushState(new Credits());
+            Game::Game::getInstance()->pushState(new Credits());
         }
 
         void MainMenu::onKeyDown(Event::Keyboard* event)
@@ -251,9 +252,9 @@ namespace Falltergeist
 
         void MainMenu::onStateActivate(Event::State* event)
         {
-            Game::getInstance()->mouse()->setState(Input::Mouse::Cursor::BIG_ARROW);
-            Game::getInstance()->mixer()->playACMMusic("07desert.acm",true);
-            Game::getInstance()->renderer()->fadeIn(0,0,0,1000);
+            Game::Game::getInstance()->mouse()->setState(Input::Mouse::Cursor::BIG_ARROW);
+            Game::Game::getInstance()->mixer()->playACMMusic("07desert.acm",true);
+            Game::Game::getInstance()->renderer()->fadeIn(0,0,0,1000);
         }
     }
 }

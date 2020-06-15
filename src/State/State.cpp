@@ -12,7 +12,7 @@ namespace Falltergeist
 {
     namespace State
     {
-        State::State() : Event::EventTarget(Game::getInstance()->eventDispatcher())
+        State::State() : Event::EventTarget(Game::Game::getInstance()->eventDispatcher())
         {
             activateHandler().add([this](Event::State* event) {
                 this->onStateActivate(event);
@@ -247,9 +247,9 @@ namespace Falltergeist
             });
 
             if (in) {
-                Game::getInstance()->renderer()->fadeIn(0, 0, 0, 1000);
+                Game::Game::getInstance()->renderer()->fadeIn(0, 0, 0, 1000);
             } else {
-                Game::getInstance()->renderer()->fadeOut(0, 0, 0, 1000);
+                Game::Game::getInstance()->renderer()->fadeOut(0, 0, 0, 1000);
             }
         }
     }

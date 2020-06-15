@@ -46,8 +46,8 @@ namespace Falltergeist
                         _offset.setX(ofs.x());
                         _value = ((maxValue() - minValue()) / 218.f) * (float)_offset.x();
                         emitEvent(std::make_unique<Event::Event>("change"), changeHandler());
-                        Game::getInstance()->mixer()->playACMSound(_downSound);
-                        Game::getInstance()->mixer()->playACMSound(_upSound);
+                        Game::Game::getInstance()->mixer()->playACMSound(_downSound);
+                        Game::Game::getInstance()->mixer()->playACMSound(_upSound);
                         return;
                     }
                 }
@@ -73,7 +73,7 @@ namespace Falltergeist
             auto sender = dynamic_cast<Slider*>(event->target());
             if (!sender->_downSound.empty())
             {
-                Game::getInstance()->mixer()->playACMSound(sender->_downSound);
+                Game::Game::getInstance()->mixer()->playACMSound(sender->_downSound);
             }
         }
 
@@ -82,7 +82,7 @@ namespace Falltergeist
             auto sender = dynamic_cast<Slider*>(event->target());
             if (!sender->_upSound.empty())
             {
-                Game::getInstance()->mixer()->playACMSound(sender->_upSound);
+                Game::Game::getInstance()->mixer()->playACMSound(sender->_upSound);
             }
         }
 

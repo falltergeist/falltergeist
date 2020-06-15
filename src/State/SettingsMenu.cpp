@@ -35,13 +35,13 @@ namespace Falltergeist
 
             // background
             auto background = resourceManager->getImage("art/intrface/prefscrn.frm");
-            Point backgroundPos = Point((Game::getInstance()->renderer()->size() - background->size()) / 2);
+            Point backgroundPos = Point((Game::Game::getInstance()->renderer()->size() - background->size()) / 2);
             int backgroundX = backgroundPos.x();
             int backgroundY = backgroundPos.y();
             background->setPosition(backgroundPos);
             addUI(background);
 
-            auto settings = Game::getInstance()->settings();
+            auto settings = Game::Game::getInstance()->settings();
 
             // Switches (big)
             auto combatDifficultySwitch = new UI::MultistateImageButton(UI::MultistateImageButton::Type::BIG_SWITCH, {backgroundX + 76, backgroundY + 149});
@@ -347,7 +347,7 @@ namespace Falltergeist
             addUI("music_volume", musicVolumeSlider);
             musicVolumeSlider->changeHandler().add([=](Event::Event* evt)
             {
-                Game::getInstance()->mixer()->setMusicVolume(musicVolumeSlider->value());
+                Game::Game::getInstance()->mixer()->setMusicVolume(musicVolumeSlider->value());
             });
 
             // SOUND EFFECTS VOLUME SLIDER
@@ -441,12 +441,12 @@ namespace Falltergeist
         void SettingsMenu::doCancel()
         {
             // TODO: restore volume and mouse sensitivity
-            Game::getInstance()->popState();
+            Game::Game::getInstance()->popState();
         }
 
         void SettingsMenu::doSave()
         {
-            auto settings = Game::getInstance()->settings();
+            auto settings = Game::Game::getInstance()->settings();
             // TODO: remove C-style casts
             settings->setCombatDifficulty(((UI::MultistateImageButton*)getUI("combat_difficulty"))->state());
             settings->setGameDifficulty(((UI::MultistateImageButton*)getUI("game_difficulty"))->state());
@@ -473,7 +473,7 @@ namespace Falltergeist
             settings->setPlayerSpeedup(((UI::ImageButton*)getUI("player_speedup"))->checked());
 
             settings->save();
-            Game::getInstance()->popState();
+            Game::Game::getInstance()->popState();
         }
 
         void SettingsMenu::onDefaultButtonClick(Event::Mouse* event)
@@ -495,12 +495,12 @@ namespace Falltergeist
 
         void SettingsMenu::onStateActivate(Event::State* event)
         {
-            Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::BIG_ARROW);
+            Game::Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::BIG_ARROW);
         }
 
         void SettingsMenu::onStateDeactivate(Event::State* event)
         {
-            Game::getInstance()->mouse()->popState();
+            Game::Game::getInstance()->mouse()->popState();
         }
     }
 }

@@ -30,7 +30,7 @@ namespace Falltergeist
             setFullscreen(false);
             setModal(true);
 
-            Point backgroundPos = Point((Game::getInstance()->renderer()->size() - Point(640, 480)) / 2);
+            Point backgroundPos = Point((Game::Game::getInstance()->renderer()->size() - Point(640, 480)) / 2);
             int backgroundX = backgroundPos.x();
             int backgroundY = backgroundPos.y();
 
@@ -57,7 +57,7 @@ namespace Falltergeist
             doneLabel->setFont("font3.aaf", {0xb8, 0x9c, 0x28, 0xff});
 
             _counter = new UI::BigCounter({backgroundX + 215, backgroundY + 13});
-            _counter->setNumber(Game::getInstance()->player()->age());
+            _counter->setNumber(Game::Game::getInstance()->player()->age());
 
             addUI(bg);
             addUI(ageBox);
@@ -87,7 +87,7 @@ namespace Falltergeist
 
         void PlayerEditAge::doBack()
         {
-            Game::getInstance()->popState();
+            Game::Game::getInstance()->popState();
         }
 
         void PlayerEditAge::doDec()
@@ -102,8 +102,8 @@ namespace Falltergeist
 
         void PlayerEditAge::doDone()
         {
-            Game::getInstance()->player()->setAge(_counter->number());
-            Game::getInstance()->popState();
+            Game::Game::getInstance()->player()->setAge(_counter->number());
+            Game::Game::getInstance()->popState();
         }
 
         void PlayerEditAge::doInc()

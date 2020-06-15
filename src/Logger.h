@@ -4,13 +4,14 @@
 #include <iostream>
 #include "Graphics/Point.h"
 #include "Graphics/Size.h"
+#include "ILogger.h"
 
 namespace Falltergeist
 {
     using Graphics::Point;
     using Graphics::Size;
 
-    class Logger
+    class Logger final : public ILogger
     {
         public:
             enum class Level
@@ -36,6 +37,12 @@ namespace Falltergeist
             static std::ostream &warning(const std::string &subsystem = "");
             static std::ostream &error(const std::string &subsystem = "");
             static std::ostream &critical(const std::string &subsystem = "");
+
+            std::ostream& debug() override;
+            std::ostream& info() override;
+            std::ostream& warning() override;
+            std::ostream& error() override;
+            std::ostream& critical() override;
 
         private:
             static Level _level;

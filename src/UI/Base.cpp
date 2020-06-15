@@ -20,7 +20,7 @@ namespace Falltergeist
         {
         }
 
-        Base::Base(const Point& pos) : Event::EventTarget(Game::getInstance()->eventDispatcher())
+        Base::Base(const Point& pos) : Event::EventTarget(Game::Game::getInstance()->eventDispatcher())
         {
             _position = pos;
         }

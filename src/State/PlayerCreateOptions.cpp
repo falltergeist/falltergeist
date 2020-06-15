@@ -36,7 +36,7 @@ namespace Falltergeist
 
             auto background = resourceManager->getImage("art/intrface/opbase.frm");
 
-            Point backgroundPos = Point((Game::getInstance()->renderer()->size() - background->size()) / 2);
+            Point backgroundPos = Point((Game::Game::getInstance()->renderer()->size() - background->size()) / 2);
             int backgroundX = backgroundPos.x();
             int backgroundY = backgroundPos.y();
 
@@ -124,7 +124,7 @@ namespace Falltergeist
 
         void PlayerCreateOptions::onDoneButtonClick(Event::Mouse* event)
         {
-            Game::getInstance()->popState();
+            Game::Game::getInstance()->popState();
         }
 
         void PlayerCreateOptions::onKeyDown(Event::Keyboard* event)
@@ -134,7 +134,7 @@ namespace Falltergeist
                 case SDLK_ESCAPE:
                 case SDLK_RETURN:
                 case SDLK_d:
-                    Game::getInstance()->popState();
+                    Game::Game::getInstance()->popState();
                     break;
             }
         }

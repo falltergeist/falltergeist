@@ -14,7 +14,7 @@ namespace Falltergeist
             const auto baseId = FID & 0x00000FFF;
             auto lst = ResourceManager::getInstance()->lstFileType("art/critters/critters.lst");
             if (baseId >= lst->strings()->size()) {
-                Logger::error() << "CritterAnimationHelper::getPrefix - LST size: " << lst->strings()->size() << " <= baseId: " << baseId << " frmType: " << std::endl;
+                Logger::error("") << "CritterAnimationHelper::getPrefix - LST size: " << lst->strings()->size() << " <= baseId: " << baseId << " frmType: " << std::endl;
                 return "";
             }
             return lst->strings()->at(baseId).erase(6);

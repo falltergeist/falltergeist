@@ -16,7 +16,6 @@
 #include "../Graphics/Renderer.h"
 #include "../Graphics/RendererConfig.h"
 #include "../Input/Mouse.h"
-#include "../Logger.h"
 #include "../ResourceManager.h"
 #include "../Settings.h"
 #include "../State/State.h"
@@ -28,20 +27,31 @@ namespace Falltergeist
 {
     namespace Game
     {
-        using namespace Base;
-
-        Game* getInstance()
-        {
-            return ::Falltergeist::Game::Game::getInstance();
-        }
+        Game* Game::_instance = nullptr;
 
         Game::Game()
         {
         }
 
+        Game::Game(std::shared_ptr<ILogger> logger)
+        {
+            this->logger = std::move(logger);
+        }
+
         Game* Game::getInstance()
         {
-            return Base::Singleton<Game>::get();
+            if (_instance == nullptr) {
+                _instance = new Game();
+            }
+            return _instance;
+        }
+
+        Game* Game::getInstance(std::shared_ptr<ILogger> logger)
+        {
+            if (_instance == nullptr) {
+                _instance = new Game(logger);
+            }
+            return _instance;
         }
 
         void Game::init(std::unique_ptr<Settings> settings)
@@ -55,10 +65,13 @@ namespace Falltergeist
 
             _eventDispatcher = std::make_unique<Event::Dispatcher>();
 
-            _renderer = std::make_shared<Graphics::Renderer>(createRendererConfigFromSettings());
+            _renderer = std::make_shared<Graphics::Renderer>(
+                createRendererConfigFromSettings(),
+                logger
+            );
 
-            Logger::info("GAME") << CrossPlatform::getVersion() << std::endl;
-            Logger::info("GAME") << "Opensource Fallout 2 game engine" << std::endl;
+            logger->info() << "[GAME] " << CrossPlatform::getVersion() << std::endl;
+            logger->info() << "[GAME] Opensource Fallout 2 game engine" << std::endl;
 
             SDL_setenv("SDL_VIDEO_CENTERED", "1", 1);
 
@@ -70,14 +83,14 @@ namespace Falltergeist
             std::string version = CrossPlatform::getVersion();
             renderer()->setCaption(version.c_str());
 
-            _mixer = std::make_shared<Audio::Mixer>();
+            _mixer = std::make_shared<Audio::Mixer>(logger);
             _mixer->setMusicVolume(_settings->musicVolume());
             _mouse = std::make_shared<Input::Mouse>(uiResourceManager);
             _fpsCounter = std::make_unique<UI::FpsCounter>(Point(renderer()->width() - 42, 2));
             _fpsCounter->setWidth(42);
             _fpsCounter->setHorizontalAlign(UI::TextArea::HorizontalAlign::RIGHT);
 
-            version += " " + to_string(renderer()->size());
+            version += " " + std::to_string(renderer()->size().width()) + "x" + std::to_string(renderer()->size().height());
 
             _falltergeistVersion = std::make_unique<UI::TextArea>(version, 3, renderer()->height() - 10);
             _mousePosition = std::make_unique<UI::TextArea>("", renderer()->width() - 55, 14);
@@ -150,7 +163,7 @@ namespace Falltergeist
 
         void Game::run()
         {
-            Logger::info("GAME") << "Starting main loop" << std::endl;
+            logger->info() << "[GAME] Starting main loop" << std::endl;
             _frame = 0;
 
             uint32_t FPS = 60;
@@ -173,7 +186,7 @@ namespace Falltergeist
                     frameTime += (frameDelay - frameTime);
                 }
             }
-            Logger::info("GAME") << "Stopping main loop" << std::endl;
+            logger->info() << "[GAME] Stopping main loop" << std::endl;
         }
 
         void Game::quit()
@@ -463,6 +476,11 @@ namespace Falltergeist
         Event::Dispatcher* Game::eventDispatcher()
         {
             return _eventDispatcher.get();
+        }
+
+        std::shared_ptr<ILogger> Game::getLogger() const
+        {
+            return logger;
         }
 
         unsigned int Game::frame() const

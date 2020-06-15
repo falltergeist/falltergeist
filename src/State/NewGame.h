@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include "../ILogger.h"
 #include "../State/State.h"
 #include "../UI/IResourceManager.h"
 
@@ -22,7 +23,7 @@ namespace Falltergeist
         class NewGame final : public State
         {
             public:
-                NewGame(std::shared_ptr<UI::IResourceManager> resourceManager);
+                NewGame(std::shared_ptr<UI::IResourceManager> resourceManager, std::shared_ptr<ILogger> logger);
                 virtual ~NewGame() = default;
 
                 void init() override;
@@ -43,13 +44,13 @@ namespace Falltergeist
                 void doPrev();
                 void onKeyDown(Event::Keyboard* event) override;
 
-            protected:
+            private:
                 unsigned char _selectedCharacter = 0;
                 std::vector<std::unique_ptr<Game::DudeObject>> _characters;
 
                 void _changeCharacter();
 
-            private:
+                std::shared_ptr<ILogger> logger;
                 std::shared_ptr<UI::IResourceManager> resourceManager;
                 std::unique_ptr<UI::Factory::ImageButtonFactory> imageButtonFactory;
         };

@@ -1,9 +1,11 @@
 #pragma once
 
 #include <cstdint>
+#include <memory>
 #include <string>
 #include <unordered_map>
 #include <SDL_mixer.h>
+#include "../ILogger.h"
 
 namespace Falltergeist
 {
@@ -16,7 +18,7 @@ namespace Falltergeist
         class Mixer
         {
             public:
-                Mixer();
+                Mixer(std::shared_ptr<ILogger> logger);
                 ~Mixer();
                 void stopMusic();
                 void stopSounds();
@@ -49,6 +51,7 @@ namespace Falltergeist
                 double _musicVolume = 1.0;
                 SDL_AudioFormat _format;
                 std::string _lastMusic = "";
+                std::shared_ptr<ILogger> logger;
         };
     }
 }
