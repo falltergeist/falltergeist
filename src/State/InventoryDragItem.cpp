@@ -50,7 +50,7 @@ namespace Falltergeist
                     _itemUi->setCurrentImage(0);
                     //_itemUi->setX(100 - _itemUi->width()*0.5);
                     //_itemUi->setY(115 - _itemUi->height()*0.5);
-                    Game::getInstance()->popState();
+                    Game::Game::getInstance()->popState();
                 }
             }
         }

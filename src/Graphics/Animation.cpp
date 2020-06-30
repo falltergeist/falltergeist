@@ -10,6 +10,8 @@ namespace Falltergeist
 {
     namespace Graphics
     {
+        using Game::Game;
+
         Animation::Animation(const std::string &filename)
         {
             // create buffers

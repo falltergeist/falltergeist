@@ -36,8 +36,8 @@ namespace Falltergeist
             setModal(true);
             setFullscreen(true);
 
-            Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::NONE);
-            auto renderer = Game::getInstance()->renderer();
+            Game::Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::NONE);
+            auto renderer = Game::Game::getInstance()->renderer();
             setPosition(Point((renderer->size().width() - 640) / 2, renderer->size().height()));
 
             auto credits = ResourceManager::getInstance()->miscFileType("text/english/credits.txt");
@@ -141,19 +141,19 @@ namespace Falltergeist
         {
             fadeDoneHandler().clear();
             fadeDoneHandler().add([this](Event::Event* event){ this->onCreditsFadeDone(dynamic_cast<Event::State*>(event)); });
-            Game::getInstance()->renderer()->fadeOut(0,0,0,1000);
+            Game::Game::getInstance()->renderer()->fadeOut(0,0,0,1000);
         }
 
         void Credits::onCreditsFadeDone(Event::State* event)
         {
             fadeDoneHandler().clear();
-            Game::getInstance()->mouse()->popState();
-            Game::getInstance()->popState();
+            Game::Game::getInstance()->mouse()->popState();
+            Game::Game::getInstance()->popState();
         }
 
         void Credits::onStateActivate(Event::State* event)
         {
-            Game::getInstance()->renderer()->fadeIn(0,0,0,1000);
+            Game::Game::getInstance()->renderer()->fadeIn(0,0,0,1000);
         }
     }
 }

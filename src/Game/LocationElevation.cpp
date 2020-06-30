@@ -5,10 +5,11 @@ namespace Falltergeist
 {
     namespace Game
     {
-        LocationElevation::LocationElevation()
+        LocationElevation::LocationElevation(std::shared_ptr<ILogger> logger)
         {
-            _roof = std::make_shared<UI::TileMap>();
-            _floor = std::make_shared<UI::TileMap>();
+            this->logger = std::move(logger);
+            _roof = std::make_shared<UI::TileMap>(this->logger);
+            _floor = std::make_shared<UI::TileMap>(this->logger);
         }
 
         LocationElevation::~LocationElevation()

@@ -2,6 +2,7 @@
 
 #include <memory>
 #include <vector>
+#include "../ILogger.h"
 
 namespace Falltergeist
 {
@@ -22,7 +23,7 @@ namespace Falltergeist
         class LocationElevation final
         {
             public:
-                LocationElevation();
+                LocationElevation(std::shared_ptr<ILogger> logger);
                 ~LocationElevation();
 
                 bool canRestHere() const;
@@ -33,7 +34,9 @@ namespace Falltergeist
 
                 std::vector<Object*>* objects();
 
-            protected:
+            private:
+                std::shared_ptr<ILogger> logger;
+
                 /**
                  * @brief Can player rest here?
                  * As defined by `can_rest_here` in MAPS.TXT

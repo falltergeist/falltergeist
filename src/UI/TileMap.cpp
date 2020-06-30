@@ -19,8 +19,9 @@ namespace  Falltergeist
 {
     namespace UI
     {
-        TileMap::TileMap()
+        TileMap::TileMap(std::shared_ptr<ILogger> logger)
         {
+            this->logger = std::move(logger);
         }
 
         TileMap::~TileMap()
@@ -34,11 +35,11 @@ namespace  Falltergeist
             std::vector<glm::vec2> vertices;
             std::vector<glm::vec2> UV;
 
-            uint32_t maxW = Game::getInstance()->renderer()->maxTextureSize() / 80;
-            uint32_t maxH = Game::getInstance()->renderer()->maxTextureSize() / 36;
+            uint32_t maxW = Game::Game::getInstance()->renderer()->maxTextureSize() / 80;
+            uint32_t maxH = Game::Game::getInstance()->renderer()->maxTextureSize() / 36;
             _tilesPerAtlas = maxW*maxH;
 
-            Logger::info("GAME") << "Tilemap tiles " << _tiles.size() << std::endl;
+            logger->info() << "[GAME] Tilemap tiles " << _tiles.size() << std::endl;
 
             for (auto& it : _tiles)
             {
@@ -82,13 +83,13 @@ namespace  Falltergeist
                 uint32_t tIndex = tile->index() % _tilesPerAtlas;
 
                 float x = (float)((tIndex % maxW) * 80);
-                float fx = x / (float)Game::getInstance()->renderer()->maxTextureSize();
+                float fx = x / (float)Game::Game::getInstance()->renderer()->maxTextureSize();
 
                 float y = (float)((tIndex / maxW) * 36);
-                float fy = y / (float)Game::getInstance()->renderer()->maxTextureSize();
+                float fy = y / (float)Game::Game::getInstance()->renderer()->maxTextureSize();
 
-                float w = static_cast<float>(x + 80.0) / Game::getInstance()->renderer()->maxTextureSize();
-                float h = static_cast<float>(y + 36.0) / Game::getInstance()->renderer()->maxTextureSize();
+                float w = static_cast<float>(x + 80.0) / Game::Game::getInstance()->renderer()->maxTextureSize();
+                float h = static_cast<float>(y + 36.0) / Game::Game::getInstance()->renderer()->maxTextureSize();
 
                 UV.push_back(glm::vec2(fx, fy));
                 UV.push_back(glm::vec2(w, fy));
@@ -99,16 +100,16 @@ namespace  Falltergeist
 
             _tilemap = std::make_unique<Graphics::Tilemap>(vertices, UV);
 
-            Logger::info("GAME") << "Tilemap uniq tiles " << numbers.size() << std::endl;
+            logger->info() << "[GAME] Tilemap uniq tiles " << numbers.size() << std::endl;
 
             _atlases = (uint32_t)std::ceil((float)numbers.size() / (float)_tilesPerAtlas);
-            Logger::info("GAME") << "Tilemap atlases " << _atlases << std::endl;
+            logger->info() << "[GAME] Tilemap atlases " << _atlases << std::endl;
 
             auto tilesLst = ResourceManager::getInstance()->lstFileType("art/tiles/tiles.lst");
 
             for (uint8_t i = 0; i < _atlases; i++)
             {
-                SDL_Surface* tmp = SDL_CreateRGBSurface(0, Game::getInstance()->renderer()->maxTextureSize(), Game::getInstance()->renderer()->maxTextureSize(), 32, 0xff000000, 0x00ff0000, 0x0000ff00, 0x000000ff);
+                SDL_Surface* tmp = SDL_CreateRGBSurface(0, Game::Game::getInstance()->renderer()->maxTextureSize(), Game::Game::getInstance()->renderer()->maxTextureSize(), 32, 0xff000000, 0x00ff0000, 0x0000ff00, 0x000000ff);
                 SDL_SetSurfaceBlendMode(tmp, SDL_BLENDMODE_NONE);
                 for (unsigned int j = _tilesPerAtlas*i; j < std::min((uint32_t)numbers.size(), (uint32_t)_tilesPerAtlas*(i + 1)); ++j)
                 {
@@ -132,7 +133,7 @@ namespace  Falltergeist
 
         void TileMap::render()
         {
-            auto camera = Game::getInstance()->locationState()->camera();
+            auto camera = Game::Game::getInstance()->locationState()->camera();
             std::vector<std::vector<GLuint>> indexes;
             for (uint8_t i = 0; i < _atlases; i++)
             {
@@ -216,7 +217,7 @@ namespace  Falltergeist
 
         bool TileMap::opaque(const Point &pos)
         {
-            auto camera = Game::getInstance()->locationState()->camera();
+            auto camera = Game::Game::getInstance()->locationState()->camera();
 
             auto tilesLst = ResourceManager::getInstance()->lstFileType("art/tiles/tiles.lst");
             for (auto& it : _tiles)

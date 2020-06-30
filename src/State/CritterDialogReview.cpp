@@ -32,7 +32,7 @@ namespace Falltergeist
             setModal(false);
 
             auto background = resourceManager->getImage("art/intrface/review.frm");
-            Point backgroundPos = Point((Game::getInstance()->renderer()->size() - background->size()) / 2);
+            Point backgroundPos = Point((Game::Game::getInstance()->renderer()->size() - background->size()) / 2);
             background->setPosition(backgroundPos);
 
             // Interface buttons
@@ -63,7 +63,7 @@ namespace Falltergeist
 
         void CritterDialogReview::onDoneButtonClick(Event::Mouse* event)
         {
-            if (auto interact = dynamic_cast<CritterInteract*>(Game::getInstance()->topState(1)))
+            if (auto interact = dynamic_cast<CritterInteract*>(Game::Game::getInstance()->topState(1)))
             {
                 interact->switchSubState(CritterInteract::SubState::DIALOG);
             }
@@ -92,7 +92,7 @@ namespace Falltergeist
             dudeName->setWidth(340);
             dudeName->setWordWrap(true);
             dudeName->setFont("font1.aaf", {0xa0,0xa0, 0xa0, 0xff});
-            dudeName->setText(Game::getInstance()->player()->name()+":");
+            dudeName->setText(Game::Game::getInstance()->player()->name()+":");
 
             auto answer = new UI::TextArea(0, 0);
             answer->setWidth(316);

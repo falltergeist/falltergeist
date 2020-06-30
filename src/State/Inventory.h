@@ -1,5 +1,6 @@
 #pragma once
 
+#include "../ILogger.h"
 #include "../State/State.h"
 #include "../UI/IResourceManager.h"
 
@@ -21,7 +22,7 @@ namespace Falltergeist
         class Inventory final : public State
         {
             public:
-                Inventory(std::shared_ptr<UI::IResourceManager> resourceManager);
+                Inventory(std::shared_ptr<UI::IResourceManager> resourceManager, std::shared_ptr<ILogger> logger);
                 Inventory(const Inventory&) = delete;
                 Inventory& operator=(const Inventory&) = delete;
                 ~Inventory() override = default;
@@ -44,6 +45,7 @@ namespace Falltergeist
                 void onInventoryModified();
 
             private:
+                std::shared_ptr<ILogger> logger;
                 std::string _handItemSummary (Game::ItemObject* hand);
                 std::shared_ptr<UI::IResourceManager> resourceManager;
                 std::unique_ptr<UI::Factory::ImageButtonFactory> imageButtonFactory;

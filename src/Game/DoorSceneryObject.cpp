@@ -12,8 +12,9 @@ namespace Falltergeist
 {
     namespace Game
     {
-        DoorSceneryObject::DoorSceneryObject() : SceneryObject()
+        DoorSceneryObject::DoorSceneryObject(std::shared_ptr<ILogger> logger) : SceneryObject()
         {
+            this->logger = std::move(logger);
             _subtype = Subtype::DOOR;
         }
 
@@ -84,7 +85,7 @@ namespace Falltergeist
             queue->stop();
             queue->currentAnimation()->setReverse(true);
             Game::getInstance()->locationState()->initLight();
-            Logger::info() << "Door opened: " << opened() << std::endl;
+            Logger::info("") << "Door opened: " << opened() << std::endl;
         }
 
         void DoorSceneryObject::onClosingAnimationEnded(Event::Event* event)
@@ -95,7 +96,7 @@ namespace Falltergeist
             queue->stop();
             queue->currentAnimation()->setReverse(false);
             Game::getInstance()->locationState()->initLight();
-            Logger::info() << "Door opened: " << opened() << std::endl;
+            Logger::info("") << "Door opened: " << opened() << std::endl;
         }
     }
 }

@@ -390,7 +390,7 @@ Pro::File* ResourceManager::proFileType(unsigned int PID)
             listFile += "proto/misc/misc.lst";
             break;
         default:
-            Logger::error() << "ResourceManager::proFileType(unsigned int) - wrong PID: " << PID << endl;
+            Logger::error("") << "ResourceManager::proFileType(unsigned int) - wrong PID: " << PID << endl;
             return nullptr;
     }
 
@@ -400,7 +400,7 @@ Pro::File* ResourceManager::proFileType(unsigned int PID)
 
     if (index > lst->strings()->size())
     {
-        Logger::error() << "ResourceManager::proFileType(unsigned int) - LST size < PID: " << PID << endl;
+        Logger::error("") << "ResourceManager::proFileType(unsigned int) - LST size < PID: " << PID << endl;
         return nullptr;
     }
 
@@ -488,7 +488,7 @@ string ResourceManager::FIDtoFrmName(unsigned int FID)
     auto lst = lstFileType(typeArtDescription.lstFilePath);
     if (baseId >= lst->strings()->size())
     {
-        Logger::error() << "ResourceManager::FIDtoFrmName(unsigned int) - LST size " << lst->strings()->size() << " <= frmID: " << baseId << " frmType: " << (unsigned)type << endl;
+        Logger::error("") << "ResourceManager::FIDtoFrmName(unsigned int) - LST size " << lst->strings()->size() << " <= frmID: " << baseId << " frmType: " << (unsigned)type << endl;
         return std::string();
     }
 

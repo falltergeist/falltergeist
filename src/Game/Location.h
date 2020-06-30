@@ -4,6 +4,7 @@
 #include <map>
 #include <string>
 #include <vector>
+#include "../ILogger.h"
 
 namespace Falltergeist
 {
@@ -32,7 +33,7 @@ namespace Falltergeist
         class Location final
         {
             public:
-                Location();
+                Location(std::shared_ptr<ILogger> logger);
                 ~Location();
 
                 void loadFromMapFile(Falltergeist::Format::Map::File *file);
@@ -74,7 +75,9 @@ namespace Falltergeist
 
                 std::shared_ptr<VM::Script> script() const;
 
-            protected:
+            private:
+                std::shared_ptr<ILogger> logger;
+
                 /**
                  * @brief Location name
                  * As defined by `lookup_name` in MAPS.TXT

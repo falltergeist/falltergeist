@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../Game/SceneryObject.h"
+#include "../ILogger.h"
 
 namespace Falltergeist
 {
@@ -17,7 +18,7 @@ namespace Falltergeist
         class DoorSceneryObject : public SceneryObject
         {
             public:
-                DoorSceneryObject();
+                DoorSceneryObject(std::shared_ptr<ILogger> logger);
                 ~DoorSceneryObject() = default;
 
                 bool opened() const;
@@ -33,7 +34,8 @@ namespace Falltergeist
                 void onOpeningAnimationEnded(Event::Event* event);
                 void onClosingAnimationEnded(Event::Event* event);
 
-            protected:
+            private:
+                std::shared_ptr<ILogger> logger;
                 bool _opened = false;
                 bool _locked = false;
         };

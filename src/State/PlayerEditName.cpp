@@ -31,7 +31,7 @@ namespace Falltergeist
             setFullscreen(false);
             setModal(true);
 
-            Point bgPos = Point((Game::getInstance()->renderer()->size() - Point(640, 480)) / 2);
+            Point bgPos = Point((Game::Game::getInstance()->renderer()->size() - Point(640, 480)) / 2);
             int bgX = bgPos.x();
             int bgY = bgPos.y();
 
@@ -87,7 +87,7 @@ namespace Falltergeist
             auto doneButton = imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {bgX + 45, bgY + 43});
             doneButton->mouseClickHandler().add(std::bind(&PlayerEditName::onDoneButtonClick, this, std::placeholders::_1));
 
-            _name = new UI::TextArea(Game::getInstance()->player()->name(), bgX+43, bgY+15);
+            _name = new UI::TextArea(Game::Game::getInstance()->player()->name(), bgX+43, bgY+15);
             _name->keyDownHandler().add([this](Event::Event* event){ this->onTextAreaKeyDown(dynamic_cast<Event::Keyboard*>(event)); });
 
             _cursor = new UI::Rectangle(bgPos + Point(83, 15) ,{5,8}, {0x3F, 0xF8, 0x00, 0xFF});
@@ -159,7 +159,7 @@ namespace Falltergeist
 
         void PlayerEditName::think(const float &deltaTime)
         {
-            int bgX = (Game::getInstance()->renderer()->width() - 640) / 2;
+            int bgX = (Game::Game::getInstance()->renderer()->width() - 640) / 2;
             State::think(deltaTime);
 
             _blinkingCursorMillisecondsTracked += deltaTime;
@@ -172,7 +172,7 @@ namespace Falltergeist
 
         void PlayerEditName::doBack()
         {
-            Game::getInstance()->popState();
+            Game::Game::getInstance()->popState();
         }
 
         void PlayerEditName::doDone()
@@ -180,9 +180,9 @@ namespace Falltergeist
             std::string text(_name->text());
             if (text.length() > 0)
             {
-                Game::getInstance()->player()->setName(text.c_str());
+                Game::Game::getInstance()->player()->setName(text.c_str());
             }
-            Game::getInstance()->popState();
+            Game::Game::getInstance()->popState();
         }
     }
 }

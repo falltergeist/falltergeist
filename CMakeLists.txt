@@ -105,3 +105,5 @@ endif()
 include(cmake/install/windows.cmake)
 include(cmake/install/linux.cmake)
 include(cmake/install/apple.cmake)
+
+include(CPack)

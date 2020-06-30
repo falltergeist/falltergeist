@@ -35,7 +35,7 @@ namespace Falltergeist
 
             auto bg = resourceManager->getImage("art/intrface/lgdialog.frm");
 
-            Point bgPos = Point((Game::getInstance()->renderer()->size() - Point(640, 480)) / 2);
+            Point bgPos = Point((Game::Game::getInstance()->renderer()->size() - Point(640, 480)) / 2);
             int bgX = bgPos.x();
             int bgY = bgPos.y();
 
@@ -68,7 +68,7 @@ namespace Falltergeist
 
         void PlayerEditAlert::onDoneButtonClick(Event::Mouse* event)
         {
-            Game::getInstance()->popState();
+            Game::Game::getInstance()->popState();
         }
     }
 }

@@ -39,7 +39,7 @@ namespace Falltergeist
             // original coordinates = 455x6
             // background size = 185x368
             auto background = resourceManager->getImage("art/intrface/skldxbox.frm");
-            Graphics::Size rendSize = Game::getInstance()->renderer()->size();
+            Graphics::Size rendSize = Game::Game::getInstance()->renderer()->size();
             auto backgroundX = (rendSize.width() + 640 - 2 * background->size().width()) / 2;
             auto backgroundY = (rendSize.height() - 480 + 6);
             background->setPosition({backgroundX, backgroundY});
@@ -74,28 +74,28 @@ namespace Falltergeist
 
             // counters
             auto sneakCounter    = new UI::BigCounter({backgroundX + 111, backgroundY + 48}, 3);
-            sneakCounter->setNumber(Game::getInstance()->player()->skillValue(SKILL::SNEAK));
+            sneakCounter->setNumber(Game::Game::getInstance()->player()->skillValue(SKILL::SNEAK));
 
             auto lockpickCounter = new UI::BigCounter({backgroundX + 111, backgroundY + 48 + 36}, 3);
-            lockpickCounter->setNumber(Game::getInstance()->player()->skillValue(SKILL::LOCKPICK));
+            lockpickCounter->setNumber(Game::Game::getInstance()->player()->skillValue(SKILL::LOCKPICK));
 
             auto stealCounter    = new UI::BigCounter({backgroundX + 111, backgroundY + 48 + 36 * 2}, 3);
-            stealCounter->setNumber(Game::getInstance()->player()->skillValue(SKILL::STEAL));
+            stealCounter->setNumber(Game::Game::getInstance()->player()->skillValue(SKILL::STEAL));
 
             auto trapsCounter    = new UI::BigCounter({backgroundX + 111, backgroundY + 48 + 36 * 3}, 3);
-            trapsCounter->setNumber(Game::getInstance()->player()->skillValue(SKILL::TRAPS));
+            trapsCounter->setNumber(Game::Game::getInstance()->player()->skillValue(SKILL::TRAPS));
 
             auto firstAidCounter = new UI::BigCounter({backgroundX + 111, backgroundY + 48 + 36 * 4}, 3);
-            firstAidCounter->setNumber(Game::getInstance()->player()->skillValue(SKILL::FIRST_AID));
+            firstAidCounter->setNumber(Game::Game::getInstance()->player()->skillValue(SKILL::FIRST_AID));
 
             auto doctorCounter   = new UI::BigCounter({backgroundX + 111, backgroundY + 48 + 36 * 5}, 3);
-            doctorCounter->setNumber(Game::getInstance()->player()->skillValue(SKILL::DOCTOR));
+            doctorCounter->setNumber(Game::Game::getInstance()->player()->skillValue(SKILL::DOCTOR));
 
             auto scienceCounter  = new UI::BigCounter({backgroundX + 111, backgroundY + 48 + 36 * 6}, 3);
-            scienceCounter->setNumber(Game::getInstance()->player()->skillValue(SKILL::SCIENCE));
+            scienceCounter->setNumber(Game::Game::getInstance()->player()->skillValue(SKILL::SCIENCE));
 
             auto repairCounter   = new UI::BigCounter({backgroundX + 111, backgroundY + 48 + 36 * 7}, 3);
-            repairCounter->setNumber(Game::getInstance()->player()->skillValue(SKILL::REPAIR));
+            repairCounter->setNumber(Game::Game::getInstance()->player()->skillValue(SKILL::REPAIR));
 
             // LABELS
             std::string font = "font3.aaf";
@@ -192,8 +192,8 @@ namespace Falltergeist
 
         void Skilldex::onCancelButtonClick()
         {
-            Game::getInstance()->mouse()->popState();
-            Game::getInstance()->popState();
+            Game::Game::getInstance()->mouse()->popState();
+            Game::Game::getInstance()->popState();
         }
 
         void Skilldex::onKeyDown(Event::Keyboard* event)
@@ -205,16 +205,16 @@ namespace Falltergeist
 
         void Skilldex::onStateActivate(Event::State* event)
         {
-            Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::BIG_ARROW);
+            Game::Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::BIG_ARROW);
         }
 
         void Skilldex::onSkillButtonClick(SKILL skill)
         {
-            Game::getInstance()->locationState()->setSkillInUse(skill);
-            auto mouse = Game::getInstance()->mouse();
+            Game::Game::getInstance()->locationState()->setSkillInUse(skill);
+            auto mouse = Game::Game::getInstance()->mouse();
             mouse->popState();
             mouse->setState(Input::Mouse::Cursor::USE);
-            Game::getInstance()->popState();
+            Game::Game::getInstance()->popState();
         }
     }
 }

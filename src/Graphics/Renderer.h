@@ -9,6 +9,7 @@
 #include "../Graphics/IRendererConfig.h"
 #include "../Graphics/Point.h"
 #include "../Graphics/Size.h"
+#include "../ILogger.h"
 
 namespace Falltergeist
 {
@@ -36,7 +37,7 @@ namespace Falltergeist
                     GLES2
                 };
 
-                Renderer(std::unique_ptr<IRendererConfig> rendererConfig);
+                Renderer(std::unique_ptr<IRendererConfig> rendererConfig, std::shared_ptr<ILogger> logger);
                 ~Renderer();
 
                 void init();
@@ -109,6 +110,7 @@ namespace Falltergeist
 
             private:
                 std::unique_ptr<IRendererConfig> _rendererConfig;
+                std::shared_ptr<ILogger> logger;
         };
     }
 }

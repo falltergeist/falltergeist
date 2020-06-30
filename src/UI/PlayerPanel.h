@@ -3,6 +3,7 @@
 #include <memory>
 #include <vector>
 #include "../UI/Base.h"
+#include "../ILogger.h"
 #include "../UI/ImageButton.h"
 
 namespace Falltergeist
@@ -24,7 +25,7 @@ namespace Falltergeist
         class PlayerPanel final : public UI::Base
         {
             public:
-                PlayerPanel();
+                PlayerPanel(std::shared_ptr<ILogger> logger);
                 ~PlayerPanel() override;
 
                 Size size() const override;
@@ -40,6 +41,7 @@ namespace Falltergeist
                 void playWindowOpenSfx();
 
             private:
+                std::shared_ptr<ILogger> logger;
                 std::shared_ptr<UI::IResourceManager> resourceManager;
                 std::unique_ptr<UI::Factory::ImageButtonFactory> imageButtonFactory;
 

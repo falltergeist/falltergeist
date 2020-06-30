@@ -39,11 +39,11 @@ namespace Falltergeist
             setModal(true);
             setFullscreen(true);
 
-            auto player = Game::getInstance()->player();
+            auto player = Game::Game::getInstance()->player();
 
             // background
             auto background = resourceManager->getImage("art/intrface/edtredt.frm");
-            Point backgroundPos = Point((Game::getInstance()->renderer()->size() - background->size()) / 2);
+            Point backgroundPos = Point((Game::Game::getInstance()->renderer()->size() - background->size()) / 2);
             int backgroundX = backgroundPos.x();
             int backgroundY = backgroundPos.y();
             background->setPosition(backgroundPos);
@@ -178,12 +178,12 @@ namespace Falltergeist
             _addLabel("print", new UI::TextArea(_t(MSG_EDITOR, 103), backgroundX+365, backgroundY+453))->setFont(font3_b89c28ff, color);
             _addLabel("next",  new UI::TextArea(_t(MSG_EDITOR, 100), backgroundX+473, backgroundY+453))->setFont(font3_b89c28ff, color);
             _addLabel("cancel",new UI::TextArea(_t(MSG_EDITOR, 102), backgroundX+571, backgroundY+453))->setFont(font3_b89c28ff, color);
-            auto label = _addLabel("name", new UI::TextArea(Game::getInstance()->player()->name(), backgroundX+17, backgroundY+7));
+            auto label = _addLabel("name", new UI::TextArea(Game::Game::getInstance()->player()->name(), backgroundX+17, backgroundY+7));
             label->setWidth(150);
             label->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
             label->setFont(font3_b89c28ff, color);
             _addLabel("age",     new UI::TextArea(_t(MSG_EDITOR, 104), backgroundX+163, backgroundY+7))->setFont(font3_b89c28ff, color);
-            _addLabel("gender",  new UI::TextArea(_t(MSG_EDITOR, Game::getInstance()->player()->gender() == GENDER::MALE ? 107 : 108), backgroundX+250, backgroundY+7))->setFont(font3_b89c28ff, color);
+            _addLabel("gender",  new UI::TextArea(_t(MSG_EDITOR, Game::Game::getInstance()->player()->gender() == GENDER::MALE ? 107 : 108), backgroundX+250, backgroundY+7))->setFont(font3_b89c28ff, color);
 
             _addLabel("label_1", new UI::TextArea(_t(MSG_EDITOR, 112), backgroundX+398, backgroundY+233))->setFont(font3_b89c28ff, color); // skill points on tag skills place!
             _addLabel("label_3", new UI::TextArea(_t(MSG_EDITOR, 117), backgroundX+383, backgroundY+5))->setFont(font3_b89c28ff, color);  // skills
@@ -405,7 +405,7 @@ namespace Falltergeist
         void PlayerEdit::think(const float &deltaTime)
         {
             State::think(deltaTime);
-            auto player = Game::getInstance()->player();
+            auto player = Game::Game::getInstance()->player();
 
             *_labels.at("name") = player->name();
             *_labels.at("age") = _t(MSG_EDITOR, 104) + " " + std::to_string(player->age());
@@ -620,12 +620,12 @@ namespace Falltergeist
 
         void PlayerEdit::doCancel()
         {
-            Game::getInstance()->popState();
+            Game::Game::getInstance()->popState();
         }
 
         void PlayerEdit::doDone()
         {
-            Game::getInstance()->popState();
+            Game::Game::getInstance()->popState();
         }
 
         void PlayerEdit::doPrint()
@@ -635,12 +635,12 @@ namespace Falltergeist
 
         void PlayerEdit::onStateActivate(Event::State* event)
         {
-            Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::BIG_ARROW);
+            Game::Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::BIG_ARROW);
         }
 
         void PlayerEdit::onStateDeactivate(Event::State* event)
         {
-            Game::getInstance()->mouse()->popState();
+            Game::Game::getInstance()->mouse()->popState();
         }
 
         void PlayerEdit::onKeyDown(Event::Keyboard* event)
@@ -665,7 +665,7 @@ namespace Falltergeist
         {
             State::render();
             auto background = getUI("bg");
-            Point backgroundPos = Point((Game::getInstance()->renderer()->size() - background->size()) / 2);
+            Point backgroundPos = Point((Game::Game::getInstance()->renderer()->size() - background->size()) / 2);
             _selectedImage->setPosition(backgroundPos + Point(480, 310));
             _selectedImage->render();
             _description->setPosition(backgroundPos + Point(350, 315));

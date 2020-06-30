@@ -14,7 +14,6 @@
 #include "../Graphics/Shader.h"
 #include "../Graphics/Texture.h"
 #include "../Input/Mouse.h"
-#include "../Logger.h"
 #include "../ResourceManager.h"
 #include "../Settings.h"
 #include "../State/State.h"
@@ -23,17 +22,20 @@ namespace Falltergeist
 {
     namespace Graphics
     {
-        Renderer::Renderer(std::unique_ptr<IRendererConfig> rendererConfig)
+        using Game::Game;
+
+        Renderer::Renderer(std::unique_ptr<IRendererConfig> rendererConfig, std::shared_ptr<ILogger> logger)
         {
             _rendererConfig = std::move(rendererConfig);
+            this->logger = std::move(logger);
 
             std::string message = "Renderer initialization - ";
             if (SDL_InitSubSystem(SDL_INIT_VIDEO) < 0)
             {
-                Logger::critical("VIDEO") << message + "[FAIL]" << std::endl;
+                logger->critical() << "[VIDEO] " << message + "[FAIL]" << std::endl;
                 throw Exception(SDL_GetError());
             }
-            Logger::info("VIDEO") << message + "[OK]" << std::endl;
+            this->logger->info() << "[VIDEO] " << message << "[OK]" << std::endl;
         }
 
         Renderer::~Renderer()
@@ -82,7 +84,7 @@ namespace Falltergeist
                 throw Exception(message + "[FAIL]");
             }
 
-            Logger::info("RENDERER") << message + "[OK]" << std::endl;
+            logger->info() << "[RENDERER] " << message + "[OK]" << std::endl;
 
             message =  "Init OpenGL - ";
             // specifically request 3.2, because fucking Mesa ignores core flag with version < 3
@@ -105,7 +107,7 @@ namespace Falltergeist
                 }
             }
 
-            Logger::info("RENDERER") << message + "[OK]" << std::endl;
+            logger->info() << "[RENDERER] " << message + "[OK]" << std::endl;
             SDL_GL_SetSwapInterval(0);
 
         /*
@@ -145,16 +147,16 @@ namespace Falltergeist
             }
 
 
-            Logger::info("RENDERER") << "Using OpenGL " << _major << "." << _minor << std::endl;
-            Logger::info("RENDERER") << "Renderer: " << glGetString(GL_RENDERER) << std::endl;
-            Logger::info("RENDERER") << "Version string: " << glGetString(GL_VERSION) << std::endl;
-            Logger::info("RENDERER") << "Vendor: " << glGetString(GL_VENDOR) << std::endl;
+            logger->info() << "[RENDERER] " << "Using OpenGL " << _major << "." << _minor << std::endl;
+            logger->info() << "[RENDERER] " << "Renderer: " << glGetString(GL_RENDERER) << std::endl;
+            logger->info() << "[RENDERER] " << "Version string: " << glGetString(GL_VERSION) << std::endl;
+            logger->info() << "[RENDERER] " << "Vendor: " << glGetString(GL_VENDOR) << std::endl;
             switch (_renderpath) {
                 case RenderPath::OGL21:
-                    Logger::info("RENDERER") << "Render path: OpenGL 2.1"  << std::endl;
+                    logger->info() << "[RENDERER] " << "Render path: OpenGL 2.1"  << std::endl;
                     break;
                 case RenderPath::OGL32:
-                    Logger::info("RENDERER") << "Render path: OpenGL 3.0+" << std::endl;
+                    logger->info() << "[RENDERER] " << "Render path: OpenGL 3.0+" << std::endl;
                     break;
                 default:
                     break;
@@ -179,32 +181,32 @@ namespace Falltergeist
                     throw Exception(message + "[FAIL]: " + std::string((char*)glewGetErrorString(glewError)));
             }
 
-            Logger::info("RENDERER") << message + "[OK]" << std::endl;
-            Logger::info("RENDERER") << "Using GLEW " << glewGetString(GLEW_VERSION) << std::endl;
+            logger->info() << "[RENDERER] " << message + "[OK]" << std::endl;
+            logger->info() << "[RENDERER] " << "Using GLEW " << glewGetString(GLEW_VERSION) << std::endl;
 
-            Logger::info("RENDERER") << "Extensions: " << std::endl;
+            logger->info() << "[RENDERER] " << "Extensions: " << std::endl;
 
             if (_renderpath == RenderPath::OGL32) {
                 GLint count;
                 glGetIntegerv(GL_NUM_EXTENSIONS, &count);
 
                 for (GLint i = 0; i < count; i++) {
-                    Logger::info("RENDERER") << (const char *) glGetStringi(GL_EXTENSIONS, i) << std::endl;
+                    logger->info() << "[RENDERER] " << (const char *) glGetStringi(GL_EXTENSIONS, i) << std::endl;
                 }
             } else {
-                Logger::info("RENDERER") << (const char *) glGetString(GL_EXTENSIONS) << std::endl;
+                logger->info() << "[RENDERER] " << (const char *) glGetString(GL_EXTENSIONS) << std::endl;
             }
 
-            Logger::info("RENDERER") << "Loading default shaders" << std::endl;
+            logger->info() << "[RENDERER] " << "Loading default shaders" << std::endl;
             ResourceManager::getInstance()->shader("default");
             ResourceManager::getInstance()->shader("sprite");
             ResourceManager::getInstance()->shader("font");
             ResourceManager::getInstance()->shader("animation");
             ResourceManager::getInstance()->shader("tilemap");
             ResourceManager::getInstance()->shader("lightmap");
-            Logger::info("RENDERER") << "[OK]" << std::endl;
+            logger->info() << "[RENDERER] " << "[OK]" << std::endl;
 
-            Logger::info("RENDERER") << "Generating buffers" << std::endl;
+            logger->info() << "[RENDERER] " << "Generating buffers" << std::endl;
 
             if (_renderpath == RenderPath::OGL32) {
                 // generate VBOs for verts and tex
@@ -344,7 +346,7 @@ namespace Falltergeist
 
             if (CrossPlatform::fileExists(filename))
             {
-                Logger::warning("GAME") << "Too many screenshots" << std::endl;
+                logger->warning() << "[RENDERER] Too many screenshots" << std::endl;
                 return;
             }
 
@@ -383,7 +385,7 @@ namespace Falltergeist
 
             IMG_SavePNG(output,filename.c_str());
             SDL_FreeSurface(output);
-            Logger::info("GAME") << "Screenshot saved to " + filename << std::endl;
+            logger->info() << "[RENDERER] Screenshot saved to " + filename << std::endl;
 
             return;
 

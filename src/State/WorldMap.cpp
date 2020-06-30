@@ -32,8 +32,8 @@ namespace Falltergeist
             setModal(true);
             setFullscreen(true);
 
-            unsigned int renderWidth = Game::getInstance()->renderer()->width();
-            unsigned int renderHeight = Game::getInstance()->renderer()->height();
+            unsigned int renderWidth = Game::Game::getInstance()->renderer()->width();
+            unsigned int renderHeight = Game::Game::getInstance()->renderer()->height();
 
             // loading map tiles
             _tiles = new UI::ImageList({0, 0}, {
@@ -64,7 +64,7 @@ namespace Falltergeist
             //addUI(_hotspot);
 
             // creating screen
-            if (Game::getInstance()->settings()->worldMapFullscreen())
+            if (Game::Game::getInstance()->settings()->worldMapFullscreen())
             {
                 _panel = resourceManager->getImage("art/intrface/wminfce2.frm"); // panel small
                 mapWidth = renderWidth - 168;
@@ -85,8 +85,8 @@ namespace Falltergeist
         void WorldMap::render()
         {
             // calculating render size, screen size, etc
-            unsigned int renderWidth = Game::getInstance()->renderer()->width();
-            unsigned int renderHeight = Game::getInstance()->renderer()->height();
+            unsigned int renderWidth = Game::Game::getInstance()->renderer()->width();
+            unsigned int renderHeight = Game::Game::getInstance()->renderer()->height();
 
             // MAP SHOW
             // calculating delta (shift of map to fit to screen)
@@ -149,7 +149,7 @@ namespace Falltergeist
             unsigned int panelX;
             unsigned int panelY;
 
-            if (Game::getInstance()->settings()->worldMapFullscreen())
+            if (Game::Game::getInstance()->settings()->worldMapFullscreen())
             {
                 panelX = renderWidth - 168; // only panel right
             }
@@ -166,7 +166,7 @@ namespace Falltergeist
 
         void WorldMap::handle(Event::Event* event)
         {
-            auto game = Game::getInstance();
+            auto game = Game::Game::getInstance();
 
             if (auto mouseEvent = dynamic_cast<Event::Mouse*>(event))
             {
@@ -195,12 +195,12 @@ namespace Falltergeist
 
         void WorldMap::onStateActivate(Event::State* event)
         {
-            Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::BIG_ARROW);
+            Game::Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::BIG_ARROW);
         }
 
         void WorldMap::onStateDeactivate(Event::State* event)
         {
-            Game::getInstance()->mouse()->popState();
+            Game::Game::getInstance()->mouse()->popState();
         }
 
         void WorldMap::onKeyDown(Event::Keyboard* event)
@@ -209,7 +209,7 @@ namespace Falltergeist
             {
                 case SDLK_ESCAPE:
                 {
-                    Game::getInstance()->popState();
+                    Game::Game::getInstance()->popState();
                 }
             }
         }

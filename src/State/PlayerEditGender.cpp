@@ -30,7 +30,7 @@ namespace Falltergeist
             setFullscreen(false);
             setModal(true);
 
-            Point bgPos = Point((Game::getInstance()->renderer()->size() - Point(640, 480)) / 2);
+            Point bgPos = Point((Game::Game::getInstance()->renderer()->size() - Point(640, 480)) / 2);
             int bgX = bgPos.x();
             int bgY = bgPos.y();
 
@@ -64,13 +64,13 @@ namespace Falltergeist
             addUI(doneLabel);
             addUI(_maleImage);
             addUI(_femaleImage);
-            setGender(Game::getInstance()->player()->gender());
+            setGender(Game::Game::getInstance()->player()->gender());
         }
 
         void PlayerEditGender::onDoneButtonClick(Event::Mouse* event)
         {
-            Game::getInstance()->player()->setGender(_gender);
-            Game::getInstance()->popState();
+            Game::Game::getInstance()->player()->setGender(_gender);
+            Game::Game::getInstance()->popState();
         }
 
         void PlayerEditGender::onFemaleButtonPress(Event::Mouse* event)
@@ -88,11 +88,11 @@ namespace Falltergeist
             switch (event->keyCode())
             {
                 case SDLK_ESCAPE:
-                    Game::getInstance()->popState();
+                    Game::Game::getInstance()->popState();
                     break;
                 case SDLK_RETURN:
-                    Game::getInstance()->player()->setGender(_gender);
-                    Game::getInstance()->popState();
+                    Game::Game::getInstance()->player()->setGender(_gender);
+                    Game::Game::getInstance()->popState();
                     break;
                 case SDLK_LEFT:
                 case SDLK_RIGHT:

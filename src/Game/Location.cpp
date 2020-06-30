@@ -17,8 +17,9 @@ namespace Falltergeist
 
     namespace Game
     {
-        Location::Location()
+        Location::Location(std::shared_ptr<ILogger> logger)
         {
+            this->logger = std::move(logger);
         }
 
         Location::~Location()
@@ -49,10 +50,10 @@ namespace Falltergeist
                 );
             }
 
-            GameObjectHelper gameObjectHelper;
+            GameObjectHelper gameObjectHelper(logger);
 
             for (auto &mapElevation : mapFile->elevations()) {
-                auto elevation = std::make_shared<LocationElevation>();
+                auto elevation = std::make_shared<LocationElevation>(logger);
 
                 // load objects
                 for (auto &mapObject : mapElevation.objects()) {

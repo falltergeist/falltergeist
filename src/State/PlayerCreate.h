@@ -2,6 +2,7 @@
 
 #include <map>
 #include <vector>
+#include "../ILogger.h"
 #include "../State/State.h"
 #include "../UI/IResourceManager.h"
 
@@ -24,7 +25,7 @@ namespace Falltergeist
         class PlayerCreate final : public State
         {
             public:
-                PlayerCreate(std::shared_ptr<UI::IResourceManager> resourceManager);
+                PlayerCreate(std::shared_ptr<UI::IResourceManager> resourceManager, std::shared_ptr<ILogger> logger);
                 virtual ~PlayerCreate() = default;
 
                 void init() override;
@@ -76,6 +77,7 @@ namespace Falltergeist
                 bool _skillToggle(unsigned int num);
 
             private:
+                std::shared_ptr<ILogger> logger;
                 std::shared_ptr<UI::IResourceManager> resourceManager;
                 std::unique_ptr<UI::Factory::ImageButtonFactory> imageButtonFactory;
         };

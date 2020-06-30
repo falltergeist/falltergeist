@@ -25,10 +25,11 @@ namespace Falltergeist
     namespace State
     {
 
-        NewGame::NewGame(std::shared_ptr<UI::IResourceManager> resourceManager) : State()
+        NewGame::NewGame(std::shared_ptr<UI::IResourceManager> resourceManager, std::shared_ptr<ILogger> logger) : State()
         {
-            this->resourceManager = resourceManager;
-            imageButtonFactory = std::make_unique<UI::Factory::ImageButtonFactory>(resourceManager);
+            this->resourceManager = std::move(resourceManager);
+            this->logger = std::move(logger);
+            imageButtonFactory = std::make_unique<UI::Factory::ImageButtonFactory>(this->resourceManager);
         }
 
         void NewGame::init()
@@ -39,7 +40,7 @@ namespace Falltergeist
             setFullscreen(true);
             setModal(true);
 
-            auto renderer = Game::getInstance()->renderer();
+            auto renderer = Game::Game::getInstance()->renderer();
 
             setPosition((renderer->size() - Point(640, 480)) / 2);
 
@@ -87,33 +88,33 @@ namespace Falltergeist
 
         void NewGame::doBeginGame()
         {
-            Game::getInstance()->setPlayer(std::move(_characters.at(_selectedCharacter)));
+            Game::Game::getInstance()->setPlayer(std::move(_characters.at(_selectedCharacter)));
             _characters.clear();
 
-            StateLocationHelper stateLocationHelper;
-            Game::getInstance()->setState(stateLocationHelper.getInitialLocationState());
+            StateLocationHelper stateLocationHelper(logger);
+            Game::Game::getInstance()->setState(stateLocationHelper.getInitialLocationState());
         }
 
         void NewGame::doEdit()
         {
-            Game::getInstance()->setPlayer(std::move(_characters.at(_selectedCharacter)));
+            Game::Game::getInstance()->setPlayer(std::move(_characters.at(_selectedCharacter)));
             _characters.clear();
-            Game::getInstance()->pushState(new PlayerCreate(resourceManager));
+            Game::Game::getInstance()->pushState(new PlayerCreate(resourceManager, logger));
         }
 
         void NewGame::doCreate()
         {
             auto none = std::make_unique<Game::DudeObject>();
             none->loadFromGCDFile(ResourceManager::getInstance()->gcdFileType("premade/blank.gcd"));
-            Game::getInstance()->setPlayer(std::move(none));
-            Game::getInstance()->pushState(new PlayerCreate(resourceManager));
+            Game::Game::getInstance()->setPlayer(std::move(none));
+            Game::Game::getInstance()->pushState(new PlayerCreate(resourceManager, logger));
         }
 
         void NewGame::doBack()
         {
             fadeDoneHandler().clear();
             fadeDoneHandler().add([this](Event::Event* event){ this->onBackFadeDone(dynamic_cast<Event::State*>(event)); });
-            Game::getInstance()->renderer()->fadeOut(0,0,0,1000);
+            Game::Game::getInstance()->renderer()->fadeOut(0,0,0,1000);
         }
 
         void NewGame::doNext()
@@ -150,7 +151,7 @@ namespace Falltergeist
         void NewGame::onBackFadeDone(Event::State* event)
         {
             fadeDoneHandler().clear();
-            Game::getInstance()->popState();
+            Game::Game::getInstance()->popState();
         }
 
         void NewGame::onPrevCharacterButtonClick(Event::Mouse* event)
@@ -279,7 +280,7 @@ namespace Falltergeist
 
             _changeCharacter();
 
-            Game::getInstance()->renderer()->fadeIn(0,0,0,1000);
+            Game::Game::getInstance()->renderer()->fadeIn(0,0,0,1000);
         }
     }
 }

@@ -5,6 +5,7 @@
 #include "../Graphics/Point.h"
 #include "../Graphics/Rect.h"
 #include "../Graphics/Renderer.h"
+#include "../ILogger.h"
 
 namespace Falltergeist
 {
@@ -23,7 +24,7 @@ namespace Falltergeist
         class TileMap
         {
             public:
-                TileMap();
+                TileMap(std::shared_ptr<ILogger> logger);
                 ~TileMap();
 
                 std::map<unsigned int, std::unique_ptr<Tile>>& tiles();
@@ -38,6 +39,7 @@ namespace Falltergeist
                 bool opaque(const Point& pos);
 
             private:
+                std::shared_ptr<ILogger> logger;
                 std::map<unsigned int, std::unique_ptr<Tile>> _tiles;
                 uint32_t _tilesPerAtlas;
                 std::unique_ptr<Graphics::Tilemap> _tilemap;

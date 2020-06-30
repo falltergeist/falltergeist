@@ -57,7 +57,8 @@ namespace Falltergeist
             std::shared_ptr<Graphics::Renderer> renderer,
             std::shared_ptr<Audio::Mixer> audioMixer,
             std::shared_ptr<Game::Time> gameTime,
-            std::shared_ptr<UI::IResourceManager> resourceManager
+            std::shared_ptr<UI::IResourceManager> resourceManager,
+            std::shared_ptr<ILogger> logger
         ) : State(),
             player(std::move(player)),
             mouse(std::move(mouse)),
@@ -66,7 +67,8 @@ namespace Falltergeist
             audioMixer(std::move(audioMixer)),
             gameTime(std::move(gameTime))
         {
-            this->resourceManager = resourceManager;
+            this->resourceManager = std::move(resourceManager);
+            this->logger = std::move(logger);
         }
 
         void Location::init()
@@ -180,7 +182,7 @@ namespace Falltergeist
 
             initLight();
 
-            _playerPanel = makeUI<UI::PlayerPanel>();
+            _playerPanel = makeUI<UI::PlayerPanel>(logger);
 
             _mouseDownHandler.add(std::bind(&Location::onMouseDown, this, std::placeholders::_1));
             _mouseUpHandler.add(std::bind(&Location::onMouseUp, this, std::placeholders::_1));
@@ -201,12 +203,12 @@ namespace Falltergeist
                     auto icons = getCursorIconsForObject(_objectUnderCursor);
                     if (!icons.empty()) {
                         // TODO delegate state manipulation to some kind of state manager
-                        if (dynamic_cast<CursorDropdown *>(Game::getInstance()->topState()) != nullptr) {
-                            Game::getInstance()->popState();
+                        if (dynamic_cast<CursorDropdown *>(Game::Game::getInstance()->topState()) != nullptr) {
+                            Game::Game::getInstance()->popState();
                         }
                         auto state = new CursorDropdown(resourceManager, std::move(icons), !_actionCursorButtonPressed);
                         state->setObject(_objectUnderCursor);
-                        Game::getInstance()->pushState(state);
+                        Game::Game::getInstance()->pushState(state);
                     }
                 }
                 _actionCursorButtonPressed = false;
@@ -336,6 +338,8 @@ namespace Falltergeist
 
         void Location::initializePlayerTestAppareance(std::shared_ptr<Game::DudeObject> player) const
         {
+            Game::ObjectFactory objectFactory(logger);
+
             static bool equipped;
             if (equipped) {
                 return;
@@ -343,13 +347,13 @@ namespace Falltergeist
 
             equipped = true;
             player->setArmorSlot(nullptr);
-            auto powerArmor = (Game::ItemObject*) Game::ObjectFactory::getInstance()->createObject(PID_POWERED_ARMOR);
-            auto leatherJacket = (Game::ItemObject*) Game::ObjectFactory::getInstance()->createObject(PID_LEATHER_JACKET);
-            auto combatArmor = (Game::ItemObject*) Game::ObjectFactory::getInstance()->createObject(PID_COMBAT_ARMOR);
-            auto purpleRobe = (Game::ItemObject*) Game::ObjectFactory::getInstance()->createObject(PID_PURPLE_ROBE);
+            auto powerArmor = (Game::ItemObject*) objectFactory.createObjectByPID(PID_POWERED_ARMOR);
+            auto leatherJacket = (Game::ItemObject*) objectFactory.createObjectByPID(PID_LEATHER_JACKET);
+            auto combatArmor = (Game::ItemObject*) objectFactory.createObjectByPID(PID_COMBAT_ARMOR);
+            auto purpleRobe = (Game::ItemObject*) objectFactory.createObjectByPID(PID_PURPLE_ROBE);
             purpleRobe->setAmount(5);
-            auto miniGun = (Game::WeaponItemObject*)Game::ObjectFactory::getInstance()->createObject(PID_MINIGUN);
-            auto spear = (Game::WeaponItemObject*) Game::ObjectFactory::getInstance()->createObject(PID_SPEAR);
+            auto miniGun = (Game::WeaponItemObject*) objectFactory.createObjectByPID(PID_MINIGUN);
+            auto spear = (Game::WeaponItemObject*) objectFactory.createObjectByPID(PID_SPEAR);
 
             player->inventory()->push_back(powerArmor);
             player->inventory()->push_back(leatherJacket);
@@ -941,24 +945,24 @@ namespace Falltergeist
                             if (exitGrid->exitMapNumber() < 0) {
                                 auto worldMapState = new WorldMap(resourceManager);
                                 // TODO delegate state manipulation to some kind of state manager
-                                Game::getInstance()->setState(worldMapState);
+                                Game::Game::getInstance()->setState(worldMapState);
                                 return;
                             }
 
                             auto mapsFile = ResourceManager::getInstance()->mapsTxt();
                             std::string mapName = mapsFile->maps().at(exitGrid->exitMapNumber()).name;
 
-                            GameLocationHelper gameLocationHelper;
+                            GameLocationHelper gameLocationHelper(logger);
                             auto location = gameLocationHelper.getByName(mapName);
                             location->setDefaultPosition(exitGrid->exitHexagonNumber());
                             location->setDefaultOrientation(exitGrid->exitDirection());
                             location->setDefaultElevationIndex(exitGrid->exitElevationNumber());
 
                             // TODO move this instantiation to StateLocationHelper or some kind of state manager
-                            auto state = new Location(player, mouse, settings, renderer, audioMixer, gameTime, resourceManager);
+                            auto state = new Location(player, mouse, settings, renderer, audioMixer, gameTime, resourceManager, logger);
                             state->setLocation(location);
                             // TODO delegate state manipulation to some kind of state manager
-                            Game::getInstance()->setState(state);
+                            Game::Game::getInstance()->setState(state);
 
                             return;
                         }
@@ -1216,7 +1220,9 @@ namespace Falltergeist
 
         Game::Object *Location::addObject(unsigned int PID, unsigned int position, unsigned int elevation)
         {
-            auto object = Game::ObjectFactory::getInstance()->createObject(PID);
+            Game::ObjectFactory objectFactory(logger);
+
+            auto object = objectFactory.createObjectByPID(PID);
             _objects.emplace_back(object);
             moveObjectToHexagon(object, hexagonGrid()->at(position));
             object->setElevation(elevation);

@@ -118,8 +118,8 @@ namespace Falltergeist
 
         void InventoryItem::onMouseDragStart(Event::Mouse* event)
         {
-            Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::NONE);
-            Game::getInstance()->mixer()->playACMSound("sound/sfx/ipickup1.acm");
+            Game::Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::NONE);
+            Game::Game::getInstance()->mixer()->playACMSound("sound/sfx/ipickup1.acm");
             _oldType = type();
             setType(Type::DRAG);
             setOffset((event->position() - _position) - size() / 2);
@@ -132,8 +132,8 @@ namespace Falltergeist
 
         void InventoryItem::onMouseDragStop(Event::Mouse* event)
         {
-            Game::getInstance()->mouse()->popState();
-            Game::getInstance()->mixer()->playACMSound("sound/sfx/iputdown.acm");
+            Game::Game::getInstance()->mouse()->popState();
+            Game::Game::getInstance()->mixer()->playACMSound("sound/sfx/iputdown.acm");
             setOffset({0, 0});
             setType(_oldType);
 
@@ -162,7 +162,7 @@ namespace Falltergeist
                 }
                 this->setItem(itemObject);
                 if (auto armor = dynamic_cast<Game::ArmorItemObject*>(itemObject)) {
-                    Game::getInstance()->player()->setArmorSlot(armor);
+                    Game::Game::getInstance()->player()->setArmorSlot(armor);
                 }
             }
         }
@@ -185,7 +185,7 @@ namespace Falltergeist
                     itemsList->addItem(this, 1);
                 }
                 this->setItem(item);
-                auto player = Game::getInstance()->player();
+                auto player = Game::Game::getInstance()->player();
                 if (hand == HAND::LEFT) {
                     player->setLeftHandSlot(item);
                 } else {

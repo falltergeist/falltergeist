@@ -24,11 +24,11 @@ namespace Falltergeist
         std::string configFile = CrossPlatform::getConfigPath() + "/config.ini";
         std::ofstream stream(configFile);
 
-        Logger::info() << "Saving config to " << configFile << std::endl;
+        Logger::info("") << "Saving config to " << configFile << std::endl;
 
         if (!stream)
         {
-            Logger::warning() << "Cannot open config file at `" << configFile << "`;" << std::endl;
+            Logger::warning("") << "Cannot open config file at `" << configFile << "`;" << std::endl;
             return false;
         }
 
@@ -127,11 +127,11 @@ namespace Falltergeist
         std::string configFile = CrossPlatform::getConfigPath() + "/config.ini";
         std::ifstream stream(configFile);
 
-        Logger::info() << "Loading config from " << configFile << std::endl;
+        Logger::info("") << "Loading config from " << configFile << std::endl;
 
         if (!stream)
         {
-            Logger::warning() << "Cannot open config file at `" << configFile << "`;" << std::endl;
+            Logger::warning("") << "Cannot open config file at `" << configFile << "`;" << std::endl;
             return false;
         }
 

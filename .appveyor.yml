@@ -28,7 +28,7 @@ init:
   - ps: echo "--------------------  END SYSTEM INFORMATION  --------------------"
 
 install:
-  - ps: vcpkg install 
+  - ps: vcpkg install
               sdl2:$env:VCPKG_TRIPLET_NAME
               sdl2-image:$env:VCPKG_TRIPLET_NAME
               sdl2-mixer:$env:VCPKG_TRIPLET_NAME
@@ -46,7 +46,7 @@ after_build:
   - cmd: cpack -c "%CONFIGURATION%"
 
 artifacts:
-  - path: build/falltergeist-*.zip
+  - path: build/falltergeist-*.exe
 
 #deploy:
 #  - provider: GitHub

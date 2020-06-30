@@ -40,7 +40,7 @@ namespace Falltergeist
                 sender->_checked = !sender->_checked;
             }
             if (!sender->buttonUpSoundFilename.empty()) {
-                Game::getInstance()->mixer()->playACMSound(sender->buttonUpSoundFilename);
+                Game::Game::getInstance()->mixer()->playACMSound(sender->buttonUpSoundFilename);
             }
         }
 
@@ -52,7 +52,7 @@ namespace Falltergeist
 
             auto sender = dynamic_cast<ImageButton*>(event->target());
             if (!sender->buttonDownSoundFilename.empty()) {
-                Game::getInstance()->mixer()->playACMSound(sender->buttonDownSoundFilename);
+                Game::Game::getInstance()->mixer()->playACMSound(sender->buttonDownSoundFilename);
             }
         }
 

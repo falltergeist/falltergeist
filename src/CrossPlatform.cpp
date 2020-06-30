@@ -89,7 +89,7 @@ namespace Falltergeist
     {
         char* buffer=SDL_GetBasePath();
         if (buffer == NULL) {
-            Logger::warning() << "SDL_GetBasePath() not able to obtain a path on this platform" << std::endl;
+            Logger::warning("") << "SDL_GetBasePath() not able to obtain a path on this platform" << std::endl;
             return "./";
         }
         std::string path(buffer);
@@ -146,7 +146,7 @@ namespace Falltergeist
         if (_falloutDataPath.length() > 0) {
             return _falloutDataPath;
         }
-        Logger::info() << "Looking for Fallout data files" << std::endl;
+        Logger::info("") << "Looking for Fallout data files" << std::endl;
         std::vector<std::string> directories;
         directories.push_back(getExecutableDirectory());
 
@@ -158,7 +158,7 @@ namespace Falltergeist
             std::vector<std::string> cdDrives = getCdDrivePaths();
             directories.insert(directories.end(), cdDrives.begin(), cdDrives.end());
         } catch (const Exception& e) {
-            Logger::error() << e.what() << std::endl;
+            Logger::error("") << e.what() << std::endl;
         }
 
         for (auto &directory : directories) {
@@ -168,10 +168,10 @@ namespace Falltergeist
                 [directory](const std::string& file) {
                     std::ifstream stream(directory + "/" + file);
                     if (stream) {
-                        Logger::info() << "Searching in directory: " << directory << " " << file << " [FOUND]" << std::endl;
+                        Logger::info("") << "Searching in directory: " << directory << " " << file << " [FOUND]" << std::endl;
                         return true;
                     } else {
-                        Logger::info() << "Searching in directory: " << directory << " " << file << " [NOT FOUND]" << std::endl;
+                        Logger::info("") << "Searching in directory: " << directory << " " << file << " [NOT FOUND]" << std::endl;
                         return false;
                     }
                 })
@@ -190,7 +190,7 @@ namespace Falltergeist
         if (_falltergeistDataPath.length() > 0) {
             return _falltergeistDataPath;
         }
-        Logger::info() << "Looking for Falltergeist data files" << std::endl;
+        Logger::info("") << "Looking for Falltergeist data files" << std::endl;
         std::vector<std::string> directories;
         directories.push_back(getExecutableDirectory());
 
@@ -201,11 +201,11 @@ namespace Falltergeist
         for (auto &directory : directories) {
             std::ifstream stream(directory + "/data/movies.lst");
             if (stream) {
-                Logger::info() << "Searching in directory: " << directory << "/data/movies.lst [FOUND]" << std::endl;
+                Logger::info("") << "Searching in directory: " << directory << "/data/movies.lst [FOUND]" << std::endl;
                 _falltergeistDataPath = directory;
                 return _falltergeistDataPath;
             } else {
-                Logger::info() << "Searching in directory: " << directory << "/data/movies.lst [NOT FOUND]" << std::endl;
+                Logger::info("") << "Searching in directory: " << directory << "/data/movies.lst [NOT FOUND]" << std::endl;
             }
         }
 

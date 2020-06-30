@@ -25,7 +25,7 @@ namespace Falltergeist
 
         PipBoy::~PipBoy()
         {
-            Game::getInstance()->mouse()->popState();
+            Game::Game::getInstance()->mouse()->popState();
         }
 
         void PipBoy::init()
@@ -36,11 +36,11 @@ namespace Falltergeist
             setModal(true);
             setFullscreen(true);
 
-            Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::BIG_ARROW);
+            Game::Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::BIG_ARROW);
 
             // Background
             auto background = resourceManager->getImage("art/intrface/pip.frm");
-            Point backgroundPos = Point((Game::getInstance()->renderer()->size() - background->size()) / 2);
+            Point backgroundPos = Point((Game::Game::getInstance()->renderer()->size() - background->size()) / 2);
             int backgroundX = backgroundPos.x();
             int backgroundY = backgroundPos.y();
             background->setPosition(backgroundPos);
@@ -55,7 +55,7 @@ namespace Falltergeist
             // Date and time
 
             // Date
-            auto gameTime = Game::getInstance()->gameTime();
+            auto gameTime = Game::Game::getInstance()->gameTime();
 
             auto day = new UI::SmallCounter(backgroundPos + Point(21, 17));
             day->setLength(2);
@@ -98,14 +98,14 @@ namespace Falltergeist
 
         void PipBoy::onCloseButtonClick(Event::Mouse* event)
         {
-            Game::getInstance()->popState();
+            Game::Game::getInstance()->popState();
         }
 
         void PipBoy::onKeyDown(Event::Keyboard* event)
         {
             if (event->keyCode() == SDLK_ESCAPE)
             {
-                Game::getInstance()->popState();
+                Game::Game::getInstance()->popState();
             }
         }
     }

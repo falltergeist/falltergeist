@@ -70,7 +70,8 @@ namespace Falltergeist
                     std::shared_ptr<Graphics::Renderer> renderer,
                     std::shared_ptr<Audio::Mixer> audioMixer,
                     std::shared_ptr<Game::Time> gameTime,
-                    std::shared_ptr<UI::IResourceManager> resourceManager
+                    std::shared_ptr<UI::IResourceManager> resourceManager,
+                    std::shared_ptr<ILogger> logger
                 );
                 ~Location() override = default;
 
@@ -142,6 +143,7 @@ namespace Falltergeist
                 std::shared_ptr<Audio::Mixer> audioMixer;
                 std::shared_ptr<Game::Time> gameTime;
                 std::shared_ptr<UI::IResourceManager> resourceManager;
+                std::shared_ptr<ILogger> logger;
 
             protected:
                 struct TimerEvent

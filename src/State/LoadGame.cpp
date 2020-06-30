@@ -36,7 +36,7 @@ namespace Falltergeist
             setModal(true);
             setFullscreen(true);
 
-            auto game = Game::getInstance();
+            auto game = Game::Game::getInstance();
             //auto player = Game::getInstance()->player();
 
             // background
@@ -87,39 +87,39 @@ namespace Falltergeist
 
         void LoadGame::onDoneButtonClick(Event::Mouse* event)
         {
-            Game::getInstance()->popState();
+            Game::Game::getInstance()->popState();
         }
 
         void LoadGame::doCancel()
         {
-            if (!Game::getInstance()->locationState())
+            if (!Game::Game::getInstance()->locationState())
             {
                 fadeDoneHandler().clear();
                 fadeDoneHandler().add([this](Event::Event* event){ this->onCancelFadeDone(dynamic_cast<Event::State*>(event)); });
-                Game::getInstance()->renderer()->fadeOut(255,255,255,1000);
+                Game::Game::getInstance()->renderer()->fadeOut(255,255,255,1000);
             }
             else
             {
-                Game::getInstance()->popState();
+                Game::Game::getInstance()->popState();
             }
         }
 
         void LoadGame::onCancelFadeDone(Event::State* event)
         {
             fadeDoneHandler().clear();
-            Game::getInstance()->popState();
+            Game::Game::getInstance()->popState();
         }
 
         void LoadGame::onStateActivate(Event::State* event)
         {
-            if (!Game::getInstance()->locationState())
-                Game::getInstance()->renderer()->fadeIn(0,0,0,1000);
-            Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::BIG_ARROW);
+            if (!Game::Game::getInstance()->locationState())
+                Game::Game::getInstance()->renderer()->fadeIn(0,0,0,1000);
+            Game::Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::BIG_ARROW);
         }
 
         void LoadGame::onStateDeactivate(Event::State* event)
         {
-            Game::getInstance()->mouse()->popState();
+            Game::Game::getInstance()->mouse()->popState();
         }
 
         void LoadGame::onKeyDown(Event::Keyboard* event)

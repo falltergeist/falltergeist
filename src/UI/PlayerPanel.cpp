@@ -30,9 +30,11 @@ namespace Falltergeist
 
     namespace UI
     {
-        PlayerPanel::PlayerPanel() : UI::Base()
+        PlayerPanel::PlayerPanel(std::shared_ptr<ILogger> logger) : UI::Base()
         {
-            auto game = Game::getInstance();
+            this->logger = std::move(logger);
+
+            auto game = Game::Game::getInstance();
             auto renderer = game->renderer();
             auto mouse = game->mouse();
 
@@ -167,7 +169,7 @@ namespace Falltergeist
 
             _messageLog->mouseMoveHandler().add([this](Event::Mouse* event)
                 {
-                    auto mouse = Game::getInstance()->mouse();
+                    auto mouse = Game::Game::getInstance()->mouse();
                     Point relPos = event->position() - _messageLog->position();
 
                     auto state = relPos.y() < (_messageLog->size().height() / 2)
@@ -184,7 +186,7 @@ namespace Falltergeist
                 {
                     _scrollingLog = 0;
                     _scrollingLogTimer = 0;
-                    Game::getInstance()->mouse()->setState(Input::Mouse::Cursor::BIG_ARROW);
+                    Game::Game::getInstance()->mouse()->setState(Input::Mouse::Cursor::BIG_ARROW);
                 });
 
             keyDownHandler().add([this](Event::Event* event) {
@@ -203,7 +205,7 @@ namespace Falltergeist
 
         void PlayerPanel::renderHandSlot()
         {
-            if (auto item = Game::getInstance()->player()->currentHandSlot())
+            if (auto item = Game::Game::getInstance()->player()->currentHandSlot())
             {
                 auto itemUi = item->inventoryDragUi();
                 Point p = _isAttackBtnPressed ? Point(361, 58) : Point(360, 60);
@@ -250,7 +252,7 @@ namespace Falltergeist
         {
             UI::Base::think(deltaTime);
 
-            auto game = Game::getInstance();
+            auto game = Game::Game::getInstance();
 
             for (auto it = _ui.begin(); it != _ui.end(); ++it)
             {
@@ -275,12 +277,12 @@ namespace Falltergeist
 
         void PlayerPanel::playWindowOpenSfx()
         {
-            Game::getInstance()->mixer()->playACMSound("sound/sfx/ib1p1xx1.acm");
+            Game::Game::getInstance()->mixer()->playACMSound("sound/sfx/ib1p1xx1.acm");
         }
 
         void PlayerPanel::changeHand()
         {
-            auto player = Game::getInstance()->player();
+            auto player = Game::Game::getInstance()->player();
             auto lastSlot = player->currentHandSlot();
             auto takeOut = [player](Event::Event* evt)
                 {
@@ -309,38 +311,38 @@ namespace Falltergeist
 
         void PlayerPanel::openGameMenu()
         {
-            Game::getInstance()->pushState(new State::GameMenu(resourceManager));
+            Game::Game::getInstance()->pushState(new State::GameMenu(resourceManager, logger));
             playWindowOpenSfx();
         }
 
         void PlayerPanel::openInventory()
         {
-            auto state = new State::Inventory(resourceManager);
-            Game::getInstance()->pushState(state);
+            auto state = new State::Inventory(resourceManager, logger);
+            Game::Game::getInstance()->pushState(state);
             playWindowOpenSfx();
         }
 
         void PlayerPanel::openSkilldex()
         {
-            Game::getInstance()->pushState(new State::Skilldex(resourceManager));
+            Game::Game::getInstance()->pushState(new State::Skilldex(resourceManager));
             playWindowOpenSfx();
         }
 
         void PlayerPanel::openMap()
         {
-            Game::getInstance()->pushState(new State::WorldMap(resourceManager));
+            Game::Game::getInstance()->pushState(new State::WorldMap(resourceManager));
             playWindowOpenSfx();
         }
 
         void PlayerPanel::openCharacterScreen()
         {
-            Game::getInstance()->pushState(new State::PlayerEdit(resourceManager));
+            Game::Game::getInstance()->pushState(new State::PlayerEdit(resourceManager));
             playWindowOpenSfx();
         }
 
         void PlayerPanel::openPipBoy()
         {
-            Game::getInstance()->pushState(new State::PipBoy(resourceManager));
+            Game::Game::getInstance()->pushState(new State::PipBoy(resourceManager));
             playWindowOpenSfx();
         }
 
@@ -400,7 +402,7 @@ namespace Falltergeist
                 case SDLK_x:
                     if (event->controlPressed())
                     {
-                        Game::getInstance()->pushState(new State::ExitConfirm(resourceManager));
+                        Game::Game::getInstance()->pushState(new State::ExitConfirm(resourceManager, logger));
                         playWindowOpenSfx();
                     }
                 case SDLK_SLASH:
@@ -434,7 +436,7 @@ namespace Falltergeist
                     // @TODO: quick load logic
                     break;
                 case SDLK_F10:
-                    Game::getInstance()->pushState(new State::ExitConfirm(resourceManager));
+                    Game::Game::getInstance()->pushState(new State::ExitConfirm(resourceManager, logger));
                     playWindowOpenSfx();
                     break;
                 case SDLK_F12:
@@ -445,19 +447,19 @@ namespace Falltergeist
 
         void PlayerPanel::openSaveGame()
         {
-            Game::getInstance()->pushState(new State::SaveGame(resourceManager));
+            Game::Game::getInstance()->pushState(new State::SaveGame(resourceManager));
             playWindowOpenSfx();
         }
 
         void PlayerPanel::openLoadGame()
         {
-            Game::getInstance()->pushState(new State::LoadGame(resourceManager));
+            Game::Game::getInstance()->pushState(new State::LoadGame(resourceManager));
             playWindowOpenSfx();
         }
 
         void PlayerPanel::displayMessage(const std::string& message)
         {
-            Game::getInstance()->mixer()->playACMSound("sound/sfx/monitor.acm");
+            Game::Game::getInstance()->mixer()->playACMSound("sound/sfx/monitor.acm");
             std::string msg = "\n\x95";
             msg += message;
             *_messageLog << msg;

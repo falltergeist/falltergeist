@@ -27,10 +27,11 @@ namespace Falltergeist
 
     namespace State
     {
-        PlayerCreate::PlayerCreate(std::shared_ptr<UI::IResourceManager> resourceManager) : State()
+        PlayerCreate::PlayerCreate(std::shared_ptr<UI::IResourceManager> resourceManager, std::shared_ptr<ILogger> logger) : State()
         {
-            this->resourceManager = resourceManager;
-            imageButtonFactory = std::make_unique<UI::Factory::ImageButtonFactory>(resourceManager);
+            this->resourceManager = std::move(resourceManager);
+            this->logger = std::move(logger);
+            imageButtonFactory = std::make_unique<UI::Factory::ImageButtonFactory>(this->resourceManager);
         }
 
         void PlayerCreate::init()
@@ -43,7 +44,7 @@ namespace Falltergeist
 
             // background
             auto background = resourceManager->getImage("art/intrface/edtrcrte.frm");
-            Point backgroundPos = Point((Game::getInstance()->renderer()->size() - background->size()) / 2);
+            Point backgroundPos = Point((Game::Game::getInstance()->renderer()->size() - background->size()) / 2);
             int backgroundX = backgroundPos.x();
             int backgroundY = backgroundPos.y();
             background->setPosition(backgroundPos);
@@ -154,12 +155,12 @@ namespace Falltergeist
             _addLabel("options", new UI::TextArea(_t(MSG_EDITOR, 101), backgroundX+365, backgroundY+453))->setFont(font3_b89c28ff, color);
             _addLabel("next",    new UI::TextArea(_t(MSG_EDITOR, 100), backgroundX+473, backgroundY+453))->setFont(font3_b89c28ff, color);
             _addLabel("cancel",  new UI::TextArea(_t(MSG_EDITOR, 102), backgroundX+571, backgroundY+453))->setFont(font3_b89c28ff, color);
-            auto label = _addLabel("name",    new UI::TextArea(Game::getInstance()->player()->name(), backgroundX+17, backgroundY+7));
+            auto label = _addLabel("name",    new UI::TextArea(Game::Game::getInstance()->player()->name(), backgroundX+17, backgroundY+7));
             label->setWidth(150);
             label->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
             label->setFont(font3_b89c28ff, color);
             _addLabel("age",     new UI::TextArea(_t(MSG_EDITOR, 104), backgroundX+163, backgroundY+7))->setFont(font3_b89c28ff, color);
-            _addLabel("gender",  new UI::TextArea(_t(MSG_EDITOR, Game::getInstance()->player()->gender() == GENDER::MALE ? 107 : 108), backgroundX+250, backgroundY+7))->setFont(font3_b89c28ff, color);
+            _addLabel("gender",  new UI::TextArea(_t(MSG_EDITOR, Game::Game::getInstance()->player()->gender() == GENDER::MALE ? 107 : 108), backgroundX+250, backgroundY+7))->setFont(font3_b89c28ff, color);
             _addLabel("label_1", new UI::TextArea(_t(MSG_EDITOR, 116), backgroundX+14, backgroundY+286))->setFont(font3_b89c28ff, color);  // char points
             _addLabel("label_2", new UI::TextArea(_t(MSG_EDITOR, 139), backgroundX+50, backgroundY+326))->setFont(font3_b89c28ff, color);  // optinal traits
             _addLabel("label_3", new UI::TextArea(_t(MSG_EDITOR, 117), backgroundX+383, backgroundY+5))->setFont(font3_b89c28ff, color);   // skills
@@ -275,7 +276,7 @@ namespace Falltergeist
         {
             // TODO: this shit shouldn't be updated each fucking frame, duh
             State::think(deltaTime);
-            auto player = Game::getInstance()->player();
+            auto player = Game::Game::getInstance()->player();
 
             *_labels.at("name") = player->name();
             *_labels.at("age") = _t(MSG_EDITOR, 104) +  " " + std::to_string(player->age());
@@ -413,7 +414,7 @@ namespace Falltergeist
 
         bool PlayerCreate::_statDecrease(unsigned int num)
         {
-            auto player = Game::getInstance()->player();
+            auto player = Game::Game::getInstance()->player();
             if (player->stat((STAT)num) <= 1) return false;
 
             player->setStat((STAT)num, player->stat((STAT)num) - 1);
@@ -423,7 +424,7 @@ namespace Falltergeist
 
         bool PlayerCreate::_statIncrease(unsigned int num)
         {
-            auto player = Game::getInstance()->player();
+            auto player = Game::Game::getInstance()->player();
             if (player->statsPoints() <= 0) return false;
 
             if (player->stat((STAT)num) + player->statBonus((STAT)num) >= 10) return false;
@@ -435,7 +436,7 @@ namespace Falltergeist
 
         bool PlayerCreate::_traitToggle(unsigned int num)
         {
-            auto player = Game::getInstance()->player();
+            auto player = Game::Game::getInstance()->player();
             if (player->traitTagged((TRAIT)num))
             {
                 player->setTraitTagged((TRAIT)num, 0);
@@ -459,7 +460,7 @@ namespace Falltergeist
 
         bool PlayerCreate::_skillToggle(unsigned int num)
         {
-            auto player = Game::getInstance()->player();
+            auto player = Game::Game::getInstance()->player();
             if (player->skillTagged((SKILL)num))
             {
                 player->setSkillTagged((SKILL)num, 0);
@@ -521,7 +522,7 @@ namespace Falltergeist
                         {
                             auto state = new PlayerEditAlert(resourceManager);
                             state->setMessage(_t(MSG_EDITOR, 148) + "\n" + _t(MSG_EDITOR, 149));
-                            Game::getInstance()->pushState(state);
+                            Game::Game::getInstance()->pushState(state);
                         }
                     }
 
@@ -535,7 +536,7 @@ namespace Falltergeist
                         {
                             auto state = new PlayerEditAlert(resourceManager);
                             state->setMessage(_t(MSG_EDITOR, 140) + "\n" + _t(MSG_EDITOR, 141));
-                            Game::getInstance()->pushState(state);
+                            Game::Game::getInstance()->pushState(state);
                         }
                     }
                 }
@@ -612,36 +613,36 @@ namespace Falltergeist
 
         void PlayerCreate::doAge()
         {
-            Game::getInstance()->pushState(new PlayerEditAge(resourceManager));
+            Game::Game::getInstance()->pushState(new PlayerEditAge(resourceManager));
         }
 
         void PlayerCreate::doBack()
         {
-            Game::getInstance()->popState();
+            Game::Game::getInstance()->popState();
         }
 
         void PlayerCreate::doDone()
         {
-            auto player = Game::getInstance()->player();
+            auto player = Game::Game::getInstance()->player();
             player->setHitPoints(player->hitPointsMax());
 
-            StateLocationHelper stateLocationHelper;
-            Game::getInstance()->setState(stateLocationHelper.getInitialLocationState());
+            StateLocationHelper stateLocationHelper(logger);
+            Game::Game::getInstance()->setState(stateLocationHelper.getInitialLocationState());
         }
 
         void PlayerCreate::doGender()
         {
-            Game::getInstance()->pushState(new PlayerEditGender(resourceManager));
+            Game::Game::getInstance()->pushState(new PlayerEditGender(resourceManager));
         }
 
         void PlayerCreate::doName()
         {
-            Game::getInstance()->pushState(new PlayerEditName(resourceManager));
+            Game::Game::getInstance()->pushState(new PlayerEditName(resourceManager));
         }
 
         void PlayerCreate::doOptions()
         {
-            Game::getInstance()->pushState(new PlayerCreateOptions(resourceManager));
+            Game::Game::getInstance()->pushState(new PlayerCreateOptions(resourceManager));
         }
 
         void PlayerCreate::onKeyDown(Event::Keyboard* event)
@@ -675,7 +676,7 @@ namespace Falltergeist
         {
             State::render();
             auto background = getUI("bg");
-            Point backgroundPos = Point((Game::getInstance()->renderer()->size() - background->size()) / 2);
+            Point backgroundPos = Point((Game::Game::getInstance()->renderer()->size() - background->size()) / 2);
             _selectedImage->setPosition(backgroundPos + Point(480, 310));
             _selectedImage->render();
             _description->setPosition(backgroundPos + Point(350, 315));

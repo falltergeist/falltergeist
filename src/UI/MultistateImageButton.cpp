@@ -101,10 +101,10 @@ namespace Falltergeist
             auto sender = dynamic_cast<MultistateImageButton*>(event->target());
 
             if (!sender->_downSound.empty()) {
-                Game::getInstance()->mixer()->playACMSound(sender->_downSound);
+                Game::Game::getInstance()->mixer()->playACMSound(sender->_downSound);
             }
             if (!sender->_upSound.empty()) {
-                Game::getInstance()->mixer()->playACMSound(sender->_upSound);
+                Game::Game::getInstance()->mixer()->playACMSound(sender->_upSound);
             }
         }
 

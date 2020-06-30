@@ -1,5 +1,8 @@
 #pragma once
 
+#include <memory>
+#include "../ILogger.h"
+
 namespace Falltergeist
 {
     namespace State
@@ -11,8 +14,10 @@ namespace Falltergeist
         class StateLocationHelper
         {
             public:
-                StateLocationHelper() = default;
+                StateLocationHelper(std::shared_ptr<ILogger> logger);
                 State::Location* getInitialLocationState() const;
+            private:
+                std::shared_ptr<ILogger> logger;
         };
     }
 }

@@ -5,7 +5,6 @@
 #include "../Exception.h"
 #include "../Format/Acm/File.h"
 #include "../Game/Game.h"
-#include "../Logger.h"
 #include "../ResourceManager.h"
 #include "../Settings.h"
 #include "../UI/MvePlayer.h"
@@ -14,8 +13,11 @@ namespace Falltergeist
 {
     namespace Audio
     {
-        Mixer::Mixer()
+        using Game::Game;
+
+        Mixer::Mixer(std::shared_ptr<ILogger> logger)
         {
+            this->logger = std::move(logger);
             _init();
         }
 
@@ -34,18 +36,18 @@ namespace Falltergeist
             std::string message = "[AUDIO] - SDL_Init - ";
             if (SDL_InitSubSystem(SDL_INIT_AUDIO) < 0)
             {
-                Logger::critical() << message + "[FAIL]" << std::endl;
+                logger->critical() << message + "[FAIL]" << std::endl;
                 throw Exception(SDL_GetError());
             }
-            Logger::info() << message + "[OK]" << std::endl;
+            logger->info() << message + "[OK]" << std::endl;
 
             message = "[AUDIO] - Mix_OpenAudio - ";
             if (Mix_OpenAudio(22050, AUDIO_S16LSB, 2, Game::getInstance()->settings()->audioBufferSize()) < 0)
             {
-                Logger::critical() << message + "[FAIL]" << std::endl;
+                logger->critical() << message + "[FAIL]" << std::endl;
                 throw Exception(Mix_GetError());
             }
-            Logger::info() << message + "[OK]" << std::endl;
+            logger->info() << message + "[OK]" << std::endl;
             int frequency, channels;
             Mix_QuerySpec(&frequency, &_format, &channels);
         }
@@ -135,7 +137,7 @@ namespace Falltergeist
             auto pmve = (UI::MvePlayer*)(udata);
             if (pmve->samplesLeft() <= 0)
             {
-                Logger::debug("AUDIO") << "buffer underrun?" << std::endl;
+                logger->debug() << "[AUDIO] buffer underrun?" << std::endl;
                 Mix_HookMusic(NULL, NULL);
                 return;
             }
@@ -153,7 +155,7 @@ namespace Falltergeist
         {
             auto acm = ResourceManager::getInstance()->acmFileType(filename);
             if (!acm) return;
-            Logger::debug("Mixer") << "playing: " << acm->filename() << std::endl;
+            logger->debug() << "[Mixer] playing: " << acm->filename() << std::endl;
             Mix_Chunk *chunk = NULL;
 
             auto it = _sfx.find(acm->filename());
@@ -221,8 +223,4 @@ namespace Falltergeist
             return _lastMusic;
         }
     }
-
-
-
-
 }

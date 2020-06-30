@@ -11,6 +11,8 @@ namespace Falltergeist
 {
     namespace Graphics
     {
+        using Game::Game;
+
         Sprite::Sprite(const std::string& fname)
         {
             _texture = ResourceManager::getInstance()->texture(fname);

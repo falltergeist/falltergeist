@@ -53,7 +53,7 @@ namespace Falltergeist
         void Mouse::setPosition(const Point& pos)
         {
             _position = pos;
-            auto renderer = Game::getInstance()->renderer();
+            auto renderer = Game::Game::getInstance()->renderer();
             float scaleX = renderer->scaleX();
             float scaleY = renderer->scaleY();
             SDL_WarpMouseInWindow(renderer->sdlWindow(), (int)(pos.x() * scaleX), (int)(pos.y() * scaleY));
@@ -222,8 +222,8 @@ namespace Falltergeist
         {
             SDL_GetMouseState(&_position.rx(), &_position.ry());
             _position = Point(
-                static_cast<int>(_position.x() / Game::getInstance()->renderer()->scaleX()),
-                static_cast<int>(_position.y() / Game::getInstance()->renderer()->scaleY())
+                static_cast<int>(_position.x() / Game::Game::getInstance()->renderer()->scaleX()),
+                static_cast<int>(_position.y() / Game::Game::getInstance()->renderer()->scaleY())
             );
             if (_ui) {
                 _ui->think(deltaTime);
