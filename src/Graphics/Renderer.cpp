@@ -276,7 +276,7 @@ namespace Falltergeist
             _fadeAlpha = 255;
             _fadeStep = -1;
             _fadeDone = false;
-            _fadeDelay = static_cast<unsigned>(round(time / 256));
+            _fadeDelay = static_cast<unsigned>(round(time / 500));
             _fadeTimer = 0;
         }
 
@@ -287,7 +287,7 @@ namespace Falltergeist
             _fadeAlpha = 0;
             _fadeStep = 1;
             _fadeDone = false;
-            _fadeDelay = static_cast<unsigned>(round(time / 256));
+            _fadeDelay = static_cast<unsigned>(round(time / 500));
             _fadeTimer = 0;
         }
 

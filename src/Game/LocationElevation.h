@@ -28,10 +28,10 @@ namespace Falltergeist
                 bool canRestHere() const;
                 void setCanRestHere(bool value);
 
-                std::shared_ptr<UI::TileMap> floor();
-                std::shared_ptr<UI::TileMap> roof();
+                const std::shared_ptr<UI::TileMap> &floor();
+                const std::shared_ptr<UI::TileMap> &roof();
 
-                std::vector<Object*>* objects();
+                std::vector<std::shared_ptr<Object>>* objects();
 
             protected:
                 /**
@@ -47,7 +47,7 @@ namespace Falltergeist
                 /**
                  * @brief Array of game objects
                  */
-                std::vector<Object*> _objects;
+                std::vector<std::shared_ptr<Object>> _objects;
         };
     }
 }

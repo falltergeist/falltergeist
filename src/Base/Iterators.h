@@ -92,7 +92,7 @@ namespace Falltergeist
         template <typename T>
         class vector_ptr_decorator
         {
-            using vector_t = std::vector<std::unique_ptr<T>>;
+            using vector_t = std::vector<std::shared_ptr<T>>;
 
             vector_t& _cont;
 
@@ -102,7 +102,7 @@ namespace Falltergeist
             using reverse_iterator = reverse_iterator_decorator<T, vector_t>;
             using const_reverse_iterator = const_reverse_iterator_decorator<T, vector_t>;
 
-            vector_ptr_decorator(std::vector<std::unique_ptr<T>>& vec) : _cont(vec)
+            vector_ptr_decorator(std::vector<std::shared_ptr<T>>& vec) : _cont(vec)
             {
             }
 

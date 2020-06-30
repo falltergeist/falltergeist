@@ -72,7 +72,9 @@ namespace Falltergeist
                     std::shared_ptr<Game::Time> gameTime,
                     std::shared_ptr<UI::IResourceManager> resourceManager
                 );
-                ~Location() override = default;
+
+                // Need out of line to get unique_ptr to work with gcc's STL
+                ~Location() override;
 
                 void init() override;
                 void think(const float &deltaTime) override;
@@ -84,8 +86,8 @@ namespace Falltergeist
                 HexagonGrid* hexagonGrid();
                 LocationCamera* camera();
 
-                std::shared_ptr<Game::Location> location();
-                void setLocation(std::shared_ptr<Game::Location> location);
+                const std::unique_ptr<Game::Location> &location();
+                void setLocation(std::unique_ptr<Game::Location> location);
 
                 unsigned int elevation() const;
                 void setElevation(unsigned int elevation);
@@ -95,9 +97,9 @@ namespace Falltergeist
 
                 std::map<std::string, VM::StackValue>* EVARS();
 
-                void moveObjectToHexagon(Game::Object *object, Hexagon *hexagon, bool update = true);
-                void removeObjectFromMap(Game::Object *object);
-                void destroyObject(Game::Object* object);
+                void moveObjectToHexagon(const std::shared_ptr<Game::Object> &object, const std::shared_ptr<Hexagon> &hexagon, bool update = true);
+                void removeObjectFromMap(const std::shared_ptr<Game::Object> &object);
+                void destroyObject(const std::shared_ptr<Game::Object> &object);
                 void centerCameraAtHexagon(Hexagon* hexagon);
                 void centerCameraAtHexagon(int tileNum);
                 void handleAction(Game::Object* object, Input::Mouse::Icon action);
@@ -110,8 +112,8 @@ namespace Falltergeist
                 void removeTimerEvent(Game::Object* obj, int fixedParam);
 
                 void onBackgroundClick(Event::Mouse* event);
-                void onObjectMouseEvent(Event::Mouse* event, Game::Object* object);
-                void onObjectHover(Event::Mouse* event, Game::Object* object);
+                void onObjectMouseEvent(Event::Mouse* event, const std::weak_ptr<Game::Object> &weakObject);
+                void onObjectHover(Event::Mouse* event, const std::weak_ptr<Game::Object> &object);
                 void onKeyDown(Event::Keyboard* event) override;
                 void onMouseUp(Event::Mouse* event);
                 void onMouseDown(Event::Mouse* event);
@@ -129,13 +131,13 @@ namespace Falltergeist
 
                 void initLight();
 
-                Game::Object* addObject(unsigned int PID, unsigned int position, unsigned int elevation);
+                std::shared_ptr<Game::Object> addObject(unsigned int PID, unsigned int position, unsigned int elevation);
 
                 SKILL skillInUse() const;
                 void setSkillInUse(SKILL skill);
 
             private:
-                std::shared_ptr<Game::DudeObject> player;
+                std::weak_ptr<Game::DudeObject> player;
                 std::shared_ptr<Input::Mouse> mouse;
                 std::shared_ptr<Settings> settings;
                 std::shared_ptr<Graphics::Renderer> renderer;
@@ -167,14 +169,14 @@ namespace Falltergeist
                 std::unique_ptr<LocationCamera> _camera;
                 std::map<std::string, VM::StackValue> _EVARS;
 
-                std::shared_ptr<Falltergeist::Game::Location> _location;
+                std::unique_ptr<Falltergeist::Game::Location> _location;
                 unsigned int _elevation = 0;
 
                 bool _locationEnter = true;
                 unsigned int _currentMap = 0;
                 unsigned int _lastClickedTile = 0;
-                Game::Object* _objectUnderCursor = nullptr;
-                Game::Object* _actionCursorLastObject = nullptr;
+                std::shared_ptr<Game::Object> _objectUnderCursor;
+                std::shared_ptr<Game::Object> _actionCursorLastObject;
                 bool _actionCursorButtonPressed = false;
                 UI::PlayerPanel* _playerPanel;
 
@@ -195,9 +197,9 @@ namespace Falltergeist
                 std::vector<Input::Mouse::Icon> getCursorIconsForObject(Game::Object* object);
 
                 unsigned int _lightLevel = 0x10000;
-                Falltergeist::Graphics::Lightmap* _lightmap;
+                std::shared_ptr<Falltergeist::Graphics::Lightmap> _lightmap;
 
-                std::vector<Game::SpatialObject*> _spatials;
+                std::vector<std::shared_ptr<Game::SpatialObject>> _spatials;
 
                 void initializePlayerTestAppareance(std::shared_ptr<Game::DudeObject> player) const;
 
@@ -224,7 +226,7 @@ namespace Falltergeist
 
                 bool movePlayerToObject(Game::Object *object);
 
-                Game::Object* getGameObjectUnderCursor();
+                std::shared_ptr<Game::Object> getGameObjectUnderCursor();
         };
     }
 }

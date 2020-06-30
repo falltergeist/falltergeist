@@ -47,7 +47,7 @@ namespace Falltergeist {
                         << std::endl;
                 auto elevation = _script->dataStack()->popInteger();
                 auto position = _script->dataStack()->popInteger();
-                auto critter = static_cast<Game::CritterObject *>(_script->dataStack()->popObject());
+                auto critter = std::static_pointer_cast<Game::CritterObject>(_script->dataStack()->popObject());
                 if (!critter) {
                     _error("critter_attempt_placement - invalid critter pointer");
                 }

@@ -53,7 +53,7 @@ namespace Falltergeist {
                     case 0x2: // ANIM_CLEAR
                     {
                         auto object = arg.objectValue();
-                        if (auto critterObject = dynamic_cast<Game::CritterObject *>(object)) {
+                        if (auto critterObject = std::dynamic_pointer_cast<Game::CritterObject>(object)) {
                             critterObject->stopMovement();
                         } else {
                             auto queue = dynamic_cast<UI::AnimationQueue *>(object->ui());

@@ -50,8 +50,7 @@ namespace Falltergeist
         const int Location::DROPDOWN_DELAY = 350;
         const int Location::KEYBOARD_SCROLL_STEP = 35;
 
-        Location::Location(
-            std::shared_ptr<Game::DudeObject> player,
+        Location::Location(std::shared_ptr<Game::DudeObject> player,
             std::shared_ptr<Input::Mouse> mouse,
             std::shared_ptr<Settings> settings,
             std::shared_ptr<Graphics::Renderer> renderer,
@@ -68,6 +67,8 @@ namespace Falltergeist
         {
             this->resourceManager = resourceManager;
         }
+
+        Location::~Location() {  }
 
         void Location::init()
         {
@@ -95,23 +96,25 @@ namespace Falltergeist
 
             initializeLightmap();
 
-            auto elevation = _location->elevations()->at(_elevation);
+            const auto &elevation = _location->elevations()->at(_elevation);
             // Set camera position on default
             camera()->setCenter(hexagonGrid()->at(_location->defaultPosition())->position());
 
             // @todo remove old objects from hexagonal grid
-            for (auto &object : *elevation->objects()) {
+            for (const std::shared_ptr<Game::Object> &object : *elevation->objects()) {
 
                 auto hexagon = hexagonGrid()->at(object->position());
                 moveObjectToHexagon(object, hexagon, false);
 
+
                 if (object->ui()) {
+                    std::weak_ptr<Game::Object> weakObject = object;
                     object->ui()->mouseDownHandler().add(
                         std::bind(
                             &Location::onObjectMouseEvent,
                             this,
                             std::placeholders::_1,
-                            object
+                            weakObject
                         )
                     );
                     object->ui()->mouseClickHandler().add(
@@ -119,7 +122,7 @@ namespace Falltergeist
                             &Location::onObjectMouseEvent,
                             this,
                             std::placeholders::_1,
-                            object
+                            weakObject
                         )
                     );
                     object->ui()->mouseInHandler().add(
@@ -127,7 +130,7 @@ namespace Falltergeist
                             &Location::onObjectHover,
                             this,
                             std::placeholders::_1,
-                            object
+                            weakObject
                         )
                     );
                     // TODO: get rid of mousemove handler?
@@ -136,7 +139,7 @@ namespace Falltergeist
                             &Location::onObjectHover,
                             this,
                             std::placeholders::_1,
-                            object
+                            weakObject
                         )
                     );
                     object->ui()->mouseOutHandler().add(
@@ -144,12 +147,12 @@ namespace Falltergeist
                             &Location::onObjectHover,
                             this,
                             std::placeholders::_1,
-                            object
+                            weakObject
                         )
                     );
                 }
 
-                if (auto spatial = dynamic_cast<Game::SpatialObject*>(object)) {
+                if (auto spatial = std::dynamic_pointer_cast<Game::SpatialObject>(object)) {
                     _spatials.push_back(spatial);
                     continue;
                 }
@@ -163,15 +166,21 @@ namespace Falltergeist
                 _objects.emplace_back(object);
             }
 
-            initializePlayerTestAppareance(player);
-            player->setOrientation(_location->defaultOrientation());
+            std::shared_ptr<Game::DudeObject> dude = player.lock();
+            if (!dude) {
+                Logger::warning("LOCATION") << "Lost player" << std::endl;
+                return;
+            }
+
+            initializePlayerTestAppareance(dude);
+            dude->setOrientation(_location->defaultOrientation());
 
             // Player script
-            player->setScript(new VM::Script(ResourceManager::getInstance()->intFileType(0), player.get()));
+            dude->setScript(new VM::Script(ResourceManager::getInstance()->intFileType(0), dude));
 
-            auto hexagon = hexagonGrid()->at(_location->defaultPosition());
+            std::shared_ptr<Hexagon> hexagon = hexagonGrid()->at(_location->defaultPosition());
             _objects.emplace_back(player);
-            moveObjectToHexagon(player.get(), hexagon);
+            moveObjectToHexagon(dude, hexagon);
 
             elevation->floor()->init();
             elevation->roof()->init();
@@ -198,36 +207,36 @@ namespace Falltergeist
                         _objectUnderCursor->look_at_p_proc();
                         _actionCursorLastObject = _objectUnderCursor;
                     }
-                    auto icons = getCursorIconsForObject(_objectUnderCursor);
+                    auto icons = getCursorIconsForObject(_objectUnderCursor.get());
                     if (!icons.empty()) {
                         // TODO delegate state manipulation to some kind of state manager
                         if (dynamic_cast<CursorDropdown *>(Game::getInstance()->topState()) != nullptr) {
                             Game::getInstance()->popState();
                         }
-                        auto state = new CursorDropdown(resourceManager, std::move(icons), !_actionCursorButtonPressed);
+                        auto state = std::make_unique<CursorDropdown>(resourceManager, std::move(icons), !_actionCursorButtonPressed);
                         state->setObject(_objectUnderCursor);
-                        Game::getInstance()->pushState(state);
+                        Game::getInstance()->pushState(std::move(state));
                     }
                 }
                 _actionCursorButtonPressed = false;
             });
 
             _locationScriptTimer.start(10000.0f, true);
-            _locationScriptTimer.tickHandler().add([this](Event::Event*) {
+            _locationScriptTimer.tickHandler().add([this, dude](Event::Event*) {
                 if (_location->script()) {
                     _location->script()->call("map_update_p_proc");
                 }
-                for (auto &object : _objects) {
+                for (const std::shared_ptr<Game::Object> &object : _objects) {
                     object->map_update_p_proc();
                 }
-                player->map_update_p_proc();
+                dude->map_update_p_proc();
             });
         }
 
         void Location::onStateActivate(Event::State *event)
         {
             // correct position of "red hexagon" after popups
-            auto hexagon = hexagonGrid()->hexagonAt(mouse->position() + _camera->topLeft());
+            std::shared_ptr<Hexagon> hexagon = hexagonGrid()->hexagonAt(mouse->position() + _camera->topLeft());
             if (mouse->state() == Input::Mouse::Cursor::HEXAGON_RED && hexagon) {
                 mouse->ui()->setPosition(hexagon->position() - _camera->topLeft());
             }
@@ -239,7 +248,7 @@ namespace Falltergeist
             _actionCursorTimer.stop();
         }
 
-        void Location::setLocation(std::shared_ptr<Game::Location> location)
+        void Location::setLocation(std::unique_ptr<Game::Location> location)
         {
             _location = std::move(location);
         }
@@ -331,7 +340,7 @@ namespace Falltergeist
                     }
                 }
             }
-            _lightmap = new Graphics::Lightmap(_vertices, indexes);
+            _lightmap = std::make_shared<Graphics::Lightmap>(_vertices, indexes);
         }
 
         void Location::initializePlayerTestAppareance(std::shared_ptr<Game::DudeObject> player) const
@@ -343,13 +352,13 @@ namespace Falltergeist
 
             equipped = true;
             player->setArmorSlot(nullptr);
-            auto powerArmor = (Game::ItemObject*) Game::ObjectFactory::getInstance()->createObject(PID_POWERED_ARMOR);
-            auto leatherJacket = (Game::ItemObject*) Game::ObjectFactory::getInstance()->createObject(PID_LEATHER_JACKET);
-            auto combatArmor = (Game::ItemObject*) Game::ObjectFactory::getInstance()->createObject(PID_COMBAT_ARMOR);
-            auto purpleRobe = (Game::ItemObject*) Game::ObjectFactory::getInstance()->createObject(PID_PURPLE_ROBE);
+            auto powerArmor = std::dynamic_pointer_cast<Game::ItemObject>(Game::ObjectFactory::getInstance()->createObject(PID_POWERED_ARMOR));
+            auto leatherJacket = std::dynamic_pointer_cast<Game::ItemObject>(Game::ObjectFactory::getInstance()->createObject(PID_LEATHER_JACKET));
+            auto combatArmor = std::dynamic_pointer_cast<Game::ItemObject>(Game::ObjectFactory::getInstance()->createObject(PID_COMBAT_ARMOR));
+            auto purpleRobe = std::dynamic_pointer_cast<Game::ItemObject>(Game::ObjectFactory::getInstance()->createObject(PID_PURPLE_ROBE));
             purpleRobe->setAmount(5);
-            auto miniGun = (Game::WeaponItemObject*)Game::ObjectFactory::getInstance()->createObject(PID_MINIGUN);
-            auto spear = (Game::WeaponItemObject*) Game::ObjectFactory::getInstance()->createObject(PID_SPEAR);
+            auto miniGun = std::dynamic_pointer_cast<Game::WeaponItemObject>(Game::ObjectFactory::getInstance()->createObject(PID_MINIGUN));
+            auto spear = std::dynamic_pointer_cast<Game::WeaponItemObject>(Game::ObjectFactory::getInstance()->createObject(PID_SPEAR));
 
             player->inventory()->push_back(powerArmor);
             player->inventory()->push_back(leatherJacket);
@@ -366,9 +375,9 @@ namespace Falltergeist
             std::vector<Input::Mouse::Icon> icons;
             if (object->script() && object->script()->hasFunction("use_p_proc")) {
                 icons.push_back(Input::Mouse::Icon::USE);
-            } else if (dynamic_cast<Game::DoorSceneryObject *>(object)) {
+            } else if (dynamic_cast<Game::DoorSceneryObject*>(object)) {
                 icons.push_back(Input::Mouse::Icon::USE);
-            } else if (dynamic_cast<Game::ContainerItemObject *>(object)) {
+            } else if (dynamic_cast<Game::ContainerItemObject*>(object)) {
                 icons.push_back(Input::Mouse::Icon::USE);
             }
 
@@ -387,8 +396,9 @@ namespace Falltergeist
         }
 
 
-        void Location::onObjectMouseEvent(Event::Mouse *event, Game::Object *object)
+        void Location::onObjectMouseEvent(Event::Mouse *event, const std::weak_ptr<Game::Object> &weakObject)
         {
+            std::shared_ptr<Game::Object> object = weakObject.lock();
             if (!object) {
                 return;
             }
@@ -398,27 +408,28 @@ namespace Falltergeist
                     _actionCursorTimer.start();
                     _actionCursorButtonPressed = true;
                 } else if (event->name() == "mouseclick") {
-                    auto icons = getCursorIconsForObject(object);
+                    auto icons = getCursorIconsForObject(object.get());
                     if (!icons.empty()) {
                         // Move
-                        movePlayerToObject(object);
+                        movePlayerToObject(object.get());
                         // Use
-                        handleAction(object, icons.front());
+                        handleAction(object.get(), icons.front());
                         _actionCursorButtonPressed = false;
                     }
                 }
             }
         }
 
-        void Location::onObjectHover(Event::Mouse *event, Game::Object *object)
+        void Location::onObjectHover(Event::Mouse *event, const std::weak_ptr<Game::Object> &object)
         {
+            std::shared_ptr<Game::Object> hoveredObject = object.lock();
             if (event->name() == "mouseout") {
-                if (_objectUnderCursor == object) {
+                if (!hoveredObject || _objectUnderCursor == hoveredObject) {
                     _objectUnderCursor = nullptr;
                 }
             } else {
                 if (_objectUnderCursor == nullptr || event->name() == "mousein") {
-                    _objectUnderCursor = object;
+                    _objectUnderCursor = hoveredObject;
                     _actionCursorButtonPressed = false;
                 }
 
@@ -432,7 +443,7 @@ namespace Falltergeist
 
         void Location::render()
         {
-            auto elevation = _location->elevations()->at(_elevation);
+            const std::unique_ptr<Game::LocationElevation> &elevation = _location->elevations()->at(_elevation);
             elevation->floor()->render();
             _lightmap->render(_camera->topLeft());
             renderCursor();
@@ -451,7 +462,7 @@ namespace Falltergeist
         {
             // just for testing
             if (settings->targetHighlight()) {
-                for (auto &object: _objects) {
+                for ( const std::shared_ptr<Game::Object> &object: _objects) {
                     if (dynamic_cast<Game::CritterObject *>(object.get())) {
                         if (!dynamic_cast<Game::DudeObject *>(object.get())) {
                             object->renderOutline(1);
@@ -472,18 +483,18 @@ namespace Falltergeist
         //render only flat objects first
         void Location::renderObjects() const
         {
-            for (auto &object: _flatObjects) {
+            for (const auto &object: _flatObjects) {
                 object->render();
             }
 
-            for (auto &object: _objects) {
+            for (const auto &object: _objects) {
                 object->render();
             }
         }
 
         void Location::renderObjectsText() const
         {
-            for (auto &object: _objects) {
+            for (const auto &object: _objects) {
                 object->renderText();
             }
         }
@@ -500,7 +511,12 @@ namespace Falltergeist
         {
             gameTime->think(deltaTime);
             thinkObjects(deltaTime);
-            player->think(deltaTime);
+            std::shared_ptr<Game::DudeObject> dude = player.lock();
+            if (!dude) {
+                Logger::warning("LOCATION") << "Lost player" << std::endl;
+                return;
+            }
+            dude->think(deltaTime);
             performScrolling(deltaTime);
             if (_locationEnter) {
                 _locationEnter = false;
@@ -531,7 +547,7 @@ namespace Falltergeist
                 _location->script()->initialize();
             }
 
-            for (auto &object : _objects) {
+            for (const auto &object : _objects) {
                 if (object->script()) {
                     object->script()->initialize();
                 }
@@ -541,8 +557,13 @@ namespace Falltergeist
                     spatial->script()->initialize();
                 }
             }
-            if (player->script()) {
-                player->script()->initialize();
+            std::shared_ptr<Game::DudeObject> dude = player.lock();
+            if (!dude) {
+                Logger::warning("LOCATION") << "Lost player" << std::endl;
+                return;
+            }
+            if (dude->script()) {
+                dude->script()->initialize();
             }
 
             if (_location->script()) {
@@ -552,7 +573,7 @@ namespace Falltergeist
             // By some reason we need to use reverse iterator to prevent scripts problems
             // If we use normal iterators, some exported variables are not initialized on the moment
             // when script is called
-            player->map_enter_p_proc();
+            dude->map_enter_p_proc();
             for (auto it = _objects.rbegin(); it != _objects.rend(); ++it) {
                 (*it)->map_enter_p_proc();
             }
@@ -571,7 +592,7 @@ namespace Falltergeist
 
             // if scrolling is active
             if (this->_scrollLeft || this->_scrollRight || this->_scrollTop || this->_scrollBottom) {
-                Input::Mouse::Cursor state;
+                Input::Mouse::Cursor state = Input::Mouse::Cursor::NONE;
                 if (this->_scrollLeft) {
                     state = Input::Mouse::Cursor::SCROLL_W;
                 }
@@ -611,7 +632,7 @@ namespace Falltergeist
 
         void Location::thinkObjects(const float &deltaTime) const
         {
-            for (auto &object : _objects) {
+            for (const auto &object : _objects) {
                 object->think(deltaTime);
             }
         }
@@ -653,6 +674,7 @@ namespace Falltergeist
                 return;
             }
 
+
             if (auto mouseEvent = dynamic_cast<Event::Mouse *>(event)) {
                 using Mouse = Event::Mouse;
 
@@ -671,7 +693,7 @@ namespace Falltergeist
                 // let event fall down to all objects when using action cursor and within active view
                 if (!mouseEvent->handled() &&
                     (mouse->state() == Input::Mouse::Cursor::ACTION || mouse->state() == Input::Mouse::Cursor::NONE)) {
-                    auto elevation = _location->elevations()->at(_elevation);
+                    const std::unique_ptr<Game::LocationElevation> &elevation = _location->elevations()->at(_elevation);
                     if (!elevation->roof()->opaque(mouse->position())) {
                         handleByGameObjects(mouseEvent);
                     }
@@ -682,7 +704,7 @@ namespace Falltergeist
         void Location::handleByGameObjects(Event::Mouse *event)
         {
             for (auto it = _objects.rbegin(); it != _objects.rend(); ++it) {
-                auto object = (*it).get();
+                std::shared_ptr<Game::Object> object = *it;
                 if (event->handled()) {
                     return;
                 }
@@ -694,7 +716,7 @@ namespace Falltergeist
 
             // sadly, flat objects do handle events.
             for (auto it = _flatObjects.rbegin(); it != _flatObjects.rend(); ++it) {
-                auto object = (*it).get();
+                std::shared_ptr<Game::Object> object = *it;
                 if (event->handled()) {
                     return;
                 }
@@ -731,19 +753,25 @@ namespace Falltergeist
 
         void Location::onMouseUp(Event::Mouse *event)
         {
+            std::shared_ptr<Game::DudeObject> dude = player.lock();
+            if (!dude) {
+                Logger::warning("LOCATION") << "Lost player" << std::endl;
+                return;
+            }
+
             // Player movement
             if (event->leftButton()) {
                 if (mouse->state() == Input::Mouse::Cursor::HEXAGON_RED) {
                     // Here goes the movement
                     auto hexagon = hexagonGrid()->hexagonAt(mouse->position() + _camera->topLeft());
                     if (hexagon) {
-                        auto path = hexagonGrid()->findPath(player->hexagon(), hexagon);
+                        auto path = hexagonGrid()->findPath(dude->hexagon().get(), hexagon.get());
                         if (path.size()) {
-                            player->stopMovement();
-                            player->setRunning((_lastClickedTile != 0 && hexagon->number() == _lastClickedTile) ||
+                            dude->stopMovement();
+                            dude->setRunning((_lastClickedTile != 0 && hexagon->number() == _lastClickedTile) ||
                                                (event->shiftPressed() != settings->running()));
                             for (auto pathHexagon : path) {
-                                player->movementQueue()->push_back(pathHexagon);
+                                dude->movementQueue()->push_back(pathHexagon);
                             }
                         }
                         event->setHandled(true);
@@ -758,12 +786,12 @@ namespace Falltergeist
                     if (!object) return;
 
                     // Move
-                    movePlayerToObject(object);
+                    movePlayerToObject(object.get());
 
                     // TODO: Animate
 
                     // Use
-                    object->use_skill_on_p_proc(skillInUse(), object, player.get());
+                    object->use_skill_on_p_proc(skillInUse(), object, dude);
                     mouse->setState(Input::Mouse::Cursor::ACTION);
                 }
             }
@@ -771,6 +799,12 @@ namespace Falltergeist
 
         void Location::onMouseMove(Event::Mouse *mouseEvent)
         {
+            std::shared_ptr<Game::DudeObject> dude = player.lock();
+            if (!dude) {
+                Logger::warning("LOCATION") << "Lost player" << std::endl;
+                return;
+            }
+
             auto hexagon = hexagonGrid()->hexagonAt(mouse->position() + _camera->topLeft());
             if (mouse->states()->empty()) {
                 mouse->setState(Input::Mouse::Cursor::ACTION);
@@ -792,7 +826,7 @@ namespace Falltergeist
                         std::to_string((unsigned int) (hexagon->number() / 200)) + "\n";
                 text += "Hex coords: " + std::to_string(hexagon->position().x()) + "," +
                         std::to_string(hexagon->position().y()) + "\n";
-                auto hex = player->hexagon();
+                auto hex = dude->hexagon();
                 text += "Hex delta:\n dx=" + std::to_string(hex->cubeX() - hexagon->cubeX()) + "\n dy=" +
                         std::to_string(hex->cubeY() - hexagon->cubeY()) + "\n dz=" +
                         std::to_string(hex->cubeZ() - hexagon->cubeZ()) + "\n";
@@ -805,22 +839,28 @@ namespace Falltergeist
 
         void Location::onKeyDown(Event::Keyboard *event)
         {
+            std::shared_ptr<Game::DudeObject> dude = player.lock();
+            if (!dude) {
+                Logger::warning("LOCATION") << "Lost player" << std::endl;
+                return;
+            }
+
             if (event->keyCode() == SDLK_m) {
                 toggleCursorMode();
             }
 
             if (event->keyCode() == SDLK_COMMA) {
                 // rotate left
-                player->setOrientation(player->orientation() + 5);
+                dude->setOrientation(dude->orientation() + 5);
             }
 
             if (event->keyCode() == SDLK_PERIOD) {
                 // rotate right
-                player->setOrientation(player->orientation() + 1);
+                dude->setOrientation(dude->orientation() + 1);
             }
 
             if (event->keyCode() == SDLK_HOME) {
-                centerCameraAtHexagon(player->hexagon());
+                centerCameraAtHexagon(dude->hexagon().get());
             }
 
             // @TODO: SDLK_PLUS || SDLK_KP_PLUS - increase brightness
@@ -856,24 +896,31 @@ namespace Falltergeist
             // Find path to object
             auto hexagon = object->hexagon();
 
+            std::shared_ptr<Game::DudeObject> dude = player.lock();
+            if (!dude) {
+                Logger::warning("LOCATION") << "Lost player" << std::endl;
+                return false;
+            }
+
+
             for (auto adjacentHex : hexagon->neighbors()) {
                 if (!adjacentHex->canWalkThru()) {
                     continue;
                 }
 
-                auto path = hexagonGrid()->findPath(player->hexagon(), adjacentHex);
+                auto path = hexagonGrid()->findPath(dude->hexagon().get(), adjacentHex);
 
                 if (path.size()) {
                     /* Remove the last hexagon from the path so the player stops on
                     an adjacent tile (rather than on the tile the object occupies) */
                     path.pop_back();
 
-                    player->stopMovement();
-                    player->setRunning(true);
+                    dude->stopMovement();
+                    dude->setRunning(true);
 
                     // Move!
                     for (auto pathHexagon : path) {
-                        player->movementQueue()->push_back(pathHexagon);
+                        dude->movementQueue()->push_back(pathHexagon);
                     }
                     // The player was able to move to an adjacent tile
                     return true;
@@ -909,12 +956,12 @@ namespace Falltergeist
             return &_EVARS;
         }
 
-        void Location::moveObjectToHexagon(Game::Object *object, Hexagon *hexagon, bool update)
+        void Location::moveObjectToHexagon(const std::shared_ptr<Game::Object> &object, const std::shared_ptr<Hexagon> &hexagon, bool update)
         {
-            auto elevation = _location->elevations()->at(_elevation);
+            const std::unique_ptr<Game::LocationElevation> &elevation = _location->elevations()->at(_elevation);
 
-            auto oldHexagon = object->hexagon();
-            if (oldHexagon) {
+            if (object->position() >= 0) {
+                const std::shared_ptr<Hexagon> &oldHexagon = _hexagonGrid->at(object->position());
                 if (update) {
                     //_hexagonGrid->initLight(oldHexagon, false);
                 }
@@ -929,7 +976,7 @@ namespace Falltergeist
                 /* JUST FOR EXIT GRIDS TESTING*/
                 if (object->type() == Game::Object::Type::DUDE) {
                     for (auto obj : *hexagon->objects()) {
-                        if (auto exitGrid = dynamic_cast<Game::ExitMiscObject *>(obj)) {
+                        if (auto exitGrid = std::dynamic_pointer_cast<Game::ExitMiscObject>(obj)) {
                             auto &debug = Logger::critical("LOCATION");
                             debug << " PID: 0x" << std::hex << exitGrid->PID() << std::dec << std::endl;
                             debug << " name: " << exitGrid->name() << std::endl;
@@ -939,9 +986,9 @@ namespace Falltergeist
                             debug << " exitDirection: " << exitGrid->exitDirection() << std::endl << std::endl;
 
                             if (exitGrid->exitMapNumber() < 0) {
-                                auto worldMapState = new WorldMap(resourceManager);
+                                auto worldMapState = std::make_unique<WorldMap>(resourceManager);
                                 // TODO delegate state manipulation to some kind of state manager
-                                Game::getInstance()->setState(worldMapState);
+                                Game::getInstance()->setState(std::move(worldMapState));
                                 return;
                             }
 
@@ -955,25 +1002,30 @@ namespace Falltergeist
                             location->setDefaultElevationIndex(exitGrid->exitElevationNumber());
 
                             // TODO move this instantiation to StateLocationHelper or some kind of state manager
-                            auto state = new Location(player, mouse, settings, renderer, audioMixer, gameTime, resourceManager);
-                            state->setLocation(location);
+                            auto state = std::make_unique<Location>(player.lock(), mouse, settings, renderer, audioMixer, gameTime, resourceManager);
+                            state->setLocation(std::move(location));
                             // TODO delegate state manipulation to some kind of state manager
-                            Game::getInstance()->setState(state);
+                            Game::getInstance()->setState(std::move(state));
 
                             return;
                         }
                     }
                 }
             }
+            if (object->position() < 0) {
+                update = false;
+            }
 
             object->setHexagon(hexagon);
             if (hexagon) {
                 hexagon->objects()->push_back(object);
+            } else {
+                Logger::warning("LOCATION") << "Set null hexagon" << std::endl;
             }
 
             if (object->type() == Game::Object::Type::CRITTER || object->type() == Game::Object::Type::DUDE)
                 for (auto &spatial: _spatials) {
-                    if (_hexagonGrid->distance(spatial->hexagon(), hexagon) <= spatial->radius()) {
+                    if (_hexagonGrid->distance(spatial->hexagon().get(), hexagon.get()) <= spatial->radius()) {
                         spatial->spatial_p_proc(object);
                     }
                 }
@@ -1009,7 +1061,8 @@ namespace Falltergeist
                 }
             }
 
-            if (auto dude = dynamic_cast<Game::DudeObject *>(object)) {
+            std::shared_ptr<Game::DudeObject> dude = std::dynamic_pointer_cast<Game::DudeObject>(object);
+            if (dude && dude->hexagon()) {
                 int x = dude->hexagon()->number() % 200;
                 int y = dude->hexagon()->number() / 200;
                 x /= 2;
@@ -1028,7 +1081,7 @@ namespace Falltergeist
             }
         }
 
-        void Location::removeObjectFromMap(Game::Object *object)
+        void Location::removeObjectFromMap(const std::shared_ptr<Game::Object> &object)
         {
             auto objectsAtHex = object->hexagon()->objects();
 
@@ -1041,15 +1094,14 @@ namespace Falltergeist
             if (_objectUnderCursor == object) {
                 _objectUnderCursor = nullptr;
             }
-            for (auto it = _objects.begin(); it != _objects.end(); ++it) {
-                if ((*it).get() == object) {
-                    _objects.erase(it);
-                    break;
-                }
+
+            auto it = std::find(_objects.begin(), _objects.end(), object);
+            if (it != _objects.end()) {
+                _objects.erase(it);
             }
         }
 
-        void Location::destroyObject(Game::Object *object)
+        void Location::destroyObject(const std::shared_ptr<Game::Object> &object)
         {
             object->destroy_p_proc();
             removeObjectFromMap(object);
@@ -1063,7 +1115,7 @@ namespace Falltergeist
         void Location::centerCameraAtHexagon(int tileNum)
         {
             try {
-                centerCameraAtHexagon(_hexagonGrid->at((unsigned int) tileNum));
+                centerCameraAtHexagon(_hexagonGrid->at((unsigned int) tileNum).get());
             } catch (const std::out_of_range &) {
                 throw Exception(std::string("Tile number out of range: ") + std::to_string(tileNum));
             }
@@ -1082,11 +1134,16 @@ namespace Falltergeist
 
                 case Mouse::Icon::USE:
                 {
-                    auto animation = player->setActionAnimation("al");
+                    std::shared_ptr<Game::DudeObject> dude = player.lock();
+                    if (!dude) {
+                        Logger::warning("LOCATION") << "Lost player" << std::endl;
+                        return;
+                    }
+                    auto animation = dude->setActionAnimation("al");
                     // Move to object
-                    auto playerObject = player;
+                    auto playerObject = dude;
                     animation->actionFrameHandler().add([object, playerObject](Event::Event *event) {
-                        object->onUseAnimationActionFrame(event, playerObject.get());
+                        object->onUseAnimationActionFrame(event, playerObject);
                     });
                     break;
                 }
@@ -1188,16 +1245,16 @@ namespace Falltergeist
 
         void Location::initLight()
         {
-            for (auto hex: _hexagonGrid->hexagons()) {
+            for (Hexagon *hex: _hexagonGrid->hexagons()) {
                 hex->setLight(655);
             }
 
-            for (auto hex: _hexagonGrid->hexagons()) {
+            for (Hexagon *hex: _hexagonGrid->hexagons()) {
                 _hexagonGrid->initLight(hex);
             }
 
             std::vector<float> lights;
-            for (auto hex: _hexagonGrid->hexagons()) {
+            for (Hexagon *hex: _hexagonGrid->hexagons()) {
                 int lightLevel;
 
                 unsigned int light = hex->light();
@@ -1214,10 +1271,10 @@ namespace Falltergeist
             _lightmap->update(lights);
         }
 
-        Game::Object *Location::addObject(unsigned int PID, unsigned int position, unsigned int elevation)
+        std::shared_ptr<Game::Object> Location::addObject(unsigned int PID, unsigned int position, unsigned int elevation)
         {
-            auto object = Game::ObjectFactory::getInstance()->createObject(PID);
-            _objects.emplace_back(object);
+            std::shared_ptr<Game::Object> object = Game::ObjectFactory::getInstance()->createObject(PID);
+            _objects.push_back(std::move(object));
             moveObjectToHexagon(object, hexagonGrid()->at(position));
             object->setElevation(elevation);
             return object;
@@ -1228,7 +1285,7 @@ namespace Falltergeist
             return _currentMap;
         }
 
-        std::shared_ptr<Falltergeist::Game::Location> Location::location()
+        const std::unique_ptr<Game::Location> &Location::location()
         {
             return _location;
         }
@@ -1243,10 +1300,9 @@ namespace Falltergeist
             _elevation = elevation;
         }
 
-        Game::Object* Location::getGameObjectUnderCursor()
+        std::shared_ptr<Game::Object> Location::getGameObjectUnderCursor()
         {
-            for (auto it = _objects.rbegin(); it != _objects.rend(); ++it) {
-                auto object = (*it).get();
+            for (const std::shared_ptr<Game::Object> &object : _objects) {
                 if (!object->inRender()) {
                     continue;
                 }

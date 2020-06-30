@@ -519,9 +519,9 @@ namespace Falltergeist
 
                         if (!_traitToggle(number - 1))
                         {
-                            auto state = new PlayerEditAlert(resourceManager);
+                            auto state = std::make_unique<PlayerEditAlert>(resourceManager);
                             state->setMessage(_t(MSG_EDITOR, 148) + "\n" + _t(MSG_EDITOR, 149));
-                            Game::getInstance()->pushState(state);
+                            Game::getInstance()->pushState(std::move(state));
                         }
                     }
 
@@ -533,9 +533,9 @@ namespace Falltergeist
                         _selectedImage = _images.at(name);
                         if (!_skillToggle(number - 1))
                         {
-                            auto state = new PlayerEditAlert(resourceManager);
+                            auto state = std::make_unique<PlayerEditAlert>(resourceManager);
                             state->setMessage(_t(MSG_EDITOR, 140) + "\n" + _t(MSG_EDITOR, 141));
-                            Game::getInstance()->pushState(state);
+                            Game::getInstance()->pushState(std::move(state));
                         }
                     }
                 }
@@ -612,7 +612,7 @@ namespace Falltergeist
 
         void PlayerCreate::doAge()
         {
-            Game::getInstance()->pushState(new PlayerEditAge(resourceManager));
+            Game::getInstance()->pushState(std::make_unique<PlayerEditAge>(resourceManager));
         }
 
         void PlayerCreate::doBack()
@@ -631,17 +631,17 @@ namespace Falltergeist
 
         void PlayerCreate::doGender()
         {
-            Game::getInstance()->pushState(new PlayerEditGender(resourceManager));
+            Game::getInstance()->pushState(std::make_unique<PlayerEditGender>(resourceManager));
         }
 
         void PlayerCreate::doName()
         {
-            Game::getInstance()->pushState(new PlayerEditName(resourceManager));
+            Game::getInstance()->pushState(std::make_unique<PlayerEditName>(resourceManager));
         }
 
         void PlayerCreate::doOptions()
         {
-            Game::getInstance()->pushState(new PlayerCreateOptions(resourceManager));
+            Game::getInstance()->pushState(std::make_unique<PlayerCreateOptions>(resourceManager));
         }
 
         void PlayerCreate::onKeyDown(Event::Keyboard* event)

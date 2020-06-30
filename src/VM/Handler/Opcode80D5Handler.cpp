@@ -53,7 +53,7 @@ namespace Falltergeist {
                     dataStack->push(start_tile);
                 } else {
                     auto grid = Game::getInstance()->locationState()->hexagonGrid();
-                    auto hex = grid->hexInDirection(grid->at(start_tile), dir, distance);
+                    Hexagon *hex = grid->hexInDirection(grid->at(start_tile).get(), dir, distance);
                     if (hex) {
                         dataStack->push(hex->number());
 

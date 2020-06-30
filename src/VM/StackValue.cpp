@@ -34,7 +34,7 @@ namespace Falltergeist
             _stringValue = value;
         }
 
-        StackValue::StackValue(Game::Object *value)
+        StackValue::StackValue(const std::shared_ptr<Game::Object> &value)
         {
             //throw Exception("StackValue::StackValue(Game::GameObject*) - null object value is not allowed, use integer 0");
             _type = Type::OBJECT;
@@ -82,7 +82,7 @@ namespace Falltergeist
             return _stringValue;
         }
 
-        Game::Object *StackValue::objectValue() const
+        std::shared_ptr<Game::Object> StackValue::objectValue() const
         {
             if (_type == Type::INTEGER && _intValue == 0) {
                 return nullptr;
@@ -91,7 +91,13 @@ namespace Falltergeist
                 throw ErrorException(std::string("StackValue::objectValue() - stack value is not an object, it is ") +
                                      typeName(_type));
             }
-            return _objectValue;
+            std::shared_ptr<Game::Object> ret = _objectValue.lock();
+            if (!ret) {
+                throw ErrorException(std::string("StackValue::objectValue() - object has been deleted"));
+            }
+
+
+            return ret;
         }
 
         std::string StackValue::toString() const
@@ -106,9 +112,11 @@ namespace Falltergeist
                 }
                 case Type::STRING:
                     return _stringValue;
-                case Type::OBJECT:
-                    return _objectValue ? _objectValue->name() : std::string(
+                case Type::OBJECT: {
+                    const std::shared_ptr<Game::Object> &object = objectValue();
+                    return object ? object->name() : std::string(
                             "(null)"); // just in case, we should never create null object value
+                }
                 default:
                     throw ErrorException(
                             "StackValue::toString() - cannot convert type to string: " + std::to_string((int) _type));
@@ -132,7 +140,7 @@ namespace Falltergeist
                     return result;
                 }
                 case Type::OBJECT:
-                    return (int) (_objectValue != nullptr);
+                    return (int) (objectValue() != nullptr);
                 default:
                     return 0;
             }
@@ -148,7 +156,7 @@ namespace Falltergeist
                 case Type::STRING:
                     return _stringValue.length() > 0;
                 case Type::OBJECT:
-                    return _objectValue != nullptr;
+                    return (objectValue()) != nullptr;
             }
             throw ErrorException("StackValue::toBoolean() - something strange happened");
         }

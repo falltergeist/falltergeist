@@ -43,9 +43,9 @@ namespace Falltergeist {
                 const int pid = _script->dataStack()->popInteger();
                 auto who = _script->dataStack()->popObject();
 
-                auto findItem = [&](std::vector<Game::ItemObject *> *container) -> Game::ItemObject* {
+                auto findItem = [&](std::vector<std::shared_ptr<Game::ItemObject>> *container) -> std::shared_ptr<Game::ItemObject> {
                     auto iterator = std::find_if(container->begin(), container->end(),
-                                                 [&](Game::ItemObject *&item) { return item->PID() == pid; });
+                                                 [&](const std::shared_ptr<Game::ItemObject> &item) { return item->PID() == pid; });
                     if (iterator != container->end()) {
                         return *iterator;
                     } else {
@@ -53,14 +53,14 @@ namespace Falltergeist {
                     }
                 };
 
-                if (auto critter = dynamic_cast<Game::CritterObject *>(who)) {
+                if (auto critter = std::dynamic_pointer_cast<Game::CritterObject>(who)) {
                     _script->dataStack()->push(findItem(critter->inventory()));
-                } else if (auto container = dynamic_cast<Game::ContainerItemObject *>(who)) {
+                } else if (auto container = std::dynamic_pointer_cast<Game::ContainerItemObject>(who)) {
                     _script->dataStack()->push(findItem(container->inventory()));
                 } else {
                     _warning(std::string("obj_carrying_pid_obj: 'who' is not valid GameCritterObject, nor ContainerItemObject. It is ") +
                              typeid(who).name());
-                    _script->dataStack()->push(nullptr);
+                    _script->dataStack()->push(std::shared_ptr<Game::CritterObject>(nullptr));
                 }
             }
         }

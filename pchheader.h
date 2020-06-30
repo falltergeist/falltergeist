@@ -15,5 +15,4 @@
 #include "Base/Buffer.h"
 #include "Base/Delegate.h"
 #include "Base/Iterators.h"
-#include "Base/Singleton.h"
 #include "Logger.h"

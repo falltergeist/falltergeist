@@ -24,6 +24,7 @@
 
 // Falltergeist includes
 #include "../../Game/Game.h"
+#include "../../State/State.h"
 #include "../../Logger.h"
 #include "../../VM/Script.h"
 

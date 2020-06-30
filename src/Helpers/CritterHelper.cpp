@@ -20,7 +20,7 @@ namespace Falltergeist
 
         uint32_t CritterHelper::weaponId(Falltergeist::Game::CritterObject *critter) const
         {
-            if (auto weapon = dynamic_cast<Game::WeaponItemObject*>(critter->currentHandSlot())) {
+            if (auto weapon = std::dynamic_pointer_cast<Game::WeaponItemObject>(critter->currentHandSlot())) {
                 return weapon->animationCode();
             }
 

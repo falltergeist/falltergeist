@@ -54,7 +54,7 @@ namespace Falltergeist
 
 
                 Object();
-                virtual ~Object() = default;
+                virtual ~Object();
 
                 // whether this object is transparent in terms of walking through it by a critter
                 virtual bool canWalkThru() const;
@@ -144,8 +144,8 @@ namespace Falltergeist
                 void setUI(UI::Base* ui);
 
                 // Hexagon of object current position
-                Hexagon* hexagon() const;
-                void setHexagon(Hexagon* hexagon);
+                const std::shared_ptr<Hexagon> &hexagon() const;
+                void setHexagon(const std::shared_ptr<Hexagon> &hexagon);
 
                 // TextArea, currently floating above the object
                 UI::TextArea* floatMessage() const;
@@ -173,18 +173,18 @@ namespace Falltergeist
                 // call "map_update_p_proc" when map is updating (once every N frames, after times skip in pipboy)
                 virtual void map_update_p_proc();
                 // call "pickup_p_proc" of the script entity (when picking up item object)
-                virtual void pickup_p_proc(CritterObject* pickedUpBy);
+                virtual void pickup_p_proc(const std::shared_ptr<CritterObject> &pickedUpBy);
                 // perform "use" action, may call "use_p_proc" of the underlying script
-                virtual void use_p_proc(CritterObject* usedBy);
+                virtual void use_p_proc(const std::shared_ptr<CritterObject> &usedBy);
                 // perform "use object on" action, may call "use_obj_on_p_proc" procedure
-                virtual void use_obj_on_p_proc(Object* objectUsed, CritterObject* usedBy);
+                virtual void use_obj_on_p_proc(const std::shared_ptr<Object> &objectUsed, const std::shared_ptr<CritterObject> &usedBy);
                 // perform "use skill on" action, may call "use_skill_on_p_proc" procedure
-                virtual void use_skill_on_p_proc(SKILL skill, Object* objectUsed, CritterObject* usedBy);
+                virtual void use_skill_on_p_proc(SKILL skill, const std::shared_ptr<Object> &objectUsed, const std::shared_ptr<CritterObject> &usedBy);
 
 
 
-                virtual void onUseAnimationActionFrame(Event::Event* event, CritterObject* critter);
-                virtual void onUseAnimationEnd(Event::Event* event, CritterObject* critter);
+                virtual void onUseAnimationActionFrame(Event::Event* event, const std::shared_ptr<CritterObject> &critter);
+                virtual void onUseAnimationEnd(Event::Event* event, const std::shared_ptr<CritterObject> &critter);
 
                 unsigned short lightOrientation() const;
                 virtual void setLightOrientation(Orientation orientation);

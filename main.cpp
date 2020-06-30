@@ -17,7 +17,7 @@ int main(int argc, char* argv[])
         auto game = Game::Game::getInstance();
         game->setUIResourceManager(uiResourceManager);
         game->init(std::unique_ptr<Settings>(new Settings()));
-        game->setState(new State::Start(uiResourceManager));
+        game->setState(std::make_unique<State::Start>(uiResourceManager));
         game->run();
         game->shutdown();
         return 0;

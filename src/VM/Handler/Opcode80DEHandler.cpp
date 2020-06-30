@@ -47,7 +47,7 @@ namespace Falltergeist {
                 int headID = _script->dataStack()->popInteger();
                 State::CritterInteract::Mood mood = static_cast<State::CritterInteract::Mood>(_script->dataStack()->popInteger());
 
-                auto critter = dynamic_cast<Game::CritterObject *>(_script->dataStack()->popObject());
+                auto critter = std::dynamic_pointer_cast<Game::CritterObject>(_script->dataStack()->popObject());
                 if (!critter) _error("start_gdialog - wrong critter pointer");
 
                 int msgFileID = _script->dataStack()->popInteger();
@@ -62,14 +62,14 @@ namespace Falltergeist {
                         mood = State::CritterInteract::Mood::GOOD;
                     }
                 }
-                auto interact = new State::CritterInteract(std::make_shared<UI::ResourceManager>());
+                auto interact = std::make_unique<State::CritterInteract>(std::make_shared<UI::ResourceManager>());
                 interact->setBackgroundID(backgroundID);
                 interact->setHeadID(headID);
                 interact->setMood(mood);
                 interact->setCritter(critter);
                 interact->setMsgFileID(msgFileID);
                 interact->setScript(_script);
-                Game::getInstance()->pushState(interact);
+                Game::getInstance()->pushState(std::move(interact));
             }
         }
     }

@@ -52,7 +52,7 @@ namespace Falltergeist
 
         void Mixer::stopMusic()
         {
-            Mix_HookMusic(NULL, NULL);
+            Mix_HookMusic(nullptr, nullptr);
         }
 
         std::function<void(void*, uint8_t*, uint32_t)> musicCallback;
@@ -184,6 +184,7 @@ namespace Falltergeist
                     Mix_FreeChunk(_sfx.begin()->second);
                     _sfx.erase(_sfx.begin());
                 }
+                free(cvt.buf);
                 _sfx.insert(std::pair<std::string, Mix_Chunk*>(acm->filename(), chunk));
             }
             Mix_PlayChannel(-1, chunk, 0);

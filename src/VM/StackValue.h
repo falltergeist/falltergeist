@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <memory>
 
 namespace Falltergeist
 {
@@ -29,7 +30,7 @@ namespace Falltergeist
 
                 StackValue(const std::string &value);
 
-                StackValue(Game::Object *value);
+                StackValue(const std::shared_ptr<Game::Object> &value);
 
                 virtual ~StackValue();
 
@@ -47,7 +48,7 @@ namespace Falltergeist
                 std::string stringValue() const;
 
                 // returns object pointer or throws exception if it's not object
-                Game::Object *objectValue() const;
+                std::shared_ptr<Falltergeist::Game::Object> objectValue() const;
 
                 // converts value of any type to string representation
                 std::string toString() const;
@@ -66,8 +67,8 @@ namespace Falltergeist
                 union {
                     int32_t _intValue;
                     float _floatValue;
-                    Game::Object *_objectValue;
                 };
+                std::weak_ptr<Game::Object> _objectValue;
                 std::string _stringValue;
         };
     }

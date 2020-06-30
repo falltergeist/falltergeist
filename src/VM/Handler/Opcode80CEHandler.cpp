@@ -49,11 +49,11 @@ namespace Falltergeist {
                 // ANIMATE_WALK      (0)
                 // ANIMATE_RUN       (1)
                 // ANIMATE_INTERRUPT (16) - flag to interrupt current animation
-                auto critter = dynamic_cast<Game::CritterObject *>(object);
+                auto critter = std::dynamic_pointer_cast<Game::CritterObject>(object);
                 auto state = Game::Game::getInstance()->locationState();
                 if (state) {
                     auto tileObj = state->hexagonGrid()->at(tile);
-                    auto path = state->hexagonGrid()->findPath(object->hexagon(), tileObj);
+                    auto path = state->hexagonGrid()->findPath(object->hexagon().get(), tileObj.get());
                     if (path.size()) {
                         critter->stopMovement();
                         critter->setRunning((speed & 1) != 0);

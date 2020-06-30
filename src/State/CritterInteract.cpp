@@ -21,6 +21,7 @@
 #include "../UI/AnimationQueue.h"
 #include "../UI/Factory/ImageButtonFactory.h"
 #include "../Audio/Mixer.h"
+#include "../Logger.h"
 
 namespace Falltergeist
 {
@@ -29,9 +30,9 @@ namespace Falltergeist
         CritterInteract::CritterInteract(std::shared_ptr<UI::IResourceManager> resourceManager) : State()
         {
             this->resourceManager = resourceManager;
-            _dialog = new CritterDialog(resourceManager);
-            _review = new CritterDialogReview(resourceManager);
-            _barter = new CritterBarter(resourceManager);
+            _dialog = std::make_shared<CritterDialog>(resourceManager);
+            _review = std::make_shared<CritterDialogReview>(resourceManager);
+            _barter = std::make_shared<CritterBarter>(resourceManager);
             // pre-init review, so we can push questions/answers to it.
             _review->init();
         }
@@ -40,9 +41,6 @@ namespace Falltergeist
         {
             auto camera = Game::getInstance()->locationState()->camera();
             camera->setCenter(_oldCameraCenter);
-            delete _dialog;
-            delete _review;
-            delete _barter;
         }
 
         void CritterInteract::onStateActivate(Event::State* event)
@@ -187,12 +185,12 @@ namespace Falltergeist
             _mood = mood;
         }
 
-        Game::CritterObject* CritterInteract::critter()
+        const std::shared_ptr<Game::CritterObject> &CritterInteract::critter()
         {
             return _critter;
         }
 
-        void CritterInteract::setCritter(Game::CritterObject* critter)
+        void CritterInteract::setCritter(const std::shared_ptr<Game::CritterObject> &critter)
         {
             _critter = critter;
         }
@@ -291,17 +289,44 @@ namespace Falltergeist
 
         CritterDialog* CritterInteract::dialog()
         {
-            return _dialog;
+            if (_dialog) {
+                return _dialog.get();
+            }
+            if (_state == SubState::DIALOG) {
+                return dynamic_cast<CritterDialog*>(Game::getInstance()->topState(0));
+            }
+
+            Logger::error("CRITTERINTERACT") << "Asked for dialog, "
+                "but we're not in dialog state and don't have our own object" << std::endl;
+            return nullptr;
         }
 
         CritterDialogReview* CritterInteract::dialogReview()
         {
-            return _review;
+            if (_review) {
+                return _review.get();
+            }
+            if (_state == SubState::REVIEW) {
+                return dynamic_cast<CritterDialogReview*>(Game::getInstance()->topState(0));
+            }
+
+            Logger::error("CRITTERINTERACT") << "Asked for dialog review, "
+                "but we're not in review state and don't have our own object" << std::endl;
+            return nullptr;
         }
 
         CritterBarter* CritterInteract::barter()
         {
-            return _barter;
+            if (_barter) {
+                return _barter.get();
+            }
+            if (_state == SubState::BARTER) {
+                return dynamic_cast<CritterBarter*>(Game::getInstance()->topState(0));
+            }
+
+            Logger::error("CRITTERINTERACT") << "Asked for dialog barter, "
+                "but we're not in barter state and don't have our own object" << std::endl;
+            return nullptr;
         }
 
         void CritterInteract::switchSubState(CritterInteract::SubState state)
@@ -313,7 +338,10 @@ namespace Falltergeist
             {
                 Game::getInstance()->popState(false);
             }
+
+
             _state = state;
+            // TODO: These should be unique pointers and should really be owned by the Game instance, not CritterInteract
             switch (state)
             {
                 case SubState::DIALOG:
@@ -326,6 +354,7 @@ namespace Falltergeist
                     Game::getInstance()->pushState(_review);
                     break;
                 default:
+                    Logger::warning("CRITTERINTERACT") << "Switching to unkown substate " << int(state) << std::endl;
                     break;
             }
         }

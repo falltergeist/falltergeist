@@ -84,12 +84,12 @@ namespace Falltergeist
             push(StackValue(value));
         }
 
-        Game::Object *Stack::popObject()
+        std::shared_ptr<Game::Object> Stack::popObject()
         {
             return pop().objectValue();
         }
 
-        void Stack::push(Game::Object *value)
+        void Stack::push(const std::shared_ptr<Game::Object> &value)
         {
             push(StackValue(value));
         }

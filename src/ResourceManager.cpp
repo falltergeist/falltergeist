@@ -66,7 +66,8 @@ ResourceManager::ResourceManager()
 // static
 ResourceManager* ResourceManager::getInstance()
 {
-    return Base::Singleton<ResourceManager>::get();
+    static ResourceManager manager;
+    return &manager;
 }
 
 void ResourceManager::_loadStreamForFile(string filename, std::function<void(Dat::Stream&&)> callback) {
@@ -496,7 +497,7 @@ string ResourceManager::FIDtoFrmName(unsigned int FID)
     return typeArtDescription.prefixPath + frmName;
 }
 
-void ResourceManager::shutdown()
+ResourceManager::~ResourceManager()
 {
     unloadResources();
 }

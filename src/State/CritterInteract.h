@@ -82,8 +82,8 @@ namespace Falltergeist
                 Mood mood();
                 void setMood(Mood mood);
 
-                Game::CritterObject* critter();
-                void setCritter(Game::CritterObject* critter);
+                const std::shared_ptr<Game::CritterObject> &critter();
+                void setCritter(const std::shared_ptr<Game::CritterObject> &critter);
 
                 int msgFileID();
                 void setMsgFileID(int value);
@@ -111,7 +111,7 @@ namespace Falltergeist
                 Mood _mood = Mood::NEUTRAL;
                 int _msgFileID = -1;
                 VM::Script* _script = nullptr;
-                Game::CritterObject* _critter = nullptr;
+                std::shared_ptr<Game::CritterObject> _critter;
                 std::string _headName;
                 uint32_t _startTime;
                 uint32_t _nextIndex;
@@ -122,9 +122,9 @@ namespace Falltergeist
                 int32_t _badFidgets;
                 Game::Timer _fidgetTimer;
 
-                CritterDialog* _dialog;
-                CritterBarter* _barter;
-                CritterDialogReview* _review;
+                std::shared_ptr<CritterDialog> _dialog;
+                std::shared_ptr<CritterBarter> _barter;
+                std::shared_ptr<CritterDialogReview> _review;
 
                 SubState _state = SubState::NONE;
             private:

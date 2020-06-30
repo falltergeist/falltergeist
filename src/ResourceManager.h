@@ -7,7 +7,6 @@
 #include <memory>
 #include <unordered_map>
 #include <vector>
-#include "Base/Singleton.h"
 
 namespace Falltergeist
 {
@@ -119,11 +118,10 @@ namespace Falltergeist
             void unloadResources();
             std::string FIDtoFrmName(unsigned int FID);
             Game::Location* gameLocation(unsigned int number);
-            void shutdown();
+
+            ~ResourceManager();
 
         private:
-            friend class Base::Singleton<ResourceManager>;
-
             std::vector<std::unique_ptr<Format::Dat::File>> _datFiles;
             std::unordered_map<std::string, std::unique_ptr<Format::Dat::Item>> _datItems;
             std::unordered_map<std::string, std::unique_ptr<Graphics::Texture>> _textures;

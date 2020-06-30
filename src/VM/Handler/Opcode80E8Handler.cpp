@@ -40,7 +40,7 @@ namespace Falltergeist {
                                                       << std::endl;
                 int amount = _script->dataStack()->popInteger();
                 debug << "    amount = " << amount << std::endl;
-                auto critter = dynamic_cast<Game::CritterObject *>(_script->dataStack()->popObject());
+                auto critter = std::dynamic_pointer_cast<Game::CritterObject>(_script->dataStack()->popObject());
                 if (!critter) {
                     _error("VM::critter_heal - invalid critter pointer");
                 }

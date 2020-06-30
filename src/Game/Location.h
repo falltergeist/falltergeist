@@ -70,7 +70,7 @@ namespace Falltergeist
                 unsigned int defaultOrientation() const;
                 void setDefaultOrientation(unsigned int value);
 
-                std::vector<std::shared_ptr<LocationElevation>>* elevations();
+                std::vector<std::unique_ptr<LocationElevation>>* elevations();
 
                 std::shared_ptr<VM::Script> script() const;
 
@@ -152,7 +152,7 @@ namespace Falltergeist
                 /**
                  * @brief Map elevations
                  */
-                std::vector<std::shared_ptr<LocationElevation>> _elevations;
+                std::vector<std::unique_ptr<LocationElevation>> _elevations;
 
                 std::shared_ptr<VM::Script> _script;
         };

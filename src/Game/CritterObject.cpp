@@ -29,7 +29,7 @@ namespace Falltergeist
             _setupNextIdleAnim();
         }
 
-        std::vector<ItemObject*>* CritterObject::inventory()
+        std::vector<std::shared_ptr<ItemObject>>* CritterObject::inventory()
         {
             return &_inventory;
         }
@@ -39,12 +39,12 @@ namespace Falltergeist
             Object::setOrientation(value);
         }
 
-        ArmorItemObject* CritterObject::armorSlot() const
+        const std::shared_ptr<ArmorItemObject> &CritterObject::armorSlot() const
         {
             return _armorSlot;
         }
 
-        void CritterObject::setArmorSlot(ArmorItemObject* object)
+        void CritterObject::setArmorSlot(const std::shared_ptr<ArmorItemObject> &object)
         {
             if (object) {
                 setFID((_gender == GENDER::FEMALE) ? object->femaleFID() : object->maleFID());
@@ -54,22 +54,22 @@ namespace Falltergeist
             _armorSlot = object;
         }
 
-        ItemObject* CritterObject::leftHandSlot() const
+        const std::shared_ptr<ItemObject> &CritterObject::leftHandSlot() const
         {
             return _leftHandSlot;
         }
 
-        void CritterObject::setLeftHandSlot(ItemObject* object)
+        void CritterObject::setLeftHandSlot(const std::shared_ptr<ItemObject> &object)
         {
             _leftHandSlot = object;
         }
 
-        ItemObject* CritterObject::rightHandSlot() const
+        const std::shared_ptr<ItemObject> &CritterObject::rightHandSlot() const
         {
             return _rightHandSlot;
         }
 
-        void CritterObject::setRightHandSlot(ItemObject* object)
+        void CritterObject::setRightHandSlot(const std::shared_ptr<ItemObject> &object)
         {
             _rightHandSlot = object;
         }
@@ -333,15 +333,15 @@ namespace Falltergeist
                 weight += item->weight();
             }
 
-            if (auto armor = dynamic_cast<ItemObject*>(armorSlot())) {
+            if (auto armor = std::dynamic_pointer_cast<ItemObject>(armorSlot())) {
                 weight += armor->weight();
             }
 
-            if (auto leftHand = dynamic_cast<ItemObject*>(leftHandSlot())) {
+            if (auto leftHand = std::dynamic_pointer_cast<ItemObject>(leftHandSlot())) {
                 weight += leftHand->weight();
             }
 
-            if (auto rightHand = dynamic_cast<ItemObject*>(rightHandSlot())) {
+            if (auto rightHand = std::dynamic_pointer_cast<ItemObject>(rightHandSlot())) {
                 weight += rightHand->weight();
             }
 
@@ -443,7 +443,7 @@ namespace Falltergeist
             _currentHand = value;
         }
 
-        ItemObject* CritterObject::currentHandSlot() const
+        const std::shared_ptr<ItemObject> &CritterObject::currentHandSlot() const
         {
             return currentHand() == HAND::RIGHT ? rightHandSlot() : leftHandSlot();
         }
@@ -452,7 +452,7 @@ namespace Falltergeist
         {
             if (_script && _script->hasFunction("talk_p_proc")) {
                 _script
-                    ->setSourceObject(Game::getInstance()->player().get())
+                    ->setSourceObject(Game::getInstance()->player())
                     ->call("talk_p_proc")
                 ;
             }
@@ -477,12 +477,12 @@ namespace Falltergeist
         {
         }
 
-        void CritterObject::use_skill_on_p_proc(SKILL skill, Object* objectUsed, CritterObject* usedBy)
+        void CritterObject::use_skill_on_p_proc(SKILL skill, const std::shared_ptr<Object> &objectUsed, const std::shared_ptr<CritterObject> &usedBy)
         {
         }
 
         // TODO: probably need to remove movement queue logic to separate class.
-        std::vector<Hexagon*>* CritterObject::movementQueue()
+        std::vector<std::shared_ptr<Hexagon>>* CritterObject::movementQueue()
         {
             return &_movementQueue;
         }
@@ -532,20 +532,20 @@ namespace Falltergeist
         // for different animation cycles.
         void CritterObject::onMovementAnimationFrame(Event::Event* event)
         {
-            auto animation = dynamic_cast<UI::Animation*>(ui());
-            auto curFrameOfs = animation->frameOffset();
+            UI::Animation *animation = dynamic_cast<UI::Animation*>(ui());
+            Point curFrameOfs = animation->frameOffset();
             if (isOutsideOfHexForDirection(curFrameOfs, _orientation)) {
                 // if we stepped too much away from current hex center, switch to the next hex
                 auto moveQueue = movementQueue();
                 if (!moveQueue->empty()) {
                     auto hexagon = moveQueue->back();
                     moveQueue->pop_back();
-                    Game::getInstance()->locationState()->moveObjectToHexagon(this, hexagon);
+                    Game::getInstance()->locationState()->moveObjectToHexagon(shared_from_this(), hexagon);
 
                     // This hack is needed for prevent game crash when player goes to the
                     // exit tile and location is changed but movement is not finished
                     for (auto object : *hexagon->objects()) {
-                        if (dynamic_cast<ExitMiscObject*>(object)) {
+                        if (std::dynamic_pointer_cast<ExitMiscObject>(object)) {
                             moveQueue->clear();
                             break;
                         }
@@ -553,6 +553,7 @@ namespace Falltergeist
                 }
                 if (moveQueue->empty()) {
                     _moving = false;
+                    animation = dynamic_cast<UI::Animation*>(ui());
                     animation->stop();
                     setActionAnimation("aa")->stop();
                     _setupNextIdleAnim();

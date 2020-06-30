@@ -213,5 +213,7 @@ namespace Falltergeist
                 }
             }
         }
+
+        Falltergeist::State::WorldMap::~WorldMap() { }
     }
 }

@@ -23,7 +23,7 @@ namespace Falltergeist
         {
             public:
                 CursorDropdown(
-                    std::shared_ptr<UI::IResourceManager> resourceManager,
+                    const std::shared_ptr<UI::IResourceManager> &resourceManager,
                     std::vector<Input::Mouse::Icon>&& icons,
                     bool onlyIcon = false
                 );
@@ -36,14 +36,14 @@ namespace Falltergeist
 
                 void onLeftButtonUp(Event::Mouse* event);
 
-                Game::Object* object();
-                void setObject(Game::Object* object);
+                const std::shared_ptr<Game::Object> &object();
+                void setObject(const std::shared_ptr<Game::Object> &object);
 
                 void onStateActivate(Event::State* event) override;
                 void onStateDeactivate(Event::State* event) override;
 
             protected:
-                Game::Object* _object = nullptr;
+                std::shared_ptr<Game::Object> _object;
                 bool _onlyShowIcon;
                 std::vector<Input::Mouse::Icon> _icons;
                 int _initialX;

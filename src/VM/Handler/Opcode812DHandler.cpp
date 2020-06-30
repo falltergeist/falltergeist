@@ -37,7 +37,7 @@ namespace Falltergeist {
 
             void Opcode812D::_run() {
                 Logger::debug("SCRIPT") << "[812D] [+] int is_locked(GameDoorSceneryObject* object)" << std::endl;
-                auto object = dynamic_cast<Game::DoorSceneryObject *>(_script->dataStack()->popObject());
+                auto object = std::dynamic_pointer_cast<Game::DoorSceneryObject>(_script->dataStack()->popObject());
                 _script->dataStack()->push(object->locked());
             }
         }

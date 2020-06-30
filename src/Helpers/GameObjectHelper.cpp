@@ -1,3 +1,7 @@
+// C++ standard includes
+#include <memory>
+
+// Falltergeist includes
 #include "../Exception.h"
 #include "../Format/Map/Object.h"
 #include "../Format/Map/Script.h"
@@ -17,13 +21,13 @@ namespace Falltergeist
 {
     namespace Helpers
     {
-        Game::Object* GameObjectHelper::createFromMapSpatialScript(const Format::Map::Script& mapScript) const
+        std::shared_ptr<Game::Object> GameObjectHelper::createFromMapSpatialScript(const Format::Map::Script& mapScript) const
         {
             auto tile = mapScript.spatialTile();
             auto hex = tile & 0xFFFF;
             auto elev = ((tile >> 28) & 0xf) >> 1;
 
-            auto object = new Game::SpatialObject(mapScript.spatialRadius());
+            auto object = std::make_shared<Game::SpatialObject>(mapScript.spatialRadius());
             object->setElevation(elev);
             object->setPosition(hex);
 
@@ -34,9 +38,9 @@ namespace Falltergeist
             return object;
         }
 
-        Game::Object* GameObjectHelper::createFromMapObject(const std::unique_ptr<Format::Map::Object> &mapObject) const
+        std::shared_ptr<Game::Object> GameObjectHelper::createFromMapObject(const std::unique_ptr<Format::Map::Object> &mapObject) const
         {
-            auto object = Game::ObjectFactory::getInstance()->createObject(mapObject->PID());
+            std::shared_ptr<Game::Object> object = Game::ObjectFactory::getInstance()->createObject(mapObject->PID());
             if (!object) {
                 Logger::error() << "Location::setLocation() - can't create object with PID: " << mapObject->PID() << std::endl;
                 return nullptr;
@@ -51,20 +55,20 @@ namespace Falltergeist
             object->setFlags(mapObject->flags());
             object->setDefaultFrame(mapObject->frameNumber());
 
-            if (auto exitGrid = dynamic_cast<Game::ExitMiscObject *>(object)) {
+            if (auto exitGrid = std::dynamic_pointer_cast<Game::ExitMiscObject>(object)) {
                 exitGrid->setExitMapNumber(mapObject->exitMap());
                 exitGrid->setExitElevationNumber(mapObject->exitElevation());
                 exitGrid->setExitHexagonNumber(mapObject->exitPosition());
                 exitGrid->setExitDirection(mapObject->exitOrientation());
             }
 
-            if (auto door = dynamic_cast<Game::DoorSceneryObject *>(object)) {
+            if (auto door = std::dynamic_pointer_cast<Game::DoorSceneryObject>(object)) {
                 door->setOpened(mapObject->opened());
             }
 
-            if (auto container = dynamic_cast<Game::ContainerItemObject *>(object)) {
+            if (auto container = std::dynamic_pointer_cast<Game::ContainerItemObject>(object)) {
                 for (auto &child : mapObject->children()) {
-                    auto item = dynamic_cast<Game::ItemObject *>(Game::ObjectFactory::getInstance()->createObject(child->PID()));
+                    auto item = std::dynamic_pointer_cast<Game::ItemObject>(Game::ObjectFactory::getInstance()->createObject(child->PID()));
                     if (!item) {
                         Logger::error() << "Location::setLocation() - can't create object with PID: " << child->PID() << std::endl;
                         return nullptr;
@@ -75,9 +79,9 @@ namespace Falltergeist
             }
 
             // TODO: use common interface...
-            if (auto critter = dynamic_cast<Game::CritterObject *>(object)) {
+            if (auto critter = std::dynamic_pointer_cast<Game::CritterObject>(object)) {
                 for (auto &child : mapObject->children()) {
-                    auto item = dynamic_cast<Game::ItemObject *>(Game::ObjectFactory::getInstance()->createObject(
+                    auto item = std::dynamic_pointer_cast<Game::ItemObject>(Game::ObjectFactory::getInstance()->createObject(
                             child->PID()));
                     if (!item) {
                         Logger::error() << "Location::setLocation() - can't create object with PID: "

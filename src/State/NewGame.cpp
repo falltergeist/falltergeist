@@ -31,6 +31,8 @@ namespace Falltergeist
             imageButtonFactory = std::make_unique<UI::Factory::ImageButtonFactory>(resourceManager);
         }
 
+        NewGame::~NewGame() {  }
+
         void NewGame::init()
         {
             if (_initialized) return;
@@ -63,6 +65,7 @@ namespace Falltergeist
             auto nextCharacterButton = addUI(imageButtonFactory->getByType(ImageButtonType::RIGHT_ARROW, {318, 320}));
             nextCharacterButton->mouseClickHandler().add(std::bind(&NewGame::onNextCharacterButtonClick, this, std::placeholders::_1));
 
+            // if fade time divisor is set to 512, these make the screen not show up at all on first try, but _only_ when running with ASAN...?
             addUI("images", new UI::ImageList({27, 23}, {
                 resourceManager->getImage("art/intrface/combat.frm"),
                 resourceManager->getImage("art/intrface/stealth.frm"),
@@ -98,7 +101,7 @@ namespace Falltergeist
         {
             Game::getInstance()->setPlayer(std::move(_characters.at(_selectedCharacter)));
             _characters.clear();
-            Game::getInstance()->pushState(new PlayerCreate(resourceManager));
+            Game::getInstance()->pushState(std::make_unique<PlayerCreate>(resourceManager));
         }
 
         void NewGame::doCreate()
@@ -106,7 +109,7 @@ namespace Falltergeist
             auto none = std::make_unique<Game::DudeObject>();
             none->loadFromGCDFile(ResourceManager::getInstance()->gcdFileType("premade/blank.gcd"));
             Game::getInstance()->setPlayer(std::move(none));
-            Game::getInstance()->pushState(new PlayerCreate(resourceManager));
+            Game::getInstance()->pushState(std::make_unique<PlayerCreate>(resourceManager));
         }
 
         void NewGame::doBack()

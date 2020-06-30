@@ -40,7 +40,7 @@ namespace Falltergeist {
 
             void Opcode80D8::_run() {
                 Logger::debug("SCRIPT") << "[80D8] [=] void add_obj_to_inven(void* who, void* item)" << std::endl;
-                auto item = dynamic_cast<Game::ItemObject *>(_script->dataStack()->popObject());
+                auto item = std::dynamic_pointer_cast<Game::ItemObject>(_script->dataStack()->popObject());
                 auto invenObj = _script->dataStack()->popObject();
 
                 if (!item) {
@@ -48,10 +48,10 @@ namespace Falltergeist {
                     return;
                 }
 
-                std::vector<Game::ItemObject *> *inven;
-                if (auto critterObj = dynamic_cast<Game::CritterObject *>(invenObj)) {
+                std::vector<std::shared_ptr<Game::ItemObject>> *inven;
+                if (auto critterObj = std::dynamic_pointer_cast<Game::CritterObject>(invenObj)) {
                     inven = critterObj->inventory();
-                } else if (auto contObj = dynamic_cast<Game::ContainerItemObject *>(invenObj)) {
+                } else if (auto contObj = std::dynamic_pointer_cast<Game::ContainerItemObject>(invenObj)) {
                     inven = contObj->inventory();
                 } else {
                     _error("add_obj_to_inven - wrong WHO parameter");

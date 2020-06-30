@@ -31,9 +31,9 @@ namespace Falltergeist
         class Script
         {
             public:
-                Script(Format::Int::File *script, Game::Object *owner);
+                Script(Format::Int::File *script, const std::shared_ptr<Game::Object> &owner);
 
-                Script(const std::string &filename, Game::Object *owner);
+                Script(const std::string &filename, const std::shared_ptr<Game::Object> &owner);
 
                 virtual ~Script();
 
@@ -62,7 +62,7 @@ namespace Falltergeist
 
                 Format::Int::File *script();
 
-                Game::Object *owner();
+                std::shared_ptr<Falltergeist::Game::Object> owner();
 
                 unsigned int programCounter();
 
@@ -86,22 +86,22 @@ namespace Falltergeist
 
                 int fixedParam() const;
 
-                VM::Script *setTargetObject(Game::Object *_targetObject);
+                VM::Script *setTargetObject(const std::shared_ptr<Game::Object> &targetObject);
 
-                Game::Object *targetObject() const;
+                std::shared_ptr<Falltergeist::Game::Object> targetObject() const;
 
-                VM::Script *setSourceObject(Game::Object *_sourceObject);
+                VM::Script *setSourceObject(const std::shared_ptr<Game::Object> &sourceObject);
 
-                Game::Object *sourceObject() const;
+                std::shared_ptr<Falltergeist::Game::Object> sourceObject() const;
 
                 SKILL usedSkill() const;
 
                 VM::Script *setUsedSkill(SKILL skill);
 
             protected:
-                Game::Object *_owner = nullptr;
-                Game::Object *_sourceObject = nullptr;
-                Game::Object *_targetObject = nullptr;
+                std::weak_ptr<Game::Object> _owner;
+                std::weak_ptr<Game::Object> _sourceObject;
+                std::weak_ptr<Game::Object> _targetObject;
                 SKILL _usedSkill = SKILL::NONE;
 
                 int _fixedParam = 0;

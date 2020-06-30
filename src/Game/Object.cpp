@@ -197,16 +197,21 @@ namespace Falltergeist
             _wallTransEnd = value;
         }
 
-        Hexagon *Object::hexagon() const
+        const std::shared_ptr<Hexagon> &Object::hexagon() const
         {
+            static const std::shared_ptr<Hexagon> null;
             if (this->position() < 0) {
-                return nullptr;
+                return null;
             }
 
+            if (!Game::getInstance()->locationState()) {
+                Logger::warning("OBJECT") << "Game not initialized yet, but we already have a position" << std::endl;
+                return null;
+            }
             return Game::getInstance()->locationState()->hexagonGrid()->at(this->position());
         }
 
-        void Object::setHexagon(Hexagon *hexagon)
+        void Object::setHexagon(const std::shared_ptr<Hexagon> &hexagon)
         {
             setPosition(hexagon->number());
         }
@@ -296,7 +301,7 @@ namespace Falltergeist
             bool useDefault = true;
             if (script() && script()->hasFunction("description_p_proc")) {
                 script()
-                        ->setSourceObject(Game::getInstance()->player().get())
+                        ->setSourceObject(Game::getInstance()->player())
                         ->call("description_p_proc");
                 if (script()->overrides()) {
                     useDefault = false;
@@ -311,7 +316,7 @@ namespace Falltergeist
             }
         }
 
-        void Object::use_p_proc(CritterObject *usedBy)
+        void Object::use_p_proc(const std::shared_ptr<CritterObject> &usedBy)
         {
             if (script() && script()->hasFunction("use_p_proc")) {
                 script()
@@ -324,7 +329,7 @@ namespace Falltergeist
         {
             if (script() && script()->hasFunction("destroy_p_proc")) {
                 script()
-                        ->setSourceObject(Game::getInstance()->player().get())
+                        ->setSourceObject(Game::getInstance()->player())
                         ->call("destroy_p_proc");
             }
         }
@@ -334,7 +339,7 @@ namespace Falltergeist
             bool useDefault = true;
             if (script() && script()->hasFunction("look_at_p_proc")) {
                 script()
-                        ->setSourceObject(Game::getInstance()->player().get())
+                        ->setSourceObject(Game::getInstance()->player())
                         ->call("look_at_p_proc");
                 if (script()->overrides()) {
                     useDefault = false;
@@ -369,7 +374,7 @@ namespace Falltergeist
             }
         }
 
-        void Object::pickup_p_proc(CritterObject *pickedUpBy)
+        void Object::pickup_p_proc(const std::shared_ptr<CritterObject> &pickedUpBy)
         {
             if (script() && script()->hasFunction("pickup_p_proc")) {
                 script()
@@ -379,7 +384,7 @@ namespace Falltergeist
             // @TODO: standard handler
         }
 
-        void Object::use_obj_on_p_proc(Object *objectUsed, CritterObject *usedBy)
+        void Object::use_obj_on_p_proc(const std::shared_ptr<Object> &objectUsed, const std::shared_ptr<CritterObject> &usedBy)
         {
             if (script() && script()->hasFunction("use_obj_on_p_proc")) {
                 script()
@@ -390,7 +395,7 @@ namespace Falltergeist
             // @TODO: standard handlers for drugs, etc.
         }
 
-        void Object::use_skill_on_p_proc(SKILL skill, Object *objectUsed, CritterObject *usedBy)
+        void Object::use_skill_on_p_proc(SKILL skill, const std::shared_ptr<Object> &objectUsed, const std::shared_ptr<CritterObject> &usedBy)
         {
             if (script() && script()->hasFunction("use_skill_on_p_proc")) {
                 script()
@@ -402,7 +407,7 @@ namespace Falltergeist
             // @TODO: standard handlers
         }
 
-        void Object::onUseAnimationActionFrame(Event::Event *event, CritterObject *critter)
+        void Object::onUseAnimationActionFrame(Event::Event *event, const std::shared_ptr<CritterObject> &critter)
         {
             use_p_proc(critter);
             auto animation = dynamic_cast<UI::Animation *>(critter->ui());
@@ -416,7 +421,7 @@ namespace Falltergeist
             }
         }
 
-        void Object::onUseAnimationEnd(Event::Event *event, CritterObject *critter)
+        void Object::onUseAnimationEnd(Event::Event *event, const std::shared_ptr<CritterObject> &critter)
         {
             critter->setActionAnimation("aa")->stop();
         }
@@ -552,5 +557,11 @@ namespace Falltergeist
         {
             _position = position;
         }
+
+        // need out-of-line declaration for std::unique_ptr to be happy with other forward declarations
+        Falltergeist::Game::Object::~Object()
+        {
+        }
+
     }
 }

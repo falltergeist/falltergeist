@@ -45,7 +45,7 @@ namespace Falltergeist
             _locked = value;
         }
 
-        void DoorSceneryObject::use_p_proc(CritterObject* usedBy)
+        void DoorSceneryObject::use_p_proc(const std::shared_ptr<CritterObject> &usedBy)
         {
             Object::use_p_proc(usedBy);
             if (script() && script()->overrides()) {

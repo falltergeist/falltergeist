@@ -43,8 +43,8 @@ namespace Falltergeist {
                 auto object = _script->dataStack()->popObject();
 
                 int amount = 0;
-                auto critter = dynamic_cast<Game::CritterObject *>(object);
-                auto container = dynamic_cast<Game::ContainerItemObject *>(object);
+                auto critter = std::dynamic_pointer_cast<Game::CritterObject>(object);
+                auto container = std::dynamic_pointer_cast<Game::ContainerItemObject>(object);
                 if (critter) {
                     for (auto object : *critter->inventory()) if (object->PID() == PID) amount += object->amount();
                 } else if (container) {

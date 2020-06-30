@@ -53,11 +53,11 @@ namespace Falltergeist {
                 auto game = Game::Game::getInstance();
                 auto player = game->player();
                 auto hexagon = game->locationState()->hexagonGrid()->at(position);
-                Game::getInstance()->locationState()->moveObjectToHexagon(player.get(), hexagon);
+                Game::getInstance()->locationState()->moveObjectToHexagon(player, hexagon);
                 //player->setPosition(position);
                 player->setOrientation(orientation);
                 player->setElevation(elevation);
-                Game::Game::getInstance()->locationState()->centerCameraAtHexagon(player->hexagon());
+                Game::Game::getInstance()->locationState()->centerCameraAtHexagon(player->hexagon().get());
             }
         }
     }

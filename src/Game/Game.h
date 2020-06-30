@@ -4,7 +4,6 @@
 #include <string>
 #include <vector>
 #include <SDL.h>
-#include "../Base/Singleton.h"
 #include "../Game/Time.h"
 #include "../Graphics/IRendererConfig.h"
 #include "../UI/IResourceManager.h"
@@ -64,9 +63,9 @@ namespace Falltergeist
                  * @param offset optional offset (1 means second from the top, and so on)
                  */
                 State::State* topState(unsigned offset = 0) const;
-                void pushState(State::State* state);
-                void setState(State::State* state);
-                void popState(bool doDelete = true);
+                void pushState(std::shared_ptr<State::State> state);
+                void setState(std::shared_ptr<State::State> state);
+                std::shared_ptr<State::State> popState(bool doDelete = true);
 
                 void run();
                 void quit();
@@ -91,7 +90,7 @@ namespace Falltergeist
                 std::shared_ptr<Input::Mouse> mouse() const;
                 std::shared_ptr<Graphics::Renderer> renderer() const;
                 std::shared_ptr<Time> gameTime() const;
-                State::Location* locationState();
+                std::shared_ptr<State::Location> locationState();
                 std::shared_ptr<Audio::Mixer> mixer() const;
                 Event::Dispatcher* eventDispatcher();
 
@@ -106,8 +105,9 @@ namespace Falltergeist
                 void setUIResourceManager(std::shared_ptr<UI::IResourceManager> uiResourceManager);
             protected:
                 std::vector<int> _GVARS;
-                std::vector<std::unique_ptr<State::State>> _states;
-                std::vector<std::unique_ptr<State::State>> _statesForDelete;
+                std::vector<std::shared_ptr<State::State>> _states;
+                std::vector<std::shared_ptr<State::State>> _statesForDelete;
+                std::weak_ptr<State::Location> _locationState;
 
                 std::shared_ptr<Time> _gameTime;
 
@@ -135,7 +135,6 @@ namespace Falltergeist
 
             private:
                 std::shared_ptr<UI::IResourceManager> uiResourceManager;
-                friend class Base::Singleton<Game>;
                 void _initGVARS();
                 std::unique_ptr<Event::Event> _createEventFromSDL(const SDL_Event& sdlEvent);
                 std::unique_ptr<Graphics::IRendererConfig> createRendererConfigFromSettings();

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <memory>
 #include <vector>
 #include "../State/State.h"
 #include "../UI/IResourceManager.h"
@@ -26,7 +27,7 @@ namespace Falltergeist
         class CritterBarter final : public State
         {
             public:
-                CritterBarter(std::shared_ptr<UI::IResourceManager> resourceManager);
+                CritterBarter(const std::shared_ptr<UI::IResourceManager> &resourceManager);
                 ~CritterBarter() override;
 
                 void init() override;
@@ -37,16 +38,16 @@ namespace Falltergeist
                 void onKeyDown(Event::Keyboard* event) override;
                 void onStateDeactivate(Event::State* event) override;
 
-                Game::CritterObject* trader();
-                void setTrader(Game::CritterObject* trader);
+                const std::shared_ptr<Game::CritterObject> &trader();
+                void setTrader(const std::shared_ptr<Game::CritterObject> &trader);
 
             protected:
                 int _sellPriceTotal = 0;
                 int _buyPriceTotal = 0;
 
-                Game::CritterObject* _trader = nullptr;
-                std::vector<Game::ItemObject*> _itemsToSell;
-                std::vector<Game::ItemObject*> _itemsToBuy;
+                std::shared_ptr<Game::CritterObject> _trader;
+                std::vector<std::shared_ptr<Game::ItemObject>> _itemsToSell;
+                std::vector<std::shared_ptr<Game::ItemObject>> _itemsToBuy;
 
             private:
                 std::shared_ptr<UI::IResourceManager> resourceManager;

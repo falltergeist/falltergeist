@@ -41,7 +41,8 @@ namespace Falltergeist
 
         Game* Game::getInstance()
         {
-            return Base::Singleton<Game>::get();
+            static Game game;
+            return &game;
         }
 
         void Game::init(std::unique_ptr<Settings> settings)
@@ -91,7 +92,7 @@ namespace Falltergeist
 
             IMG_Init(IMG_INIT_JPG | IMG_INIT_PNG);
 
-            srand(static_cast<unsigned>(time(0))); /// randomization
+            srand(static_cast<unsigned>(time(nullptr))); /// randomization
 
             atexit(SDL_Quit);
         }
@@ -104,48 +105,63 @@ namespace Falltergeist
         void Game::shutdown()
         {
             _mixer.reset();
-            ResourceManager::getInstance()->shutdown();
+            _mouse.reset();
             while (!_states.empty()) {
                 popState();
             }
+            _statesForDelete.clear();
             _settings.reset();
         }
 
-        void Game::pushState(State::State* state)
+        void Game::pushState(std::shared_ptr<State::State> state)
         {
-            _states.push_back(std::unique_ptr<State::State>(state));
             if (!state->initialized()) {
                 state->init();
             }
+            std::shared_ptr<State::Location> location = std::dynamic_pointer_cast<State::Location>(state);
+            if (location) {
+                if (_locationState.lock())  {
+                    Logger::warning("GAME") << "duplicate location state";
+                }
+
+                _locationState = location;
+            }
+
             state->emitEvent(std::make_unique<Event::State>("push"), state->pushHandler());
             state->setActive(true);
             state->emitEvent(std::make_unique<Event::State>("activate"), state->activateHandler());
+            _states.push_back(std::move(state));
         }
 
-        void Game::popState(bool doDelete)
+        std::shared_ptr<State::State> Game::popState(bool doDelete)
         {
             if (_states.empty()) {
-                return;
+                return nullptr;
             }
 
             State::State* state = _states.back().get();
+            std::shared_ptr<State::State> ret;
             if (doDelete) {
                 _statesForDelete.emplace_back(std::move(_states.back()));
+                state = _statesForDelete.back().get();
             } else {
-                _states.back().release();
+                ret = std::move(_states.back());
+                state = ret.get();
             }
             _states.pop_back();
             state->setActive(false);
             state->emitEvent(std::make_unique<Event::State>("deactivate"), state->deactivateHandler());
             state->emitEvent(std::make_unique<Event::State>("pop"), state->popHandler());
+
+            return ret;
         }
 
-        void Game::setState(State::State* state)
+        void Game::setState(std::shared_ptr<State::State> state)
         {
             while (!_states.empty()) {
                 popState();
             }
-            pushState(state);
+            pushState(std::move(state));
         }
 
         void Game::run()
@@ -196,15 +212,9 @@ namespace Falltergeist
             return _mouse;
         }
 
-        State::Location* Game::locationState()
+        std::shared_ptr<State::Location> Game::locationState()
         {
-            for (auto& state : _states) {
-                auto location = dynamic_cast<State::Location*>(state.get());
-                if (location) {
-                    return location;
-                }
-            }
-            return nullptr;
+            return _locationState.lock();
         }
 
         void Game::setGVAR(unsigned int number, int value)

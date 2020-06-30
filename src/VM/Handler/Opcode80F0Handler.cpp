@@ -41,10 +41,10 @@ namespace Falltergeist {
                                         << std::endl;
                 int fixedParam = _script->dataStack()->popInteger();
                 int delay = _script->dataStack()->popInteger();
-                Game::Object *object = _script->dataStack()->popObject();
+                std::shared_ptr<Game::Object> object = _script->dataStack()->popObject();
                 auto state = Game::Game::getInstance()->locationState();
                 if (state) {
-                    state->addTimerEvent(object, delay, fixedParam);
+                    state->addTimerEvent(object.get(), delay, fixedParam);
                 }
             }
         }

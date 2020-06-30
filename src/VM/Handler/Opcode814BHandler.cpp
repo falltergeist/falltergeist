@@ -39,7 +39,7 @@ namespace Falltergeist {
                 // @TODO
                 Logger::debug("SCRIPT") << "[814B] [*] void* party_member_obj(int pid)" << std::endl;
                 _script->dataStack()->popInteger();
-                _script->dataStack()->push((Game::Object *) nullptr);
+                _script->dataStack()->push(std::shared_ptr<Game::Object>(nullptr));
             }
         }
     }

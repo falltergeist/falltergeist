@@ -38,7 +38,7 @@ namespace Falltergeist {
             void Opcode813C::_run() {
                 int amount = _script->dataStack()->popInteger();
                 int skill = _script->dataStack()->popInteger();
-                auto critter = static_cast<Game::CritterObject *>(_script->dataStack()->popObject());
+                auto critter = std::static_pointer_cast<Game::CritterObject>(_script->dataStack()->popObject());
 
                 critter->setSkillGainedValue((SKILL) skill, critter->skillGainedValue((SKILL) skill) + amount);
 

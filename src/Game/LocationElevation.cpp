@@ -33,12 +33,12 @@ namespace Falltergeist
             _canRestHere = value;
         }
 
-        std::shared_ptr<UI::TileMap> LocationElevation::floor()
+        const std::shared_ptr<UI::TileMap> &LocationElevation::floor()
         {
             return _floor;
         }
 
-        std::shared_ptr<UI::TileMap> LocationElevation::roof()
+        const std::shared_ptr<UI::TileMap> &LocationElevation::roof()
         {
             return _roof;
         }
@@ -47,7 +47,7 @@ namespace Falltergeist
          * @brief Returns array of game objects
          * @return Game objects
          */
-        std::vector<Object*>* LocationElevation::objects()
+        std::vector<std::shared_ptr<Object>>* LocationElevation::objects()
         {
             return &_objects;
         }

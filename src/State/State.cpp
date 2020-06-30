@@ -25,6 +25,8 @@ namespace Falltergeist
             });
         }
 
+        State::~State() { }
+
         void State::init()
         {
             _initialized = true;

@@ -12,7 +12,7 @@ namespace Falltergeist
         {
             public:
                 StateLocationHelper() = default;
-                State::Location* getInitialLocationState() const;
+                std::unique_ptr<Falltergeist::State::Location> getInitialLocationState() const;
         };
     }
 }

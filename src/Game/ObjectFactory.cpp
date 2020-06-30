@@ -27,13 +27,14 @@ namespace Falltergeist
     {
         ObjectFactory* ObjectFactory::getInstance()
         {
-            return Base::Singleton<ObjectFactory>::get();
+            static ObjectFactory factory;
+            return &factory;
         }
 
-        Object* ObjectFactory::createObject(unsigned int PID)
+        std::shared_ptr<Object> ObjectFactory::createObject(unsigned int PID)
         {
             auto proto = ResourceManager::getInstance()->proFileType(PID);
-            Object* object = 0;
+            std::shared_ptr<Object> object;
             switch ((OBJECT_TYPE)proto->typeId())
             {
                 case OBJECT_TYPE::ITEM:
@@ -42,68 +43,71 @@ namespace Falltergeist
                     {
                         case ITEM_TYPE::AMMO:
                         {
-                            object = new AmmoItemObject();
+                            object = std::make_shared<AmmoItemObject>();
                             break;
                         }
                         case ITEM_TYPE::ARMOR:
                         {
-                            object = new ArmorItemObject();
+                            std::shared_ptr<ArmorItemObject> armorObject = std::make_shared<ArmorItemObject>();
+                            object = armorObject;
                             for (unsigned i = (unsigned)DAMAGE::NORMAL; i != (unsigned)DAMAGE::POISON; ++i)
                             {
-                                ((ArmorItemObject*)object)->setDamageResist((DAMAGE)i, proto->damageResist()->at(i));
-                                ((ArmorItemObject*)object)->setDamageThreshold((DAMAGE)i, proto->damageThreshold()->at(i));
+                                armorObject->setDamageResist((DAMAGE)i, proto->damageResist()->at(i));
+                                armorObject->setDamageThreshold((DAMAGE)i, proto->damageThreshold()->at(i));
                             }
-                            ((ArmorItemObject*)object)->setPerk(proto->perk());
-                            ((ArmorItemObject*)object)->setMaleFID(proto->armorMaleFID());
-                            ((ArmorItemObject*)object)->setFemaleFID(proto->armorFemaleFID());
-                            ((ArmorItemObject*)object)->setArmorClass(proto->armorClass());
+                            armorObject->setPerk(proto->perk());
+                            armorObject->setMaleFID(proto->armorMaleFID());
+                            armorObject->setFemaleFID(proto->armorFemaleFID());
+                            armorObject->setArmorClass(proto->armorClass());
                             break;
                         }
                         case ITEM_TYPE::CONTAINER:
                         {
-                            object = new ContainerItemObject();
+                            object = std::make_shared<ContainerItemObject>();
                             break;
                         }
                         case ITEM_TYPE::DRUG:
                         {
-                            object = new DrugItemObject();
+                            object = std::make_shared<DrugItemObject>();
                             break;
                         }
                         case ITEM_TYPE::KEY:
                         {
-                            object = new KeyItemObject();
+                            object = std::make_shared<KeyItemObject>();
                             break;
                         }
                         case ITEM_TYPE::MISC:
                         {
-                            object = new MiscItemObject();
+                            object = std::make_shared<MiscItemObject>();
                             break;
                         }
                         case ITEM_TYPE::WEAPON:
                         {
-                            object = new WeaponItemObject();
+                            std::shared_ptr<WeaponItemObject> weaponObject = std::make_shared<WeaponItemObject>();
+                            object = weaponObject;
 
-                            ((WeaponItemObject*)object)->setPerk(proto->perk());
-                            ((WeaponItemObject*)object)->setAnimationCode(proto->weaponAnimationCode());
-                            ((WeaponItemObject*)object)->setDamageMin(proto->weaponDamageMin());
-                            ((WeaponItemObject*)object)->setDamageMax(proto->weaponDamageMax());
-                            ((WeaponItemObject*)object)->setDamageType(proto->weaponDamageType());
-                            ((WeaponItemObject*)object)->setRangePrimary(proto->weaponRangePrimary());
-                            ((WeaponItemObject*)object)->setRangeSecondary(proto->weaponRangeSecondary());
-                            ((WeaponItemObject*)object)->setMinimumStrength(proto->weaponMinimumStrenght());
-                            ((WeaponItemObject*)object)->setActionCostPrimary(proto->weaponActionCostPrimary());
-                            ((WeaponItemObject*)object)->setActionCostSecondary(proto->weaponActionCostSecondary());
-                            ((WeaponItemObject*)object)->setBurstRounds(proto->weaponBurstRounds());
-                            ((WeaponItemObject*)object)->setAmmoType(proto->weaponAmmoType());
-                            ((WeaponItemObject*)object)->setAmmoPID(proto->weaponAmmoPID());
-                            ((WeaponItemObject*)object)->setAmmoCapacity(proto->weaponAmmoCapacity());
+                            weaponObject->setPerk(proto->perk());
+                            weaponObject->setAnimationCode(proto->weaponAnimationCode());
+                            weaponObject->setDamageMin(proto->weaponDamageMin());
+                            weaponObject->setDamageMax(proto->weaponDamageMax());
+                            weaponObject->setDamageType(proto->weaponDamageType());
+                            weaponObject->setRangePrimary(proto->weaponRangePrimary());
+                            weaponObject->setRangeSecondary(proto->weaponRangeSecondary());
+                            weaponObject->setMinimumStrength(proto->weaponMinimumStrenght());
+                            weaponObject->setActionCostPrimary(proto->weaponActionCostPrimary());
+                            weaponObject->setActionCostSecondary(proto->weaponActionCostSecondary());
+                            weaponObject->setBurstRounds(proto->weaponBurstRounds());
+                            weaponObject->setAmmoType(proto->weaponAmmoType());
+                            weaponObject->setAmmoPID(proto->weaponAmmoPID());
+                            weaponObject->setAmmoCapacity(proto->weaponAmmoCapacity());
                             break;
                         }
                     }
-                    ((ItemObject*)object)->setWeight(proto->weight());
+                    std::shared_ptr<ItemObject> itemObject = std::dynamic_pointer_cast<ItemObject>(object);
+                    itemObject->setWeight(proto->weight());
                     // @TODO: ((GameItemObject*)object)->setVolume(proto->containerSize());
-                    ((ItemObject*)object)->setInventoryFID(proto->inventoryFID());
-                    ((ItemObject*)object)->setPrice(proto->basePrice());
+                    itemObject->setInventoryFID(proto->inventoryFID());
+                    itemObject->setPrice(proto->basePrice());
                     auto msg = ResourceManager::getInstance()->msgFileType("text/english/game/pro_item.msg");
                     try
                     {
@@ -115,7 +119,8 @@ namespace Falltergeist
                 }
                 case OBJECT_TYPE::CRITTER:
                 {
-                    object = new CritterObject();
+                    std::shared_ptr<CritterObject> critterObject = std::make_shared<CritterObject>();
+                    object = critterObject;
                     auto msg = ResourceManager::getInstance()->msgFileType("text/english/game/pro_crit.msg");
                     try
                     {
@@ -126,30 +131,30 @@ namespace Falltergeist
 
                     for (unsigned i = (unsigned)STAT::STRENGTH; i <= (unsigned)STAT::LUCK; i++)
                     {
-                        ((CritterObject*)object)->setStat((STAT)i, proto->critterStats()->at(i));
-                        ((CritterObject*)object)->setStatBonus((STAT)i, proto->critterStatsBonus()->at(i));
+                        critterObject->setStat((STAT)i, proto->critterStats()->at(i));
+                        critterObject->setStatBonus((STAT)i, proto->critterStatsBonus()->at(i));
                     }
                     for (unsigned i = (unsigned)SKILL::SMALL_GUNS; i <= (unsigned)SKILL::OUTDOORSMAN; i++)
                     {
-                        ((CritterObject*)object)->setSkillTagged((SKILL)i, proto->critterSkills()->at(i));
+                        critterObject->setSkillTagged((SKILL)i, proto->critterSkills()->at(i));
                     }
-                    ((CritterObject*)object)->setActionPoints(proto->critterActionPoints());
-                    ((CritterObject*)object)->setActionPointsMax(proto->critterActionPoints());
-                    ((CritterObject*)object)->setCritterFlags(proto->critterFlags());
-                    ((CritterObject*)object)->setHitPointsMax(proto->critterHitPointsMax());
-                    ((CritterObject*)object)->setArmorClass(proto->critterArmorClass());
-                    ((CritterObject*)object)->setCarryWeightMax(proto->critterCarryWeightMax());
-                    ((CritterObject*)object)->setMeleeDamage(proto->critterMeleeDamage());
-                    ((CritterObject*)object)->setSequence(proto->critterSequence());
-                    ((CritterObject*)object)->setCriticalChance(proto->critterCriticalChance());
-                    ((CritterObject*)object)->setHealingRate(proto->critterHealingRate());
+                    critterObject->setActionPoints(proto->critterActionPoints());
+                    critterObject->setActionPointsMax(proto->critterActionPoints());
+                    critterObject->setCritterFlags(proto->critterFlags());
+                    critterObject->setHitPointsMax(proto->critterHitPointsMax());
+                    critterObject->setArmorClass(proto->critterArmorClass());
+                    critterObject->setCarryWeightMax(proto->critterCarryWeightMax());
+                    critterObject->setMeleeDamage(proto->critterMeleeDamage());
+                    critterObject->setSequence(proto->critterSequence());
+                    critterObject->setCriticalChance(proto->critterCriticalChance());
+                    critterObject->setHealingRate(proto->critterHealingRate());
                     for (unsigned i = (unsigned)DAMAGE::NORMAL; i <= (unsigned)DAMAGE::POISON; i++)
                     {
-                        ((CritterObject*)object)->setDamageResist((DAMAGE)i, proto->damageResist()->at(i));
-                        ((CritterObject*)object)->setDamageThreshold((DAMAGE)i, proto->damageThreshold()->at(i));
+                        critterObject->setDamageResist((DAMAGE)i, proto->damageResist()->at(i));
+                        critterObject->setDamageThreshold((DAMAGE)i, proto->damageThreshold()->at(i));
                     }
-                    ((CritterObject*)object)->setGender(proto->critterGender() ? GENDER::FEMALE : GENDER::MALE);
-                    ((CritterObject*)object)->setAge(proto->critterAge());
+                    critterObject->setGender(proto->critterGender() ? GENDER::FEMALE : GENDER::MALE);
+                    critterObject->setAge(proto->critterAge());
                     break;
                 }
                 case OBJECT_TYPE::SCENERY:
@@ -158,28 +163,28 @@ namespace Falltergeist
                     {
                         case SCENERY_TYPE::DOOR:
                         {
-                            object = new DoorSceneryObject();
+                            object = std::make_shared<DoorSceneryObject>();
                             break;
                         }
                         case SCENERY_TYPE::ELEVATOR:
                         {
-                            object = new ElevatorSceneryObject();
+                            object = std::make_shared<ElevatorSceneryObject>();
                             break;
                         }
                         case SCENERY_TYPE::GENERIC:
                         {
-                            object = new GenericSceneryObject();
+                            object = std::make_shared<GenericSceneryObject>();
                             break;
                         }
                         case SCENERY_TYPE::LADDER_TOP:
                         case SCENERY_TYPE::LADDER_BOTTOM:
                         {
-                            object = new LadderSceneryObject();
+                            object = std::make_shared<LadderSceneryObject>();
                             break;
                         }
                         case SCENERY_TYPE::STAIRS:
                         {
-                            object = new StairsSceneryObject();
+                            object = std::make_shared<StairsSceneryObject>();
                             break;
                         }
                     }
@@ -191,7 +196,7 @@ namespace Falltergeist
                     }
                     catch (const Exception&) {}
 
-                    ((SceneryObject*)object)->setSoundId((char)proto->soundId());
+                    std::dynamic_pointer_cast<SceneryObject>(object)->setSoundId((char)proto->soundId());
 
                     //first two bytes are orientation. second two - unknown
                     unsigned short orientation = proto->flagsExt() >> 16;
@@ -220,7 +225,7 @@ namespace Falltergeist
                 }
                 case OBJECT_TYPE::WALL:
                 {
-                    object = new WallObject();
+                    object = std::make_shared<WallObject>();
                     auto msg = ResourceManager::getInstance()->msgFileType("text/english/game/pro_wall.msg");
                     try
                     {
@@ -271,10 +276,10 @@ namespace Falltergeist
                         case 21:
                         case 22:
                         case 23:
-                            object = new ExitMiscObject();
+                            object = std::make_shared<ExitMiscObject>();
                             break;
                         default:
-                            object = new MiscObject();
+                            object = std::make_shared<MiscObject>();
                             break;
                     }
 

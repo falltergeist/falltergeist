@@ -16,8 +16,7 @@ namespace Falltergeist
 {
     namespace State
     {
-        CursorDropdown::CursorDropdown(
-            std::shared_ptr<UI::IResourceManager> resourceManager,
+        CursorDropdown::CursorDropdown(const std::shared_ptr<UI::IResourceManager> &resourceManager,
             std::vector<Input::Mouse::Icon>&& icons,
             bool onlyIcon
         ) : State()
@@ -156,12 +155,12 @@ namespace Falltergeist
             }
         }
 
-        Game::Object* CursorDropdown::object()
+        const std::shared_ptr<Game::Object> &CursorDropdown::object()
         {
             return _object;
         }
 
-        void CursorDropdown::setObject(Game::Object* object)
+        void CursorDropdown::setObject(const std::shared_ptr<Game::Object> &object)
         {
             _object = object;
         }
@@ -269,7 +268,7 @@ namespace Falltergeist
             auto game = Game::getInstance();
             game->popState();
             if (!_onlyShowIcon) {
-                game->locationState()->handleAction(object(), _icons.at(_currentIcon));
+                game->locationState()->handleAction(object().get(), _icons.at(_currentIcon));
                 event->setHandled(true);
             }
         }

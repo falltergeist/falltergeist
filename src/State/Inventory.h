@@ -44,7 +44,7 @@ namespace Falltergeist
                 void onInventoryModified();
 
             private:
-                std::string _handItemSummary (Game::ItemObject* hand);
+                std::string _handItemSummary (const std::shared_ptr<Game::ItemObject> &hand);
                 std::shared_ptr<UI::IResourceManager> resourceManager;
                 std::unique_ptr<UI::Factory::ImageButtonFactory> imageButtonFactory;
                 void _screenShow (unsigned int PID);
