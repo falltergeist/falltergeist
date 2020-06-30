@@ -7,9 +7,15 @@
 
 namespace Falltergeist
 {
-    Settings::Settings()
+    Settings::Settings() : Settings::Settings(true)
     {
-        if (!load()) {
+    }
+
+    /**
+     * @param loadFromFile if true then load a configuration file or create a new one, otherwise use default values
+     */
+    Settings::Settings(bool loadFromFile) {
+        if (loadFromFile && !load()) {
             save();
         }
     }
