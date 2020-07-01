@@ -16,6 +16,7 @@ namespace Falltergeist
         MSG_STATS,
         MSG_SKILLDEX,
         MSG_DIALOG_BOX,
+        MSG_PERK,
         MSG_PROTO,
         MSG_PROTO_ITEMS,
 
