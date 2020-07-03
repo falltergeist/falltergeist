@@ -17,6 +17,7 @@ Under development
 - [feature] Added timediff to gameloop in order to make things to be independent from SDL ticks (alexeevdv)
 - [feature] Extract UI generation logic from game objects (alexeevdv)
 - [feature] New video settings: window position(x,y) and always_on_top flag (adamkewley)
+- [feature] Added missing logo in the Pipboy window and special date greetings (JanSimek)
 
 0.3.1 (2018-01-14)
 =======================
