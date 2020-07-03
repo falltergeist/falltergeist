@@ -1,3 +1,4 @@
+#include "../functions.h"
 #include "../State/PipBoy.h"
 #include "../Event/Keyboard.h"
 #include "../Game/Game.h"
@@ -5,11 +6,13 @@
 #include "../Graphics/Renderer.h"
 #include "../Input/Mouse.h"
 #include "../ResourceManager.h"
+#include "../UI/Base.h"
 #include "../UI/Factory/ImageButtonFactory.h"
 #include "../UI/Image.h"
 #include "../UI/ImageButton.h"
 #include "../UI/MonthCounter.h"
 #include "../UI/SmallCounter.h"
+#include "../UI/TextArea.h"
 
 namespace Falltergeist
 {
@@ -44,6 +47,10 @@ namespace Falltergeist
             int backgroundX = backgroundPos.x();
             int backgroundY = backgroundPos.y();
             background->setPosition(backgroundPos);
+
+            // Pipboy logo
+            auto logo = resourceManager->getImage("art/intrface/pipx.frm");
+            logo->setPosition({ backgroundX + 325, backgroundY + 165 });
 
             // Buttons
             auto alarmButton = imageButtonFactory->getByType(ImageButtonType::PIPBOY_ALARM_BUTTON, {backgroundX + 124, backgroundY + 13});
@@ -82,6 +89,7 @@ namespace Falltergeist
             time->setType(UI::SmallCounter::Type::UNSIGNED);
 
             addUI(background);
+            addUI(logo);
 
             addUI(alarmButton);
             addUI(statusButton);
@@ -94,6 +102,12 @@ namespace Falltergeist
             addUI(time);
 
             addUI(closeButton);
+
+            // Special date greeting
+            std::string greeting = getSpecialGreeting(gameTime->month(), gameTime->day());
+            if (!greeting.empty()) {
+                addUI(new UI::TextArea(greeting, backgroundX+385, backgroundY+325));
+            }
         }
 
         void PipBoy::onCloseButtonClick(Event::Mouse* event)
@@ -107,6 +121,36 @@ namespace Falltergeist
             {
                 Game::Game::getInstance()->popState();
             }
+        }
+
+        std::string PipBoy::getSpecialGreeting(int month, int day) {
+
+            if (month == 1 && day == 1) {
+                return _t(MSG_PIPBOY, 100); // New Year
+            }
+            if (month == 2 && day == 14) {
+                return _t(MSG_PIPBOY, 101); // Valentine's Day
+            }
+            if (month == 4 && day == 1) {
+                return _t(MSG_PIPBOY, 102); // April fools
+            }
+            if (month == 10 && day == 6) {
+                return _t(MSG_PIPBOY, 103); // Fallout shipping day
+            }
+            if (month == 7 && day == 4) {
+                return _t(MSG_PIPBOY, 104); // Independence day
+            }
+            if (month == 10 && day == 31) {
+                return _t(MSG_PIPBOY, 105); // Halloween
+            }
+            if (month == 11 && day == 26) {
+                return _t(MSG_PIPBOY, 106); // Thanksgiving
+            }
+            if (month == 12 && day == 24) {
+                return _t(MSG_PIPBOY, 107); // Christmas
+            }
+
+            return std::string();
         }
     }
 }
