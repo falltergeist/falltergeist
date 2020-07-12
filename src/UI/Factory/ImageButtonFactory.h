@@ -49,7 +49,8 @@ namespace Falltergeist
                         DIALOG_DOWN_ARROW,
                         SMALL_UP_ARROW,
                         SMALL_DOWN_ARROW,
-                        MAP_HOTSPOT
+                        MAP_HOTSPOT,
+                        ELEVATOR_CIRCLE
                     };
 
                     ImageButtonFactory(std::shared_ptr<IResourceManager> uiResourceManager);
