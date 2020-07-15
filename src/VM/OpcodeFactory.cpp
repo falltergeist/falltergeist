@@ -82,6 +82,7 @@
 #include "../VM/Handler/Opcode80CAHandler.h"
 #include "../VM/Handler/Opcode80CBHandler.h"
 #include "../VM/Handler/Opcode80CCHandler.h"
+#include "../VM/Handler/Opcode80CDHandler.h"
 #include "../VM/Handler/Opcode80CEHandler.h"
 #include "../VM/Handler/Opcode80CFHandler.h"
 #include "../VM/Handler/Opcode80D0Handler.h"
@@ -386,6 +387,8 @@ namespace Falltergeist
                     return std::make_unique<Handler::Opcode80CB>(script, logger);
                 case 0x80CC:
                     return std::make_unique<Handler::Opcode80CC>(script, logger);
+                case 0x80CD:
+                    return std::make_unique<Handler::Opcode80CD>(script, logger);
                 case 0x80CE:
                     return std::make_unique<Handler::Opcode80CE>(script, logger);
                 case 0x80CF:
