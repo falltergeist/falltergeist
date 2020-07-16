@@ -15,6 +15,7 @@
             },
             "command": "mkdir",
             "args": [
+                "-p",
                 "build"
             ],
             "group": "build"
