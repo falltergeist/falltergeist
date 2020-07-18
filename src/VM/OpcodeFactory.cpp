@@ -139,6 +139,7 @@
 #include "../VM/Handler/Opcode8117Handler.h"
 #include "../VM/Handler/Opcode8118Handler.h"
 #include "../VM/Handler/Opcode8119Handler.h"
+#include "../VM/Handler/Opcode811AHandler.h"
 #include "../VM/Handler/Opcode811CHandler.h"
 #include "../VM/Handler/Opcode811DHandler.h"
 #include "../VM/Handler/Opcode811EHandler.h"
@@ -501,6 +502,8 @@ namespace Falltergeist
                     return std::make_unique<Handler::Opcode8118>(script, logger);
                 case 0x8119:
                     return std::make_unique<Handler::Opcode8119>(script, logger);
+                case 0x811A:
+                    return std::make_unique<Handler::Opcode811A>(script, logger);
                 case 0x811C:
                     return std::make_unique<Handler::Opcode811C>(script, logger);
                 case 0x811D:
