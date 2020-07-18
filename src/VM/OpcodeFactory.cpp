@@ -100,11 +100,13 @@
 #include "../VM/Handler/Opcode80E3Handler.h"
 #include "../VM/Handler/Opcode80E4Handler.h"
 #include "../VM/Handler/Opcode80E5Handler.h"
+#include "../VM/Handler/Opcode80E6Handler.h"
 #include "../VM/Handler/Opcode80E7Handler.h"
 #include "../VM/Handler/Opcode80E8Handler.h"
 #include "../VM/Handler/Opcode80E9Handler.h"
 #include "../VM/Handler/Opcode80EAHandler.h"
 #include "../VM/Handler/Opcode80ECHandler.h"
+#include "../VM/Handler/Opcode80EEHandler.h"
 #include "../VM/Handler/Opcode80EFHandler.h"
 #include "../VM/Handler/Opcode80F0Handler.h"
 #include "../VM/Handler/Opcode80F1Handler.h"
@@ -423,6 +425,8 @@ namespace Falltergeist
                 case 0x80E4:
                     return std::make_unique<Handler::Opcode80E4>(script, logger);
                 case 0x80E5:
+                    return std::make_unique<Handler::Opcode80E6>(script, logger);
+                case 0x80E6:
                     return std::make_unique<Handler::Opcode80E5>(script, logger);
                 case 0x80E7:
                     return std::make_unique<Handler::Opcode80E7>(script, logger);
@@ -434,6 +438,8 @@ namespace Falltergeist
                     return std::make_unique<Handler::Opcode80EA>(script, logger);
                 case 0x80EC:
                     return std::make_unique<Handler::Opcode80EC>(script, logger);
+                case 0x80EE:
+                    return std::make_unique<Handler::Opcode80EE>(script, logger);
                 case 0x80EF:
                     return std::make_unique<Handler::Opcode80EF>(script, logger);
                 case 0x80F0:
