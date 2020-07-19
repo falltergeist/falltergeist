@@ -7,6 +7,8 @@
 #include "../Game/DoorSceneryObject.h"
 #include "../Game/ElevatorSceneryObject.h"
 #include "../Game/ExitMiscObject.h"
+#include "../Game/LadderSceneryObject.h"
+#include "../Game/StairsSceneryObject.h"
 #include "../Game/ObjectFactory.h"
 #include "../Game/SpatialObject.h"
 #include "../Helpers/GameObjectHelper.h"
@@ -86,6 +88,19 @@ namespace Falltergeist
                     container->inventory()->push_back(item);
                 }
             }
+
+            if (auto ladder = dynamic_cast<Game::LadderSceneryObject *>(object)) {
+                ladder->setExitMapNumber(mapObject->exitMap());
+                ladder->setExitElevationNumber(mapObject->exitElevation());
+                ladder->setExitHexagonNumber(mapObject->exitPosition());
+            }
+
+            if (auto stairs = dynamic_cast<Game::StairsSceneryObject *>(object)) {
+                stairs->setExitMapNumber(mapObject->exitMap());
+                stairs->setExitElevationNumber(mapObject->exitElevation());
+                stairs->setExitHexagonNumber(mapObject->exitPosition());
+            }
+
 
             // TODO: use common interface...
             if (auto critter = dynamic_cast<Game::CritterObject *>(object)) {
