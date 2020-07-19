@@ -14,6 +14,8 @@
 #include "../Game/DoorSceneryObject.h"
 #include "../Game/ExitMiscObject.h"
 #include "../Game/Game.h"
+#include "../Game/LadderSceneryObject.h"
+#include "../Game/StairsSceneryObject.h"
 #include "../Game/Location.h"
 #include "../Game/LocationElevation.h"
 #include "../Game/ObjectFactory.h"
@@ -373,6 +375,10 @@ namespace Falltergeist
             } else if (dynamic_cast<Game::DoorSceneryObject *>(object)) {
                 icons.push_back(Input::Mouse::Icon::USE);
             } else if (dynamic_cast<Game::ContainerItemObject *>(object)) {
+                icons.push_back(Input::Mouse::Icon::USE);
+            } else if (dynamic_cast<Game::LadderSceneryObject *>(object)) {
+                icons.push_back(Input::Mouse::Icon::USE);
+            } else if (dynamic_cast<Game::StairsSceneryObject *>(object)) {
                 icons.push_back(Input::Mouse::Icon::USE);
             }
 

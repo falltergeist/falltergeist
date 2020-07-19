@@ -272,15 +272,26 @@ namespace Falltergeist
                         uint32_t elevhex;  // elev+hex
                         uint32_t hex;
                         uint32_t elev;
+                        int32_t map;
                         switch((SCENERY_TYPE)object->objectSubtypeId())
                         {
                             case SCENERY_TYPE::LADDER_TOP:
                             case SCENERY_TYPE::LADDER_BOTTOM:
-                            case SCENERY_TYPE::STAIRS:
+                                map = stream.int32();
                                 elevhex = stream.uint32();  // elev+hex
                                 hex = elevhex & 0xFFFF;
                                 elev = ((elevhex >> 28) & 0xf) >> 1;
-                                object->setExitMap(stream.int32()); // map id
+                                object->setExitMap(map); // map id
+                                object->setExitPosition(hex);
+                                object->setExitElevation(elev);
+                                break;
+                            case SCENERY_TYPE::STAIRS:
+                                // looks like for ladders and stairs map and elev+hex fields in the different order
+                                elevhex = stream.uint32();  // elev+hex
+                                map = stream.int32();
+                                hex = elevhex & 0xFFFF;
+                                elev = ((elevhex >> 28) & 0xf) >> 1;
+                                object->setExitMap(map); // map id
                                 object->setExitPosition(hex);
                                 object->setExitElevation(elev);
                                 break;
