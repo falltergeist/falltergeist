@@ -18,8 +18,8 @@ Under development
 - [feature] Extract UI generation logic from game objects (alexeevdv)
 - [feature] New video settings: window position(x,y) and always_on_top flag (adamkewley)
 - [feature] Added missing logo in the Pipboy window and special date greetings (JanSimek)
-- [feature] Added elevators support (667bdrm)
 - [feature] Added ladders and stairs funtionality (667bdrm)
+- [feature] Added elevators support (667bdrm)
 
 0.3.1 (2018-01-14)
 =======================
