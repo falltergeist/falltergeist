@@ -5,6 +5,7 @@
 #include "../UI/Base.h"
 #include "../ILogger.h"
 #include "../UI/ImageButton.h"
+#include "../UI/CombatPanel.h"
 
 namespace Falltergeist
 {
@@ -48,6 +49,7 @@ namespace Falltergeist
                 std::shared_ptr<Image> _background;
                 std::shared_ptr<SmallCounter> _hitPoints;
                 std::shared_ptr<SmallCounter> _armorClass;
+                std::shared_ptr<CombatPanel> _combatPanel;
                 std::shared_ptr<TextArea> _messageLog;
                 std::vector<std::shared_ptr<UI::Base>> _ui;
 
@@ -68,6 +70,7 @@ namespace Falltergeist
                 void openSkilldex();
                 void openSaveGame();
                 void openLoadGame();
+                void endCombatTurn();
 
                 void onKeyDown(Event::Keyboard* event);
         };

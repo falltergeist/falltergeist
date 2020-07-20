@@ -17,6 +17,7 @@
 #include "../State/Skilldex.h"
 #include "../State/WorldMap.h"
 #include "../UI/Animation.h"
+#include "../UI/CombatPanel.h"
 #include "../UI/Factory/ImageButtonFactory.h"
 #include "../UI/ImageButton.h"
 #include "../UI/PlayerPanel.h"
@@ -86,8 +87,11 @@ namespace Falltergeist
             _ui.back()->mouseDownHandler().add([this](Event::Event* event){
                 if(auto mouse = dynamic_cast<Event::Mouse*>(event))
                 {
-                    if(mouse->leftButton())
+                    if(mouse->leftButton()) {
                         _isAttackBtnPressed = true;
+                        if (!_combatPanel->activated())
+                            _combatPanel->setActivated(true);
+                    }
                 }
             });
 
@@ -131,6 +135,22 @@ namespace Falltergeist
             _ui.back()->mouseClickHandler().add([this](Event::Event* event){
                 this->openPipBoy();
             });
+
+            // Combat panel
+            _combatPanel = std::make_shared<CombatPanel>(position() + Point(580, 38));
+            _combatPanel->setMode(CombatPanel::CombatMode::PLAYER_TURN);
+
+            auto _btnEndTurn = std::shared_ptr<UI::ImageButton>(_combatPanel->_btnEndTurn);
+            _btnEndTurn->mouseClickHandler().add([this](Event::Event* event){
+                endCombatTurn();
+            });
+
+            auto _btnEndCombat = std::shared_ptr<UI::ImageButton>(_combatPanel->_btnEndCombat);
+            _btnEndCombat->mouseClickHandler().add([this](Event::Event* event){
+                _combatPanel->setActivated(false);
+            });
+
+            _ui.push_back(_combatPanel);
 
             // Message log
             _messageLog = std::make_shared<UI::TextArea>(position() + Point(23, 24));
@@ -346,12 +366,22 @@ namespace Falltergeist
             playWindowOpenSfx();
         }
 
+        void PlayerPanel::endCombatTurn()
+        {
+            // @TODO: implement combat sequence
+            if (_combatPanel->activated()) {
+                Game::Game::getInstance()->mixer()->playACMSound("sound/sfx/icombat1.acm");
+            }
+        }
+
         void PlayerPanel::onKeyDown(Event::Keyboard* event)
         {
             switch (event->keyCode())
             {
                 case SDLK_a:
                     // @TODO: initiateCombat();
+                    if (!_combatPanel->activated())
+                        _combatPanel->setActivated(true);
                     break;
                 case SDLK_c:
                     openCharacterScreen();
@@ -405,8 +435,19 @@ namespace Falltergeist
                         Game::Game::getInstance()->pushState(new State::ExitConfirm(resourceManager, logger));
                         playWindowOpenSfx();
                     }
+                    break;
+                case SDLK_RETURN:
+                    // @TODO: endCombat();
+                    if (_combatPanel->activated()) {
+                        _combatPanel->setActivated(false);
+                    }
+                    break;
                 case SDLK_SLASH:
                     // @TODO: printCurrentTime();
+                    break;
+                case SDLK_SPACE:
+                    // @TODO: endCombatTurn();
+                    endCombatTurn();
                     break;
                 case SDLK_TAB:
                     openMap();
