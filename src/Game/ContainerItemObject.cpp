@@ -31,22 +31,26 @@ namespace Falltergeist
                 return;
             }
 
-            if (!opened()) {
-                if (UI::AnimationQueue* queue = dynamic_cast<UI::AnimationQueue*>(this->ui())) {
-                    queue->start();
-                    queue->animationEndedHandler().add(std::bind(&ContainerItemObject::onOpeningAnimationEnded, this, std::placeholders::_1));
-                    if (_soundId) {
-                        Game::getInstance()->mixer()->playACMSound(std::string("sound/sfx/iocntnr") + _soundId + ".acm");
+            if (!_locked) {
+                if (!opened()) {
+                    if (UI::AnimationQueue* queue = dynamic_cast<UI::AnimationQueue*>(this->ui())) {
+                        queue->start();
+                        queue->animationEndedHandler().add(std::bind(&ContainerItemObject::onOpeningAnimationEnded, this, std::placeholders::_1));
+                        if (_soundId) {
+                            Game::getInstance()->mixer()->playACMSound(std::string("sound/sfx/iocntnr") + _soundId + ".acm");
+                        }
+                    }
+                } else {
+                    if (UI::AnimationQueue* queue = dynamic_cast<UI::AnimationQueue*>(this->ui())) {
+                        queue->start();
+                        queue->animationEndedHandler().add(std::bind(&ContainerItemObject::onClosingAnimationEnded, this, std::placeholders::_1));
+                        if (_soundId) {
+                            Game::getInstance()->mixer()->playACMSound(std::string("sound/sfx/iccntnr") + _soundId + ".acm");
+                        }
                     }
                 }
-            } else {
-                if (UI::AnimationQueue* queue = dynamic_cast<UI::AnimationQueue*>(this->ui())) {
-                    queue->start();
-                    queue->animationEndedHandler().add(std::bind(&ContainerItemObject::onClosingAnimationEnded, this, std::placeholders::_1));
-                    if (_soundId) {
-                        Game::getInstance()->mixer()->playACMSound(std::string("sound/sfx/iccntnr") + _soundId + ".acm");
-                    }
-                }
+            } else if (_soundId) {
+                Game::getInstance()->mixer()->playACMSound(std::string("sound/sfx/ilcntnr") + _soundId + ".acm");
             }
         }
 
