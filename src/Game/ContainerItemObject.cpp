@@ -35,17 +35,17 @@ namespace Falltergeist
                 if (UI::AnimationQueue* queue = dynamic_cast<UI::AnimationQueue*>(this->ui())) {
                     queue->start();
                     queue->animationEndedHandler().add(std::bind(&ContainerItemObject::onOpeningAnimationEnded, this, std::placeholders::_1));
-                    /*if (_soundId) {
-                        Game::getInstance()->mixer()->playACMSound(std::string("sound/sfx/sodoors") + _soundId + ".acm");
-                    }*/
+                    if (_soundId) {
+                        Game::getInstance()->mixer()->playACMSound(std::string("sound/sfx/iocntnr") + _soundId + ".acm");
+                    }
                 }
             } else {
                 if (UI::AnimationQueue* queue = dynamic_cast<UI::AnimationQueue*>(this->ui())) {
                     queue->start();
                     queue->animationEndedHandler().add(std::bind(&ContainerItemObject::onClosingAnimationEnded, this, std::placeholders::_1));
-                    /*if (_soundId) {
-                        Game::getInstance()->mixer()->playACMSound(std::string("sound/sfx/scdoors") + _soundId + ".acm");
-                    }*/
+                    if (_soundId) {
+                        Game::getInstance()->mixer()->playACMSound(std::string("sound/sfx/iccntnr") + _soundId + ".acm");
+                    }
                 }
             }
         }

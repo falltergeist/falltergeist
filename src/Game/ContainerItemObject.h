@@ -10,7 +10,7 @@ namespace Falltergeist
     {
         class Event;
     }
-    
+
     namespace Game
     {
         /**
