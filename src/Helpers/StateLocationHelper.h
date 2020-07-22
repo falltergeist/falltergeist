@@ -16,6 +16,7 @@ namespace Falltergeist
             public:
                 StateLocationHelper(std::shared_ptr<ILogger> logger);
                 State::Location* getInitialLocationState() const;
+                State::Location* getCustomLocationState(const std::string& name, uint32_t elevation, uint32_t position) const;
             private:
                 std::shared_ptr<ILogger> logger;
         };

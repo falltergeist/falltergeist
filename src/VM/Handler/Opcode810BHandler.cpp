@@ -1,5 +1,16 @@
 #include "../../VM/Handler/Opcode810BHandler.h"
-#include "../../VM/Script.h"
+#include "../../Game/DudeObject.h"
+#include "../../Game/Object.h"
+#include "../../Game/SceneryObject.h"
+#include "../../Game/ElevatorSceneryObject.h"
+#include "../../Game/Game.h"
+#include "../../State/Location.h"
+#include "../../PathFinding/HexagonGrid.h"
+#include "../../PathFinding/Hexagon.h"
+#include "../../State/ElevatorDialog.h"
+#include "../../UI/ResourceManager.h"
+
+#define PID_ELEVATOR_STUB (33555725)
 
 namespace Falltergeist
 {
@@ -17,11 +28,47 @@ namespace Falltergeist
                 logger->debug() << "[810B] [*] int metarule(int type, value)" << std::endl;
                 auto value = _script->dataStack()->pop();
                 auto type = _script->dataStack()->popInteger();
+
                 int result = 0;
+                auto object = (Game::Object*)_script->sourceObject();
 
                 switch (type) {
                     case 14: // METARULE_TEST_FIRSTRUN
                         result = 1;
+                        break;
+                    case 15: // METARULE_ELEVATOR
+                        logger->info() << "[ELEVATOR] metarule value = " << value.toString() << std::endl;
+
+                        if (auto critter = dynamic_cast<Game::CritterObject *>(object)) {
+                            logger->info() << "Triggered critter PID = " << critter->PID() << std::endl;
+
+                            bool found = false;
+                            for (int i = 1; i < 6; i++) {
+                                if (!found) {
+                                    auto hexagons = Game::Game::getInstance()->locationState()->hexagonGrid()->ring(critter->hexagon(), i);
+
+                                    for (auto hexagon: hexagons) {
+                                        if (!found) {
+                                            auto position = hexagon->number();
+                                            auto objects = Game::Game::getInstance()->locationState()->hexagonGrid()->at(position)->objects();
+
+                                            for (auto object : *objects) {
+                                                if (object->type() == Game::Object::Type::SCENERY && object->PID() == PID_ELEVATOR_STUB) {
+                                                    if (auto elevatorStub = dynamic_cast<Game::ElevatorSceneryObject *>(object)) {
+                                                        logger->info() << "[ELEVATOR] stub found: type = " << (uint32_t)elevatorStub->elevatorType() << " level = " << (uint32_t)elevatorStub->elevatorLevel() << std::endl;
+                                                        found = true;
+                                                        auto elevatorDialog = new State::ElevatorDialog(std::make_shared<UI::ResourceManager>(), this->logger, elevatorStub->elevatorType(), elevatorStub->elevatorLevel());
+                                                        Game::Game::getInstance()->pushState(elevatorDialog);
+                                                    }
+                                                }
+                                            }        
+                                        }
+                                    }
+                                }
+                            }
+                        } 
+
+                        result = -1;
                         break;
                     case 16: // METARULE_PARTY_COUNT
                         result = 0;
