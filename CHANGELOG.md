@@ -21,6 +21,7 @@ Under development
 - [feature] Added ladders and stairs funtionality (667bdrm)
 - [feature] Added container animation and sound (667bdrm)
 - [feature] Added soundId support for items objects (667bdrm)
+- [feature] Added elevators support (667bdrm)
 
 0.3.1 (2018-01-14)
 =======================

@@ -10,5 +10,25 @@ namespace Falltergeist
         {
             _subtype = Subtype::ELEVATOR;
         }
+
+        int ElevatorSceneryObject::elevatorType()
+        {
+            return _elevatorType;
+        }
+
+        void ElevatorSceneryObject::setElevatorType(int type)
+        {
+            _elevatorType = type;
+        }
+
+        int ElevatorSceneryObject::elevatorLevel()
+        {
+            return _elevatorLevel;
+        }
+
+        void ElevatorSceneryObject::setElevatorLevel(int level)
+        {
+            _elevatorLevel = level;
+        }
     }
 }
