@@ -35,6 +35,8 @@ namespace Falltergeist
             Logger::info("LADDER") << "mapId=" << this->exitMapNumber() << " position=" << this->exitHexagonNumber() << " elevation=" << this->exitElevationNumber()  << std::endl;
             Logger::info("LADDER") << "current map: " << game->locationState()->location()->name() << std::endl;
 
+            game->player()->stopMovement();
+
             if (this->exitMapNumber() != -1) {
                 std::string mapName;
 
