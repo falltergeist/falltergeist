@@ -1,6 +1,7 @@
 #include "../Game/Game.h"
 #include "../Game/Location.h"
 #include "../Helpers/GameLocationHelper.h"
+#include "../PathFinding/Hexagon.h"
 #include "../Logger.h"
 #include "../ResourceManager.h"
 #include "../Settings.h"

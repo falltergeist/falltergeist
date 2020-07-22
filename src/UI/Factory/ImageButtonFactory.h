@@ -52,6 +52,7 @@ namespace Falltergeist
                         MAP_HOTSPOT,
                         PANEL_END_TURN,
                         PANEL_END_COMBAT,
+                        ELEVATOR_CIRCLE
                     };
 
                     ImageButtonFactory(std::shared_ptr<IResourceManager> uiResourceManager);
