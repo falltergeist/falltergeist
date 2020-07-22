@@ -5,6 +5,7 @@
 #include "../Game/ContainerItemObject.h"
 #include "../Game/CritterObject.h"
 #include "../Game/DoorSceneryObject.h"
+#include "../Game/ElevatorSceneryObject.h"
 #include "../Game/ExitMiscObject.h"
 #include "../Game/LadderSceneryObject.h"
 #include "../Game/StairsSceneryObject.h"
@@ -69,6 +70,11 @@ namespace Falltergeist
 
             if (auto door = dynamic_cast<Game::DoorSceneryObject *>(object)) {
                 door->setOpened(mapObject->opened());
+            }
+
+            if (auto elevator = dynamic_cast<Game::ElevatorSceneryObject *>(object)) {
+                elevator->setElevatorType(mapObject->elevatorType());
+                elevator->setElevatorLevel(mapObject->elevatorLevel());
             }
 
             if (auto container = dynamic_cast<Game::ContainerItemObject *>(object)) {

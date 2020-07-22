@@ -1,0 +1,285 @@
+[common]
+frm_pressed_button=141
+frm_released_button=142
+frm_positioner=149
+
+[Elevator 0]
+panel_art_idx=143
+labels_art_idx=-1
+buttons_count=4
+; Klamath Grazing Area, klagraz.map
+button_0=14,0,14890
+; Klamath Grazing Area, klagraz.map
+button_1=14,1,18936
+; Vault City Courtyard, vctyctyd.map
+button_2=15,0,21340
+; Vault City Courtyard, vctyctyd.map
+button_3=15,1,21340
+
+
+[Elevator 1]
+panel_art_idx=143
+labels_art_idx=150
+buttons_count=2
+; Klamath Trapping Caves, klatrap.map
+button_0=13,0,20502
+; Klamath Grazing Area, klagraz.map
+button_1=14,0,14912
+button_2=0,0,-1
+button_3=0,0,-1
+
+
+[Elevator 2]
+panel_art_idx=144
+labels_art_idx=-1
+buttons_count=3
+; Gecko Junkyard, geckjunk.map
+button_0=33,0,12498
+; Gecko Junkyard, geckjunk.map
+button_1=33,1,20094
+; Gecko Access Tunnels, gecktunl.map
+button_2=34,0,17312
+button_3=0,0,-1
+
+[Elevator 3]
+panel_art_idx=144
+labels_art_idx=145
+buttons_count=2
+; Gecko Access Tunnels, gecktunl.map
+button_0=34,0,16140
+; Gecko Access Tunnels, gecktunl.map
+button_1=34,1,16140
+button_2=0,0,-1
+button_3=0,0,-1
+
+[Elevator 4]
+panel_art_idx=146
+labels_art_idx=-1
+buttons_count=3
+; Military Base Levels 1-2, mbase12.map
+button_0=49,0,14920
+; Military Base Levels 1-2, mbase12.map
+button_1=49,1,15120
+; Military Base Levels 3-4, mbase34.map
+button_2=50,0,12944
+button_3=0,0,-1
+
+[Elevator 5]
+panel_art_idx=146
+labels_art_idx=147
+buttons_count=2
+; Military Base Levels 3-4, mbase34.map
+button_0=50,0,24520
+; Military Base Levels 3-4, mbase34.map
+button_1=50,1,25316
+button_2=0,0,-1
+button_3=0,0,-1
+
+[Elevator 6]
+panel_art_idx=146
+labels_art_idx=-1
+buttons_count=3
+; NCR: Downtown, ncr1.map
+button_0=42,0,22526
+; NCR: Downtown, ncr1.map
+button_1=42,1,22526
+; NCR: Downtown, ncr1.map
+button_2=42,2,22526
+button_3=0,0,-1
+
+[Elevator 7]
+panel_art_idx=146
+labels_art_idx=151
+buttons_count=3
+; NCR: Downtown, ncr1.map
+button_0=42,2,14086
+; NCR: Council 1, ncr2.map
+button_1=43,0,14086
+; NCR: Council 1, ncr2.map
+button_2=43,2,14086
+button_3=0,0,-1
+
+[Elevator 8]
+panel_art_idx=148
+labels_art_idx=-1
+buttons_count=3
+; Vault 13, vault13.map
+button_0=40,0,14104
+; Vault 13, vault13.map
+button_1=40,1,22504
+; Vault 13, vault13.map
+button_2=40,2,17312
+button_3=0,0,-1
+
+[Elevator 9]
+panel_art_idx=146
+labels_art_idx=-1
+buttons_count=3
+; Klamath Downtown, kladwtwn.map
+button_0=9,0,13704
+; Klamath Downtown, kladwtwn.map
+button_1=9,1,23302
+; Klamath Downtown, kladwtwn.map
+button_2=9,2,17308
+button_3=0,0,-1
+
+[Elevator 10]
+panel_art_idx=146
+labels_art_idx=-1
+buttons_count=3
+; Sierra Army Depot: Levels 1-3, depolva.map
+button_0=28,0,19300
+; Sierra Army Depot: Levels 1-3, depolva.map
+button_1=28,1,19300
+; Sierra Army Depot: Levels 1-3, depolva.map
+button_2=28,2,20110
+button_3=0,0,-1
+
+[Elevator 11]
+panel_art_idx=146
+labels_art_idx=147
+buttons_count=2
+; Sierra Army Depot: Levels 1-3, depolva.map
+button_0=28,2,20118
+; Sierra Army Depot: Level 4, depolvb.map
+button_1=29,0,21710
+button_2=0,0,-1
+button_3=0,0,-1
+
+[Elevator 12]
+panel_art_idx=388
+labels_art_idx=-1
+buttons_count=4
+; Sierra Army Depot: Levels 1-3, depolva.map
+button_0=28,0,20122
+; Sierra Army Depot: Levels 1-3, depolva.map
+button_1=28,1,20124
+; Sierra Army Depot: Levels 1-3, depolva.map
+button_2=28,2,20940
+; Sierra Army Depot: Level 4, depolvb.map
+button_3=29,0,22540
+
+[Elevator 13]
+panel_art_idx=143
+labels_art_idx=150
+buttons_count=2
+; Klamath Toxic Caves, klatoxcv.map
+button_0=12,1,16052
+; Klamath Toxic Caves, klatoxcv.map
+button_1=12,2,14480
+button_2=0,0,-1
+button_3=0,0,-1
+
+[Elevator 14]
+panel_art_idx=148
+labels_art_idx=-1
+buttons_count=3
+; Den Business 1, denbus1.map
+button_0=6,0,14104
+; Den Business 1, denbus1.map
+button_1=6,1,22504
+; Den Business 1, denbus1.map
+button_2=6,2,17312
+button_3=0,0,-1
+
+[Elevator 15]
+panel_art_idx=148
+labels_art_idx=-1
+buttons_count=3
+; Vault City Vault, vctyvlt.map
+button_0=30,0,14104
+; Vault City Vault, vctyvlt.map
+button_1=30,1,22504
+; Vault City Vault, vctyvlt.map
+button_2=30,2,17312
+button_3=0,0,-1
+
+[Elevator 16]
+panel_art_idx=148
+labels_art_idx=-1
+buttons_count=3
+; Vault 15, vault15.map
+button_0=36,0,13704
+; Vault 15, vault15.map
+button_1=36,1,23302
+; Vault 15, vault15.map
+button_2=36,2,17308
+button_3=0,0,-1
+
+[Elevator 17]
+panel_art_idx=143
+labels_art_idx=150
+buttons_count=2
+; Vault 15 East Entrance, v15sent.map
+button_0=39,0,17285
+; vault15.map
+button_1=36,0,19472
+button_2=0,0,-1
+button_3=0,0,-1
+
+[Elevator 18]
+panel_art_idx=143
+labels_art_idx=150
+buttons_count=2
+; Navarro Entrance, navarro.map
+button_0=109,2,10701
+; Navarro Entrance, navarro.map
+button_1=109,1,10705
+button_2=0,0,-1
+button_3=0,0,-1
+
+[Elevator 19]
+panel_art_idx=143
+labels_art_idx=150
+buttons_count=2
+; Navarro Entrance, navarro.map
+button_0=109,2,14697
+; Navarro Entrance, navarro.map
+button_1=109,1,15099
+button_2=0,0,-1
+button_3=0,0,-1
+
+[Elevator 20]
+panel_art_idx=143
+labels_art_idx=150
+buttons_count=2
+; Navarro Entrance, navarro.map
+button_0=109,2,23877
+; Navarro Entrance, navarro.map
+button_1=109,1,25481
+button_2=0,0,-1
+button_3=0,0,-1
+
+[Elevator 21]
+panel_art_idx=143
+labels_art_idx=150
+buttons_count=2
+; Navarro Entrance, navarro.map
+button_0=109,2,26130
+; Navarro Entrance, navarro.map
+button_1=109,1,24721
+button_2=0,0,-1
+button_3=0,0,-1
+
+[Elevator 22]
+panel_art_idx=143
+labels_art_idx=150
+buttons_count=2
+; San Fran China, sfchina.map
+button_0=137,0,23953
+; Navarro Entrance, navarro.map
+button_1=148,1,16526
+button_2=0,0,-1
+button_3=0,0,-1
+
+
+[Elevator 23]
+panel_art_idx=143
+labels_art_idx=150
+buttons_count=2
+; Wanamingo Mine Entrance, redwame.map
+button_0=62,0,16901
+; Wanamingo Mine Level 12, redwan1.map
+button_1=63,1,17923
+button_2=0,0,-1
+button_3=0,0,-1
