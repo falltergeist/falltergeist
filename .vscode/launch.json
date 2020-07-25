@@ -4,8 +4,9 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
+
         {
-            "name": "(gdb) Launch",
+            "name": "(gdb) Launch (Linux)",
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/build/falltergeist",
@@ -23,6 +24,18 @@
                 }
             ],
             "preLaunchTask": "Build"
-        }
+        },
+        {
+            "name": "(VS Debugger) Launch (Windows)",
+            "type": "cppvsdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/Release/falltergeist.exe",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "preLaunchTask": "Build"
+        },
     ]
 }
