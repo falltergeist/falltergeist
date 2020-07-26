@@ -273,7 +273,6 @@ namespace Falltergeist
             statsPanel->addUI("screenLabel", screenLabel);
 
             addUI(statsPanel);
-            //statsPanel->setVisible(false);
 
             auto inventoryList = new UI::ItemsList(Point(40, 40));
             inventoryList->setItems(game->player()->inventory());
@@ -593,7 +592,7 @@ namespace Falltergeist
 
         void Inventory::onStateDeactivate(Event::State *event)
         {
-            // @TODO: stop dropdown timers on armor, hands and slots
+            _actionCursorTimer.stop();
         }
 
         std::vector<Input::Mouse::Icon> Inventory::getCursorIconsForItem(Game::ItemObject *item)
