@@ -45,8 +45,6 @@ namespace Falltergeist
             this->logger = std::move(logger);
             imageButtonFactory = std::make_unique<UI::Factory::ImageButtonFactory>(this->resourceManager);
 
-            this->statsPanel = new UI::Panel(Point(370, 47));
-
             pushHandler().add([](Event::State* ev) {
                 Game::Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::ACTION);
             });
@@ -69,8 +67,6 @@ namespace Falltergeist
             // action cursor stuff
             _actionCursorTimer.setInterval((unsigned) 350);
             _actionCursorTimer.tickHandler().add([this](Event::Event *) {
-                auto mouseState = Game::Game::getInstance()->mouse()->state();
-
                 if (!_item) {
                     return;
                 }
@@ -105,6 +101,8 @@ namespace Falltergeist
 
             setPosition((game->renderer()->size() - Point(499, 377 + panelHeight)) / 2); // 499x377 = art/intrface/invbox.frm
 
+            statsPanel = new UI::Panel(position() + Point(300, 47));
+
             addUI("background", resourceManager->getImage("art/intrface/invbox.frm"));
             getUI("background")->mouseClickHandler().add(std::bind(&Inventory::backgroundRightClick, this, std::placeholders::_1));
 
@@ -123,20 +121,12 @@ namespace Falltergeist
             getUI("button_down")->mouseClickHandler().add(std::bind(&Inventory::onScrollDownButtonClick, this, std::placeholders::_1));
 
             // screen
-
-           
-
             auto screenX = 0;
             auto screenY = 0;
-            
-            
-            //auto statsPanel = new UI::Panel(Point(370, 47));
-
             auto player = Game::Game::getInstance()->player();
 
-            statsPanel->addUI("player_name", new UI::TextArea(player->name(), screenX, screenY));
-            
-            
+            statsPanel->addUI("player_name", new UI::TextArea(player->name(), Point(screenX, screenY)));
+
             auto line1 = new UI::Rectangle(Point(screenX, screenY+16), Graphics::Size(142, 1), {0x3f, 0xf8, 0x00, 0xff} );
 
             std::string statsLabels;
@@ -145,8 +135,6 @@ namespace Falltergeist
                 statsLabels += _t(MSG_INVENTORY, i) + "\n";
             }
             statsPanel->addUI("label_stats", new UI::TextArea(statsLabels, screenX, screenY + 10*2));
-
-
 
             std::string statsValues;
             for (unsigned i = (unsigned)STAT::STRENGTH; i <= (unsigned)STAT::LUCK; i++)
@@ -633,6 +621,5 @@ namespace Falltergeist
                 Game::Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::HAND);
             }
         }
-
     }
 }
