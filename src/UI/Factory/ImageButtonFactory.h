@@ -50,6 +50,8 @@ namespace Falltergeist
                         SMALL_UP_ARROW,
                         SMALL_DOWN_ARROW,
                         MAP_HOTSPOT,
+                        PANEL_END_TURN,
+                        PANEL_END_COMBAT,
                         ELEVATOR_CIRCLE
                     };
 
