@@ -29,7 +29,7 @@
             "name": "(VS Debugger) Launch (Windows)",
             "type": "cppvsdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/build/Release/falltergeist.exe",
+            "program": "${workspaceFolder}/build/RelWithDebInfo/falltergeist.exe",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",

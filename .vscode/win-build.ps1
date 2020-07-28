@@ -1,4 +1,5 @@
-Set-PSDebug -Trace 1
+# Uncomment below to enable build script debugging
+#Set-PSDebug -Trace 1
 
 $builddir = $args[0];
 
@@ -81,8 +82,8 @@ if (-Not(Test-Path "$builddir/falltergeist.sln" -PathType leaf)) {
 Write-Host "Building falltergeist..."
 
 # Fixme: DEBUG config linked to wrong SDL dll, use RELEASE for now
-&"cmake" --build $builddir --config RELEASE
+&"cmake" --build $builddir --config RelWithDebInfo
 
-if (-Not(Test-Path "$builddir/Release/falltergeist.exe" -PathType leaf)) {
+if (-Not(Test-Path "$builddir/RelWithDebInfo/falltergeist.exe" -PathType leaf)) {
   throw $errormessage5
 }
