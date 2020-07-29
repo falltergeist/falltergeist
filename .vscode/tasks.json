@@ -6,6 +6,16 @@
         "kind": "build",
         "isDefault": true
     },
+    "windows": {
+        "options": {
+            "shell": {
+                "executable": "powershell.exe",
+                "args": ["-NoProfile -ExecutionPolicy Bypass "]
+            
+            },
+        },
+
+    },
     "tasks": [
         {
             "label": "mkworkdir",
@@ -13,23 +23,45 @@
             "options": {
                 "cwd": "${workspaceRoot}"
             },
-            "command": "mkdir",
-            "args": [
-                "-p",
-                "build"
-            ],
+            "linux": {
+                "command": "mkdir",
+                "args": [
+                    "-p",
+                    "build"
+                ],
+            },
+            "windows": {
+                "command": "{if (-Not(Test-Path \"${workspaceRoot}\\build\" -PathType leaf)) { mkdir build }}",
+            },
             "group": "build"
         },
         {
             "label": "cmake",
             "type": "shell",
+        
             "options": {
                 "cwd": "${workspaceRoot}/build"
             },
-            "command": "cmake",
-            "args": [
-                "${workspaceRoot}"
-            ],
+            "linux": {
+                "command": "cmake",
+                "args": [
+                    "${workspaceRoot}"
+                ],
+                "options": {
+                    "env": {}
+                },
+            },
+            "windows": {
+                "command": "echo",
+                "args": [
+                    "${workspaceRoot}"
+                ],
+                "options": {
+                    "cwd": "${workspaceRoot}\\build",
+                    "env": {}
+
+                },
+            },
             "group": "build",
             "dependsOn": [
                 "mkworkdir"
@@ -43,7 +75,18 @@
             "options": {
                 "cwd": "${workspaceRoot}/build"
             },
-            "command": "make",
+            "linux":{
+                "command": "make",
+            },
+            "windows":{
+                "options": {
+                    "cwd": "${workspaceRoot}\\build"
+                },
+                "command": "${workspaceRoot}\\.vscode\\win-build.bat",
+                "args": [
+                    "${workspaceRoot}\\build"
+                ]
+            },
             "group": {
                 "kind": "build",
                 "isDefault": true

@@ -21,6 +21,13 @@ https://falltergeist.org/
 cmake . && make
 ```
 
+### Linux (Debian/Ubuntu)
+```console
+sudo apt-get install  build-essential libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libglew-dev libglm-dev zlib1g-dev
+
+cmake . && make
+```
+
 ### Windows (Visual Studio x64)
 
 You could add dependencies manually but it is easier to use [Conan](https://docs.conan.io/en/latest/howtos/vs2017_cmake.html). 
