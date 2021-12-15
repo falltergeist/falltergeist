@@ -1,5 +1,7 @@
 #include "../State/LuaTest.h"
 #include "../UI/TextArea.h"
+#include "../Game/Game.h"
+#include "../Input/Mouse.h"
 
 namespace Falltergeist {
     namespace State {
@@ -18,6 +20,7 @@ namespace Falltergeist {
 
             setModal(true);
             setFullscreen(true);
+            Game::Game::getInstance()->mouse()->setState(Input::Mouse::Cursor::BIG_ARROW);
 
             State::init();
 

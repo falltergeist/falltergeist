@@ -1,7 +1,6 @@
 #include "../VM/LuaScript.h"
 #include <iostream>
 #include <functional>
-#include "../Scripting/Lua/Binding/Graphics/Image.h"
 #include "../ResourceManager.h"
 #include "../UI/Image.h"
 #include "assert.h"
@@ -45,6 +44,26 @@ namespace Falltergeist {
                 return 1;
             };
 
+            auto ImageSetX = [](lua_State* L)->int {
+                std::cout << "ImageSetX" << std::endl;
+                assert(lua_isuserdata(L, -2));
+                auto image = (UI::Image*)lua_touserdata(L, -2);
+                assert(lua_isnumber(L, -1));
+                lua_Number x = lua_tonumber(L, -1);
+                image->setX((int) x);
+                return 0;
+            };
+
+            auto ImageSetY = [](lua_State* L)->int {
+                std::cout << "ImageSetY" << std::endl;
+                assert(lua_isuserdata(L, -2));
+                auto image = (UI::Image*)lua_touserdata(L, -2);
+                assert(lua_isnumber(L, -1));
+                lua_Number y = lua_tonumber(L, -1);
+                image->setY((int) y);
+                return 0;
+            };
+
             auto AddEventListener = [](lua_State* L)->int {
                 std::cout << "AddEventListener" << std::endl;
                 assert(lua_isuserdata(L, -3));
@@ -53,12 +72,34 @@ namespace Falltergeist {
                 const char* eventName = lua_tostring(L, -2);
                 assert(lua_isfunction(L, -1));
                 int function_index = luaL_ref(L, LUA_REGISTRYINDEX);
+                lua_pushvalue(L, -3);
+                int image_index = luaL_ref(L, LUA_REGISTRYINDEX);
+                lua_pop(L, 1);
 
-                image->mouseClickHandler().add([L, function_index](Event::Mouse* event)->void {
+                image->mouseClickHandler().add([L, function_index, image_index](Event::Mouse* event)->void {
                     std::cout << "handler invoked" << std::endl;
                     lua_rawgeti(L, LUA_REGISTRYINDEX, function_index);
                     assert(lua_isfunction(L, -1));
-                    lua_pcall(L, 0, 0, 0);
+
+                    lua_newtable(L);
+
+                    lua_pushstring(L, "name");
+                    lua_pushstring(L, "click");
+                    lua_settable(L, -3);
+
+                    lua_pushstring(L, "x");
+                    lua_pushnumber(L, event->position().x());
+                    lua_settable(L, -3);
+
+                    lua_pushstring(L, "y");
+                    lua_pushnumber(L, event->position().y());
+                    lua_settable(L, -3);
+
+                    lua_pushstring(L, "target");
+                    lua_rawgeti(L, LUA_REGISTRYINDEX, image_index);
+                    lua_settable(L, -3);
+
+                    lua_pcall(L, 1, 0, 0);
                 });
                 return 0;
             };
@@ -74,6 +115,12 @@ namespace Falltergeist {
             lua_newtable(luaState);
             lua_pushstring(luaState, "addEventListener");
             lua_pushcfunction(luaState, AddEventListener);
+            lua_settable(luaState, -3);
+            lua_pushstring(luaState, "x");
+            lua_pushcfunction(luaState, ImageSetX);
+            lua_settable(luaState, -3);
+            lua_pushstring(luaState, "y");
+            lua_pushcfunction(luaState, ImageSetY);
             lua_settable(luaState, -3);
             lua_setglobal(luaState, "Image");
 
