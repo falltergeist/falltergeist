@@ -2,11 +2,11 @@
 #include "../UI/TextArea.h"
 #include "../Game/Game.h"
 #include "../Input/Mouse.h"
+#include <filesystem>
 
-namespace Falltergeist {
-    namespace State {
+namespace Falltergeist::State {
         LuaTest::LuaTest() : State() {
-            luaScript = std::make_unique<VM::LuaScript>("../scripts/main.lua", this);
+            luaScript = std::make_unique<VM::LuaScript>(std::string(std::filesystem::current_path()) + "/scripts/main.lua", this);
         }
 
         void LuaTest::think(const float &deltaTime) {
@@ -27,4 +27,3 @@ namespace Falltergeist {
             luaScript->execute();
         }
     }
-}

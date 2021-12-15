@@ -2,7 +2,7 @@
 
 #include <array>
 #include <vector>
-#include <glm/glm.hpp>
+#include <glm.hpp>
 #include "../Format/Enums.h"
 #include "../Graphics/Renderer.h"
 

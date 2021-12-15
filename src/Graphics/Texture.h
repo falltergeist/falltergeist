@@ -2,7 +2,7 @@
 
 #include <memory>
 #include <vector>
-#include <GL/glew.h>
+#include <glew.h>
 #include <SDL.h>
 #include <SDL_opengl.h>
 #include "../Graphics/Point.h"

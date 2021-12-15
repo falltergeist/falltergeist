@@ -385,6 +385,7 @@ namespace Falltergeist
     std::vector<std::string> CrossPlatform::getDataPaths()
     {
         std::vector<std::string> _dataPaths;
+        _dataPaths.push_back(std::filesystem::current_path());
     #if defined(__unix__)
         char *maybeDataHome = getenv("XDG_DATA_HOME");
         if (maybeDataHome == nullptr || *maybeDataHome == '\0') {

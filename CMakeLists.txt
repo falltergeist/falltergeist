@@ -62,7 +62,7 @@ if(NOT GLM_FOUND)
 endif(NOT GLM_FOUND)
 include_directories(${GLM_INCLUDE_DIR})
 
-find_package(Lua REQUIRED)
+find_package(Lua 5.3 REQUIRED)
 if(NOT LUA_FOUND)
 	message(FATAL_ERROR "Lua library not found")
 endif()
@@ -78,7 +78,7 @@ endif()
 add_executable(falltergeist main.cpp ${SOURCES} ${_additional_includes})
 
 set_target_properties(falltergeist PROPERTIES
-	CXX_STANDARD 14
+	CXX_STANDARD 17
 	CXX_STANDARD_REQUIRED YES
 	CXX_EXTENSIONS NO
 )

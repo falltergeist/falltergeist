@@ -3,8 +3,8 @@
 #include <map>
 #include <string>
 #include <vector>
-#include <glm/glm.hpp>
-#include <GL/glew.h>
+#include <glm.hpp>
+#include <glew.h>
 #include <SDL.h>
 
 namespace Falltergeist

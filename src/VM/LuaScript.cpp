@@ -3,28 +3,12 @@
 #include <functional>
 #include "../ResourceManager.h"
 #include "../UI/Image.h"
-#include "assert.h"
+#include <cassert>
 
 extern "C" {
     #include "lualib.h"
     #include "lauxlib.h"
 }
-
-int addEventListener(lua_State *L)
-{
-    std::cout << "addEventListener" << std::endl;
-    return 0;
-}
-
-int newImageFunction(lua_State *L)
-{
-    std::cout << "newImageFunction" << std::endl;
-    lua_newtable(L);
-    lua_pushstring(L, "addEventListener");
-    lua_pushcfunction(L, addEventListener);
-    lua_settable(L, -3);
-    return 1;
-};
 
 namespace Falltergeist {
     namespace VM {
