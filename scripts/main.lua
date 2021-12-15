@@ -7,12 +7,17 @@ local function buttonClickListener(event)
     print(event.y)
     print(event.name)
     print(event.target)
+    local button = event.target;
+    button.x = button.x + 30
 end
 
 local function createButton(x, y)
     local button = graphics.newImage("art/intrface/menuup.frm")
-    button:x(x)
-    button:y(y)
+    print(button)
+    print(button.x)
+    print(button.y)
+    button.x = x
+    button.y = y
     button:addEventListener("click", buttonClickListener)
 
     print(button)

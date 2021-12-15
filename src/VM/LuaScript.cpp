@@ -82,7 +82,10 @@ namespace Falltergeist {
 
             luaL_newmetatable(luaState, "ImageMeta");
             lua_pushstring(luaState, "__index");
-            lua_getglobal(luaState, "Image");
+            lua_pushcfunction(luaState, Lua::Graphics::Image::metaIndex);
+            lua_settable(luaState, -3);
+            lua_pushstring(luaState, "__newindex");
+            lua_pushcfunction(luaState, Lua::Graphics::Image::metaNewIndex);
             lua_settable(luaState, -3);
 
             lua_newtable(luaState);
