@@ -4,6 +4,9 @@
 #include "../ResourceManager.h"
 #include "../UI/Image.h"
 #include <cassert>
+#include "../Lua/Graphics/Image.h"
+#include "../Lua/SceneManager/Scene.h"
+#include "../Lua/EventHandlerContext.h"
 
 extern "C" {
     #include "lualib.h"
@@ -19,50 +22,27 @@ namespace Falltergeist {
 
             this->state = state;
 
-            auto CreateImage = [](lua_State* L)->int {
-                std::cout << "CreateImage" << std::endl;
-                const char* filename = lua_tostring(L, -1);
-                auto image = new UI::Image(std::make_unique<Graphics::Sprite>(filename));
-                lua_pushlightuserdata(L, image);
-                luaL_setmetatable(L, "ImageMeta");
-                return 1;
-            };
-
-            auto ImageSetX = [](lua_State* L)->int {
-                std::cout << "ImageSetX" << std::endl;
-                assert(lua_isuserdata(L, -2));
-                auto image = (UI::Image*)lua_touserdata(L, -2);
-                assert(lua_isnumber(L, -1));
-                lua_Number x = lua_tonumber(L, -1);
-                image->setX((int) x);
-                return 0;
-            };
-
-            auto ImageSetY = [](lua_State* L)->int {
-                std::cout << "ImageSetY" << std::endl;
-                assert(lua_isuserdata(L, -2));
-                auto image = (UI::Image*)lua_touserdata(L, -2);
-                assert(lua_isnumber(L, -1));
-                lua_Number y = lua_tonumber(L, -1);
-                image->setY((int) y);
-                return 0;
-            };
-
             auto AddEventListener = [](lua_State* L)->int {
                 std::cout << "AddEventListener" << std::endl;
+
+
                 assert(lua_isuserdata(L, -3));
                 auto image = (UI::Image*)lua_touserdata(L, -3);
                 assert(lua_isstring(L, -2));
                 const char* eventName = lua_tostring(L, -2);
                 assert(lua_isfunction(L, -1));
                 int function_index = luaL_ref(L, LUA_REGISTRYINDEX);
-                lua_pushvalue(L, -3);
+                std::cout << function_index << std::endl;
+                lua_pushvalue(L, -2);
+                assert(lua_isuserdata(L, -1));
                 int image_index = luaL_ref(L, LUA_REGISTRYINDEX);
+                std::cout << image_index << std::endl;
                 lua_pop(L, 1);
+                Lua::EventHandlerContext eventHandlerContext(image_index,function_index);
 
-                image->mouseClickHandler().add([L, function_index, image_index](Event::Mouse* event)->void {
+                image->mouseClickHandler().add([L, eventHandlerContext](Event::Mouse* event)->void {
                     std::cout << "handler invoked" << std::endl;
-                    lua_rawgeti(L, LUA_REGISTRYINDEX, function_index);
+                    lua_rawgeti(L, LUA_REGISTRYINDEX, eventHandlerContext.handlerIndex);
                     assert(lua_isfunction(L, -1));
 
                     lua_newtable(L);
@@ -80,19 +60,11 @@ namespace Falltergeist {
                     lua_settable(L, -3);
 
                     lua_pushstring(L, "target");
-                    lua_rawgeti(L, LUA_REGISTRYINDEX, image_index);
+                    lua_rawgeti(L, LUA_REGISTRYINDEX, eventHandlerContext.targetIndex);
                     lua_settable(L, -3);
 
                     lua_pcall(L, 1, 0, 0);
                 });
-                return 0;
-            };
-
-            auto SceneAdd = [](lua_State* L)->int {
-                std::cout << "SceneAdd" << std::endl;
-                auto state = (State::State*)lua_touserdata(L, lua_upvalueindex(1));
-                auto image = (UI::Image*)lua_touserdata(L, -1);
-                state->addUI(image);
                 return 0;
             };
 
@@ -101,10 +73,10 @@ namespace Falltergeist {
             lua_pushcfunction(luaState, AddEventListener);
             lua_settable(luaState, -3);
             lua_pushstring(luaState, "x");
-            lua_pushcfunction(luaState, ImageSetX);
+            lua_pushcfunction(luaState, Lua::Graphics::Image::setX);
             lua_settable(luaState, -3);
             lua_pushstring(luaState, "y");
-            lua_pushcfunction(luaState, ImageSetY);
+            lua_pushcfunction(luaState, Lua::Graphics::Image::setY);
             lua_settable(luaState, -3);
             lua_setglobal(luaState, "Image");
 
@@ -115,16 +87,11 @@ namespace Falltergeist {
 
             lua_newtable(luaState);
             lua_pushstring(luaState, "newImage");
-            lua_pushcclosure(luaState, CreateImage, 0);
+            lua_pushcclosure(luaState, Lua::Graphics::Image::create, 0);
             lua_settable(luaState, -3);
             lua_setglobal(luaState, "graphics");
 
-            lua_newtable(luaState);
-            lua_pushstring(luaState, "add");
-            lua_pushlightuserdata(luaState, state);
-            lua_pushcclosure(luaState, SceneAdd, 1);
-            lua_settable(luaState, -3);
-            lua_setglobal(luaState, "scene");
+            Lua::SceneManager::Scene::addToLua(luaState, state);
 
             if (luaL_loadfile(luaState, filename.c_str())) {
                 std::cout << "can not load script " << std::endl;
