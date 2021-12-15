@@ -62,11 +62,17 @@ if(NOT GLM_FOUND)
 endif(NOT GLM_FOUND)
 include_directories(${GLM_INCLUDE_DIR})
 
+find_package(Lua REQUIRED)
+if(NOT LUA_FOUND)
+	message(FATAL_ERROR "Lua library not found")
+endif()
+include_directories(${LUA_INCLUDE_DIR})
+
 file(GLOB_RECURSE SOURCES  src/*.cpp)
 
 if(MSVC)
-        file(GLOB_RECURSE HEADERS  src/*.h)
-        set(_additional_includes "package/windows.rc" pchheader.cpp ${HEADERS})
+    file(GLOB_RECURSE HEADERS  src/*.h)
+    set(_additional_includes "package/windows.rc" pchheader.cpp ${HEADERS})
 endif()
 
 add_executable(falltergeist main.cpp ${SOURCES} ${_additional_includes})
@@ -99,7 +105,16 @@ endif()
 if (CONAN_LIBS)
 	target_link_libraries(falltergeist ${CONAN_LIBS})
 else()
-	target_link_libraries(falltergeist ${ZLIB_LIBRARIES} ${SDL2_LIBRARY} ${SDL_MIXER_LIBRARY} ${SDL_IMAGE_LIBRARY} ${OPENGL_gl_LIBRARY} ${GLEW_LIBRARY})
+	target_link_libraries(
+		falltergeist
+		${ZLIB_LIBRARIES}
+		${SDL2_LIBRARY}
+		${SDL_MIXER_LIBRARY}
+		${SDL_IMAGE_LIBRARY}
+		${OPENGL_gl_LIBRARY}
+		${GLEW_LIBRARY}
+		${LUA_LIBRARIES}
+	)
 endif()
 
 include(cmake/install/windows.cmake)

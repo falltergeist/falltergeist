@@ -12,6 +12,7 @@ https://falltergeist.org/
 - [GLEW](http://glew.sourceforge.net/)
 - [GLM](http://glm.g-truc.net/)
 - [Zlib](http://www.zlib.net/)
+- [Lua](https://www.lua.org/)
 
 ## Compilation
 
@@ -23,7 +24,7 @@ cmake . && make
 
 ### Linux (Debian/Ubuntu)
 ```console
-sudo apt-get install  build-essential libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libglew-dev libglm-dev zlib1g-dev
+sudo apt-get install  build-essential libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libglew-dev libglm-dev zlib1g-dev liblua5.3-dev
 
 cmake . && make
 ```
