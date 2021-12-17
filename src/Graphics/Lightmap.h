@@ -3,6 +3,7 @@
 #include "../Graphics/Point.h"
 #include "../Graphics/Renderer.h"
 #include "../Graphics/Shader.h"
+#include "../Graphics/VertexBuffer.h"
 
 namespace Falltergeist
 {
@@ -18,8 +19,8 @@ namespace Falltergeist
 
             private:
                 GLuint _vao;
-                GLuint _coords;
-                GLuint _lights;
+                std::unique_ptr<VertexBuffer> _coordinatesVertexBuffer;
+                std::unique_ptr<VertexBuffer> _lightsVertexBuffer;
                 GLuint _ebo;
 
                 GLint _uniformFade;

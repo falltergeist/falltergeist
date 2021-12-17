@@ -163,10 +163,11 @@ namespace  Falltergeist
             for (uint32_t i = 0; i < _atlases; i++)
             {
                 //render atlas with indexes->at(atlasIndex)
-                _tilemap.get()->render(topLeft, indexes.at(i), i);
-
+                if (indexes.at(i).empty()) {
+                    continue;
+                }
+                _tilemap->render(topLeft, indexes.at(i), i);
             }
-
         }
 
         void TileMap::setInside(bool inside)
