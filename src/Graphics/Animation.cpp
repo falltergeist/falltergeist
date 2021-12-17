@@ -16,14 +16,6 @@ namespace Falltergeist
 
         Animation::Animation(const std::string &filename)
         {
-            // create buffers
-            // generate VAO
-            if (Game::getInstance()->renderer()->renderPath() == Renderer::RenderPath::OGL32)
-            {
-                GL_CHECK(glGenVertexArrays(1, &_vao));
-                GL_CHECK(glBindVertexArray(_vao));
-            }
-
             _texture = ResourceManager::getInstance()->texture(filename);
 
             Format::Frm::File* frm = ResourceManager::getInstance()->frmFileType(filename);
@@ -69,18 +61,6 @@ namespace Falltergeist
 
             }
 
-            _coordinatesVertexBuffer = std::make_unique<VertexBuffer>(
-                    &_vertices[0],
-                    _vertices.size() * sizeof(glm::vec2),
-                    VertexBuffer::UsagePattern::StaticDraw
-            );
-
-            _textureCoordinatesVertexBuffer = std::make_unique<VertexBuffer>(
-                    &_texCoords[0],
-                    _texCoords.size() * sizeof(glm::vec2),
-                    VertexBuffer::UsagePattern::StaticDraw
-            );
-
             _shader = ResourceManager::getInstance()->shader("animation");
 
             _uniformTex = _shader->getUniform("tex");
@@ -101,14 +81,42 @@ namespace Falltergeist
 
             _attribPos = _shader->getAttrib("Position");
             _attribTex = _shader->getAttrib("TexCoord");
+
+            _vertexArray = std::make_unique<VertexArray>();
+
+            _coordinatesVertexBuffer = std::make_unique<VertexBuffer>(
+                    &_vertices[0],
+                    _vertices.size() * sizeof(glm::vec2),
+                    VertexBuffer::UsagePattern::StaticDraw
+            );
+            VertexBufferLayout coordinatesVertexBufferLayout;
+            coordinatesVertexBufferLayout.addAttribute({
+                   (unsigned int) _attribPos,
+                   2,
+                   VertexBufferAttribute::Type::Float,
+                   false,
+                   0
+            });
+            _vertexArray->addBuffer(_coordinatesVertexBuffer, coordinatesVertexBufferLayout);
+
+            _textureCoordinatesVertexBuffer = std::make_unique<VertexBuffer>(
+                    &_texCoords[0],
+                    _texCoords.size() * sizeof(glm::vec2),
+                    VertexBuffer::UsagePattern::StaticDraw
+            );
+            VertexBufferLayout textureCoordinatesVertexBufferLayout;
+            textureCoordinatesVertexBufferLayout.addAttribute({
+                  (unsigned int) _attribTex,
+                  2,
+                  VertexBufferAttribute::Type::Float,
+                  false,
+                  0
+            });
+            _vertexArray->addBuffer(_textureCoordinatesVertexBuffer, textureCoordinatesVertexBufferLayout);
         }
 
         Animation::~Animation()
         {
-            if (Game::getInstance()->renderer()->renderPath() == Renderer::RenderPath::OGL32)
-            {
-                GL_CHECK(glDeleteVertexArrays(1, &_vao));
-            }
         }
 
         void Animation::render(int x, int y, unsigned int direction, unsigned int frame, bool transparency, bool light, int outline, unsigned int lightValue)
@@ -154,23 +162,7 @@ namespace Falltergeist
                 _shader->setUniform(_uniformTexSize, glm::vec2((float)_texture->textureWidth(), (float)_texture->textureHeight()));
             }
 
-
-            if (Game::getInstance()->renderer()->renderPath() == Renderer::RenderPath::OGL32)
-            {
-                GLint curvao;
-                glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &curvao);
-                if ((GLuint)curvao != _vao)
-                {
-                    GL_CHECK(glBindVertexArray(_vao));
-                }
-            }
-
-            _coordinatesVertexBuffer->bind();
-            GL_CHECK(glVertexAttribPointer(_attribPos, 2, GL_FLOAT, GL_FALSE, 0, (void*)0 ));
-
-
-            _textureCoordinatesVertexBuffer->bind();
-            GL_CHECK(glVertexAttribPointer(_attribTex, 2, GL_FLOAT, GL_FALSE, 0, (void*)0 ));
+            _vertexArray->bind();
 
             unsigned int indexes[6] = {
                 (pos * 4), (pos * 4 + 1),
@@ -180,10 +172,7 @@ namespace Falltergeist
             IndexBuffer indexBuffer(indexes, 6, IndexBuffer::UsagePattern::StaticDraw);
             indexBuffer.bind();
 
-            GL_CHECK(glEnableVertexAttribArray(_attribPos));
-            GL_CHECK(glEnableVertexAttribArray(_attribTex));
-
-            GL_CHECK(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0 ));
+            GL_CHECK(glDrawElements(GL_TRIANGLES, indexBuffer.count(), GL_UNSIGNED_INT, nullptr));
         }
 
         bool Animation::opaque(unsigned int x, unsigned int y)
