@@ -449,11 +449,12 @@ namespace Falltergeist
             vertices.push_back(glm::vec2((float)x+(float)w, (float)y+(float)h));
 
 
-            ResourceManager::getInstance()->shader("default")->use();
+            auto defaultShader = ResourceManager::getInstance()->shader("default");
+            defaultShader->use();
 
-            ResourceManager::getInstance()->shader("default")->setUniform("color", fcolor);
+            defaultShader->setUniform("color", fcolor);
 
-            ResourceManager::getInstance()->shader("default")->setUniform("MVP", getMVP());
+            defaultShader->setUniform("MVP", getMVP());
 
             if (_renderpath==RenderPath::OGL32)
             {
@@ -470,15 +471,15 @@ namespace Falltergeist
 
             GL_CHECK(glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glm::vec2), &vertices[0], GL_DYNAMIC_DRAW));
 
-            GL_CHECK(glVertexAttribPointer(ResourceManager::getInstance()->shader("default")->getAttrib("Position"), 2, GL_FLOAT, GL_FALSE, 0, (void*)0 ));
+            GL_CHECK(glVertexAttribPointer(defaultShader->getAttrib("Position"), 2, GL_FLOAT, GL_FALSE, 0, (void*)0 ));
 
             GL_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, Game::getInstance()->renderer()->getEBO()));
 
-            GL_CHECK(glEnableVertexAttribArray(ResourceManager::getInstance()->shader("default")->getAttrib("Position")));
+            GL_CHECK(glEnableVertexAttribArray(defaultShader->getAttrib("Position")));
 
             GL_CHECK(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, 0 ));
 
-            GL_CHECK(glDisableVertexAttribArray(ResourceManager::getInstance()->shader("default")->getAttrib("Position")));
+            GL_CHECK(glDisableVertexAttribArray(defaultShader->getAttrib("Position")));
 
         }
 

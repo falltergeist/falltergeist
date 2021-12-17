@@ -218,37 +218,37 @@ namespace Falltergeist
 
         void Shader::setUniform(const std::string &uniform, float x)
         {
-            glUniform1f(getUniform(uniform), x);
+            GL_CHECK(glUniform1f(getUniform(uniform), x));
         }
 
         void Shader::setUniform(const std::string &uniform, float x, float y)
         {
-            glUniform2f(getUniform(uniform), x, y);
+            GL_CHECK(glUniform2f(getUniform(uniform), x, y));
         }
 
         void Shader::setUniform(const std::string &uniform, float x, float y, float z)
         {
-            glUniform3f(getUniform(uniform), x, y, z);
+            GL_CHECK(glUniform3f(getUniform(uniform), x, y, z));
         }
 
         void Shader::setUniform(const std::string &uniform, float x, float y, float z, float w)
         {
-            glUniform4f(getUniform(uniform), x, y, z, w);
+            GL_CHECK(glUniform4f(getUniform(uniform), x, y, z, w));
         }
 
         void Shader::setUniform(const std::string &uniform, const glm::vec2 &vec)
         {
-            glUniform2fv(getUniform(uniform), 1, glm::value_ptr(vec));
+            GL_CHECK(glUniform2fv(getUniform(uniform), 1, glm::value_ptr(vec)));
         }
 
         void Shader::setUniform(const std::string &uniform, const glm::vec3 &vec)
         {
-            glUniform3fv(getUniform(uniform), 1, glm::value_ptr(vec));
+            GL_CHECK(glUniform3fv(getUniform(uniform), 1, glm::value_ptr(vec)));
         }
 
         void Shader::setUniform(const std::string &uniform, std::vector<GLuint> vec)
         {
-            glUniform1iv(getUniform(uniform), static_cast<GLsizei>(vec.size()), (const int*)&vec[0]);
+            GL_CHECK(glUniform1iv(getUniform(uniform), static_cast<GLsizei>(vec.size()), (const int*)&vec[0]));
         }
 
         void Shader::setUniform(const std::string &uniform, const glm::vec4 &vec)
@@ -273,17 +273,17 @@ namespace Falltergeist
 
         void Shader::setUniform(const GLint &uniform, float x, float y)
         {
-            glUniform2f((uniform), x, y);
+            GL_CHECK(glUniform2f((uniform), x, y));
         }
 
         void Shader::setUniform(const GLint &uniform, float x, float y, float z)
         {
-            glUniform3f((uniform), x, y, z);
+            GL_CHECK(glUniform3f((uniform), x, y, z));
         }
 
         void Shader::setUniform(const GLint &uniform, float x, float y, float z, float w)
         {
-            glUniform4f((uniform), x, y, z, w);
+            GL_CHECK(glUniform4f((uniform), x, y, z, w));
         }
 
         void Shader::setUniform(const GLint &uniform, const glm::vec2 &vec)
@@ -293,7 +293,7 @@ namespace Falltergeist
 
         void Shader::setUniform(const GLint &uniform, const glm::vec3 &vec)
         {
-            glUniform3fv((uniform), 1, glm::value_ptr(vec));
+            GL_CHECK(glUniform3fv((uniform), 1, glm::value_ptr(vec)));
         }
 
         void Shader::setUniform(const GLint &uniform, std::vector<GLuint> vec)
