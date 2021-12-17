@@ -15,12 +15,7 @@ namespace Falltergeist
 
         TextArea::TextArea()
         {
-            if (Game::getInstance()->renderer()->renderPath() == Renderer::RenderPath::OGL32)
-            {
-                GL_CHECK(glGenVertexArrays(1, &_vao));
-                GL_CHECK(glBindVertexArray(_vao));
-            }
-
+            _vertexArray = std::make_unique<VertexArray>();
             _coordinatesVertexBuffer = std::make_unique<VertexBuffer>(nullptr, 0);
             _textureCoordinatesVertexBuffer = std::make_unique<VertexBuffer>(nullptr, 0);
             _indexBuffer = std::make_unique<IndexBuffer>(nullptr, 0);
@@ -69,54 +64,45 @@ namespace Falltergeist
                 _shader->setUniform(_uniformTexSize, glm::vec2((float)font->texture()->textureWidth(), (float)font->texture()->textureHeight()));
             }
 
-            if (Game::getInstance()->renderer()->renderPath() == Renderer::RenderPath::OGL32)
-            {
-                GLint curvao;
-                glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &curvao);
-                if ((GLuint)curvao != _vao)
-                {
-                    GL_CHECK(glBindVertexArray(_vao));
-                }
-            }
-
-            _coordinatesVertexBuffer->bind();
-            GL_CHECK(glVertexAttribPointer(_attribPos, 2, GL_FLOAT, GL_FALSE, 0, (void*)0 ));
-
-            _textureCoordinatesVertexBuffer->bind();
-            GL_CHECK(glVertexAttribPointer(_attribTex, 2, GL_FLOAT, GL_FALSE, 0, (void*)0 ));
-
+            _vertexArray->bind();
             _indexBuffer->bind();
 
-            GL_CHECK(glEnableVertexAttribArray(_attribPos));
-            GL_CHECK(glEnableVertexAttribArray(_attribTex));
-
             GL_CHECK(glDrawElements(GL_TRIANGLES, _indexBuffer->count(), GL_UNSIGNED_INT, nullptr));
-
-            GL_CHECK(glDisableVertexAttribArray(_attribPos));
-            GL_CHECK(glDisableVertexAttribArray(_attribTex));
         }
 
         void TextArea::updateBuffers(std::vector<glm::vec2> vertices, std::vector<glm::vec2> UV,  std::vector<unsigned int> indexes)
         {
             if (vertices.empty())
             {
+                _indexBuffer = std::make_unique<IndexBuffer>(nullptr, 0);
                 return;
             }
 
-            if (Game::getInstance()->renderer()->renderPath() == Renderer::RenderPath::OGL32)
-            {
-                GLint curvao;
-                glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &curvao);
-                if ((GLuint)curvao != _vao)
-                {
-                    GL_CHECK(glBindVertexArray(_vao));
-                }
-            }
+            _vertexArray = std::make_unique<VertexArray>();
 
             // TODO pass GL_DYNAMIC_DRAW
             _coordinatesVertexBuffer = std::make_unique<VertexBuffer>(&vertices[0], vertices.size() * sizeof(glm::vec2));
+            VertexBufferLayout coordinatesVertexBufferLayout;
+            coordinatesVertexBufferLayout.addAttribute({
+               (unsigned int) _attribPos,
+               2,
+               VertexBufferAttribute::Type::Float,
+               false,
+               0
+            });
+            _vertexArray->addBuffer(_coordinatesVertexBuffer, coordinatesVertexBufferLayout);
+
             // TODO pass GL_DYNAMIC_DRAW
             _textureCoordinatesVertexBuffer = std::make_unique<VertexBuffer>(&UV[0], UV.size() * sizeof(glm::vec2));
+            VertexBufferLayout textureCoordinatesVertexBufferLayout;
+            textureCoordinatesVertexBufferLayout.addAttribute({
+              (unsigned int) _attribTex,
+              2,
+              VertexBufferAttribute::Type::Float,
+              false,
+              0
+            });
+            _vertexArray->addBuffer(_textureCoordinatesVertexBuffer, textureCoordinatesVertexBufferLayout);
 
             // TODO pass GL_DYNAMIC_DRAW
             _indexBuffer = std::make_unique<IndexBuffer>(&indexes[0], indexes.size());

@@ -24,7 +24,7 @@ namespace Falltergeist
                 void updateBuffers(std::vector<glm::vec2> vertices, std::vector<glm::vec2> UV,  std::vector<unsigned int> indexes);
 
             protected:
-                GLuint _vao;
+                std::unique_ptr<VertexArray> _vertexArray;
                 std::unique_ptr<VertexBuffer> _coordinatesVertexBuffer;
                 std::unique_ptr<VertexBuffer> _textureCoordinatesVertexBuffer;
                 std::unique_ptr<IndexBuffer> _indexBuffer;
