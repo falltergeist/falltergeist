@@ -3,7 +3,6 @@ set(CMAKE_BUILD_TYPE "Debug" CACHE STRING "Choose the type of build (by default 
 
 cmake_minimum_required(VERSION 3.8)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake/modules)
-
 project(falltergeist)
 set(falltergeist_VERSION  0.3.1)
 

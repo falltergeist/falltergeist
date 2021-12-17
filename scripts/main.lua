@@ -2,35 +2,30 @@
 -- local graphics = require('graphics')
 -- local scene = sceneManager:new()
 
-local function buttonClickListener(event)
-    print(event.x)
-    print(event.y)
-    print(event.name)
-    print(event.target)
-    local button = event.target;
-    button.x = button.x + 30
-end
+local function createButton(x, y, name)
+    local button = {}
+    button.name = name
 
-local function createButton(x, y)
-    local button = graphics.newImage("art/intrface/menuup.frm")
-    print(button)
-    print(button.x)
-    print(button.y)
-    button.x = x
-    button.y = y
-    button:addEventListener("click", buttonClickListener)
+    function button:onClick()
+        print('Button clicked: ', self.name)
+        self.image.x = self.image.x + 30
+    end
 
-    print(button)
+    button.image = graphics.newImage("art/intrface/menuup.frm")
+    button.image.x = x
+    button.image.y = y
+    button.image:addEventListener("click", function() button:onClick() end)
+
     return button
 end
 
 local background = graphics.newImage("art/intrface/mainmenu.frm")
 
-local introButton = createButton(30, 19)
-local newGameButton = createButton(30, 19 + 41)
+local introButton = createButton(30, 19, "Intro")
+local newGameButton = createButton(30, 19 + 41, "New game")
 
 scene.add(background)
-scene.add(introButton)
-scene.add(newGameButton)
+scene.add(introButton.image)
+scene.add(newGameButton.image)
 
 -- return scene

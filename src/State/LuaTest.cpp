@@ -6,6 +6,7 @@
 
 namespace Falltergeist::State {
         LuaTest::LuaTest() : State() {
+            // TODO use VFS
             luaScript = std::make_unique<VM::LuaScript>(std::string(std::filesystem::current_path()) + "/scripts/main.lua", this);
         }
 

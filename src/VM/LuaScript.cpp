@@ -7,6 +7,7 @@
 #include "../Lua/Graphics/Image.h"
 #include "../Lua/SceneManager/Scene.h"
 #include "../Lua/EventHandlerContext.h"
+#include <filesystem>
 
 extern "C" {
     #include "lualib.h"
@@ -19,6 +20,13 @@ namespace Falltergeist {
         LuaScript::LuaScript(const std::string &filename, State::State* state) {
             luaState = luaL_newstate();
             luaL_openlibs(luaState);
+
+            std::string pathToModules = std::string(std::filesystem::current_path()) + "/scripts/?.lua";
+
+            lua_getglobal(luaState, "package" );
+            lua_pushstring(luaState, pathToModules.c_str() );
+            lua_setfield(luaState, -2, "path" );
+            lua_pop(luaState, 1 );
 
             this->state = state;
 
