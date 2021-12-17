@@ -509,7 +509,7 @@ namespace Falltergeist
         {
             std::vector<glm::vec2> vertices;
             std::vector<glm::vec2> UV;
-            std::vector<GLushort> indexes;
+            std::vector<unsigned int> indexes;
 
             int cnt = 0;
             auto tex = font()->texture();
