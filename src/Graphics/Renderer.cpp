@@ -11,6 +11,9 @@
 #include "../Graphics/GLCheck.h"
 #include "../Graphics/Point.h"
 #include "../Graphics/Renderer.h"
+#include "../Graphics/VertexArray.h"
+#include "../Graphics/VertexBuffer.h"
+#include "../Graphics/IndexBuffer.h"
 #include "../Graphics/IRendererConfig.h"
 #include "../Graphics/Shader.h"
 #include "../Graphics/Texture.h"
@@ -41,14 +44,6 @@ namespace Falltergeist
 
         Renderer::~Renderer()
         {
-            GL_CHECK(glDeleteBuffers(1, &_coord_vbo));
-            GL_CHECK(glDeleteBuffers(1, &_texcoord_vbo));
-            GL_CHECK(glDeleteBuffers(1, &_ebo));
-
-            if (_renderpath == RenderPath::OGL32)
-            {
-                GL_CHECK(glDeleteVertexArrays(1, &_vao));
-            }
         }
 
         void Renderer::init()
@@ -208,21 +203,6 @@ namespace Falltergeist
             logger->info() << "[RENDERER] " << "[OK]" << std::endl;
 
             logger->info() << "[RENDERER] " << "Generating buffers" << std::endl;
-
-            if (_renderpath == RenderPath::OGL32) {
-                // generate VBOs for verts and tex
-                GL_CHECK(glGenVertexArrays(1, &_vao));
-                GL_CHECK(glBindVertexArray(_vao));
-            }
-
-            GL_CHECK(glGenBuffers(1, &_coord_vbo));
-            GL_CHECK(glGenBuffers(1, &_texcoord_vbo));
-
-            // pre-populate element buffer. 6 elements, because we draw as triangles
-            GL_CHECK(glGenBuffers(1, &_ebo));
-            GL_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ebo));
-            GLushort indexes[6] = { 0, 1, 2, 3, 2, 1 };
-            GL_CHECK(glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6*sizeof(GLushort), indexes, GL_STATIC_DRAW));
 
             // generate projection matrix
             _MVP = glm::ortho(
@@ -412,29 +392,9 @@ namespace Falltergeist
             return _scaleY;
         }
 
-        GLuint Renderer::getVAO()
-        {
-            return _vao;
-        }
-
-        GLuint Renderer::getVVBO()
-        {
-            return _coord_vbo;
-        }
-
-        GLuint Renderer::getTVBO()
-        {
-            return _texcoord_vbo;
-        }
-
         glm::mat4 Renderer::getMVP()
         {
             return _MVP;
-        }
-
-        GLuint Renderer::getEBO()
-        {
-            return _ebo;
         }
 
         void Renderer::drawRect(int x, int y, int w, int h, SDL_Color color)
@@ -451,36 +411,30 @@ namespace Falltergeist
 
             auto defaultShader = ResourceManager::getInstance()->shader("default");
             defaultShader->use();
-
             defaultShader->setUniform("color", fcolor);
-
             defaultShader->setUniform("MVP", getMVP());
 
-            if (_renderpath==RenderPath::OGL32)
-            {
-                GLint curvao;
-                glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &curvao);
-                GLint vao = getVAO();
-                if (curvao != vao)
-                {
-                    GL_CHECK(glBindVertexArray(vao));
-                }
-            }
+            VertexArray vertexArray;
 
-            GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, Game::getInstance()->renderer()->getVVBO()));
+            std::unique_ptr<VertexBuffer> coordinatesVertexBuffer = std::make_unique<VertexBuffer>(
+                    &vertices[0],
+                    vertices.size() * sizeof(glm::vec2),
+                    VertexBuffer::UsagePattern::DynamicDraw
+            );
+            VertexBufferLayout coordinatesVertexBufferLayout;
+            coordinatesVertexBufferLayout.addAttribute({
+                    (unsigned int) defaultShader->getAttrib("Position"),
+                    2,
+                    VertexBufferAttribute::Type::Float,
+                    false,
+                    0
+            });
+            vertexArray.addBuffer(coordinatesVertexBuffer, coordinatesVertexBufferLayout);
 
-            GL_CHECK(glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glm::vec2), &vertices[0], GL_DYNAMIC_DRAW));
+            static unsigned int indexes[6] = { 0, 1, 2, 3, 2, 1 };
+            IndexBuffer indexBuffer(indexes, 6, IndexBuffer::UsagePattern::StaticDraw);
 
-            GL_CHECK(glVertexAttribPointer(defaultShader->getAttrib("Position"), 2, GL_FLOAT, GL_FALSE, 0, (void*)0 ));
-
-            GL_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, Game::getInstance()->renderer()->getEBO()));
-
-            GL_CHECK(glEnableVertexAttribArray(defaultShader->getAttrib("Position")));
-
-            GL_CHECK(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, 0 ));
-
-            GL_CHECK(glDisableVertexAttribArray(defaultShader->getAttrib("Position")));
-
+            GL_CHECK(glDrawElements(GL_TRIANGLES, indexBuffer.count(), GL_UNSIGNED_INT, nullptr));
         }
 
         void Renderer::drawRect(const Point &pos, const Size &size, SDL_Color color)
