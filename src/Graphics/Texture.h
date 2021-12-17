@@ -17,7 +17,7 @@ namespace Falltergeist
             public:
                 typedef std::vector<uint32_t> RgbaPixels;
 
-                Texture(std::unique_ptr<RgbaPixels>& pixels, unsigned int width, unsigned int height, unsigned int textureWidth, unsigned int textureHeight);
+                Texture(std::unique_ptr<RgbaPixels>& pixels, unsigned int width, unsigned int height);
                 Texture(unsigned int width, unsigned int height);
                 Texture(SDL_Surface* surface);
                 ~Texture();
@@ -25,11 +25,7 @@ namespace Falltergeist
                 unsigned int width() const;
                 unsigned int height() const;
 
-                unsigned int textureWidth() const;
-                unsigned int textureHeight() const;
-
                 void loadFromSurface(SDL_Surface* surface);
-                void loadFromRGB(unsigned int* data);
                 void loadFromRGBA(unsigned int* data);
 
                 void bind(uint8_t unit=0);
@@ -47,8 +43,6 @@ namespace Falltergeist
                 unsigned int _height = 0;
                 Size _size;
 
-                unsigned int _textureWidth = 0;
-                unsigned int _textureHeight = 0;
                 std::vector<bool> _mask;
         };
     }

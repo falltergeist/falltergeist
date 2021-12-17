@@ -560,11 +560,25 @@ namespace Falltergeist
             }
             _decodeFrame(data + 14, len - 14);
 
-            SDL_PixelFormat* format = SDL_AllocFormat(SDL_PIXELFORMAT_BGR888);
-            SDL_Surface *temp = SDL_ConvertSurface(_currentBuf, format, 0);
+            int bpp;
+            uint32_t Rmask, Gmask, Bmask, Amask;
+            SDL_PixelFormatEnumToMasks(SDL_PIXELFORMAT_ABGR8888, &bpp, &Rmask, &Gmask, &Bmask, &Amask);
+
+            SDL_Surface *temp = SDL_CreateRGBSurface(0, _currentBuf->w, _currentBuf->h, bpp,
+                                                  Rmask, Gmask, Bmask, Amask
+            );
+            SDL_SetSurfaceAlphaMod( _currentBuf, 0xFF );
+            SDL_SetSurfaceBlendMode( _currentBuf, SDL_BLENDMODE_NONE );
+
+            SDL_Rect area;
+            area.x = 0;
+            area.y = 0;
+            area.w = _currentBuf->w;
+            area.h = _currentBuf->h;
+            SDL_BlitSurface(_currentBuf, &area, temp, &area);
+
             _movie->loadFromSurface(temp);
             SDL_FreeSurface(temp);
-            SDL_FreeFormat(format);
         }
 
         void MvePlayer::_setDecodingMap(uint8_t* data)

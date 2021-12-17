@@ -58,9 +58,9 @@ namespace Falltergeist
             vertices.push_back(vertex_down_right);
 
             glm::vec2 uv_up_left    = glm::vec2( 0.0, 0.0 );
-            glm::vec2 uv_up_right   = glm::vec2( (float)_texture->width()/(float)_texture->textureWidth(), 0.0 );
-            glm::vec2 uv_down_right = glm::vec2( (float)_texture->width()/(float)_texture->textureWidth(), (float)_texture->height()/(float)_texture->textureHeight() );
-            glm::vec2 uv_down_left  = glm::vec2( 0.0, (float)_texture->height()/(float)_texture->textureHeight() );
+            glm::vec2 uv_up_right   = glm::vec2( 1.0, 0.0 );
+            glm::vec2 uv_down_right = glm::vec2( 1.0, 1.0);
+            glm::vec2 uv_down_left  = glm::vec2( 0.0, 1.0);
 
             UV.push_back(uv_up_left   );
             UV.push_back(uv_down_left );

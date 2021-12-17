@@ -68,9 +68,9 @@ namespace Falltergeist
             };
             glm::vec2 UV[4] = {
                 glm::vec2(0.0, 0.0),
-                glm::vec2(0.0, (float)_texture->height() / (float)_texture->textureHeight()),
-                glm::vec2((float)_texture->width() / (float)_texture->textureWidth(), 0.0),
-                glm::vec2((float)_texture->width() / (float)_texture->textureWidth(), (float)_texture->height() / (float)_texture->textureHeight())
+                glm::vec2(0.0, 1.0),
+                glm::vec2(1.0, 0.0),
+                glm::vec2(1.0, 1.0)
             };
 
             x--;
@@ -134,7 +134,7 @@ namespace Falltergeist
 
             if (Game::getInstance()->renderer()->renderPath() == Renderer::RenderPath::OGL21)
             {
-                _shader->setUniform(_uniformTexSize, glm::vec2((float)_texture->textureWidth(), (float)_texture->textureHeight()));
+                _shader->setUniform(_uniformTexSize, glm::vec2((float)_texture->width(), (float)_texture->height()));
             }
 
             VertexArray vertexArray;
@@ -191,10 +191,10 @@ namespace Falltergeist
                 glm::vec2((float)(x + width), (float)(y + height))
             };
             glm::vec2 UV[4] = {
-                glm::vec2((float)dx / (float)_texture->textureWidth(), (float)dy / (float)_texture->textureHeight()),
-                glm::vec2((float)dx / (float)_texture->textureWidth(), (float)(dy + height) / (float)_texture->textureHeight()),
-                glm::vec2((float)(dx + width) / (float)_texture->textureWidth(), (float)dy / (float)_texture->textureHeight()),
-                glm::vec2((float)(dx + width) / (float)_texture->textureWidth(), (float)(dy + height) / (float)_texture->textureHeight())
+                glm::vec2((float)dx / (float)_texture->width(), (float)dy / (float)_texture->height()),
+                glm::vec2((float)dx / (float)_texture->width(), (float)(dy + height) / (float)_texture->height()),
+                glm::vec2((float)(dx + width) / (float)_texture->width(), (float)dy / (float)_texture->height()),
+                glm::vec2((float)(dx + width) / (float)_texture->width(), (float)(dy + height) / (float)_texture->height())
             };
 
             glm::vec2 eggVec;
@@ -256,7 +256,7 @@ namespace Falltergeist
             _shader->setUniform(_uniformOutline, false);
 
             if (Game::getInstance()->renderer()->renderPath() == Renderer::RenderPath::OGL21) {
-                _shader->setUniform(_uniformTexSize, glm::vec2((float)_texture->textureWidth(), (float)_texture->textureHeight()));
+                _shader->setUniform(_uniformTexSize, glm::vec2((float)_texture->width(), (float)_texture->height()));
             }
 
             VertexArray vertexArray;

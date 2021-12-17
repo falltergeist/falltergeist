@@ -18,11 +18,11 @@ namespace Falltergeist
             return x;
         }
 
-        Texture::Texture(std::unique_ptr<RgbaPixels>& pixels, unsigned int width, unsigned int height, unsigned int textureWidth, unsigned int textureHeight)
-        : _pixels(std::move(pixels)), _width(width), _height(height), _textureWidth(textureWidth), _textureHeight(textureHeight) {
+        Texture::Texture(std::unique_ptr<RgbaPixels>& pixels, unsigned int width, unsigned int height)
+        : _pixels(std::move(pixels)), _width(width), _height(height) {
             GL_CHECK(glGenTextures(1, &_textureID));
             GL_CHECK(glBindTexture(GL_TEXTURE_2D, _textureID));
-            GL_CHECK(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, _textureWidth, _textureHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, _pixels->data()));
+            GL_CHECK(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, _width, _height, 0, GL_ABGR_EXT, GL_UNSIGNED_BYTE, _pixels->data()));
             GL_CHECK(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST));
             GL_CHECK(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST));
         }
@@ -62,16 +62,6 @@ namespace Falltergeist
             return _height;
         }
 
-        unsigned int Texture::textureWidth() const
-        {
-            return _textureWidth;
-        }
-
-        unsigned int Texture::textureHeight() const
-        {
-            return _textureHeight;
-        }
-
         Size Texture::size() const
         {
             return _size;
@@ -79,78 +69,21 @@ namespace Falltergeist
 
         void Texture::loadFromSurface(SDL_Surface* surface)
         {
-            SDL_Surface* resizedSurface = NULL;
-            SDL_Rect area;
+            GL_CHECK(glBindTexture(GL_TEXTURE_2D, _textureID));
+            GL_CHECK(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, surface->w, surface->h, 0, GL_ABGR_EXT, GL_UNSIGNED_BYTE, surface->pixels));
+            GL_CHECK(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST));
+            GL_CHECK(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST));
 
-            if (surface == NULL)
-            {
-                return;
-            }
-
-            int newWidth = NearestPowerOf2(_width);
-            int newHeight = NearestPowerOf2(_height);
-
-            int bpp;
-            Uint32 Rmask, Gmask, Bmask, Amask;
-
-            SDL_PixelFormatEnumToMasks(
-                SDL_PIXELFORMAT_ABGR8888, &bpp,
-                &Rmask, &Gmask, &Bmask, &Amask
-            );
-
-            resizedSurface = SDL_CreateRGBSurface(0, newWidth, newHeight, bpp,
-                Rmask, Gmask, Bmask, Amask
-            );
-
-            area.x = 0;
-            area.y = 0;
-            area.w = surface->w;
-            area.h = surface->h;
-
-            SDL_SetSurfaceAlphaMod( surface, 0xFF );
-            SDL_SetSurfaceBlendMode( surface, SDL_BLENDMODE_NONE );
-            SDL_BlitSurface(surface, &area, resizedSurface, &area);
-
-            glBindTexture(GL_TEXTURE_2D, _textureID);
-
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, resizedSurface->w, resizedSurface->h, 0, GL_RGBA, GL_UNSIGNED_BYTE, resizedSurface->pixels);
-
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-
-            _textureWidth = resizedSurface->w;
-            _textureHeight = resizedSurface->h;
-            SDL_FreeSurface(resizedSurface);
-        }
-
-        void Texture::loadFromRGB(unsigned int* data)
-        {
-            SDL_Surface* tempSurf = NULL;
-            Uint32 rmask, gmask, bmask, amask;
-            rmask = 0xff0000;
-            gmask = 0x00ff00;
-            bmask = 0x0000ff;
-            amask = 0x000000;
-            tempSurf = SDL_CreateRGBSurfaceFrom(data, _width, _height, 24, _width*3, rmask, gmask, bmask, amask);
-
-            loadFromSurface(tempSurf);
-
-            SDL_FreeSurface(tempSurf);
+            _width = surface->w;
+            _height = surface->h;
         }
 
         void Texture::loadFromRGBA(unsigned int* data)
         {
-            Uint32 rmask, gmask, bmask, amask;
-            rmask = 0xff000000;
-            gmask = 0x00ff0000;
-            bmask = 0x0000ff00;
-            amask = 0x000000ff;
-
-            SDL_Surface* tempSurf = SDL_CreateRGBSurfaceFrom(data, _width, _height, 32, _width*4, rmask, gmask, bmask, amask);
-
-            loadFromSurface(tempSurf);
-
-            SDL_FreeSurface(tempSurf);
+            GL_CHECK(glBindTexture(GL_TEXTURE_2D, _textureID));
+            GL_CHECK(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, _width, _height, 0, GL_ABGR_EXT, GL_UNSIGNED_BYTE, data));
+            GL_CHECK(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST));
+            GL_CHECK(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST));
         }
 
         void Texture::bind(uint8_t unit)
