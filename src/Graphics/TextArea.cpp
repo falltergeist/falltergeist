@@ -3,6 +3,7 @@
 #include "../CrossPlatform.h"
 #include "../Event/Mouse.h"
 #include "../Game/Game.h"
+#include "../Graphics/GLCheck.h"
 #include "../Graphics/TextArea.h"
 #include "../ResourceManager.h"
 

@@ -4,6 +4,7 @@
 #include "../Graphics/Renderer.h"
 #include "../Graphics/Shader.h"
 #include "../Graphics/Texture.h"
+#include "../Graphics/VertexBuffer.h"
 
 namespace Falltergeist
 {
@@ -19,9 +20,8 @@ namespace Falltergeist
 
             private:
                 GLuint _vao;
-                GLuint _coords;
-                GLuint _texCoords;
-                GLuint _ebo;
+                std::unique_ptr<VertexBuffer> _coordinatesVertexBuffer;
+                std::unique_ptr<VertexBuffer> _textureCoordinatesVertexBuffer;
                 std::vector<std::unique_ptr<Texture>> _textures;
 
                 GLint _uniformTex;

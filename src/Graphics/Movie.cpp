@@ -1,4 +1,5 @@
 #include "../Game/Game.h"
+#include "../Graphics/GLCheck.h"
 #include "../Graphics/Movie.h"
 #include "../Graphics/Renderer.h"
 #include "../Graphics/Shader.h"

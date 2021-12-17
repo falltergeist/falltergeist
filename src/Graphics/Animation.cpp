@@ -3,6 +3,7 @@
 #include "../Game/Game.h"
 #include "../Graphics/AnimatedPalette.h"
 #include "../Graphics/Animation.h"
+#include "../Graphics/GLCheck.h"
 #include "../ResourceManager.h"
 #include "../State/Location.h"
 

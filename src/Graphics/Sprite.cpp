@@ -1,6 +1,7 @@
 #include "../Game/DudeObject.h"
 #include "../Game/Game.h"
 #include "../Graphics/AnimatedPalette.h"
+#include "../Graphics/GLCheck.h"
 #include "../Graphics/Sprite.h"
 #include "../LocationCamera.h"
 #include "../PathFinding/Hexagon.h"

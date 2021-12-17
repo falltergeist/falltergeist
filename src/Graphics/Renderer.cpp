@@ -8,6 +8,7 @@
 #include "../Event/State.h"
 #include "../Exception.h"
 #include "../Game/Game.h"
+#include "../Graphics/GLCheck.h"
 #include "../Graphics/Point.h"
 #include "../Graphics/Renderer.h"
 #include "../Graphics/IRendererConfig.h"
