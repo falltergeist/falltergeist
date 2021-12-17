@@ -213,7 +213,7 @@ namespace Falltergeist
 
         void Shader::setUniform(const std::string &uniform, int i)
         {
-            glUniform1i(getUniform(uniform), i);
+            GL_CHECK(glUniform1i(getUniform(uniform), i));
         }
 
         void Shader::setUniform(const std::string &uniform, float x)

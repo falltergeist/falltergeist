@@ -4,6 +4,9 @@
 #include "../Graphics/Renderer.h"
 #include "../Graphics/Shader.h"
 #include "../ResourceManager.h"
+#include "../Graphics/VertexBuffer.h"
+#include "../Graphics/IndexBuffer.h"
+#include "../Graphics/VertexArray.h"
 
 namespace Falltergeist
 {
@@ -13,16 +16,11 @@ namespace Falltergeist
 
         Movie::Movie()
         {
-            // 640x320
-            _texture = new Graphics::Texture(640,320);
+            _texture = std::make_unique<Graphics::Texture>(640,320);
         }
 
         Movie::~Movie()
         {
-            if (_texture)
-            {
-                delete _texture;
-            }
         }
 
         unsigned int Movie::width() const
@@ -70,54 +68,51 @@ namespace Falltergeist
 
             // TODO: different shader
 
-            ResourceManager::getInstance()->shader("sprite")->use();
+            auto spriteShader = ResourceManager::getInstance()->shader("sprite");
+            spriteShader->use();
 
             _texture->bind(0);
 
-            GL_CHECK(ResourceManager::getInstance()->shader("sprite")->setUniform("tex",0));
+            spriteShader->setUniform("tex",0);
+            spriteShader->setUniform("fade",Game::getInstance()->renderer()->fadeColor());
+            spriteShader->setUniform("MVP", Game::getInstance()->renderer()->getMVP());
 
-            ResourceManager::getInstance()->shader("sprite")->setUniform("fade",Game::getInstance()->renderer()->fadeColor());
+            VertexArray vertexArray;
 
-            ResourceManager::getInstance()->shader("sprite")->setUniform("MVP", Game::getInstance()->renderer()->getMVP());
+            std::unique_ptr<VertexBuffer> coordinatesVertexBuffer = std::make_unique<VertexBuffer>(
+                    &vertices[0],
+                    vertices.size() * sizeof(glm::vec2),
+                    VertexBuffer::UsagePattern::DynamicDraw
+            );
+            VertexBufferLayout coordinatesVertexBufferLayout;
+            coordinatesVertexBufferLayout.addAttribute({
+                    (unsigned int) spriteShader->getAttrib("Position"),
+                    2,
+                    VertexBufferAttribute::Type::Float,
+                    false,
+                    0
+            });
+            vertexArray.addBuffer(coordinatesVertexBuffer, coordinatesVertexBufferLayout);
 
-            if (Game::getInstance()->renderer()->renderPath() == Renderer::RenderPath::OGL32)
-            {
-                GLint curvao;
-                glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &curvao);
-                GLint vao = Game::getInstance()->renderer()->getVAO();
-                if (curvao != vao)
-                {
-                    GL_CHECK(glBindVertexArray(vao));
-                }
-            }
+            std::unique_ptr<VertexBuffer> textureCoordinatesVertexBuffer = std::make_unique<VertexBuffer>(
+                    &UV[0],
+                    UV.size() * sizeof(glm::vec2),
+                    VertexBuffer::UsagePattern::DynamicDraw
+            );
+            VertexBufferLayout textureCoordinatesVertexBufferLayout;
+            textureCoordinatesVertexBufferLayout.addAttribute({
+                    (unsigned int) spriteShader->getAttrib("TexCoord"),
+                    2,
+                    VertexBufferAttribute::Type::Float,
+                    false,
+                    0
+            });
+            vertexArray.addBuffer(textureCoordinatesVertexBuffer, textureCoordinatesVertexBufferLayout);
 
+            static unsigned int indexes[6] = { 0, 1, 2, 3, 2, 1 };
+            IndexBuffer indexBuffer(indexes, 6, IndexBuffer::UsagePattern::StaticDraw);
 
-            GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, Game::getInstance()->renderer()->getVVBO()));
-
-            GL_CHECK(glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glm::vec2), &vertices[0], GL_DYNAMIC_DRAW));
-
-            GL_CHECK(glVertexAttribPointer(ResourceManager::getInstance()->shader("sprite")->getAttrib("Position"), 2, GL_FLOAT, GL_FALSE, 0, (void*)0 ));
-
-
-            GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, Game::getInstance()->renderer()->getTVBO()));
-
-            GL_CHECK(glBufferData(GL_ARRAY_BUFFER, UV.size() * sizeof(glm::vec2), &UV[0], GL_DYNAMIC_DRAW));
-
-            GL_CHECK(glVertexAttribPointer(ResourceManager::getInstance()->shader("sprite")->getAttrib("TexCoord"), 2, GL_FLOAT, GL_FALSE, 0, (void*)0 ));
-
-            GL_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, Game::getInstance()->renderer()->getEBO()));
-
-            GL_CHECK(glEnableVertexAttribArray(ResourceManager::getInstance()->shader("sprite")->getAttrib("Position")));
-
-            GL_CHECK(glEnableVertexAttribArray(ResourceManager::getInstance()->shader("sprite")->getAttrib("TexCoord")));
-
-            GL_CHECK(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, 0 ));
-
-            GL_CHECK(glDisableVertexAttribArray(ResourceManager::getInstance()->shader("sprite")->getAttrib("Position")));
-
-            GL_CHECK(glDisableVertexAttribArray(ResourceManager::getInstance()->shader("sprite")->getAttrib("TexCoord")));
-
-        //    GL_CHECK(glBindVertexArray(0));
+            GL_CHECK(glDrawElements(GL_TRIANGLES, indexBuffer.count(), GL_UNSIGNED_INT, nullptr));
         }
     }
 }
