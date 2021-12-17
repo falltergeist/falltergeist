@@ -20,20 +20,6 @@ namespace Falltergeist
                 throw std::logic_error("Indexes should not be empty");
             }
 
-            if (Game::getInstance()->renderer()->renderPath() == Renderer::RenderPath::OGL32)
-            {
-                GL_CHECK(glGenVertexArrays(1, &_vao));
-                GL_CHECK(glBindVertexArray(_vao));
-            }
-
-            _coordinatesVertexBuffer = std::make_unique<VertexBuffer>(
-                    &coords[0],
-                    coords.size() * sizeof(glm::vec2),
-                    VertexBuffer::UsagePattern::StaticDraw
-            );
-
-            _lightsVertexBuffer = std::make_unique<VertexBuffer>(nullptr, 0);
-
             _indexBuffer = std::make_unique<IndexBuffer>(
                 &indexes[0],
                 indexes.size(),
@@ -48,14 +34,29 @@ namespace Falltergeist
 
             _attribPos = _shader->getAttrib("Position");
             _attribLights = _shader->getAttrib("lights");
+
+            _vertexArray = std::make_unique<VertexArray>();
+
+            _coordinatesVertexBuffer = std::make_unique<VertexBuffer>(
+                    &coords[0],
+                    coords.size() * sizeof(glm::vec2),
+                    VertexBuffer::UsagePattern::StaticDraw
+            );
+            VertexBufferLayout coordinatesVertexBufferLayout;
+            coordinatesVertexBufferLayout.addAttribute({
+                   (unsigned int) _attribPos,
+                   2,
+                   VertexBufferAttribute::Type::Float,
+                   false,
+                   0
+           });
+            _vertexArray->addBuffer(_coordinatesVertexBuffer, coordinatesVertexBufferLayout);
+
+            _lightsVertexBuffer = std::make_unique<VertexBuffer>(nullptr, 0);
         }
 
         Lightmap::~Lightmap()
         {
-            if (Game::getInstance()->renderer()->renderPath() == Renderer::RenderPath::OGL32)
-            {
-                GL_CHECK(glDeleteVertexArrays(1, &_vao));
-            }
         }
 
         void Lightmap::render(const Point &pos)
@@ -71,24 +72,7 @@ namespace Falltergeist
 
             _shader->setUniform(_uniformFade, Game::getInstance()->renderer()->fadeColor());
 
-            if (Game::getInstance()->renderer()->renderPath() == Renderer::RenderPath::OGL32)
-            {
-                GLint curvao;
-                glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &curvao);
-                if ((GLuint)curvao != _vao)
-                {
-                    GL_CHECK(glBindVertexArray(_vao));
-                }
-            }
-
-            _coordinatesVertexBuffer->bind();
-            GL_CHECK(glEnableVertexAttribArray(_attribPos));
-            GL_CHECK(glVertexAttribPointer(_attribPos, 2, GL_FLOAT, GL_FALSE, 0, (void*)0 ));
-
-            _lightsVertexBuffer->bind();
-            GL_CHECK(glEnableVertexAttribArray(_attribLights));
-            GL_CHECK(glVertexAttribPointer(_attribLights, 1, GL_FLOAT, GL_FALSE, 0, (void*)0 ));
-
+            _vertexArray->bind();
             _indexBuffer->bind();
 
             GL_CHECK(glDrawElements(GL_TRIANGLES, _indexBuffer->count(), GL_UNSIGNED_INT, nullptr));
@@ -97,21 +81,22 @@ namespace Falltergeist
 
         void Lightmap::update(std::vector<float> lights)
         {
-            if (Game::getInstance()->renderer()->renderPath() == Renderer::RenderPath::OGL32)
-            {
-                GLint curvao;
-                glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &curvao);
-                if ((GLuint)curvao != _vao)
-                {
-                    GL_CHECK(glBindVertexArray(_vao));
-                }
-            }
+            _vertexArray->bind();
 
             _lightsVertexBuffer = std::make_unique<VertexBuffer>(
                 &lights[0],
                 lights.size() * sizeof(float),
                 VertexBuffer::UsagePattern::StaticDraw
             );
+            VertexBufferLayout lightsVertexBufferLayout;
+            lightsVertexBufferLayout.addAttribute({
+                  (unsigned int) _attribLights,
+                  1,
+                  VertexBufferAttribute::Type::Float,
+                  false,
+                  0
+            });
+            _vertexArray->addBuffer(_lightsVertexBuffer, lightsVertexBufferLayout);
         }
     }
 }

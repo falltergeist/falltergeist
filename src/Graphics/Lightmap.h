@@ -5,6 +5,7 @@
 #include "../Graphics/Shader.h"
 #include "../Graphics/IndexBuffer.h"
 #include "../Graphics/VertexBuffer.h"
+#include "../Graphics/VertexArray.h"
 
 namespace Falltergeist
 {
@@ -19,7 +20,7 @@ namespace Falltergeist
                 void update(std::vector<float> lights);
 
             private:
-                GLuint _vao;
+                std::unique_ptr<VertexArray> _vertexArray;
                 std::unique_ptr<VertexBuffer> _coordinatesVertexBuffer;
                 std::unique_ptr<VertexBuffer> _lightsVertexBuffer;
                 std::unique_ptr<IndexBuffer> _indexBuffer;
