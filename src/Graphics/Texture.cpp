@@ -18,6 +18,15 @@ namespace Falltergeist
             return x;
         }
 
+        Texture::Texture(std::unique_ptr<RgbaPixels>& pixels, unsigned int width, unsigned int height, unsigned int textureWidth, unsigned int textureHeight)
+        : _pixels(std::move(pixels)), _width(width), _height(height), _textureWidth(textureWidth), _textureHeight(textureHeight) {
+            GL_CHECK(glGenTextures(1, &_textureID));
+            GL_CHECK(glBindTexture(GL_TEXTURE_2D, _textureID));
+            GL_CHECK(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, _textureWidth, _textureHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, _pixels->data()));
+            GL_CHECK(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST));
+            GL_CHECK(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST));
+        }
+
         Texture::Texture(unsigned int width, unsigned int height) : _size(width, height)
         {
             _width = width;

@@ -12,9 +12,12 @@ namespace Falltergeist
 {
     namespace Graphics
     {
-        class Texture
+        class Texture final
         {
             public:
+                typedef std::vector<uint32_t> RgbaPixels;
+
+                Texture(std::unique_ptr<RgbaPixels>& pixels, unsigned int width, unsigned int height, unsigned int textureWidth, unsigned int textureHeight);
                 Texture(unsigned int width, unsigned int height);
                 Texture(SDL_Surface* surface);
                 ~Texture();
@@ -37,8 +40,9 @@ namespace Falltergeist
 
                 Size size() const;
 
-            protected:
-                GLuint _textureID;
+            private:
+                std::unique_ptr<RgbaPixels> _pixels;
+                GLuint _textureID = 0;
                 unsigned int _width = 0;
                 unsigned int _height = 0;
                 Size _size;

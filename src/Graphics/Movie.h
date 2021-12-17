@@ -19,6 +19,8 @@ namespace Falltergeist
 
             private:
                 std::unique_ptr<Texture> _texture;
+                unsigned int _width;
+                unsigned int _height;
         };
     }
 }

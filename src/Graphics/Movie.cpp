@@ -7,6 +7,7 @@
 #include "../Graphics/VertexBuffer.h"
 #include "../Graphics/IndexBuffer.h"
 #include "../Graphics/VertexArray.h"
+#include "../Graphics/SdlSurfaceTextureFactory.h"
 
 namespace Falltergeist
 {
@@ -16,7 +17,9 @@ namespace Falltergeist
 
         Movie::Movie()
         {
-            _texture = std::make_unique<Graphics::Texture>(640,320);
+            _width = 640;
+            _height = 320;
+            _texture = std::make_unique<Graphics::Texture>(_width,_height);
         }
 
         Movie::~Movie()
@@ -25,17 +28,18 @@ namespace Falltergeist
 
         unsigned int Movie::width() const
         {
-            return _texture->width();
+            return _width;
         }
 
         unsigned int Movie::height() const
         {
-            return _texture->height();
+            return _height;
         }
 
         void Movie::loadFromSurface(SDL_Surface* surface)
         {
-            _texture->loadFromSurface(surface);
+            SdlSurfaceTextureFactory textureFactory;
+            _texture = textureFactory.createFromSurface(surface);
         }
 
         void Movie::render(int x, int y)
@@ -43,13 +47,10 @@ namespace Falltergeist
             std::vector<glm::vec2> vertices;
             std::vector<glm::vec2> UV;
 
-            int width = 640;
-            int height = 320;
-
             glm::vec2 vertex_up_left    = glm::vec2( (float)x, (float)y);
-            glm::vec2 vertex_up_right   = glm::vec2( (float)(x+width), (float)y);
-            glm::vec2 vertex_down_right = glm::vec2( (float)(x+width), (float)(y+height));
-            glm::vec2 vertex_down_left  = glm::vec2( (float)x, (float)(y+height));
+            glm::vec2 vertex_up_right   = glm::vec2( (float)(x+_width), (float)y);
+            glm::vec2 vertex_down_right = glm::vec2( (float)(x+_width), (float)(y+_height));
+            glm::vec2 vertex_down_left  = glm::vec2( (float)x, (float)(y+_height));
 
             vertices.push_back(vertex_up_left   );
             vertices.push_back(vertex_down_left );
