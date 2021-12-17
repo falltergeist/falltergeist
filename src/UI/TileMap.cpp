@@ -98,7 +98,12 @@ namespace  Falltergeist
 
             }
 
-            _tilemap = std::make_unique<Graphics::Tilemap>(vertices, UV);
+            // Can be empty if f.e. there is no roof on location
+            if (vertices.empty() || UV.empty()) {
+                _tilemap = nullptr;
+            } else {
+                _tilemap = std::make_unique<Graphics::Tilemap>(vertices, UV);
+            }
 
             logger->info() << "[GAME] Tilemap uniq tiles " << numbers.size() << std::endl;
 
@@ -125,7 +130,9 @@ namespace  Falltergeist
                     SDL_FreeSurface(tileSurf);
                 }
                 //push new atlas
-                _tilemap->addTexture(tmp);
+                if (_tilemap != nullptr) {
+                    _tilemap->addTexture(tmp);
+                }
                 //IMG_SavePNG(tmp, "text.png");
                 SDL_FreeSurface(tmp);
             }
@@ -133,6 +140,10 @@ namespace  Falltergeist
 
         void TileMap::render()
         {
+            if (_tilemap == nullptr) {
+                return;
+            }
+
             auto camera = Game::Game::getInstance()->locationState()->camera();
             std::vector<std::vector<GLuint>> indexes;
             for (uint8_t i = 0; i < _atlases; i++)

@@ -16,16 +16,15 @@ namespace Falltergeist
             if (coords.empty() ) {
                 throw std::logic_error("Coordinates should not be empty");
             }
+            if (indexes.empty()) {
+                throw std::logic_error("Indexes should not be empty");
+            }
 
             if (Game::getInstance()->renderer()->renderPath() == Renderer::RenderPath::OGL32)
             {
                 GL_CHECK(glGenVertexArrays(1, &_vao));
                 GL_CHECK(glBindVertexArray(_vao));
             }
-
-            // generate VBOs for verts and tex
-            GL_CHECK(glGenBuffers(1, &_ebo));
-
 
             _coordinatesVertexBuffer = std::make_unique<VertexBuffer>(
                     &coords[0],
@@ -35,11 +34,11 @@ namespace Falltergeist
 
             _lightsVertexBuffer = std::make_unique<VertexBuffer>(nullptr, 0);
 
-            GL_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ebo));
-            // update indexes
-            GL_CHECK(glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexes.size() * sizeof(GLuint), &indexes[0], GL_DYNAMIC_DRAW));
-            _indexes = static_cast<unsigned>(indexes.size());
-
+            _indexBuffer = std::make_unique<IndexBuffer>(
+                &indexes[0],
+                indexes.size(),
+                IndexBuffer::UsagePattern::DynamicDraw
+            );
 
             _shader = ResourceManager::getInstance()->shader("lightmap");
 
@@ -53,8 +52,6 @@ namespace Falltergeist
 
         Lightmap::~Lightmap()
         {
-            GL_CHECK(glDeleteBuffers(1, &_ebo));
-
             if (Game::getInstance()->renderer()->renderPath() == Renderer::RenderPath::OGL32)
             {
                 GL_CHECK(glDeleteVertexArrays(1, &_vao));
@@ -63,8 +60,6 @@ namespace Falltergeist
 
         void Lightmap::render(const Point &pos)
         {
-            if (_indexes<=0) return;
-
             GL_CHECK(glBlendFunc(GL_DST_COLOR, GL_SRC_COLOR));
 
             _shader->use();
@@ -86,7 +81,6 @@ namespace Falltergeist
                 }
             }
 
-
             _coordinatesVertexBuffer->bind();
             GL_CHECK(glEnableVertexAttribArray(_attribPos));
             GL_CHECK(glVertexAttribPointer(_attribPos, 2, GL_FLOAT, GL_FALSE, 0, (void*)0 ));
@@ -95,10 +89,9 @@ namespace Falltergeist
             GL_CHECK(glEnableVertexAttribArray(_attribLights));
             GL_CHECK(glVertexAttribPointer(_attribLights, 1, GL_FLOAT, GL_FALSE, 0, (void*)0 ));
 
-            GL_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ebo));
+            _indexBuffer->bind();
 
-            GL_CHECK(glDrawElements(GL_TRIANGLES, _indexes, GL_UNSIGNED_INT, 0 ));
-
+            GL_CHECK(glDrawElements(GL_TRIANGLES, _indexBuffer->count(), GL_UNSIGNED_INT, nullptr));
             GL_CHECK(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
         }
 

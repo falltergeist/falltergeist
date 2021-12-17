@@ -14,8 +14,11 @@ namespace Falltergeist {
         using Game::Game;
 
         Tilemap::Tilemap(std::vector<glm::vec2> coords, std::vector<glm::vec2> textureCoords) {
-            if (coords.empty() || textureCoords.empty()) {
+            if (coords.empty()) {
                 throw std::logic_error("Coordinates should not be empty");
+            }
+            if (textureCoords.empty()) {
+                throw std::logic_error("Texture coordinates should not be empty");
             }
 
             _coordinatesVertexBuffer = std::make_unique<VertexBuffer>(&coords[0], coords.size() * sizeof(glm::vec2));

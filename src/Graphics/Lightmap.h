@@ -3,6 +3,7 @@
 #include "../Graphics/Point.h"
 #include "../Graphics/Renderer.h"
 #include "../Graphics/Shader.h"
+#include "../Graphics/IndexBuffer.h"
 #include "../Graphics/VertexBuffer.h"
 
 namespace Falltergeist
@@ -21,7 +22,7 @@ namespace Falltergeist
                 GLuint _vao;
                 std::unique_ptr<VertexBuffer> _coordinatesVertexBuffer;
                 std::unique_ptr<VertexBuffer> _lightsVertexBuffer;
-                GLuint _ebo;
+                std::unique_ptr<IndexBuffer> _indexBuffer;
 
                 GLint _uniformFade;
                 GLint _uniformMVP;
@@ -29,7 +30,6 @@ namespace Falltergeist
 
                 GLint _attribPos;
                 GLint _attribLights;
-                unsigned int _indexes;
                 Graphics::Shader*_shader;
         };
     }
