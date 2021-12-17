@@ -21,12 +21,9 @@ namespace Falltergeist
                 GL_CHECK(glBindVertexArray(_vao));
             }
 
-            // generate VBOs for verts and tex
-            GL_CHECK(glGenBuffers(1, &_coords));
-            GL_CHECK(glGenBuffers(1, &_texCoords));
-            GL_CHECK(glGenBuffers(1, &_ebo));
-            GL_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ebo));
-        //    GL_CHECK(glBindVertexArray(0));
+            _coordinatesVertexBuffer = std::make_unique<VertexBuffer>(nullptr, 0);
+            _textureCoordinatesVertexBuffer = std::make_unique<VertexBuffer>(nullptr, 0);
+            _indexBuffer = std::make_unique<IndexBuffer>(nullptr, 0);
 
             _shader = ResourceManager::getInstance()->shader("font");
 
@@ -47,20 +44,12 @@ namespace Falltergeist
 
         TextArea::~TextArea()
         {
-            GL_CHECK(glDeleteBuffers(1, &_coords));
-            GL_CHECK(glDeleteBuffers(1, &_texCoords));
-            GL_CHECK(glDeleteBuffers(1, &_ebo));
-            if (Game::getInstance()->renderer()->renderPath() == Renderer::RenderPath::OGL32)
-            {
-                GL_CHECK(glDeleteVertexArrays(1, &_vao));
-            }
         }
 
 
         void TextArea::render(Point& pos, Graphics::Font* font, SDL_Color _color, SDL_Color _outlineColor)
         {
-            if (!_cnt)
-            {
+            if (_indexBuffer->count() == 0) {
                 return;
             }
 
@@ -90,32 +79,29 @@ namespace Falltergeist
                 }
             }
 
-            GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, _coords));
+            _coordinatesVertexBuffer->bind();
             GL_CHECK(glVertexAttribPointer(_attribPos, 2, GL_FLOAT, GL_FALSE, 0, (void*)0 ));
 
-
-            GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, _texCoords));
+            _textureCoordinatesVertexBuffer->bind();
             GL_CHECK(glVertexAttribPointer(_attribTex, 2, GL_FLOAT, GL_FALSE, 0, (void*)0 ));
 
-            GL_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ebo));
+            _indexBuffer->bind();
 
             GL_CHECK(glEnableVertexAttribArray(_attribPos));
             GL_CHECK(glEnableVertexAttribArray(_attribTex));
 
-            GL_CHECK(glDrawElements(GL_TRIANGLES, _cnt, GL_UNSIGNED_SHORT, 0 ));
+            GL_CHECK(glDrawElements(GL_TRIANGLES, _indexBuffer->count(), GL_UNSIGNED_INT, nullptr));
 
             GL_CHECK(glDisableVertexAttribArray(_attribPos));
             GL_CHECK(glDisableVertexAttribArray(_attribTex));
         }
 
-        void TextArea::updateBuffers(std::vector<glm::vec2> vertices, std::vector<glm::vec2> UV,  std::vector<GLushort> indexes)
+        void TextArea::updateBuffers(std::vector<glm::vec2> vertices, std::vector<glm::vec2> UV,  std::vector<unsigned int> indexes)
         {
-            if (!vertices.size())
+            if (vertices.empty())
             {
-                _cnt = 0;
                 return;
             }
-            _cnt = static_cast<int>(indexes.size());
 
             if (Game::getInstance()->renderer()->renderPath() == Renderer::RenderPath::OGL32)
             {
@@ -127,18 +113,13 @@ namespace Falltergeist
                 }
             }
 
-            GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, _coords));
-            GL_CHECK(glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glm::vec2), &vertices[0], GL_DYNAMIC_DRAW));
+            // TODO pass GL_DYNAMIC_DRAW
+            _coordinatesVertexBuffer = std::make_unique<VertexBuffer>(&vertices[0], vertices.size() * sizeof(glm::vec2));
+            // TODO pass GL_DYNAMIC_DRAW
+            _textureCoordinatesVertexBuffer = std::make_unique<VertexBuffer>(&UV[0], UV.size() * sizeof(glm::vec2));
 
-
-            GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, _texCoords));
-            GL_CHECK(glBufferData(GL_ARRAY_BUFFER, UV.size() * sizeof(glm::vec2), &UV[0], GL_DYNAMIC_DRAW));
-
-            GL_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ebo));
-            GL_CHECK(glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexes.size() * sizeof(GLushort), &indexes[0], GL_DYNAMIC_DRAW));
-
-            GL_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
-            GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, 0));
+            // TODO pass GL_DYNAMIC_DRAW
+            _indexBuffer = std::make_unique<IndexBuffer>(&indexes[0], indexes.size());
         }
     }
 }

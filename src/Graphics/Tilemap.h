@@ -20,7 +20,6 @@ namespace Falltergeist
                 void addTexture(SDL_Surface* surface);
 
             private:
-                GLuint _vao;
                 std::unique_ptr<VertexBuffer> _coordinatesVertexBuffer;
                 std::unique_ptr<VertexBuffer> _textureCoordinatesVertexBuffer;
                 std::unique_ptr<VertexArray> _vertexArray;
