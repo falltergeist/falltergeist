@@ -80,8 +80,11 @@ namespace Falltergeist
 
             _vertexArray = std::make_unique<VertexArray>();
 
-            // TODO pass GL_DYNAMIC_DRAW
-            _coordinatesVertexBuffer = std::make_unique<VertexBuffer>(&vertices[0], vertices.size() * sizeof(glm::vec2));
+            _coordinatesVertexBuffer = std::make_unique<VertexBuffer>(
+                    &vertices[0],
+                    vertices.size() * sizeof(glm::vec2),
+                    VertexBuffer::UsagePattern::DynamicDraw
+            );
             VertexBufferLayout coordinatesVertexBufferLayout;
             coordinatesVertexBufferLayout.addAttribute({
                (unsigned int) _attribPos,
@@ -92,8 +95,11 @@ namespace Falltergeist
             });
             _vertexArray->addBuffer(_coordinatesVertexBuffer, coordinatesVertexBufferLayout);
 
-            // TODO pass GL_DYNAMIC_DRAW
-            _textureCoordinatesVertexBuffer = std::make_unique<VertexBuffer>(&UV[0], UV.size() * sizeof(glm::vec2));
+            _textureCoordinatesVertexBuffer = std::make_unique<VertexBuffer>(
+                    &UV[0],
+                    UV.size() * sizeof(glm::vec2),
+                    VertexBuffer::UsagePattern::DynamicDraw
+            );
             VertexBufferLayout textureCoordinatesVertexBufferLayout;
             textureCoordinatesVertexBufferLayout.addAttribute({
               (unsigned int) _attribTex,
@@ -104,8 +110,11 @@ namespace Falltergeist
             });
             _vertexArray->addBuffer(_textureCoordinatesVertexBuffer, textureCoordinatesVertexBufferLayout);
 
-            // TODO pass GL_DYNAMIC_DRAW
-            _indexBuffer = std::make_unique<IndexBuffer>(&indexes[0], indexes.size());
+            _indexBuffer = std::make_unique<IndexBuffer>(
+                    &indexes[0],
+                    indexes.size(),
+                    IndexBuffer::UsagePattern::DynamicDraw
+            );
         }
     }
 }

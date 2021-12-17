@@ -3,6 +3,7 @@
 #include "../Game/Game.h"
 #include "../Graphics/AnimatedPalette.h"
 #include "../Graphics/Animation.h"
+#include "../Graphics/IndexBuffer.h"
 #include "../Graphics/GLCheck.h"
 #include "../ResourceManager.h"
 #include "../State/Location.h"
@@ -22,11 +23,6 @@ namespace Falltergeist
                 GL_CHECK(glGenVertexArrays(1, &_vao));
                 GL_CHECK(glBindVertexArray(_vao));
             }
-
-            // generate VBOs for verts and tex
-            GL_CHECK(glGenBuffers(1, &_coordsVBO));
-            GL_CHECK(glGenBuffers(1, &_texCoordsVBO));
-            GL_CHECK(glGenBuffers(1, &_ebo));
 
             _texture = ResourceManager::getInstance()->texture(filename);
 
@@ -73,11 +69,17 @@ namespace Falltergeist
 
             }
 
-            GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, _coordsVBO));
-            GL_CHECK(glBufferData(GL_ARRAY_BUFFER, _vertices.size() * sizeof(glm::vec2), &_vertices[0], GL_STATIC_DRAW));
+            _coordinatesVertexBuffer = std::make_unique<VertexBuffer>(
+                    &_vertices[0],
+                    _vertices.size() * sizeof(glm::vec2),
+                    VertexBuffer::UsagePattern::StaticDraw
+            );
 
-            GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, _texCoordsVBO));
-            GL_CHECK(glBufferData(GL_ARRAY_BUFFER, _texCoords.size() * sizeof(glm::vec2), &_texCoords[0], GL_STATIC_DRAW));
+            _textureCoordinatesVertexBuffer = std::make_unique<VertexBuffer>(
+                    &_texCoords[0],
+                    _texCoords.size() * sizeof(glm::vec2),
+                    VertexBuffer::UsagePattern::StaticDraw
+            );
 
             _shader = ResourceManager::getInstance()->shader("animation");
 
@@ -103,10 +105,6 @@ namespace Falltergeist
 
         Animation::~Animation()
         {
-            GL_CHECK(glDeleteBuffers(1, &_coordsVBO));
-            GL_CHECK(glDeleteBuffers(1, &_texCoordsVBO));
-            GL_CHECK(glDeleteBuffers(1, &_ebo));
-
             if (Game::getInstance()->renderer()->renderPath() == Renderer::RenderPath::OGL32)
             {
                 GL_CHECK(glDeleteVertexArrays(1, &_vao));
@@ -115,7 +113,7 @@ namespace Falltergeist
 
         void Animation::render(int x, int y, unsigned int direction, unsigned int frame, bool transparency, bool light, int outline, unsigned int lightValue)
         {
-            int pos = direction*_stride+frame;
+            unsigned pos = direction * _stride + frame;
 
             float texStart = _texCoords.at(pos*4).y;
             float texEnd = _texCoords.at(pos*4+3).y;
@@ -167,28 +165,25 @@ namespace Falltergeist
                 }
             }
 
-            GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, _coordsVBO));
+            _coordinatesVertexBuffer->bind();
             GL_CHECK(glVertexAttribPointer(_attribPos, 2, GL_FLOAT, GL_FALSE, 0, (void*)0 ));
 
 
-            GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, _texCoordsVBO));
+            _textureCoordinatesVertexBuffer->bind();
             GL_CHECK(glVertexAttribPointer(_attribTex, 2, GL_FLOAT, GL_FALSE, 0, (void*)0 ));
 
-            GL_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ebo));
-
-            GLushort indexes[6] = {(GLushort) (pos * 4), (GLushort) (pos * 4 + 1), (GLushort) (pos * 4 + 2), (GLushort) (pos * 4 + 3), (GLushort) (pos * 4 + 2), (GLushort) (pos * 4 + 1)};
-
-
-            GL_CHECK(glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6*sizeof(GLushort), indexes, GL_STATIC_DRAW));
+            unsigned int indexes[6] = {
+                (pos * 4), (pos * 4 + 1),
+                (pos * 4 + 2), (pos * 4 + 3),
+                (pos * 4 + 2), (pos * 4 + 1)
+            };
+            IndexBuffer indexBuffer(indexes, 6, IndexBuffer::UsagePattern::StaticDraw);
+            indexBuffer.bind();
 
             GL_CHECK(glEnableVertexAttribArray(_attribPos));
             GL_CHECK(glEnableVertexAttribArray(_attribTex));
 
-            GL_CHECK(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, 0 ));
-
-            GL_CHECK(glDisableVertexAttribArray(_attribPos));
-
-            GL_CHECK(glDisableVertexAttribArray(_attribTex));
+            GL_CHECK(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0 ));
         }
 
         bool Animation::opaque(unsigned int x, unsigned int y)

@@ -95,7 +95,7 @@ namespace Falltergeist {
 
             _vertexArray->bind();
 
-            IndexBuffer indexBuffer(&indexes[0], indexes.size());
+            IndexBuffer indexBuffer(&indexes[0], indexes.size(), IndexBuffer::UsagePattern::StaticDraw);
 
             GL_CHECK(glDrawElements(GL_TRIANGLES, indexes.size(), GL_UNSIGNED_INT, nullptr));
         }

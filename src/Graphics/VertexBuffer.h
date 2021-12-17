@@ -4,7 +4,12 @@ namespace Falltergeist {
     namespace Graphics {
         class VertexBuffer final {
         public:
-            VertexBuffer(const void* data, unsigned int size);
+            enum class UsagePattern {
+                StaticDraw,
+                DynamicDraw
+            };
+
+            VertexBuffer(const void* data, unsigned int size, UsagePattern usagePattern = UsagePattern::StaticDraw);
             ~VertexBuffer();
 
             void bind() const;
@@ -13,7 +18,7 @@ namespace Falltergeist {
             unsigned int size() const;
 
         private:
-            unsigned int _resourceId;
+            unsigned int _resourceId = 0;
             const void* _data;
             unsigned int _size;
         };

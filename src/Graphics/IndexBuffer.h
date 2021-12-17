@@ -4,7 +4,12 @@ namespace Falltergeist {
     namespace Graphics {
         class IndexBuffer final {
         public:
-            IndexBuffer(unsigned int* indexes, unsigned int count);
+            enum class UsagePattern {
+                StaticDraw,
+                DynamicDraw
+            };
+
+            IndexBuffer(unsigned int* indexes, unsigned int count, UsagePattern usagePattern = UsagePattern::StaticDraw);
             ~IndexBuffer();
 
             void bind() const;
@@ -13,7 +18,7 @@ namespace Falltergeist {
             unsigned int count() const;
 
         private:
-            unsigned int _resourceId;
+            unsigned int _resourceId = 0;
             const unsigned int* _indexes;
             unsigned int _count;
         };
