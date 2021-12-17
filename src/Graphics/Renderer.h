@@ -17,15 +17,6 @@ namespace Falltergeist
     {
         class Texture;
 
-        #define GL_CHECK(x) do { \
-            x; \
-            int _err = glGetError(); \
-            if (_err) { \
-                printf("GL Error %d at %d, %s in %s", _err, __LINE__, __func__, __FILE__); \
-                exit(-1); \
-            } \
-        } while (0)
-
         class Renderer
         {
             public:
@@ -61,10 +52,6 @@ namespace Falltergeist
                 void setCaption(const std::string& caption);
                 SDL_Window* sdlWindow();
 
-                GLuint getVAO();
-                GLuint getVVBO();
-                GLuint getTVBO();
-                GLuint getEBO();
                 glm::mat4 getMVP();
 
                 void drawRect(int x, int y, int w, int h, SDL_Color color);
@@ -97,10 +84,6 @@ namespace Falltergeist
 
                 SDL_Window* _sdlWindow;
                 SDL_GLContext _glcontext;
-                GLuint _vao;
-                GLuint _ebo;
-                GLuint _texcoord_vbo;
-                GLuint _coord_vbo;
                 glm::mat4 _MVP;
                 GLint _major;
                 GLint _minor;

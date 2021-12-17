@@ -5,6 +5,9 @@
 #include <vector>
 #include "../Graphics/Font.h"
 #include "../Graphics/Renderer.h"
+#include "../Graphics/VertexBuffer.h"
+#include "../Graphics/VertexArray.h"
+#include "../Graphics/IndexBuffer.h"
 #include "../Graphics/Shader.h"
 
 namespace Falltergeist
@@ -18,14 +21,13 @@ namespace Falltergeist
                 ~TextArea();
 
                 void render(Point& pos, Graphics::Font* font, SDL_Color _color, SDL_Color _outlineColor);
-                void updateBuffers(std::vector<glm::vec2> vertices, std::vector<glm::vec2> UV,  std::vector<GLushort> indexes);
+                void updateBuffers(std::vector<glm::vec2> vertices, std::vector<glm::vec2> UV,  std::vector<unsigned int> indexes);
 
             protected:
-                GLuint _vao;
-                GLuint _coords;
-                GLuint _texCoords;
-                GLuint _ebo;
-                int _cnt = 0;
+                std::unique_ptr<VertexArray> _vertexArray;
+                std::unique_ptr<VertexBuffer> _coordinatesVertexBuffer;
+                std::unique_ptr<VertexBuffer> _textureCoordinatesVertexBuffer;
+                std::unique_ptr<IndexBuffer> _indexBuffer;
 
                 GLint _uniformTex;
                 GLint _uniformTexSize;

@@ -18,7 +18,7 @@ namespace Falltergeist
                 void loadFromSurface(SDL_Surface* surface);
 
             private:
-                Texture* _texture;
+                std::unique_ptr<Texture> _texture;
         };
     }
 }

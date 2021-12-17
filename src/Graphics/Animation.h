@@ -1,6 +1,8 @@
 #pragma once
 
 #include <iosfwd>
+#include "../Graphics/VertexArray.h"
+#include "../Graphics/VertexBuffer.h"
 #include "../Graphics/Renderer.h"
 #include "../Graphics/Shader.h"
 #include "../Graphics/Texture.h"
@@ -21,10 +23,9 @@ namespace Falltergeist
                 void trans(Graphics::TransFlags::Trans _trans);
 
             private:
-                GLuint _vao;
-                GLuint _coordsVBO;
-                GLuint _texCoordsVBO;
-                GLuint _ebo;
+                std::unique_ptr<VertexArray> _vertexArray;
+                std::unique_ptr<VertexBuffer> _coordinatesVertexBuffer;
+                std::unique_ptr<VertexBuffer> _textureCoordinatesVertexBuffer;
                 Texture* _texture;
                 int _stride;
                 Graphics::TransFlags::Trans _trans = Graphics::TransFlags::Trans::NONE;

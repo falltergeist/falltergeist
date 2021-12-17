@@ -3,6 +3,8 @@
 #include "../Game/Game.h"
 #include "../Graphics/AnimatedPalette.h"
 #include "../Graphics/Animation.h"
+#include "../Graphics/IndexBuffer.h"
+#include "../Graphics/GLCheck.h"
 #include "../ResourceManager.h"
 #include "../State/Location.h"
 
@@ -14,19 +16,6 @@ namespace Falltergeist
 
         Animation::Animation(const std::string &filename)
         {
-            // create buffers
-            // generate VAO
-            if (Game::getInstance()->renderer()->renderPath() == Renderer::RenderPath::OGL32)
-            {
-                GL_CHECK(glGenVertexArrays(1, &_vao));
-                GL_CHECK(glBindVertexArray(_vao));
-            }
-
-            // generate VBOs for verts and tex
-            GL_CHECK(glGenBuffers(1, &_coordsVBO));
-            GL_CHECK(glGenBuffers(1, &_texCoordsVBO));
-            GL_CHECK(glGenBuffers(1, &_ebo));
-
             _texture = ResourceManager::getInstance()->texture(filename);
 
             Format::Frm::File* frm = ResourceManager::getInstance()->frmFileType(filename);
@@ -72,12 +61,6 @@ namespace Falltergeist
 
             }
 
-            GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, _coordsVBO));
-            GL_CHECK(glBufferData(GL_ARRAY_BUFFER, _vertices.size() * sizeof(glm::vec2), &_vertices[0], GL_STATIC_DRAW));
-
-            GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, _texCoordsVBO));
-            GL_CHECK(glBufferData(GL_ARRAY_BUFFER, _texCoords.size() * sizeof(glm::vec2), &_texCoords[0], GL_STATIC_DRAW));
-
             _shader = ResourceManager::getInstance()->shader("animation");
 
             _uniformTex = _shader->getUniform("tex");
@@ -98,41 +81,65 @@ namespace Falltergeist
 
             _attribPos = _shader->getAttrib("Position");
             _attribTex = _shader->getAttrib("TexCoord");
+
+            _vertexArray = std::make_unique<VertexArray>();
+
+            _coordinatesVertexBuffer = std::make_unique<VertexBuffer>(
+                    &_vertices[0],
+                    _vertices.size() * sizeof(glm::vec2),
+                    VertexBuffer::UsagePattern::StaticDraw
+            );
+            VertexBufferLayout coordinatesVertexBufferLayout;
+            coordinatesVertexBufferLayout.addAttribute({
+                   (unsigned int) _attribPos,
+                   2,
+                   VertexBufferAttribute::Type::Float,
+                   false,
+                   0
+            });
+            _vertexArray->addBuffer(_coordinatesVertexBuffer, coordinatesVertexBufferLayout);
+
+            _textureCoordinatesVertexBuffer = std::make_unique<VertexBuffer>(
+                    &_texCoords[0],
+                    _texCoords.size() * sizeof(glm::vec2),
+                    VertexBuffer::UsagePattern::StaticDraw
+            );
+            VertexBufferLayout textureCoordinatesVertexBufferLayout;
+            textureCoordinatesVertexBufferLayout.addAttribute({
+                  (unsigned int) _attribTex,
+                  2,
+                  VertexBufferAttribute::Type::Float,
+                  false,
+                  0
+            });
+            _vertexArray->addBuffer(_textureCoordinatesVertexBuffer, textureCoordinatesVertexBufferLayout);
         }
 
         Animation::~Animation()
         {
-            GL_CHECK(glDeleteBuffers(1, &_coordsVBO));
-            GL_CHECK(glDeleteBuffers(1, &_texCoordsVBO));
-            GL_CHECK(glDeleteBuffers(1, &_ebo));
-
-            if (Game::getInstance()->renderer()->renderPath() == Renderer::RenderPath::OGL32)
-            {
-                GL_CHECK(glDeleteVertexArrays(1, &_vao));
-            }
         }
 
         void Animation::render(int x, int y, unsigned int direction, unsigned int frame, bool transparency, bool light, int outline, unsigned int lightValue)
         {
-            int pos = direction*_stride+frame;
+            unsigned pos = direction * _stride + frame;
 
             float texStart = _texCoords.at(pos*4).y;
             float texEnd = _texCoords.at(pos*4+3).y;
             float texHeight = texEnd-texStart;
 
-            GL_CHECK(_shader->use());
+            _shader->use();
 
-            GL_CHECK(_texture->bind(0));
+            _texture->bind(0);
 
-            GL_CHECK(_shader->setUniform(_uniformTex, 0));
+            _shader->setUniform(_uniformTex, 0);
 
-            GL_CHECK(_shader->setUniform(_uniformOffset, glm::vec2((float)x, (float)y)));
+            _shader->setUniform(_uniformOffset, glm::vec2((float)x, (float)y));
 
-            GL_CHECK(_shader->setUniform(_uniformMVP, Game::getInstance()->renderer()->getMVP()));
+            _shader->setUniform(_uniformMVP, Game::getInstance()->renderer()->getMVP());
 
-            GL_CHECK(_shader->setUniform(_uniformFade, Game::getInstance()->renderer()->fadeColor()));
+            _shader->setUniform(_uniformFade, Game::getInstance()->renderer()->fadeColor());
 
-            GL_CHECK(_shader->setUniform(_uniformCnt, Game::getInstance()->animatedPalette()->counters()));
+            _shader->setUniform(_uniformCnt, Game::getInstance()->animatedPalette()->counters());
 
             int lightLevel = 100;
             if (light)
@@ -143,51 +150,29 @@ namespace Falltergeist
                     lightLevel = lightValue / ((65536-655)/100);
                 }
             }
-            GL_CHECK(_shader->setUniform(_uniformLight, lightLevel));
+            _shader->setUniform(_uniformLight, lightLevel);
 
-            GL_CHECK(_shader->setUniform(_uniformTrans, _trans));
-            GL_CHECK(_shader->setUniform(_uniformOutline, outline));
+            _shader->setUniform(_uniformTrans, _trans);
+            _shader->setUniform(_uniformOutline, outline);
 
-            GL_CHECK(_shader->setUniform(_uniformTexStart, texStart));
-            GL_CHECK(_shader->setUniform(_uniformTexHeight, texHeight));
+            _shader->setUniform(_uniformTexStart, texStart);
+            _shader->setUniform(_uniformTexHeight, texHeight);
             if (Game::getInstance()->renderer()->renderPath() == Renderer::RenderPath::OGL21)
             {
-                GL_CHECK(_shader->setUniform(_uniformTexSize, glm::vec2((float)_texture->textureWidth(), (float)_texture->textureHeight() ) ));
+                _shader->setUniform(_uniformTexSize, glm::vec2((float)_texture->textureWidth(), (float)_texture->textureHeight()));
             }
 
+            _vertexArray->bind();
 
-            if (Game::getInstance()->renderer()->renderPath() == Renderer::RenderPath::OGL32)
-            {
-                GLint curvao;
-                glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &curvao);
-                if ((GLuint)curvao != _vao)
-                {
-                    GL_CHECK(glBindVertexArray(_vao));
-                }
-            }
+            unsigned int indexes[6] = {
+                (pos * 4), (pos * 4 + 1),
+                (pos * 4 + 2), (pos * 4 + 3),
+                (pos * 4 + 2), (pos * 4 + 1)
+            };
+            IndexBuffer indexBuffer(indexes, 6, IndexBuffer::UsagePattern::StaticDraw);
+            indexBuffer.bind();
 
-            GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, _coordsVBO));
-            GL_CHECK(glVertexAttribPointer(_attribPos, 2, GL_FLOAT, GL_FALSE, 0, (void*)0 ));
-
-
-            GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, _texCoordsVBO));
-            GL_CHECK(glVertexAttribPointer(_attribTex, 2, GL_FLOAT, GL_FALSE, 0, (void*)0 ));
-
-            GL_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ebo));
-
-            GLushort indexes[6] = {(GLushort) (pos * 4), (GLushort) (pos * 4 + 1), (GLushort) (pos * 4 + 2), (GLushort) (pos * 4 + 3), (GLushort) (pos * 4 + 2), (GLushort) (pos * 4 + 1)};
-
-
-            GL_CHECK(glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6*sizeof(GLushort), indexes, GL_STATIC_DRAW));
-
-            GL_CHECK(glEnableVertexAttribArray(_attribPos));
-            GL_CHECK(glEnableVertexAttribArray(_attribTex));
-
-            GL_CHECK(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, 0 ));
-
-            GL_CHECK(glDisableVertexAttribArray(_attribPos));
-
-            GL_CHECK(glDisableVertexAttribArray(_attribTex));
+            GL_CHECK(glDrawElements(GL_TRIANGLES, indexBuffer.count(), GL_UNSIGNED_INT, nullptr));
         }
 
         bool Animation::opaque(unsigned int x, unsigned int y)
