@@ -449,11 +449,11 @@ namespace Falltergeist
             vertices.push_back(glm::vec2((float)x+(float)w, (float)y+(float)h));
 
 
-            GL_CHECK(ResourceManager::getInstance()->shader("default")->use());
+            ResourceManager::getInstance()->shader("default")->use();
 
-            GL_CHECK(ResourceManager::getInstance()->shader("default")->setUniform("color", fcolor));
+            ResourceManager::getInstance()->shader("default")->setUniform("color", fcolor);
 
-            GL_CHECK(ResourceManager::getInstance()->shader("default")->setUniform("MVP", getMVP()));
+            ResourceManager::getInstance()->shader("default")->setUniform("MVP", getMVP());
 
             if (_renderpath==RenderPath::OGL32)
             {

@@ -65,20 +65,20 @@ namespace Falltergeist {
                 throw std::logic_error("Indexes should not be empty");
             };
 
-            GL_CHECK(_shader->use());
+            _shader->use();
 
-            GL_CHECK(_textures.at(atlas).get()->bind(0));
+            _textures.at(atlas).get()->bind(0);
 
-            GL_CHECK(_shader->setUniform(_uniformTex, 0));
+            _shader->setUniform(_uniformTex, 0);
 
-            GL_CHECK(_shader->setUniform(_uniformMVP, Game::getInstance()->renderer()->getMVP()));
+            _shader->setUniform(_uniformMVP, Game::getInstance()->renderer()->getMVP());
 
             // set camera offset
-            GL_CHECK(_shader->setUniform(_uniformOffset, glm::vec2((float) pos.x() + 1.0, (float) pos.y() + 2.0)));
+            _shader->setUniform(_uniformOffset, glm::vec2((float) pos.x() + 1.0, (float) pos.y() + 2.0));
 
-            GL_CHECK(_shader->setUniform(_uniformFade, Game::getInstance()->renderer()->fadeColor()));
+            _shader->setUniform(_uniformFade, Game::getInstance()->renderer()->fadeColor());
 
-            GL_CHECK(_shader->setUniform(_uniformCnt, Game::getInstance()->animatedPalette()->counters()));
+            _shader->setUniform(_uniformCnt, Game::getInstance()->animatedPalette()->counters());
 
             int lightLevel = 100;
             if (auto state = Game::getInstance()->locationState()) {
@@ -91,7 +91,7 @@ namespace Falltergeist {
                     lightLevel = (state->lightLevel() - 0xA000) * 100 / 0x6000;
                 }
             }
-            GL_CHECK(_shader->setUniform(_uniformLight, lightLevel));
+            _shader->setUniform(_uniformLight, lightLevel);
 
             _vertexArray->bind();
 

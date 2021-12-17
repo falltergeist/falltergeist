@@ -70,15 +70,15 @@ namespace Falltergeist
 
             // TODO: different shader
 
-            GL_CHECK(ResourceManager::getInstance()->shader("sprite")->use());
+            ResourceManager::getInstance()->shader("sprite")->use();
 
-            GL_CHECK(_texture->bind(0));
+            _texture->bind(0);
 
             GL_CHECK(ResourceManager::getInstance()->shader("sprite")->setUniform("tex",0));
 
-            GL_CHECK(ResourceManager::getInstance()->shader("sprite")->setUniform("fade",Game::getInstance()->renderer()->fadeColor()));
+            ResourceManager::getInstance()->shader("sprite")->setUniform("fade",Game::getInstance()->renderer()->fadeColor());
 
-            GL_CHECK(ResourceManager::getInstance()->shader("sprite")->setUniform("MVP", Game::getInstance()->renderer()->getMVP()));
+            ResourceManager::getInstance()->shader("sprite")->setUniform("MVP", Game::getInstance()->renderer()->getMVP());
 
             if (Game::getInstance()->renderer()->renderPath() == Renderer::RenderPath::OGL32)
             {

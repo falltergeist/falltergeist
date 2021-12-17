@@ -64,20 +64,20 @@ namespace Falltergeist
                 return;
             }
 
-            GL_CHECK(_shader->use());
+            _shader->use();
 
-            GL_CHECK(font->texture()->bind(0));
+            font->texture()->bind(0);
 
-            GL_CHECK(_shader->setUniform(_uniformTex, 0));
+            _shader->setUniform(_uniformTex, 0);
 
-            GL_CHECK(_shader->setUniform(_uniformMVP, Game::getInstance()->renderer()->getMVP()));
-            GL_CHECK(_shader->setUniform(_uniformOffset, glm::vec2((float)pos.x(), (float(pos.y())) )));
-            GL_CHECK(_shader->setUniform(_uniformColor, glm::vec4((float)_color.r / 255.f, (float)_color.g / 255.f, (float)_color.b / 255.f, (float)_color.a / 255.f)));
-            GL_CHECK(_shader->setUniform(_uniformOutline, glm::vec4((float)_outlineColor.r / 255.f, (float)_outlineColor.g / 255.f, (float)_outlineColor.b / 255.f, (float)_outlineColor.a / 255.f)));
-            GL_CHECK(_shader->setUniform(_uniformFade, Game::getInstance()->renderer()->fadeColor()));
+            _shader->setUniform(_uniformMVP, Game::getInstance()->renderer()->getMVP());
+            _shader->setUniform(_uniformOffset, glm::vec2((float)pos.x(), (float(pos.y()))));
+            _shader->setUniform(_uniformColor, glm::vec4((float)_color.r / 255.f, (float)_color.g / 255.f, (float)_color.b / 255.f, (float)_color.a / 255.f));
+            _shader->setUniform(_uniformOutline, glm::vec4((float)_outlineColor.r / 255.f, (float)_outlineColor.g / 255.f, (float)_outlineColor.b / 255.f, (float)_outlineColor.a / 255.f));
+            _shader->setUniform(_uniformFade, Game::getInstance()->renderer()->fadeColor());
             if (Game::getInstance()->renderer()->renderPath() == Graphics::Renderer::RenderPath::OGL21)
             {
-                GL_CHECK(_shader->setUniform(_uniformTexSize, glm::vec2((float)font->texture()->textureWidth(), (float)font->texture()->textureHeight() )));
+                _shader->setUniform(_uniformTexSize, glm::vec2((float)font->texture()->textureWidth(), (float)font->texture()->textureHeight()));
             }
 
             if (Game::getInstance()->renderer()->renderPath() == Renderer::RenderPath::OGL32)

@@ -1,6 +1,7 @@
 ﻿#include "../Exception.h"
 #include "../Game/Game.h"
 #include "../Graphics/Texture.h"
+#include "../Graphics/GLCheck.h"
 
 namespace Falltergeist
 {
@@ -156,16 +157,16 @@ namespace Falltergeist
 
             if (_textureID > 0)
             {
-                glGetIntegerv(GL_ACTIVE_TEXTURE, &curunit);
-                glGetIntegerv(GL_TEXTURE_BINDING_2D, &curtexture);
+                GL_CHECK(glGetIntegerv(GL_ACTIVE_TEXTURE, &curunit));
+                GL_CHECK(glGetIntegerv(GL_TEXTURE_BINDING_2D, &curtexture));
 
-                if (curunit != GL_TEXTURE0+unit)
+                if (curunit != GL_TEXTURE0 + unit)
                 {
-                    glActiveTexture(GL_TEXTURE0+unit);
+                    GL_CHECK(glActiveTexture(GL_TEXTURE0 + unit));
                 }
-                if (curunit != GL_TEXTURE0+unit || (GLuint)curtexture != _textureID)
+                if (curunit != GL_TEXTURE0 + unit || (GLuint)curtexture != _textureID)
                 {
-                    glBindTexture(GL_TEXTURE_2D, _textureID);
+                    GL_CHECK(glBindTexture(GL_TEXTURE_2D, _textureID));
                 }
             }
         }

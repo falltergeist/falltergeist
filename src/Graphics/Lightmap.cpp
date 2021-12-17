@@ -66,14 +66,14 @@ namespace Falltergeist
 
             GL_CHECK(glBlendFunc(GL_DST_COLOR, GL_SRC_COLOR));
 
-            GL_CHECK(_shader->use());
+            _shader->use();
 
-            GL_CHECK(_shader->setUniform(_uniformMVP, Game::getInstance()->renderer()->getMVP()));
+            _shader->setUniform(_uniformMVP, Game::getInstance()->renderer()->getMVP());
 
             // set camera offset
-            GL_CHECK(_shader->setUniform(_uniformOffset, glm::vec2((float)pos.x(), (float)pos.y()) ));
+            _shader->setUniform(_uniformOffset, glm::vec2((float)pos.x(), (float)pos.y()));
 
-            GL_CHECK(_shader->setUniform(_uniformFade, Game::getInstance()->renderer()->fadeColor()));
+            _shader->setUniform(_uniformFade, Game::getInstance()->renderer()->fadeColor());
 
             if (Game::getInstance()->renderer()->renderPath() == Renderer::RenderPath::OGL32)
             {

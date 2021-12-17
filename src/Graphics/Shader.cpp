@@ -3,6 +3,7 @@
 #include "../Exception.h"
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
+#include "../Graphics/GLCheck.h"
 #include "../Graphics/Shader.h"
 #include "../Logger.h"
 #define GLM_FORCE_RADIANS
@@ -158,10 +159,10 @@ namespace Falltergeist
         void Shader::use()
         {
             GLint cur;
-            glGetIntegerv(GL_CURRENT_PROGRAM, &cur);
+            GL_CHECK(glGetIntegerv(GL_CURRENT_PROGRAM, &cur));
             if ((GLuint)cur!=_progId)
             {
-                glUseProgram(_progId);
+                GL_CHECK(glUseProgram(_progId));
             }
         }
 
@@ -252,22 +253,22 @@ namespace Falltergeist
 
         void Shader::setUniform(const std::string &uniform, const glm::vec4 &vec)
         {
-            glUniform4fv(getUniform(uniform), 1, glm::value_ptr(vec));
+            GL_CHECK(glUniform4fv(getUniform(uniform), 1, glm::value_ptr(vec)));
         }
 
         void Shader::setUniform(const std::string &uniform, const glm::mat4 &mat)
         {
-            glUniformMatrix4fv(getUniform(uniform), 1, GL_FALSE, glm::value_ptr(mat));
+            GL_CHECK(glUniformMatrix4fv(getUniform(uniform), 1, GL_FALSE, glm::value_ptr(mat)));
         }
 
         void Shader::setUniform(const GLint &uniform, int i)
         {
-            glUniform1i((uniform), i);
+            GL_CHECK(glUniform1i((uniform), i));
         }
 
         void Shader::setUniform(const GLint &uniform, float x)
         {
-            glUniform1f((uniform), x);
+            GL_CHECK(glUniform1f((uniform), x));
         }
 
         void Shader::setUniform(const GLint &uniform, float x, float y)
@@ -287,7 +288,7 @@ namespace Falltergeist
 
         void Shader::setUniform(const GLint &uniform, const glm::vec2 &vec)
         {
-            glUniform2fv((uniform), 1, glm::value_ptr(vec));
+            GL_CHECK(glUniform2fv((uniform), 1, glm::value_ptr(vec)));
         }
 
         void Shader::setUniform(const GLint &uniform, const glm::vec3 &vec)
@@ -297,17 +298,17 @@ namespace Falltergeist
 
         void Shader::setUniform(const GLint &uniform, std::vector<GLuint> vec)
         {
-            glUniform1iv((uniform), static_cast<GLsizei>(vec.size()), (const int*)&vec[0]);
+            GL_CHECK(glUniform1iv((uniform), static_cast<GLsizei>(vec.size()), (const int*)&vec[0]));
         }
 
         void Shader::setUniform(const GLint &uniform, const glm::vec4 &vec)
         {
-            glUniform4fv((uniform), 1, glm::value_ptr(vec));
+            GL_CHECK(glUniform4fv((uniform), 1, glm::value_ptr(vec)));
         }
 
         void Shader::setUniform(const GLint &uniform, const glm::mat4 &mat)
         {
-            glUniformMatrix4fv((uniform), 1, GL_FALSE, glm::value_ptr(mat));
+            GL_CHECK(glUniformMatrix4fv((uniform), 1, GL_FALSE, glm::value_ptr(mat)));
         }
     }
 }

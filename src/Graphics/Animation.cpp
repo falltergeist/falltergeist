@@ -121,19 +121,19 @@ namespace Falltergeist
             float texEnd = _texCoords.at(pos*4+3).y;
             float texHeight = texEnd-texStart;
 
-            GL_CHECK(_shader->use());
+            _shader->use();
 
-            GL_CHECK(_texture->bind(0));
+            _texture->bind(0);
 
-            GL_CHECK(_shader->setUniform(_uniformTex, 0));
+            _shader->setUniform(_uniformTex, 0);
 
-            GL_CHECK(_shader->setUniform(_uniformOffset, glm::vec2((float)x, (float)y)));
+            _shader->setUniform(_uniformOffset, glm::vec2((float)x, (float)y));
 
-            GL_CHECK(_shader->setUniform(_uniformMVP, Game::getInstance()->renderer()->getMVP()));
+            _shader->setUniform(_uniformMVP, Game::getInstance()->renderer()->getMVP());
 
-            GL_CHECK(_shader->setUniform(_uniformFade, Game::getInstance()->renderer()->fadeColor()));
+            _shader->setUniform(_uniformFade, Game::getInstance()->renderer()->fadeColor());
 
-            GL_CHECK(_shader->setUniform(_uniformCnt, Game::getInstance()->animatedPalette()->counters()));
+            _shader->setUniform(_uniformCnt, Game::getInstance()->animatedPalette()->counters());
 
             int lightLevel = 100;
             if (light)
@@ -144,16 +144,16 @@ namespace Falltergeist
                     lightLevel = lightValue / ((65536-655)/100);
                 }
             }
-            GL_CHECK(_shader->setUniform(_uniformLight, lightLevel));
+            _shader->setUniform(_uniformLight, lightLevel);
 
-            GL_CHECK(_shader->setUniform(_uniformTrans, _trans));
-            GL_CHECK(_shader->setUniform(_uniformOutline, outline));
+            _shader->setUniform(_uniformTrans, _trans);
+            _shader->setUniform(_uniformOutline, outline);
 
-            GL_CHECK(_shader->setUniform(_uniformTexStart, texStart));
-            GL_CHECK(_shader->setUniform(_uniformTexHeight, texHeight));
+            _shader->setUniform(_uniformTexStart, texStart);
+            _shader->setUniform(_uniformTexHeight, texHeight);
             if (Game::getInstance()->renderer()->renderPath() == Renderer::RenderPath::OGL21)
             {
-                GL_CHECK(_shader->setUniform(_uniformTexSize, glm::vec2((float)_texture->textureWidth(), (float)_texture->textureHeight() ) ));
+                _shader->setUniform(_uniformTexSize, glm::vec2((float)_texture->textureWidth(), (float)_texture->textureHeight()));
             }
 
 
