@@ -18,7 +18,7 @@ namespace Falltergeist
             _sprite = make_shared<Graphics::Sprite>("art/intrface/months.frm");
 
             for (auto i = 0; i<12; i++) {
-                _rects.push_back({0,i*15,29,14});
+                _rects.emplace_back(Point(0,i*15), Size(29,14));
             }
             _size = Size(29,14);
         }
@@ -43,14 +43,12 @@ namespace Falltergeist
                 return false;
             }
 
-            SDL_Rect rect = _rects.at(_month);
-            return _sprite->opaque(pos.x()+rect.x, pos.y()+rect.y);
+            return _sprite->opaque(_rects.at(_month).position() + pos);
         }
 
         void MonthCounter::render(bool eggTransparency)
         {
-            SDL_Rect rect = _rects.at(_month);
-            _sprite->renderCropped(position().x(), position().y(), rect.x, rect.y, rect.w, rect.h);
+            _sprite->renderCropped(position(), _rects.at(_month));
         }
     }
 }

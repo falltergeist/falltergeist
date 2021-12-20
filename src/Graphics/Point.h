@@ -29,6 +29,10 @@ namespace Falltergeist
                 Point& operator -=(const Point& rhs);
                 Point& operator *=(double rhs);
                 Point& operator /=(double rhs);
+                bool operator<(const Point& rhs) const;
+                bool operator>(const Point& rhs) const;
+                bool operator<=(const Point& rhs) const;
+                bool operator>=(const Point& rhs) const;
 
                 bool operator ==(const Point& rhs) const;
                 bool operator !=(const Point& rhs) const;

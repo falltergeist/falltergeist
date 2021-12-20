@@ -52,7 +52,7 @@ namespace Falltergeist
                 unsigned int _length = 3;
                 Type _type = Type::UNSIGNED;
                 std::shared_ptr<Graphics::Sprite> _sprite;
-                std::vector<SDL_Rect> _rects;
+                std::vector<Graphics::Rectangle> _rects;
         };
     }
 }

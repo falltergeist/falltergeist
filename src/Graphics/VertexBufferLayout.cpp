@@ -2,6 +2,10 @@
 
 namespace Falltergeist {
     namespace Graphics {
+        VertexBufferLayout::VertexBufferLayout(const std::vector<VertexBufferAttribute>&& attributes)
+        : _attributes(attributes) {
+        }
+
         const std::vector<VertexBufferAttribute> &VertexBufferLayout::attributes() const {
             return _attributes;
         }

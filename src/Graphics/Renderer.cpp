@@ -1,7 +1,9 @@
 ﻿#include <cmath>
 #include <memory>
+
 #define GLM_FORCE_RADIANS
-#include <gtc/matrix_transform.hpp>
+
+#include <glm/gtc/matrix_transform.hpp>
 #include <SDL_image.h>
 #include "../Base/Buffer.h"
 #include "../CrossPlatform.h"
@@ -22,39 +24,34 @@
 #include "../Settings.h"
 #include "../State/State.h"
 
-namespace Falltergeist
-{
-    namespace Graphics
-    {
+namespace Falltergeist {
+    namespace Graphics {
         using Game::Game;
 
-        Renderer::Renderer(std::unique_ptr<IRendererConfig> rendererConfig, std::shared_ptr<ILogger> logger)
-        {
+        Renderer::Renderer(std::unique_ptr<IRendererConfig> rendererConfig, std::shared_ptr<ILogger> logger) {
             _rendererConfig = std::move(rendererConfig);
             this->logger = std::move(logger);
 
             std::string message = "Renderer initialization - ";
-            if (SDL_InitSubSystem(SDL_INIT_VIDEO) < 0)
-            {
+            if (SDL_InitSubSystem(SDL_INIT_VIDEO) < 0) {
                 logger->critical() << "[VIDEO] " << message + "[FAIL]" << std::endl;
                 throw Exception(SDL_GetError());
             }
             this->logger->info() << "[VIDEO] " << message << "[OK]" << std::endl;
         }
 
-        Renderer::~Renderer()
-        {
+        Renderer::~Renderer() {
         }
 
-        void Renderer::init()
-        {
+        void Renderer::init() {
             // TODO: android/ios
             // _width = deviceWidth;
             // _height = deviceHeight;
             // Game::getInstance()->engineSettings()->setFullscreen(true);
             // Game::getInstance()->engineSettings()->setScale(1); //or 2, if fullhd device
 
-            std::string message =  "SDL_CreateWindow " + std::to_string(_rendererConfig->width()) + "x" + std::to_string(_rendererConfig->height()) + "x" + std::to_string(32) + " - ";
+            std::string message = "SDL_CreateWindow " + std::to_string(_rendererConfig->width()) + "x" +
+                                  std::to_string(_rendererConfig->height()) + "x" + std::to_string(32) + " - ";
 
             uint32_t flags = SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL;
 
@@ -82,7 +79,7 @@ namespace Falltergeist
 
             logger->info() << "[RENDERER] " << message + "[OK]" << std::endl;
 
-            message =  "Init OpenGL - ";
+            message = "Init OpenGL - ";
             // specifically request 3.2, because fucking Mesa ignores core flag with version < 3
             SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
             SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
@@ -106,29 +103,29 @@ namespace Falltergeist
             logger->info() << "[RENDERER] " << message + "[OK]" << std::endl;
             SDL_GL_SetSwapInterval(0);
 
-        /*
-         * TODO: newrender
-            if (Game::getInstance()->settings()->scale() != 0)
-            {
-                switch (Game::getInstance()->settings()->scale())
+            /*
+             * TODO: newrender
+                if (Game::getInstance()->settings()->scale() != 0)
                 {
-                    default:
-                    case 1:
-                        _size.setWidth((int)(_size.width() / (_size.height() / 480.0)));
-                        _size.setHeight(480);
-                        break;
-                    case 2:
-                        _size.setWidth((int)(_size.width() / (_size.height() / 960.0)));
-                        _size.setHeight(960);
-                        break;
+                    switch (Game::getInstance()->settings()->scale())
+                    {
+                        default:
+                        case 1:
+                            _size.setWidth((int)(_size.width() / (_size.height() / 480.0)));
+                            _size.setHeight(480);
+                            break;
+                        case 2:
+                            _size.setWidth((int)(_size.width() / (_size.height() / 960.0)));
+                            _size.setHeight(960);
+                            break;
+                    }
+                    SDL_RenderSetLogicalSize(_sdlRenderer, _size.width(), _size.height());
+                    SDL_RenderGetScale(_sdlRenderer, &_scaleX, &_scaleY);
                 }
-                SDL_RenderSetLogicalSize(_sdlRenderer, _size.width(), _size.height());
-                SDL_RenderGetScale(_sdlRenderer, &_scaleX, &_scaleY);
-            }
-        */
+            */
 
-            char *version_string = (char*)glGetString(GL_VERSION);
-            if (version_string[0]-'0' >=3) { //we have at least gl 3.0
+            char *version_string = (char *) glGetString(GL_VERSION);
+            if (version_string[0] - '0' >= 3) { //we have at least gl 3.0
                 glGetIntegerv(GL_MAJOR_VERSION, &_major);
                 glGetIntegerv(GL_MINOR_VERSION, &_minor);
                 if (_major == 3 && _minor < 2) { // anything lower 3.2
@@ -137,8 +134,8 @@ namespace Falltergeist
                     _renderpath = RenderPath::OGL32;
                 }
             } else {
-                _major = version_string[0]-'0';
-                _minor = version_string[2]-'0';
+                _major = version_string[0] - '0';
+                _minor = version_string[2] - '0';
                 _renderpath = RenderPath::OGL21;
             }
 
@@ -149,7 +146,7 @@ namespace Falltergeist
             logger->info() << "[RENDERER] " << "Vendor: " << glGetString(GL_VENDOR) << std::endl;
             switch (_renderpath) {
                 case RenderPath::OGL21:
-                    logger->info() << "[RENDERER] " << "Render path: OpenGL 2.1"  << std::endl;
+                    logger->info() << "[RENDERER] " << "Render path: OpenGL 2.1" << std::endl;
                     break;
                 case RenderPath::OGL32:
                     logger->info() << "[RENDERER] " << "Render path: OpenGL 3.0+" << std::endl;
@@ -160,21 +157,21 @@ namespace Falltergeist
 
             glGetIntegerv(GL_MAX_TEXTURE_SIZE, &_maxTexSize);
 
-            message =  "Init GLEW - ";
+            message = "Init GLEW - ";
             glewExperimental = GL_TRUE;
             GLenum glewError = glewInit();
             glGetError(); // glew sometimes throws bad enum, so clean it
 
             switch (glewError) {
-                #ifdef GLEW_ERROR_NO_GLX_DISPLAY
+#ifdef GLEW_ERROR_NO_GLX_DISPLAY
                 // Wayland: https://github.com/nigels-com/glew/issues/172
                 case GLEW_ERROR_NO_GLX_DISPLAY:
                     break;
-                #endif
+#endif
                 case GLEW_OK:
                     break;
                 default:
-                    throw Exception(message + "[FAIL]: " + std::string((char*)glewGetErrorString(glewError)));
+                    throw Exception(message + "[FAIL]: " + std::string((char *) glewGetErrorString(glewError)));
             }
 
             logger->info() << "[RENDERER] " << message + "[OK]" << std::endl;
@@ -218,8 +215,7 @@ namespace Falltergeist
             _egg = ResourceManager::getInstance()->texture("data/egg.png");
         }
 
-        void Renderer::think(const float &deltaTime)
-        {
+        void Renderer::think(const float &deltaTime) {
             if (_fadeDone) {
                 return;
             }
@@ -234,8 +230,7 @@ namespace Falltergeist
             while (_fadeTimer >= fadeDelay) {
                 _fadeTimer -= fadeDelay;
                 _fadeAlpha += _fadeStep;
-                if (_fadeAlpha <= 0 || _fadeAlpha > 255)
-                {
+                if (_fadeAlpha <= 0 || _fadeAlpha > 255) {
                     _fadeAlpha = (_fadeAlpha <= 0 ? 0 : 255);
                     _fadeDone = true;
 
@@ -247,13 +242,11 @@ namespace Falltergeist
             _fadeColor.a = _fadeAlpha;
         }
 
-        bool Renderer::fading()
-        {
+        bool Renderer::fading() {
             return !_fadeDone && !_inmovie;
         }
 
-        void Renderer::fadeIn(uint8_t r, uint8_t g, uint8_t b, unsigned int time, bool inmovie)
-        {
+        void Renderer::fadeIn(uint8_t r, uint8_t g, uint8_t b, unsigned int time, bool inmovie) {
             _inmovie = inmovie;
             _fadeColor = {r, g, b, 255};
             _fadeAlpha = 255;
@@ -263,8 +256,7 @@ namespace Falltergeist
             _fadeTimer = 0;
         }
 
-        void Renderer::fadeOut(uint8_t r, uint8_t g, uint8_t b, unsigned int time, bool inmovie)
-        {
+        void Renderer::fadeOut(uint8_t r, uint8_t g, uint8_t b, unsigned int time, bool inmovie) {
             _inmovie = inmovie;
             _fadeColor = {r, g, b, 0};
             _fadeAlpha = 0;
@@ -275,88 +267,76 @@ namespace Falltergeist
         }
 
 
-        void Renderer::beginFrame()
-        {
+        void Renderer::beginFrame() {
             GL_CHECK(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
             GL_CHECK(glEnable(GL_BLEND));
             GL_CHECK(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
         }
 
-        void Renderer::endFrame()
-        {
+        void Renderer::endFrame() {
             GL_CHECK(glDisable(GL_BLEND));
             SDL_GL_SwapWindow(_sdlWindow);
         }
 
-        unsigned int Renderer::width() const
-        {
+        unsigned int Renderer::width() const {
             return _rendererConfig->width();
         }
 
-        unsigned int Renderer::height() const
-        {
+        unsigned int Renderer::height() const {
             return _rendererConfig->height();
         }
 
-        Size Renderer::size() const
-        {
+        Size Renderer::size() const {
             return {
                 static_cast<int>(_rendererConfig->width()),
                 static_cast<int>(_rendererConfig->height())
             };
         }
 
-        void Renderer::screenshot()
-        {
+        void Renderer::screenshot() {
             std::string filename;
             Uint32 rmask, gmask, bmask, amask;
-            SDL_Surface* output;
+            SDL_Surface *output;
 
             int iter = 0;
-            do
-            {
+            do {
                 std::string siter = std::to_string(iter);
-                if(siter.size() < 3)
-                {
+                if (siter.size() < 3) {
                     siter.insert(0, 3 - siter.size(), '0');
                 }
                 filename = "screenshot" + siter + ".png";
                 iter++;
-            }
-            while (CrossPlatform::fileExists(filename) && iter < 1000);
+            } while (CrossPlatform::fileExists(filename) && iter < 1000);
 
-            if (CrossPlatform::fileExists(filename))
-            {
+            if (CrossPlatform::fileExists(filename)) {
                 logger->warning() << "[RENDERER] Too many screenshots" << std::endl;
                 return;
             }
 
 
-        #if SDL_BYTEORDER == SDL_BIG_ENDIAN
+#if SDL_BYTEORDER == SDL_BIG_ENDIAN
             rmask = 0xff000000;
             gmask = 0x00ff0000;
             bmask = 0x0000ff00;
             amask = 0x000000ff;
-        #else
+#else
             rmask = 0x000000ff;
             gmask = 0x0000ff00;
             bmask = 0x00ff0000;
             amask = 0xff000000;
-        #endif
+#endif
 
             output = SDL_CreateRGBSurface(0, width(), height(), 32, rmask, gmask, bmask, amask);
-            uint8_t *destPixels = (uint8_t*)output->pixels;
+            uint8_t *destPixels = (uint8_t *) output->pixels;
             Base::Buffer<uint8_t> srcPixels(width() * height() * 4);
 
             glReadBuffer(GL_BACK);
             glReadPixels(0, 0, width(), height(), GL_RGBA, GL_UNSIGNED_BYTE, srcPixels.data());
 
-            for (int y = 0; y < static_cast<int>(height()); ++y)
-            {
-                for (int x = 0; x < static_cast<int>(width()); ++x)
-                {
-                    uint8_t* pDestPix = &destPixels[((width() * y) + x) * 4];
-                    uint8_t* pSrcPix = &srcPixels[((width() * ((height() - 1) - y)) + x) * 4];
+            for (int y = 0; y < static_cast<int>(height()); ++y) {
+                for (int x = 0; x < static_cast<int>(width()); ++x) {
+                    uint8_t *pDestPix = &destPixels[((width() * y) + x) * 4];
+                    uint8_t *pSrcPix = &srcPixels[((width() * ((height() - 1) - y)) + x) * 4];
                     pDestPix[0] = pSrcPix[0];
                     pDestPix[1] = pSrcPix[1];
                     pDestPix[2] = pSrcPix[2];
@@ -364,7 +344,7 @@ namespace Falltergeist
                 }
             }
 
-            IMG_SavePNG(output,filename.c_str());
+            IMG_SavePNG(output, filename.c_str());
             SDL_FreeSurface(output);
             logger->info() << "[RENDERER] Screenshot saved to " + filename << std::endl;
 
@@ -372,41 +352,36 @@ namespace Falltergeist
 
         }
 
-        void Renderer::setCaption(const std::string& caption)
-        {
+        void Renderer::setCaption(const std::string &caption) {
             SDL_SetWindowTitle(_sdlWindow, caption.c_str());
         }
 
-        SDL_Window* Renderer::sdlWindow()
-        {
+        SDL_Window *Renderer::sdlWindow() {
             return _sdlWindow;
         }
 
-        float Renderer::scaleX()
-        {
+        float Renderer::scaleX() {
             return _scaleX;
         }
 
-        float Renderer::scaleY()
-        {
+        float Renderer::scaleY() {
             return _scaleY;
         }
 
-        glm::mat4 Renderer::getMVP()
-        {
+        glm::mat4 Renderer::getMVP() {
             return _MVP;
         }
 
-        void Renderer::drawRect(int x, int y, int w, int h, SDL_Color color)
-        {
+        void Renderer::drawRect(int x, int y, int w, int h, SDL_Color color) {
             std::vector<glm::vec2> vertices;
 
-            glm::vec4 fcolor = glm::vec4((float)color.r/255.0f, (float)color.g/255.0f, (float)color.b/255.0f, (float)color.a/255.0f);
+            glm::vec4 fcolor = glm::vec4((float) color.r / 255.0f, (float) color.g / 255.0f, (float) color.b / 255.0f,
+                                         (float) color.a / 255.0f);
 
-            vertices.push_back(glm::vec2((float)x, (float)y));
-            vertices.push_back(glm::vec2((float)x, (float)y+(float)h));
-            vertices.push_back(glm::vec2((float)x+(float)w, (float)y));
-            vertices.push_back(glm::vec2((float)x+(float)w, (float)y+(float)h));
+            vertices.push_back(glm::vec2((float) x, (float) y));
+            vertices.push_back(glm::vec2((float) x, (float) y + (float) h));
+            vertices.push_back(glm::vec2((float) x + (float) w, (float) y));
+            vertices.push_back(glm::vec2((float) x + (float) w, (float) y + (float) h));
 
 
             auto defaultShader = ResourceManager::getInstance()->shader("default");
@@ -417,49 +392,247 @@ namespace Falltergeist
             VertexArray vertexArray;
 
             std::unique_ptr<VertexBuffer> coordinatesVertexBuffer = std::make_unique<VertexBuffer>(
-                    &vertices[0],
-                    vertices.size() * sizeof(glm::vec2),
-                    VertexBuffer::UsagePattern::DynamicDraw
+                &vertices[0],
+                vertices.size() * sizeof(glm::vec2),
+                VertexBuffer::UsagePattern::DynamicDraw
             );
             VertexBufferLayout coordinatesVertexBufferLayout;
             coordinatesVertexBufferLayout.addAttribute({
-                    (unsigned int) defaultShader->getAttrib("Position"),
-                    2,
-                    VertexBufferAttribute::Type::Float,
-                    false,
-                    0
-            });
+                                                           (unsigned int) defaultShader->getAttrib("Position"),
+                                                           2,
+                                                           VertexBufferAttribute::Type::Float
+                                                       });
             vertexArray.addBuffer(coordinatesVertexBuffer, coordinatesVertexBufferLayout);
 
-            static unsigned int indexes[6] = { 0, 1, 2, 3, 2, 1 };
+            static unsigned int indexes[6] = {0, 1, 2, 3, 2, 1};
             IndexBuffer indexBuffer(indexes, 6, IndexBuffer::UsagePattern::StaticDraw);
 
             GL_CHECK(glDrawElements(GL_TRIANGLES, indexBuffer.count(), GL_UNSIGNED_INT, nullptr));
         }
 
-        void Renderer::drawRect(const Point &pos, const Size &size, SDL_Color color)
-        {
+        void Renderer::drawRect(const Point &pos, const Size &size, SDL_Color color) {
             drawRect(pos.x(), pos.y(), size.width(), size.height(), color);
         }
 
-        glm::vec4 Renderer::fadeColor()
-        {
-            return glm::vec4((float)_fadeColor.r/255.0, (float)_fadeColor.g/255.0, (float)_fadeColor.b/255.0, (float)_fadeColor.a/255.0);
+        void Renderer::drawRectangle(const Rectangle &rectangle, const Texture *const texture) {
+            float x1 = (float) rectangle.position().x();
+            float y1 = (float) rectangle.position().y();
+            float x2 = (float) (rectangle.position().x() + rectangle.size().width());
+            float y2 = (float) (rectangle.position().y() + rectangle.size().height());
+            std::vector<glm::vec2> vertices = {
+                // aPosition       // aTexturePosition
+                glm::vec2(x1, y1), glm::vec2(0.0, 0.0),
+                glm::vec2(x1, y2), glm::vec2(0.0, 1.0),
+                glm::vec2(x2, y1), glm::vec2(1.0, 0.0),
+                glm::vec2(x2, y2), glm::vec2(1.0, 1.0),
+            };
+
+            auto spriteShader = ResourceManager::getInstance()->shader("video");
+            spriteShader->use();
+
+            texture->bind(0);
+            spriteShader->setUniform("uTexture", 0);
+            spriteShader->setUniform("uProjectionMatrix", getMVP());
+
+            std::unique_ptr<VertexBuffer> vertexBuffer = std::make_unique<VertexBuffer>(
+                &vertices[0],
+                vertices.size() * sizeof(glm::vec2),
+                VertexBuffer::UsagePattern::StaticDraw
+            );
+            VertexBufferLayout vertexBufferLayout({
+                {0, 2, VertexBufferAttribute::Type::Float}, // aPosition
+                {1, 2, VertexBufferAttribute::Type::Float}  // aTexturePosition
+            });
+            VertexArray vertexArray;
+            vertexArray.addBuffer(vertexBuffer, vertexBufferLayout);
+
+            static unsigned int indexes[6] = {0, 1, 2, 3, 2, 1};
+            IndexBuffer indexBuffer(indexes, 6, IndexBuffer::UsagePattern::StaticDraw);
+
+            GL_CHECK(glDrawElements(GL_TRIANGLES, indexBuffer.count(), GL_UNSIGNED_INT, nullptr));
         }
 
-        int32_t Renderer::maxTextureSize()
-        {
+        void
+        Renderer::drawPartialRectangle(const Point &point, const Rectangle &rectangle, const Texture *const texture) {
+            auto x1 = (float) point.x();
+            auto y1 = (float) point.y();
+            auto x2 = (float) (point.x() + rectangle.size().width());
+            auto y2 = (float) (point.y() + rectangle.size().height());
+
+            auto dx1 = (float) rectangle.position().x() / (float) texture->size().width();
+            auto dy1 = (float) rectangle.position().y() / (float) texture->size().height();
+            auto dx2 = (float) (rectangle.position().x() + rectangle.size().width()) / (float) texture->size().width();
+            auto dy2 = (float) (rectangle.position().y() + rectangle.size().height()) / (float) texture->size().height();
+
+            std::vector<glm::vec2> vertices = {
+                // aPosition       // aTexturePosition
+                glm::vec2(x1, y1), glm::vec2(dx1, dy1),
+                glm::vec2(x1, y2), glm::vec2(dx1, dy2),
+                glm::vec2(x2, y1), glm::vec2(dx2, dy1),
+                glm::vec2(x2, y2), glm::vec2(dx2, dy2),
+            };
+
+            auto spriteShader = ResourceManager::getInstance()->shader("video");
+            spriteShader->use();
+
+            texture->bind(0);
+            spriteShader->setUniform("uTexture", 0);
+            spriteShader->setUniform("uProjectionMatrix", getMVP());
+
+            std::unique_ptr<VertexBuffer> vertexBuffer = std::make_unique<VertexBuffer>(
+                &vertices[0],
+                vertices.size() * sizeof(glm::vec2),
+                VertexBuffer::UsagePattern::StaticDraw
+            );
+            VertexBufferLayout vertexBufferLayout({
+                                                      {0, 2, VertexBufferAttribute::Type::Float}, // aPosition
+                                                      {1, 2, VertexBufferAttribute::Type::Float}  // aTexturePosition
+                                                  });
+            VertexArray vertexArray;
+            vertexArray.addBuffer(vertexBuffer, vertexBufferLayout);
+
+            static unsigned int indexes[6] = {0, 1, 2, 3, 2, 1};
+            IndexBuffer indexBuffer(indexes, 6, IndexBuffer::UsagePattern::StaticDraw);
+
+            GL_CHECK(glDrawElements(GL_TRIANGLES, indexBuffer.count(), GL_UNSIGNED_INT, nullptr));
+        }
+
+        void Renderer::drawRectangle(const Rectangle &rectangle, const Texture *const texture, const Texture *const egg,
+                                     const Shader *const shader) {
+            glm::vec2 vertices[4] = {
+                glm::vec2((float) rectangle.position().x(), (float) rectangle.position().y()),
+                glm::vec2((float) rectangle.position().x(),
+                          (float) (rectangle.position().y() + rectangle.size().height())),
+                glm::vec2((float) (rectangle.position().x() + rectangle.size().width()),
+                          (float) rectangle.position().y()),
+                glm::vec2((float) (rectangle.position().x() + rectangle.size().width()),
+                          (float) (rectangle.position().y() + rectangle.size().height()))
+            };
+            glm::vec2 UV[4] = {
+                glm::vec2(0.0, 0.0),
+                glm::vec2(0.0, 1.0),
+                glm::vec2(1.0, 0.0),
+                glm::vec2(1.0, 1.0)
+            };
+
+            shader->use();
+
+            texture->bind(0);
+            egg->bind(1);
+
+            VertexArray vertexArray;
+
+            std::unique_ptr<VertexBuffer> coordinatesVertexBuffer = std::make_unique<VertexBuffer>(
+                &vertices[0],
+                sizeof(vertices),
+                VertexBuffer::UsagePattern::DynamicDraw
+            );
+
+            VertexBufferLayout coordinatesVertexBufferLayout;
+            coordinatesVertexBufferLayout.addAttribute({
+                                                           (unsigned int) shader->getAttrib("Position"),
+                                                           2,
+                                                           VertexBufferAttribute::Type::Float
+                                                       });
+            vertexArray.addBuffer(coordinatesVertexBuffer, coordinatesVertexBufferLayout);
+
+            std::unique_ptr<VertexBuffer> textureCoordinatesVertexBuffer = std::make_unique<VertexBuffer>(
+                &UV[0],
+                sizeof(UV),
+                VertexBuffer::UsagePattern::DynamicDraw
+            );
+            VertexBufferLayout textureCoordinatesVertexBufferLayout;
+            textureCoordinatesVertexBufferLayout.addAttribute({
+                                                                  (unsigned int) shader->getAttrib("TexCoord"),
+                                                                  2,
+                                                                  VertexBufferAttribute::Type::Float
+                                                              });
+            vertexArray.addBuffer(textureCoordinatesVertexBuffer, textureCoordinatesVertexBufferLayout);
+
+            static unsigned int indexes[6] = {0, 1, 2, 3, 2, 1};
+            IndexBuffer indexBuffer(indexes, 6, IndexBuffer::UsagePattern::StaticDraw);
+
+            GL_CHECK(glDrawElements(GL_TRIANGLES, indexBuffer.count(), GL_UNSIGNED_INT, nullptr));
+        }
+
+        void
+        Renderer::drawPartialRectangle(const Point &point, const Rectangle &rectangle, const Texture *const texture,
+                                       const Texture *const egg, const Shader *const shader) {
+            glm::vec2 vertices[4] = {
+                glm::vec2((float) point.x(), (float) point.y()),
+                glm::vec2((float) point.x(), (float) (point.y() + rectangle.size().height())),
+                glm::vec2((float) (point.x() + rectangle.size().width()), (float) point.y()),
+                glm::vec2((float) (point.x() + rectangle.size().width()),
+                          (float) (point.y() + rectangle.size().height()))
+            };
+            glm::vec2 UV[4] = {
+                glm::vec2((float) rectangle.position().x() / (float) texture->size().width(),
+                          (float) rectangle.position().y() / (float) texture->size().height()),
+                glm::vec2((float) rectangle.position().x() / (float) texture->size().width(),
+                          (float) (rectangle.position().y() + rectangle.size().height()) /
+                          (float) texture->size().height()),
+                glm::vec2(
+                    (float) (rectangle.position().x() + rectangle.size().width()) / (float) texture->size().width(),
+                    (float) rectangle.position().y() / (float) texture->size().height()),
+                glm::vec2(
+                    (float) (rectangle.position().x() + rectangle.size().width()) / (float) texture->size().width(),
+                    (float) (rectangle.position().y() + rectangle.size().height()) / (float) texture->size().height())
+            };
+
+            shader->use();
+            texture->bind(0);
+            egg->bind(1);
+
+            VertexArray vertexArray;
+
+            std::unique_ptr<VertexBuffer> coordinatesVertexBuffer = std::make_unique<VertexBuffer>(
+                &vertices[0],
+                sizeof(vertices),
+                VertexBuffer::UsagePattern::DynamicDraw
+            );
+            VertexBufferLayout coordinatesVertexBufferLayout;
+            coordinatesVertexBufferLayout.addAttribute({
+                                                           (unsigned int) shader->getAttrib("Position"),
+                                                           2,
+                                                           VertexBufferAttribute::Type::Float
+                                                       });
+            vertexArray.addBuffer(coordinatesVertexBuffer, coordinatesVertexBufferLayout);
+
+            std::unique_ptr<VertexBuffer> textureCoordinatesVertexBuffer = std::make_unique<VertexBuffer>(
+                &UV[0],
+                sizeof(UV),
+                VertexBuffer::UsagePattern::DynamicDraw
+            );
+            VertexBufferLayout textureCoordinatesVertexBufferLayout;
+            textureCoordinatesVertexBufferLayout.addAttribute({
+                                                                  (unsigned int) shader->getAttrib("TexCoord"),
+                                                                  2,
+                                                                  VertexBufferAttribute::Type::Float
+                                                              });
+            vertexArray.addBuffer(textureCoordinatesVertexBuffer, textureCoordinatesVertexBufferLayout);
+
+            static unsigned int indexes[6] = {0, 1, 2, 3, 2, 1};
+            IndexBuffer indexBuffer(indexes, 6, IndexBuffer::UsagePattern::StaticDraw);
+
+            GL_CHECK(glDrawElements(GL_TRIANGLES, indexBuffer.count(), GL_UNSIGNED_INT, nullptr));
+        }
+
+
+        glm::vec4 Renderer::fadeColor() {
+            return glm::vec4((float) _fadeColor.r / 255.0, (float) _fadeColor.g / 255.0, (float) _fadeColor.b / 255.0,
+                             (float) _fadeColor.a / 255.0);
+        }
+
+        int32_t Renderer::maxTextureSize() {
             return 1024;
             return _maxTexSize;
         }
 
-        Texture *Renderer::egg()
-        {
+        Texture *Renderer::egg() {
             return _egg;
         }
 
-        Renderer::RenderPath Renderer::renderPath()
-        {
+        Renderer::RenderPath Renderer::renderPath() {
             return _renderpath;
         }
     }

@@ -11,14 +11,14 @@ namespace Falltergeist
         {
             public:
                 Movie();
-                ~Movie();
-                void render(int x, int y);
-                unsigned int width() const;
-                unsigned int height() const;
+                ~Movie() = default;
+                void render(const Point& point);
+                const Size& size() const;
                 void loadFromSurface(SDL_Surface* surface);
 
             private:
                 std::unique_ptr<Texture> _texture;
+                const Size _size;
         };
     }
 }

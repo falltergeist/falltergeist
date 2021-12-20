@@ -41,7 +41,6 @@ namespace Falltergeist
         {
         }
 
-
         void TextArea::render(Point& pos, Graphics::Font* font, SDL_Color _color, SDL_Color _outlineColor)
         {
             if (_indexBuffer->count() == 0) {
@@ -61,7 +60,7 @@ namespace Falltergeist
             _shader->setUniform(_uniformFade, Game::getInstance()->renderer()->fadeColor());
             if (Game::getInstance()->renderer()->renderPath() == Graphics::Renderer::RenderPath::OGL21)
             {
-                _shader->setUniform(_uniformTexSize, glm::vec2((float)font->texture()->textureWidth(), (float)font->texture()->textureHeight()));
+                _shader->setUniform(_uniformTexSize, glm::vec2((float)font->texture()->size().width(), (float)font->texture()->size().height()));
             }
 
             _vertexArray->bind();
@@ -89,9 +88,7 @@ namespace Falltergeist
             coordinatesVertexBufferLayout.addAttribute({
                (unsigned int) _attribPos,
                2,
-               VertexBufferAttribute::Type::Float,
-               false,
-               0
+               VertexBufferAttribute::Type::Float
             });
             _vertexArray->addBuffer(_coordinatesVertexBuffer, coordinatesVertexBufferLayout);
 
@@ -104,9 +101,7 @@ namespace Falltergeist
             textureCoordinatesVertexBufferLayout.addAttribute({
               (unsigned int) _attribTex,
               2,
-              VertexBufferAttribute::Type::Float,
-              false,
-              0
+              VertexBufferAttribute::Type::Float
             });
             _vertexArray->addBuffer(_textureCoordinatesVertexBuffer, textureCoordinatesVertexBufferLayout);
 

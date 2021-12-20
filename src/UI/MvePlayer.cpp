@@ -80,7 +80,7 @@ namespace Falltergeist
             if (!_timerStarted) {
                 return;
             }
-            _movie->render(_position.x(),_position.y());
+            _movie->render(_position);
         }
 
         SDL_Rect relClose(uint32_t b, int8_t sign, uint32_t _x, uint32_t _y)
@@ -560,11 +560,13 @@ namespace Falltergeist
             }
             _decodeFrame(data + 14, len - 14);
 
-            SDL_PixelFormat* format = SDL_AllocFormat(SDL_PIXELFORMAT_BGR888);
-            SDL_Surface *temp = SDL_ConvertSurface(_currentBuf, format, 0);
+            SDL_Surface* temp = SDL_ConvertSurfaceFormat(_currentBuf, SDL_PIXELFORMAT_RGBA8888, 0);
+            // Fill alpha channel with 0xFF since it is 0x00 at this point
+            for (auto i = 0; i < temp->w * temp->h; i++) {
+                ((int32_t*)temp->pixels)[i] = ((int32_t*)temp->pixels)[i] | 0xFF;
+            }
             _movie->loadFromSurface(temp);
             SDL_FreeSurface(temp);
-            SDL_FreeFormat(format);
         }
 
         void MvePlayer::_setDecodingMap(uint8_t* data)
