@@ -72,16 +72,18 @@ namespace Falltergeist
                 }
                 else {
                     auto camera = Game::getInstance()->locationState()->camera();
-                    Point eggPos = dude->hexagon()->position() - camera->topLeft() + dude->eggOffset();
+                    Rectangle eggRectangle(
+                        dude->hexagon()->position() - camera->topLeft() + dude->eggOffset(),
+                        Size(129, 98)
+                    );
 
-                    SDL_Rect egg_rect = {eggPos.x(), eggPos.y(), 129, 98};
-                    SDL_Rect tex_rect = {point.x(), point.y(), (int) _texture->size().width(), (int) _texture->size().height()};
+                    Rectangle textureRectangle(point, _texture->size());
 
-                    if (!SDL_HasIntersection(&egg_rect, &tex_rect)) {
+                    if (!eggRectangle.hasIntersectionWith(textureRectangle)) {
                         transparency = false;
                     }
                     else {
-                        eggVec = glm::vec2((float) (eggPos.x() - point.x()), (float) (eggPos.y() - point.y()));
+                        eggVec = glm::vec2((float) (eggRectangle.position().x() - point.x()), (float) (eggRectangle.position().y() - point.y()));
                     }
                 }
             }
@@ -192,18 +194,17 @@ namespace Falltergeist
                     transparency = false;
                 } else {
                     auto camera = Game::getInstance()->locationState()->camera();
-                    Point eggPos = dude->hexagon()->position() - camera->topLeft() + dude->eggOffset();
+                    Rectangle eggRectangle(
+                        dude->hexagon()->position() - camera->topLeft() + dude->eggOffset(),
+                        Size(129, 98)
+                    );
 
-                    SDL_Rect egg_rect = {eggPos.x(), eggPos.y(), 129, 98};
-                    SDL_Rect tex_rect = {point.x(), point.y(), (int) _texture->size().width(), (int) _texture->size().height()};
+                    Rectangle textureRectangle(point, _texture->size());
 
-                    if (!SDL_HasIntersection(&egg_rect, &tex_rect))
-                    {
+                    if (!eggRectangle.hasIntersectionWith(textureRectangle)) {
                         transparency = false;
-                    }
-                    else
-                    {
-                        eggVec = glm::vec2((float) (eggPos.x() - point.x()), (float) (eggPos.y() - point.y()));
+                    } else {
+                        eggVec = glm::vec2((float) (eggRectangle.position().x() - point.x()), (float) (eggRectangle.position().y() - point.y()));
                     }
                 }
 
