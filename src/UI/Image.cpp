@@ -33,9 +33,9 @@ namespace Falltergeist
             return opaque((unsigned)position.x(), (unsigned)position.y());
         }
 
-        void Image::render(const Size &size, bool eggTransparency)
+        void Image::render(const Size& size, bool eggTransparency)
         {
-            sprite->renderScaled(position().x(), position().y(), size.width(), size.height(), eggTransparency, light(), _outline);
+            sprite->renderScaled(position().x(), position().y(), size, eggTransparency, light(), _outline);
         }
     }
 }

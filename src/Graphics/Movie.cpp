@@ -14,9 +14,7 @@ namespace Falltergeist
     {
         using Game::Game;
 
-        Movie::Movie()
-        {
-            _texture = std::make_unique<Graphics::Texture>(640,320);
+        Movie::Movie() : _width(640), _height(320) {
         }
 
         Movie::~Movie()
@@ -25,31 +23,37 @@ namespace Falltergeist
 
         unsigned int Movie::width() const
         {
-            return _texture->width();
+            return _width;
         }
 
         unsigned int Movie::height() const
         {
-            return _texture->height();
+            return _height;
         }
 
         void Movie::loadFromSurface(SDL_Surface* surface)
         {
-            _texture->loadFromSurface(surface);
+            _texture = std::make_unique<Texture>(
+                Pixels(
+                surface->pixels,
+                Size(surface->w, surface->h),
+                Pixels::Format::RGBA
+                )
+            );
         }
 
         void Movie::render(int x, int y)
         {
+            if (!_texture) {
+                return;
+            }
             std::vector<glm::vec2> vertices;
             std::vector<glm::vec2> UV;
 
-            int width = 640;
-            int height = 320;
-
             glm::vec2 vertex_up_left    = glm::vec2( (float)x, (float)y);
-            glm::vec2 vertex_up_right   = glm::vec2( (float)(x+width), (float)y);
-            glm::vec2 vertex_down_right = glm::vec2( (float)(x+width), (float)(y+height));
-            glm::vec2 vertex_down_left  = glm::vec2( (float)x, (float)(y+height));
+            glm::vec2 vertex_up_right   = glm::vec2( (float)(x+_width), (float)y);
+            glm::vec2 vertex_down_right = glm::vec2( (float)(x+_width), (float)(y+_height));
+            glm::vec2 vertex_down_left  = glm::vec2( (float)x, (float)(y+_height));
 
             vertices.push_back(vertex_up_left   );
             vertices.push_back(vertex_down_left );
@@ -57,9 +61,9 @@ namespace Falltergeist
             vertices.push_back(vertex_down_right);
 
             glm::vec2 uv_up_left    = glm::vec2( 0.0, 0.0 );
-            glm::vec2 uv_up_right   = glm::vec2( (float)_texture->width()/(float)_texture->textureWidth(), 0.0 );
-            glm::vec2 uv_down_right = glm::vec2( (float)_texture->width()/(float)_texture->textureWidth(), (float)_texture->height()/(float)_texture->textureHeight() );
-            glm::vec2 uv_down_left  = glm::vec2( 0.0, (float)_texture->height()/(float)_texture->textureHeight() );
+            glm::vec2 uv_up_right   = glm::vec2( 1.0, 0.0 );
+            glm::vec2 uv_down_right = glm::vec2( 1.0, 1.0);
+            glm::vec2 uv_down_left  = glm::vec2( 0.0, 1.0);
 
             UV.push_back(uv_up_left   );
             UV.push_back(uv_down_left );

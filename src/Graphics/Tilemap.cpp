@@ -104,8 +104,13 @@ namespace Falltergeist {
         }
 
         void Tilemap::addTexture(SDL_Surface *surface) {
-            _textures.push_back(std::make_unique<Texture>(surface->w, surface->h));
-            _textures.back().get()->loadFromSurface(surface);
+            _textures.push_back(std::make_unique<Texture>(
+                Pixels(
+                    surface->pixels,
+                    Size(surface->w, surface->h),
+                    Pixels::Format::RGBA
+                )
+            ));
         }
     }
 }

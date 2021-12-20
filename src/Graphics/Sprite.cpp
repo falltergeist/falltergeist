@@ -49,28 +49,28 @@ namespace Falltergeist
 
         unsigned int Sprite::width() const
         {
-            return _texture->width();
+            return _texture->size().width();
         }
 
         unsigned int Sprite::height() const
         {
-            return _texture->height();
+            return _texture->size().height();
         }
 
         // render, optionally scaled
-        void Sprite::renderScaled(int x, int y, unsigned int width, unsigned int height, bool transparency, bool light, int outline, unsigned int lightValue)
+        void Sprite::renderScaled(int x, int y, const Size& size, bool transparency, bool light, int outline, unsigned int lightValue)
         {
             glm::vec2 vertices[4] = {
                 glm::vec2((float)x, (float)y),
-                glm::vec2((float)x, (float)(y + height)),
-                glm::vec2((float)(x + width), (float)y),
-                glm::vec2((float)(x + width), (float)(y + height))
+                glm::vec2((float)x, (float)(y + size.height())),
+                glm::vec2((float)(x + size.width()), (float)y),
+                glm::vec2((float)(x + size.width()), (float)(y + size.height()))
             };
             glm::vec2 UV[4] = {
                 glm::vec2(0.0, 0.0),
-                glm::vec2(0.0, (float)_texture->height() / (float)_texture->textureHeight()),
-                glm::vec2((float)_texture->width() / (float)_texture->textureWidth(), 0.0),
-                glm::vec2((float)_texture->width() / (float)_texture->textureWidth(), (float)_texture->height() / (float)_texture->textureHeight())
+                glm::vec2(0.0, 1.0),
+                glm::vec2(1.0, 0.0),
+                glm::vec2(1.0, 1.0)
             };
 
             x--;
@@ -88,7 +88,7 @@ namespace Falltergeist
                     Point eggPos = dude->hexagon()->position() - camera->topLeft() + dude->eggOffset();
 
                     SDL_Rect egg_rect = {eggPos.x(), eggPos.y(), 129, 98};
-                    SDL_Rect tex_rect = {x, y, (int) _texture->width(), (int) _texture->height()};
+                    SDL_Rect tex_rect = {x, y, (int) _texture->size().width(), (int) _texture->size().height()};
 
                     if (!SDL_HasIntersection(&egg_rect, &tex_rect)) {
                         transparency = false;
@@ -134,7 +134,7 @@ namespace Falltergeist
 
             if (Game::getInstance()->renderer()->renderPath() == Renderer::RenderPath::OGL21)
             {
-                _shader->setUniform(_uniformTexSize, glm::vec2((float)_texture->textureWidth(), (float)_texture->textureHeight()));
+                _shader->setUniform(_uniformTexSize, glm::vec2((float)_texture->size().width(), (float)_texture->size().height()));
             }
 
             VertexArray vertexArray;
@@ -177,7 +177,7 @@ namespace Falltergeist
 
         void Sprite::render(int x, int y, bool transparency, bool light, int outline, unsigned int lightValue)
         {
-            renderScaled(x, y, _texture->width(), _texture->height(), transparency, light, outline, lightValue);
+            renderScaled(x, y, _texture->size(), transparency, light, outline, lightValue);
         }
 
         // render just a part of texture, unscaled
@@ -191,10 +191,10 @@ namespace Falltergeist
                 glm::vec2((float)(x + width), (float)(y + height))
             };
             glm::vec2 UV[4] = {
-                glm::vec2((float)dx / (float)_texture->textureWidth(), (float)dy / (float)_texture->textureHeight()),
-                glm::vec2((float)dx / (float)_texture->textureWidth(), (float)(dy + height) / (float)_texture->textureHeight()),
-                glm::vec2((float)(dx + width) / (float)_texture->textureWidth(), (float)dy / (float)_texture->textureHeight()),
-                glm::vec2((float)(dx + width) / (float)_texture->textureWidth(), (float)(dy + height) / (float)_texture->textureHeight())
+                glm::vec2((float)dx / (float)_texture->size().width(), (float)dy / (float)_texture->size().height()),
+                glm::vec2((float)dx / (float)_texture->size().width(), (float)(dy + height) / (float)_texture->size().height()),
+                glm::vec2((float)(dx + width) / (float)_texture->size().width(), (float)dy / (float)_texture->size().height()),
+                glm::vec2((float)(dx + width) / (float)_texture->size().width(), (float)(dy + height) / (float)_texture->size().height())
             };
 
             glm::vec2 eggVec;
@@ -208,7 +208,7 @@ namespace Falltergeist
                     Point eggPos = dude->hexagon()->position() - camera->topLeft() + dude->eggOffset();
 
                     SDL_Rect egg_rect = {eggPos.x(), eggPos.y(), 129, 98};
-                    SDL_Rect tex_rect = {x, y, (int) _texture->width(), (int) _texture->height()};
+                    SDL_Rect tex_rect = {x, y, (int) _texture->size().width(), (int) _texture->size().height()};
 
                     if (!SDL_HasIntersection(&egg_rect, &tex_rect))
                     {
@@ -256,7 +256,7 @@ namespace Falltergeist
             _shader->setUniform(_uniformOutline, false);
 
             if (Game::getInstance()->renderer()->renderPath() == Renderer::RenderPath::OGL21) {
-                _shader->setUniform(_uniformTexSize, glm::vec2((float)_texture->textureWidth(), (float)_texture->textureHeight()));
+                _shader->setUniform(_uniformTexSize, glm::vec2((float)_texture->size().width(), (float)_texture->size().height()));
             }
 
             VertexArray vertexArray;

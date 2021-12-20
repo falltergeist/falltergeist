@@ -38,20 +38,20 @@ namespace Falltergeist
                     _vertices.push_back(glm::vec2((float)srcFrame.width() + 2.0, (float)srcFrame.height() + 2.0));
 
                     _texCoords.push_back(glm::vec2(
-                        (float)(offsetX - 1.0) / (float)_texture->textureWidth(),
-                        (float)(offsetY - 1.0) / (float)_texture->textureHeight()
+                        (float)(offsetX - 1.0) / (float)_texture->size().width(),
+                        (float)(offsetY - 1.0) / (float)_texture->size().height()
                     ));
                     _texCoords.push_back(glm::vec2(
-                        (float)(offsetX - 1.0) / (float)_texture->textureWidth(),
-                        (float)(offsetY + srcFrame.height() + 1.0) / (float)_texture->textureHeight()
+                        (float)(offsetX - 1.0) / (float)_texture->size().width(),
+                        (float)(offsetY + srcFrame.height() + 1.0) / (float)_texture->size().height()
                     ));
                     _texCoords.push_back(glm::vec2(
-                        (float)(offsetX + srcFrame.width() + 1.0) / (float)_texture->textureWidth(),
-                        (float)(offsetY - 1.0) / (float)_texture->textureHeight()
+                        (float)(offsetX + srcFrame.width() + 1.0) / (float)_texture->size().width(),
+                        (float)(offsetY - 1.0) / (float)_texture->size().height()
                     ));
                     _texCoords.push_back(glm::vec2(
-                        (float)(offsetX + srcFrame.width() + 1.0) / (float)_texture->textureWidth(),
-                        (float)(offsetY + srcFrame.height() + 1.0) / (float)_texture->textureHeight()
+                        (float)(offsetX + srcFrame.width() + 1.0) / (float)_texture->size().width(),
+                        (float)(offsetY + srcFrame.height() + 1.0) / (float)_texture->size().height()
                     ));
 
                     offsetX += srcFrame.width()+2;
@@ -159,7 +159,7 @@ namespace Falltergeist
             _shader->setUniform(_uniformTexHeight, texHeight);
             if (Game::getInstance()->renderer()->renderPath() == Renderer::RenderPath::OGL21)
             {
-                _shader->setUniform(_uniformTexSize, glm::vec2((float)_texture->textureWidth(), (float)_texture->textureHeight()));
+                _shader->setUniform(_uniformTexSize, glm::vec2((float)_texture->size().width(), (float)_texture->size().height()));
             }
 
             _vertexArray->bind();
