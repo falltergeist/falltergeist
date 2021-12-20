@@ -59,6 +59,8 @@ namespace Falltergeist
                 void drawRect(int x, int y, int w, int h, SDL_Color color);
                 void drawRect(const Point &pos, const Size &size, SDL_Color color);
                 void drawRectangle(const Rectangle& rectangle, const Texture* const texture);
+                // Draw rectangle part of the texture in the given position. unscaled
+                void drawPartialRectangle(const Point& point, const Rectangle& rectangle, const Texture* const texture);
                 // Draw scaled texture in the rectangle
                 void drawRectangle(const Rectangle& rectangle, const Texture* const texture, const Texture* const egg, const Shader* const shader);
                 // Draw rectangle part of the texture in the given position. unscaled

@@ -452,6 +452,51 @@ namespace Falltergeist {
             GL_CHECK(glDrawElements(GL_TRIANGLES, indexBuffer.count(), GL_UNSIGNED_INT, nullptr));
         }
 
+        void
+        Renderer::drawPartialRectangle(const Point &point, const Rectangle &rectangle, const Texture *const texture) {
+            auto x1 = (float) point.x();
+            auto y1 = (float) point.y();
+            auto x2 = (float) (point.x() + rectangle.size().width());
+            auto y2 = (float) (point.y() + rectangle.size().height());
+
+            auto dx1 = (float) rectangle.position().x() / (float) texture->size().width();
+            auto dy1 = (float) rectangle.position().y() / (float) texture->size().height();
+            auto dx2 = (float) (rectangle.position().x() + rectangle.size().width()) / (float) texture->size().width();
+            auto dy2 = (float) (rectangle.position().y() + rectangle.size().height()) / (float) texture->size().height();
+
+            std::vector<glm::vec2> vertices = {
+                // aPosition       // aTexturePosition
+                glm::vec2(x1, y1), glm::vec2(dx1, dy1),
+                glm::vec2(x1, y2), glm::vec2(dx1, dy2),
+                glm::vec2(x2, y1), glm::vec2(dx2, dy1),
+                glm::vec2(x2, y2), glm::vec2(dx2, dy2),
+            };
+
+            auto spriteShader = ResourceManager::getInstance()->shader("video");
+            spriteShader->use();
+
+            texture->bind(0);
+            spriteShader->setUniform("uTexture", 0);
+            spriteShader->setUniform("uProjectionMatrix", getMVP());
+
+            std::unique_ptr<VertexBuffer> vertexBuffer = std::make_unique<VertexBuffer>(
+                &vertices[0],
+                vertices.size() * sizeof(glm::vec2),
+                VertexBuffer::UsagePattern::StaticDraw
+            );
+            VertexBufferLayout vertexBufferLayout({
+                                                      {0, 2, VertexBufferAttribute::Type::Float}, // aPosition
+                                                      {1, 2, VertexBufferAttribute::Type::Float}  // aTexturePosition
+                                                  });
+            VertexArray vertexArray;
+            vertexArray.addBuffer(vertexBuffer, vertexBufferLayout);
+
+            static unsigned int indexes[6] = {0, 1, 2, 3, 2, 1};
+            IndexBuffer indexBuffer(indexes, 6, IndexBuffer::UsagePattern::StaticDraw);
+
+            GL_CHECK(glDrawElements(GL_TRIANGLES, indexBuffer.count(), GL_UNSIGNED_INT, nullptr));
+        }
+
         void Renderer::drawRectangle(const Rectangle &rectangle, const Texture *const texture, const Texture *const egg,
                                      const Shader *const shader) {
             glm::vec2 vertices[4] = {
