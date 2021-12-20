@@ -26,6 +26,14 @@ namespace Falltergeist {
             bind();
             buffer->bind();
             unsigned int offset = 0;
+            unsigned int stride = 0;
+
+            if (bufferLayout.attributes().size() > 1) {
+                for (auto &attribute : bufferLayout.attributes()) {
+                    stride += attribute.size();
+                }
+            }
+
             for (auto &attribute : bufferLayout.attributes()) {
                 GL_CHECK(glEnableVertexAttribArray(attribute.index()));
 
@@ -43,7 +51,7 @@ namespace Falltergeist {
                     attribute.componentsCount(),
                     glType,
                     attribute.normalized() ? GL_TRUE : GL_FALSE,
-                    attribute.stride(),
+                    stride,
                     (const void *) offset
                 ));
                 offset += attribute.size();

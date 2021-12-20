@@ -40,9 +40,7 @@ namespace Falltergeist {
             VertexBufferAttribute coordinatesAttribute(
                     (unsigned int) _attribPos,
                     2,
-                    VertexBufferAttribute::Type::Float,
-                    false,
-                    0
+                    VertexBufferAttribute::Type::Float
             );
             VertexBufferLayout coordinatesBufferLayout;
             coordinatesBufferLayout.addAttribute(coordinatesAttribute);
@@ -51,9 +49,7 @@ namespace Falltergeist {
             VertexBufferAttribute textureCoordinatesAttribute(
                     (unsigned int) _attribTex,
                     2,
-                    VertexBufferAttribute::Type::Float,
-                    false,
-                    0
+                    VertexBufferAttribute::Type::Float
             );
             VertexBufferLayout textureCoordinatesBufferLayout;
             textureCoordinatesBufferLayout.addAttribute(textureCoordinatesAttribute);

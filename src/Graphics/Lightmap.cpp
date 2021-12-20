@@ -46,9 +46,7 @@ namespace Falltergeist
             coordinatesVertexBufferLayout.addAttribute({
                    (unsigned int) _attribPos,
                    2,
-                   VertexBufferAttribute::Type::Float,
-                   false,
-                   0
+                   VertexBufferAttribute::Type::Float
            });
             _vertexArray->addBuffer(_coordinatesVertexBuffer, coordinatesVertexBufferLayout);
 
@@ -92,9 +90,7 @@ namespace Falltergeist
             lightsVertexBufferLayout.addAttribute({
                   (unsigned int) _attribLights,
                   1,
-                  VertexBufferAttribute::Type::Float,
-                  false,
-                  0
+                  VertexBufferAttribute::Type::Float
             });
             _vertexArray->addBuffer(_lightsVertexBuffer, lightsVertexBufferLayout);
         }
