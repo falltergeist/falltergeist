@@ -45,7 +45,8 @@ namespace Falltergeist
                 if (auto pos = line.find(";")) line = line.substr(0, pos);
 
                 // rtrim
-                line.erase(std::find_if(line.rbegin(), line.rend(), std::not1(std::ptr_fun<int, int>(std::isspace))).base(), line.end());
+                line.erase(std::find_if(line.rbegin(), line.rend(), [](int c) {return std::isspace(c);}), line.end())
+                line.erase(std::find_if(line.rbegin(), line.rend(), [](int c) {return std::isspace(c);}), line.end())
 
                 // replace slashes
                 std::replace(line.begin(),line.end(),'\\','/');

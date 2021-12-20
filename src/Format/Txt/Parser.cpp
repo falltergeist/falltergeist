@@ -29,12 +29,12 @@ namespace Falltergeist
 
             void Parser::rtrim(std::string& line)
             {
-                line.erase(find_if(line.rbegin(), line.rend(), std::not1(std::ptr_fun<int, int>(isspace))).base(), line.end());
+                line.erase(std::find_if(line.rbegin(), line.rend(), [](int c) {return std::isspace(c);}), line.end())
             }
 
             void Parser::ltrim(std::string& line)
             {
-                line.erase(line.begin(), find_if(line.begin(), line.end(), std::not1(std::ptr_fun<int, int>(isspace))));
+                line.erase(line.begin(), std::find_if(line.begin(), line.end(), [](int c) {return !std::isspace(c);}))
             }
 
             void Parser::toLower(std::string& line)
