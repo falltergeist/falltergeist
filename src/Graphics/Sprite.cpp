@@ -42,29 +42,19 @@ namespace Falltergeist
         {
         }
 
-        Size Sprite::size() const
+        const Size& Sprite::size() const
         {
             return _texture->size();
         }
 
-        unsigned int Sprite::width() const
-        {
-            return _texture->size().width();
-        }
-
-        unsigned int Sprite::height() const
-        {
-            return _texture->size().height();
-        }
-
         // render, optionally scaled
-        void Sprite::renderScaled(int x, int y, const Size& size, bool transparency, bool light, int outline, unsigned int lightValue)
+        void Sprite::renderScaled(const Point& point, const Size& size, bool transparency, bool light, int outline, unsigned int lightValue)
         {
             glm::vec2 vertices[4] = {
-                glm::vec2((float)x, (float)y),
-                glm::vec2((float)x, (float)(y + size.height())),
-                glm::vec2((float)(x + size.width()), (float)y),
-                glm::vec2((float)(x + size.width()), (float)(y + size.height()))
+                glm::vec2((float) point.x(), (float) point.y()),
+                glm::vec2((float) point.x(), (float)(point.y() + size.height())),
+                glm::vec2((float)(point.x() + size.width()), (float) point.y()),
+                glm::vec2((float)(point.x() + size.width()), (float)(point.y() + size.height()))
             };
             glm::vec2 UV[4] = {
                 glm::vec2(0.0, 0.0),
@@ -72,9 +62,6 @@ namespace Falltergeist
                 glm::vec2(1.0, 0.0),
                 glm::vec2(1.0, 1.0)
             };
-
-            x--;
-            y--;
 
             glm::vec2 eggVec;
             if (transparency)
@@ -88,13 +75,13 @@ namespace Falltergeist
                     Point eggPos = dude->hexagon()->position() - camera->topLeft() + dude->eggOffset();
 
                     SDL_Rect egg_rect = {eggPos.x(), eggPos.y(), 129, 98};
-                    SDL_Rect tex_rect = {x, y, (int) _texture->size().width(), (int) _texture->size().height()};
+                    SDL_Rect tex_rect = {point.x(), point.y(), (int) _texture->size().width(), (int) _texture->size().height()};
 
                     if (!SDL_HasIntersection(&egg_rect, &tex_rect)) {
                         transparency = false;
                     }
                     else {
-                        eggVec = glm::vec2((float) (eggPos.x()-x), (float) (eggPos.y()-y));
+                        eggVec = glm::vec2((float) (eggPos.x() - point.x()), (float) (eggPos.y() - point.y()));
                     }
                 }
             }
@@ -175,26 +162,26 @@ namespace Falltergeist
             GL_CHECK(glDrawElements(GL_TRIANGLES, indexBuffer.count(), GL_UNSIGNED_INT, nullptr));
         }
 
-        void Sprite::render(int x, int y, bool transparency, bool light, int outline, unsigned int lightValue)
+        void Sprite::render(const Point& point, bool transparency, bool light, int outline, unsigned int lightValue)
         {
-            renderScaled(x, y, _texture->size(), transparency, light, outline, lightValue);
+            renderScaled(point, _texture->size(), transparency, light, outline, lightValue);
         }
 
         // render just a part of texture, unscaled
-        void Sprite::renderCropped(int x, int y, int dx, int dy, unsigned int width, unsigned int height, bool transparency,
+        void Sprite::renderCropped(const Point& point, const Rectangle& part, bool transparency,
                                    bool light, unsigned int lightValue)
         {
             glm::vec2 vertices[4] = {
-                glm::vec2((float)x, (float)y),
-                glm::vec2((float)x, (float)(y + height)),
-                glm::vec2((float)(x + width), (float)y),
-                glm::vec2((float)(x + width), (float)(y + height))
+                glm::vec2((float) point.x(), (float) point.y()),
+                glm::vec2((float)point.x(), (float)(point.y() + part.size().height())),
+                glm::vec2((float)(point.x() + part.size().width()), (float)point.y()),
+                glm::vec2((float)(point.x() + part.size().width()), (float)(point.y() + part.size().height()))
             };
             glm::vec2 UV[4] = {
-                glm::vec2((float)dx / (float)_texture->size().width(), (float)dy / (float)_texture->size().height()),
-                glm::vec2((float)dx / (float)_texture->size().width(), (float)(dy + height) / (float)_texture->size().height()),
-                glm::vec2((float)(dx + width) / (float)_texture->size().width(), (float)dy / (float)_texture->size().height()),
-                glm::vec2((float)(dx + width) / (float)_texture->size().width(), (float)(dy + height) / (float)_texture->size().height())
+                glm::vec2((float)part.position().x() / (float)_texture->size().width(), (float)part.position().y() / (float)_texture->size().height()),
+                glm::vec2((float)part.position().x() / (float)_texture->size().width(), (float)(part.position().y() + part.size().height()) / (float)_texture->size().height()),
+                glm::vec2((float)(part.position().x() + part.size().width()) / (float)_texture->size().width(), (float)part.position().y() / (float)_texture->size().height()),
+                glm::vec2((float)(part.position().x() + part.size().width()) / (float)_texture->size().width(), (float)(part.position().y() + part.size().height()) / (float)_texture->size().height())
             };
 
             glm::vec2 eggVec;
@@ -208,7 +195,7 @@ namespace Falltergeist
                     Point eggPos = dude->hexagon()->position() - camera->topLeft() + dude->eggOffset();
 
                     SDL_Rect egg_rect = {eggPos.x(), eggPos.y(), 129, 98};
-                    SDL_Rect tex_rect = {x, y, (int) _texture->size().width(), (int) _texture->size().height()};
+                    SDL_Rect tex_rect = {point.x(), point.y(), (int) _texture->size().width(), (int) _texture->size().height()};
 
                     if (!SDL_HasIntersection(&egg_rect, &tex_rect))
                     {
@@ -216,7 +203,7 @@ namespace Falltergeist
                     }
                     else
                     {
-                        eggVec = glm::vec2((float) (eggPos.x() - x), (float) (eggPos.y() - y));
+                        eggVec = glm::vec2((float) (eggPos.x() - point.x()), (float) (eggPos.y() - point.y()));
                     }
                 }
 
@@ -297,9 +284,9 @@ namespace Falltergeist
             GL_CHECK(glDrawElements(GL_TRIANGLES, indexBuffer.count(), GL_UNSIGNED_INT, nullptr));
         }
 
-        bool Sprite::opaque(unsigned int x, unsigned int y)
+        bool Sprite::opaque(const Point& point)
         {
-            return _texture->opaque(x+1, y+1);
+            return _texture->opaque(point.x() + 1, point.y() + 1);
         }
 
         void Sprite::trans(Graphics::TransFlags::Trans trans)

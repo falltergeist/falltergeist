@@ -22,10 +22,10 @@ namespace Falltergeist
                 case Type::BIG_SWITCH:
                 {
                     _sprite = make_shared<Graphics::Sprite>("art/intrface/prfbknbs.frm");
-                    _rects.push_back({0,0*47,46,47});
-                    _rects.push_back({0,1*47,46,47});
-                    _rects.push_back({0,2*47,46,47});
-                    _rects.push_back({0,3*47,46,47});
+                    _rects.emplace_back(Point(0,0*47), Size(46,47));
+                    _rects.emplace_back(Point(0,1*47), Size(46,47));
+                    _rects.emplace_back(Point(0,2*47), Size(46,47));
+                    _rects.emplace_back(Point(0,3*47), Size(46,47));
                     _maxState = 4;
                     _size = Size(46,47);
 
@@ -36,8 +36,8 @@ namespace Falltergeist
                 case Type::SMALL_SWITCH:
                 {
                     _sprite = make_shared<Graphics::Sprite>("art/intrface/prflknbs.frm");
-                    _rects.push_back({0,0*25,22,25});
-                    _rects.push_back({0,1*25,22,25});
+                    _rects.emplace_back(Point(0,0*25), Size(22,25));
+                    _rects.emplace_back(Point(0,1*25), Size(22,25));
                     _maxState = 2;
                     _size = Size(22,25);
 
@@ -156,8 +156,7 @@ namespace Falltergeist
 
         void MultistateImageButton::render(bool eggTransparency)
         {
-            SDL_Rect rect = _rects.at(_currentState);
-            _sprite->renderCropped(position().x(), position().y(), rect.x, rect.y, rect.w, rect.h);
+            _sprite->renderCropped(position(), _rects.at(_currentState));
         }
 
         bool MultistateImageButton::opaque(const Point &pos)
@@ -166,8 +165,7 @@ namespace Falltergeist
                 return false;
             }
 
-            SDL_Rect rect = _rects.at(_currentState);
-            return _sprite->opaque(pos.x()+rect.x, pos.y()+rect.y);
+            return _sprite->opaque(_rects.at(_currentState).position() + pos);
         }
 
         Size MultistateImageButton::size() const

@@ -15,11 +15,11 @@ namespace Falltergeist
             {
                 for (int i = 0; i < 12; i++) // numbers
                 {
-                    _rects.push_back({120*cl + i*9, 0, 9, 17});
+                    _rects.emplace_back(Point(120*cl + i*9, 0), Size(9, 17));
                 }
                 // signs are 7 px wide
-                _rects.push_back({120*cl + 108 + 0*7, 0, 7, 17});
-                _rects.push_back({120*cl + 108 + 1*7, 0, 7, 17});
+                _rects.emplace_back(Point(120*cl + 108 + 0*7, 0), Size(7, 17));
+                _rects.emplace_back(Point(120*cl + 108 + 1*7, 0), Size(7, 17));
             }
         }
 
@@ -80,15 +80,10 @@ namespace Falltergeist
             int pad = 0;
             if (_type == Type::SIGNED)
             {
-                if (_number < 0)
-                {
-                    SDL_Rect rect = _rects.at(12*_color);
-                    _sprite->renderCropped(position().x(), position().y(), rect.x, rect.y, rect.w, rect.h);
-                }
-                else
-                {
-                    SDL_Rect rect = _rects.at(13*_color);
-                    _sprite->renderCropped(position().x(), position().y(), rect.x, rect.y, rect.w, rect.h);
+                if (_number < 0) {
+                    _sprite->renderCropped(position(), _rects.at(12*_color));
+                } else {
+                    _sprite->renderCropped(position(), _rects.at(13*_color));
                 }
                 pad = 6;
             }
@@ -107,8 +102,7 @@ namespace Falltergeist
                     default:
                         break;
                 }
-                SDL_Rect rect = _rects.at(num);
-                _sprite->renderCropped(position().x() + pad + i*9, position().y(), rect.x, rect.y, rect.w, rect.h);
+                _sprite->renderCropped(position() + Point(pad + i*9, 0), _rects.at(num));
             }
         }
 

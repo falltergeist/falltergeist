@@ -1,4 +1,5 @@
 #include "../UI/ElevatorProgress.h"
+#include "../Graphics/Rectangle.h"
 
 namespace Falltergeist
 {
@@ -40,13 +41,13 @@ namespace Falltergeist
             }
 
             SDL_Rect rect = _rects.at(_progress);
-            return _sprite->opaque(pos.x() + rect.x, pos.y() + rect.y);
+            return _sprite->opaque(Point(pos.x() + rect.x, pos.y() + rect.y));
         }
 
         void ElevatorProgress::render(bool eggTransparency)
         {
             SDL_Rect rect = _rects.at(_progress);
-            _sprite->renderCropped(position().x(), position().y(), rect.x, rect.y, rect.w, rect.h);
+            _sprite->renderCropped(position(), Graphics::Rectangle(Point(rect.x, rect.y), Size(rect.w, rect.h)));
         }
     }
 }

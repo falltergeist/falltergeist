@@ -42,7 +42,7 @@ namespace Falltergeist
                 Month _month;
                 Size _size;
                 std::shared_ptr<Graphics::Sprite> _sprite;
-                std::vector<SDL_Rect> _rects;
+                std::vector<Graphics::Rectangle> _rects;
         };
     }
 }
