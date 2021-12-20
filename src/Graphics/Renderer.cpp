@@ -434,24 +434,16 @@ namespace Falltergeist {
             spriteShader->setUniform("uTexture", 0);
             spriteShader->setUniform("uProjectionMatrix", getMVP());
 
-            VertexArray vertexArray;
-
             std::unique_ptr<VertexBuffer> vertexBuffer = std::make_unique<VertexBuffer>(
                 &vertices[0],
                 vertices.size() * sizeof(glm::vec2),
                 VertexBuffer::UsagePattern::StaticDraw
             );
-            VertexBufferLayout vertexBufferLayout;
-            vertexBufferLayout.addAttribute({
-                                                0, // aPosition
-                                                2,
-                                                VertexBufferAttribute::Type::Float
-                                            });
-            vertexBufferLayout.addAttribute({
-                                                1, // aTexturePosition
-                                                2,
-                                                VertexBufferAttribute::Type::Float
-                                            });
+            VertexBufferLayout vertexBufferLayout({
+                {0, 2, VertexBufferAttribute::Type::Float}, // aPosition
+                {1, 2, VertexBufferAttribute::Type::Float}  // aTexturePosition
+            });
+            VertexArray vertexArray;
             vertexArray.addBuffer(vertexBuffer, vertexBufferLayout);
 
             static unsigned int indexes[6] = {0, 1, 2, 3, 2, 1};
