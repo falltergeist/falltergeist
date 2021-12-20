@@ -19,9 +19,6 @@ namespace Falltergeist
                 explicit Texture(const Pixels& pixels);
                 ~Texture();
 
-                unsigned int width() const;
-                unsigned int height() const;
-
                 void bind(uint8_t unit=0);
                 void unbind(uint8_t unit=0);
 

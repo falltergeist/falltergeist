@@ -530,10 +530,10 @@ namespace Falltergeist
                 vertices.push_back(vertex_down_left );
                 vertices.push_back(vertex_down_right);
 
-                glm::vec2 tex_up_left    = glm::vec2( (textureX-1.0)/(float)tex->width(), (textureY-1.0)/(float)tex->height() );
-                glm::vec2 tex_up_right   = glm::vec2( (textureX+(float)font()->width()+1.0)/(float)tex->width(), (textureY-1.0)/(float)tex->height() );
-                glm::vec2 tex_down_left  = glm::vec2( (textureX-1.0)/(float)tex->width(), (textureY+(float)font()->height()+1.0)/(float)tex->height() );
-                glm::vec2 tex_down_right = glm::vec2( (textureX+(float)font()->width()+1.0)/(float)tex->width(), (textureY+(float)font()->height()+1.0)/(float)tex->height() );
+                glm::vec2 tex_up_left    = glm::vec2( (textureX-1.0)/(float)tex->size().width(), (textureY-1.0)/(float)tex->size().height() );
+                glm::vec2 tex_up_right   = glm::vec2( (textureX+(float)font()->width()+1.0)/(float)tex->size().width(), (textureY-1.0)/(float)tex->size().height() );
+                glm::vec2 tex_down_left  = glm::vec2( (textureX-1.0)/(float)tex->size().width(), (textureY+(float)font()->height()+1.0)/(float)tex->size().height() );
+                glm::vec2 tex_down_right = glm::vec2( (textureX+(float)font()->width()+1.0)/(float)tex->size().width(), (textureY+(float)font()->height()+1.0)/(float)tex->size().height() );
 
                 UV.push_back(tex_up_left   );
                 UV.push_back(tex_up_right  );

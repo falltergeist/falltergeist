@@ -33,14 +33,6 @@ namespace Falltergeist {
             }
         }
 
-        unsigned int Texture::width() const {
-            return _size.width();
-        }
-
-        unsigned int Texture::height() const {
-            return _size.height();
-        }
-
         const Size &Texture::size() const {
             return _size;
         }
@@ -82,11 +74,11 @@ namespace Falltergeist {
         }
 
         bool Texture::opaque(unsigned int x, unsigned int y) {
-            if (x >= width() || y >= height() || y * width() + x >= _mask.size()) {
+            if (x >= _size.width() || y >= _size.height() || y * _size.width() + x >= _mask.size()) {
                 return false;
             }
 
-            return _mask.at(y * width() + x);
+            return _mask.at(y * _size.width() + x);
         }
 
         void Texture::setMask(std::vector<bool> mask) {

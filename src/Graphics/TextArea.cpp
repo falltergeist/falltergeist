@@ -61,7 +61,7 @@ namespace Falltergeist
             _shader->setUniform(_uniformFade, Game::getInstance()->renderer()->fadeColor());
             if (Game::getInstance()->renderer()->renderPath() == Graphics::Renderer::RenderPath::OGL21)
             {
-                _shader->setUniform(_uniformTexSize, glm::vec2((float)font->texture()->width(), (float)font->texture()->height()));
+                _shader->setUniform(_uniformTexSize, glm::vec2((float)font->texture()->size().width(), (float)font->texture()->size().height()));
             }
 
             _vertexArray->bind();
