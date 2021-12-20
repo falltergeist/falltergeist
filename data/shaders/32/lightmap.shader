@@ -1,3 +1,4 @@
+#shader fragment
 #version 150
 
 uniform vec4 fade;
@@ -10,4 +11,19 @@ void main(void)
 
    fragColor = mix(origColor, fade, fade.a);
    fragColor.a = origColor.a;
+}
+
+#shader vertex
+#version 150
+
+uniform mat4 MVP;
+in vec2 Position;
+in float lights;
+uniform vec2 offset;
+out float fLight;
+
+void main(void)
+{
+  fLight = lights;
+  gl_Position = MVP*vec4(Position-offset, 0.0, 1.0);
 }

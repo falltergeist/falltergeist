@@ -41,7 +41,6 @@ namespace Falltergeist
         {
         }
 
-
         void TextArea::render(Point& pos, Graphics::Font* font, SDL_Color _color, SDL_Color _outlineColor)
         {
             if (_indexBuffer->count() == 0) {

@@ -1,3 +1,4 @@
+#shader fragment
 #version 120
 uniform sampler2D tex;
 uniform vec4 fade;
@@ -204,4 +205,19 @@ void main(void)
 
     gl_FragColor = mix(origColor, fade, fade.a);
     gl_FragColor.a = origColor.a;
+}
+
+#shader vertex
+#version 120
+
+uniform mat4 MVP;
+uniform vec2 offset;
+attribute vec2 Position;
+attribute vec2 TexCoord;
+varying vec2 UV;
+
+void main(void)
+{
+  UV = TexCoord;
+  gl_Position = MVP*vec4(Position+offset, 0.0, 1.0);
 }
