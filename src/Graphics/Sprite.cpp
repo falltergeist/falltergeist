@@ -1,7 +1,6 @@
 #include "../Game/DudeObject.h"
 #include "../Game/Game.h"
 #include "../Graphics/AnimatedPalette.h"
-#include "../Graphics/GLCheck.h"
 #include "../Graphics/Sprite.h"
 #include "../LocationCamera.h"
 #include "../PathFinding/Hexagon.h"
@@ -127,19 +126,6 @@ namespace Falltergeist
         void Sprite::renderCropped(const Point& point, const Rectangle& part, bool transparency,
                                    bool light, unsigned int lightValue)
         {
-            glm::vec2 vertices[4] = {
-                glm::vec2((float) point.x(), (float) point.y()),
-                glm::vec2((float)point.x(), (float)(point.y() + part.size().height())),
-                glm::vec2((float)(point.x() + part.size().width()), (float)point.y()),
-                glm::vec2((float)(point.x() + part.size().width()), (float)(point.y() + part.size().height()))
-            };
-            glm::vec2 UV[4] = {
-                glm::vec2((float)part.position().x() / (float)_texture->size().width(), (float)part.position().y() / (float)_texture->size().height()),
-                glm::vec2((float)part.position().x() / (float)_texture->size().width(), (float)(part.position().y() + part.size().height()) / (float)_texture->size().height()),
-                glm::vec2((float)(part.position().x() + part.size().width()) / (float)_texture->size().width(), (float)part.position().y() / (float)_texture->size().height()),
-                glm::vec2((float)(part.position().x() + part.size().width()) / (float)_texture->size().width(), (float)(part.position().y() + part.size().height()) / (float)_texture->size().height())
-            };
-
             glm::vec2 eggVec;
             if (transparency)
             {
@@ -165,9 +151,6 @@ namespace Falltergeist
             }
 
             _shader->use();
-
-            _texture->bind(0);
-            Game::getInstance()->renderer()->egg()->bind(1);
 
             _shader->setUniform(_uniformTex, 0);
             _shader->setUniform(_uniformEggTex, 1);
@@ -201,42 +184,7 @@ namespace Falltergeist
                 _shader->setUniform(_uniformTexSize, glm::vec2((float)_texture->size().width(), (float)_texture->size().height()));
             }
 
-            VertexArray vertexArray;
-
-            std::unique_ptr<VertexBuffer> coordinatesVertexBuffer = std::make_unique<VertexBuffer>(
-                    &vertices[0],
-                    sizeof(vertices),
-                    VertexBuffer::UsagePattern::DynamicDraw
-            );
-            VertexBufferLayout coordinatesVertexBufferLayout;
-            coordinatesVertexBufferLayout.addAttribute({
-                   (unsigned int) _attribPos,
-                   2,
-                   VertexBufferAttribute::Type::Float,
-                   false,
-                   0
-            });
-            vertexArray.addBuffer(coordinatesVertexBuffer, coordinatesVertexBufferLayout);
-
-            std::unique_ptr<VertexBuffer> textureCoordinatesVertexBuffer = std::make_unique<VertexBuffer>(
-                    &UV[0],
-                    sizeof(UV),
-                    VertexBuffer::UsagePattern::DynamicDraw
-            );
-            VertexBufferLayout textureCoordinatesVertexBufferLayout;
-            textureCoordinatesVertexBufferLayout.addAttribute({
-                  (unsigned int) _attribTex,
-                  2,
-                  VertexBufferAttribute::Type::Float,
-                  false,
-                  0
-            });
-            vertexArray.addBuffer(textureCoordinatesVertexBuffer, textureCoordinatesVertexBufferLayout);
-
-            static unsigned int indexes[6] = { 0, 1, 2, 3, 2, 1 };
-            IndexBuffer indexBuffer(indexes, 6, IndexBuffer::UsagePattern::StaticDraw);
-
-            GL_CHECK(glDrawElements(GL_TRIANGLES, indexBuffer.count(), GL_UNSIGNED_INT, nullptr));
+            Game::getInstance()->renderer()->drawPartialRectangle(point, part, _texture, Game::getInstance()->renderer()->egg(), _shader);
         }
 
         bool Sprite::opaque(const Point& point)

@@ -575,6 +575,64 @@ namespace Falltergeist
             GL_CHECK(glDrawElements(GL_TRIANGLES, indexBuffer.count(), GL_UNSIGNED_INT, nullptr));
         }
 
+        void Renderer::drawPartialRectangle(const Point& point, const Rectangle& rectangle, const Texture* const texture, const Texture* const egg, const Shader* const shader)
+        {
+            glm::vec2 vertices[4] = {
+                    glm::vec2((float) point.x(), (float) point.y()),
+                    glm::vec2((float)point.x(), (float)(point.y() + rectangle.size().height())),
+                    glm::vec2((float)(point.x() + rectangle.size().width()), (float)point.y()),
+                    glm::vec2((float)(point.x() + rectangle.size().width()), (float)(point.y() + rectangle.size().height()))
+            };
+            glm::vec2 UV[4] = {
+                    glm::vec2((float)rectangle.position().x() / (float)texture->size().width(), (float)rectangle.position().y() / (float)texture->size().height()),
+                    glm::vec2((float)rectangle.position().x() / (float)texture->size().width(), (float)(rectangle.position().y() + rectangle.size().height()) / (float)texture->size().height()),
+                    glm::vec2((float)(rectangle.position().x() + rectangle.size().width()) / (float)texture->size().width(), (float)rectangle.position().y() / (float)texture->size().height()),
+                    glm::vec2((float)(rectangle.position().x() + rectangle.size().width()) / (float)texture->size().width(), (float)(rectangle.position().y() + rectangle.size().height()) / (float)texture->size().height())
+            };
+
+            shader->use();
+            texture->bind(0);
+            egg->bind(1);
+
+            VertexArray vertexArray;
+
+            std::unique_ptr<VertexBuffer> coordinatesVertexBuffer = std::make_unique<VertexBuffer>(
+                    &vertices[0],
+                    sizeof(vertices),
+                    VertexBuffer::UsagePattern::DynamicDraw
+            );
+            VertexBufferLayout coordinatesVertexBufferLayout;
+            coordinatesVertexBufferLayout.addAttribute({
+                                                               (unsigned int) shader->getAttrib("Position"),
+                                                               2,
+                                                               VertexBufferAttribute::Type::Float,
+                                                               false,
+                                                               0
+                                                       });
+            vertexArray.addBuffer(coordinatesVertexBuffer, coordinatesVertexBufferLayout);
+
+            std::unique_ptr<VertexBuffer> textureCoordinatesVertexBuffer = std::make_unique<VertexBuffer>(
+                    &UV[0],
+                    sizeof(UV),
+                    VertexBuffer::UsagePattern::DynamicDraw
+            );
+            VertexBufferLayout textureCoordinatesVertexBufferLayout;
+            textureCoordinatesVertexBufferLayout.addAttribute({
+                                                                      (unsigned int) shader->getAttrib("TexCoord"),
+                                                                      2,
+                                                                      VertexBufferAttribute::Type::Float,
+                                                                      false,
+                                                                      0
+                                                              });
+            vertexArray.addBuffer(textureCoordinatesVertexBuffer, textureCoordinatesVertexBufferLayout);
+
+            static unsigned int indexes[6] = { 0, 1, 2, 3, 2, 1 };
+            IndexBuffer indexBuffer(indexes, 6, IndexBuffer::UsagePattern::StaticDraw);
+
+            GL_CHECK(glDrawElements(GL_TRIANGLES, indexBuffer.count(), GL_UNSIGNED_INT, nullptr));
+        }
+
+
         glm::vec4 Renderer::fadeColor()
         {
             return glm::vec4((float)_fadeColor.r/255.0, (float)_fadeColor.g/255.0, (float)_fadeColor.b/255.0, (float)_fadeColor.a/255.0);
