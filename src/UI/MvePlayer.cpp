@@ -560,23 +560,11 @@ namespace Falltergeist
             }
             _decodeFrame(data + 14, len - 14);
 
-            int bpp;
-            uint32_t Rmask, Gmask, Bmask, Amask;
-            SDL_PixelFormatEnumToMasks(SDL_PIXELFORMAT_ABGR8888, &bpp, &Rmask, &Gmask, &Bmask, &Amask);
-
-            SDL_Surface *temp = SDL_CreateRGBSurface(0, _currentBuf->w, _currentBuf->h, bpp,
-                                                  Rmask, Gmask, Bmask, Amask
-            );
-            SDL_SetSurfaceAlphaMod( _currentBuf, 0xFF );
-            SDL_SetSurfaceBlendMode( _currentBuf, SDL_BLENDMODE_NONE );
-
-            SDL_Rect area;
-            area.x = 0;
-            area.y = 0;
-            area.w = _currentBuf->w;
-            area.h = _currentBuf->h;
-            SDL_BlitSurface(_currentBuf, &area, temp, &area);
-
+            SDL_Surface* temp = SDL_ConvertSurfaceFormat(_currentBuf, SDL_PIXELFORMAT_RGBA8888, 0);
+            // Fill alpha channel with 0xFF since it is 0x00 at this point
+            for (auto i = 0; i < temp->w * temp->h; i++) {
+                ((int32_t*)temp->pixels)[i] = ((int32_t*)temp->pixels)[i] | 0xFF;
+            }
             _movie->loadFromSurface(temp);
             SDL_FreeSurface(temp);
         }

@@ -7,7 +7,6 @@
 #include "../Graphics/VertexBuffer.h"
 #include "../Graphics/IndexBuffer.h"
 #include "../Graphics/VertexArray.h"
-#include "../Graphics/SdlSurfaceTextureFactory.h"
 
 namespace Falltergeist
 {
@@ -15,11 +14,7 @@ namespace Falltergeist
     {
         using Game::Game;
 
-        Movie::Movie()
-        {
-            _width = 640;
-            _height = 320;
-            _texture = std::make_unique<Graphics::Texture>(_width,_height);
+        Movie::Movie() : _width(640), _height(320) {
         }
 
         Movie::~Movie()
@@ -38,12 +33,20 @@ namespace Falltergeist
 
         void Movie::loadFromSurface(SDL_Surface* surface)
         {
-            SdlSurfaceTextureFactory textureFactory;
-            _texture = textureFactory.createFromSurface(surface);
+            _texture = std::make_unique<Texture>(
+                Pixels(
+                surface->pixels,
+                Size(surface->w, surface->h),
+                Pixels::Format::RGBA
+                )
+            );
         }
 
         void Movie::render(int x, int y)
         {
+            if (!_texture) {
+                return;
+            }
             std::vector<glm::vec2> vertices;
             std::vector<glm::vec2> UV;
 
