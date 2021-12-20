@@ -55,7 +55,7 @@ namespace Falltergeist
 
             private:
                 std::shared_ptr<Graphics::Sprite> _sprite;
-                std::vector<SDL_Rect> _rects;
+                std::vector<Graphics::Rectangle> _rects;
                 unsigned int _currentState = 0;
                 Mode _mode = Mode::CYCLIC;
                 Size _size;

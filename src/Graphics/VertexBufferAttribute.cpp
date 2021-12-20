@@ -7,14 +7,8 @@ namespace Falltergeist {
             unsigned int index,
             unsigned int componentsCount,
             Type type,
-            bool normalized,
-            unsigned int stride
-        ) {
-            _index = index;
-            _componentsCount = componentsCount;
-            _type = type;
-            _normalized = normalized;
-            _stride = stride;
+            bool normalized
+        ) : _index(index), _componentsCount(componentsCount), _type(type), _normalized(normalized) {
         }
 
         unsigned int VertexBufferAttribute::index() const {
@@ -31,10 +25,6 @@ namespace Falltergeist {
 
         bool VertexBufferAttribute::normalized() const {
             return _normalized;
-        }
-
-        unsigned int VertexBufferAttribute::stride() const {
-            return _stride;
         }
 
         unsigned int VertexBufferAttribute::size() const {

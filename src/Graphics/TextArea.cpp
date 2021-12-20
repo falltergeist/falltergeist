@@ -41,7 +41,6 @@ namespace Falltergeist
         {
         }
 
-
         void TextArea::render(Point& pos, Graphics::Font* font, SDL_Color _color, SDL_Color _outlineColor)
         {
             if (_indexBuffer->count() == 0) {
@@ -89,9 +88,7 @@ namespace Falltergeist
             coordinatesVertexBufferLayout.addAttribute({
                (unsigned int) _attribPos,
                2,
-               VertexBufferAttribute::Type::Float,
-               false,
-               0
+               VertexBufferAttribute::Type::Float
             });
             _vertexArray->addBuffer(_coordinatesVertexBuffer, coordinatesVertexBufferLayout);
 
@@ -104,9 +101,7 @@ namespace Falltergeist
             textureCoordinatesVertexBufferLayout.addAttribute({
               (unsigned int) _attribTex,
               2,
-              VertexBufferAttribute::Type::Float,
-              false,
-              0
+              VertexBufferAttribute::Type::Float
             });
             _vertexArray->addBuffer(_textureCoordinatesVertexBuffer, textureCoordinatesVertexBufferLayout);
 

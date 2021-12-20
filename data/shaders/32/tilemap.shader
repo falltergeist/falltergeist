@@ -1,19 +1,15 @@
-#version 120
+#shader fragment
+#version 150
 
 uniform sampler2D tex;
 uniform vec4 fade;
 uniform int cnt[6];
 uniform int global_light;
-varying vec2 UV;
-
-bool almosteq(in float val, in float val2)
-{
-    return (val >= (val2-0.05) && val <= (val2 + 0.05));
-}
+in vec2 UV;
+out vec4 fragColor;
 
 void main(void)
 {
-
     const vec3 monitorsPalette[5] = vec3[](
         vec3(0.42, 0.42, 0.43),
         vec3(0.38, 0.40, 0.49),
@@ -58,46 +54,46 @@ void main(void)
         vec3(0.27, 0.0, 0.0)
     );
 
-    vec4 origColor = texture2D(tex, UV);
+    vec4 origColor = texture(tex, UV);
 
-    if (almosteq(origColor.a, 0.2) && almosteq(origColor.r, 0.6))
+    if (origColor.a == 0.2 && origColor.r == 0.6)
     {
         int index = int((origColor.b * 255.0) / 51.0);
         int newIndex;
 
         if (index<0) index = 0;
 
-        if (almosteq(origColor.g, 0.0))
+        if (origColor.g == 0.0)
         {
             if (index>3) index = 3;
-             newIndex = int(mod(((index) + cnt[0]), 4));
+             newIndex = ((index) + cnt[0]) % 4;
             origColor.rgb = slimePalette[(newIndex)];
         }
-        else if (almosteq(origColor.g, 0.2))
+        else if (origColor.g == 0.2)
         {
             if (index>4) index = 4;
-             newIndex = int(mod(((index) + cnt[1]), 5));
+             newIndex = ((index) + cnt[1]) % 5;
             origColor.rgb = monitorsPalette[(newIndex)];
         }
-        else if (almosteq(origColor.g, 0.4))
+        else if (origColor.g == 0.4)
         {
             if (index>4) index = 4;
-             newIndex = int(mod(((index) + cnt[2]), 5));
+             newIndex = ((index) + cnt[2]) % 5;
             origColor.rgb = fireSlowPalette[(newIndex)];
         }
-        else if (almosteq(origColor.g, 0.6))
+        else if (origColor.g == 0.6)
         {
             if (index>4) index = 4;
-             newIndex = int(mod(((index) + cnt[3]), 5));
+             newIndex = ((index) + cnt[3]) % 5;
             origColor.rgb = fireFastPalette[(newIndex)];
         }
-        else if (almosteq(origColor.g, 0.8))
+        else if (origColor.g == 0.8)
         {
             if (index>5) index = 5;
-             newIndex = int(mod(((index) + cnt[4]), 6));
+             newIndex = ((index) + cnt[4]) % 6;
             origColor.rgb = shorePalette[(newIndex)];
         }
-        else if (almosteq(origColor.g, 1.0))
+        else if (origColor.g == 1.0)
         {
             origColor.rgb = vec3((cnt[5]*4)/255.0,0,0);
         }
@@ -110,6 +106,21 @@ void main(void)
      origColor.rgb = origColor.rgb/100*global_light;
    }
 
-   gl_FragColor = mix(origColor, fade, fade.a);
-   gl_FragColor.a = origColor.a;
+   fragColor = mix(origColor, fade, fade.a);
+   fragColor.a = origColor.a;
+}
+
+#shader vertex
+#version 150
+
+uniform mat4 MVP;
+in vec2 Position;
+in vec2 TexCoord;
+uniform vec2 offset;
+out vec2 UV;
+
+void main(void)
+{
+  UV = TexCoord;
+  gl_Position = MVP*vec4(Position-offset, 0.0, 1.0);
 }

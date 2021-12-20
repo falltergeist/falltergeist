@@ -104,25 +104,20 @@ namespace Falltergeist
                 return;
             }
             if ((checkboxMode && _checked) || (_leftButtonPressed)) {
-                buttonDownSprite->render(position().x(), position().y());
+                buttonDownSprite->render(position());
                 return;
             }
 
-            buttonUpSprite->render(position().x(), position().y());
+            buttonUpSprite->render(position());
         }
 
         bool ImageButton::opaque(const Point &pos)
         {
-            return opaque(pos.x(),pos.y());
-        }
-
-        bool ImageButton::opaque(unsigned int x, unsigned int y)
-        {
             if ((checkboxMode && _checked) || (_hovered && _leftButtonPressed)) {
-                return buttonDownSprite->opaque(x, y);
+                return buttonDownSprite->opaque(pos);
             }
 
-            return buttonUpSprite->opaque(x, y);
+            return buttonUpSprite->opaque(pos);
         }
     }
 }

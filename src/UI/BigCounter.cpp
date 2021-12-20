@@ -54,7 +54,7 @@ namespace Falltergeist
                     num += 12;
                 }
                 SDL_Rect rect = _rects.at(num);
-                _sprite->renderCropped(position().x() + i * 14, position().y(), rect.x, rect.y, rect.w, rect.h);
+                _sprite->renderCropped(Point(position().x() + i * 14, position().y()), Graphics::Rectangle(Point(rect.x, rect.y), Size(rect.w, rect.h)));
             }
         }
 

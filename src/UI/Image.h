@@ -22,7 +22,6 @@ namespace Falltergeist
 
                 virtual void render(const Size &size, bool eggTransparency = false) override;
 
-                bool opaque(unsigned int x, unsigned int y);
                 virtual bool opaque(const Point &position) override;
 
                 virtual Size size() const override;

@@ -1,7 +1,6 @@
 #include "../Game/DudeObject.h"
 #include "../Game/Game.h"
 #include "../Graphics/AnimatedPalette.h"
-#include "../Graphics/GLCheck.h"
 #include "../Graphics/Sprite.h"
 #include "../LocationCamera.h"
 #include "../PathFinding/Hexagon.h"
@@ -42,40 +41,14 @@ namespace Falltergeist
         {
         }
 
-        Size Sprite::size() const
+        const Size& Sprite::size() const
         {
             return _texture->size();
         }
 
-        unsigned int Sprite::width() const
-        {
-            return _texture->size().width();
-        }
-
-        unsigned int Sprite::height() const
-        {
-            return _texture->size().height();
-        }
-
         // render, optionally scaled
-        void Sprite::renderScaled(int x, int y, const Size& size, bool transparency, bool light, int outline, unsigned int lightValue)
+        void Sprite::renderScaled(const Point& point, const Size& size, bool transparency, bool light, int outline, unsigned int lightValue)
         {
-            glm::vec2 vertices[4] = {
-                glm::vec2((float)x, (float)y),
-                glm::vec2((float)x, (float)(y + size.height())),
-                glm::vec2((float)(x + size.width()), (float)y),
-                glm::vec2((float)(x + size.width()), (float)(y + size.height()))
-            };
-            glm::vec2 UV[4] = {
-                glm::vec2(0.0, 0.0),
-                glm::vec2(0.0, 1.0),
-                glm::vec2(1.0, 0.0),
-                glm::vec2(1.0, 1.0)
-            };
-
-            x--;
-            y--;
-
             glm::vec2 eggVec;
             if (transparency)
             {
@@ -85,24 +58,23 @@ namespace Falltergeist
                 }
                 else {
                     auto camera = Game::getInstance()->locationState()->camera();
-                    Point eggPos = dude->hexagon()->position() - camera->topLeft() + dude->eggOffset();
+                    Rectangle eggRectangle(
+                        dude->hexagon()->position() - camera->topLeft() + dude->eggOffset(),
+                        Size(129, 98)
+                    );
 
-                    SDL_Rect egg_rect = {eggPos.x(), eggPos.y(), 129, 98};
-                    SDL_Rect tex_rect = {x, y, (int) _texture->size().width(), (int) _texture->size().height()};
+                    Rectangle textureRectangle(point, _texture->size());
 
-                    if (!SDL_HasIntersection(&egg_rect, &tex_rect)) {
+                    if (!eggRectangle.hasIntersectionWith(textureRectangle)) {
                         transparency = false;
                     }
                     else {
-                        eggVec = glm::vec2((float) (eggPos.x()-x), (float) (eggPos.y()-y));
+                        eggVec = glm::vec2((float) (eggRectangle.position().x() - point.x()), (float) (eggRectangle.position().y() - point.y()));
                     }
                 }
             }
 
             _shader->use();
-
-            _texture->bind(0);
-            Game::getInstance()->renderer()->egg()->bind(1);
 
             _shader->setUniform(_uniformTex, 0);
             _shader->setUniform(_uniformEggTex, 1);
@@ -137,66 +109,23 @@ namespace Falltergeist
                 _shader->setUniform(_uniformTexSize, glm::vec2((float)_texture->size().width(), (float)_texture->size().height()));
             }
 
-            VertexArray vertexArray;
-
-            std::unique_ptr<VertexBuffer> coordinatesVertexBuffer = std::make_unique<VertexBuffer>(
-                    &vertices[0],
-                    sizeof(vertices),
-                    VertexBuffer::UsagePattern::DynamicDraw
+            Game::getInstance()->renderer()->drawRectangle(
+                Rectangle(point, size),
+                _texture,
+                Game::getInstance()->renderer()->egg(),
+                _shader
             );
-            VertexBufferLayout coordinatesVertexBufferLayout;
-            coordinatesVertexBufferLayout.addAttribute({
-                    (unsigned int) _attribPos,
-                    2,
-                    VertexBufferAttribute::Type::Float,
-                    false,
-                    0
-            });
-            vertexArray.addBuffer(coordinatesVertexBuffer, coordinatesVertexBufferLayout);
-
-            std::unique_ptr<VertexBuffer> textureCoordinatesVertexBuffer = std::make_unique<VertexBuffer>(
-                    &UV[0],
-                    sizeof(UV),
-                    VertexBuffer::UsagePattern::DynamicDraw
-            );
-            VertexBufferLayout textureCoordinatesVertexBufferLayout;
-            textureCoordinatesVertexBufferLayout.addAttribute({
-                    (unsigned int) _attribTex,
-                    2,
-                    VertexBufferAttribute::Type::Float,
-                    false,
-                    0
-            });
-            vertexArray.addBuffer(textureCoordinatesVertexBuffer, textureCoordinatesVertexBufferLayout);
-
-            static unsigned int indexes[6] = { 0, 1, 2, 3, 2, 1 };
-            IndexBuffer indexBuffer(indexes, 6, IndexBuffer::UsagePattern::StaticDraw);
-
-            GL_CHECK(glDrawElements(GL_TRIANGLES, indexBuffer.count(), GL_UNSIGNED_INT, nullptr));
         }
 
-        void Sprite::render(int x, int y, bool transparency, bool light, int outline, unsigned int lightValue)
+        void Sprite::render(const Point& point, bool transparency, bool light, int outline, unsigned int lightValue)
         {
-            renderScaled(x, y, _texture->size(), transparency, light, outline, lightValue);
+            renderScaled(point, _texture->size(), transparency, light, outline, lightValue);
         }
 
         // render just a part of texture, unscaled
-        void Sprite::renderCropped(int x, int y, int dx, int dy, unsigned int width, unsigned int height, bool transparency,
+        void Sprite::renderCropped(const Point& point, const Rectangle& part, bool transparency,
                                    bool light, unsigned int lightValue)
         {
-            glm::vec2 vertices[4] = {
-                glm::vec2((float)x, (float)y),
-                glm::vec2((float)x, (float)(y + height)),
-                glm::vec2((float)(x + width), (float)y),
-                glm::vec2((float)(x + width), (float)(y + height))
-            };
-            glm::vec2 UV[4] = {
-                glm::vec2((float)dx / (float)_texture->size().width(), (float)dy / (float)_texture->size().height()),
-                glm::vec2((float)dx / (float)_texture->size().width(), (float)(dy + height) / (float)_texture->size().height()),
-                glm::vec2((float)(dx + width) / (float)_texture->size().width(), (float)dy / (float)_texture->size().height()),
-                glm::vec2((float)(dx + width) / (float)_texture->size().width(), (float)(dy + height) / (float)_texture->size().height())
-            };
-
             glm::vec2 eggVec;
             if (transparency)
             {
@@ -205,27 +134,23 @@ namespace Falltergeist
                     transparency = false;
                 } else {
                     auto camera = Game::getInstance()->locationState()->camera();
-                    Point eggPos = dude->hexagon()->position() - camera->topLeft() + dude->eggOffset();
+                    Rectangle eggRectangle(
+                        dude->hexagon()->position() - camera->topLeft() + dude->eggOffset(),
+                        Size(129, 98)
+                    );
 
-                    SDL_Rect egg_rect = {eggPos.x(), eggPos.y(), 129, 98};
-                    SDL_Rect tex_rect = {x, y, (int) _texture->size().width(), (int) _texture->size().height()};
+                    Rectangle textureRectangle(point, _texture->size());
 
-                    if (!SDL_HasIntersection(&egg_rect, &tex_rect))
-                    {
+                    if (!eggRectangle.hasIntersectionWith(textureRectangle)) {
                         transparency = false;
-                    }
-                    else
-                    {
-                        eggVec = glm::vec2((float) (eggPos.x() - x), (float) (eggPos.y() - y));
+                    } else {
+                        eggVec = glm::vec2((float) (eggRectangle.position().x() - point.x()), (float) (eggRectangle.position().y() - point.y()));
                     }
                 }
 
             }
 
             _shader->use();
-
-            _texture->bind(0);
-            Game::getInstance()->renderer()->egg()->bind(1);
 
             _shader->setUniform(_uniformTex, 0);
             _shader->setUniform(_uniformEggTex, 1);
@@ -259,47 +184,12 @@ namespace Falltergeist
                 _shader->setUniform(_uniformTexSize, glm::vec2((float)_texture->size().width(), (float)_texture->size().height()));
             }
 
-            VertexArray vertexArray;
-
-            std::unique_ptr<VertexBuffer> coordinatesVertexBuffer = std::make_unique<VertexBuffer>(
-                    &vertices[0],
-                    sizeof(vertices),
-                    VertexBuffer::UsagePattern::DynamicDraw
-            );
-            VertexBufferLayout coordinatesVertexBufferLayout;
-            coordinatesVertexBufferLayout.addAttribute({
-                   (unsigned int) _attribPos,
-                   2,
-                   VertexBufferAttribute::Type::Float,
-                   false,
-                   0
-            });
-            vertexArray.addBuffer(coordinatesVertexBuffer, coordinatesVertexBufferLayout);
-
-            std::unique_ptr<VertexBuffer> textureCoordinatesVertexBuffer = std::make_unique<VertexBuffer>(
-                    &UV[0],
-                    sizeof(UV),
-                    VertexBuffer::UsagePattern::DynamicDraw
-            );
-            VertexBufferLayout textureCoordinatesVertexBufferLayout;
-            textureCoordinatesVertexBufferLayout.addAttribute({
-                  (unsigned int) _attribTex,
-                  2,
-                  VertexBufferAttribute::Type::Float,
-                  false,
-                  0
-            });
-            vertexArray.addBuffer(textureCoordinatesVertexBuffer, textureCoordinatesVertexBufferLayout);
-
-            static unsigned int indexes[6] = { 0, 1, 2, 3, 2, 1 };
-            IndexBuffer indexBuffer(indexes, 6, IndexBuffer::UsagePattern::StaticDraw);
-
-            GL_CHECK(glDrawElements(GL_TRIANGLES, indexBuffer.count(), GL_UNSIGNED_INT, nullptr));
+            Game::getInstance()->renderer()->drawPartialRectangle(point, part, _texture, Game::getInstance()->renderer()->egg(), _shader);
         }
 
-        bool Sprite::opaque(unsigned int x, unsigned int y)
+        bool Sprite::opaque(const Point& point)
         {
-            return _texture->opaque(x+1, y+1);
+            return _texture->opaque(point.x() + 1, point.y() + 1);
         }
 
         void Sprite::trans(Graphics::TransFlags::Trans trans)

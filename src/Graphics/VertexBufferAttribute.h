@@ -12,22 +12,19 @@ namespace Falltergeist {
                 unsigned int index,
                 unsigned int componentsCount,
                 Type type,
-                bool normalized,
-                unsigned int stride
+                bool normalized = false
             );
 
             unsigned int index() const;
             unsigned int componentsCount() const;
             Type type() const;
             bool normalized() const;
-            unsigned int stride() const;
             unsigned int size() const;
         private:
             unsigned int _index;
             unsigned int _componentsCount;
             Type _type;
             bool _normalized;
-            unsigned int _stride;
         };
     }
 }

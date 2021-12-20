@@ -62,6 +62,22 @@ namespace Falltergeist
             return *this;
         }
 
+        bool Point::operator<(const Point &rhs) const {
+            return _x < rhs._x && _y < rhs._y;
+        }
+
+        bool Point::operator>(const Point &rhs) const {
+            return _x < rhs._x && _y < rhs._y;
+        }
+
+        bool Point::operator<=(const Point &rhs) const {
+            return operator<(rhs) || operator==(rhs);
+        }
+
+        bool Point::operator>=(const Point &rhs) const {
+            return operator>(rhs) || operator==(rhs);
+        }
+
         bool Point::operator ==(const Point& rhs) const
         {
             return _x == rhs._x && _y == rhs._y;

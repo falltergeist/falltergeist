@@ -5,6 +5,7 @@
 #include "../Graphics/Renderer.h"
 #include "../Graphics/GLCheck.h"
 #include "../Graphics/Shader.h"
+#include "../Graphics/ShaderFile.h"
 #include "../Logger.h"
 #define GLM_FORCE_RADIANS
 #include <glm/gtc/type_ptr.hpp>
@@ -15,7 +16,7 @@ namespace Falltergeist
     {
         using Game::Game;
 
-        Shader::Shader(std::string fname)
+        Shader::Shader(const std::string& fname)
         {
             _load(fname);
         }
@@ -61,7 +62,7 @@ namespace Falltergeist
             return shader;
         }
 
-        bool Shader::_load(std::string fname)
+        bool Shader::_load(const std::string& fname)
         {
             _progId = 0;
 
@@ -78,46 +79,12 @@ namespace Falltergeist
                     break;
             }
             // TODO: use resource manager
-            std::string fprog = std::string(CrossPlatform::findFalltergeistDataPath() + "/data/shaders/" +rpath +fname+".fp");
-            std::string vprog = std::string(CrossPlatform::findFalltergeistDataPath() + "/data/shaders/" +rpath +fname+".vp");
+            std::string pathToFile = CrossPlatform::findFalltergeistDataPath() + "/data/shaders/" + rpath + fname +".shader";
+            Logger::info("RENDERER") << "Loading shader " << pathToFile << std::endl;
+            ShaderFile shaderFile(pathToFile);
 
-            Logger::info("RENDERER") << "Loading shader " << fprog << std::endl;
-            Logger::info("RENDERER") << "Loading shader " << vprog << std::endl;
-
-            std::ifstream fpfile(fprog);
-            std::ifstream vpfile(vprog);
-
-            if (!fpfile.is_open())
-            {
-                throw Exception("Can't open shader source "+fprog);
-            }
-            if (!vpfile.is_open())
-            {
-                throw Exception("Can't open shader source "+vprog);
-            }
-
-            std::string fpsrc;
-            std::string vpsrc;
-
-            fpfile.seekg(0, std::ios::end);
-            fpsrc.reserve(static_cast<size_t>(fpfile.tellg()));
-            fpfile.seekg(0, std::ios::beg);
-
-            fpsrc.assign((std::istreambuf_iterator<char>(fpfile)),
-                       std::istreambuf_iterator<char>());
-            fpfile.close();
-
-            vpfile.seekg(0, std::ios::end);
-            vpsrc.reserve(static_cast<size_t>(vpfile.tellg()));
-            vpfile.seekg(0, std::ios::beg);
-
-            vpsrc.assign((std::istreambuf_iterator<char>(vpfile)),
-                         std::istreambuf_iterator<char>());
-            vpfile.close();
-
-
-            _shaders.push_back( _loadShader(fpsrc.c_str(), GL_FRAGMENT_SHADER) );
-            _shaders.push_back( _loadShader(vpsrc.c_str(), GL_VERTEX_SHADER) );
+            _shaders.push_back( _loadShader(shaderFile.fragmentSection().c_str(), GL_FRAGMENT_SHADER) );
+            _shaders.push_back( _loadShader(shaderFile.vertexSection().c_str(), GL_VERTEX_SHADER) );
 
             _progId = glCreateProgram();
 
@@ -156,7 +123,7 @@ namespace Falltergeist
             return true;
         }
 
-        void Shader::use()
+        void Shader::use() const
         {
             GLint cur;
             GL_CHECK(glGetIntegerv(GL_CURRENT_PROGRAM, &cur));
@@ -169,11 +136,6 @@ namespace Falltergeist
         void Shader::unuse()
         {
             glUseProgram(0);
-        }
-
-        GLuint Shader::id()
-        {
-            return _progId;
         }
 
         GLint Shader::getUniform(const std::string &uniform) const
