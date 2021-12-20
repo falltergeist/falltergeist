@@ -442,6 +442,81 @@ namespace Falltergeist
             drawRect(pos.x(), pos.y(), size.width(), size.height(), color);
         }
 
+        void Renderer::drawRectangle(const Point& position, const Size& size, const Texture* const texture)
+        {
+            std::vector<glm::vec2> vertices;
+            std::vector<glm::vec2> UV;
+
+            glm::vec2 vertex_up_left    = glm::vec2( (float) position.x(), (float) position.y());
+            glm::vec2 vertex_up_right   = glm::vec2( (float)(position.x() + size.width()), (float) position.y());
+            glm::vec2 vertex_down_right = glm::vec2( (float)(position.x() + size.width()), (float)(position.y() + size.height()));
+            glm::vec2 vertex_down_left  = glm::vec2( (float)position.x(), (float)(position.y() + size.height()));
+
+            vertices.push_back(vertex_up_left   );
+            vertices.push_back(vertex_down_left );
+            vertices.push_back(vertex_up_right  );
+            vertices.push_back(vertex_down_right);
+
+            glm::vec2 uv_up_left    = glm::vec2( 0.0, 0.0 );
+            glm::vec2 uv_up_right   = glm::vec2( 1.0, 0.0 );
+            glm::vec2 uv_down_right = glm::vec2( 1.0, 1.0);
+            glm::vec2 uv_down_left  = glm::vec2( 0.0, 1.0);
+
+            UV.push_back(uv_up_left   );
+            UV.push_back(uv_down_left );
+            UV.push_back(uv_up_right  );
+            UV.push_back(uv_down_right);
+
+            // TODO: different shader
+
+            auto spriteShader = ResourceManager::getInstance()->shader("sprite");
+            spriteShader->use();
+
+            texture->bind(0);
+
+            spriteShader->setUniform("tex",0);
+            spriteShader->setUniform("fade",Game::getInstance()->renderer()->fadeColor());
+            spriteShader->setUniform("MVP", Game::getInstance()->renderer()->getMVP());
+
+            VertexArray vertexArray;
+
+            std::unique_ptr<VertexBuffer> coordinatesVertexBuffer = std::make_unique<VertexBuffer>(
+                    &vertices[0],
+                    vertices.size() * sizeof(glm::vec2),
+                    VertexBuffer::UsagePattern::DynamicDraw
+            );
+            VertexBufferLayout coordinatesVertexBufferLayout;
+            coordinatesVertexBufferLayout.addAttribute({
+                                                               (unsigned int) spriteShader->getAttrib("Position"),
+                                                               2,
+                                                               VertexBufferAttribute::Type::Float,
+                                                               false,
+                                                               0
+                                                       });
+            vertexArray.addBuffer(coordinatesVertexBuffer, coordinatesVertexBufferLayout);
+
+            std::unique_ptr<VertexBuffer> textureCoordinatesVertexBuffer = std::make_unique<VertexBuffer>(
+                    &UV[0],
+                    UV.size() * sizeof(glm::vec2),
+                    VertexBuffer::UsagePattern::DynamicDraw
+            );
+            VertexBufferLayout textureCoordinatesVertexBufferLayout;
+            textureCoordinatesVertexBufferLayout.addAttribute({
+                                                                      (unsigned int) spriteShader->getAttrib("TexCoord"),
+                                                                      2,
+                                                                      VertexBufferAttribute::Type::Float,
+                                                                      false,
+                                                                      0
+                                                              });
+            vertexArray.addBuffer(textureCoordinatesVertexBuffer, textureCoordinatesVertexBufferLayout);
+
+            static unsigned int indexes[6] = { 0, 1, 2, 3, 2, 1 };
+            IndexBuffer indexBuffer(indexes, 6, IndexBuffer::UsagePattern::StaticDraw);
+
+            GL_CHECK(glDrawElements(GL_TRIANGLES, indexBuffer.count(), GL_UNSIGNED_INT, nullptr));
+        }
+
+
         glm::vec4 Renderer::fadeColor()
         {
             return glm::vec4((float)_fadeColor.r/255.0, (float)_fadeColor.g/255.0, (float)_fadeColor.b/255.0, (float)_fadeColor.a/255.0);

@@ -19,7 +19,7 @@ namespace Falltergeist
                 explicit Texture(const Pixels& pixels);
                 ~Texture();
 
-                void bind(uint8_t unit=0);
+                void bind(uint8_t unit=0) const;
                 void unbind(uint8_t unit=0);
 
                 bool opaque(unsigned int x, unsigned int y);

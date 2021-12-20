@@ -56,6 +56,7 @@ namespace Falltergeist
 
                 void drawRect(int x, int y, int w, int h, SDL_Color color);
                 void drawRect(const Point &pos, const Size &size, SDL_Color color);
+                void drawRectangle(const Point& position, const Size& size, const Texture* const texture);
 
                 glm::vec4 fadeColor();
 

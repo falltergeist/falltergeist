@@ -80,7 +80,7 @@ namespace Falltergeist
             if (!_timerStarted) {
                 return;
             }
-            _movie->render(_position.x(),_position.y());
+            _movie->render(_position);
         }
 
         SDL_Rect relClose(uint32_t b, int8_t sign, uint32_t _x, uint32_t _y)

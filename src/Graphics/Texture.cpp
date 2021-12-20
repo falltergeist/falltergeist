@@ -37,7 +37,7 @@ namespace Falltergeist {
             return _size;
         }
 
-        void Texture::bind(uint8_t unit) {
+        void Texture::bind(uint8_t unit) const {
             /*    if (unit > GL_MAX_TEXTURE_UNITS)
                 {
                     // die horribly
