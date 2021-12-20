@@ -1,18 +1,42 @@
+local graphics = require('graphics')
+
 local Button = {}
 
 function Button:new()
     local button = {}
     setmetatable(button, Button)
-    self.__index = self
-    self.pressed = false
-    self.sprite = -- load from 2 frm files
 
-    self.sprite:addEventHandler('mouse_in', function(event) self:onMouseIn(event) end)
-    self.sprite:addEventHandler('mouse_out', function(event) self:onMouseOut(event) end)
-    self.sprite:addEventHandler('mouse_down', function(event) self:onMouseDown(event) end)
-    self.sprite:addEventHandler('mouse_up', function(event) self:onMouseUp(event) end)
+    -- 26 is the menu button image size
+    self.buttonGroup = display.newGroup(26, 26)
 
-    return button
+    self.pressedImage = graphics.newImage('art/intrface/menudown.frm')
+    -- position is relative to the group
+    self.pressedImage.x = 0
+    self.pressedImage.y = 0
+    self.pressedImage:hide()
+    self.buttonGroup:add(pressedImage)
+
+    -- position is relative to the group
+    self.releasedImage = graphics.newImage('art/intrface/menuup.frm')
+    self.releasedImage.x = 0
+    self.releasedImage.x = 0
+    self.buttonGroup:add(releasedImage)
+
+    -- It should react on whole display group if no hit mask is provided
+    -- local hitMask = display.newHitmask('released_image.png')
+    -- button:setHitMask(hitMask)
+
+    self.buttonGroup:addEventHandler('mouse_down', function(event)
+        -- show pressed
+        -- hide released
+    end)
+
+    self.buttonGroup:addEventHandler('mouse_up', function(event)
+        -- show released
+        -- hide pressed
+    end)
+
+    return buttonGroup
 end
 
 function Button:debug()
@@ -22,25 +46,25 @@ end
 function Button:onMouseIn(event)
     if event.left_button_pressed then
         self.pressed = true
-        self.sprite.setFrame(pressed)
     end
 end
 
 function Button:onMouseOut(event)
     self.pressed = false
-    self.sprite.setFrame(released)
 end
 
 function Button:onMouseDown(event)
     -- if event.button = left_button
     self.pressed = true
-    self.sprite.setFrame(pressed)
+    self.imageReleased:hide()
+    self.imagePressed:show()
 end
 
 function Button:onMouseUp(event)
     -- if event.button = left_button
     self.pressed = false
-    self.sprite.setFrame(released)
+    self.imageReleased:show()
+    self.imagePressed:hide()
 end
 
 return Button

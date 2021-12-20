@@ -3,19 +3,11 @@
 -- local scene = sceneManager:new()
 
 local function createButton(x, y, name)
-    local button = {}
-    button.name = name
-
-    function button:onClick()
-        print('Button clicked: ', self.name)
-        self.image.x = self.image.x + 30
-    end
-
-    button.image = graphics.newImage("art/intrface/menuup.frm")
-    button.image.x = x
-    button.image.y = y
-    button.image:addEventListener("click", function() button:onClick() end)
-
+    local button = Button.new()
+    button.imagePressed.x = x
+    button.imagePressed.y = y
+    button.imageReleased.x = x
+    button.imageReleased.y = y
     return button
 end
 

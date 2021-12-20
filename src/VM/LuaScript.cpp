@@ -48,31 +48,62 @@ namespace Falltergeist {
                 lua_pop(L, 1);
                 Lua::EventHandlerContext eventHandlerContext(image_index,function_index);
 
-                image->mouseClickHandler().add([L, eventHandlerContext](Event::Mouse* event)->void {
-                    std::cout << "handler invoked" << std::endl;
-                    lua_rawgeti(L, LUA_REGISTRYINDEX, eventHandlerContext.handlerIndex);
-                    assert(lua_isfunction(L, -1));
+                if (strcmp(eventName, "mouse_down") == 0) {
+                    image->mouseDownHandler().add([L, eventHandlerContext](Event::Mouse* event)->void {
+                        std::cout << "handler invoked" << std::endl;
+                        lua_rawgeti(L, LUA_REGISTRYINDEX, eventHandlerContext.handlerIndex);
+                        assert(lua_isfunction(L, -1));
 
-                    lua_newtable(L);
+                        lua_newtable(L);
 
-                    lua_pushstring(L, "name");
-                    lua_pushstring(L, "click");
-                    lua_settable(L, -3);
+                        lua_pushstring(L, "name");
+                        lua_pushstring(L, "click");
+                        lua_settable(L, -3);
 
-                    lua_pushstring(L, "x");
-                    lua_pushnumber(L, event->position().x());
-                    lua_settable(L, -3);
+                        lua_pushstring(L, "x");
+                        lua_pushnumber(L, event->position().x());
+                        lua_settable(L, -3);
 
-                    lua_pushstring(L, "y");
-                    lua_pushnumber(L, event->position().y());
-                    lua_settable(L, -3);
+                        lua_pushstring(L, "y");
+                        lua_pushnumber(L, event->position().y());
+                        lua_settable(L, -3);
 
-                    lua_pushstring(L, "target");
-                    lua_rawgeti(L, LUA_REGISTRYINDEX, eventHandlerContext.targetIndex);
-                    lua_settable(L, -3);
+                        lua_pushstring(L, "target");
+                        lua_rawgeti(L, LUA_REGISTRYINDEX, eventHandlerContext.targetIndex);
+                        lua_settable(L, -3);
 
-                    lua_pcall(L, 1, 0, 0);
-                });
+                        lua_pcall(L, 1, 0, 0);
+                    });
+                }
+
+                if (strcmp(eventName, "mouse_up") == 0) {
+                    image->mouseUpHandler().add([L, eventHandlerContext](Event::Mouse* event)->void {
+                        std::cout << "handler invoked" << std::endl;
+                        lua_rawgeti(L, LUA_REGISTRYINDEX, eventHandlerContext.handlerIndex);
+                        assert(lua_isfunction(L, -1));
+
+                        lua_newtable(L);
+
+                        lua_pushstring(L, "name");
+                        lua_pushstring(L, "click");
+                        lua_settable(L, -3);
+
+                        lua_pushstring(L, "x");
+                        lua_pushnumber(L, event->position().x());
+                        lua_settable(L, -3);
+
+                        lua_pushstring(L, "y");
+                        lua_pushnumber(L, event->position().y());
+                        lua_settable(L, -3);
+
+                        lua_pushstring(L, "target");
+                        lua_rawgeti(L, LUA_REGISTRYINDEX, eventHandlerContext.targetIndex);
+                        lua_settable(L, -3);
+
+                        lua_pcall(L, 1, 0, 0);
+                    });
+                }
+
                 return 0;
             };
 
@@ -85,6 +116,12 @@ namespace Falltergeist {
             lua_settable(luaState, -3);
             lua_pushstring(luaState, "y");
             lua_pushcfunction(luaState, Lua::Graphics::Image::setY);
+            lua_settable(luaState, -3);
+            lua_pushstring(luaState, "show");
+            lua_pushcfunction(luaState, Lua::Graphics::Image::show);
+            lua_settable(luaState, -3);
+            lua_pushstring(luaState, "hide");
+            lua_pushcfunction(luaState, Lua::Graphics::Image::hide);
             lua_settable(luaState, -3);
             lua_setglobal(luaState, "Image");
 

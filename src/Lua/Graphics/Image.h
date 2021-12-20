@@ -80,5 +80,21 @@ namespace Falltergeist::Lua::Graphics {
                     image->setY((int) y);
                     return 0;
                 };
+
+                static int show(lua_State* L) {
+                    std::cout << "Image::show" << std::endl;
+                    assert(lua_isuserdata(L, -1));
+                    auto image = (UI::Image*)lua_touserdata(L, -1);
+                    image->setVisible(true);
+                    return 0;
+                }
+
+                static int hide(lua_State* L) {
+                    std::cout << "Image::hide" << std::endl;
+                    assert(lua_isuserdata(L, -1));
+                    auto image = (UI::Image*)lua_touserdata(L, -1);
+                    image->setVisible(false);
+                    return 0;
+                }
             };
         }
