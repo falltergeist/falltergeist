@@ -15,16 +15,13 @@ namespace Falltergeist
         {
             public:
 
-                Shader(std::string fname);
+                Shader(const std::string& fname);
 
                 ~Shader();
 
-                void use();
+                void use() const;
 
                 void unuse();
-
-                GLuint id();
-
 
                 void setUniform(const std::string &uniform, int i);
 
@@ -74,7 +71,7 @@ namespace Falltergeist
 
                 std::vector<GLuint> _shaders;
 
-                bool _load(std::string fname);
+                bool _load(const std::string& fname);
                 mutable std::map<std::string, GLint> _uniforms;
                 mutable std::map<std::string, GLint> _attribs;
         };

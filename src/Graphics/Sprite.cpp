@@ -50,19 +50,6 @@ namespace Falltergeist
         // render, optionally scaled
         void Sprite::renderScaled(const Point& point, const Size& size, bool transparency, bool light, int outline, unsigned int lightValue)
         {
-            glm::vec2 vertices[4] = {
-                glm::vec2((float) point.x(), (float) point.y()),
-                glm::vec2((float) point.x(), (float)(point.y() + size.height())),
-                glm::vec2((float)(point.x() + size.width()), (float) point.y()),
-                glm::vec2((float)(point.x() + size.width()), (float)(point.y() + size.height()))
-            };
-            glm::vec2 UV[4] = {
-                glm::vec2(0.0, 0.0),
-                glm::vec2(0.0, 1.0),
-                glm::vec2(1.0, 0.0),
-                glm::vec2(1.0, 1.0)
-            };
-
             glm::vec2 eggVec;
             if (transparency)
             {
@@ -89,9 +76,6 @@ namespace Falltergeist
             }
 
             _shader->use();
-
-            _texture->bind(0);
-            Game::getInstance()->renderer()->egg()->bind(1);
 
             _shader->setUniform(_uniformTex, 0);
             _shader->setUniform(_uniformEggTex, 1);
@@ -126,42 +110,12 @@ namespace Falltergeist
                 _shader->setUniform(_uniformTexSize, glm::vec2((float)_texture->size().width(), (float)_texture->size().height()));
             }
 
-            VertexArray vertexArray;
-
-            std::unique_ptr<VertexBuffer> coordinatesVertexBuffer = std::make_unique<VertexBuffer>(
-                    &vertices[0],
-                    sizeof(vertices),
-                    VertexBuffer::UsagePattern::DynamicDraw
+            Game::getInstance()->renderer()->drawRectangle(
+                Rectangle(point, size),
+                _texture,
+                Game::getInstance()->renderer()->egg(),
+                _shader
             );
-            VertexBufferLayout coordinatesVertexBufferLayout;
-            coordinatesVertexBufferLayout.addAttribute({
-                    (unsigned int) _attribPos,
-                    2,
-                    VertexBufferAttribute::Type::Float,
-                    false,
-                    0
-            });
-            vertexArray.addBuffer(coordinatesVertexBuffer, coordinatesVertexBufferLayout);
-
-            std::unique_ptr<VertexBuffer> textureCoordinatesVertexBuffer = std::make_unique<VertexBuffer>(
-                    &UV[0],
-                    sizeof(UV),
-                    VertexBuffer::UsagePattern::DynamicDraw
-            );
-            VertexBufferLayout textureCoordinatesVertexBufferLayout;
-            textureCoordinatesVertexBufferLayout.addAttribute({
-                    (unsigned int) _attribTex,
-                    2,
-                    VertexBufferAttribute::Type::Float,
-                    false,
-                    0
-            });
-            vertexArray.addBuffer(textureCoordinatesVertexBuffer, textureCoordinatesVertexBufferLayout);
-
-            static unsigned int indexes[6] = { 0, 1, 2, 3, 2, 1 };
-            IndexBuffer indexBuffer(indexes, 6, IndexBuffer::UsagePattern::StaticDraw);
-
-            GL_CHECK(glDrawElements(GL_TRIANGLES, indexBuffer.count(), GL_UNSIGNED_INT, nullptr));
         }
 
         void Sprite::render(const Point& point, bool transparency, bool light, int outline, unsigned int lightValue)

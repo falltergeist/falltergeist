@@ -15,7 +15,7 @@ namespace Falltergeist
     {
         using Game::Game;
 
-        Shader::Shader(std::string fname)
+        Shader::Shader(const std::string& fname)
         {
             _load(fname);
         }
@@ -61,7 +61,7 @@ namespace Falltergeist
             return shader;
         }
 
-        bool Shader::_load(std::string fname)
+        bool Shader::_load(const std::string& fname)
         {
             _progId = 0;
 
@@ -156,7 +156,7 @@ namespace Falltergeist
             return true;
         }
 
-        void Shader::use()
+        void Shader::use() const
         {
             GLint cur;
             GL_CHECK(glGetIntegerv(GL_CURRENT_PROGRAM, &cur));
@@ -169,11 +169,6 @@ namespace Falltergeist
         void Shader::unuse()
         {
             glUseProgram(0);
-        }
-
-        GLuint Shader::id()
-        {
-            return _progId;
         }
 
         GLint Shader::getUniform(const std::string &uniform) const

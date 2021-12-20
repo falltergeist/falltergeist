@@ -34,7 +34,7 @@ namespace Falltergeist
                 return;
             }
 
-            Game::getInstance()->renderer()->drawRectangle(point, _size, _texture.get());
+            Game::getInstance()->renderer()->drawRectangle(Rectangle(point, _size), _texture.get());
         }
     }
 }

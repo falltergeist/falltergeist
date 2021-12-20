@@ -8,6 +8,8 @@
 #include <SDL.h>
 #include "../Graphics/IRendererConfig.h"
 #include "../Graphics/Point.h"
+#include "../Graphics/Rectangle.h"
+#include "../Graphics/Shader.h"
 #include "../Graphics/Size.h"
 #include "../ILogger.h"
 
@@ -56,7 +58,8 @@ namespace Falltergeist
 
                 void drawRect(int x, int y, int w, int h, SDL_Color color);
                 void drawRect(const Point &pos, const Size &size, SDL_Color color);
-                void drawRectangle(const Point& position, const Size& size, const Texture* const texture);
+                void drawRectangle(const Rectangle& rectangle, const Texture* const texture);
+                void drawRectangle(const Rectangle& rectangle, const Texture* const texture, const Texture* const egg, const Shader* const shader);
 
                 glm::vec4 fadeColor();
 

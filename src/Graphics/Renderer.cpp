@@ -442,15 +442,15 @@ namespace Falltergeist
             drawRect(pos.x(), pos.y(), size.width(), size.height(), color);
         }
 
-        void Renderer::drawRectangle(const Point& position, const Size& size, const Texture* const texture)
+        void Renderer::drawRectangle(const Rectangle& rectangle, const Texture* const texture)
         {
             std::vector<glm::vec2> vertices;
             std::vector<glm::vec2> UV;
 
-            glm::vec2 vertex_up_left    = glm::vec2( (float) position.x(), (float) position.y());
-            glm::vec2 vertex_up_right   = glm::vec2( (float)(position.x() + size.width()), (float) position.y());
-            glm::vec2 vertex_down_right = glm::vec2( (float)(position.x() + size.width()), (float)(position.y() + size.height()));
-            glm::vec2 vertex_down_left  = glm::vec2( (float)position.x(), (float)(position.y() + size.height()));
+            glm::vec2 vertex_up_left    = glm::vec2( (float) rectangle.position().x(), (float) rectangle.position().y());
+            glm::vec2 vertex_up_right   = glm::vec2( (float)(rectangle.position().x() + rectangle.size().width()), (float) rectangle.position().y());
+            glm::vec2 vertex_down_right = glm::vec2( (float)(rectangle.position().x() + rectangle.size().width()), (float)(rectangle.position().y() + rectangle.size().height()));
+            glm::vec2 vertex_down_left  = glm::vec2( (float)rectangle.position().x(), (float)(rectangle.position().y() + rectangle.size().height()));
 
             vertices.push_back(vertex_up_left   );
             vertices.push_back(vertex_down_left );
@@ -516,6 +516,64 @@ namespace Falltergeist
             GL_CHECK(glDrawElements(GL_TRIANGLES, indexBuffer.count(), GL_UNSIGNED_INT, nullptr));
         }
 
+        void Renderer::drawRectangle(const Rectangle& rectangle, const Texture* const texture, const Texture* const egg, const Shader* const shader)
+        {
+            glm::vec2 vertices[4] = {
+                    glm::vec2((float) rectangle.position().x(), (float) rectangle.position().y()),
+                    glm::vec2((float) rectangle.position().x(), (float)(rectangle.position().y() + rectangle.size().height())),
+                    glm::vec2((float)(rectangle.position().x() + rectangle.size().width()), (float) rectangle.position().y()),
+                    glm::vec2((float)(rectangle.position().x() + rectangle.size().width()), (float)(rectangle.position().y() + rectangle.size().height()))
+            };
+            glm::vec2 UV[4] = {
+                    glm::vec2(0.0, 0.0),
+                    glm::vec2(0.0, 1.0),
+                    glm::vec2(1.0, 0.0),
+                    glm::vec2(1.0, 1.0)
+            };
+
+            shader->use();
+
+            texture->bind(0);
+            egg->bind(1);
+
+            VertexArray vertexArray;
+
+            std::unique_ptr<VertexBuffer> coordinatesVertexBuffer = std::make_unique<VertexBuffer>(
+                    &vertices[0],
+                    sizeof(vertices),
+                    VertexBuffer::UsagePattern::DynamicDraw
+            );
+
+            VertexBufferLayout coordinatesVertexBufferLayout;
+            coordinatesVertexBufferLayout.addAttribute({
+                                                               (unsigned int) shader->getAttrib("Position"),
+                                                               2,
+                                                               VertexBufferAttribute::Type::Float,
+                                                               false,
+                                                               0
+                                                       });
+            vertexArray.addBuffer(coordinatesVertexBuffer, coordinatesVertexBufferLayout);
+
+            std::unique_ptr<VertexBuffer> textureCoordinatesVertexBuffer = std::make_unique<VertexBuffer>(
+                    &UV[0],
+                    sizeof(UV),
+                    VertexBuffer::UsagePattern::DynamicDraw
+            );
+            VertexBufferLayout textureCoordinatesVertexBufferLayout;
+            textureCoordinatesVertexBufferLayout.addAttribute({
+                                                                      (unsigned int) shader->getAttrib("TexCoord"),
+                                                                      2,
+                                                                      VertexBufferAttribute::Type::Float,
+                                                                      false,
+                                                                      0
+                                                              });
+            vertexArray.addBuffer(textureCoordinatesVertexBuffer, textureCoordinatesVertexBufferLayout);
+
+            static unsigned int indexes[6] = { 0, 1, 2, 3, 2, 1 };
+            IndexBuffer indexBuffer(indexes, 6, IndexBuffer::UsagePattern::StaticDraw);
+
+            GL_CHECK(glDrawElements(GL_TRIANGLES, indexBuffer.count(), GL_UNSIGNED_INT, nullptr));
+        }
 
         glm::vec4 Renderer::fadeColor()
         {
