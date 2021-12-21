@@ -77,7 +77,9 @@ namespace Falltergeist
 
         void CritterInteract::init()
         {
-            if (_initialized) return;
+            if (_initialized) {
+                return;
+            }
             State::init();
 
             setFullscreen(false);

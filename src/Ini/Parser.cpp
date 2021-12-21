@@ -29,12 +29,16 @@ namespace Falltergeist
                 line.erase(line.find(";"));
             }
 
-            line.erase(find_if(line.rbegin(), line.rend(), std::not_fn(::isspace)).base(), line.end());
+            line.erase(std::find_if(line.rbegin(), line.rend(), [](unsigned char c) {
+                return !std::isspace(c);
+            }).base(), line.end());
         }
 
         void Parser::_ltrim(std::string &line)
         {
-            line.erase(line.begin(), find_if(line.begin(), line.end(), std::not_fn(::isspace)));
+            line.erase(line.begin(), std::find_if(line.begin(), line.end(), [](unsigned char c) {
+                return !std::isspace(c);
+            }));
         }
 
         void Parser::_toLower(std::string &line)
@@ -267,8 +271,12 @@ namespace Falltergeist
             {
                 std::string val=ss.substr(0,ss.find(","));
                 ss.erase(0,ss.find(",")+1);
-                if (_parseArrayDecimal(_vec,val)) continue;
-                if (_parseArrayBool(_vec,val)) continue;
+                if (_parseArrayDecimal(_vec,val)) {
+                    continue;
+                }
+                if (_parseArrayBool(_vec,val)) {
+                    continue;
+                }
                 Logger::debug("INI") << "string value found for property `" << "`: " << val << std::endl;
                 _vec.push_back(Value(val));
             }
@@ -296,13 +304,17 @@ namespace Falltergeist
             while (std::getline(_stream, line))
             {
                 // Lines starting with "#" or ";" are treated as comments and ignored
-                if (line[0] == '#' || line[0] == ';') continue;
+                if (line[0] == '#' || line[0] == ';') {
+                    continue;
+                }
 
                 // Prepare line
                 _trim(line);
 
                 // Skip empty lines
-                if (line.length() == 0) continue;
+                if (line.length() == 0) {
+                    continue;
+                }
 
                 // Found section
                 if (*line.begin() == '[' && *line.rbegin() == ']')
@@ -330,11 +342,17 @@ namespace Falltergeist
                 _toLower(name);
 
                 // Try to parse boolean
-                if (_parseBool(name, value, ini)) continue;
+                if (_parseBool(name, value, ini)) {
+                    continue;
+                }
                 // Try to parse decimal (double or integer)
-                if (_parseDecimal(name, value, ini)) continue;
+                if (_parseDecimal(name, value, ini)) {
+                    continue;
+                }
                 // Try to parse array
-                if (_parseArray(name, value, ini)) continue;
+                if (_parseArray(name, value, ini)) {
+                    continue;
+                }
 
                 // Interpret value as string if none of other parsers succeeded
                 Logger::debug("INI") << "string value found for property `" << name << "`: " << value << std::endl;

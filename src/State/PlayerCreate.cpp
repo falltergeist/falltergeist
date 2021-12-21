@@ -36,7 +36,9 @@ namespace Falltergeist
 
         void PlayerCreate::init()
         {
-            if (_initialized) return;
+            if (_initialized) {
+                return;
+            }
             State::init();
 
             setFullscreen(true);
@@ -367,7 +369,9 @@ namespace Falltergeist
             // Selected labels colors
             for(auto it = _labels.begin(); it != _labels.end(); ++it)
             {
-                if (_selectedLabel != it->second) continue;
+                if (_selectedLabel != it->second) {
+                    continue;
+                }
 
                 std::string name = it->first;
 
@@ -415,7 +419,9 @@ namespace Falltergeist
         bool PlayerCreate::_statDecrease(unsigned int num)
         {
             auto player = Game::Game::getInstance()->player();
-            if (player->stat((STAT)num) <= 1) return false;
+            if (player->stat((STAT)num) <= 1) {
+                return false;
+            }
 
             player->setStat((STAT)num, player->stat((STAT)num) - 1);
             player->setStatsPoints(player->statsPoints() + 1);
@@ -425,9 +431,13 @@ namespace Falltergeist
         bool PlayerCreate::_statIncrease(unsigned int num)
         {
             auto player = Game::Game::getInstance()->player();
-            if (player->statsPoints() <= 0) return false;
+            if (player->statsPoints() <= 0) {
+                return false;
+            }
 
-            if (player->stat((STAT)num) + player->statBonus((STAT)num) >= 10) return false;
+            if (player->stat((STAT)num) + player->statBonus((STAT)num) >= 10) {
+                return false;
+            }
 
             player->setStat((STAT)num, player->stat((STAT)num) + 1);
             player->setStatsPoints(player->statsPoints() - 1);
@@ -447,7 +457,9 @@ namespace Falltergeist
                 unsigned int selectedTraits = 0;
                 for (unsigned i = (unsigned)TRAIT::FAST_METABOLISM; i <= (unsigned)TRAIT::GIFTED; i++)
                 {
-                    if (player->traitTagged((TRAIT)i)) selectedTraits++;
+                    if (player->traitTagged((TRAIT)i)) {
+                        selectedTraits++;
+                    }
                 }
                 if (selectedTraits < 2)
                 {
@@ -489,15 +501,26 @@ namespace Falltergeist
                 {
                     std::string name = it->first;
 
-                    if (name == "name") return onNameButtonClick(event);
-                    if (name == "age")  return onAgeButtonClick(event);
-                    if (name == "gender") return onGenderButtonClick(event);
-                    if (name == "cancel") return onBackButtonClick(event);
-                    if (name == "done") return onDoneButtonClick(event);
-                    if (name == "options") return onOptionsButtonClick(event);
+                    if (name == "name") {
+                        return onNameButtonClick(event);
+                    }
+                    if (name == "age") {
+                        return onAgeButtonClick(event);
+                    }
+                    if (name == "gender") {
+                        return onGenderButtonClick(event);
+                    }
+                    if (name == "cancel") {
+                        return onBackButtonClick(event);
+                    }
+                    if (name == "done") {
+                        return onDoneButtonClick(event);
+                    }
+                    if (name == "options") {
+                        return onOptionsButtonClick(event);
+                    }
 
-                    if (name.find("stats_") == 0)
-                    {
+                    if (name.find("stats_") == 0) {
                         _selectedLabel = _labels.at(name.substr(0,7));
 
                         _selectedImage = _images.at(name.substr(0,7));

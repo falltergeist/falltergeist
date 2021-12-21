@@ -27,7 +27,9 @@ namespace Falltergeist
 
         void PlayerEditAlert::init()
         {
-            if (_initialized) return;
+            if (_initialized) {
+                return;
+            }
             State::init();
 
             setFullscreen(false);

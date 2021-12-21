@@ -628,8 +628,12 @@ namespace Falltergeist
             width = get_short(data) * 8;
             height = get_short(data+2) * 8;
 
-            if (_currentBuf != nullptr) return;
-            if (_backBuf != nullptr) return;
+            if (_currentBuf != nullptr) {
+                return;
+            }
+            if (_backBuf != nullptr) {
+                return;
+            }
 
             _currentBuf = SDL_CreateRGBSurface(0, width, height, 8, 0, 0, 0, 0);
             if (!_currentBuf)
@@ -643,7 +647,9 @@ namespace Falltergeist
                 throw new Exception(SDL_GetError());
             }
 
-            if (_decodingMap != nullptr) return;
+            if (_decodingMap != nullptr) {
+                return;
+            }
             // decoding map is 4 bits per 8x8 block
             _decodingMap = new uint8_t [(width*height / (8*8))];
 
@@ -682,11 +688,15 @@ namespace Falltergeist
             int16_t *buf = (int16_t*)data;
             while (res < len / 2)
             {
-                if (_samplesReady <= 0) break;
+                if (_samplesReady <= 0) {
+                    break;
+                }
                 *buf = _audioBuf[_audioBufHead];
                 buf++;
                 _audioBufHead++;
-                if (_audioBufHead >= _audioBufSize) _audioBufHead = 0;
+                if (_audioBufHead >= _audioBufSize) {
+                    _audioBufHead = 0;
+                }
                 res++;
                 _samplesReady--;
             }
@@ -704,11 +714,15 @@ namespace Falltergeist
             _audioBuf[_audioBufTail] = left;
             _audioBufTail++;
             _samplesReady++;
-            if (_audioBufTail >= _audioBufSize) _audioBufTail = 0;
+            if (_audioBufTail >= _audioBufSize) {
+                _audioBufTail = 0;
+            }
             _audioBuf[_audioBufTail] = right;
             _audioBufTail++;
             _samplesReady++;
-            if (_audioBufTail >= _audioBufSize) _audioBufTail = 0;
+            if (_audioBufTail >= _audioBufSize) {
+                _audioBufTail = 0;
+            }
 
             for (int32_t i = 0; i < strlen/2-2; i++)
             {
@@ -726,7 +740,9 @@ namespace Falltergeist
                 }
                 _audioBufTail++;
                 _samplesReady++;
-                if (_audioBufTail >= _audioBufSize) _audioBufTail = 0;
+                if (_audioBufTail >= _audioBufSize) {
+                    _audioBufTail = 0;
+                }
             }
         }
 

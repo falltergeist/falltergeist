@@ -77,7 +77,9 @@ namespace Falltergeist
 
         bool Section::_hasType(PropertyMapConstIterator iter, Value::Tag tag)
         {
-            if (iter->second._tag == tag) return true;
+            if (iter->second._tag == tag) {
+                return true;
+            }
             Logger::warning("INI")
                     << "Property `" << iter->first
                     << " `expected to be " << Value::tagString(tag)

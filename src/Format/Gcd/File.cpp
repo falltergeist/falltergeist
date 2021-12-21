@@ -110,85 +110,113 @@ namespace Falltergeist
 
             uint32_t File::stat(STAT number) const
             {
-                if (number > STAT::LUCK) throw Exception("File::stat() - number out of range: " + std::to_string((unsigned)number));
+                if (number > STAT::LUCK) {
+                    throw Exception("File::stat() - number out of range: " + std::to_string((unsigned)number));
+                }
                 return _stats.at((unsigned)number);
             }
 
             void File::setStat(STAT number, uint32_t value)
             {
-                if (number > STAT::LUCK) throw Exception("File::setStat() - number out of range: " + std::to_string((unsigned)number));
+                if (number > STAT::LUCK) {
+                    throw Exception("File::setStat() - number out of range: " + std::to_string((unsigned)number));
+                }
                 _stats.at((unsigned)number) = value;
             }
 
             uint32_t File::statBonus(STAT number) const
             {
-                if (number > STAT::LUCK) throw Exception("File::statBonus() - number out of range: " + std::to_string((unsigned)number));
+                if (number > STAT::LUCK) {
+                    throw Exception("File::statBonus() - number out of range: " + std::to_string((unsigned)number));
+                }
                 return _statsBonus.at((unsigned)number);
             }
 
             void File::setStatBonus(STAT number, uint32_t value)
             {
-                if (number > STAT::LUCK) throw Exception("File::setStatBonus() - number out of range: " + std::to_string((unsigned)number));
+                if (number > STAT::LUCK) {
+                    throw Exception("File::setStatBonus() - number out of range: " + std::to_string((unsigned)number));
+                }
                 _statsBonus.at((unsigned)number) = value;
             }
 
             uint32_t File::skill(SKILL number) const
             {
-                if (number > SKILL::OUTDOORSMAN) throw Exception("File::skill() - number out of range: " + std::to_string((unsigned)number));
+                if (number > SKILL::OUTDOORSMAN) {
+                    throw Exception("File::skill() - number out of range: " + std::to_string((unsigned)number));
+                }
                 return _skills.at((unsigned)number);
             }
 
             void File::setSkill(SKILL number, uint32_t value)
             {
-                if (number > SKILL::OUTDOORSMAN) throw Exception("File::setSkill() - number out of range: " + std::to_string((unsigned)number));
+                if (number > SKILL::OUTDOORSMAN) {
+                    throw Exception("File::setSkill() - number out of range: " + std::to_string((unsigned)number));
+                }
                 _skills.at((unsigned)number) = value;
             }
 
             uint32_t File::damage(DAMAGE type) const
             {
-                if (type > DAMAGE::EXPLOSIVE) throw Exception("File::damage() - type out of range: " + std::to_string((unsigned)type));
+                if (type > DAMAGE::EXPLOSIVE) {
+                    throw Exception("File::damage() - type out of range: " + std::to_string((unsigned)type));
+                }
                 return _damage.at((unsigned)type);
             }
 
             void File::setDamage(DAMAGE type, uint32_t value)
             {
-                if (type > DAMAGE::EXPLOSIVE) throw Exception("File::setDamage() - type out of range: " + std::to_string((unsigned)type));
+                if (type > DAMAGE::EXPLOSIVE) {
+                    throw Exception("File::setDamage() - type out of range: " + std::to_string((unsigned)type));
+                }
                 _damage.at((unsigned)type) = value;
             }
 
             uint32_t File::damageBonus(DAMAGE type) const
             {
-                if (type > DAMAGE::EXPLOSIVE) throw Exception("File::damageBonus() - type out of range: " + std::to_string((unsigned)type));
+                if (type > DAMAGE::EXPLOSIVE) {
+                    throw Exception("File::damageBonus() - type out of range: " + std::to_string((unsigned)type));
+                }
                 return _damageBonus.at((unsigned)type);
             }
 
             void File::setDamageBonus(DAMAGE type, uint32_t value)
             {
-                if (type > DAMAGE::EXPLOSIVE) throw Exception("File::setDamageBonus() - type out of range: " + std::to_string((unsigned)type));
+                if (type > DAMAGE::EXPLOSIVE) {
+                    throw Exception("File::setDamageBonus() - type out of range: " + std::to_string((unsigned)type));
+                }
                 _damageBonus.at((unsigned)type) = value;
             }
 
             uint32_t File::resistance(DAMAGE type) const
             {
-                if (type > DAMAGE::EXPLOSIVE) throw Exception("File::resistance() - type out of range: " + std::to_string((unsigned)type));
+                if (type > DAMAGE::EXPLOSIVE) {
+                    throw Exception("File::resistance() - type out of range: " + std::to_string((unsigned)type));
+                }
                 return _resistance.at((unsigned)type);
             }
 
             void File::setResistance(DAMAGE type, uint32_t value)
             {
-                if (type > DAMAGE::EXPLOSIVE) throw Exception("File::setResistance() - type out of range: " + std::to_string((unsigned)type));
+                if (type > DAMAGE::EXPLOSIVE) {
+                    throw Exception("File::setResistance() - type out of range: " + std::to_string((unsigned)type));
+                }
                 _resistance.at((unsigned)type) = value;
             }
 
             uint32_t File::resistanceBonus(DAMAGE type) const
             {
-                if (type > DAMAGE::EXPLOSIVE) throw Exception("File::resistanceBonus() - type out of range: " + std::to_string((unsigned)type));
+                if (type > DAMAGE::EXPLOSIVE) {
+                    throw Exception("File::resistanceBonus() - type out of range: " + std::to_string((unsigned)type));
+                }
                 return _resistanceBonus.at((unsigned)type);
             }
 
             void File::setResistanceBonus(DAMAGE type, uint32_t value)
             {
-                if (type > DAMAGE::EXPLOSIVE) throw Exception("File::setResistanceBonus() - type out of range: " + std::to_string((unsigned)type));
+                if (type > DAMAGE::EXPLOSIVE) {
+                    throw Exception("File::setResistanceBonus() - type out of range: " + std::to_string((unsigned)type));
+                }
                 _resistanceBonus.at((unsigned)type) = value;
             }
 

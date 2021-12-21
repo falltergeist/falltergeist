@@ -22,7 +22,9 @@ namespace Falltergeist
             {
                 logger->debug() << "[80D4] [+] int tile_num(GameObject* object)" << std::endl;
                 auto object = _script->dataStack()->popObject();
-                if (!object) _error("tile_num - object is NULL");
+                if (!object) {
+                    _error("tile_num - object is NULL");
+                }
                 _script->dataStack()->push((int) object->hexagon()->number());
             }
         }

@@ -34,7 +34,9 @@ namespace Falltergeist
 
         void ImageButton::_onMouseClick(Event::Mouse* event)
         {
-            if(!_enabled) return;
+            if(!_enabled) {
+                return;
+            }
             auto sender = dynamic_cast<ImageButton*>(event->target());
             if (sender->checkboxMode) {
                 sender->_checked = !sender->_checked;

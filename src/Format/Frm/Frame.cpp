@@ -44,7 +44,9 @@ namespace Falltergeist
 
             uint8_t Frame::index(uint16_t x, uint16_t y) const
             {
-                if (x >= _width || y >= _height) return 0;
+                if (x >= _width || y >= _height) {
+                    return 0;
+                }
 
                 return _indexes.at(_width*y + x);
             }

@@ -30,7 +30,9 @@ namespace Falltergeist
 
         void LoadGame::init()
         {
-            if (_initialized) return;
+            if (_initialized) {
+                return;
+            }
             State::init();
 
             setModal(true);
@@ -112,8 +114,9 @@ namespace Falltergeist
 
         void LoadGame::onStateActivate(Event::State* event)
         {
-            if (!Game::Game::getInstance()->locationState())
-                Game::Game::getInstance()->renderer()->fadeIn(0,0,0,1000);
+            if (!Game::Game::getInstance()->locationState()) {
+                Game::Game::getInstance()->renderer()->fadeIn(0, 0, 0, 1000);
+            }
             Game::Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::BIG_ARROW);
         }
 

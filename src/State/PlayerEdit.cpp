@@ -33,7 +33,9 @@ namespace Falltergeist
 
         void PlayerEdit::init()
         {
-            if (_initialized) return;
+            if (_initialized) {
+                return;
+            }
             State::init();
 
             setModal(true);
@@ -483,7 +485,9 @@ namespace Falltergeist
             // Selected labels colors
             for(auto it = _labels.begin(); it != _labels.end(); ++it)
             {
-                if (_selectedLabel != it->second) continue;
+                if (_selectedLabel != it->second) {
+                    continue;
+                }
 
                 std::string name = it->first;
 
@@ -538,8 +542,12 @@ namespace Falltergeist
                 {
                     std::string name = it->first;
 
-                    if (name == "cancel") return doCancel();
-                    if (name == "done") return doDone();
+                    if (name == "cancel") {
+                        return doCancel();
+                    }
+                    if (name == "done") {
+                        return doDone();
+                    }
 
                 }
             }

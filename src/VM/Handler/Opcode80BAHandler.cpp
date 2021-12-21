@@ -24,9 +24,17 @@ namespace Falltergeist
                 auto critter = dynamic_cast<Game::CritterObject *>(object);
                 auto container = dynamic_cast<Game::ContainerItemObject *>(object);
                 if (critter) {
-                    for (auto object : *critter->inventory()) if (object->PID() == PID) amount += object->amount();
+                    for (auto object : *critter->inventory()) {
+                        if (object->PID() == PID) {
+                            amount += object->amount();
+                        }
+                    }
                 } else if (container) {
-                    for (auto object : *container->inventory()) if (object->PID() == PID) amount += object->amount();
+                    for (auto object : *container->inventory()) {
+                        if (object->PID() == PID) {
+                            amount += object->amount();
+                        }
+                    }
                 } else {
                     _error("obj_is_carrying_obj_pid - invalid object type");
                 }

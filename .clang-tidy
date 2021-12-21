@@ -1,0 +1,9 @@
+Checks: "-*,\
+  readability-braces-around-statements\
+"
+
+WarningsAsErrors: "*"
+
+CheckOptions:
+
+HeaderFilterRegex: ".*"

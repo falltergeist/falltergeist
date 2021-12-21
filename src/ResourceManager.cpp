@@ -397,7 +397,9 @@ namespace Falltergeist {
     Frm::File *ResourceManager::frmFileType(unsigned int FID) {
         const auto &frmName = FIDtoFrmName(FID);
 
-        if (frmName.empty()) return nullptr;
+        if (frmName.empty()) {
+            return nullptr;
+        }
         return frmFileType(frmName);
     }
 

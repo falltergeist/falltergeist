@@ -42,10 +42,14 @@ namespace Falltergeist
             void File::_addString(std::string line)
             {
                 // strip comments
-                if (auto pos = line.find(";")) line = line.substr(0, pos);
+                if (auto pos = line.find(";")) {
+                    line = line.substr(0, pos);
+                }
 
                 // rtrim
-                line.erase(std::find_if(line.rbegin(), line.rend(), std::not_fn(::isspace)).base(), line.end());
+                line.erase(std::find_if(line.rbegin(), line.rend(), [](unsigned char c) {
+                    return !std::isspace(c);
+                }).base(), line.end());
 
                 // replace slashes
                 std::replace(line.begin(),line.end(),'\\','/');

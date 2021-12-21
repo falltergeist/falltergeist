@@ -66,7 +66,9 @@ namespace Falltergeist
 
         void Mixer::_musicCallback(void *udata, uint8_t *stream, uint32_t len)
         {
-            if (_paused) return;
+            if (_paused) {
+                return;
+            }
 
             auto pacm = (Format::Acm::File*)(udata);
             if (pacm->samplesLeft() <= 0)
@@ -93,7 +95,9 @@ namespace Falltergeist
         {
             Mix_HookMusic(NULL, NULL);
             auto acm = ResourceManager::getInstance()->acmFileType(Game::getInstance()->settings()->musicPath()+filename);
-            if (!acm) return;
+            if (!acm) {
+                return;
+            }
             _lastMusic = filename;
             _loop = loop;
             musicCallback = std::bind(&Mixer::_musicCallback, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
@@ -103,7 +107,9 @@ namespace Falltergeist
 
         void Mixer::_speechCallback(void *udata, uint8_t *stream, uint32_t len)
         {
-            if (_paused) return;
+            if (_paused) {
+                return;
+            }
 
             auto pacm = (Format::Acm::File*)(udata);
             if (pacm->samplesLeft() <= 0)
@@ -126,7 +132,9 @@ namespace Falltergeist
         {
             Mix_HookMusic(NULL, NULL);
             auto acm = ResourceManager::getInstance()->acmFileType("sound/speech/"+filename);
-            if (!acm) return;
+            if (!acm) {
+                return;
+            }
             musicCallback = std::bind(&Mixer::_speechCallback, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
             acm->rewind();
             Mix_HookMusic(myMusicPlayer, (void *)acm);
@@ -154,7 +162,9 @@ namespace Falltergeist
         void Mixer::playACMSound(const std::string& filename)
         {
             auto acm = ResourceManager::getInstance()->acmFileType(filename);
-            if (!acm) return;
+            if (!acm) {
+                return;
+            }
             logger->debug() << "[Mixer] playing: " << acm->filename() << std::endl;
             Mix_Chunk *chunk = NULL;
 
@@ -181,8 +191,8 @@ namespace Falltergeist
 
                 // make SDL_mixer chunk
                 chunk = Mix_QuickLoad_RAW(cvt.buf, static_cast<uint32_t>(cvt.len * cvt.len_ratio));
-                if (_sfx.size() > 100) // TODO: make this configurable
-                {
+                // TODO: make this configurable
+                if (_sfx.size() > 100) {
                     Mix_FreeChunk(_sfx.begin()->second);
                     _sfx.erase(_sfx.begin());
                 }
@@ -213,8 +223,11 @@ namespace Falltergeist
 
         void Mixer::setMusicVolume(double volume)
         {
-            if (volume < 0.0) volume = 0.0;
-            else if (volume > 1.0) volume = 1.0;
+            if (volume < 0.0) {
+                volume = 0.0;
+            } else if (volume > 1.0) {
+                volume = 1.0;
+            }
             _musicVolume = volume;
         }
 

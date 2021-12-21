@@ -94,7 +94,9 @@ namespace Falltergeist
 
         void Mouse::_setType(Cursor state)
         {
-            if (this->state() == state) return;
+            if (this->state() == state) {
+                return;
+            }
             _ui.reset(nullptr);
             switch (state)
             {

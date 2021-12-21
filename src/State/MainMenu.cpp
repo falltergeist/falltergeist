@@ -39,7 +39,9 @@ namespace Falltergeist
 
         void MainMenu::init()
         {
-            if (_initialized) return;
+            if (_initialized) {
+                return;
+            }
             State::init();
 
             setModal(true);

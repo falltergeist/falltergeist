@@ -49,9 +49,13 @@ namespace Falltergeist
                 }
 
                 // rtrim
-                line.erase(std::find_if(line.rbegin(), line.rend(), std::not_fn(::isspace)).base(), line.end());
+                line.erase(std::find_if(line.rbegin(), line.rend(), [](unsigned char c) {
+                    return !std::isspace(c);
+                }).base(), line.end());
 
-                if (line.length() == 0) return;
+                if (line.length() == 0) {
+                    return;
+                }
 
                 if (line == "GAME_GLOBAL_VARS:")
                 {
@@ -67,7 +71,9 @@ namespace Falltergeist
                 std::string name = line.substr(0, line.find(":="));
                 std::string value = line.substr(line.find(":=")+2,line.find(";")-line.find(":=")-2);
                 // rtrim
-                name.erase(std::find_if(name.rbegin(), name.rend(), std::not_fn(::isspace)).base(), name.end());
+                name.erase(std::find_if(name.rbegin(), name.rend(), [](unsigned char c) {
+                    return !std::isspace(c);
+                }).base(), name.end());
 
                 if (_GVARmode)
                 {
@@ -118,7 +124,9 @@ namespace Falltergeist
                 unsigned int i = 0;
                 for (auto gvar : _GVARS)
                 {
-                    if (i == number) return gvar.second;
+                    if (i == number) {
+                        return gvar.second;
+                    }
                     i++;
                 }
                 throw Exception("File::GVAR(number) - not found: " + std::to_string(number));
@@ -129,7 +137,9 @@ namespace Falltergeist
                 unsigned int i = 0;
                 for (auto mvar : _MVARS)
                 {
-                    if (i == number) return mvar.second;
+                    if (i == number) {
+                        return mvar.second;
+                    }
                     i++;
                 }
                 throw Exception("File::MVAR(number) - not found: " + std::to_string(number));

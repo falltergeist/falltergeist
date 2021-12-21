@@ -216,8 +216,9 @@ namespace Falltergeist
                         {
                             case Mouse::Button::LEFT:
                             {
-                                if(_leftButtonPressed==false)
+                                if (_leftButtonPressed == false) {
                                     _leftButtonPressed = true;
+                                }
 
                                 break;
                             }
