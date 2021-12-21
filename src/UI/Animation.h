@@ -32,7 +32,7 @@ namespace Falltergeist
                 const Point& shift() const;
                 void setShift(const Point& value);
 
-                Size size() const override;
+                const Size& size() const override;
 
                 void play();
                 void stop();

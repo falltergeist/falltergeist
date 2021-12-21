@@ -14,9 +14,9 @@ namespace Falltergeist
         {
         }
 
-        void  TextAreaList::setSize(Size size)
+        void TextAreaList::setSize(const Size& size)
         {
-            _size=size;
+            _size = size;
         }
 
         void TextAreaList::addArea(std::unique_ptr<TextArea> area)

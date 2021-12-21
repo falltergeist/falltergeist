@@ -15,6 +15,7 @@
 #include "../State/SettingsMenu.h"
 #include "../UI/Animation.h"
 #include "../UI/Factory/ImageButtonFactory.h"
+#include "../UI/Group.h"
 #include "../UI/Image.h"
 #include "../UI/ImageButton.h"
 #include "../UI/TextArea.h"
@@ -51,6 +52,17 @@ namespace Falltergeist
             setPosition((renderer->size() - Point(640, 480)) / 2);
 
             addUI("background", resourceManager->getImage("art/intrface/mainmenu.frm"));
+
+//            TODO remove
+//            auto testButtonGroup = (UI::Group*) addUI(new UI::Group({50, 50}, {200, 200}));
+//
+//            auto releasedImage = new UI::Image(std::make_unique<Graphics::Sprite>("art/intrface/menuup.frm"));
+//            releasedImage->setPosition({0, 0});
+//            testButtonGroup->addItem(releasedImage);
+//
+//            auto pressedImage = new UI::Image(std::make_unique<Graphics::Sprite>("art/intrface/menudown.frm"));
+//            pressedImage->setPosition({0, 50});
+//            testButtonGroup->addItem(pressedImage);
 
             // intro button
             auto introButton = addUI(imageButtonFactory->getByType(ImageButtonType::MENU_RED_CIRCLE, {30, 19}));

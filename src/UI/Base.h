@@ -21,102 +21,161 @@ namespace Falltergeist
 
         class Base : public Event::EventTarget
         {
-            public:
+        public:
 
-                Base(int x = 0, int y = 0);
-                Base(const Point& pos);
-                ~Base() override;
+            Base(int x = 0, int y = 0);
 
-                int x() const;
-                void setX(int value);
+            Base(const Point& pos);
 
-                int y() const;
-                void setY(int value);
+            ~Base() override;
 
-                virtual unsigned width() const;
-                virtual unsigned height() const;
+            int x() const;
 
-                virtual Point position() const;
-                virtual void setPosition(const Point& pos);
+            void setX(int value);
 
-                virtual Point offset() const;
-                virtual void setOffset(const Point& pos);
-                void setOffset(int x, int y);
+            int y() const;
 
-                virtual bool visible() const;
-                virtual void setVisible(bool value);
+            void setY(int value);
 
-                /**
-                 * @brief Handles OS events coming from the State::handle().
-                 * Used in Event Capturing process.
-                 * This method is called first in the main loop (before think() and render()).
-                 */
-                virtual void handle(Event::Event* event);
-                /**
-                 * @brief Process any real-time actions at each frame.
-                 * This method is called after handle() but before render() in the main loop.
-                 */
-                virtual void think(const float &deltaTime);
-                /**
-                 * @brief Render this UI element on game window.
-                 * This method is called last in the main loop (after handle() and think()).
-                 */
-                virtual void render(bool eggTransparency = false);
-                virtual void render(const Size& size, bool eggTransparency = false);
+            virtual unsigned width() const;
 
-                /**
-                 * @brief Handles mouse events from OS.
-                 */
-                virtual void handle(Event::Mouse* mouseEvent);
+            virtual unsigned height() const;
 
-                virtual Size size() const;
+            virtual Point position() const;
 
-                virtual bool opaque(const Point &pos);
+            virtual void setPosition(const Point& pos);
 
-                Event::KeyboardHandler& keyDownHandler();
-                Event::KeyboardHandler& keyUpHandler();
+            virtual Point offset() const;
 
-                // TODO: maybe not all elements should have drag events?
-                Event::MouseHandler& mouseDragStartHandler();
-                Event::MouseHandler& mouseDragHandler();
-                Event::MouseHandler& mouseDragStopHandler();
-                Event::MouseHandler& mouseInHandler();
-                Event::MouseHandler& mouseMoveHandler();
-                Event::MouseHandler& mouseOutHandler();
-                Event::MouseHandler& mouseClickHandler();
-                Event::MouseHandler& mouseDownHandler();
-                Event::MouseHandler& mouseUpHandler();
-                // TODO: mouse hover? (will require additional hoverDelay property)
+            virtual void setOffset(const Point& pos);
 
-                virtual void setLight(bool light);
-                virtual bool light();
-                virtual void setLightLevel(unsigned int level);
-                // object translucency mode
-                Graphics::TransFlags::Trans trans() const;
-                // sets object translucency mode
-                void setTrans(Graphics::TransFlags::Trans value);
+            void setOffset(int x, int y);
 
-                void setOutline(int outline);
+            virtual bool visible() const;
 
-            protected:
-                Point _position;
-                Point _offset;
-                bool _light = false;
-                Graphics::TransFlags::Trans _trans = Graphics::TransFlags::Trans::DEFAULT;
+            virtual void setVisible(bool value);
 
-                bool _leftButtonPressed = false;
-                bool _rightButtonPressed = false;
-                bool _drag = false;
-                bool _hovered = false;
-                bool _visible = true;
+            /**
+             * @brief Handles OS events coming from the State::handle().
+             * Used in Event Capturing process.
+             * This method is called first in the main loop (before think() and render()).
+             */
+            virtual void handle(Event::Event* event);
 
-                Event::KeyboardHandler _keyDownHandler, _keyUpHandler;
-                Event::MouseHandler _mouseDragStartHandler, _mouseDragHandler, _mouseDragStopHandler,
-                                    _mouseInHandler, _mouseMoveHandler, _mouseOutHandler,
-                                    _mouseClickHandler, _mouseDownHandler, _mouseUpHandler;
+            /**
+             * @brief Process any real-time actions at each frame.
+             * This method is called after handle() but before render() in the main loop.
+             */
+            virtual void think(const float &deltaTime);
 
-                int _outline = 0;
-                unsigned int _lightLevel;
+            /**
+             * @brief Render this UI element on game window.
+             * This method is called last in the main loop (after handle() and think()).
+             */
+            virtual void render(bool eggTransparency = false);
+
+            virtual void render(const Size& size, bool eggTransparency = false);
+
+            /**
+             * @brief Render UI element relative to the given position.
+             * finalPosition = position + ui.position()
+             */
+            virtual void render(const Point& position);
+
+            /**
+             * @brief Handles mouse events from OS.
+             */
+            virtual void handle(Event::Mouse* mouseEvent);
+
+            virtual const Size& size() const;
+
+            virtual bool opaque(const Point &pos);
+
+            Event::KeyboardHandler& keyDownHandler();
+
+            Event::KeyboardHandler& keyUpHandler();
+
+            // TODO: maybe not all elements should have drag events?
+            Event::MouseHandler& mouseDragStartHandler();
+
+            Event::MouseHandler& mouseDragHandler();
+
+            Event::MouseHandler& mouseDragStopHandler();
+
+            Event::MouseHandler& mouseInHandler();
+
+            Event::MouseHandler& mouseMoveHandler();
+
+            Event::MouseHandler& mouseOutHandler();
+
+            Event::MouseHandler& mouseClickHandler();
+
+            Event::MouseHandler& mouseDownHandler();
+
+            Event::MouseHandler& mouseUpHandler();
+            // TODO: mouse hover? (will require additional hoverDelay property)
+
+            virtual void setLight(bool light);
+
+            virtual bool light();
+
+            virtual void setLightLevel(unsigned int level);
+
+            // object translucency mode
+            Graphics::TransFlags::Trans trans() const;
+
+            // sets object translucency mode
+            void setTrans(Graphics::TransFlags::Trans value);
+
+            void setOutline(int outline);
+
+        protected:
+            Point _position;
+
+            Point _offset;
+
+            bool _light = false;
+
+            Graphics::TransFlags::Trans _trans = Graphics::TransFlags::Trans::DEFAULT;
+
+            bool _leftButtonPressed = false;
+
+            bool _rightButtonPressed = false;
+
+            bool _drag = false;
+
+            bool _hovered = false;
+
+            bool _visible = true;
+
+            Event::KeyboardHandler _keyDownHandler;
+
+            Event::KeyboardHandler _keyUpHandler;
+
+            Event::MouseHandler _mouseDragStartHandler;
+
+            Event::MouseHandler _mouseDragHandler;
+
+            Event::MouseHandler _mouseDragStopHandler;
+
+            Event::MouseHandler _mouseInHandler;
+
+            Event::MouseHandler _mouseMoveHandler;
+
+            Event::MouseHandler _mouseOutHandler;
+
+            Event::MouseHandler _mouseClickHandler;
+
+            Event::MouseHandler _mouseDownHandler;
+
+            Event::MouseHandler _mouseUpHandler;
+
+            int _outline = 0;
+
+            unsigned int _lightLevel;
+
+        private:
+            Size _size;
         };
     }
 }

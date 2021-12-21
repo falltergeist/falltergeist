@@ -75,9 +75,9 @@ namespace Falltergeist
             return _checked;
         }
 
-        void ImageButton::setChecked(bool _checked)
+        void ImageButton::setChecked(bool checked)
         {
-            this->_checked = _checked;
+            _checked = checked;
         }
 
         bool ImageButton::enabled()
@@ -85,9 +85,9 @@ namespace Falltergeist
             return _enabled;
         }
 
-        void ImageButton::setEnabled(bool _enabled)
+        void ImageButton::setEnabled(bool enabled)
         {
-            this->_enabled = _enabled;
+            _enabled = enabled;
         }
 
         void ImageButton::handle(Event::Mouse* mouseEvent)

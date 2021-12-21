@@ -14,43 +14,55 @@ namespace Falltergeist
     {
         class Slider : public Falltergeist::UI::Base
         {
-            public:
-                Slider(const Point& pos, std::unique_ptr<Image> imageOn, std::unique_ptr<Image> imageOff);
-                virtual ~Slider() = default;
+        public:
+            Slider(const Point& pos, std::unique_ptr<Image> imageOn, std::unique_ptr<Image> imageOff);
 
-                void handle(Event::Event* event) override;
+            ~Slider() override = default;
 
-                Size size() const override;
+            void handle(Event::Event* event) override;
 
-                bool opaque(const Point &pos) override;
+            const Size& size() const override;
 
-                void render(bool eggTransparency) override;
+            bool opaque(const Point &pos) override;
 
-                double minValue() const;
-                void setMinValue(double value);
+            void render(bool eggTransparency) override;
 
-                double maxValue() const;
-                void setMaxValue(double value);
+            double minValue() const;
 
-                double value() const;
-                void setValue(double value);
+            void setMinValue(double value);
 
-                Event::Handler& changeHandler();
+            double maxValue() const;
 
-            private:
-                std::unique_ptr<Image> imageOn;
-                std::unique_ptr<Image> imageOff;
+            void setMaxValue(double value);
 
-                double _minValue = 0.0;
-                double _maxValue = 1.0;
-                double _value = 0.0;
-                std::string _downSound;
-                std::string _upSound;
-                Event::Handler _changeHandler;
+            double value() const;
 
-                void _onDrag(Event::Mouse* event);
-                void _onLeftButtonDown(Event::Mouse* event);
-                void _onLeftButtonUp(Event::Mouse* event);
+            void setValue(double value);
+
+            Event::Handler& changeHandler();
+
+        private:
+            std::unique_ptr<Image> imageOn;
+
+            std::unique_ptr<Image> imageOff;
+
+            double _minValue = 0.0;
+
+            double _maxValue = 1.0;
+
+            double _value = 0.0;
+
+            std::string _downSound;
+
+            std::string _upSound;
+
+            Event::Handler _changeHandler;
+
+            void _onDrag(Event::Mouse* event);
+
+            void _onLeftButtonDown(Event::Mouse* event);
+
+            void _onLeftButtonUp(Event::Mouse* event);
         };
     }
 }

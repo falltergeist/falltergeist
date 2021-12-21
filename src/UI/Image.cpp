@@ -15,7 +15,17 @@ namespace Falltergeist
             sprite->render(position(), eggTransparency, light(), _outline, _lightLevel);
         }
 
-        Size Image::size() const
+        void Image::render(const Size& size, bool eggTransparency)
+        {
+            sprite->renderScaled(position(), size, eggTransparency, light(), _outline);
+        }
+
+        void Image::render(const Point& position) {
+            sprite->trans(_trans);
+            sprite->render(position + this->position(), false, light(), _outline, _lightLevel);
+        }
+
+        const Size& Image::size() const
         {
             return sprite->size();
         }
@@ -26,11 +36,6 @@ namespace Falltergeist
                 return false;
             }
             return sprite->opaque(position);
-        }
-
-        void Image::render(const Size& size, bool eggTransparency)
-        {
-            sprite->renderScaled(position(), size, eggTransparency, light(), _outline);
         }
     }
 }

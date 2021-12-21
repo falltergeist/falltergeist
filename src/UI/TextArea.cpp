@@ -185,12 +185,14 @@ namespace Falltergeist
             _needUpdate();
         }
 
-        Size TextArea::size() const
+        const Size& TextArea::size() const
         {
-            return Size(
+            _renderingSize = Size(
                 _size.width() ? _size.width() : _calculatedSize.width(),
                 _size.height() ? _size.height() : _calculatedSize.height()
             );
+
+            return _renderingSize;
         }
 
         Size TextArea::textSize()

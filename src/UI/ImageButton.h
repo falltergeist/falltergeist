@@ -29,14 +29,14 @@ namespace Falltergeist
                 //void setState(unsigned int value);
 
                 bool checked();
-                void setChecked(bool _checked);
+                void setChecked(bool checked);
 
                 bool enabled();
-                void setEnabled(bool _enabled);
+                void setEnabled(bool enabled);
 
-                virtual void handle(Event::Mouse* mouseEvent) override;
-                virtual void render(bool eggTransparency = false) override;
-                virtual bool opaque(const Point &pos) override;
+                void handle(Event::Mouse* mouseEvent) override;
+                void render(bool eggTransparency = false) override;
+                bool opaque(const Point &pos) override;
 
             protected:
                 bool checkboxMode = false; // remember new state after click

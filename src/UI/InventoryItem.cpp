@@ -17,7 +17,9 @@ namespace Falltergeist
     {
         using Graphics::Rect;
 
-        InventoryItem::InventoryItem(Game::ItemObject *item, const Point& pos) : Falltergeist::UI::Base(pos)
+        InventoryItem::InventoryItem(Game::ItemObject *item, const Point& pos)
+            : Falltergeist::UI::Base(pos),
+              _size(Size(70, 49)) // Type::INVENTORY
         {
             _item = item;
             mouseDownHandler().add(std::bind(&InventoryItem::onMouseLeftDown, this, std::placeholders::_1));
@@ -37,6 +39,15 @@ namespace Falltergeist
 
         void InventoryItem::setType(Type value)
         {
+            switch (value)
+            {
+                case Type::INVENTORY:
+                    _size = Size(70, 49);
+                case Type::SLOT:
+                    _size = Size(90, 63);
+                default:
+                    _size = Size(57, 40);
+            }
             _type = value;
         }
 
@@ -196,17 +207,9 @@ namespace Falltergeist
             }
         }
 
-        Size InventoryItem::size() const
+        const Size& InventoryItem::size() const
         {
-            switch (_type)
-            {
-                case Type::INVENTORY:
-                    return Size(70, 49);
-                case Type::SLOT:
-                    return Size(90, 63);
-                default:
-                    return Size(57, 40);
-            }
+            return _size;
         }
 
         Event::MouseHandler& InventoryItem::itemDragStopHandler()

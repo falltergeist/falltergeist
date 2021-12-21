@@ -132,11 +132,10 @@ namespace Falltergeist
                                _outline, _lightLevel);
         }
 
-        Size Animation::size() const
+        const Size& Animation::size() const
         {
             if (!_animation) {
-                Size size;
-                return size;
+                return Base::size();
             }
             return _animationFrames.at(_currentFrame)->size();
         }

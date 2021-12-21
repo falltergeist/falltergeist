@@ -10,18 +10,21 @@ namespace Falltergeist
     {
         class Rectangle final : public Base
         {
-            public:
-                Rectangle(const Point& pos, const Size& size, SDL_Color color);
-                void render(bool eggTransparency = false) override;
+        public:
+            Rectangle(const Point& pos, const Size& size, SDL_Color color);
 
-                bool opaque(unsigned int x, unsigned int y);
-                bool opaque(const Point &pos) override;
+            void render(bool eggTransparency = false) override;
 
-                Size size() const override;
+            bool opaque(unsigned int x, unsigned int y);
 
-            private:
-                Size _size;
-                SDL_Color _color;
+            bool opaque(const Point &pos) override;
+
+            const Size& size() const override;
+
+        private:
+            Size _size;
+
+            SDL_Color _color;
         };
     }
 }

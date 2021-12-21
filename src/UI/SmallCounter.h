@@ -12,47 +12,62 @@ namespace Falltergeist
 
         class SmallCounter final : public Falltergeist::UI::Base
         {
-            public:
-                enum Color
-                {
-                    WHITE = 1,
-                    YELLOW,
-                    RED
-                };
-                enum Type
-                {
-                    UNSIGNED = 0,
-                    SIGNED
-                };
+        public:
+            enum Color
+            {
+                WHITE = 1,
+                YELLOW,
+                RED
+            };
 
-                SmallCounter(const Point& pos);
-                SmallCounter(const SmallCounter&) = delete;
-                void operator=(const SmallCounter&) = delete;
-                virtual ~SmallCounter() = default;
+            enum Type
+            {
+                UNSIGNED = 0,
+                SIGNED
+            };
 
-                Color color() const;
-                void setColor(Color color);
+            SmallCounter(const Point& pos);
 
-                unsigned int length() const;
-                void setLength(unsigned int length);
+            SmallCounter(const SmallCounter&) = delete;
 
-                signed int number() const;
-                void setNumber(signed int number);
+            void operator=(const SmallCounter&) = delete;
 
-                Type type() const;
-                void setType(Type type);
+            ~SmallCounter() override = default;
 
-                void render(bool eggTransparency) override;
-                bool opaque(const Point &pos) override;
+            Color color() const;
 
-            private:
-                Color _color = Color::WHITE;
-                signed int _number = 0;
-                std::string _numberText = "";
-                unsigned int _length = 3;
-                Type _type = Type::UNSIGNED;
-                std::shared_ptr<Graphics::Sprite> _sprite;
-                std::vector<Graphics::Rectangle> _rects;
+            void setColor(Color color);
+
+            unsigned int length() const;
+
+            void setLength(unsigned int length);
+
+            signed int number() const;
+
+            void setNumber(signed int number);
+
+            Type type() const;
+
+            void setType(Type type);
+
+            void render(bool eggTransparency) override;
+
+            bool opaque(const Point &pos) override;
+
+        private:
+            Color _color = Color::WHITE;
+
+            signed int _number = 0;
+
+            std::string _numberText = "";
+
+            unsigned int _length = 3;
+
+            Type _type = Type::UNSIGNED;
+
+            std::shared_ptr<Graphics::Sprite> _sprite;
+
+            std::vector<Graphics::Rectangle> _rects;
         };
     }
 }

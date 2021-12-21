@@ -26,35 +26,47 @@ namespace Falltergeist
                 };
 
                 InventoryItem(Game::ItemObject* item, const Point& pos = Point());
+
                 ~InventoryItem() override;
 
                 Type type() const;
+
                 void setType(Type value);
 
                 Game::ItemObject* item();
+
                 void setItem(Game::ItemObject* item);
 
                 void render(bool eggTransparency = false) override;
-                Size size() const override;
 
-                virtual bool opaque(const Point &pos) override;
+                const Size& size() const override;
+
+                bool opaque(const Point &pos) override;
 
                 void onMouseLeftDown(Event::Mouse* event);
+
                 void onMouseDragStart(Event::Mouse* event);
+
                 void onMouseDrag(Event::Mouse* event);
+
                 void onMouseDragStop(Event::Mouse* event);
 
                 void onArmorDragStop(Event::Mouse* event);
+
                 void onHandDragStop(Event::Mouse* event, HAND hand);
 
                 Event::MouseHandler& itemDragStopHandler();
 
             private:
                 Game::ItemObject* _item = nullptr;
+
                 Type _type = Type::INVENTORY;
+
                 Type _oldType = Type::INVENTORY;
 
                 Event::MouseHandler _itemDragStopHandler;
+
+                Size _size;
         };
     }
 }

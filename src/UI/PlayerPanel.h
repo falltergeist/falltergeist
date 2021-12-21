@@ -24,52 +24,70 @@ namespace Falltergeist
 
         class PlayerPanel final : public UI::Base
         {
-            public:
-                PlayerPanel(std::shared_ptr<ILogger> logger);
-                ~PlayerPanel() override;
+        public:
+            PlayerPanel(std::shared_ptr<ILogger> logger);
 
-                Size size() const override;
+            ~PlayerPanel() override;
 
-                void render(bool eggTransparency = false) override;
-                void handle(Event::Event *event) override;
-                void think(const float &deltaTime) override;
+            const Size& size() const override;
 
-                virtual bool opaque(const Point &pos) override;
+            void render(bool eggTransparency = false) override;
 
-                void displayMessage(const std::string& message);
+            void handle(Event::Event *event) override;
 
-                void playWindowOpenSfx();
+            void think(const float &deltaTime) override;
 
-            private:
-                std::shared_ptr<ILogger> logger;
-                std::shared_ptr<UI::IResourceManager> resourceManager;
-                std::unique_ptr<UI::Factory::ImageButtonFactory> imageButtonFactory;
+            bool opaque(const Point &pos) override;
 
-                std::shared_ptr<Image> _background;
-                std::shared_ptr<SmallCounter> _hitPoints;
-                std::shared_ptr<SmallCounter> _armorClass;
-                std::shared_ptr<TextArea> _messageLog;
-                std::vector<std::shared_ptr<UI::Base>> _ui;
+            void displayMessage(const std::string& message);
 
-                bool _isAttackBtnPressed;
+            void playWindowOpenSfx();
 
-                char _scrollingLog = 0;
-                // TODO: replace with real timer
-                unsigned int _scrollingLogTimer = 0;
+        private:
+            std::shared_ptr<ILogger> logger;
 
-                void renderHandSlot();
+            std::shared_ptr<UI::IResourceManager> resourceManager;
 
-                void changeHand();
-                void openCharacterScreen();
-                void openGameMenu();
-                void openInventory();
-                void openMap();
-                void openPipBoy();
-                void openSkilldex();
-                void openSaveGame();
-                void openLoadGame();
+            std::unique_ptr<UI::Factory::ImageButtonFactory> imageButtonFactory;
 
-                void onKeyDown(Event::Keyboard* event);
+            std::shared_ptr<Image> _background;
+
+            std::shared_ptr<SmallCounter> _hitPoints;
+
+            std::shared_ptr<SmallCounter> _armorClass;
+
+            std::shared_ptr<TextArea> _messageLog;
+
+            std::vector<std::shared_ptr<UI::Base>> _ui;
+
+            bool _isAttackBtnPressed;
+
+            char _scrollingLog = 0;
+
+            // TODO: replace with real timer
+            unsigned int _scrollingLogTimer = 0;
+
+            void renderHandSlot();
+
+            void changeHand();
+
+            void openCharacterScreen();
+
+            void openGameMenu();
+
+            void openInventory();
+
+            void openMap();
+
+            void openPipBoy();
+
+            void openSkilldex();
+
+            void openSaveGame();
+
+            void openLoadGame();
+
+            void onKeyDown(Event::Keyboard* event);
         };
     }
 }

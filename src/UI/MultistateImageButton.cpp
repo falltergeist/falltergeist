@@ -170,7 +170,7 @@ namespace Falltergeist
             return _sprite->opaque(_rects.at(_currentState).position() + pos);
         }
 
-        Size MultistateImageButton::size() const
+        const Size& MultistateImageButton::size() const
         {
             return _size;
         }

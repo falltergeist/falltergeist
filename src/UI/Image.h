@@ -18,13 +18,15 @@ namespace Falltergeist
                 Image(std::unique_ptr<Graphics::Sprite> sprite);
                 virtual ~Image() = default;
 
-                virtual void render(bool eggTransparency = false) override;
+                void render(bool eggTransparency = false) override;
 
-                virtual void render(const Size &size, bool eggTransparency = false) override;
+                void render(const Size &size, bool eggTransparency = false) override;
 
-                virtual bool opaque(const Point &position) override;
+                void render(const Point& position) override;
 
-                virtual Size size() const override;
+                bool opaque(const Point &position) override;
+
+                const Size& size() const override;
 
             private:
                 std::unique_ptr<Graphics::Sprite> sprite;

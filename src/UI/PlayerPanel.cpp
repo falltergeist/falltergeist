@@ -199,7 +199,7 @@ namespace Falltergeist
         {
         }
 
-        Size PlayerPanel::size() const
+        const Size& PlayerPanel::size() const
         {
             return _background->size();
         }

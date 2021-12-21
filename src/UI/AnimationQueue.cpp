@@ -99,7 +99,7 @@ namespace Falltergeist
             return _animations.at(_currentAnimation).get();
         }
 
-        Size AnimationQueue::size() const
+        const Size& AnimationQueue::size() const
         {
             return currentAnimation()->size();
         }

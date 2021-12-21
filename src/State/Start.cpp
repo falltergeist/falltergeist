@@ -47,6 +47,9 @@ namespace Falltergeist
             addUI("splash", resourceManager->getImage("art/splash/" + splashes.at(rand() % splashes.size())));
 
             auto game = Game::Game::getInstance();
+            // TODO remove
+            // game->setState(new MainMenu(resourceManager, logger));
+
             _delayTimer = std::make_unique<Game::Timer>(3000);
             _delayTimer->start();
             _delayTimer->tickHandler().add([game, this](Event::Event*) {
