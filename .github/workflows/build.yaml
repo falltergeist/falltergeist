@@ -11,5 +11,5 @@ jobs:
         run: sudo apt install -y build-essential cmake clang-tidy libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libglew-dev libglm-dev zlib1g-dev
       - name: cmake
         run: cmake -DUSE_CLANG_TIDY=1 .
-      - name: make
+      - name: make -j`nproc`
         run: make
