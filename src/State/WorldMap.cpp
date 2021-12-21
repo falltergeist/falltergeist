@@ -116,8 +116,8 @@ namespace Falltergeist
                 deltaY = worldMapSizeY - mapHeight;
             }
 
-            signed int worldTileMinX; // start X coordinate of current tile on world map
-            signed int worldTileMinY; // start Y coordinate of current tile on world map
+            signed int worldTileMinX = 0; // start X coordinate of current tile on world map
+            signed int worldTileMinY = 0; // start Y coordinate of current tile on world map
             // NB: can be unsigned, but it compared with signed deltaX and deltaY, so...
 
             // copy tiles to screen if needed
@@ -148,8 +148,8 @@ namespace Falltergeist
             _hotspot->render();
 
             // panel
-            unsigned int panelX;
-            unsigned int panelY;
+            unsigned int panelX = 0;
+            unsigned int panelY = 0;
 
             if (Game::Game::getInstance()->settings()->worldMapFullscreen())
             {

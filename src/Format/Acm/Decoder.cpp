@@ -58,8 +58,8 @@ namespace Falltergeist
             void Decoder::_sub4d3fcc(short *memory, int *buffer, int sbSize,
                     int blocks)
             {
-                int row0, row1, row2 = 0, row3 = 0, db0, db1;
-                int i;
+                int row0 = 0, row1 = 0, row2 = 0, row3 = 0, db0 = 0, db1 = 0;
+                int i = 0;
                 int sbSize2 = sbSize * 2, sbSize3 = sbSize * 3;
                 if (blocks == 2)
                 {
@@ -151,8 +151,8 @@ namespace Falltergeist
             void Decoder::_sub4d420c(int *memory, int *buffer, int sbSize,
                     int blocks)
             {
-                int row0, row1, row2 = 0, row3 = 0, db0, db1;
-                int i;
+                int row0 = 0, row1 = 0, row2 = 0, row3 = 0, db0 = 0, db1 = 0;
+                int i = 0;
                 int sbSize2 = sbSize * 2, sbSize3 = sbSize * 3;
                 if (blocks == 4)
                 {

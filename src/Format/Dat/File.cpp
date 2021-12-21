@@ -39,9 +39,9 @@ namespace Falltergeist
                     throw Exception("File::_initialize() - can't open stream: " + filename());
                 }
 
-                unsigned int FileSize;
-                unsigned int filesTreeSize;
-                unsigned int filesTotalNumber;
+                unsigned int FileSize = 0;
+                unsigned int filesTreeSize = 0;
+                unsigned int filesTotalNumber = 0;
 
                 // reading data size from dat file
                 setPosition(size() - 4);
@@ -145,11 +145,11 @@ namespace Falltergeist
 
             File& File::operator>>(Entry& entry)
             {
-                uint32_t filenameSize;
-                uint8_t compressed;
-                uint32_t unpackedSize;
-                uint32_t packedSize;
-                uint32_t dataOffset;
+                uint32_t filenameSize = 0;
+                uint8_t compressed = 0;
+                uint32_t unpackedSize = 0;
+                uint32_t packedSize = 0;
+                uint32_t dataOffset = 0;
 
                 *this >> filenameSize;
 

@@ -20,7 +20,8 @@ namespace Falltergeist
                 LOG_INFO      = 1,
                 LOG_WARNING   = 2,
                 LOG_ERROR     = 3,
-                LOG_CRITICAL  = 4
+                LOG_CRITICAL  = 4,
+                LOG_NONE      = 5
             };
 
             static Level level();

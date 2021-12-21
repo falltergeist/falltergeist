@@ -237,7 +237,7 @@ namespace Falltergeist
             }
 
             auto mouse = Game::Game::getInstance()->mouse();
-            _initialMouseStack = static_cast<unsigned>(mouse->states()->size());
+            _initialMouseStack = static_cast<unsigned>(mouse->states().size());
             mouse->pushState(Input::Mouse::Cursor::NONE);
         }
 
@@ -248,7 +248,7 @@ namespace Falltergeist
                 auto mouse = game->mouse();
                 // workaround to get rid of cursor disappearing issues
                 std::vector<Input::Mouse::Cursor> icons;
-                while (mouse->states()->size() > _initialMouseStack) {
+                while (mouse->states().size() > _initialMouseStack) {
                     icons.push_back(mouse->state());
                     mouse->popState();
                 }

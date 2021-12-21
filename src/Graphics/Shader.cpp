@@ -46,11 +46,11 @@ namespace Falltergeist
             glShaderSource(shader, 1, &src, NULL);
             glCompileShader(shader);
 
-            GLint status;
+            GLint status = 0;
             glGetShaderiv(shader, GL_COMPILE_STATUS, &status);
             if (!status)
             {
-                GLint len;
+                GLint len = 0;
                 glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &len);
                 GLchar *log = (GLchar *) malloc(len);
                 glGetShaderInfoLog(shader, len, NULL, log);
@@ -95,12 +95,12 @@ namespace Falltergeist
                 }
                 glLinkProgram(_progId);
 
-                GLint status;
+                GLint status = 0;
                 glGetProgramiv(_progId, GL_LINK_STATUS, &status);
 
                 if (!status)
                 {
-                    GLint len;
+                    GLint len = 0;
                     glGetProgramiv(_progId, GL_INFO_LOG_LENGTH, &len);
                     GLchar *log = (GLchar *) malloc(len);
                     glGetProgramInfoLog(_progId, len, NULL, log);
@@ -125,7 +125,7 @@ namespace Falltergeist
 
         void Shader::use() const
         {
-            GLint cur;
+            GLint cur = 0;
             GL_CHECK(glGetIntegerv(GL_CURRENT_PROGRAM, &cur));
             if ((GLuint)cur!=_progId)
             {

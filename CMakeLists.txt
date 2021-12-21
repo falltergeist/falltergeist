@@ -76,7 +76,7 @@ endif()
 add_executable(falltergeist main.cpp ${SOURCES} ${_additional_includes})
 
 set_target_properties(falltergeist PROPERTIES
-	CXX_STANDARD 14
+	CXX_STANDARD 17
 	CXX_STANDARD_REQUIRED YES
 	CXX_EXTENSIONS NO
 )

@@ -180,7 +180,7 @@ namespace Falltergeist {
             logger->info() << "[RENDERER] " << "Extensions: " << std::endl;
 
             if (_renderpath == RenderPath::OGL32) {
-                GLint count;
+                GLint count = 0;
                 glGetIntegerv(GL_NUM_EXTENSIONS, &count);
 
                 for (GLint i = 0; i < count; i++) {
@@ -295,8 +295,8 @@ namespace Falltergeist {
 
         void Renderer::screenshot() {
             std::string filename;
-            Uint32 rmask, gmask, bmask, amask;
-            SDL_Surface *output;
+            Uint32 rmask = 0, gmask = 0, bmask = 0, amask = 0;
+            SDL_Surface *output = nullptr;
 
             int iter = 0;
             do {

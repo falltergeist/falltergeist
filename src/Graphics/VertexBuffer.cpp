@@ -8,7 +8,7 @@ namespace Falltergeist {
             _data = data;
             _size = size;
 
-            unsigned int usage;
+            unsigned int usage = GL_NONE;
             switch (usagePattern) {
                 case UsagePattern::DynamicDraw:
                     usage = GL_DYNAMIC_DRAW;

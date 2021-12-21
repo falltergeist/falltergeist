@@ -273,12 +273,12 @@ namespace Falltergeist
                         object->setFrmTypeId((FID & 0x0F000000) >> 24);
                         object->setObjectID3((FID & 0xF0000000) >> 28);
                         break;
-                    case OBJECT_TYPE::SCENERY:
+                    case OBJECT_TYPE::SCENERY: {
                         object->setObjectSubtypeId(callback(PID)->subtypeId());
-                        uint32_t elevhex;  // elev+hex
-                        uint32_t hex;
-                        uint32_t elev;
-                        int32_t map;
+                        uint32_t elevhex = 0;  // elev+hex
+                        uint32_t hex = 0;
+                        uint32_t elev = 0;
+                        int32_t map = 0;
                         switch((SCENERY_TYPE)object->objectSubtypeId())
                         {
                             case SCENERY_TYPE::LADDER_TOP:
@@ -314,6 +314,7 @@ namespace Falltergeist
                                 throw Exception("File::_readObject() - unknown scenery type");
                         }
                         break;
+                    }
                     case OBJECT_TYPE::WALL:
                         break;
                     case OBJECT_TYPE::TILE:

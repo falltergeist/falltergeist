@@ -48,7 +48,7 @@ namespace Falltergeist
                 throw Exception(Mix_GetError());
             }
             logger->info() << message + "[OK]" << std::endl;
-            int frequency, channels;
+            int frequency = 0, channels = 0;
             Mix_QuerySpec(&frequency, &_format, &channels);
         }
 

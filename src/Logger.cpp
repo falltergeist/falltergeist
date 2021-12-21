@@ -132,7 +132,7 @@ namespace Falltergeist
 
     void Logger::setLevel(const std::string &level)
     {
-        Logger::Level lvl;
+        Logger::Level lvl = Logger::Level::LOG_NONE;
 
         if (level == "debug")
         {

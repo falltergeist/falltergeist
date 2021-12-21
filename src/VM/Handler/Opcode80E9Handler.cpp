@@ -24,7 +24,7 @@ namespace Falltergeist
                     return;
                 }
 
-                unsigned int light;
+                unsigned int light = 0;
                 if (level < 50) {
                     light = 0x4000 + level * 0x6000 / 100;
                 } else if (level == 50) {

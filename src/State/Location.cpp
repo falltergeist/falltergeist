@@ -583,7 +583,7 @@ namespace Falltergeist
 
             // if scrolling is active
             if (this->_scrollLeft || this->_scrollRight || this->_scrollTop || this->_scrollBottom) {
-                Input::Mouse::Cursor state;
+                Input::Mouse::Cursor state = Input::Mouse::Cursor::NONE;
                 if (this->_scrollLeft) {
                     state = Input::Mouse::Cursor::SCROLL_W;
                 }
@@ -786,7 +786,7 @@ namespace Falltergeist
         void Location::onMouseMove(Event::Mouse *mouseEvent)
         {
             auto hexagon = hexagonGrid()->hexagonAt(mouse->position() + _camera->topLeft());
-            if (mouse->states()->empty()) {
+            if (mouse->states().empty()) {
                 mouse->setState(Input::Mouse::Cursor::ACTION);
             }
             if (mouse->state() == Input::Mouse::Cursor::HEXAGON_RED && hexagon) {
@@ -1216,7 +1216,7 @@ namespace Falltergeist
 
             std::vector<float> lights;
             for (auto hex: _hexagonGrid->hexagons()) {
-                int lightLevel;
+                int lightLevel = 0;
 
                 unsigned int light = hex->light();
 

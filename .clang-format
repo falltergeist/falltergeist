@@ -16,3 +16,5 @@ FixNamespaceComments: false
 AllowAllArgumentsOnNextLine: false
 AllowAllParametersOfDeclarationOnNextLine: false
 IndentWidth: 4
+PointerAlignment: Left
+ReferenceAlignment: Left

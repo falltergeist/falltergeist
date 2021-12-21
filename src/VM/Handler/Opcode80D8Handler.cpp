@@ -27,7 +27,7 @@ namespace Falltergeist
                     return;
                 }
 
-                std::vector<Game::ItemObject *> *inven;
+                std::vector<Game::ItemObject *> *inven = nullptr;
                 if (auto critterObj = dynamic_cast<Game::CritterObject *>(invenObj)) {
                     inven = critterObj->inventory();
                 } else if (auto contObj = dynamic_cast<Game::ContainerItemObject *>(invenObj)) {

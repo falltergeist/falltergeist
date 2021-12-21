@@ -125,7 +125,7 @@ namespace Falltergeist
         }
         endmntent(mtab);
     #elif defined (BSD)
-        struct statfs *mntbuf;
+        struct statfs *mntbuf = nullptr;
         int mntsize = getmntinfo(&mntbuf, MNT_NOWAIT);
         for ( int i = 0; i < mntsize; i++ ) {
             std::string directory = ((struct statfs *)&mntbuf[i])->f_mntonname;

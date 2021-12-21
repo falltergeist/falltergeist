@@ -37,7 +37,7 @@ namespace Falltergeist {
             for (auto &attribute : bufferLayout.attributes()) {
                 GL_CHECK(glEnableVertexAttribArray(attribute.index()));
 
-                unsigned int glType;
+                unsigned int glType = GL_NONE;
                 switch (attribute.type()) {
                     case VertexBufferAttribute::Type::Float:
                         glType = GL_FLOAT;
