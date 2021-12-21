@@ -49,7 +49,9 @@ namespace Falltergeist
                 }
 
                 // rtrim
-                line.erase(std::find_if(line.rbegin(), line.rend(), [](int c) {return std::isspace(c);}), line.end())
+                line.erase(std::find_if(line.rbegin(), line.rend(), [](unsigned char c) {
+                    return !std::isspace(c);
+                }).base(), line.end());
 
                 if (line.length() == 0) return;
 
@@ -67,7 +69,9 @@ namespace Falltergeist
                 std::string name = line.substr(0, line.find(":="));
                 std::string value = line.substr(line.find(":=")+2,line.find(";")-line.find(":=")-2);
                 // rtrim
-                name.erase(std::find_if(name.rbegin(), name.rend(), [](int c) {return std::isspace(c);}), name.end())
+                name.erase(std::find_if(name.rbegin(), name.rend(), [](unsigned char c) {
+                    return !std::isspace(c);
+                }).base(), name.end());
 
                 if (_GVARmode)
                 {
