@@ -42,7 +42,9 @@ namespace Falltergeist
             void File::_addString(std::string line)
             {
                 // strip comments
-                if (auto pos = line.find(";")) line = line.substr(0, pos);
+                if (auto pos = line.find(";")) {
+                    line = line.substr(0, pos);
+                }
 
                 // rtrim
                 line.erase(std::find_if(line.rbegin(), line.rend(), [](unsigned char c) {

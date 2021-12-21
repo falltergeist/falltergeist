@@ -24,7 +24,9 @@ namespace Falltergeist
 
         void PlayerEditGender::init()
         {
-            if (_initialized) return;
+            if (_initialized) {
+                return;
+            }
             State::init();
 
             setFullscreen(false);

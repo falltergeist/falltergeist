@@ -77,11 +77,15 @@ namespace Falltergeist
                     if (_bufferBitOffset == UNPACKER_BUFFER_SIZE)
                     {
                         auto remains = stream->bytesRemains();
-                        if (remains > UNPACKER_BUFFER_SIZE)
+                        if (remains > UNPACKER_BUFFER_SIZE) {
                             remains = UNPACKER_BUFFER_SIZE;
+                        }
                         _bufferBitOffset = UNPACKER_BUFFER_SIZE - remains;
-                        if (_bufferBitOffset != UNPACKER_BUFFER_SIZE)
-                            stream->readBytes((uint8_t*) (_bitsBuffer + _bufferBitOffset), remains);
+                        if (_bufferBitOffset != UNPACKER_BUFFER_SIZE) {
+                            stream->readBytes(
+                                (uint8_t *)(_bitsBuffer + _bufferBitOffset),
+                                remains);
+                        }
                     }
                     //our stream read returns -1 instead of 0 on failure
                     //comparing with 1 will solve annoying interface changes
@@ -194,8 +198,9 @@ namespace Falltergeist
                         _availBits--;
                         _nextBits >>= 1;
                         _blockPtr[i * _sbSize + pass] = 0;
-                        if ((++i) == _subblocks)
+                        if ((++i) == _subblocks) {
                             break;
+                        }
                         _blockPtr[i * _sbSize + pass] = 0;
                     }
                     else
@@ -254,12 +259,14 @@ namespace Falltergeist
                     bits = (int) Table1[bits];
 
                     _blockPtr[i * _sbSize + pass] = _buffMiddle[-1 + (bits & 3)];
-                    if ((++i) == _subblocks)
+                    if ((++i) == _subblocks) {
                         break;
+                    }
                     bits >>= 2;
                     _blockPtr[i * _sbSize + pass] = _buffMiddle[-1 + (bits & 3)];
-                    if ((++i) == _subblocks)
+                    if ((++i) == _subblocks) {
                         break;
+                    }
                     bits >>= 2;
                     _blockPtr[i * _sbSize + pass] = _buffMiddle[-1 + bits];
                 }
@@ -279,8 +286,9 @@ namespace Falltergeist
                         _availBits--;
                         _nextBits >>= 1;
                         _blockPtr[i * _sbSize + pass] = 0;
-                        if ((++i) == _subblocks)
+                        if ((++i) == _subblocks) {
                             break;
+                        }
                         _blockPtr[i * _sbSize + pass] = 0;
                     }
                     else
@@ -339,12 +347,14 @@ namespace Falltergeist
                     short val = Table2[bits];
 
                     _blockPtr[i * _sbSize + pass] = _buffMiddle[-2 + (val & 7)];
-                    if ((++i) == _subblocks)
+                    if ((++i) == _subblocks) {
                         break;
+                    }
                     val >>= 3;
                     _blockPtr[i * _sbSize + pass] = _buffMiddle[-2 + (val & 7)];
-                    if ((++i) == _subblocks)
+                    if ((++i) == _subblocks) {
                         break;
+                    }
                     val >>= 3;
                     _blockPtr[i * _sbSize + pass] = _buffMiddle[-2 + val];
                 }
@@ -364,8 +374,9 @@ namespace Falltergeist
                         _availBits--;
                         _nextBits >>= 1;
                         _blockPtr[i * _sbSize + pass] = 0;
-                        if ((++i) == _subblocks)
+                        if ((++i) == _subblocks) {
                             break;
+                        }
                         _blockPtr[i * _sbSize + pass] = 0;
                     }
                     else
@@ -389,8 +400,9 @@ namespace Falltergeist
                                 _availBits -= 5;
                                 int val = (_nextBits & 0x18) >> 3;
                                 _nextBits >>= 5;
-                                if (val >= 2)
+                                if (val >= 2) {
                                     val += 3;
+                                }
                                 _blockPtr[i * _sbSize + pass] = _buffMiddle[-3 + val];
                             }
                 }
@@ -424,8 +436,9 @@ namespace Falltergeist
                             int val = (_nextBits & 0xC) >> 2;
                             _availBits -= 4;
                             _nextBits >>= 4;
-                            if (val >= 2)
+                            if (val >= 2) {
                                 val += 3;
+                            }
                             _blockPtr[i * _sbSize + pass] = _buffMiddle[-3 + val];
                         }
                 }
@@ -445,8 +458,9 @@ namespace Falltergeist
                         _availBits--;
                         _nextBits >>= 1;
                         _blockPtr[i * _sbSize + pass] = 0;
-                        if ((++i) == _subblocks)
+                        if ((++i) == _subblocks) {
                             break;
+                        }
                         _blockPtr[i * _sbSize + pass] = 0;
                     }
                     else
@@ -459,8 +473,9 @@ namespace Falltergeist
                         else
                         {
                             int val = (_nextBits & 0x1C) >> 2;
-                            if (val >= 4)
+                            if (val >= 4) {
                                 val++;
+                            }
                             _blockPtr[i * _sbSize + pass] = _buffMiddle[-4 + val];
                             _availBits -= 5;
                             _nextBits >>= 5;
@@ -487,8 +502,9 @@ namespace Falltergeist
                         int val = (_nextBits & 0xE) >> 1;
                         _availBits -= 4;
                         _nextBits >>= 4;
-                        if (val >= 4)
+                        if (val >= 4) {
                             val++;
+                        }
                         _blockPtr[i * _sbSize + pass] = _buffMiddle[-4 + val];
                     }
                 }
@@ -505,8 +521,9 @@ namespace Falltergeist
                     unsigned char val = Table3[bits];
 
                     _blockPtr[i * _sbSize + pass] = _buffMiddle[-5 + (val & 0xF)];
-                    if ((++i) == _subblocks)
+                    if ((++i) == _subblocks) {
                         break;
+                    }
                     val >>= 4;
                     _blockPtr[i * _sbSize + pass] = _buffMiddle[-5 + val];
                 }

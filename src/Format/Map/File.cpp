@@ -38,9 +38,15 @@ namespace Falltergeist
                 _elevationFlags    = stream.uint32();
 
                 unsigned elevations = 0;
-                if ((_elevationFlags & 2) == 0) elevations++;
-                if ((_elevationFlags & 4) == 0) elevations++;
-                if ((_elevationFlags & 8) == 0) elevations++;
+                if ((_elevationFlags & 2) == 0) {
+                    elevations++;
+                }
+                if ((_elevationFlags & 4) == 0) {
+                    elevations++;
+                }
+                if ((_elevationFlags & 8) == 0) {
+                    elevations++;
+                }
 
                 _unknown1       = stream.int32();
                 _MVARsize       = stream.uint32();

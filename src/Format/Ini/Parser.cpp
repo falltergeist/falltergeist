@@ -63,14 +63,18 @@ namespace Falltergeist
                 while (std::getline(_stream, line))
                 {
                     // Lines starting with "#" or ";" are treated as comments and ignored
-                    if (line[0] == '#' || line[0] == ';') continue;
+                    if (line[0] == '#' || line[0] == ';') {
+                        continue;
+                    }
 
                     // Prepare line
                     _stripComments(line);
                     trim(line);
 
                     // Skip empty lines
-                    if (line.length() == 0) continue;
+                    if (line.length() == 0) {
+                        continue;
+                    }
 
                     // Found section
                     if (*line.begin() == '[' && *line.rbegin() == ']')

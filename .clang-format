@@ -1,0 +1,18 @@
+BraceWrapping:
+#  AfterClass:      true
+  AfterControlStatement: true
+#  AfterEnum:       true/false
+#  AfterFunction:   true
+  AfterNamespace:  true
+#  AfterObjCDeclaration: true/false
+#  AfterStruct:     true/false
+#  AfterUnion:      true/false
+#  BeforeCatch:     true/false
+#  BeforeElse:      true/false
+#  IndentBraces:    true/false
+#BreakBeforeBraces: Custom
+NamespaceIndentation: All
+FixNamespaceComments: false
+AllowAllArgumentsOnNextLine: false
+AllowAllParametersOfDeclarationOnNextLine: false
+IndentWidth: 4

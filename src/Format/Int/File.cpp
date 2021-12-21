@@ -46,7 +46,9 @@ namespace Falltergeist
                     for (unsigned i = 0; i != nameLength; ++i, ++j)
                     {
                         uint8_t ch = _stream.uint8();
-                        if (ch != 0) name.push_back(ch);
+                        if (ch != 0) {
+                            name.push_back(ch);
+                        }
                     }
 
                     _identifiers.insert(std::make_pair(nameOffset, name)); // names of functions and variables
@@ -74,7 +76,9 @@ namespace Falltergeist
                         for (unsigned i = 0; i != length; ++i, ++j)
                         {
                             uint8_t ch = _stream.uint8();
-                            if (ch != 0) name.push_back(ch);
+                            if (ch != 0) {
+                                name.push_back(ch);
+                            }
                         }
                         _strings.insert(std::make_pair(nameOffset, name));
                     }

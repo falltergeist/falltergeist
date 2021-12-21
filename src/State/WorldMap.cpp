@@ -26,7 +26,9 @@ namespace Falltergeist
 
         void WorldMap::init()
         {
-            if (_initialized) return;
+            if (_initialized) {
+                return;
+            }
             State::init();
 
             setModal(true);
@@ -188,8 +190,9 @@ namespace Falltergeist
 
             if (auto keyboardEvent = dynamic_cast<Event::Keyboard*>(event))
             {
-                if (keyboardEvent->name() == "keydown")
+                if (keyboardEvent->name() == "keydown") {
                     onKeyDown(keyboardEvent);
+                }
             }
         }
 

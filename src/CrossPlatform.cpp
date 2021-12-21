@@ -260,13 +260,13 @@ namespace Falltergeist
         {
             std::string filename(pxItem->d_name);
             std::transform(filename.begin(), filename.end(), filename.begin(), ::tolower);
-            if (filename.length() > 4) // exclude . and ..
-            {
+            // exclude . and ..
+            if (filename.length() > 4) {
                 std::string ext = filename.substr(filename.size() - 4, 4);
-                if (ext == ".dat")
-                {
-                    if (filename.length() == 12 && filename.substr(0, 5) == "patch")
-                        _dataFiles.insert(_dataFiles.begin(),filename);
+                if (ext == ".dat") {
+                    if (filename.length() == 12 && filename.substr(0, 5) == "patch") {
+                        _dataFiles.insert(_dataFiles.begin(), filename);
+                    }
                 }
             }
         }
@@ -283,15 +283,15 @@ namespace Falltergeist
         if (stat(dir, &st) == 0)
         {
             // Directory already exists
-            if (S_ISDIR(st.st_mode))
+            if (S_ISDIR(st.st_mode)) {
                 return false;
+            }
 
             throw std::runtime_error("Path `" + std::string(dir) + "' already exists and is not a directory");
-        }
-        else
-        {
-            if (mkdir(dir, S_IRWXU) == 0)
+        } else {
+            if (mkdir(dir, S_IRWXU) == 0) {
                 return true;
+            }
 
             throw std::runtime_error(strerror(errno));
         }
@@ -368,8 +368,9 @@ namespace Falltergeist
     {
     #if defined(__unix__)
         char *maybeConfigHome = getenv("XDG_CONFIG_HOME");
-        if (maybeConfigHome == nullptr || *maybeConfigHome == '\0')
+        if (maybeConfigHome == nullptr || *maybeConfigHome == '\0') {
             return getHomeDirectory() + "/.config/falltergeist";
+        }
         return std::string(maybeConfigHome) + "/falltergeist";
     #elif defined(__APPLE__)
         return getHomeDirectory() + "/Library/Application Support/falltergeist";

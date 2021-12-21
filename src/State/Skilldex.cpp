@@ -30,7 +30,9 @@ namespace Falltergeist
 
         void Skilldex::init()
         {
-            if (_initialized) return;
+            if (_initialized) {
+                return;
+            }
             State::init();
 
             setModal(true);

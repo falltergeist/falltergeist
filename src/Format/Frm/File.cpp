@@ -22,8 +22,12 @@ namespace Falltergeist
                 uint16_t shiftX[6];
                 uint16_t shiftY[6];
                 uint32_t dataOffset[6];
-                for (unsigned int i = 0; i != 6; ++i) shiftX[i] = stream.uint16();
-                for (unsigned int i = 0; i != 6; ++i) shiftY[i] = stream.uint16();
+                for (unsigned int i = 0; i != 6; ++i) {
+                    shiftX[i] = stream.uint16();
+                }
+                for (unsigned int i = 0; i != 6; ++i) {
+                    shiftY[i] = stream.uint16();
+                }
                 for (unsigned int i = 0; i != 6; ++i)
                 {
                     dataOffset[i] = stream.uint32();
@@ -115,7 +119,9 @@ namespace Falltergeist
                 // TODO: this looks like a getter, which in fact creates _rgba.
                 // Moreover, the content of _rgba depends on the specific palFile that was provided the first time
                 // This is clearly bad semantics
-                if (!_rgba.empty()) return _rgba.data();
+                if (!_rgba.empty()) {
+                    return _rgba.data();
+                }
 
                 _rgba.resize(width()*height());
 
@@ -144,7 +150,9 @@ namespace Falltergeist
 
             std::vector<bool>& File::mask(Pal::File* palFile)
             {
-                if (!_mask.empty()) return _mask;
+                if (!_mask.empty()) {
+                    return _mask;
+                }
 
                 uint16_t w = width();
                 uint16_t h = height();
@@ -174,13 +182,17 @@ namespace Falltergeist
 
             int16_t File::offsetX(unsigned int direction, unsigned int frame) const
             {
-                if (direction >= _directions.size()) direction = 0;
+                if (direction >= _directions.size()) {
+                    direction = 0;
+                }
                 return _directions.at(direction).frames().at(frame).offsetX();
             }
 
             int16_t File::offsetY(unsigned int direction, unsigned int frame) const
             {
-                if (direction >= _directions.size()) direction = 0;
+                if (direction >= _directions.size()) {
+                    direction = 0;
+                }
                 return _directions.at(direction).frames().at(frame).offsetY();
             }
         }

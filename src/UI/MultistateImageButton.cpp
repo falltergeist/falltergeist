@@ -96,7 +96,9 @@ namespace Falltergeist
 
         void MultistateImageButton::_onMouseUp(Event::Mouse* event)
         {
-            if (!event->leftButton()) return;
+            if (!event->leftButton()) {
+                return;
+            }
 
             auto sender = dynamic_cast<MultistateImageButton*>(event->target());
 
