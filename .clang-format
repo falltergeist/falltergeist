@@ -16,5 +16,7 @@ FixNamespaceComments: false
 AllowAllArgumentsOnNextLine: false
 AllowAllParametersOfDeclarationOnNextLine: false
 IndentWidth: 4
+AccessModifierOffset: -4
+EmptyLineAfterAccessModifier: Leave
 PointerAlignment: Left
 ReferenceAlignment: Left

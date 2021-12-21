@@ -6,6 +6,7 @@
 #include <stdexcept>
 #include <cctype>
 #include <chrono>
+#include <filesystem>
 
 #if defined(__unix__) || defined(__APPLE__)
     #include <sys/param.h>
