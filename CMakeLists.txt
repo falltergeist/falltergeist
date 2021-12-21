@@ -58,7 +58,6 @@ if (NOT USE_CONAN)
 	if(NOT GLEW_FOUND)
 		message(FATAL_ERROR "GLEW library not found")
 	endif(NOT GLEW_FOUND)
-	include_directories(SYSTEM ${GLEW_INCLUDE_DIR})
 endif()
 
 find_package(GLM REQUIRED)
@@ -104,7 +103,15 @@ endif()
 if (CONAN_LIBS)
 	target_link_libraries(falltergeist ${CONAN_LIBS})
 else()
-	target_link_libraries(falltergeist ${ZLIB_LIBRARIES} ${SDL2_LIBRARY} ${SDL_MIXER_LIBRARY} ${SDL_IMAGE_LIBRARY} ${OPENGL_gl_LIBRARY} ${GLEW_LIBRARY})
+	target_link_libraries(
+		falltergeist
+		${ZLIB_LIBRARIES}
+		${SDL2_LIBRARY}
+		${SDL_MIXER_LIBRARY}
+		${SDL_IMAGE_LIBRARY}
+		${OPENGL_gl_LIBRARY}
+		GLEW::glew
+	)
 endif()
 
 include(cmake/install/windows.cmake)

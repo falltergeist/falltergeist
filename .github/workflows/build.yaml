@@ -13,3 +13,16 @@ jobs:
         run: cmake -DUSE_CLANG_TIDY=1 .
       - name: make
         run: make -j`nproc`
+  build-on-macos:
+    runs-on: macos-latest
+    steps:
+       - uses: actions/checkout@v2
+       - name: install build dependencies
+         run: |
+           brew install llvm
+           ln -s "/usr/local/opt/llvm/bin/clang-tidy" "/usr/local/bin/clang-tidy"
+           brew install cmake sdl2 sdl2_image sdl2_mixer glew glm zlib
+       - name: cmake
+         run: cmake -DUSE_CLANG_TIDY=1 .
+       - name: make
+         run: make -j`nproc`
