@@ -4,6 +4,7 @@
 #include "../../Exception.h"
 #include "../../Format/Dat/Stream.h"
 #include "../../Format/Gam/File.h"
+#include "../../functions.h"
 
 namespace Falltergeist
 {
@@ -49,9 +50,7 @@ namespace Falltergeist
                 }
 
                 // rtrim
-                line.erase(std::find_if(line.rbegin(), line.rend(), [](unsigned char c) {
-                    return !std::isspace(c);
-                }).base(), line.end());
+                fltrim(line);
 
                 if (line.length() == 0) {
                     return;
@@ -71,9 +70,7 @@ namespace Falltergeist
                 std::string name = line.substr(0, line.find(":="));
                 std::string value = line.substr(line.find(":=")+2,line.find(";")-line.find(":=")-2);
                 // rtrim
-                name.erase(std::find_if(name.rbegin(), name.rend(), [](unsigned char c) {
-                    return !std::isspace(c);
-                }).base(), name.end());
+                fltrim(name);
 
                 if (_GVARmode)
                 {

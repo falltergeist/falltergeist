@@ -3,6 +3,7 @@
 #include <cctype>
 #include "../Dat/Stream.h"
 #include "../Lst/File.h"
+#include "../../functions.h"
 
 namespace Falltergeist
 {
@@ -47,9 +48,7 @@ namespace Falltergeist
                 }
 
                 // rtrim
-                line.erase(std::find_if(line.rbegin(), line.rend(), [](unsigned char c) {
-                    return !std::isspace(c);
-                }).base(), line.end());
+                frtrim(line);
 
                 // replace slashes
                 std::replace(line.begin(),line.end(),'\\','/');

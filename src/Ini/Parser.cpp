@@ -3,6 +3,7 @@
 #include <sstream>
 #include "../Ini/File.h"
 #include "../Logger.h"
+#include "../functions.h"
 
 namespace Falltergeist
 {
@@ -29,16 +30,12 @@ namespace Falltergeist
                 line.erase(line.find(";"));
             }
 
-            line.erase(std::find_if(line.rbegin(), line.rend(), [](unsigned char c) {
-                return !std::isspace(c);
-            }).base(), line.end());
+            frtrim(line);
         }
 
         void Parser::_ltrim(std::string &line)
         {
-            line.erase(line.begin(), std::find_if(line.begin(), line.end(), [](unsigned char c) {
-                return !std::isspace(c);
-            }));
+            fltrim(line);
         }
 
         void Parser::_toLower(std::string &line)

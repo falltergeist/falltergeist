@@ -1,6 +1,7 @@
 #include <algorithm>
 #include <functional>
 #include "../Txt/Parser.h"
+#include "../../functions.h"
 
 namespace Falltergeist
 {
@@ -29,16 +30,12 @@ namespace Falltergeist
 
             void Parser::rtrim(std::string& line)
             {
-                line.erase(std::find_if(line.rbegin(), line.rend(), [](unsigned char c) {
-                    return !std::isspace(c);
-                }).base(), line.end());
+                frtrim(line);
             }
 
             void Parser::ltrim(std::string& line)
             {
-                line.erase(line.begin(), std::find_if(line.begin(), line.end(), [](unsigned char c) {
-                    return !std::isspace(c);
-                }));
+                fltrim(line);
             }
 
             void Parser::toLower(std::string& line)
