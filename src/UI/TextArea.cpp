@@ -75,7 +75,9 @@ namespace Falltergeist
 
         void TextArea::setHorizontalAlign(HorizontalAlign align)
         {
-            if (_horizontalAlign == align) return;
+            if (_horizontalAlign == align) {
+                return;
+            }
             _horizontalAlign = align;
             _needUpdate();
         }
@@ -87,7 +89,9 @@ namespace Falltergeist
 
         void TextArea::setVerticalAlign(VerticalAlign align)
         {
-            if (_verticalAlign == align) return;
+            if (_verticalAlign == align) {
+                return;
+            }
             _verticalAlign = align;
             _needUpdate();
         }
@@ -133,7 +137,9 @@ namespace Falltergeist
 
         void TextArea::setWordWrap(bool wordWrap)
         {
-            if (_wordWrap == wordWrap) return;
+            if (_wordWrap == wordWrap) {
+                return;
+            }
             _wordWrap = wordWrap;
             _needUpdate(true);
         }
@@ -201,7 +207,9 @@ namespace Falltergeist
 
         void TextArea::setSize(const Size& size)
         {
-            if (_size == size) return;
+            if (_size == size) {
+                return;
+            }
             // width affect line composition, so we need full update
             _needUpdate(_size.width() != size.width());
             _size = size;
@@ -215,7 +223,9 @@ namespace Falltergeist
         // TODO: anyone is welcome to do this better..
         void TextArea::_updateSymbols()
         {
-            if (!_changed) return;
+            if (!_changed) {
+                return;
+            }
 
             _symbols.clear();
 
@@ -308,7 +318,9 @@ namespace Falltergeist
         void TextArea::_updateLines()
         {
             // check if already generated
-            if (!_lines.empty()) return;
+            if (!_lines.empty()) {
+                return;
+            }
 
             _lines.resize(1);
 
@@ -367,8 +379,9 @@ namespace Falltergeist
                         _lines.emplace_back();
                     }
 
-                    if (ch == ' ' || ch == '\n')
+                    if (ch == ' ' || ch == '\n') {
                         continue;
+                    }
 
                     Line& line = _lines.back();
                     Graphics::TextSymbol symbol {ch, {x, y}};

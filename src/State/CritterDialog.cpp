@@ -34,7 +34,9 @@ namespace Falltergeist
 
         void CritterDialog::init()
         {
-            if (_initialized) return;
+            if (_initialized) {
+                return;
+            }
             State::init();
 
             setFullscreen(false);
@@ -187,9 +189,13 @@ namespace Falltergeist
                 size_t keyOffset = keyIt - numkeys.begin();
 
                 // If numpad key
-                if (keyOffset > 8) keyOffset -= 9;
+                if (keyOffset > 8) {
+                    keyOffset -= 9;
+                }
 
-                if (keyOffset < _answers.size()) _selectAnswer(keyOffset);
+                if (keyOffset < _answers.size()) {
+                    _selectAnswer(keyOffset);
+                }
                 return;
             }
 
@@ -206,7 +212,9 @@ namespace Falltergeist
 
         void CritterDialog::_selectAnswer(size_t i)
         {
-            if (i >= _answers.size()) throw Exception("No answer with number " + std::to_string(i));
+            if (i >= _answers.size()) {
+                throw Exception("No answer with number " + std::to_string(i));
+            }
 
             auto game = Game::Game::getInstance();
             auto dialog = dynamic_cast<CritterInteract*>(game->topState(1));

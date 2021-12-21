@@ -396,7 +396,9 @@ namespace Falltergeist
                 } else {
                     auto event = _createEventFromSDL(_event);
                     if (event) {
-                        for (auto state : _getActiveStates()) state->handle(event.get());
+                        for (auto state : _getActiveStates()) {
+                            state->handle(event.get());
+                        }
                     }
                 }
                 // process events generate during handle()

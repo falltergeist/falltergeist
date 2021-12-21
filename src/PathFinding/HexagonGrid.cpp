@@ -80,18 +80,24 @@ namespace Falltergeist
             const unsigned gridSize = GRID_HEIGHT * GRID_WIDTH;
             std::array<Hexagon*, HEX_SIDES>& neighbor = hexagon->neighbors();
             // Don't get a neighbour if at the map's borders
-            if (indexBot < gridSize)
+            if (indexBot < gridSize) {
                 neighbor[0] = _hexagons.at(indexBot).get();
-            if (indexBotLeft < gridSize)
+            }
+            if (indexBotLeft < gridSize) {
                 neighbor[1] = _hexagons.at(indexBotLeft).get();
-            if (indexTopLeft < gridSize)
+            }
+            if (indexTopLeft < gridSize) {
                 neighbor[2] = _hexagons.at(indexTopLeft).get();
-            if (indexTop < gridSize)
+            }
+            if (indexTop < gridSize) {
                 neighbor[3] = _hexagons.at(indexTop).get();
-            if (indexBotRight < gridSize)
+            }
+            if (indexBotRight < gridSize) {
                 neighbor[4] = _hexagons.at(indexBotRight).get();
-            if (indexTopRight < gridSize)
+            }
+            if (indexTopRight < gridSize) {
                 neighbor[5] = _hexagons.at(indexTopRight).get();
+            }
         }
     }
 
@@ -133,7 +139,9 @@ namespace Falltergeist
 
         // if we can't go to the location
         // @todo remove when path will have length restriction
-        if (!to->canWalkThru()) return result;
+        if (!to->canWalkThru()) {
+            return result;
+        }
 
         unvisited.push(from);
 
@@ -144,18 +152,26 @@ namespace Falltergeist
         while (!unvisited.empty())
         {
             current = unvisited.top(); unvisited.pop();
-            if (current == to) break;
+            if (current == to) {
+                break;
+            }
             // search limit
-            if (costSoFar[current->number()] >= 100) break;
+            if (costSoFar[current->number()] >= 100) {
+                break;
+            }
 
             std::array<Hexagon*, HEX_SIDES>& neighbor = current->neighbors();
             // look to each adjacent hex...
             for (int i = 0; i < HEX_SIDES; i++)
             {
                 // Does the hex exist?
-                if (neighbor[i] == nullptr) continue;
+                if (neighbor[i] == nullptr) {
+                    continue;
+                }
                 // Is that hex blocked?
-                if (!neighbor[i]->canWalkThru()) continue;
+                if (!neighbor[i]->canWalkThru()) {
+                    continue;
+                }
 
                 // This hex is a viable path. But is it the shortest?
                 auto &neighborCost   = costSoFar[neighbor[i]->number()];
@@ -176,7 +192,9 @@ namespace Falltergeist
         }
 
         // found nothing
-        if (current != to) return result;
+        if (current != to) {
+            return result;
+        }
 
 
         while (current->number() != from->number())
@@ -582,8 +600,12 @@ namespace Falltergeist
                                 // dead objects block nothing
                                 //if (curObject->dead()) continue;
                                 // flat objects block nothing
-                                if (curObject->flat()) continue;
-                                if (curObject->type()==Game::Object::Type::DUDE) continue;
+                                if (curObject->flat()) {
+                                    continue;
+                                }
+                                if (curObject->type()==Game::Object::Type::DUDE) {
+                                    continue;
+                                }
 
                                 if (!curObject->canLightThru())
                                 {

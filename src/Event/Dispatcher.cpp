@@ -29,7 +29,9 @@ namespace Falltergeist
                 func(event.get());
                 // handler may set handled flag to true - to stop other handlers from executing
                 // also, target may be deleted by any handler, so we should check that on every iteration
-                if (event->handled() || target == nullptr) break;
+                if (event->handled() || target == nullptr) {
+                    break;
+                }
             }
         }
 
@@ -47,7 +49,9 @@ namespace Falltergeist
                 for (auto& task : _tasksInProcess)
                 {
                     // after previous tasks this target might already be "dead"
-                    if (task->target == nullptr) continue;
+                    if (task->target == nullptr) {
+                        continue;
+                    }
                     task->perform();
                 }
                 _tasksInProcess.clear();

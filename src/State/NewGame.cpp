@@ -34,7 +34,9 @@ namespace Falltergeist
 
         void NewGame::init()
         {
-            if (_initialized) return;
+            if (_initialized) {
+                return;
+            }
             State::init();
 
             setFullscreen(true);

@@ -28,7 +28,9 @@ namespace Falltergeist
                 State::CritterInteract::Mood mood = static_cast<State::CritterInteract::Mood>(_script->dataStack()->popInteger());
 
                 auto critter = dynamic_cast<Game::CritterObject *>(_script->dataStack()->popObject());
-                if (!critter) _error("start_gdialog - wrong critter pointer");
+                if (!critter) {
+                    _error("start_gdialog - wrong critter pointer");
+                }
 
                 int msgFileID = _script->dataStack()->popInteger();
                 if (headID > -1) {

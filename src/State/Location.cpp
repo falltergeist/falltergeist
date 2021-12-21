@@ -531,7 +531,9 @@ namespace Falltergeist
                 it->timer.think(deltaTime);
                 if (!it->timer.enabled()) {
                     it = _timerEvents.erase(it);
-                } else ++it;
+                } else {
+                    ++it;
+                }
             }
         }
 
@@ -765,7 +767,9 @@ namespace Falltergeist
                 if (mouse->state() == Input::Mouse::Cursor::USE) {
                     auto object = getGameObjectUnderCursor();
 
-                    if (!object) return;
+                    if (!object) {
+                        return;
+                    }
 
                     // Move
                     movePlayerToObject(object);
@@ -981,12 +985,13 @@ namespace Falltergeist
                 hexagon->objects()->push_back(object);
             }
 
-            if (object->type() == Game::Object::Type::CRITTER || object->type() == Game::Object::Type::DUDE)
+            if (object->type() == Game::Object::Type::CRITTER || object->type() == Game::Object::Type::DUDE) {
                 for (auto &spatial: _spatials) {
                     if (_hexagonGrid->distance(spatial->hexagon(), hexagon) <= spatial->radius()) {
                         spatial->spatial_p_proc(object);
                     }
                 }
+            }
 
             // TODO: recreate _objects array for rendering/handling
             if (update) {
@@ -1105,13 +1110,15 @@ namespace Falltergeist
                 {
                     auto dude = dynamic_cast<Game::DudeObject *>(object);
 
-                    if (!dude)
+                    if (!dude) {
                         throw Exception("Location::handleAction() - only Dude can be rotated");
+                    }
 
                     auto orientation = dude->orientation() + 1;
 
-                    if (orientation >= HEX_SIDES)
+                    if (orientation >= HEX_SIDES) {
                         orientation = 0;
+                    }
 
                     dude->setOrientation(orientation);
                     break;
@@ -1121,8 +1128,9 @@ namespace Falltergeist
                 {
                     auto critter = dynamic_cast<Game::CritterObject *>(object);
 
-                    if (!critter)
+                    if (!critter) {
                         throw Exception("Location::handleAction() - can talk only with critters!");
+                    }
 
                     critter->talk_p_proc();
                     break;

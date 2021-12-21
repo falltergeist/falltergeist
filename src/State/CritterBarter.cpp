@@ -40,7 +40,9 @@ namespace Falltergeist
 
         void CritterBarter::init()
         {
-            if (_initialized) return;
+            if (_initialized) {
+                return;
+            }
             State::init();
 
             setFullscreen(false);
@@ -82,8 +84,16 @@ namespace Falltergeist
             addUI("talkButton", imageButtonFactory->getByType(ImageButtonType::DIALOG_RED_BUTTON, {583, 162}));
             getUI("talkButton")->mouseClickHandler().add(std::bind(&CritterBarter::onTalkButtonClick, this, std::placeholders::_1));
 
-            auto scrollUp = [](UI::ItemsList *list) { if (list->canScrollUp()) list->scrollUp(); };
-            auto scrollDown = [](UI::ItemsList *list) { if (list->canScrollDown()) list->scrollDown(); };
+            auto scrollUp = [](UI::ItemsList *list) {
+                if (list->canScrollUp()) {
+                    list->scrollUp();
+                }
+            };
+            auto scrollDown = [](UI::ItemsList *list) {
+                if (list->canScrollDown()) {
+                    list->scrollDown();
+                }
+            };
 
             auto mineList = new UI::ItemsList({ 104, 35 });
             mineList->setSlotsNumber(3);
@@ -197,11 +207,16 @@ namespace Falltergeist
                 } else if (_sellPriceTotal >= _buyPriceTotal) {
                     reaction->setText(_t(MSG_INVENTORY, 27));
 
-                    for (const auto &v : _itemsToSell)
+                    for (const auto &v : _itemsToSell) {
                         _trader->inventory()->push_back(v);
+                    }
 
-                    for (const auto &v : _itemsToBuy)
-                        Game::Game::getInstance()->player()->inventory()->push_back(v);
+                    for (const auto &v : _itemsToBuy) {
+                        Game::Game::getInstance()
+                            ->player()
+                            ->inventory()
+                            ->push_back(v);
+                    }
 
                     resetTransaction();
 
@@ -232,11 +247,13 @@ namespace Falltergeist
 
         void CritterBarter::onStateDeactivate(Event::State*)
         {
-            for (const auto &v : _itemsToSell)
+            for (const auto &v : _itemsToSell) {
                 Game::Game::getInstance()->player()->inventory()->push_back(v);
+            }
 
-            for (const auto &v : _itemsToBuy)
+            for (const auto &v : _itemsToBuy) {
                 _trader->inventory()->push_back(v);
+            }
 
             dynamic_cast<UI::TextArea*>(getUI("reaction"))->setText("");
 

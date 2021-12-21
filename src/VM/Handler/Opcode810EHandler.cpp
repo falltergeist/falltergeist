@@ -36,7 +36,9 @@ namespace Falltergeist
                             critterObject->stopMovement();
                         } else {
                             auto queue = dynamic_cast<UI::AnimationQueue *>(object->ui());
-                            if (queue) queue->stop();
+                            if (queue) {
+                                queue->stop();
+                            }
                         }
                         break;
                     }

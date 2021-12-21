@@ -26,7 +26,9 @@ namespace Falltergeist
         {
             using std::string;
 
-            if (&rhs == this) return *this;
+            if (&rhs == this) {
+                return *this;
+            }
 
             _tag = rhs._tag;
             switch (_tag)
@@ -132,8 +134,9 @@ namespace Falltergeist
                     std::stringstream ss;
                     for(size_t i = 0; i < _iniVal.size(); ++i)
                     {
-                        if(i != 0)
+                        if(i != 0) {
                             ss << ",";
+                        }
                         ss << _iniVal[i].value();
                     }
                     std::string _s = ss.str();

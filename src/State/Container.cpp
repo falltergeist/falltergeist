@@ -28,7 +28,9 @@ namespace Falltergeist
 
         void Container::init()
         {
-            if (_initialized) return;
+            if (_initialized) {
+                return;
+            }
 
             setModal(true);
             setFullscreen(false);
@@ -62,8 +64,16 @@ namespace Falltergeist
             getUI("button_done")->mouseClickHandler().add(std::bind(&Container::onDoneButtonClick, this, std::placeholders::_1));
 
             // TODO: disable buttons if there is nowhere to scroll
-            auto scrollUp = [](UI::ItemsList *list) { if (list->canScrollUp()) list->scrollUp(); };
-            auto scrollDown = [](UI::ItemsList *list) { if (list->canScrollDown()) list->scrollDown(); };
+            auto scrollUp = [](UI::ItemsList *list) {
+                if (list->canScrollUp()) {
+                    list->scrollUp();
+                }
+            };
+            auto scrollDown = [](UI::ItemsList *list) {
+                if (list->canScrollDown()) {
+                    list->scrollDown();
+                }
+            };
 
             auto dudeList = new UI::ItemsList({174, 35});
             dudeList->setItems(Game::Game::getInstance()->player()->inventory());

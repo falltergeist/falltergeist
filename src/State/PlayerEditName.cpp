@@ -25,7 +25,9 @@ namespace Falltergeist
 
         void PlayerEditName::init()
         {
-            if (_initialized) return;
+            if (_initialized) {
+                return;
+            }
             State::init();
 
             setFullscreen(false);
@@ -130,11 +132,19 @@ namespace Falltergeist
                 return;
             }
 
-            if (event->keyCode() == SDLK_LSHIFT || event->keyCode() == SDLK_RSHIFT) return;
-            if (event->keyCode() == SDLK_LCTRL || event->keyCode() == SDLK_RCTRL) return;
-            if (event->keyCode() == SDLK_LALT || event->keyCode() == SDLK_RALT) return;
+            if (event->keyCode() == SDLK_LSHIFT || event->keyCode() == SDLK_RSHIFT) {
+                return;
+            }
+            if (event->keyCode() == SDLK_LCTRL || event->keyCode() == SDLK_RCTRL) {
+                return;
+            }
+            if (event->keyCode() == SDLK_LALT || event->keyCode() == SDLK_RALT) {
+                return;
+            }
 
-            if (text.length() == 11) return;
+            if (text.length() == 11) {
+                return;
+            }
 
             if (_keyCodes.find(event->keyCode()) != _keyCodes.end())
             {

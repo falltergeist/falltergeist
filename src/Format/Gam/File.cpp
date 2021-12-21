@@ -53,7 +53,9 @@ namespace Falltergeist
                     return !std::isspace(c);
                 }).base(), line.end());
 
-                if (line.length() == 0) return;
+                if (line.length() == 0) {
+                    return;
+                }
 
                 if (line == "GAME_GLOBAL_VARS:")
                 {
@@ -122,7 +124,9 @@ namespace Falltergeist
                 unsigned int i = 0;
                 for (auto gvar : _GVARS)
                 {
-                    if (i == number) return gvar.second;
+                    if (i == number) {
+                        return gvar.second;
+                    }
                     i++;
                 }
                 throw Exception("File::GVAR(number) - not found: " + std::to_string(number));
@@ -133,7 +137,9 @@ namespace Falltergeist
                 unsigned int i = 0;
                 for (auto mvar : _MVARS)
                 {
-                    if (i == number) return mvar.second;
+                    if (i == number) {
+                        return mvar.second;
+                    }
                     i++;
                 }
                 throw Exception("File::MVAR(number) - not found: " + std::to_string(number));

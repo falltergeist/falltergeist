@@ -97,7 +97,9 @@ namespace Falltergeist
             {
                 if (auto state = Game::getInstance()->locationState())
                 {
-                    if (lightValue<=state->lightLevel()) lightValue=state->lightLevel();
+                    if (lightValue<=state->lightLevel()) {
+                        lightValue=state->lightLevel();
+                    }
                     lightLevel = lightValue / ((65536-655)/100);
                 }
             }
@@ -166,7 +168,9 @@ namespace Falltergeist
             {
                 if (auto state = Game::getInstance()->locationState())
                 {
-                    if (lightValue<=state->lightLevel()) lightValue=state->lightLevel();
+                    if (lightValue<=state->lightLevel()) {
+                        lightValue=state->lightLevel();
+                    }
                     lightLevel = lightValue / ((65536-655)/100);
                 }
             }

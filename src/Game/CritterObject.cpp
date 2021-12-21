@@ -123,10 +123,14 @@ namespace Falltergeist
             switch(num)
             {
                 case STAT::STRENGTH:
-                    if (traitTagged(TRAIT::BRUISER)) bonus += 2;
+                    if (traitTagged(TRAIT::BRUISER)) {
+                        bonus += 2;
+                    }
                     break;
                 case STAT::AGILITY:
-                    if (traitTagged(TRAIT::SMALL_FRAME)) bonus += 1;
+                    if (traitTagged(TRAIT::SMALL_FRAME)) {
+                        bonus += 1;
+                    }
                     break;
                 default:
                     break;
@@ -168,35 +172,51 @@ namespace Falltergeist
             {
                 case SKILL::SMALL_GUNS:
                     value += 5 + 4 * statTotal(STAT::AGILITY);
-                    if (traitTagged(TRAIT::GOOD_NATURED)) value -= 10;
+                    if (traitTagged(TRAIT::GOOD_NATURED)) {
+                        value -= 10;
+                    }
                     break;
                 case SKILL::BIG_GUNS:
                     value += 2*statTotal(STAT::AGILITY);
-                    if (traitTagged(TRAIT::GOOD_NATURED)) value -= 10;
+                    if (traitTagged(TRAIT::GOOD_NATURED)) {
+                        value -= 10;
+                    }
                     break;
                 case SKILL::ENERGY_WEAPONS:
                     value += 2*statTotal(STAT::AGILITY);
-                    if (traitTagged(TRAIT::GOOD_NATURED)) value -= 10;
+                    if (traitTagged(TRAIT::GOOD_NATURED)) {
+                        value -= 10;
+                    }
                     break;
                 case SKILL::UNARMED:
                     value += 30 + 2*(statTotal(STAT::AGILITY) + statTotal(STAT::STRENGTH));
-                    if (traitTagged(TRAIT::GOOD_NATURED)) value -= 10;
+                    if (traitTagged(TRAIT::GOOD_NATURED)) {
+                        value -= 10;
+                    }
                     break;
                 case SKILL::MELEE_WEAPONS:
                     value += 20 + 2*(statTotal(STAT::AGILITY) + statTotal(STAT::STRENGTH));
-                    if (traitTagged(TRAIT::GOOD_NATURED)) value -= 10;
+                    if (traitTagged(TRAIT::GOOD_NATURED)) {
+                        value -= 10;
+                    }
                     break;
                 case SKILL::THROWING:
                     value += 4*statTotal(STAT::AGILITY);
-                    if (traitTagged(TRAIT::GOOD_NATURED)) value -= 10;
+                    if (traitTagged(TRAIT::GOOD_NATURED)) {
+                        value -= 10;
+                    }
                     break;
                 case SKILL::FIRST_AID:
                     value += 20 + 2*(statTotal(STAT::PERCEPTION) + statTotal(STAT::INTELLIGENCE));
-                    if (traitTagged(TRAIT::GOOD_NATURED)) value += 15;
+                    if (traitTagged(TRAIT::GOOD_NATURED)) {
+                        value += 15;
+                    }
                     break;
                 case SKILL::DOCTOR:
                     value += 20 + 5 + (statTotal(STAT::PERCEPTION) + statTotal(STAT::INTELLIGENCE));
-                    if (traitTagged(TRAIT::GOOD_NATURED)) value += 15;
+                    if (traitTagged(TRAIT::GOOD_NATURED)) {
+                        value += 15;
+                    }
                     break;
                 case SKILL::SNEAK:
                     value += 20 + 5 + 3*statTotal(STAT::AGILITY);
@@ -218,11 +238,15 @@ namespace Falltergeist
                     break;
                 case SKILL::SPEECH:
                     value += 20 + 5*statTotal(STAT::CHARISMA);
-                    if (traitTagged(TRAIT::GOOD_NATURED)) value += 15;
+                    if (traitTagged(TRAIT::GOOD_NATURED)) {
+                        value += 15;
+                    }
                     break;
                 case SKILL::BARTER:
                     value += 20 + 4*statTotal(STAT::CHARISMA);
-                    if (traitTagged(TRAIT::GOOD_NATURED)) value += 15;
+                    if (traitTagged(TRAIT::GOOD_NATURED)) {
+                        value += 15;
+                    }
                     break;
                 case SKILL::GAMBLING:
                     value += 20 + 5*statTotal(STAT::LUCK);
@@ -584,7 +608,9 @@ namespace Falltergeist
         void CritterObject::onMovementAnimationEnded(Event::Event* event)
         {
             auto animation = dynamic_cast<UI::Animation*>(ui());
-            if (!animation) throw Exception("UI::Animation expected!");
+            if (!animation) {
+                throw Exception("UI::Animation expected!");
+            }
             // get offset of the last frame
             Point lastFrameOfs = animation->offset() + animation->currentFramePtr()->offset();
             animation->setCurrentFrame(0);

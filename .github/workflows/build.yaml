@@ -10,6 +10,6 @@ jobs:
       - name: install build dependencies
         run: sudo apt install -y build-essential cmake libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libglew-dev libglm-dev zlib1g-dev
       - name: cmake
-        run: cmake .
+        run: cmake -DUSE_CLANG_TIDY=1 .
       - name: make
         run: make

@@ -91,10 +91,12 @@ namespace Falltergeist
                 size_t res = 0;
                 while (res < count) {
                     if (_samplesReady == 0) {
-                        if (_samplesLeft == 0)
+                        if (_samplesLeft == 0) {
                             break;
-                        if (!_makeNewSamples())
+                        }
+                        if (!_makeNewSamples()) {
                             break;
+                        }
                     }
                     *buffer = ( short ) ( (*_values) >> _levels);
                     _values++;

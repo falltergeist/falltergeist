@@ -15,6 +15,9 @@ https://falltergeist.org/
 
 ## Compilation
 
+CMake options:
+- USE_CLANG_TIDY - if set then clang-tidy checks are enabled
+
 ### Linux
 
 ```console

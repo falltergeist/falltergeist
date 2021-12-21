@@ -295,7 +295,9 @@ namespace Falltergeist
             if (proto->scriptId() > 0)
             {
                 auto intFile = ResourceManager::getInstance()->intFileType(proto->scriptId());
-                if (intFile) object->setScript(new VM::Script(intFile, object));
+                if (intFile) {
+                    object->setScript(new VM::Script(intFile, object));
+                }
             }
 
             return object;

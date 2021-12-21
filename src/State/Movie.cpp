@@ -32,7 +32,9 @@ namespace Falltergeist
 
         void Movie::init()
         {
-            if (_initialized) return;
+            if (_initialized) {
+                return;
+            }
             State::init();
 
             setFullscreen(true);
@@ -83,7 +85,9 @@ namespace Falltergeist
             if (sublst->strings()->at(_id)!="reserved.sve")
             {
                 _subs = ResourceManager::getInstance()->sveFileType(subfile);
-                if (_subs) _hasSubs = true;
+                if (_subs) {
+                    _hasSubs = true;
+                }
             }
             addUI("movie", new UI::MvePlayer(ResourceManager::getInstance()->mveFileType(movie)));
 
@@ -95,10 +99,11 @@ namespace Falltergeist
             subLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
             addUI("subs",subLabel);
 
-            if (_hasSubs)
+            if (_hasSubs) {
                 _nextSubLine = _subs->getSubLine(0);
-            else
-                _nextSubLine = std::pair<int,std::string>(999999,"");
+            } else {
+                _nextSubLine = std::pair<int, std::string>(999999, "");
+            }
         }
 
         void Movie::think(const float &deltaTime)
@@ -110,19 +115,16 @@ namespace Falltergeist
             }
 
             unsigned int frame = dynamic_cast<UI::MvePlayer*>(getUI("movie"))->frame();
-            if ( frame >= _nextSubLine.first)
-            {
+            if (frame >= _nextSubLine.first) {
                 dynamic_cast<UI::TextArea*>(getUI("subs"))->setText(_nextSubLine.second);
-                if (_hasSubs) _nextSubLine = _subs->getSubLine(dynamic_cast<UI::MvePlayer*>(getUI("movie"))->frame());
-            }
-            if (_effect_index<_effects.size() && frame>=_effects[_effect_index].frame)
-            {
-                if (_effects[_effect_index].direction < 0)
-                {
-                    Game::Game::getInstance()->renderer()->fadeIn(_effects[_effect_index].r, _effects[_effect_index].g, _effects[_effect_index].b, _effects[_effect_index].frames, true);
+                if (_hasSubs) {
+                    _nextSubLine = _subs->getSubLine(dynamic_cast<UI::MvePlayer*>(getUI("movie"))->frame());
                 }
-                else
-                {
+            }
+            if (_effect_index<_effects.size() && frame>=_effects[_effect_index].frame) {
+                if (_effects[_effect_index].direction < 0) {
+                    Game::Game::getInstance()->renderer()->fadeIn(_effects[_effect_index].r, _effects[_effect_index].g, _effects[_effect_index].b, _effects[_effect_index].frames, true);
+                } else {
                     Game::Game::getInstance()->renderer()->fadeOut(_effects[_effect_index].r, _effects[_effect_index].g, _effects[_effect_index].b, _effects[_effect_index].frames, true);
                 }
                 _effect_index++;

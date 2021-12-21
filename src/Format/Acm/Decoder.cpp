@@ -18,8 +18,9 @@ namespace Falltergeist
                 if (memory_size)
                 {
                     _memoryBuffer = (int *) calloc(memory_size, sizeof(int));
-                    if (!_memoryBuffer)
+                    if (!_memoryBuffer) {
                         return 0;
+                    }
                 }
                 return 1;
             }
@@ -38,8 +39,9 @@ namespace Falltergeist
                 _sub4d3fcc((short *) memPtr, buffPtr, sbSize, blocks);
                 memPtr += sbSize;
 
-                for (int i = 0; i < blocks; i++)
+                for (int i = 0; i < blocks; i++) {
                     buffPtr[i * sbSize]++;
+                }
 
                 sbSize >>= 1;
                 blocks <<= 1;

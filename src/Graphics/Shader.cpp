@@ -170,7 +170,9 @@ namespace Falltergeist
                 _attribs[attrib] = loc;
                 return loc;
             }
-            else return _attribs.at(attrib);
+            else {
+                return _attribs.at(attrib);
+            }
         }
 
         void Shader::setUniform(const std::string &uniform, int i)

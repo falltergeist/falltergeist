@@ -86,8 +86,9 @@ namespace Falltergeist
             _ui.back()->mouseDownHandler().add([this](Event::Event* event){
                 if(auto mouse = dynamic_cast<Event::Mouse*>(event))
                 {
-                    if(mouse->leftButton())
+                    if(mouse->leftButton()) {
                         _isAttackBtnPressed = true;
+                    }
                 }
             });
 
@@ -243,7 +244,9 @@ namespace Falltergeist
 
             for (auto it = _ui.rbegin(); it != _ui.rend(); ++it)
             {
-                if (event->handled()) return;
+                if (event->handled()) {
+                    return;
+                }
                 (*it)->handle(event);
             }
         }
