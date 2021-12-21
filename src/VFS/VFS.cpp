@@ -30,5 +30,22 @@ namespace Falltergeist {
             std::cout << "file: '" << pathToFile << "' not found at any mount point" << std::endl;
             return false;
         }
+
+        std::shared_ptr<IFile> VFS::open(const std::string& path, IFile::OpenMode mode) {
+            for (auto it = _mounts.begin(); it != _mounts.end(); ++it) {
+                if (it->first.size() && path.find(it->first) == std::string::npos) {
+                    std::cout << "Path '" << path << "' does not match mount point '" << it->first << "'" << std::endl;
+                    continue;
+                }
+
+                // TODO ltrim mountPoint from pathToFile
+                if (it->second->exists(it->first.size() ? path.substr(it->first.length()) : path)) {
+                    std::cout << "Mount point: '" << it->first << "' found file: '" << path << "'" << std::endl;
+                    return it->second->open(it->first.size() ? path.substr(it->first.length()) : path, mode);
+                }
+            }
+            std::cout << "file: '" << path << "' not found at any mount point" << std::endl;
+            return nullptr;
+        }
     }
 }
