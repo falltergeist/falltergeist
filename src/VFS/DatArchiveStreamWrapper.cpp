@@ -51,12 +51,12 @@ namespace Falltergeist {
                 _readUint32(packedSize);
                 _readUint32(dataOffset);
 
-                _entries.insert(std::make_pair(filename, DatArchiveEntry({
-                                                             .packedSize = packedSize,
-                                                             .unpackedSize = unpackedSize,
-                                                             .dataOffset = dataOffset,
-                                                             .isCompressed = (bool) compressed
-                                                         })));
+                _entries.insert(std::make_pair(filename, DatArchiveEntry{
+                    packedSize,
+                    unpackedSize,
+                    dataOffset,
+                    (bool) compressed
+                }));
             }
         }
 
