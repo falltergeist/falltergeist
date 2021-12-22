@@ -1,0 +1,12 @@
+{
+  "name": "falltergeist",
+  "version-string": "0.3.1",
+  "dependencies": [
+    "sdl2",
+    "sdl2-image",
+    "sdl2-mixer",
+    "zlib",
+    "glew",
+    "glm"
+  ]
+}
