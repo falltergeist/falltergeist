@@ -19,7 +19,7 @@ namespace Falltergeist
                 auto &debug = logger->debug();
                 debug << "[80C5] [?] GVAR[num]" << std::endl;
                 int num = _script->dataStack()->popInteger();
-                int value;
+                int value = 0;
                 if (num < 0) {
                     value = 0;
                 } else {

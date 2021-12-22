@@ -174,7 +174,7 @@ namespace Falltergeist
 
             uint32_t Stream::uint32()
             {
-                uint32_t value;
+                uint32_t value = 0;
                 *this >> value;
                 return value;
             }
@@ -186,7 +186,7 @@ namespace Falltergeist
 
             uint16_t Stream::uint16()
             {
-                uint16_t value;
+                uint16_t value = 0;
                 *this >> value;
                 return value;
             }
@@ -198,7 +198,7 @@ namespace Falltergeist
 
             uint8_t Stream::uint8()
             {
-                uint8_t value;
+                uint8_t value = 0;
                 *this >> value;
                 return value;
             }

@@ -25,14 +25,14 @@ namespace Falltergeist
 
                 for (uint32_t i=0; i < _phonemesCount; i++)
                 {
-                    uint8_t phoneme;
+                    uint8_t phoneme = 0;
                     stream >> phoneme;
                     _phonemes.push_back(phoneme);
                 }
 
                 for (uint32_t i=0; i < _markersCount; i++)
                 {
-                    uint32_t stype, smarker;
+                    uint32_t stype = 0, smarker = 0;
                     stream >> stype >> smarker;
                     _markerSamples.push_back(smarker);
                     _markerTimestamps.push_back(smarker*1000 / 22050 /2); //ms

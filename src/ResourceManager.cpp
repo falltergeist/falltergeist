@@ -11,7 +11,6 @@
 #include "Format/Bio/File.h"
 #include "Format/Dat/Stream.h"
 #include "Format/Dat/File.h"
-#include "Format/Dat/MiscFile.h"
 #include "Format/Dat/Item.h"
 #include "Format/Fon/File.h"
 #include "Format/Frm/File.h"
@@ -40,6 +39,9 @@
 #include "Logger.h"
 #include "ResourceManager.h"
 #include "Ini/File.h"
+#include "VFS/DatArchiveDriver.h"
+#include "VFS/NativeDriver.h"
+#include "VFS/MemoryDriver.h"
 
 namespace Falltergeist {
     using namespace std;
@@ -52,10 +54,18 @@ namespace Falltergeist {
     }
 
     ResourceManager::ResourceManager() {
+        auto vfsLogger = std::make_shared<Logger>("VFS");
+        _vfs = std::make_unique<VFS::VFS>(vfsLogger);
+
         for (auto filename : CrossPlatform::findFalloutDataFiles()) {
             string path = CrossPlatform::findFalloutDataPath() + "/" + filename;
             _datFiles.push_back(std::make_unique<Dat::File>(path));
+            _vfs->addMount("", std::make_unique<VFS::DatArchiveDriver>(path));
         }
+
+        std::string falltergeistDataPath = CrossPlatform::findFalltergeistDataPath() + "/data";
+        _vfs->addMount("data", std::make_unique<VFS::NativeDriver>(falltergeistDataPath, vfsLogger));
+        _vfs->addMount("cache", std::make_unique<VFS::MemoryDriver>());
     }
 
 // static
@@ -200,10 +210,6 @@ namespace Falltergeist {
         return _datFileItem<Sve::File>(filename);
     }
 
-    Falltergeist::Dat::MiscFile *ResourceManager::miscFileType(const std::string &filename) {
-        return _datFileItem<Dat::MiscFile>(filename);
-    }
-
     Txt::CityFile *ResourceManager::cityTxt() {
         return _datFileItem<Txt::CityFile>("data/city.txt");
     }
@@ -250,16 +256,24 @@ namespace Falltergeist {
         Graphics::Texture *texture = nullptr;
 
         if (ext == ".png") {
+            auto file = vfs()->open(filename, VFS::IFile::OpenMode::Read);
+            if (!file || !file->isOpened()) {
+                return nullptr;
+            }
+
+            char* src = new char[file->size()];
+            file->read(src, file->size());
+            SDL_Surface* tempSurface = IMG_Load_RW(SDL_RWFromMem(src, file->size()), 1);
+            vfs()->close(file);
+
             // @fixme: this section looks quite ugly. we should try to do something with it someday
-            SDL_Surface *tempSurface = IMG_Load(
-                string(CrossPlatform::findFalltergeistDataPath() + "/" + filename).c_str());
             if (tempSurface == NULL) {
                 throw Exception("ResourceManager::texture(name) - cannot load texture from file " + filename + ": " +
                                 IMG_GetError());
             }
 
-            SDL_PixelFormat *pixelFormat = SDL_AllocFormat(SDL_PIXELFORMAT_RGBA8888);
-            SDL_Surface *tempSurface2 = SDL_ConvertSurface(tempSurface, pixelFormat, 0);
+            SDL_PixelFormat* pixelFormat = SDL_AllocFormat(SDL_PIXELFORMAT_RGBA8888);
+            SDL_Surface* tempSurface2 = SDL_ConvertSurface(tempSurface, pixelFormat, 0);
             texture = new Graphics::Texture(
                 Graphics::Pixels(
                     tempSurface2->pixels,
@@ -461,4 +475,7 @@ namespace Falltergeist {
         unloadResources();
     }
 
+    std::unique_ptr<VFS::VFS>& ResourceManager::vfs() {
+        return _vfs;
+    }
 }

@@ -65,7 +65,7 @@ namespace Falltergeist
 
             Color::operator unsigned int() const
             {
-                uint8_t k;
+                uint8_t k = 0;
                 if (_nomod) {
                     k = 1;
                 }

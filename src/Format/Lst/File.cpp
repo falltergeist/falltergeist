@@ -15,7 +15,7 @@ namespace Falltergeist
                 stream.setPosition(0);
 
                 std::string line;
-                unsigned char ch;
+                unsigned char ch = 0;
                 for (unsigned int i = 0; i != stream.size(); ++i)
                 {
                     stream >> ch;

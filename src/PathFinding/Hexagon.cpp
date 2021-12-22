@@ -47,7 +47,7 @@ namespace Falltergeist
         int dx = delta.x();
         int dy = delta.y();
 
-        unsigned char result;
+        unsigned char result = 0;
 
         if (dx) {
             // trigonometry magic.

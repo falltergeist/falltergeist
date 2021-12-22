@@ -29,7 +29,7 @@ namespace Falltergeist
                 _stream >> hdr.channels;
                 _stream >> hdr.rate;
 
-                int16_t tmpword;
+                int16_t tmpword = 0;
                 _stream.readBytes((uint8_t*)&tmpword, 2);
                 _subblocks = (int32_t) (tmpword >> 4);
                 _levels = (int32_t) (tmpword&15);

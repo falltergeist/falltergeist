@@ -9,6 +9,8 @@
 #include "../Graphics/Renderer.h"
 #include "../Input/Mouse.h"
 #include "../UI/InventoryItem.h"
+
+#include <math.h>
 #include "../UI/ItemsList.h"
 
 namespace Falltergeist
@@ -46,10 +48,10 @@ namespace Falltergeist
                 return;
             }
 
-            double widthRatio;
-            double heightRatio;
-            unsigned int newWidth;
-            unsigned int newHeight;
+            double widthRatio = 0.0;
+            double heightRatio = 0.0;
+            unsigned int newWidth = 0;
+            unsigned int newHeight = 0;
             Size texSize;
 
             auto slotUi = _item->inventorySlotUi();

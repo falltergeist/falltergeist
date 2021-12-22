@@ -5,12 +5,12 @@
 #include "../Event/Mouse.h"
 #include "../Event/State.h"
 #include "../Font.h"
-#include "../Format/Dat/MiscFile.h"
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
 #include "../Input/Mouse.h"
 #include "../ResourceManager.h"
 #include "../UI/TextArea.h"
+#include "../Exception.h"
 
 namespace Falltergeist
 {
@@ -42,11 +42,18 @@ namespace Falltergeist
             auto renderer = Game::Game::getInstance()->renderer();
             setPosition(Point((renderer->size().width() - 640) / 2, renderer->size().height()));
 
-            auto credits = ResourceManager::getInstance()->miscFileType("text/english/credits.txt");
-            std::stringstream ss;
-            credits->stream().setPosition(0);
-            ss << &credits->stream();
-            std::string line;
+            auto& vfs = ResourceManager::getInstance()->vfs();
+            auto file = vfs->open("text/english/credits.txt", VFS::IFile::OpenMode::Read);
+            if (!file || !file->isOpened()) {
+                throw Exception("Could not open credits file");
+            }
+
+            std::string content;
+            content.resize(file->size());
+            file->read(content.data(), file->size());
+            vfs->close(file);
+
+            std::istringstream contentStream(content);
 
             auto font_default = ResourceManager::getInstance()->font("font4.aaf");
             SDL_Color default_color = {0x90, 0x78, 0x24, 0xFF};
@@ -56,7 +63,8 @@ namespace Falltergeist
             SDL_Color hash_color = { 0x8c, 0x8c, 0x84, 0xFF};
 
             int y = 0;
-            while (std::getline(ss, line))
+            std::string line;
+            while (std::getline(contentStream, line))
             {
                 Graphics::Font* cur_font = font_default;
                 SDL_Color cur_color = default_color;

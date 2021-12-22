@@ -3,6 +3,9 @@
 
 namespace Falltergeist
 {
+    Logger::Logger(const std::string& channel) : _channel(channel) {
+    }
+
     Logger::Level Logger::level()
     {
         return _level;
@@ -24,6 +27,7 @@ namespace Falltergeist
         if (subsystem.size() > 0) {
             subsystemMsg = " [" + subsystem + "] ";
         }
+
         return std::cout << levelString(level) << subsystemMsg << std::dec;
     }
 
@@ -53,6 +57,8 @@ namespace Falltergeist
                     return "\x1b[31m[ERROR]\x1b[0m";
                 case Logger::Level::LOG_CRITICAL:
                     return "\x1b[31;1m[CRITICAL]\x1b[0m";
+                default:
+                    break;
             }
         }
         else
@@ -69,6 +75,8 @@ namespace Falltergeist
                     return "[ERROR]";
                 case Logger::Level::LOG_CRITICAL:
                     return "[CRITICAL]";
+                default:
+                    break;
             };
         }
 
@@ -132,7 +140,7 @@ namespace Falltergeist
 
     void Logger::setLevel(const std::string &level)
     {
-        Logger::Level lvl;
+        Logger::Level lvl = Logger::Level::LOG_NONE;
 
         if (level == "debug")
         {

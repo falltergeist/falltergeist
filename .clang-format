@@ -1,4 +1,5 @@
 BraceWrapping:
+  AfterCaseLabel: false
 #  AfterClass:      true
   AfterControlStatement: true
 #  AfterEnum:       true/false
@@ -16,3 +17,12 @@ FixNamespaceComments: false
 AllowAllArgumentsOnNextLine: false
 AllowAllParametersOfDeclarationOnNextLine: false
 IndentWidth: 4
+AccessModifierOffset: -4
+EmptyLineAfterAccessModifier: Leave
+PointerAlignment: Left
+ReferenceAlignment: Left
+ColumnLimit: 150
+AllowShortFunctionsOnASingleLine: None
+AllowShortCaseLabelsOnASingleLine: false
+IndentCaseBlocks: false
+IndentCaseLabels: true

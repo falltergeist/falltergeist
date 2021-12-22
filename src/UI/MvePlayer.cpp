@@ -40,16 +40,12 @@ namespace Falltergeist
 
         int16_t get_short(uint8_t *data)
         {
-            int16_t value;
-            value = data[0] | (data[1] << 8);
-            return value;
+            return data[0] | (data[1] << 8);
         }
 
         int32_t get_int(uint8_t *data)
         {
-            int32_t value;
-            value = data[0] | (data[1] << 8) | (data[2] << 16) | (data[3] << 24);
-            return value;
+            return data[0] | (data[1] << 8) | (data[2] << 16) | (data[3] << 24);
         }
 
 
@@ -100,13 +96,12 @@ namespace Falltergeist
 
         SDL_Rect relFar(uint8_t b, uint32_t _x, uint32_t _y)
         {
-            int32_t ma, mi;
             SDL_Rect rect;
             rect.w = 8;
             rect.h = 8;
 
-            ma = b >> 4;
-            mi = b & 0xf;
+            int32_t ma = b >> 4;
+            int32_t mi = b & 0xf;
 
             rect.x = _x + mi - 8;
             rect.y = _y + ma - 8;
@@ -240,10 +235,10 @@ namespace Falltergeist
         {
             uint32_t h = (_currentBuf->h / 8);
             uint32_t w = (_currentBuf->w / 8);
-            uint32_t curMap;
+            uint32_t curMap = 0;
             SDL_Rect srcrect;
             SDL_Rect dstrect;
-            uint8_t color;
+            uint8_t color = 0;
             for (uint32_t y = 0; y < h;y++) {
                 for (uint32_t x = 0; x < w;x++) {
                     curMap = (y*w + x);
@@ -539,7 +534,7 @@ namespace Falltergeist
             int16_t nXoffset, nYoffset;
             int16_t nXsize, nYsize;
         */
-            int16_t nFlags;
+            int16_t nFlags = 0;
 
         /*
             nFrameHot  = get_short(data);
@@ -553,8 +548,7 @@ namespace Falltergeist
 
             if (nFlags & 1)
             {
-                SDL_Surface* temp;
-                temp = _currentBuf;
+                SDL_Surface* temp = _currentBuf;
                 _currentBuf = _backBuf;
                 _backBuf = temp;
             }
