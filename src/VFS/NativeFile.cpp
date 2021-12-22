@@ -98,6 +98,10 @@ namespace Falltergeist {
             return _stream.gcount();
         }
 
+        unsigned int NativeFile::read(char* to, unsigned int size) {
+            return read(reinterpret_cast<unsigned char*>(to), size);
+        }
+
         unsigned int NativeFile::write(const char* from, unsigned int size) {
             if (!isOpened() || _mode == OpenMode::Read) {
                 return 0;

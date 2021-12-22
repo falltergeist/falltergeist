@@ -40,6 +40,9 @@
 #include "Logger.h"
 #include "ResourceManager.h"
 #include "Ini/File.h"
+#include "VFS/DatArchiveDriver.h"
+#include "VFS/NativeDriver.h"
+#include "VFS/MemoryDriver.h"
 
 namespace Falltergeist {
     using namespace std;
@@ -52,10 +55,17 @@ namespace Falltergeist {
     }
 
     ResourceManager::ResourceManager() {
+        _vfs = std::make_unique<VFS::VFS>();
+
         for (auto filename : CrossPlatform::findFalloutDataFiles()) {
             string path = CrossPlatform::findFalloutDataPath() + "/" + filename;
             _datFiles.push_back(std::make_unique<Dat::File>(path));
+            _vfs->addMount("", std::make_unique<VFS::DatArchiveDriver>(path));
         }
+
+        std::string falltergeistDataPath = CrossPlatform::findFalltergeistDataPath() + "/data";
+        _vfs->addMount("data", std::make_unique<VFS::NativeDriver>(falltergeistDataPath));
+        _vfs->addMount("cache", std::make_unique<VFS::MemoryDriver>());
     }
 
 // static
@@ -461,4 +471,7 @@ namespace Falltergeist {
         unloadResources();
     }
 
+    std::unique_ptr<VFS::VFS>& ResourceManager::vfs() {
+        return _vfs;
+    }
 }

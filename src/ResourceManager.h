@@ -8,6 +8,7 @@
 #include <unordered_map>
 #include <vector>
 #include "Base/Singleton.h"
+#include "VFS/VFS.h"
 
 namespace Falltergeist
 {
@@ -119,19 +120,30 @@ namespace Falltergeist
             void unloadResources();
             std::string FIDtoFrmName(unsigned int FID);
             Game::Location* gameLocation(unsigned int number);
+
             void shutdown();
+
+            std::unique_ptr<VFS::VFS>& vfs();
 
         private:
             friend class Base::Singleton<ResourceManager>;
 
             std::vector<std::unique_ptr<Format::Dat::File>> _datFiles;
+
             std::unordered_map<std::string, std::unique_ptr<Format::Dat::Item>> _datItems;
+
             std::unordered_map<std::string, std::unique_ptr<Graphics::Texture>> _textures;
+
             std::unordered_map<std::string, std::unique_ptr<Graphics::Font>> _fonts;
+
             std::unordered_map<std::string, std::unique_ptr<Graphics::Shader>> _shaders;
 
+            std::unique_ptr<VFS::VFS> _vfs;
+
             ResourceManager();
+
             ResourceManager(const ResourceManager&) = delete;
+
             ResourceManager& operator=(const ResourceManager&) = delete;
 
             // Retrieves given file item from "virtual file system".

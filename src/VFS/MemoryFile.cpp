@@ -61,6 +61,10 @@ namespace Falltergeist {
             return bytesAvailable;
         }
 
+        unsigned int MemoryFile::read(char* to, unsigned int size) {
+            return read(reinterpret_cast<unsigned char*>(to), size);
+        }
+
         unsigned int MemoryFile::write(const char* from, unsigned int size) {
             if (!isOpened() || _mode == OpenMode::Read) {
                 return 0;

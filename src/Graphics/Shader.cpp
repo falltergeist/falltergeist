@@ -78,8 +78,8 @@ namespace Falltergeist
                 default:
                     break;
             }
-            // TODO: use resource manager
-            std::string pathToFile = CrossPlatform::findFalltergeistDataPath() + "/data/shaders/" + rpath + fname +".shader";
+
+            std::string pathToFile = "data/shaders/" + rpath + fname + ".shader";
             Logger::info("RENDERER") << "Loading shader " << pathToFile << std::endl;
             ShaderFile shaderFile(pathToFile);
 

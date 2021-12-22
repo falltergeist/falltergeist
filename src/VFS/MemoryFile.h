@@ -15,6 +15,8 @@ namespace Falltergeist {
 
             MemoryFile(MemoryFile&& other) = delete;
 
+            MemoryFile& operator=(MemoryFile other) = delete;
+
             ~MemoryFile() override = default;
 
             unsigned int size() override;
@@ -26,6 +28,8 @@ namespace Falltergeist {
             unsigned int tell() override;
 
             unsigned int read(unsigned char *to, unsigned int size) override;
+
+            unsigned int read(char* to, unsigned int size) override;
 
             unsigned int write(const char *from, unsigned int size) override;
 

@@ -3,6 +3,7 @@
 namespace Falltergeist {
     namespace VFS {
         class IDriver;
+        class VFS;
 
         class IFile {
         public:
@@ -33,10 +34,13 @@ namespace Falltergeist {
 
             virtual unsigned int read(unsigned char* to, unsigned int size) = 0;
 
+            virtual unsigned int read(char* to, unsigned int size) = 0;
+
             virtual unsigned int write(const char* from, unsigned int size) = 0;
 
         protected:
             friend class IDriver;
+            friend class VFS;
 
             virtual void _open(OpenMode mode) = 0;
 

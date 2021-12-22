@@ -67,6 +67,10 @@ namespace Falltergeist {
             return bytesAvailable;
         }
 
+        unsigned int DatArchiveFile::read(char* to, unsigned int size) {
+            return read(reinterpret_cast<unsigned char*>(to), size);
+        }
+
         unsigned int DatArchiveFile::write(const char* from, unsigned int size) {
             if (!isOpened()) {
                 return 0;

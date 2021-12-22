@@ -1,7 +1,8 @@
 #include "../Graphics/ShaderFile.h"
 #include "../Exception.h"
-#include <fstream>
+#include "../ResourceManager.h"
 #include <iostream>
+#include <sstream>
 
 namespace Falltergeist {
     namespace Graphics {
@@ -10,19 +11,27 @@ namespace Falltergeist {
             Vertex
         };
 
-        ShaderFile::ShaderFile(const std::string &file) {
-            std::ifstream ifstream(file);
-            if (!ifstream.is_open()) {
-                throw Exception("Can't open shader source " + file);
+        ShaderFile::ShaderFile(const std::string &path) {
+            auto& vfs = ResourceManager::getInstance()->vfs();
+            auto file = vfs->open(path, VFS::IFile::OpenMode::Read);
+            if (!file || !file->isOpened()) {
+                throw Exception("Can't open shader source " + path);
             }
+
+            std::string content;
+            content.resize(file->size());
+            file->read(content.data(), file->size());
+            vfs->close(file);
+
+            std::istringstream contentStream(content);
 
             ShaderFileSection currentSection = ShaderFileSection::Vertex;
             std::string fragmentSection;
             std::string vertexSection;
 
-            while (!ifstream.eof()) {
+            while (!contentStream.eof()) {
                 std::string line;
-                std::getline(ifstream, line);
+                std::getline(contentStream, line);
 
                 if (line.find("#shader vertex") != std::string::npos) {
                     currentSection = ShaderFileSection::Vertex;
@@ -42,7 +51,6 @@ namespace Falltergeist {
             }
             _fragmentSection = fragmentSection;
             _vertexSection = vertexSection;
-            ifstream.close();
         }
 
         const std::string &ShaderFile::vertexSection() const {

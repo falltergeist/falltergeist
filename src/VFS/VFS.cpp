@@ -5,12 +5,10 @@
 namespace Falltergeist {
     namespace VFS {
         void VFS::addMount(const std::string& path, std::unique_ptr<IDriver>&& driver) {
-            // TODO ensure trailing path separator
             _mounts.insert(std::make_pair(path, std::move(driver)));
         }
 
         void VFS::addMount(const std::string& path, std::unique_ptr<IDriver>& driver) {
-            // TODO ensure trailing path separator
             _mounts.insert(std::make_pair(path, std::move(driver)));
         }
 
@@ -21,7 +19,6 @@ namespace Falltergeist {
                     continue;
                 }
 
-                // TODO ltrim mountPoint from pathToFile
                 if (it->second->exists(it->first.size() ? pathToFile.substr(it->first.length()) : pathToFile)) {
                     std::cout << "Mount point: '" << it->first << "' found file: '" << pathToFile << "'" << std::endl;
                     return true;
@@ -32,6 +29,10 @@ namespace Falltergeist {
         }
 
         std::shared_ptr<IFile> VFS::open(const std::string& path, IFile::OpenMode mode) {
+            if (_openedFiles.count(path) != 0) {
+                return _openedFiles.at(path);
+            }
+
             for (auto it = _mounts.begin(); it != _mounts.end(); ++it) {
                 if (it->first.size() && path.find(it->first) == std::string::npos) {
                     std::cout << "Path '" << path << "' does not match mount point '" << it->first << "'" << std::endl;
@@ -47,12 +48,28 @@ namespace Falltergeist {
                 }
 
                 std::cout << "Mount point: '" << it->first << "' opening file: '" << path << "'" << std::endl;
+                auto file = it->second->open(it->first.size() ? path.substr(it->first.length() + 1) : path, mode);
+                if (file) {
+                    _openedFiles.emplace(std::make_pair(path, file));
+                    return file;
+                }
 
-                // TODO save file to the list of opened files
-                return it->second->open(it->first.size() ? path.substr(it->first.length() + 1) : path, mode);
+                std::cout << "Could not open file" << std::endl;
             }
             std::cout << "file: '" << path << "' not found at any mount point" << std::endl;
             return nullptr;
+        }
+
+        void VFS::close(std::shared_ptr<IFile>& file)
+        {
+            file->_close();
+
+            for (auto it = _openedFiles.begin(); it != _openedFiles.end(); ++it) {
+                if (it->second == file) {
+                    _openedFiles.erase(it->first);
+                    break;
+                }
+            }
         }
     }
 }

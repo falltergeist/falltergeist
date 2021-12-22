@@ -88,14 +88,7 @@ namespace Falltergeist
 
     std::string CrossPlatform::getExecutableDirectory()
     {
-        char* buffer=SDL_GetBasePath();
-        if (buffer == NULL) {
-            Logger::warning("") << "SDL_GetBasePath() not able to obtain a path on this platform" << std::endl;
-            return "./";
-        }
-        std::string path(buffer);
-        SDL_free(buffer);
-        return path;
+        return std::filesystem::current_path();
     }
 
     std::vector<std::string> CrossPlatform::getCdDrivePaths()

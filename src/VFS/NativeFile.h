@@ -25,6 +25,8 @@ namespace Falltergeist {
 
             unsigned int read(unsigned char* to, unsigned int size) override;
 
+            unsigned int read(char* to, unsigned int size) override;
+
             unsigned int write(const char* from, unsigned int size) override;
 
         protected:
