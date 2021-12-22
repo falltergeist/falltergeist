@@ -6,23 +6,20 @@
 
 namespace Falltergeist {
     namespace VFS {
-        NativeDriver::NativeDriver(const std::string& basePath)
+        NativeDriver::NativeDriver(const std::filesystem::path& basePath)
             : _basePath(basePath) {
-            // TODO rtrim trailing path separator
         }
 
         bool NativeDriver::exists(const std::string& path) {
-            std::cout << "Looking for path '" << path << "' with basePath '" << _basePath + "'" << std::endl;
-            std::cout << _basePath + "/" + path << std::endl;
-            return std::filesystem::exists(_basePath + "/" + path);
+            std::filesystem::path fsPath = std::filesystem::absolute(_basePath) / std::filesystem::path(path);
+            std::cout << "Looking for native file: '" << fsPath.native() << "'" << std::endl;
+            return std::filesystem::exists(fsPath);
         }
 
         std::shared_ptr<IFile> NativeDriver::open(const std::string& path, IFile::OpenMode mode) {
-            auto file = std::make_shared<NativeFile>(_basePath + "/" + path);
-            file->open(mode);
-
-            // TODO check if opened?
-
+            std::filesystem::path fsPath = std::filesystem::absolute(_basePath) / std::filesystem::path(path);
+            auto file = std::make_shared<NativeFile>(fsPath);
+            file->_open(mode);
             return file;
         }
     }

@@ -114,7 +114,7 @@ namespace Falltergeist
 
     #elif defined(__linux__)
         FILE *mtab = setmntent("/etc/mtab", "r");
-        struct mntent *m;
+        struct mntent *m = nullptr;
         struct mntent mnt;
         char strings[4096];
         while ((m = getmntent_r(mtab, &mnt, strings, sizeof(strings)))) {

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <memory>
 #include "../VFS/IFile.h"
 
 namespace Falltergeist {

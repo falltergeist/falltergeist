@@ -1,19 +1,12 @@
 #pragma once
 
 #include "../VFS/IFile.h"
-#include <string>
-#include <fstream>
-#include <filesystem>
 
 namespace Falltergeist {
     namespace VFS {
-        class NativeDriver;
-
-        class NativeFile final : public IFile {
+        class DatArchiveFile final : public IFile {
         public:
-            NativeFile(const std::filesystem::path& path);
-
-            ~NativeFile() override = default;
+            ~DatArchiveFile() override = default;
 
             unsigned int size() override;
 
@@ -28,16 +21,9 @@ namespace Falltergeist {
             unsigned int write(const char* from, unsigned int size) override;
 
         protected:
-            friend class NativeDriver;
-
             void _open(OpenMode mode) override;
 
             void _close() override;
-
-        private:
-            std::fstream _stream;
-            std::filesystem::path _path;
-            OpenMode _mode = OpenMode::Read;
         };
     }
 }

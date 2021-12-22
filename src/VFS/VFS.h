@@ -16,7 +16,7 @@ namespace Falltergeist {
 
             bool exists(const std::string& pathToFile);
 
-            std::shared_ptr<IFile> open(const std::string& path, IFile::OpenMode mode);
+            std::shared_ptr<IFile> open(const std::string& path, IFile::OpenMode mode = IFile::OpenMode::Read);
 
         private:
             std::multimap<std::string, std::unique_ptr<IDriver>> _mounts;

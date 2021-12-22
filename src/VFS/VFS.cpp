@@ -38,11 +38,18 @@ namespace Falltergeist {
                     continue;
                 }
 
-                // TODO ltrim mountPoint from pathToFile
-                if (it->second->exists(it->first.size() ? path.substr(it->first.length()) : path)) {
-                    std::cout << "Mount point: '" << it->first << "' found file: '" << path << "'" << std::endl;
-                    return it->second->open(it->first.size() ? path.substr(it->first.length()) : path, mode);
+                if (mode == IFile::OpenMode::Read || mode == IFile::OpenMode::ReadWrite) {
+                    // File should exist in these modes
+                    if (!it->second->exists(it->first.size() ? path.substr(it->first.length() + 1) : path)) {
+                        std::cout << "Mount point: '" << it->first << "' file not found: '" << path << "'" << std::endl;
+                        continue;
+                    }
                 }
+
+                std::cout << "Mount point: '" << it->first << "' opening file: '" << path << "'" << std::endl;
+
+                // TODO save file to the list of opened files
+                return it->second->open(it->first.size() ? path.substr(it->first.length() + 1) : path, mode);
             }
             std::cout << "file: '" << path << "' not found at any mount point" << std::endl;
             return nullptr;
