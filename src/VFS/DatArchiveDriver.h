@@ -1,6 +1,8 @@
 #pragma once
 
 #include "../VFS/IDriver.h"
+#include "../VFS/DatArchiveEntry.h"
+#include "../VFS/DatArchiveStreamWrapper.h"
 #include <map>
 #include <memory>
 
@@ -15,15 +17,9 @@ namespace Falltergeist {
             bool exists(const std::string& path) override;
 
             std::shared_ptr<IFile> open(const std::string& path, IFile::OpenMode mode) override;
-        private:
-            struct DatArchiveEntry {
-                unsigned int packedSize = 0;
-                unsigned int unpackedSize = 0;
-                unsigned int dataOffset = 0;
-                bool isCompressed = false;
-            };
 
-            std::map<std::string, DatArchiveEntry> _entries;
+        private:
+            DatArchiveStreamWrapper _streamWrapper;
         };
     }
 }
