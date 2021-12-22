@@ -1,28 +1,40 @@
 name: Build
 
-on: [pull_request]
+on: [push]
+#on: [pull_request]
 
 jobs:
-  build-on-ubuntu:
-    runs-on: ubuntu-latest
+  build-on-windows:
+    runs-on: windows-latest
     steps:
       - uses: actions/checkout@v2
       - name: install build dependencies
-        run: sudo apt install -y build-essential cmake clang-tidy libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libglew-dev libglm-dev zlib1g-dev
-      - name: cmake
-        run: cmake -DUSE_CLANG_TIDY=1 .
-      - name: make
-        run: make -j`nproc`
-  build-on-macos:
-    runs-on: macos-latest
-    steps:
-       - uses: actions/checkout@v2
-       - name: install build dependencies
-         run: |
-           brew install llvm
-           ln -s "/usr/local/opt/llvm/bin/clang-tidy" "/usr/local/bin/clang-tidy"
-           brew install cmake sdl2 sdl2_image sdl2_mixer glew glm zlib
-       - name: cmake
-         run: cmake -DUSE_CLANG_TIDY=1 .
-       - name: make
-         run: make -j`nproc`
+        run: |
+          choco install ninja cmake
+          ninja --version
+          cmake --version
+        # cmd "C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/VC/Auxiliary/Build/vcvars64.bat"
+
+#  build-on-ubuntu:
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/checkout@v2
+#      - name: install build dependencies
+#        run: sudo apt install -y build-essential cmake clang-tidy libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libglew-dev libglm-dev zlib1g-dev
+#      - name: cmake
+#        run: cmake -DUSE_CLANG_TIDY=1 .
+#      - name: make
+#        run: make -j`nproc`
+#  build-on-macos:
+#    runs-on: macos-latest
+#    steps:
+#       - uses: actions/checkout@v2
+#       - name: install build dependencies
+#         run: |
+#           brew install llvm
+#           ln -s "/usr/local/opt/llvm/bin/clang-tidy" "/usr/local/bin/clang-tidy"
+#           brew install cmake sdl2 sdl2_image sdl2_mixer glew glm zlib
+#       - name: cmake
+#         run: cmake -DUSE_CLANG_TIDY=1 .
+#       - name: make
+#         run: make -j`nproc`
