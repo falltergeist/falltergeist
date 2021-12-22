@@ -11,6 +11,8 @@ jobs:
       - uses: lukka/get-cmake@latest
       - name: Restore artifacts, or setup vcpkg (do not install any package)
         uses: lukka/run-vcpkg@v10
+        with:
+          vcpkgGitCommitId: '5eb037b9d79bb1b772c118ecf6fb91a72132f2a5'
       - name: Run CMake consuming CMakePreset.json and vcpkg.json by mean of vcpkg.
         uses: lukka/run-cmake@v10
         with:
