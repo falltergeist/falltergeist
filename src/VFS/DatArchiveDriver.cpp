@@ -2,15 +2,15 @@
 #include "../VFS/DatArchiveFile.h"
 #include "../VFS/MemoryFile.h"
 #include "../Exception.h"
-#include <fstream>
-#include <iostream>
-#include <algorithm>
 #include "zlib.h"
-
 
 namespace Falltergeist {
     namespace VFS {
-        DatArchiveDriver::DatArchiveDriver(const std::string& path) : _streamWrapper(DatArchiveStreamWrapper(path)) {
+        DatArchiveDriver::DatArchiveDriver(const std::string& path) : _name("DatArchiveDriver"), _streamWrapper(DatArchiveStreamWrapper(path)) {
+        }
+
+        const std::string& DatArchiveDriver::name() {
+            return _name;
         }
 
         bool DatArchiveDriver::exists(const std::string& path) {
@@ -20,12 +20,16 @@ namespace Falltergeist {
         }
 
         std::shared_ptr<IFile> DatArchiveDriver::open(const std::string& path, IFile::OpenMode mode) {
+            if (mode != IFile::OpenMode::Read) {
+                // Only read operations are supported
+                return nullptr;
+            }
+
             std::string unixStylePath = path;
             std::replace(unixStylePath.begin(), unixStylePath.end(), '\\','/');
 
             const DatArchiveEntry& entry = _streamWrapper.entries().at(path);
             if (entry.isCompressed) {
-
                 unsigned char* packedData = new unsigned char[entry.packedSize];
                 _streamWrapper.seek(entry.dataOffset);
                 _streamWrapper.readBytes(reinterpret_cast<char*>(packedData), entry.packedSize);

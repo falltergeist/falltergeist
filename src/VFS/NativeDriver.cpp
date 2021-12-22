@@ -1,13 +1,15 @@
 #include "../VFS/NativeDriver.h"
-
+#include "../VFS/NativeFile.h"
 #include <filesystem>
 #include <iostream>
-#include "../VFS/NativeFile.h"
 
 namespace Falltergeist {
     namespace VFS {
-        NativeDriver::NativeDriver(const std::filesystem::path& basePath)
-            : _basePath(basePath) {
+        NativeDriver::NativeDriver(const std::filesystem::path& basePath) : _name("NativeDriver"), _basePath(basePath) {
+        }
+
+        const std::string& NativeDriver::name() {
+            return _name;
         }
 
         bool NativeDriver::exists(const std::string& path) {

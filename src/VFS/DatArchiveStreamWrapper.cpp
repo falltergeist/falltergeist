@@ -1,6 +1,5 @@
 #include "../VFS/DatArchiveStreamWrapper.h"
 #include "../Exception.h"
-#include <iostream>
 #include <algorithm>
 
 namespace Falltergeist {

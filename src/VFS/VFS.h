@@ -2,6 +2,7 @@
 
 #include "../VFS/IDriver.h"
 #include "../VFS/IFile.h"
+#include "../ILogger.h"
 #include <map>
 #include <memory>
 #include <string>
@@ -10,7 +11,7 @@ namespace Falltergeist {
     namespace VFS {
         class VFS final {
         public:
-            VFS() = default;
+            VFS(std::shared_ptr<ILogger> logger);
 
             VFS(const VFS& other) = delete;
 
@@ -31,6 +32,7 @@ namespace Falltergeist {
         private:
             std::multimap<std::string, std::unique_ptr<IDriver>> _mounts;
             std::map<std::string, std::shared_ptr<IFile>> _openedFiles;
+            std::shared_ptr<ILogger> _logger;
         };
     }
 }

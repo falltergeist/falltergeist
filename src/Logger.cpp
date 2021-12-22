@@ -3,6 +3,9 @@
 
 namespace Falltergeist
 {
+    Logger::Logger(const std::string& channel) : _channel(channel) {
+    }
+
     Logger::Level Logger::level()
     {
         return _level;
@@ -24,6 +27,7 @@ namespace Falltergeist
         if (subsystem.size() > 0) {
             subsystemMsg = " [" + subsystem + "] ";
         }
+
         return std::cout << levelString(level) << subsystemMsg << std::dec;
     }
 

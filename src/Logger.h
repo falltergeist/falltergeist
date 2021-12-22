@@ -24,6 +24,9 @@ namespace Falltergeist
                 LOG_NONE      = 5
             };
 
+            Logger() = default;
+            Logger(const std::string& channel);
+
             static Level level();
             static void setLevel(Level level);
             static void setLevel(const std::string &level);
@@ -48,6 +51,7 @@ namespace Falltergeist
         private:
             static Level _level;
             static bool _useColors;
+            std::string _channel;
     };
 
     // Support for custom types in output streams:

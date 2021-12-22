@@ -54,7 +54,7 @@ namespace Falltergeist {
     }
 
     ResourceManager::ResourceManager() {
-        _vfs = std::make_unique<VFS::VFS>();
+        _vfs = std::make_unique<VFS::VFS>(std::make_shared<Logger>("VFS"));
 
         for (auto filename : CrossPlatform::findFalloutDataFiles()) {
             string path = CrossPlatform::findFalloutDataPath() + "/" + filename;

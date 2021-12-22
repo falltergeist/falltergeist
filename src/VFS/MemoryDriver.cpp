@@ -2,6 +2,13 @@
 
 namespace Falltergeist {
     namespace VFS {
+        MemoryDriver::MemoryDriver() : _name("MemoryDriver") {
+        }
+
+        const std::string& MemoryDriver::name() {
+            return _name;
+        }
+
         bool MemoryDriver::exists(const std::string& path) {
             return _files.count(path) != 0;
         }
