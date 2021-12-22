@@ -57,6 +57,8 @@ namespace Falltergeist
                     return "\x1b[31m[ERROR]\x1b[0m";
                 case Logger::Level::LOG_CRITICAL:
                     return "\x1b[31;1m[CRITICAL]\x1b[0m";
+                default:
+                    break;
             }
         }
         else
@@ -73,6 +75,8 @@ namespace Falltergeist
                     return "[ERROR]";
                 case Logger::Level::LOG_CRITICAL:
                     return "[CRITICAL]";
+                default:
+                    break;
             };
         }
 

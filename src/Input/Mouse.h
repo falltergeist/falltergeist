@@ -101,8 +101,6 @@ namespace Falltergeist {
 
             Point _position{320, 240};
 
-            Cursor _type = Cursor::NONE;
-
             std::vector<Cursor> _states;
 
             std::unique_ptr<UI::Base> _ui;

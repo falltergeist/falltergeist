@@ -10,7 +10,7 @@ namespace Falltergeist {
             FormattedString(const std::string format, ...) {
                 int n = 0, size=100;
                 bool b = false;
-                va_list marker;
+                va_list marker = nullptr;
 
                 while (!b) {
                     _actualString.resize(size);
