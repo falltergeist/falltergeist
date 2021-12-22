@@ -55,52 +55,6 @@ namespace Falltergeist
 
         void Base::render(bool eggTransparency)
         {
-        /* TODO: newrender
-            if (eggTransparency)
-            {
-                auto dude = Game::getInstance()->player();
-
-                if (!dude || !Game::getInstance()->locationState())
-                {
-                    Game::getInstance()->renderer()->drawTexture(texture(), position());
-                    return;
-                }
-
-                auto camera = Game::getInstance()->locationState()->camera();
-
-                Point eggPos = dude->hexagon()->position() - camera->topLeft() + dude->eggOffset();
-
-                Point eggDelta = position() - eggPos;
-
-                auto egg = ResourceManager::getInstance()->texture("data/egg.png");
-
-                //check if egg and texture intersects
-                SDL_Rect egg_rect = { eggPos.x(), eggPos.y(), (int)egg->width(), (int)egg->height() };
-                SDL_Rect tex_rect = { x(), y(), (int)texture()->width(), (int)texture()->height() };
-
-                if (!SDL_HasIntersection(&egg_rect, &tex_rect))
-                {
-                    Game::getInstance()->renderer()->drawTexture(texture(), position());
-                    return;
-                }
-
-                if (!_tmptex)
-                {
-                    _tmptex = make_unique<Graphics::Texture>(texture()->width(), texture()->height());
-                }
-                texture()->copyTo(_tmptex.get());
-
-                _tmptex->blitWithAlpha(egg, eggDelta.x(), eggDelta.y());
-                Game::getInstance()->renderer()->drawTexture(_tmptex.get(), position());
-            }
-            else
-            {
-                Game::getInstance()->renderer()->drawTexture(texture(), position());
-            }
-            */
-
-
-
         }
 
         void Base::setVisible(bool value)

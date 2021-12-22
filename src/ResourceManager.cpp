@@ -260,16 +260,24 @@ namespace Falltergeist {
         Graphics::Texture *texture = nullptr;
 
         if (ext == ".png") {
+            auto file = vfs()->open(filename, VFS::IFile::OpenMode::Read);
+            if (!file || !file->isOpened()) {
+                return nullptr;
+            }
+
+            char* src = new char[file->size()];
+            file->read(src, file->size());
+            SDL_Surface* tempSurface = IMG_Load_RW(SDL_RWFromMem(src, file->size()), 1);
+            vfs()->close(file);
+
             // @fixme: this section looks quite ugly. we should try to do something with it someday
-            SDL_Surface *tempSurface = IMG_Load(
-                string(CrossPlatform::findFalltergeistDataPath() + "/" + filename).c_str());
             if (tempSurface == NULL) {
                 throw Exception("ResourceManager::texture(name) - cannot load texture from file " + filename + ": " +
                                 IMG_GetError());
             }
 
-            SDL_PixelFormat *pixelFormat = SDL_AllocFormat(SDL_PIXELFORMAT_RGBA8888);
-            SDL_Surface *tempSurface2 = SDL_ConvertSurface(tempSurface, pixelFormat, 0);
+            SDL_PixelFormat* pixelFormat = SDL_AllocFormat(SDL_PIXELFORMAT_RGBA8888);
+            SDL_Surface* tempSurface2 = SDL_ConvertSurface(tempSurface, pixelFormat, 0);
             texture = new Graphics::Texture(
                 Graphics::Pixels(
                     tempSurface2->pixels,
