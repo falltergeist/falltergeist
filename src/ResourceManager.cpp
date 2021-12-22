@@ -54,7 +54,8 @@ namespace Falltergeist {
     }
 
     ResourceManager::ResourceManager() {
-        _vfs = std::make_unique<VFS::VFS>(std::make_shared<Logger>("VFS"));
+        auto vfsLogger = std::make_shared<Logger>("VFS");
+        _vfs = std::make_unique<VFS::VFS>(vfsLogger);
 
         for (auto filename : CrossPlatform::findFalloutDataFiles()) {
             string path = CrossPlatform::findFalloutDataPath() + "/" + filename;
@@ -63,7 +64,7 @@ namespace Falltergeist {
         }
 
         std::string falltergeistDataPath = CrossPlatform::findFalltergeistDataPath() + "/data";
-        _vfs->addMount("data", std::make_unique<VFS::NativeDriver>(falltergeistDataPath));
+        _vfs->addMount("data", std::make_unique<VFS::NativeDriver>(falltergeistDataPath, vfsLogger));
         _vfs->addMount("cache", std::make_unique<VFS::MemoryDriver>());
     }
 

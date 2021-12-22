@@ -35,6 +35,7 @@ namespace Falltergeist {
 
         protected:
             friend class MemoryDriver;
+
             friend class DatArchiveDriver;
 
             void _open(OpenMode mode) override;
@@ -43,8 +44,11 @@ namespace Falltergeist {
 
         private:
             bool _isOpened = false;
+
             std::vector<unsigned char> _data;
+
             unsigned int _seekPosition = 0;
+
             OpenMode _mode = OpenMode::Read;
         };
     }

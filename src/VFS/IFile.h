@@ -40,6 +40,7 @@ namespace Falltergeist {
 
         protected:
             friend class IDriver;
+
             friend class VFS;
 
             virtual void _open(OpenMode mode) = 0;

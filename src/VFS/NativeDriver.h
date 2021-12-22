@@ -2,6 +2,7 @@
 
 #include "../VFS/IDriver.h"
 #include "../VFS/IFile.h"
+#include "../ILogger.h"
 #include <filesystem>
 
 namespace Falltergeist {
@@ -12,7 +13,7 @@ namespace Falltergeist {
          */
         class NativeDriver final : public IDriver {
         public:
-            NativeDriver(const std::filesystem::path& basePath);
+            NativeDriver(const std::filesystem::path& basePath, std::shared_ptr<ILogger> logger);
 
             ~NativeDriver() override = default;
 
@@ -26,6 +27,8 @@ namespace Falltergeist {
             std::string _name;
 
             std::filesystem::path _basePath;
+
+            std::shared_ptr<ILogger> _logger;
         };
     }
 }

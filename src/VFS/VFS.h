@@ -31,7 +31,9 @@ namespace Falltergeist {
 
         private:
             std::multimap<std::string, std::unique_ptr<IDriver>> _mounts;
+
             std::map<std::string, std::shared_ptr<IFile>> _openedFiles;
+
             std::shared_ptr<ILogger> _logger;
         };
     }

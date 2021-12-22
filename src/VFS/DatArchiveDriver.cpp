@@ -1,7 +1,6 @@
 #include "../VFS/DatArchiveDriver.h"
 #include "../VFS/DatArchiveFile.h"
 #include "../VFS/MemoryFile.h"
-#include "../Exception.h"
 #include "zlib.h"
 
 namespace Falltergeist {

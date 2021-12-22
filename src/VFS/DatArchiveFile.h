@@ -39,8 +39,11 @@ namespace Falltergeist {
 
         private:
             bool _isOpened = false;
+
             unsigned int _seekPosition = 0;
+
             DatArchiveEntry _entry;
+
             fnReadBytes _readFunction;
         };
     }

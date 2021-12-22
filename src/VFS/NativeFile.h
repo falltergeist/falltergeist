@@ -38,7 +38,9 @@ namespace Falltergeist {
 
         private:
             std::fstream _stream;
+
             std::filesystem::path _path;
+
             OpenMode _mode = OpenMode::Read;
         };
     }
