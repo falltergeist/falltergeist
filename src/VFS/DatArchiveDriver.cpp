@@ -1,16 +1,15 @@
 #include "../VFS/DatArchiveDriver.h"
 #include "../VFS/DatArchiveFile.h"
+#include "../VFS/MemoryFile.h"
 #include "../Exception.h"
 #include <fstream>
 #include <iostream>
 #include <algorithm>
+#include "zlib.h"
+
 
 namespace Falltergeist {
     namespace VFS {
-        struct DatArchiveReader {
-
-        };
-
         DatArchiveDriver::DatArchiveDriver(const std::string& path) : _streamWrapper(DatArchiveStreamWrapper(path)) {
         }
 
@@ -26,8 +25,37 @@ namespace Falltergeist {
 
             const DatArchiveEntry& entry = _streamWrapper.entries().at(path);
             if (entry.isCompressed) {
-                throw 1;
-                // uncompress and create MemoryFile instance
+
+                unsigned char* packedData = new unsigned char[entry.packedSize];
+                _streamWrapper.seek(entry.dataOffset);
+                _streamWrapper.readBytes(reinterpret_cast<char*>(packedData), entry.packedSize);
+
+                unsigned char* unpackedData = new unsigned char[entry.unpackedSize];
+
+                // unpacking
+                z_stream zStream;
+                zStream.total_in = entry.packedSize;
+                zStream.avail_in = entry.packedSize;
+                zStream.next_in = packedData;
+                zStream.total_out = zStream.avail_out = static_cast<uint32_t>(entry.unpackedSize);
+                zStream.next_out = unpackedData;
+                zStream.zalloc = Z_NULL;
+                zStream.zfree = Z_NULL;
+                zStream.opaque = Z_NULL;
+                inflateInit(&zStream);
+                inflate(&zStream, Z_FINISH);
+                inflateEnd(&zStream);
+
+                delete[] packedData;
+
+                auto file = std::make_shared<MemoryFile>();
+                file->_open(IFile::OpenMode::ReadWriteTruncate);
+                file->write(reinterpret_cast<const char*>(unpackedData), entry.unpackedSize);
+
+                delete[] unpackedData;
+
+                file->_open(mode);
+                return file;
             }
 
             auto file = std::make_shared<DatArchiveFile>(entry, [=](unsigned int seekPosition, unsigned char* to, unsigned char size)-> unsigned int {

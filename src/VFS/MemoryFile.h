@@ -31,6 +31,7 @@ namespace Falltergeist {
 
         protected:
             friend class MemoryDriver;
+            friend class DatArchiveDriver;
 
             void _open(OpenMode mode) override;
 
