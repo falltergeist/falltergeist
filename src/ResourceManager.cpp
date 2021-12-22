@@ -11,7 +11,6 @@
 #include "Format/Bio/File.h"
 #include "Format/Dat/Stream.h"
 #include "Format/Dat/File.h"
-#include "Format/Dat/MiscFile.h"
 #include "Format/Dat/Item.h"
 #include "Format/Fon/File.h"
 #include "Format/Frm/File.h"
@@ -208,10 +207,6 @@ namespace Falltergeist {
 
     Sve::File *ResourceManager::sveFileType(const string &filename) {
         return _datFileItem<Sve::File>(filename);
-    }
-
-    Falltergeist::Dat::MiscFile *ResourceManager::miscFileType(const std::string &filename) {
-        return _datFileItem<Dat::MiscFile>(filename);
     }
 
     Txt::CityFile *ResourceManager::cityTxt() {

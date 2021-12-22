@@ -1,4 +1,3 @@
-#include <fstream>
 #include "../CrossPlatform.h"
 #include "../Exception.h"
 #include "../Game/Game.h"

@@ -2,7 +2,6 @@
 #include <cerrno>
 #include <cstdlib>
 #include <cstring>
-#include <fstream>
 #include <stdexcept>
 #include <cctype>
 #include <chrono>
@@ -160,8 +159,7 @@ namespace Falltergeist
                 _necessaryDatFiles.begin(),
                 _necessaryDatFiles.end(),
                 [directory](const std::string& file) {
-                    std::ifstream stream(directory + "/" + file);
-                    if (stream) {
+                    if (std::filesystem::exists(directory + "/" + file)) {
                         Logger::info("") << "Searching in directory: " << directory << " " << file << " [FOUND]" << std::endl;
                         return true;
                     } else {
@@ -193,8 +191,7 @@ namespace Falltergeist
         }
 
         for (auto &directory : directories) {
-            std::ifstream stream(directory + "/data/movies.lst");
-            if (stream) {
+            if (std::filesystem::exists(directory + "/data/movies.lst")) {
                 Logger::info("") << "Searching in directory: " << directory << "/data/movies.lst [FOUND]" << std::endl;
                 _falltergeistDataPath = directory;
                 return _falltergeistDataPath;

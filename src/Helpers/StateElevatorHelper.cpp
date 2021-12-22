@@ -4,7 +4,6 @@
 #include "../Helpers/StateElevatorHelper.h"
 #include "../ResourceManager.h"
 #include "../Settings.h"
-#include "../Format/Dat/MiscFile.h"
 #include "../Ini/File.h"
 #include "../Exception.h"
 

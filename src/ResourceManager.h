@@ -22,7 +22,6 @@ namespace Falltergeist
         {
             class File;
             class Item;
-            class MiscFile;
             class Stream;
         }
         namespace Frm { class File; }
@@ -102,7 +101,6 @@ namespace Falltergeist
             Format::Pro::File* proFileType(unsigned int PID);
             Format::Rix::File* rixFileType(const std::string& filename);
             Format::Sve::File* sveFileType(const std::string& filename);
-            Format::Dat::MiscFile* miscFileType(const std::string& filename);
 
             Format::Txt::CityFile* cityTxt();
             Format::Txt::MapsFile* mapsTxt();
