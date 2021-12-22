@@ -1,27 +1,25 @@
 #pragma once
 
+#include "../Game/Elevator.h"
+#include "../ILogger.h"
 #include <memory>
 #include <string>
-#include "../ILogger.h"
-#include "../Game/Elevator.h"
 
-namespace Falltergeist
-{
-    namespace Game
-    {
+namespace Falltergeist {
+    namespace Game {
         class Elevator;
     }
-    namespace Helpers
-    {
-        class StateElevatorHelper
-        {
-            public:
-                StateElevatorHelper(std::shared_ptr<ILogger> logger);
-                Game::Elevator* getByType(uint32_t type);
+    namespace Helpers {
+        class StateElevatorHelper {
+        public:
+            StateElevatorHelper(std::shared_ptr<ILogger>& logger);
 
-            private:
-                std::shared_ptr<ILogger> logger;
-                std::vector<Game::Elevator*> _elevators;
+            Game::Elevator* getByType(uint32_t type);
+
+        private:
+            std::shared_ptr<ILogger> _logger;
+
+            std::vector<Game::Elevator*> _elevators;
         };
     }
 }
