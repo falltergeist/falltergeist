@@ -1,5 +1,6 @@
 #pragma once
 
+#include <memory>
 #include "../Graphics/IWindow.h"
 #include "../ILogger.h"
 #include "SDL.h"
