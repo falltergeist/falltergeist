@@ -108,6 +108,9 @@ namespace Falltergeist
                 unsigned int frame() const;
 
                 void setUIResourceManager(std::shared_ptr<UI::IResourceManager> uiResourceManager);
+
+                const std::unique_ptr<Graphics::IWindow>& window() const;
+
             protected:
                 std::vector<int> _GVARS;
                 std::vector<std::unique_ptr<State::State>> _states;
@@ -135,6 +138,7 @@ namespace Falltergeist
                 SDL_Event _event;
 
                 std::vector<State::State*> _getVisibleStates();
+
                 std::vector<State::State*> _getActiveStates();
 
             private:

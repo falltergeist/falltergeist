@@ -45,8 +45,7 @@ namespace Falltergeist
             }
 
             auto mouse = Game::Game::getInstance()->mouse();
-            _initialX = mouse->x();
-            _initialY = mouse->y();
+            _initialMousePosition = mouse->position();
 
             showMenu();
 
@@ -126,8 +125,8 @@ namespace Falltergeist
 
             auto game = Game::Game::getInstance();
 
-            _iconsPos = Point(_initialX + 29, _initialY);
-            Point delta = Point(_initialX + 29, _initialY)
+            _iconsPos = _initialMousePosition + Point(29, 0);
+            Point delta = _iconsPos
                           + Size(40, 40 * static_cast<int>(_icons.size()))
                           - game->renderer()->size()
                           + Point(0, game->locationState()->playerPanel()->size().height());
@@ -145,12 +144,12 @@ namespace Falltergeist
             if (deltaY > 0) {
                 _iconsPos.setY(_iconsPos.y() - deltaY);
             }
-            _cursor->setPosition({_initialX, _initialY});
+            _cursor->setPosition(_initialMousePosition);
             addUI(_cursor);
 
             if (!_onlyShowIcon) {
                 if (deltaY > 0) {
-                    game->mouse()->setPosition({_initialX, _iconsPos.y()});
+                    game->mouse()->setPosition({_initialMousePosition.x(), _iconsPos.y()});
                 }
                 Game::Game::getInstance()->mixer()->playACMSound("sound/sfx/iaccuxx1.acm");
             }
@@ -189,25 +188,28 @@ namespace Falltergeist
             auto game = Game::Game::getInstance();
 
             const int mousePixelsForItem = 10;
+
+            auto mouse = game->mouse();
+
             // select current icon
-            _currentIcon = (game->mouse()->y() - _iconsPos.y())/mousePixelsForItem;
+            _currentIcon = (mouse->position().y() - _iconsPos.y()) / mousePixelsForItem;
 
             if (_currentIcon < 0) {
                 if (!_onlyShowIcon) {
-                    game->mouse()->setY(_iconsPos.y());
+                    mouse->setPosition(Point(mouse->position().x(), _iconsPos.y()));
                 }
                 _currentIcon = 0;
             }
             if ((unsigned int)_currentIcon >= _icons.size()) {
                 if (!_onlyShowIcon) {
-                    game->mouse()->setY(_iconsPos.y() + static_cast<int>(_icons.size()) * mousePixelsForItem);
+                    mouse->setPosition(Point(mouse->position().x(), _iconsPos.y() + static_cast<int>(_icons.size()) * mousePixelsForItem));
                 }
                 _currentIcon = static_cast<int>(_icons.size()) - 1;
             }
             if (!_onlyShowIcon) {
-                int xDelta = game->mouse()->x() - _iconsPos.x();
+                int xDelta = mouse->position().x() - _iconsPos.x();
                 if (xDelta > 40 || xDelta < 0) {
-                    game->mouse()->setX(_initialX);
+                    mouse->setPosition(Point(_initialMousePosition.x(), mouse->position().y()));
                 }
             }
         }
@@ -259,7 +261,7 @@ namespace Falltergeist
                         mouse->pushState(*it);
                     }
                 }
-                mouse->setPosition({_initialX, _initialY});
+                mouse->setPosition(_initialMousePosition);
                 _deactivated = true;
             }
         }

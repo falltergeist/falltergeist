@@ -17,6 +17,12 @@ namespace Falltergeist {
             virtual const Size& size() const = 0;
 
             virtual bool isFullscreen() const = 0;
+
+            virtual const Point& mousePosition() const = 0;
+
+            virtual void setMousePosition(const Point& position) = 0;
+
+            virtual void pollEvents() = 0;
         };
     }
 }

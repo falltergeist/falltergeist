@@ -175,15 +175,14 @@ namespace Falltergeist
                 auto mouse = game->mouse();
 
                 // Left button down
-                if (mouseEvent->name() == "mousedown" && mouseEvent->leftButton())
-                {
+                if (mouseEvent->name() == "mousedown" && mouseEvent->leftButton()) {
+                    Graphics::Rectangle mapRectangle(Point(mapMinX, mapMinY), Graphics::Size(mapWidth, mapHeight));
+
                     // check if point clicked belongs to the screen
-                    if ((mapMinX<=(unsigned int)mouse->x()) && ((unsigned int)mouse->x()<=(mapMinX+mapWidth)) &&
-                        (mapMinY<=(unsigned int)mouse->y()) && ((unsigned int)mouse->y()<=(mapMinY+mapHeight)))
-                    {
+                    if (mapRectangle.contains(mouse->position())){
                         // change destination point
-                        worldMapX = mouse->x()+deltaX-mapMinX;
-                        worldMapY = mouse->y()+deltaY-mapMinY;
+                        worldMapX = mouse->position().x() + deltaX - mapMinX;
+                        worldMapY = mouse->position().y() + deltaY - mapMinY;
                     }
                 }
             }

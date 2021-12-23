@@ -368,6 +368,9 @@ namespace Falltergeist
                     auto mouseEvent = std::make_unique<Event::Mouse>(Mouse::Type::MOVE);
                     mouseEvent->setPosition({sdlEvent.motion.x, sdlEvent.motion.y});
                     mouseEvent->setOffset({sdlEvent.motion.xrel,sdlEvent.motion.yrel});
+
+                    // TODO move position update to window class polling
+                    ((Graphics::SdlWindow*)_window.get())->_mousePosition = {sdlEvent.motion.x, sdlEvent.motion.y};
                     return std::move(mouseEvent);
                 }
                 case SDL_KEYDOWN:
@@ -403,6 +406,9 @@ namespace Falltergeist
             if (_renderer->fading()) {
                 return;
             }
+
+            // TODO implementc
+            _window->pollEvents();
 
             while (SDL_PollEvent(&_event))
             {
@@ -530,6 +536,10 @@ namespace Falltergeist
                 _settings->fullscreen(),
                 _settings->alwaysOnTop()
             );
+        }
+
+        const std::unique_ptr<Graphics::IWindow>& Game::window() const {
+            return _window;
         }
     }
 }

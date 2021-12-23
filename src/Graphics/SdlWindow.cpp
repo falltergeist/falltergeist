@@ -34,9 +34,12 @@ namespace Falltergeist {
             if (_sdlWindow == nullptr) {
                 _logger->critical() << "Could not create SDL window: " << SDL_GetError() << std::endl;
             }
+
+            SDL_ShowCursor(0); // Hide cursor
         }
 
         SdlWindow::~SdlWindow() {
+            SDL_ShowCursor(1); // Show cursor
             SDL_DestroyWindow(_sdlWindow);
         }
 
@@ -54,6 +57,19 @@ namespace Falltergeist {
 
         bool SdlWindow::isFullscreen() const {
             return _isFullscreen;
+        }
+
+        const Point& SdlWindow::mousePosition() const {
+            return _mousePosition;
+        }
+
+        void SdlWindow::setMousePosition(const Point& position) {
+            _mousePosition = position;
+            SDL_WarpMouseInWindow(_sdlWindow, _mousePosition.x(), _mousePosition.y());
+        }
+
+        void SdlWindow::pollEvents() {
+            SDL_GetMouseState(&_mousePosition.rx(), &_mousePosition.ry());
         }
 
         SDL_Window* SdlWindow::sdlWindowPtr() const {

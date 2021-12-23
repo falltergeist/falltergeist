@@ -6,6 +6,9 @@
 #include "SDL.h"
 
 namespace Falltergeist {
+    namespace Game {
+        class Game;
+    }
     namespace Graphics {
         class SdlWindow final : public IWindow {
         public:
@@ -21,9 +24,17 @@ namespace Falltergeist {
 
             bool isFullscreen() const override;
 
+            const Point& mousePosition() const override;
+
+            void setMousePosition(const Point& position) override;
+
+            void pollEvents() override;
+
             SDL_Window* sdlWindowPtr() const;
 
         private:
+            friend class Game::Game;
+
             std::string _title;
 
             Point _position;
@@ -31,6 +42,8 @@ namespace Falltergeist {
             Size _size;
 
             bool _isFullscreen;
+
+            mutable Point _mousePosition{320, 240};
 
             SDL_Window* _sdlWindow = nullptr;
 

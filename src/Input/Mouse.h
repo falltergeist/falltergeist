@@ -64,14 +64,6 @@ namespace Falltergeist {
 
             ~Mouse();
 
-            int x() const;
-
-            void setX(int x);
-
-            int y() const;
-
-            void setY(int y);
-
             const Point& position() const;
 
             void setPosition(const Point& pos);
@@ -98,8 +90,6 @@ namespace Falltergeist {
 
           private:
             std::shared_ptr<UI::IResourceManager> _resourceManager;
-
-            Point _position{320, 240};
 
             std::vector<Cursor> _states;
 
