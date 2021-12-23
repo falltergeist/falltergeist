@@ -84,7 +84,7 @@ namespace Falltergeist
 
             _camera = std::make_unique<LocationCamera>(renderer->size(), Point(0, 0));
 
-            _hexagonInfo = std::make_unique<UI::TextArea>("", renderer->width() - 135, 25);
+            _hexagonInfo = std::make_unique<UI::TextArea>("", renderer->size().width() - 135, 25);
             _hexagonInfo->setWidth(135);
             _hexagonInfo->setHorizontalAlign(UI::TextArea::HorizontalAlign::RIGHT);
 
@@ -796,9 +796,9 @@ namespace Falltergeist
             int scrollArea = 8;
             Point mpos = mouse->position();
             _scrollLeft = (mpos.x() < scrollArea);
-            _scrollRight = (mpos.x() > renderer->width() - scrollArea);
+            _scrollRight = (mpos.x() > renderer->size().width() - scrollArea);
             _scrollTop = (mpos.y() < scrollArea);
-            _scrollBottom = (mpos.y() > renderer->height() - scrollArea);
+            _scrollBottom = (mpos.y() > renderer->size().height() - scrollArea);
 
             if (hexagon) {
                 std::string text = "Hex number: " + std::to_string(hexagon->number()) + "\n";

@@ -34,8 +34,8 @@ namespace Falltergeist
             setModal(true);
             setFullscreen(true);
 
-            unsigned int renderWidth = Game::Game::getInstance()->renderer()->width();
-            unsigned int renderHeight = Game::Game::getInstance()->renderer()->height();
+            unsigned int renderWidth = Game::Game::getInstance()->renderer()->size().width();
+            unsigned int renderHeight = Game::Game::getInstance()->renderer()->size().height();
 
             // loading map tiles
             _tiles = new UI::ImageList({0, 0}, {
@@ -87,8 +87,8 @@ namespace Falltergeist
         void WorldMap::render()
         {
             // calculating render size, screen size, etc
-            unsigned int renderWidth = Game::Game::getInstance()->renderer()->width();
-            unsigned int renderHeight = Game::Game::getInstance()->renderer()->height();
+            unsigned int renderWidth = Game::Game::getInstance()->renderer()->size().width();
+            unsigned int renderHeight = Game::Game::getInstance()->renderer()->size().height();
 
             // MAP SHOW
             // calculating delta (shift of map to fit to screen)

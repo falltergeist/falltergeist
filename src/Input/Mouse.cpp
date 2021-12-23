@@ -55,7 +55,8 @@ namespace Falltergeist
             auto renderer = Game::Game::getInstance()->renderer();
             float scaleX = renderer->scaleX();
             float scaleY = renderer->scaleY();
-            SDL_WarpMouseInWindow(renderer->sdlWindow(), (int)(pos.x() * scaleX), (int)(pos.y() * scaleY));
+            SDL_Window* currentSdlWindow = SDL_GetMouseFocus();
+            SDL_WarpMouseInWindow(currentSdlWindow, (int)(pos.x() * scaleX), (int)(pos.y() * scaleY));
         }
 
         void Mouse::setState(Cursor state)

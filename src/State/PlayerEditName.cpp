@@ -169,7 +169,7 @@ namespace Falltergeist
 
         void PlayerEditName::think(const float &deltaTime)
         {
-            int bgX = (Game::Game::getInstance()->renderer()->width() - 640) / 2;
+            int bgX = (Game::Game::getInstance()->renderer()->size().width() - 640) / 2;
             State::think(deltaTime);
 
             _blinkingCursorMillisecondsTracked += deltaTime;

@@ -44,8 +44,8 @@ namespace Falltergeist
             _background = std::shared_ptr<Image>(resourceManager->getImage("art/intrface/iface.frm"));
             _ui.push_back(_background);
 
-            setX((renderer->width() - 640) / 2);
-            setY(renderer->height() - _background->height());
+            setX((renderer->size().width() - 640) / 2);
+            setY(renderer->size().height() - _background->height());
 
             _background->setPosition(this->position());
 

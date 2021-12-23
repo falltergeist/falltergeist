@@ -6,6 +6,7 @@
 #include <SDL.h>
 #include "../Game/Time.h"
 #include "../Graphics/IRendererConfig.h"
+#include "../Graphics/IWindow.h"
 #include "../ILogger.h"
 #include "../UI/IResourceManager.h"
 
@@ -140,15 +141,25 @@ namespace Falltergeist
                 static Game* _instance;
 
                 std::shared_ptr<UI::IResourceManager> uiResourceManager;
+
+                std::unique_ptr<Graphics::IWindow> _window;
+
                 void _initGVARS();
+
                 std::unique_ptr<Event::Event> _createEventFromSDL(const SDL_Event& sdlEvent);
+
                 std::unique_ptr<Graphics::IRendererConfig> createRendererConfigFromSettings();
+
                 std::shared_ptr<ILogger> logger;
 
                 Game();
+
                 Game(std::shared_ptr<ILogger> logger);
+
                 ~Game();
+
                 Game(Game const&) = delete;
+
                 void operator=(Game const&) = delete;
         };
     }

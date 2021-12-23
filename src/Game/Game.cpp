@@ -22,6 +22,7 @@
 #include "../State/Location.h"
 #include "../UI/FpsCounter.h"
 #include "../UI/TextArea.h"
+#include "../Graphics/SdlWindow.h"
 
 namespace Falltergeist
 {
@@ -65,10 +66,26 @@ namespace Falltergeist
 
             _eventDispatcher = std::make_unique<Event::Dispatcher>();
 
-            _renderer = std::make_shared<Graphics::Renderer>(
-                createRendererConfigFromSettings(),
+            auto rendererConfig = createRendererConfigFromSettings();
+
+            std::string version = CrossPlatform::getVersion();
+
+            auto sdlWindow = std::make_unique<Graphics::SdlWindow>(
+                version.c_str(),
+                Graphics::Point(rendererConfig->x(), rendererConfig->y()),
+                Graphics::Size(rendererConfig->width(), rendererConfig->height()),
+                rendererConfig->isFullscreen(),
                 logger
             );
+
+            _renderer = std::make_shared<Graphics::Renderer>(
+                std::move(rendererConfig),
+                logger,
+                sdlWindow->size(),
+                sdlWindow->sdlWindowPtr()
+            );
+
+            _window = std::move(sdlWindow);
 
             logger->info() << "[GAME] " << CrossPlatform::getVersion() << std::endl;
             logger->info() << "[GAME] Opensource Fallout 2 game engine" << std::endl;
@@ -80,20 +97,18 @@ namespace Falltergeist
 
             renderer()->init();
 
-            std::string version = CrossPlatform::getVersion();
-            renderer()->setCaption(version.c_str());
 
             _mixer = std::make_shared<Audio::Mixer>(logger);
             _mixer->setMusicVolume(_settings->musicVolume());
             _mouse = std::make_shared<Input::Mouse>(uiResourceManager);
-            _fpsCounter = std::make_unique<UI::FpsCounter>(Point(renderer()->width() - 42, 2));
+            _fpsCounter = std::make_unique<UI::FpsCounter>(Point(renderer()->size().width() - 42, 2));
             _fpsCounter->setWidth(42);
             _fpsCounter->setHorizontalAlign(UI::TextArea::HorizontalAlign::RIGHT);
 
             version += " " + std::to_string(renderer()->size().width()) + "x" + std::to_string(renderer()->size().height());
 
-            _falltergeistVersion = std::make_unique<UI::TextArea>(version, 3, renderer()->height() - 10);
-            _mousePosition = std::make_unique<UI::TextArea>("", renderer()->width() - 55, 14);
+            _falltergeistVersion = std::make_unique<UI::TextArea>(version, 3, renderer()->size().height() - 10);
+            _mousePosition = std::make_unique<UI::TextArea>("", renderer()->size().width() - 55, 14);
             _mousePosition->setWidth(55);
             _mousePosition->setHorizontalAlign(UI::TextArea::HorizontalAlign::RIGHT);
             _animatedPalette = std::make_unique<Graphics::AnimatedPalette>();
