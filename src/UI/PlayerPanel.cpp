@@ -235,20 +235,15 @@ namespace Falltergeist
 
         void PlayerPanel::handle(Event::Event *event)
         {
-            UI::Base::handle(event);
-            if (auto mouseEvent = dynamic_cast<Event::Mouse*>(event))
-            {
-                mouseEvent->setObstacle(false);
-                mouseEvent->setHandled(false);
-            }
-
             for (auto it = _ui.rbegin(); it != _ui.rend(); ++it)
             {
-                if (event->handled()) {
+                if (event->isHandled()) {
                     return;
                 }
                 (*it)->handle(event);
             }
+
+            UI::Base::handle(event);
         }
 
         void PlayerPanel::think(const float &deltaTime)

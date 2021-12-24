@@ -17,10 +17,9 @@ namespace Falltergeist
 
     namespace State
     {
-        PlayerEditName::PlayerEditName(std::shared_ptr<UI::IResourceManager> resourceManager) : State()
-        {
-            this->resourceManager = resourceManager;
-            imageButtonFactory = std::make_unique<UI::Factory::ImageButtonFactory>(resourceManager);
+        PlayerEditName::PlayerEditName(std::shared_ptr<UI::IResourceManager> resourceManager)
+            : State(), _resourceManager(resourceManager) {
+            _imageButtonFactory = std::make_unique<UI::Factory::ImageButtonFactory>(_resourceManager);
         }
 
         void PlayerEditName::init()
@@ -74,23 +73,25 @@ namespace Falltergeist
             _keyCodes.insert(std::make_pair(SDLK_9, '9'));
             _keyCodes.insert(std::make_pair(SDLK_0, '0'));
 
-            auto bg = resourceManager->getImage("art/intrface/charwin.frm");
+            auto bg = _resourceManager->getImage("art/intrface/charwin.frm");
             bg->setPosition(bgPos + Point(22, 0));
 
-            auto nameBox = resourceManager->getImage("art/intrface/namebox.frm");
+            auto nameBox = _resourceManager->getImage("art/intrface/namebox.frm");
             nameBox->setPosition(bgPos + Point(35, 10));
 
-            auto doneBox = resourceManager->getImage("art/intrface/donebox.frm");
+            auto doneBox = _resourceManager->getImage("art/intrface/donebox.frm");
             doneBox->setPosition(bgPos + Point(35, 40));
 
             auto doneLabel = new UI::TextArea(_t(MSG_EDITOR, 100), bgX+65, bgY+43);
             doneLabel->setFont("font3.aaf", {0xb8, 0x9c, 0x28, 0xff});
 
-            auto doneButton = imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {bgX + 45, bgY + 43});
+            auto doneButton = _imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {bgX + 45, bgY + 43});
             doneButton->mouseClickHandler().add(std::bind(&PlayerEditName::onDoneButtonClick, this, std::placeholders::_1));
 
             _name = new UI::TextArea(Game::Game::getInstance()->player()->name(), bgX+43, bgY+15);
-            _name->keyDownHandler().add([this](Event::Event* event){ this->onTextAreaKeyDown(dynamic_cast<Event::Keyboard*>(event)); });
+            _name->keyDownHandler().add([=](Event::Event* event){
+                _onTextAreaKeyDown(dynamic_cast<Event::Keyboard*>(event), _name);
+            });
 
             _cursor = new UI::Rectangle(bgPos + Point(83, 15) ,{5,8}, {0x3F, 0xF8, 0x00, 0xFF});
 
@@ -103,18 +104,16 @@ namespace Falltergeist
             addUI(_cursor);
         }
 
-        void PlayerEditName::onTextAreaKeyDown(Event::Keyboard* event)
+        void PlayerEditName::_onTextAreaKeyDown(Event::Keyboard* event, UI::TextArea* target)
         {
-            auto sender = dynamic_cast<UI::TextArea*>(event->target());
-
-            std::string text = sender->text();
+            std::string text = target->text();
 
             if (event->keyCode() == SDLK_BACKSPACE) //backspace
             {
                 if (text.length() > 0)
                 {
                     text = text.substr(0, text.length() - 1);
-                    sender->setText(text.c_str());
+                    target->setText(text.c_str());
                     return;
                 }
                 return;
@@ -158,7 +157,7 @@ namespace Falltergeist
                 {
                     text += chr;
                 }
-                sender->setText(text.c_str());
+                target->setText(text.c_str());
             }
         }
 

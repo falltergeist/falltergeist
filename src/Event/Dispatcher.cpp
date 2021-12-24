@@ -23,13 +23,12 @@ namespace Falltergeist
         template <typename T>
         void Dispatcher::Task<T>::perform()
         {
-            event->setHandled(false);
             for (auto& func : handler.functors())
             {
                 func(event.get());
-                // handler may set handled flag to true - to stop other handlers from executing
+                // handler may call stopPropagation() - to stop other handlers from executing
                 // also, target may be deleted by any handler, so we should check that on every iteration
-                if (event->handled() || target == nullptr) {
+                if (event->isHandled() || target == nullptr) {
                     break;
                 }
             }

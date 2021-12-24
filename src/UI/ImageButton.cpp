@@ -1,97 +1,63 @@
+#include "../UI/ImageButton.h"
 #include "../Audio/Mixer.h"
 #include "../Event/Event.h"
 #include "../Event/Mouse.h"
 #include "../Exception.h"
 #include "../Game/Game.h"
 #include "../ResourceManager.h"
-#include "../UI/ImageButton.h"
 
-namespace Falltergeist
-{
+namespace Falltergeist {
     using namespace std;
 
-    namespace UI
-    {
-        ImageButton::ImageButton(
-            const Point &pos,
-            std::shared_ptr<Graphics::Sprite> buttonUpSprite,
-            std::shared_ptr<Graphics::Sprite> buttonDownSprite,
-            std::string buttonUpSoundFilename,
-            std::string buttonDownSoundFilename,
-            bool checkBoxMode
-        ) : Base(pos)
-        {
-            this->buttonUpSprite = std::move(buttonUpSprite);
-            this->buttonDownSprite = std::move(buttonDownSprite);
-            this->buttonUpSoundFilename = std::move(buttonUpSoundFilename);
-            this->buttonDownSoundFilename = std::move(buttonDownSoundFilename);
-            this->checkboxMode = checkBoxMode;
-
-            mouseClickHandler().add(std::bind(&ImageButton::_onMouseClick, this, std::placeholders::_1));
-            mouseDownHandler().add(std::bind(&ImageButton::_onMouseDown, this, std::placeholders::_1));
-            mouseOutHandler().add(std::bind(&ImageButton::_onMouseOut, this, std::placeholders::_1));
+    namespace UI {
+        ImageButton::ImageButton(const Point& pos, std::shared_ptr<Graphics::Sprite> buttonUpSprite,
+                                 std::shared_ptr<Graphics::Sprite> buttonDownSprite, std::string buttonUpSoundFilename,
+                                 std::string buttonDownSoundFilename, bool checkBoxMode)
+            : Base(pos), _checkboxMode(checkBoxMode), _buttonDownSoundFilename(buttonDownSoundFilename),
+              _buttonUpSoundFilename(buttonUpSoundFilename), _buttonUpSprite(buttonUpSprite), _buttonDownSprite(buttonDownSprite) {
+            mouseClickHandler().add([=](Event::Mouse*) { _onMouseClick(); });
+            mouseDownHandler().add([=](Event::Mouse* event) { _onMouseDown(event); });
         }
 
-        void ImageButton::_onMouseClick(Event::Mouse* event)
-        {
-            if(!_enabled) {
+        void ImageButton::_onMouseClick() {
+            if (!_enabled) {
                 return;
             }
-            auto sender = dynamic_cast<ImageButton*>(event->target());
-            if (sender->checkboxMode) {
-                sender->_checked = !sender->_checked;
+            if (_checkboxMode) {
+                _checked = !_checked;
             }
-            if (!sender->buttonUpSoundFilename.empty()) {
-                Game::Game::getInstance()->mixer()->playACMSound(sender->buttonUpSoundFilename);
+            if (!_buttonUpSoundFilename.empty()) {
+                Game::Game::getInstance()->mixer()->playACMSound(_buttonUpSoundFilename);
             }
         }
 
-        void ImageButton::_onMouseDown(Event::Mouse* event)
-        {
+        void ImageButton::_onMouseDown(Event::Mouse* event) {
             if (!event->leftButton() || !_enabled) {
                 return;
             }
 
-            auto sender = dynamic_cast<ImageButton*>(event->target());
-            if (!sender->buttonDownSoundFilename.empty()) {
-                Game::Game::getInstance()->mixer()->playACMSound(sender->buttonDownSoundFilename);
+            if (!_buttonDownSoundFilename.empty()) {
+                Game::Game::getInstance()->mixer()->playACMSound(_buttonDownSoundFilename);
             }
         }
 
-
-        void ImageButton::_onMouseOut(Event::Mouse* event)
-        {
-        //    if(!_enabled) return;
-        //    auto sender = dynamic_cast<ImageButton*>(event->target());
-        //    if (_leftButtonPressed && !sender->buttonUpSoundFilename.empty())
-        //    {
-        //        Game::getInstance()->mixer()->playACMSound(sender->buttonUpSoundFilename);
-        //    }
-        }
-
-
-        bool ImageButton::checked()
-        {
+        bool ImageButton::checked() {
             return _checked;
         }
 
-        void ImageButton::setChecked(bool _checked)
-        {
-            this->_checked = _checked;
+        void ImageButton::setChecked(bool checked) {
+            _checked = checked;
         }
 
-        bool ImageButton::enabled()
-        {
+        bool ImageButton::enabled() {
             return _enabled;
         }
 
-        void ImageButton::setEnabled(bool _enabled)
-        {
-            this->_enabled = _enabled;
+        void ImageButton::setEnabled(bool enabled) {
+            _enabled = enabled;
         }
 
-        void ImageButton::handle(Event::Mouse* mouseEvent)
-        {
+        void ImageButton::handle(Event::Mouse* mouseEvent) {
             if (!_enabled) {
                 return;
             }
@@ -100,26 +66,24 @@ namespace Falltergeist
             Base::handle(mouseEvent);
         }
 
-        void ImageButton::render(bool eggTransparency)
-        {
-            if(!_enabled) {
+        void ImageButton::render(bool eggTransparency) {
+            if (!_enabled) {
                 return;
             }
-            if ((checkboxMode && _checked) || (_leftButtonPressed)) {
-                buttonDownSprite->render(position());
+            if ((_checkboxMode && _checked) || (_leftButtonPressed)) {
+                _buttonDownSprite->render(position());
                 return;
             }
 
-            buttonUpSprite->render(position());
+            _buttonUpSprite->render(position());
         }
 
-        bool ImageButton::opaque(const Point &pos)
-        {
-            if ((checkboxMode && _checked) || (_hovered && _leftButtonPressed)) {
-                return buttonDownSprite->opaque(pos);
+        bool ImageButton::opaque(const Point& pos) {
+            if ((_checkboxMode && _checked) || (_hovered && _leftButtonPressed)) {
+                return _buttonDownSprite->opaque(pos);
             }
 
-            return buttonUpSprite->opaque(pos);
+            return _buttonUpSprite->opaque(pos);
         }
     }
 }

@@ -57,7 +57,7 @@ namespace Falltergeist
             auto moveHandler = [this](Event::Event* event) {
                 if (active() && _onlyShowIcon) {
                     Game::Game::getInstance()->popState();
-                    event->setHandled(true);
+                    event->stopPropagation();
                 }
             };
             _mouseMoveHandler.add(moveHandler);
@@ -176,7 +176,7 @@ namespace Falltergeist
                     emitEvent(std::make_unique<Event::Mouse>(*mouseEvent), _mouseUpHandler);
                 } else if (mouseEvent->originalType() == Event::Mouse::Type::MOVE) {
                     emitEvent(std::make_unique<Event::Mouse>(*mouseEvent), _mouseMoveHandler);
-                    event->setHandled(true);
+                    event->stopPropagation();
                 }
             }
         }
@@ -272,7 +272,7 @@ namespace Falltergeist
             game->popState();
             if (!_onlyShowIcon) {
                 game->locationState()->handleAction(object(), _icons.at(_currentIcon));
-                event->setHandled(true);
+                event->stopPropagation();
             }
         }
     }

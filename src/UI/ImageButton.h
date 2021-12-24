@@ -1,56 +1,54 @@
 #pragma once
 
-#include <string>
-#include <vector>
 #include "../Graphics/Sprite.h"
 #include "../UI/Base.h"
+#include <string>
+#include <vector>
 
-namespace Falltergeist
-{
-    namespace Event
-    {
+namespace Falltergeist {
+    namespace Event {
         class Mouse;
     }
-    namespace UI
-    {
-        class ImageButton final: public Falltergeist::UI::Base
-        {
-            public:
-                ImageButton(
-                    const Point &pos,
-                    std::shared_ptr<Graphics::Sprite> buttonUpSprite,
-                    std::shared_ptr<Graphics::Sprite> buttonDownSprite,
-                    std::string buttonUpSoundFilename,
-                    std::string buttonDownSoundFilename,
-                    bool checkBoxMode
-                );
-                virtual ~ImageButton() = default;
+    namespace UI {
+        class ImageButton final : public Falltergeist::UI::Base {
+        public:
+            ImageButton(const Point& pos, std::shared_ptr<Graphics::Sprite> buttonUpSprite, std::shared_ptr<Graphics::Sprite> buttonDownSprite,
+                        std::string buttonUpSoundFilename, std::string buttonDownSoundFilename, bool checkBoxMode);
 
-                //void setState(unsigned int value);
+            virtual ~ImageButton() = default;
 
-                bool checked();
-                void setChecked(bool _checked);
+            bool checked();
 
-                bool enabled();
-                void setEnabled(bool _enabled);
+            void setChecked(bool checked);
 
-                virtual void handle(Event::Mouse* mouseEvent) override;
-                virtual void render(bool eggTransparency = false) override;
-                virtual bool opaque(const Point &pos) override;
+            bool enabled();
 
-            protected:
-                bool checkboxMode = false; // remember new state after click
-                bool _checked = false;
-                bool _enabled = true;
+            void setEnabled(bool enabled);
 
-                std::string buttonDownSoundFilename;
-                std::string buttonUpSoundFilename;
-                std::shared_ptr<Graphics::Sprite> buttonUpSprite;
-                std::shared_ptr<Graphics::Sprite> buttonDownSprite;
+            virtual void handle(Event::Mouse* mouseEvent) override;
 
-                void _onMouseClick(Event::Mouse* event);
-                void _onMouseDown(Event::Mouse* event);
-                void _onMouseOut(Event::Mouse* event);
+            virtual void render(bool eggTransparency = false) override;
+
+            virtual bool opaque(const Point& pos) override;
+
+        protected:
+            bool _checkboxMode = false; // remember new state after click
+
+            bool _checked = false;
+
+            bool _enabled = true;
+
+            std::string _buttonDownSoundFilename;
+
+            std::string _buttonUpSoundFilename;
+
+            std::shared_ptr<Graphics::Sprite> _buttonUpSprite;
+
+            std::shared_ptr<Graphics::Sprite> _buttonDownSprite;
+
+            void _onMouseClick();
+
+            void _onMouseDown(Event::Mouse* event);
         };
     }
 }

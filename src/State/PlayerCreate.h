@@ -32,21 +32,10 @@ namespace Falltergeist
                 void think(const float &deltaTime) override;
                 void render() override;
 
-                void onMaskClick(Event::Mouse* event);
-                void onButtonClick(Event::Mouse* event);
-                void onAgeButtonClick(Event::Mouse* event);
-                void onNameButtonClick(Event::Mouse* event);
-                void onGenderButtonClick(Event::Mouse* event);
-                void onLabelClick(Event::Mouse* event);
-                void onBackButtonClick(Event::Mouse* event);
-                void onDoneButtonClick(Event::Mouse* event);
-                void onOptionsButtonClick(Event::Mouse* event);
-                void doAge();
-                void doName();
-                void doGender();
-                void doOptions();
-                void doDone();
-                void doBack();
+                void onMaskClick(UI::HiddenMask* target);
+
+                void onLabelClick(UI::TextArea* target);
+
                 void onKeyDown(Event::Keyboard* event) override;
 
             protected:
@@ -77,9 +66,26 @@ namespace Falltergeist
                 bool _skillToggle(unsigned int num);
 
             private:
-                std::shared_ptr<ILogger> logger;
-                std::shared_ptr<UI::IResourceManager> resourceManager;
-                std::unique_ptr<UI::Factory::ImageButtonFactory> imageButtonFactory;
+                std::shared_ptr<ILogger> _logger;
+
+                std::shared_ptr<UI::IResourceManager> _resourceManager;
+
+                std::unique_ptr<UI::Factory::ImageButtonFactory> _imageButtonFactory;
+
+                void _onButtonClick(UI::ImageButton* target);
+
+                void _doAge();
+
+                void _doName();
+
+                void _doGender();
+
+                void _doOptions();
+
+                void _doDone();
+
+                void _doBack();
+
         };
     }
 }

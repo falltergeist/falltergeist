@@ -21,26 +21,34 @@ namespace Falltergeist
         {
             public:
                 PlayerEditName(std::shared_ptr<UI::IResourceManager> resourceManager);
+
                 virtual ~PlayerEditName() = default;
 
                 void init() override;
+
                 void think(const float &deltaTime) override;
 
                 void onDoneButtonClick(Event::Mouse* event);
-                void onTextAreaKeyDown(Event::Keyboard* event);
 
                 void doDone();
+
                 void doBack();
 
             protected:
                 float _blinkingCursorMillisecondsTracked = 0;
+
                 UI::TextArea* _name = nullptr;
+
                 UI::Rectangle* _cursor = nullptr;
+
                 std::map<char,char> _keyCodes;
 
             private:
-                std::shared_ptr<UI::IResourceManager> resourceManager;
-                std::unique_ptr<UI::Factory::ImageButtonFactory> imageButtonFactory;
+                std::shared_ptr<UI::IResourceManager> _resourceManager;
+
+                std::unique_ptr<UI::Factory::ImageButtonFactory> _imageButtonFactory;
+
+                void _onTextAreaKeyDown(Event::Keyboard* event, UI::TextArea* target);
         };
     }
 }
