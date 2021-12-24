@@ -29,8 +29,8 @@ namespace Falltergeist {
     namespace Graphics {
         using Game::Game;
 
-        Renderer::Renderer(std::unique_ptr<IRendererConfig> rendererConfig, std::shared_ptr<ILogger> logger, const Size& size, SDL_Window* sdlWindow)
-            : _rendererConfig(std::move(rendererConfig)), _logger(logger), _size(size), _sdlWindow(sdlWindow) {
+        Renderer::Renderer(std::unique_ptr<IRendererConfig> rendererConfig, std::shared_ptr<ILogger> logger, std::shared_ptr<SdlWindow> sdlWindow)
+            : _rendererConfig(std::move(rendererConfig)), _logger(logger), _size(sdlWindow->boundaries().size()), _sdlWindow(sdlWindow) {
             if (SDL_WasInit(SDL_INIT_VIDEO) == 0) {
                 if (SDL_InitSubSystem(SDL_INIT_VIDEO) < 0) {
                     logger->critical() << "Could not init SDL video subsystem: " << SDL_GetError() << std::endl;
@@ -51,14 +51,14 @@ namespace Falltergeist {
             SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
             SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
 
-            _glcontext = SDL_GL_CreateContext(_sdlWindow);
+            _glcontext = SDL_GL_CreateContext(_sdlWindow->sdlWindowPtr());
 
             if (!_glcontext) {
                 // ok, try and create 2.1 context then
                 SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, 0);
                 SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
                 SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
-                _glcontext = SDL_GL_CreateContext(_sdlWindow);
+                _glcontext = SDL_GL_CreateContext(_sdlWindow->sdlWindowPtr());
 
                 if (!_glcontext) {
                     throw Exception(message + SDL_GetError() + "[FAIL]");
@@ -218,7 +218,7 @@ namespace Falltergeist {
 
         void Renderer::endFrame() {
             GL_CHECK(glDisable(GL_BLEND));
-            SDL_GL_SwapWindow(_sdlWindow);
+            SDL_GL_SwapWindow(_sdlWindow->sdlWindowPtr());
         }
 
         const Size& Renderer::size() const {

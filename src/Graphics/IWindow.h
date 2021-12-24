@@ -3,6 +3,7 @@
 #include <string>
 #include "../Graphics/Point.h"
 #include "../Graphics/Size.h"
+#include "../Graphics/Rectangle.h"
 
 namespace Falltergeist {
     namespace Graphics {
@@ -12,15 +13,9 @@ namespace Falltergeist {
 
             virtual const std::string& title() const = 0;
 
-            virtual const Point& position() const = 0;
-
-            virtual const Size& size() const = 0;
+            virtual const Rectangle& boundaries() const = 0;
 
             virtual bool isFullscreen() const = 0;
-
-            virtual const Point& mousePosition() const = 0;
-
-            virtual void setMousePosition(const Point& position) = 0;
 
             virtual void pollEvents() = 0;
         };

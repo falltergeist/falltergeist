@@ -13,8 +13,8 @@ namespace Falltergeist
 {
     namespace Input
     {
-        Mouse::Mouse(const std::shared_ptr<UI::IResourceManager>& resourceManager)
-        : _resourceManager(resourceManager) {
+        Mouse::Mouse(const std::shared_ptr<UI::IResourceManager>& resourceManager, std::shared_ptr<IMouse> mouse)
+        : _resourceManager(resourceManager), _mouse(mouse) {
         }
 
         Mouse::~Mouse()
@@ -23,14 +23,12 @@ namespace Falltergeist
 
         const Point& Mouse::position() const
         {
-            // TODO replace it with direct window usage
-            return Game::Game::getInstance()->window()->mousePosition();
+            return _mouse->position();
         }
 
         void Mouse::setPosition(const Point& pos)
         {
-            // TODO replace it with direct window usage
-            Game::Game::getInstance()->window()->setMousePosition(pos);
+            _mouse->setPosition(pos);
         }
 
         void Mouse::setState(Cursor state)

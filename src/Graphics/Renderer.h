@@ -11,7 +11,7 @@
 #include "../Graphics/Rectangle.h"
 #include "../Graphics/Shader.h"
 #include "../Graphics/Size.h"
-#include "../Graphics/IWindow.h"
+#include "../Graphics/SdlWindow.h"
 #include "../ILogger.h"
 
 namespace Falltergeist
@@ -31,7 +31,9 @@ namespace Falltergeist
                     GLES2
                 };
 
-                Renderer(std::unique_ptr<IRendererConfig> rendererConfig, std::shared_ptr<ILogger> logger, const Size& size, SDL_Window* sdlWindow);
+                // It does not accept IWindow since Renderer implementation is still SDL specific
+                // This whole class should be abstracted away to interface and Renderer should become SdlRenderer
+                Renderer(std::unique_ptr<IRendererConfig> rendererConfig, std::shared_ptr<ILogger> logger, std::shared_ptr<SdlWindow> sdlWindow);
 
                 ~Renderer();
 
@@ -120,9 +122,10 @@ namespace Falltergeist
 
                 std::shared_ptr<ILogger> _logger;
 
+                // TODO use _sdlWindow boundaries instead
                 Size _size;
 
-                SDL_Window* _sdlWindow;
+                std::shared_ptr<SdlWindow> _sdlWindow;
         };
     }
 }

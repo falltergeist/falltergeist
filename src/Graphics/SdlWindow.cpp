@@ -2,8 +2,29 @@
 
 namespace Falltergeist {
     namespace Graphics {
-        SdlWindow::SdlWindow(const std::string& title, const Point& position, const Size& size, bool isFullscreen, std::shared_ptr<ILogger> logger)
-            : _title(title), _position(position), _size(size), _isFullscreen(isFullscreen), _logger(logger) {
+        SdlWindow::SdlWindow(const std::string& title, const Rectangle& boundaries, bool isFullscreen, std::shared_ptr<ILogger> logger)
+            : _title(title), _boundaries(boundaries), _isFullscreen(isFullscreen), _logger(logger) {
+
+//            // enumerate displays
+//            int displays = SDL_GetNumVideoDisplays();
+//            assert( displays > 1 );  // assume we have secondary monitor
+//
+//            // get display bounds for all displays
+//            vector< SDL_Rect > displayBounds;
+//            for( int i = 0; i < displays; i++ ) {
+//                displayBounds.push_back( SDL_Rect() );
+//                SDL_GetDisplayBounds( i, &displayBounds.back() );
+//            }
+//
+//            // window of dimensions 500 * 500 offset 100 pixels on secondary monitor
+//            int x = displayBounds[ 1 ].x + 100;
+//            int y = displayBounds[ 1 ].y + 100;
+//            int w = 500;
+//            int h = 500;
+//
+//            // so now x and y are on secondary display
+//            SDL_Window * window = SDL_CreateWindow( "title", x, y, w, h, FLAGS... );
+
 
             Uint32 flags = SDL_WindowFlags::SDL_WINDOW_SHOWN | SDL_WindowFlags::SDL_WINDOW_OPENGL;
 
@@ -24,22 +45,19 @@ namespace Falltergeist {
 
             _sdlWindow = SDL_CreateWindow(
                 _title.c_str(),
-                _position.x(),
-                _position.y(),
-                _size.width(),
-                _size.height(),
+                _boundaries.position().x(),
+                _boundaries.position().y(),
+                _boundaries.size().width(),
+                _boundaries.size().height(),
                 flags
             );
 
             if (_sdlWindow == nullptr) {
                 _logger->critical() << "Could not create SDL window: " << SDL_GetError() << std::endl;
             }
-
-            SDL_ShowCursor(0); // Hide cursor
         }
 
         SdlWindow::~SdlWindow() {
-            SDL_ShowCursor(1); // Show cursor
             SDL_DestroyWindow(_sdlWindow);
         }
 
@@ -47,33 +65,19 @@ namespace Falltergeist {
             return _title;
         }
 
-        const Point& SdlWindow::position() const {
-            return _position;
-        }
-
-        const Size& SdlWindow::size() const {
-            return _size;
+        const Rectangle& SdlWindow::boundaries() const {
+            return _boundaries;
         }
 
         bool SdlWindow::isFullscreen() const {
             return _isFullscreen;
         }
 
-        const Point& SdlWindow::mousePosition() const {
-            return _mousePosition;
-        }
-
-        void SdlWindow::setMousePosition(const Point& position) {
-            _mousePosition = position;
-            SDL_WarpMouseInWindow(_sdlWindow, _mousePosition.x(), _mousePosition.y());
+        SDL_Window* SdlWindow::sdlWindowPtr() const {
+            return _sdlWindow;
         }
 
         void SdlWindow::pollEvents() {
-            SDL_GetMouseState(&_mousePosition.rx(), &_mousePosition.ry());
-        }
-
-        SDL_Window* SdlWindow::sdlWindowPtr() const {
-            return _sdlWindow;
         }
     }
 }

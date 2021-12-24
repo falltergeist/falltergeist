@@ -12,21 +12,15 @@ namespace Falltergeist {
     namespace Graphics {
         class SdlWindow final : public IWindow {
         public:
-            SdlWindow(const std::string& title, const Point& position, const Size& size, bool isFullscreen, std::shared_ptr<ILogger> logger);
+            SdlWindow(const std::string& title, const Rectangle& boundaries, bool isFullscreen, std::shared_ptr<ILogger> logger);
 
             ~SdlWindow() override;
 
             const std::string& title() const override;
 
-            const Point& position() const override;
-
-            const Size& size() const override;
+            const Rectangle& boundaries() const override;
 
             bool isFullscreen() const override;
-
-            const Point& mousePosition() const override;
-
-            void setMousePosition(const Point& position) override;
 
             void pollEvents() override;
 
@@ -37,13 +31,9 @@ namespace Falltergeist {
 
             std::string _title;
 
-            Point _position;
-
-            Size _size;
+            Rectangle _boundaries;
 
             bool _isFullscreen;
-
-            mutable Point _mousePosition{320, 240};
 
             SDL_Window* _sdlWindow = nullptr;
 
