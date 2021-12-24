@@ -16,12 +16,14 @@
 #include "../Graphics/Renderer.h"
 #include "../Graphics/RendererConfig.h"
 #include "../Input/Mouse.h"
+#include "../Input/SdlMouse.h"
 #include "../ResourceManager.h"
 #include "../Settings.h"
 #include "../State/State.h"
 #include "../State/Location.h"
 #include "../UI/FpsCounter.h"
 #include "../UI/TextArea.h"
+#include "../Graphics/SdlWindow.h"
 
 namespace Falltergeist
 {
@@ -29,13 +31,10 @@ namespace Falltergeist
     {
         Game* Game::_instance = nullptr;
 
-        Game::Game()
-        {
+        Game::Game() {
         }
 
-        Game::Game(std::shared_ptr<ILogger> logger)
-        {
-            this->logger = std::move(logger);
+        Game::Game(std::shared_ptr<ILogger> logger) : _logger(logger) {
         }
 
         Game* Game::getInstance()
@@ -65,13 +64,31 @@ namespace Falltergeist
 
             _eventDispatcher = std::make_unique<Event::Dispatcher>();
 
-            _renderer = std::make_shared<Graphics::Renderer>(
-                createRendererConfigFromSettings(),
-                logger
+            auto rendererConfig = createRendererConfigFromSettings();
+
+            std::string version = CrossPlatform::getVersion();
+
+            auto sdlWindow = std::make_shared<Graphics::SdlWindow>(
+                version.c_str(),
+                Graphics::Rectangle(
+                    Point(rendererConfig->x(), rendererConfig->y()),
+                    Graphics::Size(rendererConfig->width(), rendererConfig->height())
+                ),
+                rendererConfig->isFullscreen(),
+                logger()
             );
 
-            logger->info() << "[GAME] " << CrossPlatform::getVersion() << std::endl;
-            logger->info() << "[GAME] Opensource Fallout 2 game engine" << std::endl;
+            auto sdlMouse = std::make_shared<Input::SdlMouse>(sdlWindow);
+            sdlMouse->setCursorState(Input::IMouse::CursorState::Hidden);
+
+            _renderer = std::make_shared<Graphics::Renderer>(
+                std::move(rendererConfig),
+                logger(),
+                sdlWindow
+            );
+
+            logger()->info() << "[GAME] " << CrossPlatform::getVersion() << std::endl;
+            logger()->info() << "[GAME] Opensource Fallout 2 game engine" << std::endl;
 
             SDL_setenv("SDL_VIDEO_CENTERED", "1", 1);
 
@@ -80,20 +97,19 @@ namespace Falltergeist
 
             renderer()->init();
 
-            std::string version = CrossPlatform::getVersion();
-            renderer()->setCaption(version.c_str());
 
-            _mixer = std::make_shared<Audio::Mixer>(logger);
+            _mixer = std::make_shared<Audio::Mixer>(logger());
             _mixer->setMusicVolume(_settings->musicVolume());
-            _mouse = std::make_shared<Input::Mouse>(uiResourceManager);
-            _fpsCounter = std::make_unique<UI::FpsCounter>(Point(renderer()->width() - 42, 2));
+            _mouse = std::make_shared<Input::Mouse>(_uiResourceManager, sdlMouse);
+            _mouse->setPosition({320, 240});
+            _fpsCounter = std::make_unique<UI::FpsCounter>(Point(renderer()->size().width() - 42, 2));
             _fpsCounter->setWidth(42);
             _fpsCounter->setHorizontalAlign(UI::TextArea::HorizontalAlign::RIGHT);
 
             version += " " + std::to_string(renderer()->size().width()) + "x" + std::to_string(renderer()->size().height());
 
-            _falltergeistVersion = std::make_unique<UI::TextArea>(version, 3, renderer()->height() - 10);
-            _mousePosition = std::make_unique<UI::TextArea>("", renderer()->width() - 55, 14);
+            _falltergeistVersion = std::make_unique<UI::TextArea>(version, 3, renderer()->size().height() - 10);
+            _mousePosition = std::make_unique<UI::TextArea>("", renderer()->size().width() - 55, 14);
             _mousePosition->setWidth(55);
             _mousePosition->setHorizontalAlign(UI::TextArea::HorizontalAlign::RIGHT);
             _animatedPalette = std::make_unique<Graphics::AnimatedPalette>();
@@ -163,7 +179,7 @@ namespace Falltergeist
 
         void Game::run()
         {
-            logger->info() << "[GAME] Starting main loop" << std::endl;
+            logger()->info() << "[GAME] Starting main loop" << std::endl;
             _frame = 0;
 
             uint32_t FPS = 60;
@@ -186,7 +202,7 @@ namespace Falltergeist
                     frameTime += (frameDelay - frameTime);
                 }
             }
-            logger->info() << "[GAME] Stopping main loop" << std::endl;
+            logger()->info() << "[GAME] Stopping main loop" << std::endl;
         }
 
         void Game::quit()
@@ -353,6 +369,9 @@ namespace Falltergeist
                     auto mouseEvent = std::make_unique<Event::Mouse>(Mouse::Type::MOVE);
                     mouseEvent->setPosition({sdlEvent.motion.x, sdlEvent.motion.y});
                     mouseEvent->setOffset({sdlEvent.motion.xrel,sdlEvent.motion.yrel});
+
+                    // TODO move position update to window class polling
+                    //((Graphics::SdlWindow*)_window.get())->_mousePosition = {sdlEvent.motion.x, sdlEvent.motion.y};
                     return std::move(mouseEvent);
                 }
                 case SDL_KEYDOWN:
@@ -389,6 +408,9 @@ namespace Falltergeist
                 return;
             }
 
+            // TODO implementc
+            //_window->pollEvents();
+
             while (SDL_PollEvent(&_event))
             {
                 if (_event.type == SDL_QUIT) {
@@ -409,6 +431,7 @@ namespace Falltergeist
         void Game::think(const float &deltaTime)
         {
             _fpsCounter->think(deltaTime);
+
             _mouse->think(deltaTime);
 
             _animatedPalette->think(deltaTime);
@@ -480,9 +503,9 @@ namespace Falltergeist
             return _eventDispatcher.get();
         }
 
-        std::shared_ptr<ILogger> Game::getLogger() const
+        std::shared_ptr<ILogger> Game::logger() const
         {
-            return logger;
+            return _logger;
         }
 
         unsigned int Game::frame() const
@@ -492,7 +515,7 @@ namespace Falltergeist
 
         void Game::setUIResourceManager(std::shared_ptr<UI::IResourceManager> uiResourceManager)
         {
-            this->uiResourceManager = uiResourceManager;
+            _uiResourceManager = uiResourceManager;
         }
 
         std::unique_ptr<Graphics::IRendererConfig> Game::createRendererConfigFromSettings()

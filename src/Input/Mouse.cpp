@@ -8,54 +8,27 @@
 #include "../UI/Animation.h"
 #include "../UI/AnimationQueue.h"
 #include "../UI/Image.h"
-#include <SDL.h>
 
 namespace Falltergeist
 {
     namespace Input
     {
-        Mouse::Mouse(const std::shared_ptr<UI::IResourceManager>& resourceManager)
-        : _resourceManager(resourceManager) {
-            SDL_ShowCursor(0); // Hide cursor
+        Mouse::Mouse(const std::shared_ptr<UI::IResourceManager>& resourceManager, std::shared_ptr<IMouse> mouse)
+        : _resourceManager(resourceManager), _mouse(mouse) {
         }
 
         Mouse::~Mouse()
         {
-            SDL_ShowCursor(1); // Show cursor
-        }
-
-        int Mouse::x() const
-        {
-            return _position.x();
-        }
-
-        int Mouse::y() const
-        {
-            return _position.y();
-        }
-
-        void Mouse::setX(int x)
-        {
-            setPosition({x, _position.y()});
-        }
-
-        void Mouse::setY(int y)
-        {
-            setPosition({_position.x(), y});
         }
 
         const Point& Mouse::position() const
         {
-            return _position;
+            return _mouse->position();
         }
 
         void Mouse::setPosition(const Point& pos)
         {
-            _position = pos;
-            auto renderer = Game::Game::getInstance()->renderer();
-            float scaleX = renderer->scaleX();
-            float scaleY = renderer->scaleY();
-            SDL_WarpMouseInWindow(renderer->sdlWindow(), (int)(pos.x() * scaleX), (int)(pos.y() * scaleY));
+            _mouse->setPosition(pos);
         }
 
         void Mouse::setState(Cursor state)
@@ -233,11 +206,6 @@ namespace Falltergeist
 
         void Mouse::think(const float &deltaTime)
         {
-            SDL_GetMouseState(&_position.rx(), &_position.ry());
-            _position = Point(
-                static_cast<int>(_position.x() / Game::Game::getInstance()->renderer()->scaleX()),
-                static_cast<int>(_position.y() / Game::Game::getInstance()->renderer()->scaleY())
-            );
             if (_ui) {
                 _ui->think(deltaTime);
             }

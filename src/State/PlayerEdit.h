@@ -31,12 +31,8 @@ namespace Falltergeist
                 void think(const float &deltaTime) override;
                 void render() override;
 
-                void onMaskClick(Event::Mouse* event);
-                void onButtonClick(Event::Mouse* event);
-                void onAgeButtonClick(Event::Mouse* event);
-                void onNameButtonClick(Event::Mouse* event);
-                void onGenderButtonClick(Event::Mouse* event);
-                void onLabelClick(Event::Mouse* event);
+                void onMaskClick(UI::HiddenMask* target);
+                void onLabelClick(UI::TextArea* target);
                 void onTabClick(Event::Mouse* event);
                 void doCancel();
                 void doDone();
@@ -67,14 +63,12 @@ namespace Falltergeist
                 void _addDescription(const std::string& name, std::string description);
                 void _addImage(const std::string& name, UI::Image* image);
 
-                bool _statIncrease(unsigned int num);
-                bool _statDecrease(unsigned int num);
-                bool _traitToggle(unsigned int num);
-                bool _skillToggle(unsigned int num);
-
             private:
-                std::shared_ptr<UI::IResourceManager> resourceManager;
-                std::unique_ptr<UI::Factory::ImageButtonFactory> imageButtonFactory;
+                std::shared_ptr<UI::IResourceManager> _resourceManager;
+
+                std::unique_ptr<UI::Factory::ImageButtonFactory> _imageButtonFactory;
+
+                void _onButtonClick(UI::ImageButton* target);
         };
     }
 }

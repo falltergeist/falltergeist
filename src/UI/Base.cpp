@@ -104,7 +104,7 @@ namespace Falltergeist
 
         void Base::handle(Event::Event* event)
         {
-            if (event->handled()) {
+            if (event->isHandled()) {
                 return;
             }
 
@@ -186,7 +186,7 @@ namespace Falltergeist
                         }
                         // mousedown event can not be "interesting" for any other UI's that "behind" this UI,
                         // so we can safely stop event capturing now
-                        mouseEvent->setHandled(true);
+                        mouseEvent->stopPropagation();
                         break;
                     }
                     case Mouse::Type::BUTTON_UP:

@@ -84,7 +84,7 @@ namespace Falltergeist
 
             _camera = std::make_unique<LocationCamera>(renderer->size(), Point(0, 0));
 
-            _hexagonInfo = std::make_unique<UI::TextArea>("", renderer->width() - 135, 25);
+            _hexagonInfo = std::make_unique<UI::TextArea>("", renderer->size().width() - 135, 25);
             _hexagonInfo->setWidth(135);
             _hexagonInfo->setHorizontalAlign(UI::TextArea::HorizontalAlign::RIGHT);
 
@@ -661,7 +661,7 @@ namespace Falltergeist
         void Location::handle(Event::Event *event)
         {
             State::handle(event);
-            if (event->handled()) {
+            if (event->isHandled()) {
                 return;
             }
 
@@ -681,7 +681,7 @@ namespace Falltergeist
                 }
 
                 // let event fall down to all objects when using action cursor and within active view
-                if (!mouseEvent->handled() &&
+                if (!mouseEvent->isHandled() &&
                     (mouse->state() == Input::Mouse::Cursor::ACTION || mouse->state() == Input::Mouse::Cursor::NONE)) {
                     auto elevation = _location->elevations()->at(_elevation);
                     if (!elevation->roof()->opaque(mouse->position())) {
@@ -695,7 +695,7 @@ namespace Falltergeist
         {
             for (auto it = _objects.rbegin(); it != _objects.rend(); ++it) {
                 auto object = (*it).get();
-                if (event->handled()) {
+                if (event->isHandled()) {
                     return;
                 }
                 if (!object->inRender()) {
@@ -707,7 +707,7 @@ namespace Falltergeist
             // sadly, flat objects do handle events.
             for (auto it = _flatObjects.rbegin(); it != _flatObjects.rend(); ++it) {
                 auto object = (*it).get();
-                if (event->handled()) {
+                if (event->isHandled()) {
                     return;
                 }
                 if (!object->inRender()) {
@@ -724,7 +724,7 @@ namespace Falltergeist
                     auto objects = hexagon->objects();
                     for (auto itt = objects->rbegin(); itt != objects->rend(); ++itt)
                     {
-                        if (event->handled()) return;
+                        if (event->isHandled()) return;
                         auto object = *itt;
                         if (!object->inRender()) continue;
                         object->handle(event);
@@ -737,7 +737,7 @@ namespace Falltergeist
         {
             if (event->rightButton()) {
                 toggleCursorMode();
-                event->setHandled(true);
+                event->stopPropagation();
             }
         }
 
@@ -758,7 +758,7 @@ namespace Falltergeist
                                 player->movementQueue()->push_back(pathHexagon);
                             }
                         }
-                        event->setHandled(true);
+                        event->stopPropagation();
                         _lastClickedTile = hexagon->number();
                     }
                 }
@@ -796,9 +796,9 @@ namespace Falltergeist
             int scrollArea = 8;
             Point mpos = mouse->position();
             _scrollLeft = (mpos.x() < scrollArea);
-            _scrollRight = (mpos.x() > renderer->width() - scrollArea);
+            _scrollRight = (mpos.x() > renderer->size().width() - scrollArea);
             _scrollTop = (mpos.y() < scrollArea);
-            _scrollBottom = (mpos.y() > renderer->height() - scrollArea);
+            _scrollBottom = (mpos.y() > renderer->size().height() - scrollArea);
 
             if (hexagon) {
                 std::string text = "Hex number: " + std::to_string(hexagon->number()) + "\n";

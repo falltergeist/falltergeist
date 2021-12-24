@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../Graphics/Point.h"
+#include "../Input/IMouse.h"
 #include "../UI/IResourceManager.h"
 #include "../UI/Image.h"
 #include <memory>
@@ -14,7 +15,7 @@ namespace Falltergeist {
         using Graphics::Point;
 
         class Mouse final {
-          public:
+        public:
             // TODO: need to consider getting rid of mouse cursor state stack,
             // it's not convenient to use
             enum class Cursor : unsigned {
@@ -48,29 +49,11 @@ namespace Falltergeist {
 
             // TODO: this is specific to CursorDropdown state, should not be
             // here
-            enum class Icon : unsigned {
-                ROTATE = 1,
-                SKILL,
-                INVENTORY,
-                CANCEL,
-                LOOK,
-                TALK,
-                PUSH,
-                UNLOAD,
-                USE
-            };
+            enum class Icon : unsigned { ROTATE = 1, SKILL, INVENTORY, CANCEL, LOOK, TALK, PUSH, UNLOAD, USE };
 
-            Mouse(const std::shared_ptr<UI::IResourceManager>& resourceManager);
+            Mouse(const std::shared_ptr<UI::IResourceManager>& resourceManager, std::shared_ptr<IMouse> mouse);
 
             ~Mouse();
-
-            int x() const;
-
-            void setX(int x);
-
-            int y() const;
-
-            void setY(int y);
 
             const Point& position() const;
 
@@ -96,14 +79,15 @@ namespace Falltergeist {
 
             UI::Base* ui();
 
-          private:
+        private:
             std::shared_ptr<UI::IResourceManager> _resourceManager;
-
-            Point _position{320, 240};
 
             std::vector<Cursor> _states;
 
             std::unique_ptr<UI::Base> _ui;
+
+            // It will wrap mouse for now. Until cursor render and state management refactoring
+            std::shared_ptr<IMouse> _mouse;
 
             void _setType(Cursor type);
         };

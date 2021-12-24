@@ -155,8 +155,8 @@ namespace Falltergeist
             buyPriceText->setColor({ 255, 255, 255, 0 });
             addUI("buyPriceText", buyPriceText);
 
-            mineList->itemDragStopHandler().add([sellList](Event::Mouse* event){ sellList->onItemDragStop(event); });
-            sellList->itemDragStopHandler().add([mineList](Event::Mouse* event){ mineList->onItemDragStop(event); });
+            mineList->itemDragStopHandler().add([sellList, mineList](Event::Mouse* event){ sellList->onItemDragStop(event, sellList); });
+            sellList->itemDragStopHandler().add([mineList, sellList](Event::Mouse* event){ mineList->onItemDragStop(event, sellList); });
             sellList->itemsListModifiedHandler().add([this, sellPriceText](Event::Event*)
                 {
                     _sellPriceTotal = 0;
@@ -166,8 +166,8 @@ namespace Falltergeist
                     sellPriceText->setText("$" + std::to_string(_sellPriceTotal));
                 });
 
-            theirsList->itemDragStopHandler().add([buyList](Event::Mouse* event){ buyList->onItemDragStop(event); });
-            buyList->itemDragStopHandler().add([theirsList](Event::Mouse* event){ theirsList->onItemDragStop(event); });
+            theirsList->itemDragStopHandler().add([buyList, theirsList](Event::Mouse* event){ buyList->onItemDragStop(event, theirsList); });
+            buyList->itemDragStopHandler().add([theirsList, buyList](Event::Mouse* event){ theirsList->onItemDragStop(event, buyList); });
             buyList->itemsListModifiedHandler().add([this, buyPriceText](Event::Event*)
                 {
                     _buyPriceTotal = 0;
@@ -177,7 +177,6 @@ namespace Falltergeist
                     }
                     buyPriceText->setText("$" + std::to_string(_buyPriceTotal));
                 });
-
         }
 
         void CritterBarter::resetTransaction()

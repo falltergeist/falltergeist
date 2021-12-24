@@ -25,7 +25,6 @@ namespace Falltergeist
             static_assert(std::is_base_of<Event, T>::value, "T should be derived from Event::Event.");
             if (handler)
             {
-                event->setTarget(this);
                 _eventDispatcher->scheduleEvent<T>(this, std::move(event), handler); // handler copy is necessary here
             }
         }

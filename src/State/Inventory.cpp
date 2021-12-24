@@ -263,8 +263,8 @@ namespace Falltergeist
             {
                 auto inventoryItem = new UI::InventoryItem(armorSlot, {154, 183});
                 inventoryItem->setType(UI::InventoryItem::Type::SLOT);
-                inventoryItem->itemDragStopHandler().add([inventoryList](Event::Mouse* event){ inventoryList->onItemDragStop(event); });
-                inventoryList->itemDragStopHandler().add([inventoryItem](Event::Mouse* event){ inventoryItem->onArmorDragStop(event); });
+                inventoryItem->itemDragStopHandler().add([inventoryList, inventoryItem](Event::Mouse* event){ inventoryList->onItemDragStop(event, inventoryItem); });
+                inventoryList->itemDragStopHandler().add([inventoryItem, inventoryList](Event::Mouse* event){ inventoryItem->onArmorDragStop(event, inventoryList); });
                 addUI(inventoryItem);
             }
 
@@ -272,8 +272,8 @@ namespace Falltergeist
             {
                 auto inventoryItem = new UI::InventoryItem(leftHand, {154, 286});
                 inventoryItem->setType(UI::InventoryItem::Type::SLOT);
-                inventoryItem->itemDragStopHandler().add([inventoryList](Event::Mouse* event){ inventoryList->onItemDragStop(event, HAND::LEFT); });
-                inventoryList->itemDragStopHandler().add([inventoryItem](Event::Mouse* event){ inventoryItem->onHandDragStop(event, HAND::LEFT); });
+                inventoryItem->itemDragStopHandler().add([inventoryList, inventoryItem](Event::Mouse* event){ inventoryList->onItemDragStop(event, HAND::LEFT, inventoryItem); });
+                inventoryList->itemDragStopHandler().add([inventoryItem, inventoryList](Event::Mouse* event){ inventoryItem->onHandDragStop(event, HAND::LEFT, inventoryList); });
                 addUI(inventoryItem);
             }
 
@@ -281,8 +281,8 @@ namespace Falltergeist
             {
                 auto inventoryItem = new UI::InventoryItem(rightHand, {247, 286});
                 inventoryItem->setType(UI::InventoryItem::Type::SLOT);
-                inventoryItem->itemDragStopHandler().add([inventoryList](Event::Mouse* event){ inventoryList->onItemDragStop(event, HAND::RIGHT); });
-                inventoryList->itemDragStopHandler().add([inventoryItem](Event::Mouse* event){ inventoryItem->onHandDragStop(event, HAND::RIGHT); });
+                inventoryItem->itemDragStopHandler().add([inventoryList, inventoryItem](Event::Mouse* event){ inventoryList->onItemDragStop(event, HAND::RIGHT, inventoryItem); });
+                inventoryList->itemDragStopHandler().add([inventoryItem, inventoryList](Event::Mouse* event){ inventoryItem->onHandDragStop(event, HAND::RIGHT, inventoryList); });
                 addUI(inventoryItem);
             }
 
@@ -371,75 +371,6 @@ namespace Falltergeist
             scrollDownButtonDisabled->setVisible(!enable);
             scrollDownButton->setEnabled(enable);
         }
-
-        void Inventory::onArmorSlotMouseDown(Event::Mouse* event)
-        {
-            if (Game::Game::getInstance()->mouse()->state() == Input::Mouse::Cursor::HAND)
-            {
-                auto itemUi = dynamic_cast<UI::ImageList*>(event->target());
-                Game::Game::getInstance()->pushState(new InventoryDragItem(itemUi));
-            }
-            else
-            {
-                auto itemPID = Game::Game::getInstance()->player()->armorSlot()->PID();
-                _screenShow(itemPID);
-            }
-        }
-
-        void Inventory::onLeftHandSlotMouseDown(Event::Mouse* event)
-        {
-            if (Game::Game::getInstance()->mouse()->state() == Input::Mouse::Cursor::HAND)
-            {
-                auto itemUi = dynamic_cast<UI::ImageList*>(event->target());
-                Game::Game::getInstance()->pushState(new InventoryDragItem(itemUi));
-            }
-            else
-            {
-                auto itemPID = Game::Game::getInstance()->player()->leftHandSlot()->PID();
-                _screenShow(itemPID);
-            }
-        }
-
-        void Inventory::onRightHandSlotMouseDown(Event::Mouse* event)
-        {
-            if (Game::Game::getInstance()->mouse()->state() == Input::Mouse::Cursor::HAND)
-            {
-                auto itemUi = dynamic_cast<UI::ImageList*>(event->target());
-                Game::Game::getInstance()->pushState(new InventoryDragItem(itemUi));
-            }
-            else
-            {
-                auto itemPID = Game::Game::getInstance()->player()->rightHandSlot()->PID();
-                _screenShow(itemPID);
-            }
-        }
-
-        //void Inventory::onSlotMouseDown(MouseEvent* event)
-        //{
-        //    auto state = dynamic_cast<Inventory*>(event->reciever());
-        //    auto itemUi = dynamic_cast<ImageList*>(event->target());
-        //    itemUi->setCurrentImage(1);
-        //    itemUi->setX(event->x() - itemUi->width()*0.5);
-        //    itemUi->setY(event->y() - itemUi->height()*0.5);
-        //}
-
-        //void Inventory::onSlotMouseUp(MouseEvent* event)
-        //{
-        //    auto itemUi = dynamic_cast<ImageList*>(event->target());
-        //    itemUi->setCurrentImage(0);
-        //    itemUi->setX(event->x() - itemUi->width()*0.5);
-        //    itemUi->setY(event->y() - itemUi->height()*0.5);
-        //}
-
-        //void Inventory::onSlotDrag(MouseEvent* event)
-        //{
-        //    //auto item = dynamic_cast<GameItemObject*>(event->reciever());
-        //    auto itemUi = dynamic_cast<ImageList*>(event->target());
-        //    //auto dragUi = item->inventoryDragUi();
-        //    itemUi->setX(itemUi->x() + event->xOffset());
-        //    itemUi->setY(itemUi->y() + event->yOffset());
-        //    //Game::getInstance()->states()->back()->ui()->push_back(dragUi);
-        //}
 
         std::string Inventory::_handItemSummary (Game::ItemObject* hand)
         {

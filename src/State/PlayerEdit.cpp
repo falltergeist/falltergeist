@@ -25,10 +25,9 @@ namespace Falltergeist
 
     namespace State
     {
-        PlayerEdit::PlayerEdit(std::shared_ptr<UI::IResourceManager> resourceManager) : State()
-        {
-            this->resourceManager = resourceManager;
-            imageButtonFactory = std::make_unique<UI::Factory::ImageButtonFactory>(resourceManager);
+        PlayerEdit::PlayerEdit(std::shared_ptr<UI::IResourceManager> resourceManager)
+            : State(), _resourceManager(resourceManager) {
+            _imageButtonFactory = std::make_unique<UI::Factory::ImageButtonFactory>(_resourceManager);
         }
 
         void PlayerEdit::init()
@@ -44,7 +43,7 @@ namespace Falltergeist
             auto player = Game::Game::getInstance()->player();
 
             // background
-            auto background = resourceManager->getImage("art/intrface/edtredt.frm");
+            auto background = _resourceManager->getImage("art/intrface/edtredt.frm");
             Point backgroundPos = Point((Game::Game::getInstance()->renderer()->size() - background->size()) / 2);
             int backgroundX = backgroundPos.x();
             int backgroundY = backgroundPos.y();
@@ -60,7 +59,7 @@ namespace Falltergeist
 
                 _addTitle(ss.str(), _t(MSG_STATS, 100 + i));       // stat title
                 _addDescription(ss.str(), _t(MSG_STATS, 200 + i)); // stat description
-                _addImage(ss.str(), resourceManager->getImage("art/skilldex/" + imagesStats[i] + ".frm")); // stat image
+                _addImage(ss.str(), _resourceManager->getImage("art/skilldex/" + imagesStats[i] + ".frm")); // stat image
                 _addLabel(ss.str(), new UI::TextArea(backgroundX+104, backgroundY+46+33*i));          // stat value label
                 _addCounter(ss.str(), new UI::BigCounter({backgroundX + 59, static_cast<int>(backgroundY + 37 + 33 * i)}));       // stat value counter
                 _addMask(ss.str(), new UI::HiddenMask(133, 29, backgroundX+14, backgroundY+36+33*i)); // stat click mask
@@ -104,7 +103,7 @@ namespace Falltergeist
                         break;
                 }
                 _addDescription(ss.str(), line); // level description
-                _addImage(ss.str(), resourceManager->getImage("art/skilldex/" + imagesLevel[i] + ".frm")); // stat image
+                _addImage(ss.str(), _resourceManager->getImage("art/skilldex/" + imagesLevel[i] + ".frm")); // stat image
                 tmp.str() = "";
                 tmp << _t(MSG_EDITOR, 113 + i) << " ";
                 switch (i)
@@ -131,7 +130,7 @@ namespace Falltergeist
                 ss << "skills_" << (i+1);
                 _addTitle(ss.str(), _t(MSG_SKILLS, 100 + i));
                 _addDescription(ss.str(), _t(MSG_SKILLS, 200 + i));
-                _addImage(ss.str(),  resourceManager->getImage("art/skilldex/" + imagesSkills[i] + ".frm"));
+                _addImage(ss.str(),  _resourceManager->getImage("art/skilldex/" + imagesSkills[i] + ".frm"));
                 _addLabel(ss.str(),  new UI::TextArea(_t(MSG_SKILLS, 100 + i), backgroundX+377, backgroundY+27+11*i))->setWidth(240);
                 _addLabel(ss.str() + "_value",  new UI::TextArea("", backgroundX+577, backgroundY+27+11*i));
             }
@@ -143,7 +142,7 @@ namespace Falltergeist
             _addTitle("health_1", _t(MSG_EDITOR, 300));
             _addLabel("health_1", new UI::TextArea(_t(MSG_EDITOR, 300), backgroundX+194, backgroundY+46)); //health
             _addDescription("health_1", _t(MSG_STATS, 207));
-            _addImage("health_1", resourceManager->getImage("art/skilldex/" + imagesHealth[0] + ".frm"));
+            _addImage("health_1", _resourceManager->getImage("art/skilldex/" + imagesHealth[0] + ".frm"));
 
             for (unsigned int i = 0; i != 7; ++i)
             {
@@ -152,7 +151,7 @@ namespace Falltergeist
                 _addTitle(ss.str(), _t(MSG_EDITOR, 312 + i));
                 _addDescription(ss.str(), _t(MSG_EDITOR, 400 + i));
                 _addLabel(ss.str(), new UI::TextArea(_t(MSG_EDITOR, 312+i), backgroundX+194, backgroundY+46+13*(i+1)))->setFont("font1.aaf", {0x18, 0x30, 0x18, 0xff});
-                _addImage(ss.str(), resourceManager->getImage("art/skilldex/" + imagesHealth[i+1] + ".frm"));
+                _addImage(ss.str(), _resourceManager->getImage("art/skilldex/" + imagesHealth[i+1] + ".frm"));
             }
 
             // PLAYER PARAMS
@@ -165,14 +164,14 @@ namespace Falltergeist
                 ss << "params_" << (i+1);
                 _addTitle(ss.str(), _t(MSG_STATS, params[i]));
                 _addDescription(ss.str(), _t(MSG_STATS, params[i] + 100));
-                _addImage(ss.str(), resourceManager->getImage("art/skilldex/" + imagesParams[i] + ".frm"));
+                _addImage(ss.str(), _resourceManager->getImage("art/skilldex/" + imagesParams[i] + ".frm"));
                 _addLabel(ss.str(), new UI::TextArea(_t(MSG_EDITOR, labels[i]), backgroundX + 194, backgroundY + 179 + 13*i));
                 _addLabel(ss.str() + "_value",  new UI::TextArea("", backgroundX + 288, backgroundY + 179 + 13*i));
             }
 
-            _addButton("print", imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {backgroundX + 345, backgroundY + 454}));
-            _addButton("done",  imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {backgroundX + 455, backgroundY + 454}));
-            _addButton("cancel",imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {backgroundX + 554, backgroundY + 454}));
+            _addButton("print", _imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {backgroundX + 345, backgroundY + 454}));
+            _addButton("done",  _imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {backgroundX + 455, backgroundY + 454}));
+            _addButton("cancel",_imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {backgroundX + 554, backgroundY + 454}));
 
             auto font3_b89c28ff = ResourceManager::getInstance()->font("font3.aaf");
             SDL_Color color = {0xb8, 0x9c, 0x28, 0xff};
@@ -180,10 +179,10 @@ namespace Falltergeist
             _addLabel("print", new UI::TextArea(_t(MSG_EDITOR, 103), backgroundX+365, backgroundY+453))->setFont(font3_b89c28ff, color);
             _addLabel("next",  new UI::TextArea(_t(MSG_EDITOR, 100), backgroundX+473, backgroundY+453))->setFont(font3_b89c28ff, color);
             _addLabel("cancel",new UI::TextArea(_t(MSG_EDITOR, 102), backgroundX+571, backgroundY+453))->setFont(font3_b89c28ff, color);
-            auto label = _addLabel("name", new UI::TextArea(Game::Game::getInstance()->player()->name(), backgroundX+17, backgroundY+7));
-            label->setWidth(150);
-            label->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
-            label->setFont(font3_b89c28ff, color);
+            auto nameLbl = _addLabel("name", new UI::TextArea(Game::Game::getInstance()->player()->name(), backgroundX+17, backgroundY+7));
+            nameLbl->setWidth(150);
+            nameLbl->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
+            nameLbl->setFont(font3_b89c28ff, color);
             _addLabel("age",     new UI::TextArea(_t(MSG_EDITOR, 104), backgroundX+163, backgroundY+7))->setFont(font3_b89c28ff, color);
             _addLabel("gender",  new UI::TextArea(_t(MSG_EDITOR, Game::Game::getInstance()->player()->gender() == GENDER::MALE ? 107 : 108), backgroundX+250, backgroundY+7))->setFont(font3_b89c28ff, color);
 
@@ -198,42 +197,44 @@ namespace Falltergeist
             _addDescription("label_2", _t(MSG_EDITOR, 147));
             _addDescription("label_3", _t(MSG_EDITOR, 151));
             _addDescription("label_4", _t(MSG_EDITOR, 145));
-            _addImage("label_1", resourceManager->getImage("art/skilldex/skills.frm"));
-            _addImage("label_2", resourceManager->getImage("art/skilldex/traits.frm"));
-            _addImage("label_3", resourceManager->getImage("art/skilldex/skills.frm"));
-            _addImage("label_4", resourceManager->getImage("art/skilldex/skills.frm"));
+            _addImage("label_1", _resourceManager->getImage("art/skilldex/skills.frm"));
+            _addImage("label_2", _resourceManager->getImage("art/skilldex/traits.frm"));
+            _addImage("label_3", _resourceManager->getImage("art/skilldex/skills.frm"));
+            _addImage("label_4", _resourceManager->getImage("art/skilldex/skills.frm"));
 
             // Name label -- ex Name change button
             //_addButton("name",  std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_PLAYER_NAME, backgroundX+13, backgroundY+0)));
-            auto nameLabel = resourceManager->getImage("art/intrface/nameoff.frm");
+            auto nameLabel = _resourceManager->getImage("art/intrface/nameoff.frm");
             nameLabel->setPosition(backgroundPos + Point(13, 0));
             addUI(nameLabel);
 
             // Age label -- ex Age change button
             //_addButton("age",  std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_PLAYER_AGE, backgroundX+156, backgroundY+0)));
-            auto ageLabel = resourceManager->getImage("art/intrface/ageoff.frm");
+            auto ageLabel = _resourceManager->getImage("art/intrface/ageoff.frm");
             ageLabel->setPosition(backgroundPos + Point(156, 0));
             addUI(ageLabel);
 
             // Gender label -- ex Gender change button
             //_addButton("gender",  std::shared_ptr<ImageButton>(new ImageButton(ImageButton::TYPE_PLAYER_GENDER, backgroundX+236, backgroundY+0)));
-            auto genderLabel = resourceManager->getImage("art/intrface/sexoff.frm");
+            auto genderLabel = _resourceManager->getImage("art/intrface/sexoff.frm");
             genderLabel->setPosition(backgroundPos + Point(236, 0));
             addUI(genderLabel);
 
             // add buttons to the state
-            for(auto it = _buttons.begin(); it != _buttons.end(); ++it)
-            {
-                it->second->mouseClickHandler().add(std::bind(&PlayerEdit::onButtonClick, this, std::placeholders::_1));
-                addUI(it->second);
+            for (auto& button : _buttons) {
+                button.second->mouseClickHandler().add([=](Event::Mouse*) {
+                    _onButtonClick(button.second);
+                });
+                addUI(button.second);
             }
 
             // add labels to the state
             // reverse iterator to change drawing order
             for(auto it = _labels.rbegin(); it != _labels.rend(); ++it)
             {
-                it->second->mouseDownHandler().add(std::bind(&PlayerEdit::onLabelClick, this, std::placeholders::_1));
-                addUI(it->second);
+                auto label = it->second;
+                label->mouseDownHandler().add([=](Event::Mouse*) { onLabelClick(label); });
+                addUI(label);
             }
 
             // add counters to the state
@@ -245,8 +246,9 @@ namespace Falltergeist
             // add hidden masks
             for(auto it = _masks.begin(); it != _masks.end(); ++it)
             {
-                it->second->mouseDownHandler().add(std::bind(&PlayerEdit::onMaskClick, this, std::placeholders::_1));
-                addUI(it->second);
+                auto mask = it->second;
+                mask->mouseDownHandler().add([=](Event::Mouse*) { onMaskClick(mask); });
+                addUI(mask);
             }
 
             _selectedImage = _images.at("stats_1");
@@ -267,9 +269,9 @@ namespace Falltergeist
 
             // TABS
             UI::ImageList *tabs = new UI::ImageList({backgroundX + 10, backgroundY + 325}, {
-                resourceManager->getImage("art/intrface/perksfdr.frm"),
-                resourceManager->getImage("art/intrface/karmafdr.frm"),
-                resourceManager->getImage("art/intrface/killsfdr.frm")
+                _resourceManager->getImage("art/intrface/perksfdr.frm"),
+                _resourceManager->getImage("art/intrface/karmafdr.frm"),
+                _resourceManager->getImage("art/intrface/killsfdr.frm")
             });
             tabs->mouseClickHandler().add(std::bind(&PlayerEdit::onTabClick, this, std::placeholders::_1));
             addUI("tabs", tabs);
@@ -338,7 +340,7 @@ namespace Falltergeist
             addUI("tab_kills_enemies", killEnemyNames);
             addUI("tab_kills_score", killEnemyScore);
 
-            auto tabsArrowUp = imageButtonFactory->getByType(ImageButtonType::SMALL_UP_ARROW, {backgroundX + 317, backgroundY + 363});
+            auto tabsArrowUp = _imageButtonFactory->getByType(ImageButtonType::SMALL_UP_ARROW, {backgroundX + 317, backgroundY + 363});
             tabsArrowUp->mouseClickHandler().add([=](...) {
                 switch (tabs->currentImage()) {
                 case 0: perksAndTraits->scrollUp();
@@ -351,7 +353,7 @@ namespace Falltergeist
             });
             addUI(tabsArrowUp);
 
-            auto tabsArrowDown = imageButtonFactory->getByType(ImageButtonType::SMALL_DOWN_ARROW, {backgroundX + 317, backgroundY + 376});
+            auto tabsArrowDown = _imageButtonFactory->getByType(ImageButtonType::SMALL_DOWN_ARROW, {backgroundX + 317, backgroundY + 376});
             tabsArrowDown->mouseClickHandler().add([=](...) {
                 switch (tabs->currentImage()) {
                 case 0: perksAndTraits->scrollDown();
@@ -532,13 +534,11 @@ namespace Falltergeist
 
         }
 
-        void PlayerEdit::onButtonClick(Event::Mouse* event)
+        void PlayerEdit::_onButtonClick(UI::ImageButton* target)
         {
-            auto sender = dynamic_cast<UI::ImageButton*>(event->target());
-
             for(auto it = _buttons.begin(); it != _buttons.end(); ++it)
             {
-                if (it->second == sender)
+                if (it->second == target)
                 {
                     std::string name = it->first;
 
@@ -548,18 +548,16 @@ namespace Falltergeist
                     if (name == "done") {
                         return doDone();
                     }
-
                 }
             }
         }
 
-        void PlayerEdit::onLabelClick(Event::Mouse* event)
+        void PlayerEdit::onLabelClick(UI::TextArea* target)
         {
             for(auto it = _labels.begin(); it != _labels.end(); ++it)
             {
                 std::string name = it->first;
-        //        if (it->second.get() == event->target())
-                if (it->second == event->target())
+                if (it->second == target)
                 {
                     // name.find("traits_") == 0 ||
                     if (name.find("stats_") == 0 || name.find("skills_") == 0 || name.find("health_") == 0 || name.find("params_") == 0 || name.find("label_") == 0 || name.find("level_") == 0 )
@@ -577,11 +575,11 @@ namespace Falltergeist
             }
         }
 
-        void PlayerEdit::onMaskClick(Event::Mouse* event)
+        void PlayerEdit::onMaskClick(UI::HiddenMask* target)
         {
             for(auto it = _masks.begin(); it != _masks.end(); ++it)
             {
-                if (it->second == event->target())
+                if (it->second == target)
                 {
                     std::string name = it->first;
                     if (name.find("stats_") == 0)

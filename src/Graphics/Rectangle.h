@@ -18,7 +18,7 @@ namespace Falltergeist {
 
             bool hasIntersectionWith(const Rectangle& other) const;
 
-            bool isInside(const Point& point) const;
+            bool contains(const Point& point) const;
 
         private:
             const Point _a;

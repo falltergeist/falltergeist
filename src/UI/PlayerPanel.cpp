@@ -44,8 +44,8 @@ namespace Falltergeist
             _background = std::shared_ptr<Image>(resourceManager->getImage("art/intrface/iface.frm"));
             _ui.push_back(_background);
 
-            setX((renderer->width() - 640) / 2);
-            setY(renderer->height() - _background->height());
+            setX((renderer->size().width() - 640) / 2);
+            setY(renderer->size().height() - _background->height());
 
             _background->setPosition(this->position());
 
@@ -235,20 +235,15 @@ namespace Falltergeist
 
         void PlayerPanel::handle(Event::Event *event)
         {
-            UI::Base::handle(event);
-            if (auto mouseEvent = dynamic_cast<Event::Mouse*>(event))
-            {
-                mouseEvent->setObstacle(false);
-                mouseEvent->setHandled(false);
-            }
-
             for (auto it = _ui.rbegin(); it != _ui.rend(); ++it)
             {
-                if (event->handled()) {
+                if (event->isHandled()) {
                     return;
                 }
                 (*it)->handle(event);
             }
+
+            UI::Base::handle(event);
         }
 
         void PlayerPanel::think(const float &deltaTime)

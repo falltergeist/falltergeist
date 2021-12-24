@@ -141,7 +141,7 @@ namespace Falltergeist
 
         void State::handle(Event::Event* event)
         {
-            if (event->handled()) {
+            if (event->isHandled()) {
                 return;
             }
             // TODO: maybe make handle() a template function to get rid of dynamic_casts?
@@ -155,7 +155,7 @@ namespace Falltergeist
             }
 
             for (auto it = _ui.rbegin(); it != _ui.rend(); ++it) {
-                if (event->handled()) {
+                if (event->isHandled()) {
                     return;
                 }
                 (*it)->handle(event);

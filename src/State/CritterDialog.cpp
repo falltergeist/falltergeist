@@ -1,6 +1,3 @@
-#include <algorithm>
-#include <vector>
-#include "../functions.h"
 #include "../State/CritterDialog.h"
 #include "../Exception.h"
 #include "../Format/Int/File.h"
@@ -11,29 +8,28 @@
 #include "../LocationCamera.h"
 #include "../PathFinding/Hexagon.h"
 #include "../ResourceManager.h"
-#include "../State/CritterInteract.h"
 #include "../State/CritterDialogReview.h"
+#include "../State/CritterInteract.h"
 #include "../State/Location.h"
 #include "../UI/AnimationQueue.h"
 #include "../UI/Factory/ImageButtonFactory.h"
 #include "../UI/Image.h"
 #include "../UI/TextArea.h"
 #include "../VM/Script.h"
+#include "../functions.h"
+#include <algorithm>
+#include <vector>
 
-namespace Falltergeist
-{
-    namespace State
-    {
+namespace Falltergeist {
+    namespace State {
         using ImageButtonType = UI::Factory::ImageButtonFactory::Type;
 
-        CritterDialog::CritterDialog(std::shared_ptr<UI::IResourceManager> resourceManager) : State()
-        {
+        CritterDialog::CritterDialog(std::shared_ptr<UI::IResourceManager> resourceManager) : State() {
             this->resourceManager = resourceManager;
             imageButtonFactory = std::make_unique<UI::Factory::ImageButtonFactory>(resourceManager);
         }
 
-        void CritterDialog::init()
-        {
+        void CritterDialog::init() {
             if (_initialized) {
                 return;
             }
@@ -57,38 +53,30 @@ namespace Falltergeist
             // TODO: maybe move text scrolling into separate UI? Though it is only in two places and works slightly differently...
             question->mouseClickHandler().add([question](Event::Mouse* event) {
                 Point relPos = event->position() - question->position();
-                if (relPos.y() < (question->size().height() / 2))
-                {
-                    if (question->lineOffset() > 0)
-                    {
+                if (relPos.y() < (question->size().height() / 2)) {
+                    if (question->lineOffset() > 0) {
                         question->setLineOffset(question->lineOffset() - 4);
                     }
-                }
-                else if (question->lineOffset() < question->numLines() - 4)
-                {
+                } else if (question->lineOffset() < question->numLines() - 4) {
                     question->setLineOffset(question->lineOffset() + 4);
                 }
             });
 
             question->mouseMoveHandler().add([question](Event::Mouse* event) {
-                if (question->numLines() > 4)
-                {
+                if (question->numLines() > 4) {
                     auto mouse = Game::Game::getInstance()->mouse();
                     Point relPos = event->position() - question->position();
-                    auto state = relPos.y() < (question->size().height() / 2)
-                        ? Input::Mouse::Cursor::SMALL_UP_ARROW
-                        : Input::Mouse::Cursor::SMALL_DOWN_ARROW;
+                    auto state =
+                        relPos.y() < (question->size().height() / 2) ? Input::Mouse::Cursor::SMALL_UP_ARROW : Input::Mouse::Cursor::SMALL_DOWN_ARROW;
 
-                    if (mouse->state() != state)
-                    {
+                    if (mouse->state() != state) {
                         mouse->setState(state);
                     }
                 }
             });
 
-            question->mouseOutHandler().add([](Event::Mouse* event) {
-                Game::Game::getInstance()->mouse()->setState(Input::Mouse::Cursor::BIG_ARROW);
-            });
+            question->mouseOutHandler().add(
+                [](Event::Mouse* event) { Game::Game::getInstance()->mouse()->setState(Input::Mouse::Cursor::BIG_ARROW); });
 
             // Interface buttons
             auto reviewButton = imageButtonFactory->getByType(ImageButtonType::DIALOG_REVIEW_BUTTON, {13, 154});
@@ -101,8 +89,7 @@ namespace Falltergeist
         }
 
         // TODO: add auto-text scrolling after 10 seconds (when it's longer than 4 lines)
-        void CritterDialog::setQuestion(const std::string& value)
-        {
+        void CritterDialog::setQuestion(const std::string& value) {
             auto game = Game::Game::getInstance();
             auto dialog = dynamic_cast<CritterInteract*>(game->topState(1));
 
@@ -113,32 +100,24 @@ namespace Falltergeist
             question->setLineOffset(0);
         }
 
-        void CritterDialog::onAnswerIn(Event::Mouse* event)
-        {
-            auto sender = dynamic_cast<UI::TextArea*>(event->target());
-            sender->setFont("font1.aaf", {0xff, 0xff, 0x7f, 0xff});
+        void CritterDialog::onAnswerIn(UI::TextArea* target) {
+            target->setFont("font1.aaf", {0xff, 0xff, 0x7f, 0xff});
         }
 
-        void CritterDialog::onAnswerOut(Event::Mouse* event)
-        {
-            auto sender = dynamic_cast<UI::TextArea*>(event->target());
-            sender->setFont("font1.aaf", {0x3f,0xf8, 0x00, 0xff});
+        void CritterDialog::onAnswerOut(UI::TextArea* target) {
+            target->setFont("font1.aaf", {0x3f, 0xf8, 0x00, 0xff});
         }
 
-        std::vector<int>* CritterDialog::functions()
-        {
+        std::vector<int>* CritterDialog::functions() {
             return &_functions;
         }
 
-        std::vector<int>* CritterDialog::reactions()
-        {
+        std::vector<int>* CritterDialog::reactions() {
             return &_reactions;
         }
 
-        void CritterDialog::deleteAnswers()
-        {
-            while(!_answers.empty())
-            {
+        void CritterDialog::deleteAnswers() {
+            while (!_answers.empty()) {
                 _answers.pop_back();
                 popUI();
             }
@@ -146,18 +125,14 @@ namespace Falltergeist
             _reactions.clear();
         }
 
-        void CritterDialog::onReviewButtonClick(Event::Mouse* event)
-        {
-            if (auto interact = dynamic_cast<CritterInteract*>(Game::Game::getInstance()->topState(1)))
-            {
+        void CritterDialog::onReviewButtonClick(Event::Mouse* event) {
+            if (auto interact = dynamic_cast<CritterInteract*>(Game::Game::getInstance()->topState(1))) {
                 interact->switchSubState(CritterInteract::SubState::REVIEW);
             }
         }
 
-        void CritterDialog::onBarterButtonClick(Event::Mouse* event)
-        {
-            if (auto interact = dynamic_cast<CritterInteract*>(Game::Game::getInstance()->topState(1)))
-            {
+        void CritterDialog::onBarterButtonClick(Event::Mouse* event) {
+            if (auto interact = dynamic_cast<CritterInteract*>(Game::Game::getInstance()->topState(1))) {
                 if (interact->critter()->canTrade()) {
                     interact->switchSubState(CritterInteract::SubState::BARTER);
                 } else {
@@ -167,25 +142,22 @@ namespace Falltergeist
             }
         }
 
-        void CritterDialog::onKeyDown(Event::Keyboard* event)
-        {
+        void CritterDialog::onKeyDown(Event::Keyboard* event) {
             static std::vector<uint32_t> numkeys = {
-                    SDLK_1, SDLK_2, SDLK_3, SDLK_4, SDLK_5, SDLK_6, SDLK_7, SDLK_8, SDLK_9,
-                    SDLK_KP_1, SDLK_KP_2, SDLK_KP_3, SDLK_KP_4, SDLK_KP_5, SDLK_KP_6, SDLK_KP_7, SDLK_KP_8, SDLK_KP_9,
+                SDLK_1,    SDLK_2,    SDLK_3,    SDLK_4,    SDLK_5,    SDLK_6,    SDLK_7,    SDLK_8,    SDLK_9,
+                SDLK_KP_1, SDLK_KP_2, SDLK_KP_3, SDLK_KP_4, SDLK_KP_5, SDLK_KP_6, SDLK_KP_7, SDLK_KP_8, SDLK_KP_9,
             };
 
             auto key = event->keyCode();
 
-            if (key == SDLK_0 || key == SDLK_KP_0)
-            {
+            if (key == SDLK_0 || key == SDLK_KP_0) {
                 // Todo: end dialog
                 return;
             }
 
             auto keyIt = std::find(numkeys.begin(), numkeys.end(), key);
             // Number key pressed
-            if (keyIt != numkeys.end())
-            {
+            if (keyIt != numkeys.end()) {
                 size_t keyOffset = keyIt - numkeys.begin();
 
                 // If numpad key
@@ -200,18 +172,14 @@ namespace Falltergeist
             }
 
             auto question = dynamic_cast<UI::TextArea*>(getUI("question"));
-            if (key == SDLK_UP && question->lineOffset() > 0)
-            {
+            if (key == SDLK_UP && question->lineOffset() > 0) {
                 question->setLineOffset(question->lineOffset() - 4);
-            }
-            else if (key == SDLK_DOWN && question->lineOffset() < question->numLines() - 4)
-            {
+            } else if (key == SDLK_DOWN && question->lineOffset() < question->numLines() - 4) {
                 question->setLineOffset(question->lineOffset() + 4);
             }
         }
 
-        void CritterDialog::_selectAnswer(size_t i)
-        {
+        void CritterDialog::_selectAnswer(size_t i) {
             if (i >= _answers.size()) {
                 throw Exception("No answer with number " + std::to_string(i));
             }
@@ -226,30 +194,26 @@ namespace Falltergeist
             int newOffset = script->script()->procedures().at(_functions.at(i)).bodyOffset();
             int oldOffset = script->programCounter() - 2;
             int reaction = 50;
-            if (i < _reactions.size())
-            {
+            if (i < _reactions.size()) {
                 reaction = _reactions.at(i);
             }
             deleteAnswers();
-            script->dataStack()->push(0); // arguments counter;
+            script->dataStack()->push(0);           // arguments counter;
             script->returnStack()->push(oldOffset); // return adrress
             script->setProgramCounter(newOffset);
             // play transition, if needed, then run script.
             dialog->transition(static_cast<CritterInteract::Reaction>(reaction));
-            //dialog->script()->run();
+            // dialog->script()->run();
         }
 
-
-        void CritterDialog::addAnswer(const std::string& text)
-        {
+        void CritterDialog::addAnswer(const std::string& text) {
             std::string line = "";
             line += '\x95';
             line += " ";
             line += text;
 
             int y = 50;
-            for (auto answer : _answers)
-            {
+            for (auto answer : _answers) {
                 y += answer->textSize().height() + 5;
             }
 
@@ -257,27 +221,21 @@ namespace Falltergeist
             answer->setWordWrap(true);
             answer->setSize({370, 0});
 
-            answer->mouseInHandler().add(std::bind(&CritterDialog::onAnswerIn, this, std::placeholders::_1));
-            answer->mouseOutHandler().add(std::bind(&CritterDialog::onAnswerOut, this, std::placeholders::_1));
-            answer->mouseClickHandler().add(std::bind(&CritterDialog::onAnswerClick, this, std::placeholders::_1));
+            answer->mouseInHandler().add([=](Event::Mouse* event) { onAnswerIn(answer); });
+            answer->mouseOutHandler().add([=](Event::Mouse* event) { onAnswerOut(answer); });
+            answer->mouseClickHandler().add([=](Event::Mouse* event) { onAnswerClick(answer); });
             _answers.push_back(answer);
             addUI(answer);
         }
 
-        bool CritterDialog::hasAnswers()
-        {
+        bool CritterDialog::hasAnswers() {
             return _answers.size() > 0;
         }
 
-        void CritterDialog::onAnswerClick(Event::Mouse* event)
-        {
-            auto sender = dynamic_cast<UI::TextArea*>(event->target());
-
+        void CritterDialog::onAnswerClick(UI::TextArea* target) {
             size_t i = 0;
-            for (auto answer : _answers)
-            {
-                if (answer == sender)
-                {
+            for (auto answer : _answers) {
+                if (answer == target) {
                     _selectAnswer(i);
                     return;
                 }
