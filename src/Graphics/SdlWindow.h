@@ -16,6 +16,8 @@ namespace Falltergeist {
 
             ~SdlWindow() override;
 
+            unsigned int id() const override;
+
             const std::string& title() const override;
 
             const Rectangle& boundaries() const override;

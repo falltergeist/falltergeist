@@ -4,31 +4,12 @@ namespace Falltergeist
 {
     namespace Event
     {
-        /**
-         * @brief Constructor
-         * @param[in] name Event name
-         */
-        Event::Event(const std::string& name)
-        {
-            _name = name;
+        Event::Event(const std::string& name) : _name(name) {
         }
 
-        /**
-         * @brief Returns event name
-         * @return Event name
-         */
-        std::string Event::name() const
+        const std::string& Event::name() const
         {
             return _name;
-        }
-
-        /**
-         * @brief Sets event name
-         * @param[in] name Event name
-         */
-        void Event::setName(const std::string& name)
-        {
-            _name = name;
         }
 
         /**

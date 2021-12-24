@@ -2,6 +2,8 @@
 
 #include <string>
 
+#include "../Event/IEvent.h"
+
 namespace Falltergeist
 {
     namespace Event
@@ -13,14 +15,14 @@ namespace Falltergeist
          *
          * This class is base for all other event classes
          */
-        class Event
+        class Event : public IEvent
         {
             public:
                 Event(const std::string& name);
-                virtual ~Event() = default;
 
-                std::string name() const;
-                void setName(const std::string& name);
+                virtual ~Event() override = default;
+
+                const std::string& name() const override;
 
                 EventTarget* target() const;
                 void setTarget(EventTarget* value);

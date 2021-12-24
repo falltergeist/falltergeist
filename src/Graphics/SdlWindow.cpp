@@ -57,6 +57,11 @@ namespace Falltergeist {
             }
         }
 
+        unsigned int SdlWindow::id() const {
+            // Only single window instance is supported at the moment
+            return 1;
+        }
+
         SdlWindow::~SdlWindow() {
             SDL_DestroyWindow(_sdlWindow);
         }
