@@ -37,7 +37,7 @@ namespace Falltergeist
                         ofs -= Point(10, 0); //~middle of thumb
                         if (ofs.x() < 0) {
                             ofs.setX(0);
-                        } else if (ofs.y() > SLIDE_WIDTH) {
+                        } else if (ofs.x() > SLIDE_WIDTH) {
                             ofs.setX(SLIDE_WIDTH);
                         }
                         _offset.setX(ofs.x());
