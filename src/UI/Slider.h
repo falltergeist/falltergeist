@@ -38,18 +38,30 @@ namespace Falltergeist
                 Event::Handler& changeHandler();
 
             private:
+                const int SLIDE_WIDTH = 218;
+
+                const int THUMB_WIDTH = 21;
+
                 std::unique_ptr<Image> imageOn;
+
                 std::unique_ptr<Image> imageOff;
 
                 double _minValue = 0.0;
+
                 double _maxValue = 1.0;
+
                 double _value = 0.0;
+
                 std::string _downSound;
+
                 std::string _upSound;
+
                 Event::Handler _changeHandler;
 
                 void _onDrag(Event::Mouse* event);
+
                 void _onLeftButtonDown(Event::Mouse* event);
+
                 void _onLeftButtonUp(Event::Mouse* event);
         };
     }

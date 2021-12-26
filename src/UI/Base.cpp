@@ -69,6 +69,7 @@ namespace Falltergeist
 
         Point Base::position() const
         {
+            // TODO get rid of offset in position()
             return _position + _offset;
         }
 

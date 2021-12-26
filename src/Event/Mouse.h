@@ -92,13 +92,19 @@ namespace Falltergeist
 
             protected:
                 bool _controlPressed = false;
+
                 bool _shiftPressed = false;
+
                 bool _altPressed = false;
+
                 bool _obstacle = false;
+
                 Button _button = Button::NONE;
+
                 Type _type;
 
                 Point _position;
+
                 Point _offset;
         };
     }
