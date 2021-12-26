@@ -13,7 +13,6 @@ namespace Falltergeist
         {
             _button = event._button;
             _position = event._position;
-            _offset = event._offset;
             _shiftPressed = event._shiftPressed;
             _controlPressed = event._controlPressed;
             _altPressed = event._altPressed;
@@ -91,16 +90,6 @@ namespace Falltergeist
         void Mouse::setPosition(const Point& position)
         {
             _position = position;
-        }
-
-        const Point& Mouse::offset() const
-        {
-            return _offset;
-        }
-
-        void Mouse::setOffset(const Point& offset)
-        {
-            _offset = offset;
         }
 
         bool Mouse::obstacle() const
