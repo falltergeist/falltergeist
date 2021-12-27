@@ -111,8 +111,8 @@ namespace Falltergeist
             });
             addUI(btnTakeAll);
 
-            dudeList->itemDragStopHandler().add([containerList](Event::Mouse* event){ containerList->onItemDragStop(event); });
-            containerList->itemDragStopHandler().add([dudeList](Event::Mouse* event){ dudeList->onItemDragStop(event); });
+            dudeList->itemDragStopHandler().add([containerList, dudeList](Event::Mouse* event){ containerList->onItemDragStop(event, dudeList); });
+            containerList->itemDragStopHandler().add([dudeList, containerList](Event::Mouse* event){ dudeList->onItemDragStop(event, containerList); });
         }
 
         Game::ContainerItemObject* Container::object()

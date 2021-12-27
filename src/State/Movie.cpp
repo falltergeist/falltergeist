@@ -3,7 +3,6 @@
 #include "../CrossPlatform.h"
 #include "../Event/Keyboard.h"
 #include "../Event/Mouse.h"
-#include "../Format/Dat/MiscFile.h"
 #include "../Format/Lst/File.h"
 #include "../Format/Sve/File.h"
 #include "../Game/Game.h"
@@ -16,6 +15,7 @@
 #include "../State/MainMenu.h"
 #include "../UI/MvePlayer.h"
 #include "../UI/TextArea.h"
+#include "../Exception.h"
 
 namespace Falltergeist
 {
@@ -53,11 +53,20 @@ namespace Falltergeist
 
             if (cfglst->strings()->at(_id)!="reserved.cfg")
             {
-                auto moviecfg = ResourceManager::getInstance()->miscFileType(moviecfgfile);
-                //parse ini
-                moviecfg->stream().setPosition(0);
-                std::istream str(&moviecfg->stream());
-                auto inifile = new Ini::Parser(str);
+                auto& vfs = ResourceManager::getInstance()->vfs();
+                auto file = vfs->open(moviecfgfile, VFS::IFile::OpenMode::Read);
+                if (!file || !file->isOpened()) {
+                    throw Exception("Could not open movie config file");
+                }
+
+                std::string content;
+                content.resize(file->size());
+                file->read(content.data(), file->size());
+                vfs->close(file);
+
+                std::istringstream contentStream(content);
+
+                auto inifile = new Ini::Parser(contentStream);
                 auto ini = inifile->parse();
                 int total_effects = ini->section("info")->propertyInt("total_effects",0);
                 auto effect_frames = ini->section("info")->propertyArray("effect_frames");

@@ -25,7 +25,7 @@ namespace Falltergeist {
         void VertexArray::addBuffer(const std::unique_ptr<VertexBuffer>& buffer, const VertexBufferLayout &bufferLayout) {
             bind();
             buffer->bind();
-            unsigned int offset = 0;
+            void * offset = 0;
             unsigned int stride = 0;
 
             if (bufferLayout.attributes().size() > 1) {
@@ -37,7 +37,7 @@ namespace Falltergeist {
             for (auto &attribute : bufferLayout.attributes()) {
                 GL_CHECK(glEnableVertexAttribArray(attribute.index()));
 
-                unsigned int glType;
+                unsigned int glType = GL_NONE;
                 switch (attribute.type()) {
                     case VertexBufferAttribute::Type::Float:
                         glType = GL_FLOAT;
@@ -52,9 +52,9 @@ namespace Falltergeist {
                     glType,
                     attribute.normalized() ? GL_TRUE : GL_FALSE,
                     stride,
-                    (const void *) offset
+                    static_cast<const void *>(offset)
                 ));
-                offset += attribute.size();
+                offset = static_cast<char*>(offset) + attribute.size();
             }
         }
     }

@@ -1,5 +1,6 @@
 Checks: "-*,\
-  readability-braces-around-statements\
+  readability-braces-around-statements,\
+  cppcoreguidelines-init-variables
 "
 
 WarningsAsErrors: "*"

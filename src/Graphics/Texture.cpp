@@ -44,8 +44,8 @@ namespace Falltergeist {
                     return;
                 }
             */
-            GLint curunit;
-            GLint curtexture;
+            GLint curunit = 0;
+            GLint curtexture = 0;
 
             if (_textureID > 0) {
                 GL_CHECK(glGetIntegerv(GL_ACTIVE_TEXTURE, &curunit));

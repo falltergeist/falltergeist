@@ -475,7 +475,6 @@ namespace Falltergeist
             Base::handle(event);
             if (auto mouseEvent = dynamic_cast<Event::Mouse*>(event))
             {
-                mouseEvent->setHandled(false);
                 mouseEvent->setObstacle(false);
             }
         }

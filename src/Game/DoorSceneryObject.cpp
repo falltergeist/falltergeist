@@ -57,7 +57,7 @@ namespace Falltergeist
                 if (!opened()) {
                     if (UI::AnimationQueue* queue = dynamic_cast<UI::AnimationQueue*>(this->ui())) {
                         queue->start();
-                        queue->animationEndedHandler().add(std::bind(&DoorSceneryObject::onOpeningAnimationEnded, this, std::placeholders::_1));
+                        queue->animationEndedHandler().add([=](Event::Event*) { onOpeningAnimationEnded(queue); });
                         if (_soundId) {
                             Game::getInstance()->mixer()->playACMSound(std::string("sound/sfx/sodoors") + _soundId + ".acm");
                         }
@@ -65,7 +65,7 @@ namespace Falltergeist
                 } else {
                     if (UI::AnimationQueue* queue = dynamic_cast<UI::AnimationQueue*>(this->ui())) {
                         queue->start();
-                        queue->animationEndedHandler().add(std::bind(&DoorSceneryObject::onClosingAnimationEnded, this, std::placeholders::_1));
+                        queue->animationEndedHandler().add([=](Event::Event*) { onClosingAnimationEnded(queue); });
                         if (_soundId) {
                             Game::getInstance()->mixer()->playACMSound(std::string("sound/sfx/scdoors") + _soundId + ".acm");
                         }
@@ -81,24 +81,22 @@ namespace Falltergeist
             return opened();
         }
 
-        void DoorSceneryObject::onOpeningAnimationEnded(Event::Event* event)
+        void DoorSceneryObject::onOpeningAnimationEnded(UI::AnimationQueue* target)
         {
-            auto queue = (UI::AnimationQueue*)event->target();
             setOpened(true);
-            queue->animationEndedHandler().clear();
-            queue->stop();
-            queue->currentAnimation()->setReverse(true);
+            target->animationEndedHandler().clear();
+            target->stop();
+            target->currentAnimation()->setReverse(true);
             Game::getInstance()->locationState()->initLight();
             Logger::info("") << "Door opened: " << opened() << std::endl;
         }
 
-        void DoorSceneryObject::onClosingAnimationEnded(Event::Event* event)
+        void DoorSceneryObject::onClosingAnimationEnded(UI::AnimationQueue* target)
         {
-            auto queue = (UI::AnimationQueue*)event->target();
             setOpened(false);
-            queue->animationEndedHandler().clear();
-            queue->stop();
-            queue->currentAnimation()->setReverse(false);
+            target->animationEndedHandler().clear();
+            target->stop();
+            target->currentAnimation()->setReverse(false);
             Game::getInstance()->locationState()->initLight();
             Logger::info("") << "Door opened: " << opened() << std::endl;
         }

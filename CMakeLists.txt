@@ -57,7 +57,6 @@ if (NOT USE_CONAN)
 	if(NOT GLEW_FOUND)
 		message(FATAL_ERROR "GLEW library not found")
 	endif(NOT GLEW_FOUND)
-	include_directories(SYSTEM ${GLEW_INCLUDE_DIR})
 endif()
 
 find_package(GLM REQUIRED)
@@ -116,9 +115,9 @@ else()
 		${SDL_MIXER_LIBRARY}
 		${SDL_IMAGE_LIBRARY}
 		${OPENGL_gl_LIBRARY}
-		${GLEW_LIBRARY}
-		${LUA_LIBRARIES}
-	)
+		GLEW::glew
+        ${LUA_LIBRARIES}
+    )
 endif()
 
 include(cmake/install/windows.cmake)

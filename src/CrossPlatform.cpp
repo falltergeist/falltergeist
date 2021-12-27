@@ -2,7 +2,6 @@
 #include <cerrno>
 #include <cstdlib>
 #include <cstring>
-#include <fstream>
 #include <stdexcept>
 #include <cctype>
 #include <chrono>
@@ -88,14 +87,7 @@ namespace Falltergeist
 
     std::string CrossPlatform::getExecutableDirectory()
     {
-        char* buffer=SDL_GetBasePath();
-        if (buffer == NULL) {
-            Logger::warning("") << "SDL_GetBasePath() not able to obtain a path on this platform" << std::endl;
-            return "./";
-        }
-        std::string path(buffer);
-        SDL_free(buffer);
-        return path;
+        return std::filesystem::current_path().string();
     }
 
     std::vector<std::string> CrossPlatform::getCdDrivePaths()
@@ -114,7 +106,7 @@ namespace Falltergeist
 
     #elif defined(__linux__)
         FILE *mtab = setmntent("/etc/mtab", "r");
-        struct mntent *m;
+        struct mntent *m = nullptr;
         struct mntent mnt;
         char strings[4096];
         while ((m = getmntent_r(mtab, &mnt, strings, sizeof(strings)))) {
@@ -126,7 +118,7 @@ namespace Falltergeist
         }
         endmntent(mtab);
     #elif defined (BSD)
-        struct statfs *mntbuf;
+        struct statfs *mntbuf = nullptr;
         int mntsize = getmntinfo(&mntbuf, MNT_NOWAIT);
         for ( int i = 0; i < mntsize; i++ ) {
             std::string directory = ((struct statfs *)&mntbuf[i])->f_mntonname;
@@ -167,8 +159,7 @@ namespace Falltergeist
                 _necessaryDatFiles.begin(),
                 _necessaryDatFiles.end(),
                 [directory](const std::string& file) {
-                    std::ifstream stream(directory + "/" + file);
-                    if (stream) {
+                    if (std::filesystem::exists(directory + "/" + file)) {
                         Logger::info("") << "Searching in directory: " << directory << " " << file << " [FOUND]" << std::endl;
                         return true;
                     } else {
@@ -200,8 +191,7 @@ namespace Falltergeist
         }
 
         for (auto &directory : directories) {
-            std::ifstream stream(directory + "/data/movies.lst");
-            if (stream) {
+            if (std::filesystem::exists(directory + "/data/movies.lst")) {
                 Logger::info("") << "Searching in directory: " << directory << "/data/movies.lst [FOUND]" << std::endl;
                 _falltergeistDataPath = directory;
                 return _falltergeistDataPath;

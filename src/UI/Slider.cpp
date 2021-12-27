@@ -12,9 +12,9 @@ namespace Falltergeist
     {
         Slider::Slider(const Point& pos, std::unique_ptr<Image> imageOn, std::unique_ptr<Image> imageOff) : Base(pos)
         {
-            mouseDragHandler().add(std::bind(&Slider::_onDrag, this, std::placeholders::_1));
-            mouseDownHandler().add(std::bind(&Slider::_onLeftButtonDown, this, std::placeholders::_1));
-            mouseUpHandler().add(std::bind(&Slider::_onLeftButtonUp, this, std::placeholders::_1));
+            mouseDragHandler().add([=](Event::Mouse* event) { _onDrag(event); });
+            mouseDownHandler().add([=](Event::Mouse* event) { _onLeftButtonDown(event); });
+            mouseUpHandler().add([=](Event::Mouse* event) { _onLeftButtonUp(event); });
             this->imageOn = std::move(imageOn);
             this->imageOff = std::move(imageOff);
             _downSound = "sound/sfx/ib1p1xx1.acm";
@@ -58,31 +58,28 @@ namespace Falltergeist
 
         void Slider::_onDrag(Event::Mouse* event)
         {
-            auto sender = dynamic_cast<Slider*>(event->target());
-            auto newOffset = sender->_offset.x() + event->offset().x();
+            auto newOffset = _offset.x() + event->offset().x();
             if (newOffset <= 218 && newOffset >= 0)
             {
-                sender->_offset.setX(newOffset);
-                sender->_value = ((sender->maxValue() - sender->minValue())/218.f)*(float)sender->offset().x();
+                _offset.setX(newOffset);
+                _value = ((maxValue() - minValue())/218.f)*(float)offset().x();
                 emitEvent(std::make_unique<Event::Event>("change"), changeHandler());
             }
         }
 
         void Slider::_onLeftButtonDown(Event::Mouse* event)
         {
-            auto sender = dynamic_cast<Slider*>(event->target());
-            if (!sender->_downSound.empty())
+            if (!_downSound.empty())
             {
-                Game::Game::getInstance()->mixer()->playACMSound(sender->_downSound);
+                Game::Game::getInstance()->mixer()->playACMSound(_downSound);
             }
         }
 
         void Slider::_onLeftButtonUp(Event::Mouse* event)
         {
-            auto sender = dynamic_cast<Slider*>(event->target());
-            if (!sender->_upSound.empty())
+            if (!_upSound.empty())
             {
-                Game::Game::getInstance()->mixer()->playACMSound(sender->_upSound);
+                Game::Game::getInstance()->mixer()->playACMSound(_upSound);
             }
         }
 

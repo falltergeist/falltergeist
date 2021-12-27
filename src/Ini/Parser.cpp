@@ -1,3 +1,5 @@
+#include <math.h>
+
 #include <algorithm>
 #include <functional>
 #include <sstream>
@@ -66,7 +68,7 @@ namespace Falltergeist
 
         bool Parser::_parseBool(std::string &name, std::string &line, std::shared_ptr<File> ini)
         {
-            bool value;
+            bool value = false;
             if (_tryBool(line, &value))
             {
                 Logger::debug("INI") << "boolean value found for property `" << name << "`: " <<
@@ -200,8 +202,8 @@ namespace Falltergeist
 
         bool Parser::_parseDecimal(std::string &name, std::string &line, std::shared_ptr<File> ini)
         {
-            int intval;
-            double doubleval;
+            int intval = 0;
+            double doubleval = 0.0;
             int ret = _tryDecimal(line, &intval, &doubleval);
             if (ret!=0)
             {
@@ -226,7 +228,7 @@ namespace Falltergeist
 
         bool Parser::_parseArrayBool(std::vector<Value> &vec, std::string val)
         {
-            bool value;
+            bool value = 0;
             if (_tryBool(val,&value))
             {
                 Logger::debug("INI") << "boolean value found for property `" << "`: " <<
@@ -241,8 +243,8 @@ namespace Falltergeist
 
         bool Parser::_parseArrayDecimal(std::vector<Value> &vec, std::string val)
         {
-            int intval;
-            double doubleval;
+            int intval = 0;
+            double doubleval = 0.0;
             int ret = _tryDecimal(val, &intval, &doubleval);
             if (ret!=0)
             {

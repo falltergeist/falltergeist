@@ -101,50 +101,49 @@ namespace Falltergeist
                 _draggedItem->setOffset(0, 0);
                 _draggedItem->setType(_type);
                 auto itemevent = std::make_unique<Event::Mouse>(*event, "itemdragstop");
-                itemevent->setTarget(this);
                 emitEvent(std::move(itemevent), itemDragStopHandler());
             }
         }
 
-        void ItemsList::onItemDragStop(Event::Mouse* event)
+        void ItemsList::onItemDragStop(Event::Mouse* event, ItemsList* target)
         {
             // check if mouse is in this item list
             if (!Rect::inRect(event->position(), position(), Size(_slotWidth, _slotHeight*_slotsNumber))) {
                 return;
             }
 
-            if (auto itemsList = dynamic_cast<ItemsList*>(event->target())) {
-                // @todo create addItem method
-                this->addItem(itemsList->draggedItem(), 1);
-
-                itemsList->removeItem(itemsList->draggedItem(), 1);
-                itemsList->update();
-            }
-
-            if (auto inventoryItem = dynamic_cast<UI::InventoryItem*>(event->target())) {
-                // @todo create addItem method
-                this->addItem(inventoryItem, 1);
-
-                if (dynamic_cast<Game::ArmorItemObject*>(inventoryItem->item()) && inventoryItem->type() == InventoryItem::Type::SLOT) {
-                    Game::Game::getInstance()->player()->setArmorSlot(nullptr);
-                }
-                inventoryItem->setItem(0);
-            }
+            // @todo create addItem method
+            addItem(target->draggedItem(), 1);
+            target->removeItem(target->draggedItem(), 1);
+            target->update();
         }
 
-        void ItemsList::onItemDragStop(Event::Mouse* event, HAND hand)
+        void ItemsList::onItemDragStop(Event::Mouse* event, UI::InventoryItem* target)
+        {
+            // check if mouse is in this item list
+            if (!Rect::inRect(event->position(), position(), Size(_slotWidth, _slotHeight*_slotsNumber))) {
+                return;
+            }
+
+            // @todo create addItem method
+            addItem(target, 1);
+            if (dynamic_cast<Game::ArmorItemObject*>(target->item()) && target->type() == InventoryItem::Type::SLOT) {
+                Game::Game::getInstance()->player()->setArmorSlot(nullptr);
+            }
+            target->setItem(0);
+        }
+
+        void ItemsList::onItemDragStop(Event::Mouse* event, HAND hand, UI::InventoryItem* target)
         {
             // check if mouse is in this item list
             if (Rect::inRect(event->position(), position(), Size(_slotWidth, _slotHeight*_slotsNumber))) {
-                if (auto inventoryItem = dynamic_cast<UI::InventoryItem*>(event->target())) {
-                    this->addItem(inventoryItem, 1);
-                    if (hand == HAND::LEFT) {
-                        Game::Game::getInstance()->player()->setLeftHandSlot(nullptr);
-                    } else {
-                        Game::Game::getInstance()->player()->setRightHandSlot(nullptr);
-                    }
-                    inventoryItem->setItem(0);
+                addItem(target, 1);
+                if (hand == HAND::LEFT) {
+                    Game::Game::getInstance()->player()->setLeftHandSlot(nullptr);
+                } else {
+                    Game::Game::getInstance()->player()->setRightHandSlot(nullptr);
                 }
+                target->setItem(0);
             }
         }
 

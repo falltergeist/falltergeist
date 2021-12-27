@@ -73,7 +73,7 @@ namespace Falltergeist
             {
                 while (bits > _availBits)
                 {
-                    unsigned char one_byte;
+                    unsigned char one_byte = 0;
                     if (_bufferBitOffset == UNPACKER_BUFFER_SIZE)
                     {
                         auto remains = stream->bytesRemains();
@@ -129,7 +129,7 @@ namespace Falltergeist
                 _blockPtr = block;
                 int pwr = _getBits(4) & 0xF, val = _getBits(16) & 0xFFFF,
                         count = 1 << pwr, v = 0;
-                int i;
+                int i = 0;
                 for (i = 0; i < count; i++)
                 {
                     _buffMiddle[i] = (short) v;

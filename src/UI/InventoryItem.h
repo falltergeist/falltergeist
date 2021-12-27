@@ -15,6 +15,8 @@ namespace Falltergeist
     }
     namespace UI
     {
+        class ItemsList;
+
         class InventoryItem : public Falltergeist::UI::Base
         {
             public:
@@ -40,18 +42,24 @@ namespace Falltergeist
                 virtual bool opaque(const Point &pos) override;
 
                 void onMouseLeftDown(Event::Mouse* event);
+
                 void onMouseDragStart(Event::Mouse* event);
+
                 void onMouseDrag(Event::Mouse* event);
+
                 void onMouseDragStop(Event::Mouse* event);
 
-                void onArmorDragStop(Event::Mouse* event);
-                void onHandDragStop(Event::Mouse* event, HAND hand);
+                void onArmorDragStop(Event::Mouse* event, ItemsList* target);
+
+                void onHandDragStop(Event::Mouse* event, HAND hand, ItemsList* target);
 
                 Event::MouseHandler& itemDragStopHandler();
 
             private:
                 Game::ItemObject* _item = nullptr;
+
                 Type _type = Type::INVENTORY;
+
                 Type _oldType = Type::INVENTORY;
 
                 Event::MouseHandler _itemDragStopHandler;

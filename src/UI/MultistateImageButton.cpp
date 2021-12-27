@@ -15,8 +15,8 @@ namespace Falltergeist
     {
         MultistateImageButton::MultistateImageButton(Type type, const Point& pos) : Falltergeist::UI::Base(pos)
         {
-            mouseClickHandler() += std::bind(&MultistateImageButton::_onMouseClick, this, std::placeholders::_1);
-            mouseUpHandler().add(std::bind(&MultistateImageButton::_onMouseUp, this, std::placeholders::_1));
+            mouseClickHandler() += [=](Event::Mouse* event){ _onMouseClick(event); };
+            mouseUpHandler().add([=](Event::Mouse* event) { _onMouseUp(event); });
             switch (type)
             {
                 case Type::BIG_SWITCH:
@@ -72,25 +72,23 @@ namespace Falltergeist
 
         void MultistateImageButton::_onMouseClick(Event::Mouse* event)
         {
-            auto sender = dynamic_cast<MultistateImageButton*>(event->target());
-
-            if (sender->mode() == Mode::PROGRESSION) {
-                if (sender->modeFactor() > 0) {
-                    sender->_currentState = (sender->_currentState < sender->_maxState - 1) ? sender->_currentState + sender->modeFactor() : 0;
+            if (mode() == Mode::PROGRESSION) {
+                if (modeFactor() > 0) {
+                    _currentState = (_currentState < _maxState - 1) ? _currentState + modeFactor() : 0;
                 } else {
-                    sender->_currentState = (sender->_currentState > 0) ? sender->_currentState + sender->modeFactor() : sender->_maxState - 1;
+                    _currentState = (_currentState > 0) ? _currentState + modeFactor() : _maxState - 1;
                 }
             } else { // Mode::CYCLIC
-                if (sender->modeFactor() > 0) {
-                    if (sender->_currentState == sender->_maxState - 1) {
-                        sender->setModeFactor(-sender->modeFactor());
+                if (modeFactor() > 0) {
+                    if (_currentState == _maxState - 1) {
+                        setModeFactor(-modeFactor());
                     }
                 } else {
-                    if (sender->_currentState == 0) {
-                        sender->setModeFactor(-sender->modeFactor());
+                    if (_currentState == 0) {
+                        setModeFactor(-modeFactor());
                     }
                 }
-                sender->_currentState += sender->modeFactor();
+                _currentState += modeFactor();
             }
         }
 
@@ -100,13 +98,11 @@ namespace Falltergeist
                 return;
             }
 
-            auto sender = dynamic_cast<MultistateImageButton*>(event->target());
-
-            if (!sender->_downSound.empty()) {
-                Game::Game::getInstance()->mixer()->playACMSound(sender->_downSound);
+            if (!_downSound.empty()) {
+                Game::Game::getInstance()->mixer()->playACMSound(_downSound);
             }
-            if (!sender->_upSound.empty()) {
-                Game::Game::getInstance()->mixer()->playACMSound(sender->_upSound);
+            if (!_upSound.empty()) {
+                Game::Game::getInstance()->mixer()->playACMSound(_upSound);
             }
         }
 

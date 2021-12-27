@@ -1,5 +1,4 @@
 #include "../../VM/Handler/Opcode80ECHandler.h"
-#include "../../Game/Game.h"
 #include "../../Game/Object.h"
 #include "../../VM/Script.h"
 

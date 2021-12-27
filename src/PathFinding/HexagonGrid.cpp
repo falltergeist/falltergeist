@@ -1,6 +1,5 @@
 #include <array>
 #include <cstdlib>
-#include <functional>
 #include <queue>
 #include <memory>
 #include "../Game/WallObject.h"
@@ -9,7 +8,7 @@
 
 namespace Falltergeist
 {
-    struct HeuristicComparison : public std::binary_function<Hexagon*, Hexagon*, bool>
+    struct HeuristicComparison
     {
         bool operator()(Hexagon* lh, Hexagon* rh) const
         {

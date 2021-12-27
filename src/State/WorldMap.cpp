@@ -34,8 +34,8 @@ namespace Falltergeist
             setModal(true);
             setFullscreen(true);
 
-            unsigned int renderWidth = Game::Game::getInstance()->renderer()->width();
-            unsigned int renderHeight = Game::Game::getInstance()->renderer()->height();
+            unsigned int renderWidth = Game::Game::getInstance()->renderer()->size().width();
+            unsigned int renderHeight = Game::Game::getInstance()->renderer()->size().height();
 
             // loading map tiles
             _tiles = new UI::ImageList({0, 0}, {
@@ -87,8 +87,8 @@ namespace Falltergeist
         void WorldMap::render()
         {
             // calculating render size, screen size, etc
-            unsigned int renderWidth = Game::Game::getInstance()->renderer()->width();
-            unsigned int renderHeight = Game::Game::getInstance()->renderer()->height();
+            unsigned int renderWidth = Game::Game::getInstance()->renderer()->size().width();
+            unsigned int renderHeight = Game::Game::getInstance()->renderer()->size().height();
 
             // MAP SHOW
             // calculating delta (shift of map to fit to screen)
@@ -116,8 +116,8 @@ namespace Falltergeist
                 deltaY = worldMapSizeY - mapHeight;
             }
 
-            signed int worldTileMinX; // start X coordinate of current tile on world map
-            signed int worldTileMinY; // start Y coordinate of current tile on world map
+            signed int worldTileMinX = 0; // start X coordinate of current tile on world map
+            signed int worldTileMinY = 0; // start Y coordinate of current tile on world map
             // NB: can be unsigned, but it compared with signed deltaX and deltaY, so...
 
             // copy tiles to screen if needed
@@ -148,8 +148,8 @@ namespace Falltergeist
             _hotspot->render();
 
             // panel
-            unsigned int panelX;
-            unsigned int panelY;
+            unsigned int panelX = 0;
+            unsigned int panelY = 0;
 
             if (Game::Game::getInstance()->settings()->worldMapFullscreen())
             {
@@ -175,15 +175,14 @@ namespace Falltergeist
                 auto mouse = game->mouse();
 
                 // Left button down
-                if (mouseEvent->name() == "mousedown" && mouseEvent->leftButton())
-                {
+                if (mouseEvent->name() == "mousedown" && mouseEvent->leftButton()) {
+                    Graphics::Rectangle mapRectangle(Point(mapMinX, mapMinY), Graphics::Size(mapWidth, mapHeight));
+
                     // check if point clicked belongs to the screen
-                    if ((mapMinX<=(unsigned int)mouse->x()) && ((unsigned int)mouse->x()<=(mapMinX+mapWidth)) &&
-                        (mapMinY<=(unsigned int)mouse->y()) && ((unsigned int)mouse->y()<=(mapMinY+mapHeight)))
-                    {
+                    if (mapRectangle.contains(mouse->position())){
                         // change destination point
-                        worldMapX = mouse->x()+deltaX-mapMinX;
-                        worldMapY = mouse->y()+deltaY-mapMinY;
+                        worldMapX = mouse->position().x() + deltaX - mapMinX;
+                        worldMapY = mouse->position().y() + deltaY - mapMinY;
                     }
                 }
             }

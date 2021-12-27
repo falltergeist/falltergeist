@@ -33,7 +33,7 @@ namespace Falltergeist
                 }
 
                 // calculate if dude egg intersects with object
-                Hexagon *dudeHex;
+                Hexagon *dudeHex = nullptr;
                 if (dude->movementQueue()->size()) {
                     dudeHex = dude->movementQueue()->back();
                 } else {
@@ -44,7 +44,7 @@ namespace Falltergeist
                 auto dudePos = dudeHex->position();
 
                 bool noBlockTrans = false;
-                bool transparent;
+                bool transparent = false;
 
                 switch (object->lightOrientation()) {
                     case Orientation::EW:

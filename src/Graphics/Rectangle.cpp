@@ -27,10 +27,10 @@ namespace Falltergeist {
         }
 
         bool Rectangle::hasIntersectionWith(const Rectangle& other) const {
-            return isInside(other._a) || isInside(other._b) || other.isInside(_a) || other.isInside(_b);
+            return contains(other._a) || contains(other._b) || other.contains(_a) || other.contains(_b);
         }
 
-        bool Rectangle::isInside(const Point& point) const {
+        bool Rectangle::contains(const Point& point) const {
             return point >= _a && point <= _b;
         }
     }

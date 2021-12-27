@@ -1,5 +1,7 @@
 #include "../Exception.h"
 #include "../Ini/Section.h"
+
+#include <math.h>
 #include "../Logger.h"
 
 namespace Falltergeist
@@ -128,7 +130,7 @@ namespace Falltergeist
                 Logger::warning("INI") << "Property `" << name << "` not found, use default value: " << def << std::endl;
                 return def;
             };
-            int ret;
+            int ret = 0;
             Section::_property(iter, ret, def);
             return ret;
         }
@@ -141,7 +143,7 @@ namespace Falltergeist
                 Logger::warning("INI") << "Property `" << name << "` not found, use default value: " << def << std::endl;
                 return def;
             };
-            double ret;
+            double ret = NAN;
             Section::_property(iter, ret, def);
             return ret;
         }
@@ -155,7 +157,7 @@ namespace Falltergeist
                         std::boolalpha << def << std::noboolalpha << std::endl;
                 return def;
             };
-            bool ret;
+            bool ret = 0;
             Section::_property(iter, ret, def);
             return ret;
         }

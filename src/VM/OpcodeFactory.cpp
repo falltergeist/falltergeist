@@ -183,6 +183,7 @@
 #include "../VM/Handler/OpcodeC001Handler.h"
 #include "../VM/Handler/OpcodeA001Handler.h"
 #include "../VM/Script.h"
+#include "../Game/Game.h"
 
 namespace Falltergeist
 {
@@ -191,6 +192,7 @@ namespace Falltergeist
         std::unique_ptr<OpcodeHandler> OpcodeFactory::createOpcode(unsigned int number, VM::Script *script)
         {
             auto logger = std::make_shared<Logger>();
+            auto game = Game::Game::getInstance();
 
             switch (number) {
                 case 0x8000:
@@ -435,7 +437,7 @@ namespace Falltergeist
                 case 0x80E9:
                     return std::make_unique<Handler::Opcode80E9>(script, logger);
                 case 0x80EA:
-                    return std::make_unique<Handler::Opcode80EA>(script, logger);
+                    return std::make_unique<Handler::Opcode80EA>(script, logger, game->gameTime());
                 case 0x80EC:
                     return std::make_unique<Handler::Opcode80EC>(script, logger);
                 case 0x80EE:

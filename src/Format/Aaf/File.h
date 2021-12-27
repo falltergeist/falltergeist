@@ -1,7 +1,6 @@
 ﻿#pragma once
 
 #include <cstdint>
-#include <fstream>
 #include <memory>
 #include <vector>
 #include "../../Format/Aaf/Glyph.h"

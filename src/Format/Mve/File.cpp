@@ -19,7 +19,7 @@ namespace Falltergeist
                 const int16_t MVE_HDRCONST1 = 0x001A;
                 const int16_t MVE_HDRCONST2 = 0x0100;
                 const int16_t MVE_HDRCONST3 = 0x1133;
-                int16_t check1, check2, check3;
+                int16_t check1 = 0, check2 = 0, check3 = 0;
 
                 char head[20];
                 _stream.readBytes((uint8_t*)head,20);

@@ -9,6 +9,8 @@
 #include "../Graphics/Renderer.h"
 #include "../Input/Mouse.h"
 #include "../UI/InventoryItem.h"
+
+#include <math.h>
 #include "../UI/ItemsList.h"
 
 namespace Falltergeist
@@ -46,10 +48,10 @@ namespace Falltergeist
                 return;
             }
 
-            double widthRatio;
-            double heightRatio;
-            unsigned int newWidth;
-            unsigned int newHeight;
+            double widthRatio = 0.0;
+            double heightRatio = 0.0;
+            unsigned int newWidth = 0;
+            unsigned int newHeight = 0;
             Size texSize;
 
             auto slotUi = _item->inventorySlotUi();
@@ -139,37 +141,33 @@ namespace Falltergeist
 
             auto itemevent = std::make_unique<Event::Mouse>(*event, "itemdragstop");
             itemevent->setPosition(event->position());
-            itemevent->setTarget(this);
             emitEvent(std::move(itemevent), itemDragStopHandler());
         }
 
-        void InventoryItem::onArmorDragStop(Event::Mouse* event)
+        void InventoryItem::onArmorDragStop(Event::Mouse* event, ItemsList* target)
         {
             // Check if mouse is over this item
             if (!Rect::inRect(event->position(), position(), size())) {
                 return;
             }
 
-            if (ItemsList* itemsList = dynamic_cast<ItemsList*>(event->target())) {
-
-                InventoryItem* draggedItem = itemsList->draggedItem();
-                auto itemObject = draggedItem->item();
-                if (itemObject->subtype() != Game::ItemObject::Subtype::ARMOR) {
-                    return;
-                }
-                itemsList->removeItem(draggedItem, 1);
-                // place current armor back to inventory
-                if (_item) {
-                    itemsList->addItem(this, 1);
-                }
-                this->setItem(itemObject);
-                if (auto armor = dynamic_cast<Game::ArmorItemObject*>(itemObject)) {
-                    Game::Game::getInstance()->player()->setArmorSlot(armor);
-                }
+            InventoryItem* draggedItem = target->draggedItem();
+            auto itemObject = draggedItem->item();
+            if (itemObject->subtype() != Game::ItemObject::Subtype::ARMOR) {
+                return;
+            }
+            target->removeItem(draggedItem, 1);
+            // place current armor back to inventory
+            if (_item) {
+                target->addItem(this, 1);
+            }
+            this->setItem(itemObject);
+            if (auto armor = dynamic_cast<Game::ArmorItemObject*>(itemObject)) {
+                Game::Game::getInstance()->player()->setArmorSlot(armor);
             }
         }
 
-        void InventoryItem::onHandDragStop(Event::Mouse* event, HAND hand)
+        void InventoryItem::onHandDragStop(Event::Mouse* event, HAND hand, ItemsList* target)
         {
             // Check if mouse is over this item
             if (!Rect::inRect(event->position(), position(), size()))
@@ -177,22 +175,19 @@ namespace Falltergeist
                 return;
             }
 
-            if (ItemsList* itemsList = dynamic_cast<ItemsList*>(event->target()))
-            {
-                InventoryItem* itemUi = itemsList->draggedItem();
-                auto item = itemUi->item();
-                itemsList->removeItem(itemUi, 1);
-                // place current weapon back to inventory
-                if (_item) {
-                    itemsList->addItem(this, 1);
-                }
-                this->setItem(item);
-                auto player = Game::Game::getInstance()->player();
-                if (hand == HAND::LEFT) {
-                    player->setLeftHandSlot(item);
-                } else {
-                    player->setRightHandSlot(item);
-                }
+            InventoryItem* itemUi = target->draggedItem();
+            auto item = itemUi->item();
+            target->removeItem(itemUi, 1);
+            // place current weapon back to inventory
+            if (_item) {
+                target->addItem(this, 1);
+            }
+            this->setItem(item);
+            auto player = Game::Game::getInstance()->player();
+            if (hand == HAND::LEFT) {
+                player->setLeftHandSlot(item);
+            } else {
+                player->setRightHandSlot(item);
             }
         }
 
