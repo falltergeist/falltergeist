@@ -6,27 +6,6 @@ namespace Falltergeist {
         SdlWindow::SdlWindow(const std::string& title, const Rectangle& boundaries, bool isFullscreen, std::shared_ptr<ILogger> logger)
             : _title(title), _boundaries(boundaries), _isFullscreen(isFullscreen), _logger(logger) {
 
-//            // enumerate displays
-//            int displays = SDL_GetNumVideoDisplays();
-//            assert( displays > 1 );  // assume we have secondary monitor
-//
-//            // get display bounds for all displays
-//            vector< SDL_Rect > displayBounds;
-//            for( int i = 0; i < displays; i++ ) {
-//                displayBounds.push_back( SDL_Rect() );
-//                SDL_GetDisplayBounds( i, &displayBounds.back() );
-//            }
-//
-//            // window of dimensions 500 * 500 offset 100 pixels on secondary monitor
-//            int x = displayBounds[ 1 ].x + 100;
-//            int y = displayBounds[ 1 ].y + 100;
-//            int w = 500;
-//            int h = 500;
-//
-//            // so now x and y are on secondary display
-//            SDL_Window * window = SDL_CreateWindow( "title", x, y, w, h, FLAGS... );
-
-
             Uint32 flags = SDL_WindowFlags::SDL_WINDOW_SHOWN | SDL_WindowFlags::SDL_WINDOW_OPENGL;
 
             if (_isFullscreen) {
@@ -44,7 +23,7 @@ namespace Falltergeist {
                 }
             }
 
-            auto sdlDisplay = SdlDisplay::getAvailableDisplays().at(0);
+            auto sdlDisplay = SdlDisplay::getAvailableDisplays().at(DEFAULT_DISPLAY_NUMBER);
             auto windowPosition = _boundaries.position() + sdlDisplay.boundaries().position();
 
             _sdlWindow = SDL_CreateWindow(
