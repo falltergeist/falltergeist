@@ -24,12 +24,14 @@ namespace Falltergeist {
 
             bool isFullscreen() const override;
 
-            void pollEvents() override;
-
             SDL_Window* sdlWindowPtr() const;
 
         private:
             friend class Game::Game;
+
+            const unsigned int DEFAULT_DISPLAY_NUMBER = 0;
+
+            unsigned int _id = 0;
 
             std::string _title;
 

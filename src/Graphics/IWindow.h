@@ -18,8 +18,6 @@ namespace Falltergeist {
             virtual const Rectangle& boundaries() const = 0;
 
             virtual bool isFullscreen() const = 0;
-
-            virtual void pollEvents() = 0;
         };
     }
 }
