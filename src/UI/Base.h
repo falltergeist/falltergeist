@@ -37,6 +37,10 @@ namespace Falltergeist
                 virtual unsigned height() const;
 
                 virtual Point position() const;
+
+                // TODO get rid of this. This should be position()
+                virtual const Point& rawPosition() const;
+
                 virtual void setPosition(const Point& pos);
 
                 virtual Point offset() const;

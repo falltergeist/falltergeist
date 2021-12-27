@@ -129,7 +129,7 @@ namespace Falltergeist
 
         void InventoryItem::onMouseDrag(Event::Mouse* event)
         {
-            setOffset(offset() + event->offset());
+            setOffset((event->position() - rawPosition()) - (size() / 2.f));
         }
 
         void InventoryItem::onMouseDragStop(Event::Mouse* event)

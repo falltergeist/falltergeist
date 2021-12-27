@@ -73,6 +73,10 @@ namespace Falltergeist
             return _position + _offset;
         }
 
+        const Point& Base::rawPosition() const {
+            return _position;
+        }
+
         void Base::setPosition(const Point& pos)
         {
             _position = pos;

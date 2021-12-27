@@ -88,8 +88,8 @@ namespace Falltergeist
 
         Size& Size::operator /=(double rhs)
         {
-            setWidth((int)(_width / rhs));
-            setHeight((int)(_height / rhs));
+            setWidth(static_cast<int>(static_cast<float>(_width) / rhs));
+            setHeight(static_cast<int>(static_cast<float>(_height) / rhs));
             return *this;
         }
 
