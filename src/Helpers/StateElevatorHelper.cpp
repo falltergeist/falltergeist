@@ -14,7 +14,7 @@ namespace Falltergeist
         StateElevatorHelper::StateElevatorHelper(std::shared_ptr<ILogger>& logger)
             : _logger(logger) {
             auto& vfs = ResourceManager::getInstance()->vfs();
-            auto file = vfs->open("data/elevators.txt", VFS::IFile::OpenMode::Read);
+            auto file = vfs.open("data/elevators.txt", VFS::IFile::OpenMode::Read);
             if (!file || !file->isOpened()) {
                 throw Exception("Could not open elevators file");
             }
@@ -22,7 +22,7 @@ namespace Falltergeist
             std::string content;
             content.resize(file->size());
             file->read(content.data(), file->size());
-            vfs->close(file);
+            vfs.close(file);
 
             std::istringstream contentStream(content);
             auto inifile = new Ini::Parser(contentStream);

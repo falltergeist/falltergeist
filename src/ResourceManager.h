@@ -121,7 +121,7 @@ namespace Falltergeist
 
             void shutdown();
 
-            std::unique_ptr<VFS::VFS>& vfs();
+            VFS::VFS& vfs();
 
         private:
             friend class Base::Singleton<ResourceManager>;
@@ -136,7 +136,7 @@ namespace Falltergeist
 
             std::unordered_map<std::string, std::unique_ptr<Graphics::Shader>> _shaders;
 
-            std::unique_ptr<VFS::VFS> _vfs;
+            VFS::VFS _vfs;
 
             ResourceManager();
 

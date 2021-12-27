@@ -4,9 +4,8 @@
 #include "src/Logger.h"
 #include "src/Settings.h"
 #include "src/State/Start.h"
-#include "src/State/LuaTest.h"
+#include "src/State/LuaState.h"
 #include "src/UI/ResourceManager.h"
-#include "src/VM/LuaScript.h"
 
 using namespace Falltergeist;
 
@@ -20,7 +19,7 @@ int main(int argc, char* argv[])
         auto uiResourceManager = std::make_shared<UI::ResourceManager>();
         game->setUIResourceManager(uiResourceManager);
         game->init(std::unique_ptr<Settings>(new Settings()));
-        game->setState(new State::LuaTest());
+        game->setState(new State::LuaState("test"));
         game->run();
         game->shutdown();
         return 0;

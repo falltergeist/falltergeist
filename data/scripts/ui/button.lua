@@ -67,4 +67,7 @@ function Button:onMouseUp(event)
     self.imagePressed:hide()
 end
 
+function Button:onMouseMove(event)
+end
+
 return Button

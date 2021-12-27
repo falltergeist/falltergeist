@@ -53,19 +53,18 @@ namespace Falltergeist {
         }
     }
 
-    ResourceManager::ResourceManager() {
+    ResourceManager::ResourceManager() : _vfs(VFS::VFS(std::make_shared<Logger>("VFS"))){
         auto vfsLogger = std::make_shared<Logger>("VFS");
-        _vfs = std::make_unique<VFS::VFS>(vfsLogger);
 
         for (auto filename : CrossPlatform::findFalloutDataFiles()) {
             string path = CrossPlatform::findFalloutDataPath() + "/" + filename;
             _datFiles.push_back(std::make_unique<Dat::File>(path));
-            _vfs->addMount("", std::make_unique<VFS::DatArchiveDriver>(path));
+            _vfs.addMount("", std::make_unique<VFS::DatArchiveDriver>(path));
         }
 
         std::string falltergeistDataPath = CrossPlatform::findFalltergeistDataPath() + "/data";
-        _vfs->addMount("data", std::make_unique<VFS::NativeDriver>(falltergeistDataPath, vfsLogger));
-        _vfs->addMount("cache", std::make_unique<VFS::MemoryDriver>());
+        _vfs.addMount("data", std::make_unique<VFS::NativeDriver>(falltergeistDataPath, vfsLogger));
+        _vfs.addMount("cache", std::make_unique<VFS::MemoryDriver>());
     }
 
 // static
@@ -256,7 +255,7 @@ namespace Falltergeist {
         Graphics::Texture *texture = nullptr;
 
         if (ext == ".png") {
-            auto file = vfs()->open(filename, VFS::IFile::OpenMode::Read);
+            auto file = vfs().open(filename, VFS::IFile::OpenMode::Read);
             if (!file || !file->isOpened()) {
                 return nullptr;
             }
@@ -264,7 +263,7 @@ namespace Falltergeist {
             char* src = new char[file->size()];
             file->read(src, file->size());
             SDL_Surface* tempSurface = IMG_Load_RW(SDL_RWFromMem(src, file->size()), 1);
-            vfs()->close(file);
+            vfs().close(file);
 
             // @fixme: this section looks quite ugly. we should try to do something with it someday
             if (tempSurface == NULL) {
@@ -475,7 +474,7 @@ namespace Falltergeist {
         unloadResources();
     }
 
-    std::unique_ptr<VFS::VFS>& ResourceManager::vfs() {
+    VFS::VFS& ResourceManager::vfs() {
         return _vfs;
     }
 }

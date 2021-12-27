@@ -54,7 +54,7 @@ namespace Falltergeist
             if (cfglst->strings()->at(_id)!="reserved.cfg")
             {
                 auto& vfs = ResourceManager::getInstance()->vfs();
-                auto file = vfs->open(moviecfgfile, VFS::IFile::OpenMode::Read);
+                auto file = vfs.open(moviecfgfile, VFS::IFile::OpenMode::Read);
                 if (!file || !file->isOpened()) {
                     throw Exception("Could not open movie config file");
                 }
@@ -62,7 +62,7 @@ namespace Falltergeist
                 std::string content;
                 content.resize(file->size());
                 file->read(content.data(), file->size());
-                vfs->close(file);
+                vfs.close(file);
 
                 std::istringstream contentStream(content);
 

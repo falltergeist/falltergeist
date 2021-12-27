@@ -13,7 +13,7 @@ namespace Falltergeist {
 
         ShaderFile::ShaderFile(const std::string &path) {
             auto& vfs = ResourceManager::getInstance()->vfs();
-            auto file = vfs->open(path, VFS::IFile::OpenMode::Read);
+            auto file = vfs.open(path, VFS::IFile::OpenMode::Read);
             if (!file || !file->isOpened()) {
                 throw Exception("Can't open shader source " + path);
             }
@@ -21,7 +21,7 @@ namespace Falltergeist {
             std::string content;
             content.resize(file->size());
             file->read(content.data(), file->size());
-            vfs->close(file);
+            vfs.close(file);
 
             std::istringstream contentStream(content);
 

@@ -43,7 +43,7 @@ namespace Falltergeist
             setPosition(Point((renderer->size().width() - 640) / 2, renderer->size().height()));
 
             auto& vfs = ResourceManager::getInstance()->vfs();
-            auto file = vfs->open("text/english/credits.txt", VFS::IFile::OpenMode::Read);
+            auto file = vfs.open("text/english/credits.txt", VFS::IFile::OpenMode::Read);
             if (!file || !file->isOpened()) {
                 throw Exception("Could not open credits file");
             }
@@ -51,7 +51,7 @@ namespace Falltergeist
             std::string content;
             content.resize(file->size());
             file->read(content.data(), file->size());
-            vfs->close(file);
+            vfs.close(file);
 
             std::istringstream contentStream(content);
 
