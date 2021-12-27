@@ -1,4 +1,5 @@
 #include "../Graphics/SdlWindow.h"
+#include "../Graphics/SdlDisplay.h"
 
 namespace Falltergeist {
     namespace Graphics {
@@ -43,10 +44,13 @@ namespace Falltergeist {
                 }
             }
 
+            auto sdlDisplay = SdlDisplay::getAvailableDisplays().at(0);
+            auto windowPosition = _boundaries.position() + sdlDisplay.boundaries().position();
+
             _sdlWindow = SDL_CreateWindow(
                 _title.c_str(),
-                _boundaries.position().x(),
-                _boundaries.position().y(),
+                windowPosition.x(),
+                windowPosition.y(),
                 _boundaries.size().width(),
                 _boundaries.size().height(),
                 flags
@@ -55,11 +59,15 @@ namespace Falltergeist {
             if (_sdlWindow == nullptr) {
                 _logger->critical() << "Could not create SDL window: " << SDL_GetError() << std::endl;
             }
+
+            _id = SDL_GetWindowID(_sdlWindow);
+            if (_id == 0) {
+                _logger->critical() << "Could not get window id: " << SDL_GetError() << std::endl;
+            }
         }
 
         unsigned int SdlWindow::id() const {
-            // Only single window instance is supported at the moment
-            return 1;
+            return _id;
         }
 
         SdlWindow::~SdlWindow() {
@@ -80,9 +88,6 @@ namespace Falltergeist {
 
         SDL_Window* SdlWindow::sdlWindowPtr() const {
             return _sdlWindow;
-        }
-
-        void SdlWindow::pollEvents() {
         }
     }
 }
