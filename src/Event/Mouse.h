@@ -48,12 +48,6 @@ namespace Falltergeist
                 void setPosition(const Point& position);
 
                 /**
-                 * The offset for which cursor moved relative to last event. Used for move events.
-                 */
-                const Point& offset() const;
-                void setOffset(const Point& offset);
-
-                /**
                  * @brief Which button was pressed during mouse button events.
                  */
                 Button button() const;
@@ -92,14 +86,18 @@ namespace Falltergeist
 
             protected:
                 bool _controlPressed = false;
+
                 bool _shiftPressed = false;
+
                 bool _altPressed = false;
+
                 bool _obstacle = false;
+
                 Button _button = Button::NONE;
+
                 Type _type;
 
                 Point _position;
-                Point _offset;
         };
     }
 }

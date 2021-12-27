@@ -89,7 +89,7 @@ namespace Falltergeist
         void ItemsList::onMouseDrag(Event::Mouse* event)
         {
             if (_draggedItem) {
-                _draggedItem->setOffset(_draggedItem->offset() + event->offset());
+                _draggedItem->setOffset(event->position() - _draggedItem->rawPosition() - (_draggedItem->size() / 2.f));
             }
         }
 

@@ -155,7 +155,7 @@ namespace Falltergeist
             buyPriceText->setColor({ 255, 255, 255, 0 });
             addUI("buyPriceText", buyPriceText);
 
-            mineList->itemDragStopHandler().add([sellList, mineList](Event::Mouse* event){ sellList->onItemDragStop(event, sellList); });
+            mineList->itemDragStopHandler().add([sellList, mineList](Event::Mouse* event){ sellList->onItemDragStop(event, mineList); });
             sellList->itemDragStopHandler().add([mineList, sellList](Event::Mouse* event){ mineList->onItemDragStop(event, sellList); });
             sellList->itemsListModifiedHandler().add([this, sellPriceText](Event::Event*)
                 {

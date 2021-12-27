@@ -368,7 +368,6 @@ namespace Falltergeist
                 {
                     auto mouseEvent = std::make_unique<Event::Mouse>(Mouse::Type::MOVE);
                     mouseEvent->setPosition({sdlEvent.motion.x, sdlEvent.motion.y});
-                    mouseEvent->setOffset({sdlEvent.motion.xrel,sdlEvent.motion.yrel});
 
                     // TODO move position update to window class polling
                     //((Graphics::SdlWindow*)_window.get())->_mousePosition = {sdlEvent.motion.x, sdlEvent.motion.y};

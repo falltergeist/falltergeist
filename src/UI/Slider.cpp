@@ -28,23 +28,20 @@ namespace Falltergeist
 
                 bool opaque = imageOn->opaque(mouseEvent->position() - _offset);
 
-                //if we are in slider coordinates and not on thumb (slider size = 218 + thumb size, thumb size = 21)
-                if (ofs.x() > 0 && ofs.x() < 239 && ofs.y() > 0 && ofs.y() < imageOn->size().height() && !opaque)
+                //if we are in slider coordinates and not on thumb (slider size = SLIDE_WIDTH + thumb size, thumb size = THUMB_WIDTH)
+                if (ofs.x() > 0 && ofs.x() < SLIDE_WIDTH + THUMB_WIDTH && ofs.y() > 0 && ofs.y() < imageOn->size().height() && !opaque)
                 {
                     //on left button up only when not dragging thumb
                     if (mouseEvent->name() == "mouseup" && mouseEvent->leftButton() && !_drag)
                     {
                         ofs -= Point(10, 0); //~middle of thumb
-                        if (ofs.x() < 0)
-                        {
+                        if (ofs.x() < 0) {
                             ofs.setX(0);
-                        }
-                        else if (ofs.y() > 218)
-                        {
-                            ofs.setX(218);
+                        } else if (ofs.x() > SLIDE_WIDTH) {
+                            ofs.setX(SLIDE_WIDTH);
                         }
                         _offset.setX(ofs.x());
-                        _value = ((maxValue() - minValue()) / 218.f) * (float)_offset.x();
+                        _value = ((maxValue() - minValue()) / static_cast<float>(THUMB_WIDTH)) * (float)_offset.x();
                         emitEvent(std::make_unique<Event::Event>("change"), changeHandler());
                         Game::Game::getInstance()->mixer()->playACMSound(_downSound);
                         Game::Game::getInstance()->mixer()->playACMSound(_upSound);
@@ -58,13 +55,16 @@ namespace Falltergeist
 
         void Slider::_onDrag(Event::Mouse* event)
         {
-            auto newOffset = _offset.x() + event->offset().x();
-            if (newOffset <= 218 && newOffset >= 0)
-            {
-                _offset.setX(newOffset);
-                _value = ((maxValue() - minValue())/218.f)*(float)offset().x();
-                emitEvent(std::make_unique<Event::Event>("change"), changeHandler());
+            int newOffset = event->position().x() - _position.x() - static_cast<int>(THUMB_WIDTH / 2.f); // stick mouse to the middle of the thumb
+            if (newOffset < 0) {
+                newOffset = 0;
+            } else if (newOffset > SLIDE_WIDTH) {
+                newOffset = SLIDE_WIDTH;
             }
+
+            _offset.setX(newOffset);
+            _value = ((maxValue() - minValue())/ static_cast<float>(SLIDE_WIDTH))*(float)offset().x();
+            emitEvent(std::make_unique<Event::Event>("change"), changeHandler());
         }
 
         void Slider::_onLeftButtonDown(Event::Mouse* event)
@@ -111,7 +111,7 @@ namespace Falltergeist
         void Slider::setValue(double value)
         {
             _value = value;
-            _offset.setX(static_cast<int>((218.f/(maxValue() - minValue())) * _value));
+            _offset.setX(static_cast<int>((static_cast<float>(SLIDE_WIDTH)/(maxValue() - minValue())) * _value));
             emitEvent(std::make_unique<Event::Event>("change"), changeHandler());
         }
 
