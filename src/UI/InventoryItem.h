@@ -37,7 +37,8 @@ namespace Falltergeist
                 void setItem(Game::ItemObject* item);
 
                 void render(bool eggTransparency = false) override;
-                Size size() const override;
+
+                const Size& size() const override;
 
                 virtual bool opaque(const Point &pos) override;
 
@@ -63,6 +64,12 @@ namespace Falltergeist
                 Type _oldType = Type::INVENTORY;
 
                 Event::MouseHandler _itemDragStopHandler;
+
+                Size _inventorySize = Size(70, 49);
+
+                Size _slotSize = Size(90, 63);
+
+                Size _defaultSize = Size(57, 40);
         };
     }
 }

@@ -24,10 +24,10 @@ namespace Falltergeist
 
                 virtual bool opaque(const Point &position) override;
 
-                virtual Size size() const override;
+                const Size& size() const override;
 
             private:
-                std::unique_ptr<Graphics::Sprite> sprite;
+                std::unique_ptr<Graphics::Sprite> _sprite;
         };
     }
 }

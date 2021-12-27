@@ -32,7 +32,7 @@ namespace Falltergeist
                 const Point& shift() const;
                 void setShift(const Point& value);
 
-                Size size() const override;
+                const Size& size() const override;
 
                 void play();
                 void stop();
@@ -69,18 +69,30 @@ namespace Falltergeist
 
             protected:
                 bool _playing = false;
+
                 bool _ended = false;
+
                 bool _reverse = false;
+
                 std::vector<std::unique_ptr<AnimationFrame>> _animationFrames;
+
                 Point _shift;
+
                 unsigned int _currentFrame = 0;
+
                 unsigned int _actionFrame = 0;
+
                 unsigned int _progress = 0;
+
                 unsigned int _frameTicks = 0;
 
                 Event::Handler _frameHandler, _actionFrameHandler, _animationEndedHandler;
+
                 std::unique_ptr<Graphics::Animation> _animation;
+
                 unsigned int _direction;
+
+                Size _zeroSize = Size(0, 0);
         };
     }
 }

@@ -2,8 +2,6 @@
 
 namespace Falltergeist
 {
-    using namespace std;
-
     namespace UI
     {
         enum
@@ -15,7 +13,7 @@ namespace Falltergeist
 
         MonthCounter::MonthCounter(Month month, const Point& pos) : Base(pos), _month(month)
         {
-            _sprite = make_shared<Graphics::Sprite>("art/intrface/months.frm");
+            _sprite = std::make_shared<Graphics::Sprite>("art/intrface/months.frm");
 
             for (auto i = 0; i<12; i++) {
                 _rects.emplace_back(Point(0,i*15), Size(29,14));

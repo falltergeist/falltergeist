@@ -25,7 +25,7 @@ namespace Falltergeist
             return false;
         }
 
-        Size Rectangle::size() const
+        const Size& Rectangle::size() const
         {
             return _size;
         }

@@ -136,7 +136,7 @@ namespace Falltergeist
             return imageOn->opaque(pos);
         }
 
-        Size Slider::size() const
+        const Size& Slider::size() const
         {
             return imageOn->size();
         }

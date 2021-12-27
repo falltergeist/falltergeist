@@ -30,7 +30,7 @@ namespace Falltergeist
 
     namespace UI
     {
-        PlayerPanel::PlayerPanel(std::shared_ptr<ILogger> logger) : UI::Base()
+        PlayerPanel::PlayerPanel(std::shared_ptr<ILogger> logger) : UI::Base(Point(0, 0))
         {
             this->logger = std::move(logger);
 
@@ -199,7 +199,7 @@ namespace Falltergeist
         {
         }
 
-        Size PlayerPanel::size() const
+        const Size& PlayerPanel::size() const
         {
             return _background->size();
         }

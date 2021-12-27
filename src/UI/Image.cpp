@@ -4,20 +4,19 @@ namespace Falltergeist
 {
     namespace UI
     {
-        Image::Image(std::unique_ptr<Graphics::Sprite> sprite) : Falltergeist::UI::Base()
-        {
-            this->sprite = std::move(sprite);
+        Image::Image(std::unique_ptr<Graphics::Sprite> sprite)
+            : Falltergeist::UI::Base(Point(0, 0)), _sprite(std::move(sprite)) {
         }
 
         void Image::render(bool eggTransparency)
         {
-            sprite->trans(_trans);
-            sprite->render(position(), eggTransparency, light(), _outline, _lightLevel);
+            _sprite->trans(_trans);
+            _sprite->render(position(), eggTransparency, light(), _outline, _lightLevel);
         }
 
-        Size Image::size() const
+        const Size& Image::size() const
         {
-            return sprite->size();
+            return _sprite->size();
         }
 
         bool Image::opaque(const Point &position)
@@ -25,12 +24,12 @@ namespace Falltergeist
             if (position.x() < 0 || position.y() < 0) {
                 return false;
             }
-            return sprite->opaque(position);
+            return _sprite->opaque(position);
         }
 
         void Image::render(const Size& size, bool eggTransparency)
         {
-            sprite->renderScaled(position(), size, eggTransparency, light(), _outline);
+            _sprite->renderScaled(position(), size, eggTransparency, light(), _outline);
         }
     }
 }

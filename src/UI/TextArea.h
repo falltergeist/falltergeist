@@ -82,7 +82,7 @@ namespace Falltergeist
             /**
              * Size of text area. It's either fixed value given to setSize() or previously calculated size.
              */
-            Size size() const override;
+            const Size& size() const override;
             /**
              * Sets fixed size of TextArea. If this is not (0, 0) - calls to size() will always return this value,
              * regardless of actual width/height of TextArea on screen.

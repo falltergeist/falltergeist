@@ -9,11 +9,9 @@
 
 namespace Falltergeist
 {
-    using namespace std;
-
     namespace UI
     {
-        MultistateImageButton::MultistateImageButton(Type type, const Point& pos) : Falltergeist::UI::Base(pos)
+        MultistateImageButton::MultistateImageButton(Type type, const Point& pos) : Base(pos)
         {
             mouseClickHandler() += [=](Event::Mouse* event){ _onMouseClick(event); };
             mouseUpHandler().add([=](Event::Mouse* event) { _onMouseUp(event); });
@@ -21,7 +19,7 @@ namespace Falltergeist
             {
                 case Type::BIG_SWITCH:
                 {
-                    _sprite = make_shared<Graphics::Sprite>("art/intrface/prfbknbs.frm");
+                    _sprite = std::make_shared<Graphics::Sprite>("art/intrface/prfbknbs.frm");
                     _rects.emplace_back(Point(0,0*47), Size(46,47));
                     _rects.emplace_back(Point(0,1*47), Size(46,47));
                     _rects.emplace_back(Point(0,2*47), Size(46,47));
@@ -35,7 +33,7 @@ namespace Falltergeist
                 }
                 case Type::SMALL_SWITCH:
                 {
-                    _sprite = make_shared<Graphics::Sprite>("art/intrface/prflknbs.frm");
+                    _sprite = std::make_shared<Graphics::Sprite>("art/intrface/prflknbs.frm");
                     _rects.emplace_back(Point(0,0*25), Size(22,25));
                     _rects.emplace_back(Point(0,1*25), Size(22,25));
                     _maxState = 2;
@@ -166,7 +164,7 @@ namespace Falltergeist
             return _sprite->opaque(_rects.at(_currentState).position() + pos);
         }
 
-        Size MultistateImageButton::size() const
+        const Size& MultistateImageButton::size() const
         {
             return _size;
         }

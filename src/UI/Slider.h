@@ -20,7 +20,7 @@ namespace Falltergeist
 
                 void handle(Event::Event* event) override;
 
-                Size size() const override;
+                const Size& size() const override;
 
                 bool opaque(const Point &pos) override;
 

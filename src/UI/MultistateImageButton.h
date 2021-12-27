@@ -51,7 +51,7 @@ namespace Falltergeist
                 void handle(Event::Mouse* mouseEvent) override;
                 bool opaque(const Point &pos) override;
                 void render(bool eggTransparency) override;
-                Size size() const override;
+                const Size& size() const override;
 
             private:
                 std::shared_ptr<Graphics::Sprite> _sprite;

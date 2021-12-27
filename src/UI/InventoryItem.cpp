@@ -84,22 +84,22 @@ namespace Falltergeist
                 default:
                     inventoryUi->setPosition(position());
 
-                    widthRatio = static_cast<double>(57) / static_cast<double>(inventoryUi->width());
-                    heightRatio = static_cast<double>(40) / static_cast<double>(inventoryUi->height());
+                    widthRatio = static_cast<double>(_defaultSize.width()) / static_cast<double>(inventoryUi->width());
+                    heightRatio = static_cast<double>(_defaultSize.height()) / static_cast<double>(inventoryUi->height());
 
                     newWidth = static_cast<unsigned int>(static_cast<double>(inventoryUi->width()) * static_cast<double>(heightRatio));
 
-                    if (newWidth <= 57) {
-                        texSize = Size(newWidth, 40);
+                    if (newWidth <= _defaultSize.width()) {
+                        texSize = Size(newWidth, _defaultSize.height());
                         inventoryUi->setPosition(position() + (this->size() - texSize) / 2);
 
-                        inventoryUi->render(Size(newWidth, 40), false);
+                        inventoryUi->render(Size(newWidth, _defaultSize.height()), false);
                         return;
                     }
                     newHeight = static_cast<unsigned int>(static_cast<double>(inventoryUi->height()) * static_cast<double>(widthRatio));
-                    texSize = Size(57, newHeight);
+                    texSize = Size(_defaultSize.width(), newHeight);
                     inventoryUi->setPosition(position() + (this->size() - texSize) / 2);
-                    inventoryUi->render(Size(57, newHeight), false);
+                    inventoryUi->render(Size(_defaultSize.width(), newHeight), false);
                     break;
             }
         }
@@ -191,16 +191,16 @@ namespace Falltergeist
             }
         }
 
-        Size InventoryItem::size() const
+        const Size& InventoryItem::size() const
         {
             switch (_type)
             {
                 case Type::INVENTORY:
-                    return Size(70, 49);
+                    return _inventorySize;
                 case Type::SLOT:
-                    return Size(90, 63);
+                    return _slotSize;
                 default:
-                    return Size(57, 40);
+                    return _defaultSize;
             }
         }
 

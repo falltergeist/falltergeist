@@ -28,7 +28,8 @@ namespace Falltergeist
 
                 virtual bool opaque(const Point &pos) override;
 
-                Size size() const override;
+                const Size& size() const override;
+
                 Point offset() const override;
 
                 Event::Handler& animationEndedHandler();

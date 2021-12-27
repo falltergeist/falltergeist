@@ -44,7 +44,6 @@
 #include "VFS/MemoryDriver.h"
 
 namespace Falltergeist {
-    using namespace std;
     using namespace Format;
 
     namespace {
@@ -58,7 +57,7 @@ namespace Falltergeist {
         _vfs = std::make_unique<VFS::VFS>(vfsLogger);
 
         for (auto filename : CrossPlatform::findFalloutDataFiles()) {
-            string path = CrossPlatform::findFalloutDataPath() + "/" + filename;
+            std::string path = CrossPlatform::findFalloutDataPath() + "/" + filename;
             _datFiles.push_back(std::make_unique<Dat::File>(path));
             _vfs->addMount("", std::make_unique<VFS::DatArchiveDriver>(path));
         }
@@ -73,21 +72,21 @@ namespace Falltergeist {
         return Base::Singleton<ResourceManager>::get();
     }
 
-    void ResourceManager::_loadStreamForFile(string filename, std::function<void(Dat::Stream &&)> callback) {
+    void ResourceManager::_loadStreamForFile(std::string filename, std::function<void(Dat::Stream &&)> callback) {
         // Searching file in Fallout data directory
         {
-            string path = CrossPlatform::findFalloutDataPath() + "/" + filename;
+            std::string path = CrossPlatform::findFalloutDataPath() + "/" + filename;
 
-            ifstream stream;
-            stream.open(path, ios_base::binary);
+            std::ifstream stream;
+            stream.open(path, std::ios_base::binary);
             if (stream.is_open()) {
-                Logger::debug("RESOURCE MANAGER") << "Loading file: " << filename << " [FROM FALLOUT DATA DIR]" << endl;
+                Logger::debug("RESOURCE MANAGER") << "Loading file: " << filename << " [FROM FALLOUT DATA DIR]" << std::endl;
             } else {
                 path = CrossPlatform::findFalltergeistDataPath() + "/" + filename;
-                stream.open(path, ios_base::binary);
+                stream.open(path, std::ios_base::binary);
                 if (stream.is_open()) {
                     Logger::debug("RESOURCE MANAGER") << "Loading file: " << filename << " [FROM FALLTERGEIST DATA DIR]"
-                                                      << endl;
+                                                      << std::endl;
                 }
             }
 
@@ -103,16 +102,16 @@ namespace Falltergeist {
             auto entry = datfile->entry(filename);
             if (entry != nullptr) {
                 Logger::debug("RESOURCE MANAGER") << "Loading file: " << filename << " [FROM " << datfile->filename()
-                                                  << "]" << endl;
+                                                  << "]" << std::endl;
                 callback(Dat::Stream(*entry));
                 return;
             }
         }
-        Logger::error("RESOURCE MANAGER") << "Loading file: " << filename << " [ NOT FOUND]" << endl;
+        Logger::error("RESOURCE MANAGER") << "Loading file: " << filename << " [ NOT FOUND]" << std::endl;
     }
 
     template<class T>
-    T *ResourceManager::_datFileItem(string filename) {
+    T *ResourceManager::_datFileItem(std::string filename) {
         std::transform(filename.begin(), filename.end(), filename.begin(), ::tolower);
 
         // Return item from cache
@@ -121,7 +120,7 @@ namespace Falltergeist {
             auto itemPtr = dynamic_cast<T *>(itemIt->second.get());
             if (itemPtr == nullptr) {
                 Logger::error("RESOURCE MANAGER") << "Requested file type does not match type in the cache: "
-                                                  << filename << endl;
+                                                  << filename << std::endl;
             }
             return itemPtr;
         }
@@ -137,60 +136,60 @@ namespace Falltergeist {
         return itemPtr;
     }
 
-    Frm::File *ResourceManager::frmFileType(const string &filename) {
+    Frm::File *ResourceManager::frmFileType(const std::string &filename) {
         // TODO: Maybe get rid of all wrappers like this and call template function directly from outside.
         return _datFileItem<Frm::File>(filename);
     }
 
-    Pal::File *ResourceManager::palFileType(const string &filename) {
+    Pal::File *ResourceManager::palFileType(const std::string &filename) {
         return _datFileItem<Pal::File>(filename);
     }
 
-    Lip::File *ResourceManager::lipFileType(const string &filename) {
+    Lip::File *ResourceManager::lipFileType(const std::string &filename) {
         return _datFileItem<Lip::File>(filename);
     }
 
-    Lst::File *ResourceManager::lstFileType(const string &filename) {
+    Lst::File *ResourceManager::lstFileType(const std::string &filename) {
         return _datFileItem<Lst::File>(filename);
     }
 
-    Aaf::File *ResourceManager::aafFileType(const string &filename) {
+    Aaf::File *ResourceManager::aafFileType(const std::string &filename) {
         return _datFileItem<Aaf::File>(filename);
     }
 
-    Acm::File *ResourceManager::acmFileType(const string &filename) {
+    Acm::File *ResourceManager::acmFileType(const std::string &filename) {
         return _datFileItem<Acm::File>(filename);
     }
 
-    Fon::File *ResourceManager::fonFileType(const string &filename) {
+    Fon::File *ResourceManager::fonFileType(const std::string &filename) {
         return _datFileItem<Fon::File>(filename);
     }
 
-    Gam::File *ResourceManager::gamFileType(const string &filename) {
+    Gam::File *ResourceManager::gamFileType(const std::string &filename) {
         return _datFileItem<Gam::File>(filename);
     }
 
-    Gcd::File *ResourceManager::gcdFileType(const string &filename) {
+    Gcd::File *ResourceManager::gcdFileType(const std::string &filename) {
         return _datFileItem<Gcd::File>(filename);
     }
 
-    Int::File *ResourceManager::intFileType(const string &filename) {
+    Int::File *ResourceManager::intFileType(const std::string &filename) {
         return _datFileItem<Int::File>(filename);
     }
 
-    Msg::File *ResourceManager::msgFileType(const string &filename) {
+    Msg::File *ResourceManager::msgFileType(const std::string &filename) {
         return _datFileItem<Msg::File>(filename);
     }
 
-    Mve::File *ResourceManager::mveFileType(const string &filename) {
+    Mve::File *ResourceManager::mveFileType(const std::string &filename) {
         return _datFileItem<Mve::File>(filename);
     }
 
-    Bio::File *ResourceManager::bioFileType(const string &filename) {
+    Bio::File *ResourceManager::bioFileType(const std::string &filename) {
         return _datFileItem<Bio::File>(filename);
     }
 
-    Map::File *ResourceManager::mapFileType(const string &filename) {
+    Map::File *ResourceManager::mapFileType(const std::string &filename) {
         auto item = _datFileItem<Map::File>(filename);
         if (item) {
             item->init(&fetchProFileType);
@@ -198,15 +197,15 @@ namespace Falltergeist {
         return item;
     }
 
-    Pro::File *ResourceManager::proFileType(const string &filename) {
+    Pro::File *ResourceManager::proFileType(const std::string &filename) {
         return _datFileItem<Pro::File>(filename);
     }
 
-    Rix::File *ResourceManager::rixFileType(const string &filename) {
+    Rix::File *ResourceManager::rixFileType(const std::string &filename) {
         return _datFileItem<Rix::File>(filename);
     }
 
-    Sve::File *ResourceManager::sveFileType(const string &filename) {
+    Sve::File *ResourceManager::sveFileType(const std::string &filename) {
         return _datFileItem<Sve::File>(filename);
     }
 
@@ -246,12 +245,12 @@ namespace Falltergeist {
         return _datFileItem<Txt::QuestsFile>("data/quests.txt");
     }
 
-    Graphics::Texture *ResourceManager::texture(const string &filename) {
+    Graphics::Texture *ResourceManager::texture(const std::string &filename) {
         if (_textures.count(filename)) {
             return _textures.at(filename).get();
         }
 
-        string ext = filename.substr(filename.length() - 4);
+        std::string ext = filename.substr(filename.length() - 4);
 
         Graphics::Texture *texture = nullptr;
 
@@ -314,11 +313,11 @@ namespace Falltergeist {
             throw Exception("ResourceManager::surface() - unknown image type:" + filename);
         }
 
-        _textures.insert(make_pair(filename, unique_ptr<Graphics::Texture>(texture)));
+        _textures.insert(make_pair(filename, std::unique_ptr<Graphics::Texture>(texture)));
         return texture;
     }
 
-    Graphics::Font *ResourceManager::font(const string &filename) {
+    Graphics::Font *ResourceManager::font(const std::string &filename) {
 
         if (_fonts.count(filename)) {
             return _fonts.at(filename).get();
@@ -337,21 +336,21 @@ namespace Falltergeist {
     }
 
 
-    Graphics::Shader *ResourceManager::shader(const string &filename) {
+    Graphics::Shader *ResourceManager::shader(const std::string &filename) {
         if (_shaders.count(filename)) {
             return _shaders.at(filename).get();
         }
 
         Graphics::Shader *shader = new Graphics::Shader(filename);
 
-        _shaders.emplace(filename, unique_ptr<Graphics::Shader>(shader));
+        _shaders.emplace(filename, std::unique_ptr<Graphics::Shader>(shader));
         return shader;
     }
 
 
     Pro::File *ResourceManager::proFileType(unsigned int PID) {
         unsigned int typeId = PID >> 24;
-        string listFile;
+        std::string listFile;
         switch ((OBJECT_TYPE) typeId) {
             case OBJECT_TYPE::ITEM:
                 listFile += "proto/items/items.lst";
@@ -372,7 +371,7 @@ namespace Falltergeist {
                 listFile += "proto/misc/misc.lst";
                 break;
             default:
-                Logger::error("") << "ResourceManager::proFileType(unsigned int) - wrong PID: " << PID << endl;
+                Logger::error("") << "ResourceManager::proFileType(unsigned int) - wrong PID: " << PID << std::endl;
                 return nullptr;
         }
 
@@ -381,11 +380,11 @@ namespace Falltergeist {
         unsigned int index = 0x00000FFF & PID;
 
         if (index > lst->strings()->size()) {
-            Logger::error("") << "ResourceManager::proFileType(unsigned int) - LST size < PID: " << PID << endl;
+            Logger::error("") << "ResourceManager::proFileType(unsigned int) - LST size < PID: " << PID << std::endl;
             return nullptr;
         }
 
-        string protoName = lst->strings()->at(index - 1);
+        std::string protoName = lst->strings()->at(index - 1);
 
         switch ((OBJECT_TYPE) typeId) {
             case OBJECT_TYPE::ITEM:
@@ -426,7 +425,7 @@ namespace Falltergeist {
         return intFileType("scripts/" + lst->strings()->at(SID));
     }
 
-    string ResourceManager::FIDtoFrmName(unsigned int FID) {
+    std::string ResourceManager::FIDtoFrmName(unsigned int FID) {
         const auto baseId = FID & 0x00000FFF;
         const auto type = static_cast<FRM_TYPE>(FID >> 24);
 
@@ -463,11 +462,11 @@ namespace Falltergeist {
         auto lst = lstFileType(typeArtDescription.lstFilePath);
         if (baseId >= lst->strings()->size()) {
             Logger::error("") << "ResourceManager::FIDtoFrmName(unsigned int) - LST size " << lst->strings()->size()
-                              << " <= frmID: " << baseId << " frmType: " << (unsigned) type << endl;
+                              << " <= frmID: " << baseId << " frmType: " << (unsigned) type << std::endl;
             return std::string();
         }
 
-        string frmName = lst->strings()->at(baseId);
+        std::string frmName = lst->strings()->at(baseId);
         return typeArtDescription.prefixPath + frmName;
     }
 
