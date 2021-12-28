@@ -61,13 +61,8 @@ namespace Falltergeist
             return _visible;
         }
 
-        Point Base::position() const
+        const Point& Base::position() const
         {
-            // TODO get rid of offset in position()
-            return _position + _offset;
-        }
-
-        const Point& Base::rawPosition() const {
             return _position;
         }
 
@@ -76,7 +71,7 @@ namespace Falltergeist
             _position = pos;
         }
 
-        Point Base::offset() const
+        const Point& Base::offset() const
         {
             return _offset;
         }
@@ -284,16 +279,6 @@ namespace Falltergeist
                 }
             }
             return;
-        }
-
-        unsigned Base::width() const
-        {
-            return size().width();
-        }
-
-        unsigned Base::height() const
-        {
-            return size().height();
         }
 
         Event::KeyboardHandler& Base::keyDownHandler()

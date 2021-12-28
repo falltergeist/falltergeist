@@ -61,10 +61,10 @@ namespace Falltergeist
             switch (_type)
             {
                 case Type::SLOT:
-                    widthRatio = static_cast<double>(88) / static_cast<double>(slotUi->width());
-                    heightRatio = static_cast<double>(58) / static_cast<double>(slotUi->height());
+                    widthRatio = static_cast<double>(88) / static_cast<double>(slotUi->size().width());
+                    heightRatio = static_cast<double>(58) / static_cast<double>(slotUi->size().height());
 
-                    newWidth = static_cast<unsigned int>(static_cast<double>(slotUi->width()) * static_cast<double>(heightRatio));
+                    newWidth = static_cast<unsigned int>(static_cast<double>(slotUi->size().width()) * static_cast<double>(heightRatio));
 
                     if (newWidth <= 88) {
                         texSize = Size(newWidth, 58);
@@ -72,22 +72,22 @@ namespace Falltergeist
                         slotUi->render(Size(newWidth, 58), false);
                         return;
                     }
-                    newHeight = static_cast<unsigned int>(static_cast<double>(slotUi->height()) * static_cast<double>(widthRatio));
+                    newHeight = static_cast<unsigned int>(static_cast<double>(slotUi->size().height()) * static_cast<double>(widthRatio));
                     texSize = Size(88, newHeight);
                     slotUi->setPosition(position() + (this->size() - texSize) / 2);
                     slotUi->render(Size(88, newHeight), false);
                     break;
                 case Type::DRAG:
-                    dragUi->setPosition(position());
+                    dragUi->setPosition(position() + offset());
                     dragUi->render();
                     break;
                 default:
                     inventoryUi->setPosition(position());
 
-                    widthRatio = static_cast<double>(_defaultSize.width()) / static_cast<double>(inventoryUi->width());
-                    heightRatio = static_cast<double>(_defaultSize.height()) / static_cast<double>(inventoryUi->height());
+                    widthRatio = static_cast<double>(_defaultSize.width()) / static_cast<double>(inventoryUi->size().width());
+                    heightRatio = static_cast<double>(_defaultSize.height()) / static_cast<double>(inventoryUi->size().height());
 
-                    newWidth = static_cast<unsigned int>(static_cast<double>(inventoryUi->width()) * static_cast<double>(heightRatio));
+                    newWidth = static_cast<unsigned int>(static_cast<double>(inventoryUi->size().width()) * static_cast<double>(heightRatio));
 
                     if (newWidth <= _defaultSize.width()) {
                         texSize = Size(newWidth, _defaultSize.height());
@@ -96,7 +96,7 @@ namespace Falltergeist
                         inventoryUi->render(Size(newWidth, _defaultSize.height()), false);
                         return;
                     }
-                    newHeight = static_cast<unsigned int>(static_cast<double>(inventoryUi->height()) * static_cast<double>(widthRatio));
+                    newHeight = static_cast<unsigned int>(static_cast<double>(inventoryUi->size().height()) * static_cast<double>(widthRatio));
                     texSize = Size(_defaultSize.width(), newHeight);
                     inventoryUi->setPosition(position() + (this->size() - texSize) / 2);
                     inventoryUi->render(Size(_defaultSize.width(), newHeight), false);
@@ -129,7 +129,7 @@ namespace Falltergeist
 
         void InventoryItem::onMouseDrag(Event::Mouse* event)
         {
-            setOffset((event->position() - rawPosition()) - (size() / 2.f));
+            setOffset((event->position() - position()) - (size() / 2.f));
         }
 
         void InventoryItem::onMouseDragStop(Event::Mouse* event)

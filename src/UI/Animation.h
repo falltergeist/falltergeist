@@ -15,14 +15,16 @@ namespace Falltergeist
         {
             public:
                 Animation();
+
                 Animation(const std::string& frmName, unsigned int direction = 0);
+
                 ~Animation() override;
 
                 std::vector<std::unique_ptr<AnimationFrame>>& frames();
 
                 void think(const float &deltaTime) override;
-                void render(bool eggTransparency = false) override;
 
+                void render(bool eggTransparency = false) override;
 
                 virtual bool opaque(const Point &pos) override;
 
@@ -30,16 +32,21 @@ namespace Falltergeist
                  * Additional offset, specific to current direction and taken from source FRM file.
                  */
                 const Point& shift() const;
+
                 void setShift(const Point& value);
 
                 const Size& size() const override;
 
                 void play();
+
                 void stop();
+
                 void setReverse(bool value);
 
                 unsigned int currentFrame() const;
+
                 void setCurrentFrame(unsigned int value);
+
                 AnimationFrame* currentFramePtr() const;
 
                 /**
@@ -48,20 +55,25 @@ namespace Falltergeist
                 Point frameOffset() const;
 
                 unsigned int actionFrame() const;
+
                 void setActionFrame(unsigned int value);
+
                 AnimationFrame* actionFramePtr() const;
 
                 bool ended() const;
+
                 bool playing() const;
 
                 /**
                  * Invoked when animation has ended.
                  */
                 Event::Handler& animationEndedHandler();
+
                 /**
                  * Invoked when animation "action" frame is reached
                  */
                 Event::Handler& actionFrameHandler();
+
                 /**
                  * Invoked on every frame of animation
                  */

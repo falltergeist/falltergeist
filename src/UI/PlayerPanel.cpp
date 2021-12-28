@@ -45,7 +45,7 @@ namespace Falltergeist
             _ui.push_back(_background);
 
             setX((renderer->size().width() - 640) / 2);
-            setY(renderer->size().height() - _background->height());
+            setY(renderer->size().height() - _background->size().height());
 
             _background->setPosition(this->position());
 

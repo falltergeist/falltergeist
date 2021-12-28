@@ -28,12 +28,15 @@ namespace Falltergeist
                 };
 
                 InventoryItem(Game::ItemObject* item, const Point& pos = Point());
+
                 ~InventoryItem() override;
 
                 Type type() const;
+
                 void setType(Type value);
 
                 Game::ItemObject* item();
+
                 void setItem(Game::ItemObject* item);
 
                 void render(bool eggTransparency = false) override;

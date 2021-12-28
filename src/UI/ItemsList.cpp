@@ -50,7 +50,7 @@ namespace Falltergeist
         {
             unsigned int i = 0;
             for (auto& item : _inventoryItems) {
-                Point pos = position() + Point(0, _slotHeight*i);
+                Point pos = position() + offset() + Point(0, _slotHeight*i);
                 item->setPosition(pos);
                 item->render();
 
@@ -89,7 +89,7 @@ namespace Falltergeist
         void ItemsList::onMouseDrag(Event::Mouse* event)
         {
             if (_draggedItem) {
-                _draggedItem->setOffset(event->position() - _draggedItem->rawPosition() - (_draggedItem->size() / 2.f));
+                _draggedItem->setOffset(event->position() - _draggedItem->position() - (_draggedItem->size() / 2.f));
             }
         }
 

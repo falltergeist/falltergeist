@@ -16,6 +16,7 @@ namespace Falltergeist
         {
             public:
                 Slider(const Point& pos, std::unique_ptr<Image> imageOn, std::unique_ptr<Image> imageOff);
+
                 virtual ~Slider() = default;
 
                 void handle(Event::Event* event) override;
@@ -27,12 +28,15 @@ namespace Falltergeist
                 void render(bool eggTransparency) override;
 
                 double minValue() const;
+
                 void setMinValue(double value);
 
                 double maxValue() const;
+
                 void setMaxValue(double value);
 
                 double value() const;
+
                 void setValue(double value);
 
                 Event::Handler& changeHandler();

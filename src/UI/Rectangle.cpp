@@ -15,11 +15,6 @@ namespace Falltergeist
             Game::Game::getInstance()->renderer()->drawRect(position(),_size, _color);
         }
 
-        bool Rectangle::opaque(unsigned int x, unsigned int y)
-        {
-            return false;
-        }
-
         bool Rectangle::opaque(const Point &pos)
         {
             return false;

@@ -122,8 +122,8 @@ namespace Falltergeist
 
         void Slider::render(bool eggTransparency)
         {
-            imageOn->setPosition(position());
-            imageOff->setPosition(position());
+            imageOn->setPosition(position() + offset());
+            imageOff->setPosition(position() + offset());
             if (_drag) {
                 imageOn->render(eggTransparency);
             } else {
