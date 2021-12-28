@@ -1,76 +1,72 @@
 #pragma once
 
-#include <string>
 #include "../UI/Base.h"
 #include "../UI/ImageList.h"
+#include <string>
 
-namespace Falltergeist
-{
-    namespace Event
-    {
+namespace Falltergeist {
+    namespace Event {
         class Mouse;
     }
-    namespace UI
-    {
-        class Slider : public Falltergeist::UI::Base
-        {
-            public:
-                Slider(const Point& pos, std::unique_ptr<Image> imageOn, std::unique_ptr<Image> imageOff);
+    namespace UI {
+        class Slider : public Falltergeist::UI::Base {
+        public:
+            Slider(const Point& pos, std::unique_ptr<Image> imageOn, std::unique_ptr<Image> imageOff);
 
-                virtual ~Slider() = default;
+            virtual ~Slider() = default;
 
-                const Size& size() const override;
+            const Size& size() const override;
 
-                bool opaque(const Point &pos) override;
+            bool opaque(const Point& pos) override;
 
-                void render(bool eggTransparency) override;
+            void render(bool eggTransparency) override;
 
-                double minValue() const;
+            double minValue() const;
 
-                void setMinValue(double value);
+            void setMinValue(double value);
 
-                double maxValue() const;
+            double maxValue() const;
 
-                void setMaxValue(double value);
+            void setMaxValue(double value);
 
-                double value() const;
+            double value() const;
 
-                void setValue(double value);
+            void setValue(double value);
 
-                Event::Handler& changeHandler();
+            Event::Handler& changeHandler();
 
-            private:
-                Size _sliderSize = Size(241, 14);
+        private:
+            Size _sliderSize = Size(241, 14);
 
-                Point _sliderOffset = Point(0, 0);
+            Point _sliderOffset = Point(0, 0);
 
-                Size _thumbSize = Size(21, 14);
+            Size _thumbSize = Size(21, 14);
 
-                std::unique_ptr<Image> _imageOn;
+            std::unique_ptr<Image> _imageOn;
 
-                std::unique_ptr<Image> _imageOff;
+            std::unique_ptr<Image> _imageOff;
 
-                double _minValue = 0.0;
+            double _minValue = 0.0;
 
-                double _maxValue = 1.0;
+            double _maxValue = 1.0;
 
-                double _value = 0.0;
+            double _value = 0.0;
 
-                std::string _downSound;
+            std::string _downSound;
 
-                std::string _upSound;
+            std::string _upSound;
 
-                Event::Handler _changeHandler;
+            Event::Handler _changeHandler;
 
-                void _onDrag(Event::Mouse* event);
+            void _onDrag(Event::Mouse* event);
 
-                void _onMouseDown(Event::Mouse* event);
+            void _onMouseDown(Event::Mouse* event);
 
-                void _onMouseUp(Event::Mouse* event);
+            void _onMouseUp(Event::Mouse* event);
 
-                double _offsetToValue(const Point& offset);
+            double _offsetToValue(const Point& offset);
 
-                Point _valueToOffset(double value);
+            Point _valueToOffset(double value);
         };
     }
 }
