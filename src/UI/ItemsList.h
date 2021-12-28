@@ -21,8 +21,6 @@ namespace Falltergeist
             public:
                 ItemsList(const Point& pos);
 
-                void setPosition(const Point &pos) override;
-
                 void setItems(std::vector<Game::ItemObject*>* items);
 
                 std::vector<Game::ItemObject*>* items();
@@ -79,6 +77,8 @@ namespace Falltergeist
 
                 InventoryItem* _draggedItem = nullptr;
 
+                Point _draggedItemInitialPosition;
+
                 std::vector<std::unique_ptr<InventoryItem>> _inventoryItems;
 
                 InventoryItem::Type _type = InventoryItem::Type::INVENTORY;
@@ -94,8 +94,6 @@ namespace Falltergeist
                 Event::MouseHandler _itemDragStopHandler;
 
                 Event::Handler _itemsListModifiedHandler;
-
-                void _updatePositions();
         };
     }
 }
