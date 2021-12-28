@@ -19,8 +19,6 @@ namespace Falltergeist
 
                 virtual ~Slider() = default;
 
-                void handle(Event::Event* event) override;
-
                 const Size& size() const override;
 
                 bool opaque(const Point &pos) override;
@@ -42,13 +40,15 @@ namespace Falltergeist
                 Event::Handler& changeHandler();
 
             private:
-                const int SLIDE_WIDTH = 218;
+                Size _sliderSize = Size(241, 14);
 
-                const int THUMB_WIDTH = 21;
+                Point _sliderOffset = Point(0, 0);
 
-                std::unique_ptr<Image> imageOn;
+                Size _thumbSize = Size(21, 14);
 
-                std::unique_ptr<Image> imageOff;
+                std::unique_ptr<Image> _imageOn;
+
+                std::unique_ptr<Image> _imageOff;
 
                 double _minValue = 0.0;
 
@@ -64,9 +64,13 @@ namespace Falltergeist
 
                 void _onDrag(Event::Mouse* event);
 
-                void _onLeftButtonDown(Event::Mouse* event);
+                void _onMouseDown(Event::Mouse* event);
 
-                void _onLeftButtonUp(Event::Mouse* event);
+                void _onMouseUp(Event::Mouse* event);
+
+                double _offsetToValue(const Point& offset);
+
+                Point _valueToOffset(double value);
         };
     }
 }

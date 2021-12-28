@@ -45,15 +45,6 @@ namespace Falltergeist
                 friend Size operator *(Size lhs, double rhs);
                 friend Size operator /(Size lhs, double rhs);
 
-                // Addition of another Size
-                Size add(const Size& rhs) const;
-                // Subtraction of another Size
-                Size sub(const Size& rhs) const;
-                // Multiplication of width/height by given number
-                Size mul(double rhs) const;
-                // Division by given number
-                Size div(double rhs) const;
-
             private:
                 int _width;
                 int _height;

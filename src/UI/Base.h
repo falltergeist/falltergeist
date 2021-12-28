@@ -42,7 +42,9 @@ namespace Falltergeist
 
                 virtual void setOffset(const Point& pos);
 
-                void setOffset(int x, int y);
+                virtual const Size& size() const;
+
+                virtual bool opaque(const Point &pos);
 
                 virtual bool visible() const;
 
@@ -54,6 +56,11 @@ namespace Falltergeist
                  * This method is called first in the main loop (before think() and render()).
                  */
                 virtual void handle(Event::Event* event);
+
+                /**
+                 * @brief Handles mouse events from OS.
+                 */
+                virtual void handle(Event::Mouse* mouseEvent);
 
                 /**
                  * @brief Process any real-time actions at each frame.
@@ -68,15 +75,6 @@ namespace Falltergeist
                 virtual void render(bool eggTransparency = false);
 
                 virtual void render(const Size& size, bool eggTransparency = false);
-
-                /**
-                 * @brief Handles mouse events from OS.
-                 */
-                virtual void handle(Event::Mouse* mouseEvent);
-
-                virtual const Size& size() const;
-
-                virtual bool opaque(const Point &pos);
 
                 Event::KeyboardHandler& keyDownHandler();
 

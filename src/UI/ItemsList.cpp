@@ -98,7 +98,7 @@ namespace Falltergeist
             if (_draggedItem) {
                 Game::Game::getInstance()->mouse()->popState();
                 Game::Game::getInstance()->mixer()->playACMSound("sound/sfx/iputdown.acm");
-                _draggedItem->setOffset(0, 0);
+                _draggedItem->setOffset(Point(0, 0));
                 _draggedItem->setType(_type);
                 auto itemevent = std::make_unique<Event::Mouse>(*event, "itemdragstop");
                 emitEvent(std::move(itemevent), itemDragStopHandler());

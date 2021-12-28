@@ -37,16 +37,6 @@ namespace Falltergeist
             return _height;
         }
 
-        /*int& Size::rwidth()
-        {
-            return _width;
-        }
-
-        int& Size::rheight()
-        {
-            return _height;
-        }*/
-
         void Size::setWidth(int width)
         {
             if (width < 0)
@@ -125,26 +115,6 @@ namespace Falltergeist
         {
             lhs /= rhs;
             return lhs;
-        }
-
-        Size Size::add(const Size& rhs) const
-        {
-            return *this + rhs;
-        }
-
-        Size Size::sub(const Size& rhs) const
-        {
-            return *this - rhs;
-        }
-
-        Size Size::mul(double rhs) const
-        {
-            return *this * rhs;
-        }
-
-        Size Size::div(double rhs) const
-        {
-            return *this / rhs;
         }
     }
 }

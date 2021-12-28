@@ -34,10 +34,10 @@ namespace Falltergeist
                 direction = 0;
             }
             auto& dir = frm->directions().at(direction);
-            image->setOffset(
+            image->setOffset(Point(
                 frm->offsetX(direction) + dir.shiftX(),
                 frm->offsetY(direction) + dir.shiftY()
-            );
+            ));
 
             return image;
         }
