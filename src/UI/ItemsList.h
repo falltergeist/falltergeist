@@ -77,6 +77,8 @@ namespace Falltergeist
 
                 InventoryItem* _draggedItem = nullptr;
 
+                Point _draggedItemInitialPosition;
+
                 std::vector<std::unique_ptr<InventoryItem>> _inventoryItems;
 
                 InventoryItem::Type _type = InventoryItem::Type::INVENTORY;

@@ -20,16 +20,8 @@ namespace Falltergeist {
         Base::~Base() {
         }
 
-        int Base::x() const {
-            return (position() + offset()).x();
-        }
-
         void Base::setX(int value) {
             setPosition(Point(value, position().y()));
-        }
-
-        int Base::y() const {
-            return _position.y() + _offset.y();
         }
 
         void Base::setY(int value) {

@@ -20,9 +20,9 @@ namespace Falltergeist
 
         ItemsList::ItemsList(const Point& pos) : Falltergeist::UI::Base(pos)
         {
-            mouseDownHandler().add( std::bind(&ItemsList::onMouseLeftDown, this, std::placeholders::_1));
+            mouseDownHandler().add(std::bind(&ItemsList::onMouseLeftDown, this, std::placeholders::_1));
             mouseDragStartHandler().add(std::bind(&ItemsList::onMouseDragStart, this, std::placeholders::_1));
-            mouseDragHandler().add(     std::bind(&ItemsList::onMouseDrag, this, std::placeholders::_1));
+            mouseDragHandler().add(std::bind(&ItemsList::onMouseDrag, this, std::placeholders::_1));
             mouseDragStopHandler().add( std::bind(&ItemsList::onMouseDragStop, this, std::placeholders::_1));
         }
 
@@ -50,7 +50,11 @@ namespace Falltergeist
         {
             unsigned int i = 0;
             for (auto& item : _inventoryItems) {
-                Point pos = position() + offset() + Point(0, _slotHeight*i);
+                Point pos = position() + Point(0, _slotHeight*i);
+                if (item.get() == _draggedItem) {
+                    item->render();
+                    continue;
+                }
                 item->setPosition(pos);
                 item->render();
 
@@ -74,13 +78,14 @@ namespace Falltergeist
 
         void ItemsList::onMouseDragStart(Event::Mouse* event)
         {
-            unsigned int index = (event->position().y() - y())/_slotHeight;
+            unsigned int index = (event->position().y() - position().y()) / _slotHeight;
             if (index < _inventoryItems.size()) {
                 Game::Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::NONE);
                 Game::Game::getInstance()->mixer()->playACMSound("sound/sfx/ipickup1.acm");
                 _draggedItem = _inventoryItems.at(index).get();
                 _draggedItem->setType(InventoryItem::Type::DRAG);
-                _draggedItem->setOffset((event->position() - _draggedItem->position()) - (_draggedItem->size() / 2));
+                _draggedItemInitialPosition = _draggedItem->position();
+                _draggedItem->setPosition(event->position() - (_draggedItem->size() / 2.f));
             } else {
                 _draggedItem = nullptr;
             }
@@ -89,7 +94,7 @@ namespace Falltergeist
         void ItemsList::onMouseDrag(Event::Mouse* event)
         {
             if (_draggedItem) {
-                _draggedItem->setOffset(event->position() - _draggedItem->position() - (_draggedItem->size() / 2.f));
+                _draggedItem->setPosition(event->position() - (_draggedItem->size() / 2.f));
             }
         }
 
@@ -98,8 +103,8 @@ namespace Falltergeist
             if (_draggedItem) {
                 Game::Game::getInstance()->mouse()->popState();
                 Game::Game::getInstance()->mixer()->playACMSound("sound/sfx/iputdown.acm");
-                _draggedItem->setOffset(Point(0, 0));
                 _draggedItem->setType(_type);
+                _draggedItem->setPosition(_draggedItemInitialPosition);
                 auto itemevent = std::make_unique<Event::Mouse>(*event, "itemdragstop");
                 emitEvent(std::move(itemevent), itemDragStopHandler());
             }

@@ -26,11 +26,7 @@ namespace Falltergeist
 
                 ~Base() override;
 
-                int x() const;
-
                 void setX(int value);
-
-                int y() const;
 
                 void setY(int value);
 
