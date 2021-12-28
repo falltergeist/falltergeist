@@ -3,27 +3,27 @@
 
 #define GLM_FORCE_RADIANS
 
-#include <glm/gtc/matrix_transform.hpp>
-#include <SDL_image.h>
 #include "../Base/Buffer.h"
 #include "../CrossPlatform.h"
 #include "../Event/State.h"
 #include "../Exception.h"
 #include "../Game/Game.h"
 #include "../Graphics/GLCheck.h"
+#include "../Graphics/IRendererConfig.h"
+#include "../Graphics/IndexBuffer.h"
 #include "../Graphics/Point.h"
 #include "../Graphics/Renderer.h"
+#include "../Graphics/SdlWindow.h"
+#include "../Graphics/Shader.h"
+#include "../Graphics/Texture.h"
 #include "../Graphics/VertexArray.h"
 #include "../Graphics/VertexBuffer.h"
-#include "../Graphics/IndexBuffer.h"
-#include "../Graphics/IRendererConfig.h"
-#include "../Graphics/Shader.h"
-#include "../Graphics/SdlWindow.h"
-#include "../Graphics/Texture.h"
 #include "../Input/Mouse.h"
 #include "../ResourceManager.h"
 #include "../Settings.h"
 #include "../State/State.h"
+#include <SDL_image.h>
+#include <glm/gtc/matrix_transform.hpp>
 
 namespace Falltergeist {
     namespace Graphics {
@@ -68,8 +68,8 @@ namespace Falltergeist {
             _logger->info() << "[RENDERER] " << message + "[OK]" << std::endl;
             SDL_GL_SetSwapInterval(0);
 
-            char *version_string = (char *) glGetString(GL_VERSION);
-            if (version_string[0] - '0' >= 3) { //we have at least gl 3.0
+            char* version_string = (char*)glGetString(GL_VERSION);
+            if (version_string[0] - '0' >= 3) { // we have at least gl 3.0
                 glGetIntegerv(GL_MAJOR_VERSION, &_major);
                 glGetIntegerv(GL_MINOR_VERSION, &_minor);
                 if (_major == 3 && _minor < 2) { // anything lower 3.2
@@ -83,16 +83,22 @@ namespace Falltergeist {
                 _renderpath = RenderPath::OGL21;
             }
 
-            _logger->info() << "[RENDERER] " << "Using OpenGL " << _major << "." << _minor << std::endl;
-            _logger->info() << "[RENDERER] " << "Renderer: " << glGetString(GL_RENDERER) << std::endl;
-            _logger->info() << "[RENDERER] " << "Version string: " << glGetString(GL_VERSION) << std::endl;
-            _logger->info() << "[RENDERER] " << "Vendor: " << glGetString(GL_VENDOR) << std::endl;
+            _logger->info() << "[RENDERER] "
+                            << "Using OpenGL " << _major << "." << _minor << std::endl;
+            _logger->info() << "[RENDERER] "
+                            << "Renderer: " << glGetString(GL_RENDERER) << std::endl;
+            _logger->info() << "[RENDERER] "
+                            << "Version string: " << glGetString(GL_VERSION) << std::endl;
+            _logger->info() << "[RENDERER] "
+                            << "Vendor: " << glGetString(GL_VENDOR) << std::endl;
             switch (_renderpath) {
                 case RenderPath::OGL21:
-                    _logger->info() << "[RENDERER] " << "Render path: OpenGL 2.1" << std::endl;
+                    _logger->info() << "[RENDERER] "
+                                    << "Render path: OpenGL 2.1" << std::endl;
                     break;
                 case RenderPath::OGL32:
-                    _logger->info() << "[RENDERER] " << "Render path: OpenGL 3.0+" << std::endl;
+                    _logger->info() << "[RENDERER] "
+                                    << "Render path: OpenGL 3.0+" << std::endl;
                     break;
                 default:
                     break;
@@ -114,45 +120,43 @@ namespace Falltergeist {
                 case GLEW_OK:
                     break;
                 default:
-                    throw Exception(message + "[FAIL]: " + std::string((char *) glewGetErrorString(glewError)));
+                    throw Exception(message + "[FAIL]: " + std::string((char*)glewGetErrorString(glewError)));
             }
 
             _logger->info() << "[RENDERER] " << message + "[OK]" << std::endl;
-            _logger->info() << "[RENDERER] " << "Using GLEW " << glewGetString(GLEW_VERSION) << std::endl;
+            _logger->info() << "[RENDERER] "
+                            << "Using GLEW " << glewGetString(GLEW_VERSION) << std::endl;
 
-            _logger->info() << "[RENDERER] " << "Extensions: " << std::endl;
+            _logger->info() << "[RENDERER] "
+                            << "Extensions: " << std::endl;
 
             if (_renderpath == RenderPath::OGL32) {
                 GLint count = 0;
                 glGetIntegerv(GL_NUM_EXTENSIONS, &count);
 
                 for (GLint i = 0; i < count; i++) {
-                    _logger->info() << "[RENDERER] " << (const char *) glGetStringi(GL_EXTENSIONS, i) << std::endl;
+                    _logger->info() << "[RENDERER] " << (const char*)glGetStringi(GL_EXTENSIONS, i) << std::endl;
                 }
             } else {
-                _logger->info() << "[RENDERER] " << (const char *) glGetString(GL_EXTENSIONS) << std::endl;
+                _logger->info() << "[RENDERER] " << (const char*)glGetString(GL_EXTENSIONS) << std::endl;
             }
 
-            _logger->info() << "[RENDERER] " << "Loading default shaders" << std::endl;
+            _logger->info() << "[RENDERER] "
+                            << "Loading default shaders" << std::endl;
             ResourceManager::getInstance()->shader("default");
             ResourceManager::getInstance()->shader("sprite");
             ResourceManager::getInstance()->shader("font");
             ResourceManager::getInstance()->shader("animation");
             ResourceManager::getInstance()->shader("tilemap");
             ResourceManager::getInstance()->shader("lightmap");
-            _logger->info() << "[RENDERER] " << "[OK]" << std::endl;
+            _logger->info() << "[RENDERER] "
+                            << "[OK]" << std::endl;
 
-            _logger->info() << "[RENDERER] " << "Generating buffers" << std::endl;
+            _logger->info() << "[RENDERER] "
+                            << "Generating buffers" << std::endl;
 
             // generate projection matrix
-            _MVP = glm::ortho(
-                0.0,
-                static_cast<double>(_rendererConfig->width()),
-                static_cast<double>(_rendererConfig->height()),
-                0.0,
-                -1.0,
-                1.0
-            );
+            _MVP = glm::ortho(0.0, static_cast<double>(_rendererConfig->width()), static_cast<double>(_rendererConfig->height()), 0.0, -1.0, 1.0);
 
             // load egg
             _egg = ResourceManager::getInstance()->texture("data/egg.png");
@@ -209,7 +213,6 @@ namespace Falltergeist {
             _fadeTimer = 0;
         }
 
-
         void Renderer::beginFrame() {
             GL_CHECK(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
             GL_CHECK(glEnable(GL_BLEND));
@@ -228,7 +231,7 @@ namespace Falltergeist {
         void Renderer::screenshot() {
             std::string filename;
             Uint32 rmask = 0, gmask = 0, bmask = 0, amask = 0;
-            SDL_Surface *output = nullptr;
+            SDL_Surface* output = nullptr;
 
             int iter = 0;
             do {
@@ -245,7 +248,6 @@ namespace Falltergeist {
                 return;
             }
 
-
 #if SDL_BYTEORDER == SDL_BIG_ENDIAN
             rmask = 0xff000000;
             gmask = 0x00ff0000;
@@ -259,7 +261,7 @@ namespace Falltergeist {
 #endif
 
             output = SDL_CreateRGBSurface(0, size().width(), size().height(), 32, rmask, gmask, bmask, amask);
-            uint8_t *destPixels = (uint8_t *) output->pixels;
+            uint8_t* destPixels = (uint8_t*)output->pixels;
             Base::Buffer<uint8_t> srcPixels(size().width() * size().height() * 4);
 
             glReadBuffer(GL_BACK);
@@ -267,8 +269,8 @@ namespace Falltergeist {
 
             for (int y = 0; y < static_cast<int>(size().height()); ++y) {
                 for (int x = 0; x < static_cast<int>(size().width()); ++x) {
-                    uint8_t *pDestPix = &destPixels[((size().width() * y) + x) * 4];
-                    uint8_t *pSrcPix = &srcPixels[((size().width() * ((size().height() - 1) - y)) + x) * 4];
+                    uint8_t* pDestPix = &destPixels[((size().width() * y) + x) * 4];
+                    uint8_t* pSrcPix = &srcPixels[((size().width() * ((size().height() - 1) - y)) + x) * 4];
                     pDestPix[0] = pSrcPix[0];
                     pDestPix[1] = pSrcPix[1];
                     pDestPix[2] = pSrcPix[2];
@@ -296,14 +298,12 @@ namespace Falltergeist {
         void Renderer::drawRect(int x, int y, int w, int h, SDL_Color color) {
             std::vector<glm::vec2> vertices;
 
-            glm::vec4 fcolor = glm::vec4((float) color.r / 255.0f, (float) color.g / 255.0f, (float) color.b / 255.0f,
-                                         (float) color.a / 255.0f);
+            glm::vec4 fcolor = glm::vec4((float)color.r / 255.0f, (float)color.g / 255.0f, (float)color.b / 255.0f, (float)color.a / 255.0f);
 
-            vertices.push_back(glm::vec2((float) x, (float) y));
-            vertices.push_back(glm::vec2((float) x, (float) y + (float) h));
-            vertices.push_back(glm::vec2((float) x + (float) w, (float) y));
-            vertices.push_back(glm::vec2((float) x + (float) w, (float) y + (float) h));
-
+            vertices.push_back(glm::vec2((float)x, (float)y));
+            vertices.push_back(glm::vec2((float)x, (float)y + (float)h));
+            vertices.push_back(glm::vec2((float)x + (float)w, (float)y));
+            vertices.push_back(glm::vec2((float)x + (float)w, (float)y + (float)h));
 
             auto defaultShader = ResourceManager::getInstance()->shader("default");
             defaultShader->use();
@@ -312,17 +312,10 @@ namespace Falltergeist {
 
             VertexArray vertexArray;
 
-            std::unique_ptr<VertexBuffer> coordinatesVertexBuffer = std::make_unique<VertexBuffer>(
-                &vertices[0],
-                vertices.size() * sizeof(glm::vec2),
-                VertexBuffer::UsagePattern::DynamicDraw
-            );
+            std::unique_ptr<VertexBuffer> coordinatesVertexBuffer =
+                std::make_unique<VertexBuffer>(&vertices[0], vertices.size() * sizeof(glm::vec2), VertexBuffer::UsagePattern::DynamicDraw);
             VertexBufferLayout coordinatesVertexBufferLayout;
-            coordinatesVertexBufferLayout.addAttribute({
-                                                           (unsigned int) defaultShader->getAttrib("Position"),
-                                                           2,
-                                                           VertexBufferAttribute::Type::Float
-                                                       });
+            coordinatesVertexBufferLayout.addAttribute({(unsigned int)defaultShader->getAttrib("Position"), 2, VertexBufferAttribute::Type::Float});
             vertexArray.addBuffer(coordinatesVertexBuffer, coordinatesVertexBufferLayout);
 
             static unsigned int indexes[6] = {0, 1, 2, 3, 2, 1};
@@ -331,21 +324,19 @@ namespace Falltergeist {
             GL_CHECK(glDrawElements(GL_TRIANGLES, indexBuffer.count(), GL_UNSIGNED_INT, nullptr));
         }
 
-        void Renderer::drawRect(const Point &pos, const Size &size, SDL_Color color) {
+        void Renderer::drawRect(const Point& pos, const Size& size, SDL_Color color) {
             drawRect(pos.x(), pos.y(), size.width(), size.height(), color);
         }
 
-        void Renderer::drawRectangle(const Rectangle &rectangle, const Texture *const texture) {
-            float x1 = (float) rectangle.position().x();
-            float y1 = (float) rectangle.position().y();
-            float x2 = (float) (rectangle.position().x() + rectangle.size().width());
-            float y2 = (float) (rectangle.position().y() + rectangle.size().height());
+        void Renderer::drawRectangle(const Rectangle& rectangle, const Texture* const texture) {
+            float x1 = (float)rectangle.position().x();
+            float y1 = (float)rectangle.position().y();
+            float x2 = (float)(rectangle.position().x() + rectangle.size().width());
+            float y2 = (float)(rectangle.position().y() + rectangle.size().height());
             std::vector<glm::vec2> vertices = {
                 // aPosition       // aTexturePosition
-                glm::vec2(x1, y1), glm::vec2(0.0, 0.0),
-                glm::vec2(x1, y2), glm::vec2(0.0, 1.0),
-                glm::vec2(x2, y1), glm::vec2(1.0, 0.0),
-                glm::vec2(x2, y2), glm::vec2(1.0, 1.0),
+                glm::vec2(x1, y1), glm::vec2(0.0, 0.0), glm::vec2(x1, y2), glm::vec2(0.0, 1.0),
+                glm::vec2(x2, y1), glm::vec2(1.0, 0.0), glm::vec2(x2, y2), glm::vec2(1.0, 1.0),
             };
 
             auto spriteShader = ResourceManager::getInstance()->shader("video");
@@ -355,11 +346,8 @@ namespace Falltergeist {
             spriteShader->setUniform("uTexture", 0);
             spriteShader->setUniform("uProjectionMatrix", getMVP());
 
-            std::unique_ptr<VertexBuffer> vertexBuffer = std::make_unique<VertexBuffer>(
-                &vertices[0],
-                vertices.size() * sizeof(glm::vec2),
-                VertexBuffer::UsagePattern::StaticDraw
-            );
+            std::unique_ptr<VertexBuffer> vertexBuffer =
+                std::make_unique<VertexBuffer>(&vertices[0], vertices.size() * sizeof(glm::vec2), VertexBuffer::UsagePattern::StaticDraw);
             VertexBufferLayout vertexBufferLayout({
                 {0, 2, VertexBufferAttribute::Type::Float}, // aPosition
                 {1, 2, VertexBufferAttribute::Type::Float}  // aTexturePosition
@@ -373,24 +361,21 @@ namespace Falltergeist {
             GL_CHECK(glDrawElements(GL_TRIANGLES, indexBuffer.count(), GL_UNSIGNED_INT, nullptr));
         }
 
-        void
-        Renderer::drawPartialRectangle(const Point &point, const Rectangle &rectangle, const Texture *const texture) {
-            auto x1 = (float) point.x();
-            auto y1 = (float) point.y();
-            auto x2 = (float) (point.x() + rectangle.size().width());
-            auto y2 = (float) (point.y() + rectangle.size().height());
+        void Renderer::drawPartialRectangle(const Point& point, const Rectangle& rectangle, const Texture* const texture) {
+            auto x1 = (float)point.x();
+            auto y1 = (float)point.y();
+            auto x2 = (float)(point.x() + rectangle.size().width());
+            auto y2 = (float)(point.y() + rectangle.size().height());
 
-            auto dx1 = (float) rectangle.position().x() / (float) texture->size().width();
-            auto dy1 = (float) rectangle.position().y() / (float) texture->size().height();
-            auto dx2 = (float) (rectangle.position().x() + rectangle.size().width()) / (float) texture->size().width();
-            auto dy2 = (float) (rectangle.position().y() + rectangle.size().height()) / (float) texture->size().height();
+            auto dx1 = (float)rectangle.position().x() / (float)texture->size().width();
+            auto dy1 = (float)rectangle.position().y() / (float)texture->size().height();
+            auto dx2 = (float)(rectangle.position().x() + rectangle.size().width()) / (float)texture->size().width();
+            auto dy2 = (float)(rectangle.position().y() + rectangle.size().height()) / (float)texture->size().height();
 
             std::vector<glm::vec2> vertices = {
                 // aPosition       // aTexturePosition
-                glm::vec2(x1, y1), glm::vec2(dx1, dy1),
-                glm::vec2(x1, y2), glm::vec2(dx1, dy2),
-                glm::vec2(x2, y1), glm::vec2(dx2, dy1),
-                glm::vec2(x2, y2), glm::vec2(dx2, dy2),
+                glm::vec2(x1, y1), glm::vec2(dx1, dy1), glm::vec2(x1, y2), glm::vec2(dx1, dy2),
+                glm::vec2(x2, y1), glm::vec2(dx2, dy1), glm::vec2(x2, y2), glm::vec2(dx2, dy2),
             };
 
             auto spriteShader = ResourceManager::getInstance()->shader("video");
@@ -400,15 +385,12 @@ namespace Falltergeist {
             spriteShader->setUniform("uTexture", 0);
             spriteShader->setUniform("uProjectionMatrix", getMVP());
 
-            std::unique_ptr<VertexBuffer> vertexBuffer = std::make_unique<VertexBuffer>(
-                &vertices[0],
-                vertices.size() * sizeof(glm::vec2),
-                VertexBuffer::UsagePattern::StaticDraw
-            );
+            std::unique_ptr<VertexBuffer> vertexBuffer =
+                std::make_unique<VertexBuffer>(&vertices[0], vertices.size() * sizeof(glm::vec2), VertexBuffer::UsagePattern::StaticDraw);
             VertexBufferLayout vertexBufferLayout({
-                                                      {0, 2, VertexBufferAttribute::Type::Float}, // aPosition
-                                                      {1, 2, VertexBufferAttribute::Type::Float}  // aTexturePosition
-                                                  });
+                {0, 2, VertexBufferAttribute::Type::Float}, // aPosition
+                {1, 2, VertexBufferAttribute::Type::Float}  // aTexturePosition
+            });
             VertexArray vertexArray;
             vertexArray.addBuffer(vertexBuffer, vertexBufferLayout);
 
@@ -418,23 +400,13 @@ namespace Falltergeist {
             GL_CHECK(glDrawElements(GL_TRIANGLES, indexBuffer.count(), GL_UNSIGNED_INT, nullptr));
         }
 
-        void Renderer::drawRectangle(const Rectangle &rectangle, const Texture *const texture, const Texture *const egg,
-                                     const Shader *const shader) {
-            glm::vec2 vertices[4] = {
-                glm::vec2((float) rectangle.position().x(), (float) rectangle.position().y()),
-                glm::vec2((float) rectangle.position().x(),
-                          (float) (rectangle.position().y() + rectangle.size().height())),
-                glm::vec2((float) (rectangle.position().x() + rectangle.size().width()),
-                          (float) rectangle.position().y()),
-                glm::vec2((float) (rectangle.position().x() + rectangle.size().width()),
-                          (float) (rectangle.position().y() + rectangle.size().height()))
-            };
-            glm::vec2 UV[4] = {
-                glm::vec2(0.0, 0.0),
-                glm::vec2(0.0, 1.0),
-                glm::vec2(1.0, 0.0),
-                glm::vec2(1.0, 1.0)
-            };
+        void Renderer::drawRectangle(const Rectangle& rectangle, const Texture* const texture, const Texture* const egg, const Shader* const shader) {
+            glm::vec2 vertices[4] = {glm::vec2((float)rectangle.position().x(), (float)rectangle.position().y()),
+                                     glm::vec2((float)rectangle.position().x(), (float)(rectangle.position().y() + rectangle.size().height())),
+                                     glm::vec2((float)(rectangle.position().x() + rectangle.size().width()), (float)rectangle.position().y()),
+                                     glm::vec2((float)(rectangle.position().x() + rectangle.size().width()),
+                                               (float)(rectangle.position().y() + rectangle.size().height()))};
+            glm::vec2 UV[4] = {glm::vec2(0.0, 0.0), glm::vec2(0.0, 1.0), glm::vec2(1.0, 0.0), glm::vec2(1.0, 1.0)};
 
             shader->use();
 
@@ -443,31 +415,17 @@ namespace Falltergeist {
 
             VertexArray vertexArray;
 
-            std::unique_ptr<VertexBuffer> coordinatesVertexBuffer = std::make_unique<VertexBuffer>(
-                &vertices[0],
-                sizeof(vertices),
-                VertexBuffer::UsagePattern::DynamicDraw
-            );
+            std::unique_ptr<VertexBuffer> coordinatesVertexBuffer =
+                std::make_unique<VertexBuffer>(&vertices[0], sizeof(vertices), VertexBuffer::UsagePattern::DynamicDraw);
 
             VertexBufferLayout coordinatesVertexBufferLayout;
-            coordinatesVertexBufferLayout.addAttribute({
-                                                           (unsigned int) shader->getAttrib("Position"),
-                                                           2,
-                                                           VertexBufferAttribute::Type::Float
-                                                       });
+            coordinatesVertexBufferLayout.addAttribute({(unsigned int)shader->getAttrib("Position"), 2, VertexBufferAttribute::Type::Float});
             vertexArray.addBuffer(coordinatesVertexBuffer, coordinatesVertexBufferLayout);
 
-            std::unique_ptr<VertexBuffer> textureCoordinatesVertexBuffer = std::make_unique<VertexBuffer>(
-                &UV[0],
-                sizeof(UV),
-                VertexBuffer::UsagePattern::DynamicDraw
-            );
+            std::unique_ptr<VertexBuffer> textureCoordinatesVertexBuffer =
+                std::make_unique<VertexBuffer>(&UV[0], sizeof(UV), VertexBuffer::UsagePattern::DynamicDraw);
             VertexBufferLayout textureCoordinatesVertexBufferLayout;
-            textureCoordinatesVertexBufferLayout.addAttribute({
-                                                                  (unsigned int) shader->getAttrib("TexCoord"),
-                                                                  2,
-                                                                  VertexBufferAttribute::Type::Float
-                                                              });
+            textureCoordinatesVertexBufferLayout.addAttribute({(unsigned int)shader->getAttrib("TexCoord"), 2, VertexBufferAttribute::Type::Float});
             vertexArray.addBuffer(textureCoordinatesVertexBuffer, textureCoordinatesVertexBufferLayout);
 
             static unsigned int indexes[6] = {0, 1, 2, 3, 2, 1};
@@ -476,29 +434,20 @@ namespace Falltergeist {
             GL_CHECK(glDrawElements(GL_TRIANGLES, indexBuffer.count(), GL_UNSIGNED_INT, nullptr));
         }
 
-        void
-        Renderer::drawPartialRectangle(const Point &point, const Rectangle &rectangle, const Texture *const texture,
-                                       const Texture *const egg, const Shader *const shader) {
-            glm::vec2 vertices[4] = {
-                glm::vec2((float) point.x(), (float) point.y()),
-                glm::vec2((float) point.x(), (float) (point.y() + rectangle.size().height())),
-                glm::vec2((float) (point.x() + rectangle.size().width()), (float) point.y()),
-                glm::vec2((float) (point.x() + rectangle.size().width()),
-                          (float) (point.y() + rectangle.size().height()))
-            };
-            glm::vec2 UV[4] = {
-                glm::vec2((float) rectangle.position().x() / (float) texture->size().width(),
-                          (float) rectangle.position().y() / (float) texture->size().height()),
-                glm::vec2((float) rectangle.position().x() / (float) texture->size().width(),
-                          (float) (rectangle.position().y() + rectangle.size().height()) /
-                          (float) texture->size().height()),
-                glm::vec2(
-                    (float) (rectangle.position().x() + rectangle.size().width()) / (float) texture->size().width(),
-                    (float) rectangle.position().y() / (float) texture->size().height()),
-                glm::vec2(
-                    (float) (rectangle.position().x() + rectangle.size().width()) / (float) texture->size().width(),
-                    (float) (rectangle.position().y() + rectangle.size().height()) / (float) texture->size().height())
-            };
+        void Renderer::drawPartialRectangle(const Point& point, const Rectangle& rectangle, const Texture* const texture, const Texture* const egg,
+                                            const Shader* const shader) {
+            glm::vec2 vertices[4] = {glm::vec2((float)point.x(), (float)point.y()),
+                                     glm::vec2((float)point.x(), (float)(point.y() + rectangle.size().height())),
+                                     glm::vec2((float)(point.x() + rectangle.size().width()), (float)point.y()),
+                                     glm::vec2((float)(point.x() + rectangle.size().width()), (float)(point.y() + rectangle.size().height()))};
+            glm::vec2 UV[4] = {glm::vec2((float)rectangle.position().x() / (float)texture->size().width(),
+                                         (float)rectangle.position().y() / (float)texture->size().height()),
+                               glm::vec2((float)rectangle.position().x() / (float)texture->size().width(),
+                                         (float)(rectangle.position().y() + rectangle.size().height()) / (float)texture->size().height()),
+                               glm::vec2((float)(rectangle.position().x() + rectangle.size().width()) / (float)texture->size().width(),
+                                         (float)rectangle.position().y() / (float)texture->size().height()),
+                               glm::vec2((float)(rectangle.position().x() + rectangle.size().width()) / (float)texture->size().width(),
+                                         (float)(rectangle.position().y() + rectangle.size().height()) / (float)texture->size().height())};
 
             shader->use();
             texture->bind(0);
@@ -506,30 +455,16 @@ namespace Falltergeist {
 
             VertexArray vertexArray;
 
-            std::unique_ptr<VertexBuffer> coordinatesVertexBuffer = std::make_unique<VertexBuffer>(
-                &vertices[0],
-                sizeof(vertices),
-                VertexBuffer::UsagePattern::DynamicDraw
-            );
+            std::unique_ptr<VertexBuffer> coordinatesVertexBuffer =
+                std::make_unique<VertexBuffer>(&vertices[0], sizeof(vertices), VertexBuffer::UsagePattern::DynamicDraw);
             VertexBufferLayout coordinatesVertexBufferLayout;
-            coordinatesVertexBufferLayout.addAttribute({
-                                                           (unsigned int) shader->getAttrib("Position"),
-                                                           2,
-                                                           VertexBufferAttribute::Type::Float
-                                                       });
+            coordinatesVertexBufferLayout.addAttribute({(unsigned int)shader->getAttrib("Position"), 2, VertexBufferAttribute::Type::Float});
             vertexArray.addBuffer(coordinatesVertexBuffer, coordinatesVertexBufferLayout);
 
-            std::unique_ptr<VertexBuffer> textureCoordinatesVertexBuffer = std::make_unique<VertexBuffer>(
-                &UV[0],
-                sizeof(UV),
-                VertexBuffer::UsagePattern::DynamicDraw
-            );
+            std::unique_ptr<VertexBuffer> textureCoordinatesVertexBuffer =
+                std::make_unique<VertexBuffer>(&UV[0], sizeof(UV), VertexBuffer::UsagePattern::DynamicDraw);
             VertexBufferLayout textureCoordinatesVertexBufferLayout;
-            textureCoordinatesVertexBufferLayout.addAttribute({
-                                                                  (unsigned int) shader->getAttrib("TexCoord"),
-                                                                  2,
-                                                                  VertexBufferAttribute::Type::Float
-                                                              });
+            textureCoordinatesVertexBufferLayout.addAttribute({(unsigned int)shader->getAttrib("TexCoord"), 2, VertexBufferAttribute::Type::Float});
             vertexArray.addBuffer(textureCoordinatesVertexBuffer, textureCoordinatesVertexBufferLayout);
 
             static unsigned int indexes[6] = {0, 1, 2, 3, 2, 1};
@@ -537,11 +472,9 @@ namespace Falltergeist {
 
             GL_CHECK(glDrawElements(GL_TRIANGLES, indexBuffer.count(), GL_UNSIGNED_INT, nullptr));
         }
-
 
         glm::vec4 Renderer::fadeColor() {
-            return glm::vec4((float) _fadeColor.r / 255.0, (float) _fadeColor.g / 255.0, (float) _fadeColor.b / 255.0,
-                             (float) _fadeColor.a / 255.0);
+            return glm::vec4((float)_fadeColor.r / 255.0, (float)_fadeColor.g / 255.0, (float)_fadeColor.b / 255.0, (float)_fadeColor.a / 255.0);
         }
 
         int32_t Renderer::maxTextureSize() {
@@ -549,7 +482,7 @@ namespace Falltergeist {
             return _maxTexSize;
         }
 
-        Texture *Renderer::egg() {
+        Texture* Renderer::egg() {
             return _egg;
         }
 

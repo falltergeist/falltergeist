@@ -1,68 +1,72 @@
 #pragma once
 
-#include <string>
 #include "../UI/Base.h"
 #include "../UI/ImageList.h"
+#include <string>
 
-namespace Falltergeist
-{
-    namespace Event
-    {
+namespace Falltergeist {
+    namespace Event {
         class Mouse;
     }
-    namespace UI
-    {
-        class Slider : public Falltergeist::UI::Base
-        {
-            public:
-                Slider(const Point& pos, std::unique_ptr<Image> imageOn, std::unique_ptr<Image> imageOff);
-                virtual ~Slider() = default;
+    namespace UI {
+        class Slider : public Falltergeist::UI::Base {
+        public:
+            Slider(const Point& pos, std::unique_ptr<Image> imageOn, std::unique_ptr<Image> imageOff);
 
-                void handle(Event::Event* event) override;
+            virtual ~Slider() = default;
 
-                const Size& size() const override;
+            const Size& size() const override;
 
-                bool opaque(const Point &pos) override;
+            bool opaque(const Point& pos) override;
 
-                void render(bool eggTransparency) override;
+            void render(bool eggTransparency) override;
 
-                double minValue() const;
-                void setMinValue(double value);
+            double minValue() const;
 
-                double maxValue() const;
-                void setMaxValue(double value);
+            void setMinValue(double value);
 
-                double value() const;
-                void setValue(double value);
+            double maxValue() const;
 
-                Event::Handler& changeHandler();
+            void setMaxValue(double value);
 
-            private:
-                const int SLIDE_WIDTH = 218;
+            double value() const;
 
-                const int THUMB_WIDTH = 21;
+            void setValue(double value);
 
-                std::unique_ptr<Image> imageOn;
+            Event::Handler& changeHandler();
 
-                std::unique_ptr<Image> imageOff;
+        private:
+            Size _sliderSize = Size(241, 14);
 
-                double _minValue = 0.0;
+            Point _sliderOffset = Point(0, 0);
 
-                double _maxValue = 1.0;
+            Size _thumbSize = Size(21, 14);
 
-                double _value = 0.0;
+            std::unique_ptr<Image> _imageOn;
 
-                std::string _downSound;
+            std::unique_ptr<Image> _imageOff;
 
-                std::string _upSound;
+            double _minValue = 0.0;
 
-                Event::Handler _changeHandler;
+            double _maxValue = 1.0;
 
-                void _onDrag(Event::Mouse* event);
+            double _value = 0.0;
 
-                void _onLeftButtonDown(Event::Mouse* event);
+            std::string _downSound;
 
-                void _onLeftButtonUp(Event::Mouse* event);
+            std::string _upSound;
+
+            Event::Handler _changeHandler;
+
+            void _onDrag(Event::Mouse* event);
+
+            void _onMouseDown(Event::Mouse* event);
+
+            void _onMouseUp(Event::Mouse* event);
+
+            double _offsetToValue(const Point& offset);
+
+            Point _valueToOffset(double value);
         };
     }
 }

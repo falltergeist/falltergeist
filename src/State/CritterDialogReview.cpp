@@ -98,7 +98,7 @@ namespace Falltergeist
 
             auto answer = new UI::TextArea(0, 0);
             answer->setWidth(316);
-            answer->setOffset(26,0);
+            answer->setOffset(Point(26, 0));
             answer->setWordWrap(true);
             answer->setFont("font1.aaf", {0x74,0x74, 0x74, 0xff});
             answer->setText(value);
@@ -114,11 +114,11 @@ namespace Falltergeist
             crName->setWidth(340);
             crName->setWordWrap(true);
             crName->setFont("font1.aaf", {0x3f,0xf8, 0x00, 0xff});
-            crName->setText(_critterName+":");
+            crName->setText(_critterName + ":");
 
             auto question = new UI::TextArea(0, 0);
             question->setWidth(316);
-            question->setOffset(26,0);
+            question->setOffset(Point(26, 0));
             question->setWordWrap(true);
             question->setFont("font1.aaf", {0x00,0xa4, 0x00, 0xff});
             question->setText(value);
@@ -126,7 +126,6 @@ namespace Falltergeist
             auto list = dynamic_cast<UI::TextAreaList*>(getUI("list"));
             list->addArea(std::unique_ptr<UI::TextArea>(crName));
             list->addArea(std::unique_ptr<UI::TextArea>(question));
-
         }
     }
 }

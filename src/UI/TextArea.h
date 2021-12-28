@@ -56,6 +56,7 @@ namespace Falltergeist
              * Creates TextArea as copy of another TextArea, placed at the given position (0,0 by default).
              */
             TextArea(const TextArea& textArea, Point pos = Point());
+
             ~TextArea() override;
 
             /**
@@ -74,15 +75,18 @@ namespace Falltergeist
             void appendText(const std::string& text);
 
             HorizontalAlign horizontalAlign() const;
+
             void setHorizontalAlign(HorizontalAlign align);
 
             VerticalAlign verticalAlign() const;
+
             void setVerticalAlign(VerticalAlign align);
 
             /**
              * Size of text area. It's either fixed value given to setSize() or previously calculated size.
              */
             const Size& size() const override;
+
             /**
              * Sets fixed size of TextArea. If this is not (0, 0) - calls to size() will always return this value,
              * regardless of actual width/height of TextArea on screen.
@@ -118,6 +122,7 @@ namespace Falltergeist
              * Top and left text padding.
              */
             const Size& paddingTopLeft() const;
+
             /**
              * Sets top and left text padding, in pixels, relative to TextArea position.
              */
@@ -127,6 +132,7 @@ namespace Falltergeist
              * Bottom and right text padding.
              */
             const Size& paddingBottomRight() const;
+
             /**
              * Sets bottom and right text padding, ix pixels, relative to TextArea position + size.
              * Has no effect if size is not set.
@@ -164,20 +170,23 @@ namespace Falltergeist
              * Current line offset.
              */
             int lineOffset() const;
+
             /**
              * Sets number of lines to adjust vertical position. Positive - up, negative - down.
              */
             void setLineOffset(int);
 
             const std::vector<int>& customLineShifts() const;
+
             /**
              * Sets custom horizontal shifting for each if displayed line. This is applied after alignment and doesn't affect TextArea size.
              */
             void setCustomLineShifts(std::vector<int> shifts);
 
-
             Graphics::Font* font();
+
             void setFont(Graphics::Font* font);
+
             void setFont(Graphics::Font* font, SDL_Color color);
 
             /**
@@ -200,10 +209,12 @@ namespace Falltergeist
              * Appends given string to current text.
              */
             TextArea& operator<<(const std::string& text);
+
             /**
              * Appends string representation of given number.
              */
             TextArea& operator<<(unsigned value);
+
             /**
              * Appends string representation of given number.
              */
@@ -213,10 +224,12 @@ namespace Falltergeist
              * Appends given string to current text.
              */
             TextArea& operator+=(const std::string& text);
+
             /**
              * Appends string representation of given number.
              */
             TextArea& operator+=(unsigned value);
+
             /**
              * Appends string representation of given number.
              */
@@ -226,25 +239,26 @@ namespace Falltergeist
              * Replaces text content.
              */
             TextArea& operator=(const std::string& text);
+
             /**
              * Replaces content with string representation of given number.
              */
             TextArea& operator=(unsigned value);
+
             /**
              * Replaces content with string representation of given number.
              */
             TextArea& operator=(signed value);
 
         private:
-
             struct Line
             {
                 // line width in pixels
                 int width = 0;
+
                 std::vector<Graphics::TextSymbol> symbols;
 
-                bool operator < (const Line& rhs) const
-                {
+                bool operator < (const Line& rhs) const {
                     return width < rhs.width;
                 }
             };
@@ -255,10 +269,13 @@ namespace Falltergeist
             bool _changed = true;
 
             std::vector<Graphics::TextSymbol> _symbols;
+
             std::string _text;
+
             Graphics::Font* _font = nullptr;
 
             HorizontalAlign _horizontalAlign = HorizontalAlign::LEFT;
+
             VerticalAlign _verticalAlign = VerticalAlign::TOP;
 
             /**
@@ -270,6 +287,7 @@ namespace Falltergeist
              * Real size of TextArea on screen, as determined by previous _updateSymbols() call.
              */
             Size _calculatedSize;
+
             /**
              * Lines of text. Cleared along with _changed flag when it is required to recalculate symbol positions.
              */
@@ -280,14 +298,20 @@ namespace Falltergeist
             bool _wordWrap = false;
 
             Size _paddingTopLeft, _paddingBottomRight;
+
             std::vector<int> _customLineShifts;
 
             // TODO: implement
             SDL_Color _backgroundColor = {0,0,0,0};
+
             // TODO: should be white, and properly set to green in states/ui
             SDL_Color _color = {0x3f, 0xf8, 0x00, 0xff};
+
             SDL_Color _outlineColor = {0,0,0,0};
+
             unsigned int _timestampCreated = 0;
+
+            Graphics::TextArea _textArea;
 
             /**
              * Update symbols, if needed.
@@ -305,7 +329,6 @@ namespace Falltergeist
              */
             void _needUpdate(bool lines = false);
 
-            Graphics::TextArea _textArea;
             void _updateBuffers();
         };
     }

@@ -16,6 +16,7 @@ namespace Falltergeist
         {
             public:
                 Image(std::unique_ptr<Graphics::Sprite> sprite);
+
                 virtual ~Image() = default;
 
                 virtual void render(bool eggTransparency = false) override;

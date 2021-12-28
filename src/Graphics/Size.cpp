@@ -1,150 +1,98 @@
 #include "../Graphics/Size.h"
 
-namespace Falltergeist
-{
-    namespace Graphics
-    {
-        Size::Size(int width, int height)
-        {
+namespace Falltergeist {
+    namespace Graphics {
+        Size::Size(int width, int height) {
             setWidth(width);
             setHeight(height);
         }
 
-        Size::Size(const Point& rhs)
-        {
+        Size::Size(const Point& rhs) {
             *this = rhs;
         }
 
-        Size& Size::operator =(const Point& rhs)
-        {
+        Size& Size::operator=(const Point& rhs) {
             setWidth(rhs.x());
             setHeight(rhs.y());
             return *this;
         }
 
-        Size::operator Point() const
-        {
+        Size::operator Point() const {
             return Point(_width, _height);
         }
 
-        int Size::width() const
-        {
+        int Size::width() const {
             return _width;
         }
 
-        int Size::height() const
-        {
+        int Size::height() const {
             return _height;
         }
 
-        /*int& Size::rwidth()
-        {
-            return _width;
-        }
-
-        int& Size::rheight()
-        {
-            return _height;
-        }*/
-
-        void Size::setWidth(int width)
-        {
-            if (width < 0)
-            {
+        void Size::setWidth(int width) {
+            if (width < 0) {
                 width = 0;
             }
             _width = width;
         }
 
-        void Size::setHeight(int height)
-        {
-            if (height < 0)
-            {
+        void Size::setHeight(int height) {
+            if (height < 0) {
                 height = 0;
             }
             _height = height;
         }
 
-        Size& Size::operator +=(const Size& rhs)
-        {
+        Size& Size::operator+=(const Size& rhs) {
             setWidth(_width + rhs._width);
             setHeight(_height + rhs._height);
             return *this;
         }
 
-        Size& Size::operator -=(const Size& rhs)
-        {
+        Size& Size::operator-=(const Size& rhs) {
             setWidth(_width - rhs._width);
             setHeight(_height - rhs._height);
             return *this;
         }
 
-        Size& Size::operator *=(double rhs)
-        {
+        Size& Size::operator*=(double rhs) {
             setWidth((int)(_width * rhs));
             setHeight((int)(_height * rhs));
             return *this;
         }
 
-        Size& Size::operator /=(double rhs)
-        {
+        Size& Size::operator/=(double rhs) {
             setWidth(static_cast<int>(static_cast<float>(_width) / rhs));
             setHeight(static_cast<int>(static_cast<float>(_height) / rhs));
             return *this;
         }
 
-        bool Size::operator ==(const Size& rhs) const
-        {
+        bool Size::operator==(const Size& rhs) const {
             return _width == rhs._width && _height == rhs._height;
         }
 
-        bool Size::operator !=(const Size& rhs) const
-        {
+        bool Size::operator!=(const Size& rhs) const {
             return !(*this == rhs);
         }
 
-        Size operator +(Size lhs, const Size& rhs)
-        {
+        Size operator+(Size lhs, const Size& rhs) {
             lhs += rhs;
             return lhs;
         }
 
-        Size operator -(Size lhs, const Size& rhs)
-        {
+        Size operator-(Size lhs, const Size& rhs) {
             lhs -= rhs;
             return lhs;
         }
 
-        Size operator *(Size lhs, double rhs)
-        {
+        Size operator*(Size lhs, double rhs) {
             lhs *= rhs;
             return lhs;
         }
 
-        Size operator /(Size lhs, double rhs)
-        {
+        Size operator/(Size lhs, double rhs) {
             lhs /= rhs;
             return lhs;
-        }
-
-        Size Size::add(const Size& rhs) const
-        {
-            return *this + rhs;
-        }
-
-        Size Size::sub(const Size& rhs) const
-        {
-            return *this - rhs;
-        }
-
-        Size Size::mul(double rhs) const
-        {
-            return *this * rhs;
-        }
-
-        Size Size::div(double rhs) const
-        {
-            return *this / rhs;
         }
     }
 }

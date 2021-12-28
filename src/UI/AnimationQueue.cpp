@@ -1,92 +1,67 @@
-#include <memory>
+#include "../UI/AnimationQueue.h"
 #include "../Event/Event.h"
 #include "../UI/Animation.h"
-#include "../UI/AnimationQueue.h"
+#include <memory>
 
-namespace Falltergeist
-{
-    namespace UI
-    {
-        AnimationQueue::AnimationQueue() : Base(Point(0, 0))
-        {
+namespace Falltergeist {
+    namespace UI {
+        AnimationQueue::AnimationQueue() : Base(Point(0, 0)) {
         }
 
-        AnimationQueue::~AnimationQueue()
-        {
-            clear();
-        }
-
-        std::vector<std::unique_ptr<Animation>>& AnimationQueue::animations()
-        {
+        std::vector<std::unique_ptr<Animation>>& AnimationQueue::animations() {
             return _animations;
         }
 
-        void AnimationQueue::clear()
-        {
+        void AnimationQueue::clear() {
             _currentAnimation = 0;
             _playing = false;
             _repeat = false;
             _animations.clear();
         }
 
-        void AnimationQueue::stop()
-        {
+        void AnimationQueue::stop() {
             _playing = false;
             _currentAnimation = 0;
             currentAnimation()->stop();
         }
 
-        void AnimationQueue::start()
-        {
+        void AnimationQueue::start() {
             _playing = true;
         }
 
-        void AnimationQueue::setRepeat(bool value)
-        {
+        void AnimationQueue::setRepeat(bool value) {
             _repeat = value;
         }
 
-        void AnimationQueue::render(bool eggTransparency)
-        {
+        void AnimationQueue::render(bool eggTransparency) {
             currentAnimation()->setLightLevel(_lightLevel);
             currentAnimation()->setLight(light());
             currentAnimation()->setTrans(_trans);
-            currentAnimation()->setPosition(this->position());
+            currentAnimation()->setPosition(position() + offset());
             currentAnimation()->render(eggTransparency);
         }
 
-        void AnimationQueue::think(const float &deltaTime)
-        {
-            if (_playing)
-            {
-                if (currentAnimation()->ended())
-                {
+        void AnimationQueue::think(const float& deltaTime) {
+            if (_playing) {
+                if (currentAnimation()->ended()) {
                     // not last animation in queue
-                    if (_currentAnimation < _animations.size() - 1)
-                    {
+                    if (_currentAnimation < _animations.size() - 1) {
                         _currentAnimation++;
                         currentAnimation()->stop(); // rewind
                         currentAnimation()->play();
-                    }
-                    else
-                    {
-                        if (!_repeat)
-                        {
+                    } else {
+                        if (!_repeat) {
                             emitEvent(std::make_unique<Event::Event>("animationEnded"), animationEndedHandler());
                             currentAnimation()->stop();
                             _playing = false;
                             return;
-                        }
-                        else
-                        {
+                        } else {
                             _currentAnimation = 0;
                             currentAnimation()->stop();
                             currentAnimation()->play();
                         }
                     }
-                }
-                else if (!currentAnimation()->playing())
-                {
+                } else if (!currentAnimation()->playing()) {
                     currentAnimation()->play();
                 }
 
@@ -94,27 +69,23 @@ namespace Falltergeist
             }
         }
 
-        Animation* AnimationQueue::currentAnimation() const
-        {
+        Animation* AnimationQueue::currentAnimation() const {
             return _animations.at(_currentAnimation).get();
         }
 
-        const Size& AnimationQueue::size() const
-        {
+        const Size& AnimationQueue::size() const {
             return currentAnimation()->size();
         }
 
-        Point AnimationQueue::offset() const
-        {
+        const Point& AnimationQueue::offset() const {
             return currentAnimation()->offset();
         }
 
-        Event::Handler& AnimationQueue::animationEndedHandler()
-        {
+        Event::Handler& AnimationQueue::animationEndedHandler() {
             return _animationEndedHandler;
         }
 
-        bool AnimationQueue::opaque(const Point &pos) {
+        bool AnimationQueue::opaque(const Point& pos) {
             currentAnimation()->setPosition(this->position());
             return currentAnimation()->opaque(pos);
         }

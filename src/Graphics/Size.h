@@ -2,61 +2,57 @@
 
 #include "../Graphics/Point.h"
 
-namespace Falltergeist
-{
-    namespace Graphics
-    {
+namespace Falltergeist {
+    namespace Graphics {
         /**
          * Represents a Size of a rectangular object: width and height, in pixels.
          */
-        class Size
-        {
-            public:
-                Size() : _width(0), _height(0) {}
+        class Size {
+        public:
+            Size() : _width(0), _height(0) {
+            }
 
-                Size(int width, int height);
+            Size(int width, int height);
 
-                explicit Size(const Point& rhs);
+            explicit Size(const Point& rhs);
 
-                Size& operator=(const Point& rhs);
+            Size& operator=(const Point& rhs);
 
-                // Implicit conversion to Point
-                operator Point() const;
+            // Implicit conversion to Point
+            operator Point() const;
 
-                int width() const;
-                int height() const;
+            int width() const;
 
-                /*int& rwidth();
-                int& rheight();*/
+            int height() const;
 
-                void setWidth(int width);
-                void setHeight(int height);
+            void setWidth(int width);
 
-                Size& operator +=(const Size& rhs);
-                Size& operator -=(const Size& rhs);
-                Size& operator *=(double rhs);
-                Size& operator /=(double rhs);
+            void setHeight(int height);
 
-                bool operator ==(const Size& rhs) const;
-                bool operator !=(const Size& rhs) const;
+            Size& operator+=(const Size& rhs);
 
-                friend Size operator +(Size lhs, const Size& rhs);
-                friend Size operator -(Size lhs, const Size& rhs);
-                friend Size operator *(Size lhs, double rhs);
-                friend Size operator /(Size lhs, double rhs);
+            Size& operator-=(const Size& rhs);
 
-                // Addition of another Size
-                Size add(const Size& rhs) const;
-                // Subtraction of another Size
-                Size sub(const Size& rhs) const;
-                // Multiplication of width/height by given number
-                Size mul(double rhs) const;
-                // Division by given number
-                Size div(double rhs) const;
+            Size& operator*=(double rhs);
 
-            private:
-                int _width;
-                int _height;
+            Size& operator/=(double rhs);
+
+            bool operator==(const Size& rhs) const;
+
+            bool operator!=(const Size& rhs) const;
+
+            friend Size operator+(Size lhs, const Size& rhs);
+
+            friend Size operator-(Size lhs, const Size& rhs);
+
+            friend Size operator*(Size lhs, double rhs);
+
+            friend Size operator/(Size lhs, double rhs);
+
+        private:
+            int _width;
+
+            int _height;
         };
     }
 }

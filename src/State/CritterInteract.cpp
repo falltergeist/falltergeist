@@ -135,7 +135,7 @@ namespace Falltergeist
                 auto head = new UI::AnimationQueue();
                 head->animations().push_back(std::make_unique<UI::Animation>("art/heads/" + headImage));
 
-                int offset = 388/2 - head->currentAnimation()->width()/2;
+                int offset = 388/2 - head->currentAnimation()->size().width()/2;
                 head->setPosition({128+offset, 15});
                 addUI("head",head);
             }

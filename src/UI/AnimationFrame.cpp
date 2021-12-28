@@ -42,16 +42,6 @@ namespace Falltergeist
             _size = size;
         }
 
-        unsigned int AnimationFrame::width() const
-        {
-            return _size.width();
-        }
-
-        unsigned int AnimationFrame::height() const
-        {
-            return _size.height();
-        }
-
         Point AnimationFrame::offset() const
         {
             return _offset;

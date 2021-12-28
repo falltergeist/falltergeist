@@ -22,20 +22,25 @@ namespace Falltergeist
                 ItemsList(const Point& pos);
 
                 void setItems(std::vector<Game::ItemObject*>* items);
+
                 std::vector<Game::ItemObject*>* items();
 
                 std::vector<std::unique_ptr<InventoryItem>>& inventoryItems();
+
                 InventoryItem* draggedItem();
 
                 void update();
 
                 void scrollUp();
+
                 void scrollDown();
 
                 bool canScrollUp();
+
                 bool canScrollDown();
 
                 unsigned int slotsNumber() const;
+
                 void setSlotsNumber(unsigned int value);
 
                 unsigned int slotOffset() const;

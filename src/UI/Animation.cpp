@@ -71,7 +71,7 @@ namespace Falltergeist
                     frame->setDuration((unsigned)std::round(1000.0 / static_cast<double>(frm->framesPerSecond())));
                 }
 
-                x += frame->width()+2;
+                x += frame->size().width()+2;
                 _animationFrames.push_back(std::move(frame));
             }
 
@@ -126,7 +126,7 @@ namespace Falltergeist
                 return;
             }
             auto& frame = _animationFrames.at(_currentFrame);
-            Point offsetPosition = position() + shift() + frame->offset();
+            Point offsetPosition = position() + offset() + shift() + frame->offset();
             _animation->trans(_trans);
             _animation->render(offsetPosition.x(), offsetPosition.y(), _direction, _currentFrame, eggTransparency, light(),
                                _outline, _lightLevel);

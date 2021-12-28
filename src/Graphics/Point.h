@@ -1,59 +1,64 @@
 #pragma once
 
-namespace Falltergeist
-{
-    namespace Graphics
-    {
+namespace Falltergeist {
+    namespace Graphics {
         /**
          * Represents a Point on screen: x and y coordinates, in pixels.
          */
-        class Point
-        {
-            public:
-                Point() : _x(0), _y(0) {}
+        class Point {
+        public:
+            Point() : _x(0), _y(0) {
+            }
 
-                Point(int x, int y) : _x(x), _y(y) {}
+            Point(int x, int y) : _x(x), _y(y) {
+            }
 
-                int x() const;
-                int y() const;
+            int x() const;
 
-                // Reference to x coordinate
-                int& rx();
-                // Reference to y coordinate
-                int& ry();
+            int y() const;
 
-                void setX(int x);
-                void setY(int y);
+            // Reference to x coordinate
+            int& rx();
 
-                Point& operator +=(const Point& rhs);
-                Point& operator -=(const Point& rhs);
-                Point& operator *=(double rhs);
-                Point& operator /=(double rhs);
-                bool operator<(const Point& rhs) const;
-                bool operator>(const Point& rhs) const;
-                bool operator<=(const Point& rhs) const;
-                bool operator>=(const Point& rhs) const;
+            // Reference to y coordinate
+            int& ry();
 
-                bool operator ==(const Point& rhs) const;
-                bool operator !=(const Point& rhs) const;
+            void setX(int x);
 
-                friend Point operator +(Point lhs, const Point& rhs);
-                friend Point operator -(Point lhs, const Point& rhs);
-                friend Point operator *(Point lhs, double rhs);
-                friend Point operator /(Point lhs, double rhs);
+            void setY(int y);
 
-                // Addition of given Point
-                Point add(const Point& rhs) const;
-                // Subtraction of given Point
-                Point sub(const Point& rhs) const;
-                // Multiplication by given number
-                Point mul(double rhs) const;
-                // Division by given number
-                Point div(double rhs) const;
+            Point& operator+=(const Point& rhs);
 
-            private:
-                int _x;
-                int _y;
+            Point& operator-=(const Point& rhs);
+
+            Point& operator*=(double rhs);
+
+            Point& operator/=(double rhs);
+
+            bool operator<(const Point& rhs) const;
+
+            bool operator>(const Point& rhs) const;
+
+            bool operator<=(const Point& rhs) const;
+
+            bool operator>=(const Point& rhs) const;
+
+            bool operator==(const Point& rhs) const;
+
+            bool operator!=(const Point& rhs) const;
+
+            friend Point operator+(Point lhs, const Point& rhs);
+
+            friend Point operator-(Point lhs, const Point& rhs);
+
+            friend Point operator*(Point lhs, double rhs);
+
+            friend Point operator/(Point lhs, double rhs);
+
+        private:
+            int _x;
+
+            int _y;
         };
     }
 }

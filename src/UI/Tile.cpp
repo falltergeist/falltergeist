@@ -15,7 +15,7 @@ namespace Falltergeist
             return _number;
         }
 
-        Point Tile::position() const
+        const Point& Tile::position() const
         {
             return _position;
         }

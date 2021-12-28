@@ -14,28 +14,31 @@ namespace Falltergeist
         {
             public:
                 AnimationFrame();
+
                 ~AnimationFrame();
 
                 Point position() const;
+
                 void setPosition(const Point&);
 
                 unsigned int x() const;
+
                 unsigned int y() const;
 
-
                 const Size& size() const;
+
                 void setSize(const Size&);
 
-                unsigned int width() const;
-                unsigned int height() const;
-
                 Point offset() const;
+
                 void setOffset(const Point&);
 
                 int xOffset() const;
+
                 int yOffset() const;
 
                 unsigned int duration() const;
+
                 void setDuration(unsigned int duration);
 
             protected:
