@@ -28,7 +28,7 @@ namespace Falltergeist
                 PlayerPanel(std::shared_ptr<ILogger> logger);
                 ~PlayerPanel() override;
 
-                Size size() const override;
+                const Size& size() const override;
 
                 void render(bool eggTransparency = false) override;
                 void handle(Event::Event *event) override;

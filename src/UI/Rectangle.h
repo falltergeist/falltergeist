@@ -17,7 +17,7 @@ namespace Falltergeist
                 bool opaque(unsigned int x, unsigned int y);
                 bool opaque(const Point &pos) override;
 
-                Size size() const override;
+                const Size& size() const override;
 
             private:
                 Size _size;

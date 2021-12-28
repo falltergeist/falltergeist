@@ -16,17 +16,11 @@ namespace Falltergeist
     {
         using namespace Base;
 
-        Base::Base(int x, int y) : Base(Point(x, y))
-        {
+        Base::Base(const Point& pos)
+            : Event::EventTarget(Game::Game::getInstance()->eventDispatcher()), _position(pos), _size(Size(0, 0)) {
         }
 
-        Base::Base(const Point& pos) : Event::EventTarget(Game::Game::getInstance()->eventDispatcher())
-        {
-            _position = pos;
-        }
-
-        Base::~Base()
-        {
+        Base::~Base() {
         }
 
         int Base::x() const
@@ -97,9 +91,9 @@ namespace Falltergeist
             setOffset(Point(x, y));
         }
 
-        Size Base::size() const
+        const Size& Base::size() const
         {
-            return Size(0, 0);
+            return _size;
         }
 
         bool Base::opaque(const Point &pos)

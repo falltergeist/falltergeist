@@ -7,7 +7,7 @@ namespace Falltergeist
 {
     namespace UI
     {
-        AnimationQueue::AnimationQueue() : Falltergeist::UI::Base()
+        AnimationQueue::AnimationQueue() : Base(Point(0, 0))
         {
         }
 
@@ -99,7 +99,7 @@ namespace Falltergeist
             return _animations.at(_currentAnimation).get();
         }
 
-        Size AnimationQueue::size() const
+        const Size& AnimationQueue::size() const
         {
             return currentAnimation()->size();
         }

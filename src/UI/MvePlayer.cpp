@@ -48,9 +48,7 @@ namespace Falltergeist
             return data[0] | (data[1] << 8) | (data[2] << 16) | (data[3] << 24);
         }
 
-
-        MvePlayer::MvePlayer(Format::Mve::File* mve) : Falltergeist::UI::Base()
-        {
+        MvePlayer::MvePlayer(Format::Mve::File* mve) : Base(Point(0, 0)) {
             _movie = new Graphics::Movie();
             _mve = mve;
             _mve->setPosition(26);

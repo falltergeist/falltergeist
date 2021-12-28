@@ -32,7 +32,7 @@ namespace Falltergeist
             return _position.y();
         }
 
-        Size AnimationFrame::size() const
+        const Size& AnimationFrame::size() const
         {
             return _size;
         }

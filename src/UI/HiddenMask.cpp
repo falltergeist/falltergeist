@@ -6,9 +6,7 @@ namespace Falltergeist
 {
     namespace UI
     {
-        HiddenMask::HiddenMask(unsigned int width, unsigned int height, int x, int y)// : Image(width, height)
-        {
-            setPosition({x, y});
+        HiddenMask::HiddenMask(unsigned int width, unsigned int height, int x, int y) : Base(Point(x, y)) {
         }
 
         HiddenMask::~HiddenMask()

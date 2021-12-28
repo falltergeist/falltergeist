@@ -3,14 +3,11 @@
 
 namespace Falltergeist
 {
-    using namespace std;
-
     namespace UI
     {
-
         ElevatorProgress::ElevatorProgress(uint8_t progress, const Point& pos) : Base(pos), _progress(progress)
         {
-            _sprite = make_shared<Graphics::Sprite>("art/intrface/gaj000.frm");
+            _sprite = std::make_shared<Graphics::Sprite>("art/intrface/gaj000.frm");
 
             for (auto i = 0; i < 13; i++) {
                 _rects.push_back({0, i * 55 + 1, 92, 56});

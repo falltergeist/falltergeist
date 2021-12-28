@@ -22,9 +22,8 @@ namespace Falltergeist
         class Base : public Event::EventTarget
         {
             public:
-
-                Base(int x = 0, int y = 0);
                 Base(const Point& pos);
+
                 ~Base() override;
 
                 int x() const;
@@ -73,7 +72,7 @@ namespace Falltergeist
                  */
                 virtual void handle(Event::Mouse* mouseEvent);
 
-                virtual Size size() const;
+                virtual const Size& size() const;
 
                 virtual bool opaque(const Point &pos);
 
@@ -121,6 +120,9 @@ namespace Falltergeist
 
                 int _outline = 0;
                 unsigned int _lightLevel;
+
+            private:
+                Size _size;
         };
     }
 }

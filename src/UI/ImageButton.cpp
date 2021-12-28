@@ -7,8 +7,6 @@
 #include "../ResourceManager.h"
 
 namespace Falltergeist {
-    using namespace std;
-
     namespace UI {
         ImageButton::ImageButton(const Point& pos, std::shared_ptr<Graphics::Sprite> buttonUpSprite,
                                  std::shared_ptr<Graphics::Sprite> buttonDownSprite, std::string buttonUpSoundFilename,

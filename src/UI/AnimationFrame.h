@@ -23,7 +23,7 @@ namespace Falltergeist
                 unsigned int y() const;
 
 
-                Size size() const;
+                const Size& size() const;
                 void setSize(const Size&);
 
                 unsigned int width() const;

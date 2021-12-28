@@ -22,11 +22,11 @@ namespace Falltergeist
     {
         using Graphics::Rect;
 
-        Animation::Animation() : Falltergeist::UI::Base()
+        Animation::Animation() : Base(Point(0, 0))
         {
         }
 
-        Animation::Animation(const std::string& frmName, unsigned int direction) : Falltergeist::UI::Base()
+        Animation::Animation(const std::string& frmName, unsigned int direction) : Base(Point(0, 0))
         {
             _direction = direction;
             auto frm = ResourceManager::getInstance()->frmFileType(frmName);
@@ -132,11 +132,10 @@ namespace Falltergeist
                                _outline, _lightLevel);
         }
 
-        Size Animation::size() const
+        const Size& Animation::size() const
         {
             if (!_animation) {
-                Size size;
-                return size;
+                return _zeroSize;
             }
             return _animationFrames.at(_currentFrame)->size();
         }
