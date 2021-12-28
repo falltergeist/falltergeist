@@ -26,6 +26,11 @@ namespace Falltergeist
             mouseDragStopHandler().add( std::bind(&ItemsList::onMouseDragStop, this, std::placeholders::_1));
         }
 
+        void ItemsList::setPosition(const Point& pos) {
+            Base::setPosition(pos);
+            _updatePositions();
+        }
+
         void ItemsList::setItems(std::vector<Game::ItemObject*>* items)
         {
             _items = items;
@@ -44,22 +49,18 @@ namespace Falltergeist
             for (unsigned int i = _slotOffset; i < items()->size() && i != _slotOffset + _slotsNumber; i++) {
                 _inventoryItems.push_back(std::unique_ptr<InventoryItem>(new InventoryItem(items()->at(i))));
             }
+            _updatePositions();
         }
 
         void ItemsList::render(bool eggTransparency)
         {
-            unsigned int i = 0;
             for (auto& item : _inventoryItems) {
-                Point pos = position() + offset() + Point(0, _slotHeight*i);
-                item->setPosition(pos);
                 item->render();
 
                 auto itemObj = item->item();
                 if (itemObj->amount() > 1) {
-                    itemObj->inventoryAmountUi()->setPosition(pos + Point(9, 8));
                     itemObj->inventoryAmountUi()->render();
                 }
-                i++;
             }
         }
 
@@ -80,7 +81,7 @@ namespace Falltergeist
                 Game::Game::getInstance()->mixer()->playACMSound("sound/sfx/ipickup1.acm");
                 _draggedItem = _inventoryItems.at(index).get();
                 _draggedItem->setType(InventoryItem::Type::DRAG);
-                _draggedItem->setOffset(event->position() - _draggedItem->position() - (_draggedItem->size() / 2.f));
+                _draggedItem->setPosition(event->position() - (_draggedItem->size() / 2.f));
             } else {
                 _draggedItem = nullptr;
             }
@@ -89,7 +90,7 @@ namespace Falltergeist
         void ItemsList::onMouseDrag(Event::Mouse* event)
         {
             if (_draggedItem) {
-                _draggedItem->setOffset(event->position() - _draggedItem->position() - (_draggedItem->size() / 2.f));
+                _draggedItem->setPosition(event->position() - (_draggedItem->size() / 2.f));
             }
         }
 
@@ -98,8 +99,8 @@ namespace Falltergeist
             if (_draggedItem) {
                 Game::Game::getInstance()->mouse()->popState();
                 Game::Game::getInstance()->mixer()->playACMSound("sound/sfx/iputdown.acm");
-                _draggedItem->setOffset(Point(0, 0));
                 _draggedItem->setType(_type);
+                _updatePositions();
                 auto itemevent = std::make_unique<Event::Mouse>(*event, "itemdragstop");
                 emitEvent(std::move(itemevent), itemDragStopHandler());
             }
@@ -229,6 +230,22 @@ namespace Falltergeist
                 i++;
             }
             return false;
+        }
+
+        void ItemsList::_updatePositions() {
+            unsigned int i = 0;
+            for (auto& item : _inventoryItems) {
+                Point pos = position() + Point(0, _slotHeight*i);
+                item->setPosition(pos);
+                item->render();
+
+                auto itemObj = item->item();
+                if (itemObj->amount() > 1) {
+                    itemObj->inventoryAmountUi()->setPosition(pos + Point(9, 8));
+                    itemObj->inventoryAmountUi()->render();
+                }
+                i++;
+            }
         }
     }
 }
