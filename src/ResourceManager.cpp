@@ -33,9 +33,9 @@
 #include "Logger.h"
 #include "ResourceManager.h"
 #include "Ini/File.h"
-#include "VFS/DatArchiveDriver.h"
-#include "VFS/NativeDriver.h"
-#include "VFS/MemoryDriver.h"
+#include "falltergeist/vfs/DatArchiveDriver.h"
+#include "falltergeist/vfs/NativeDriver.h"
+#include "falltergeist/vfs/MemoryDriver.h"
 
 // Third-party includes
 #include <SDL_image.h>
@@ -58,8 +58,7 @@ namespace Falltergeist {
     }
 
     ResourceManager::ResourceManager() {
-        auto vfsLogger = std::make_shared<Logger>("VFS");
-        _vfs = std::make_unique<VFS::VFS>(vfsLogger);
+        _vfs = std::make_unique<VFS::VFS>();
 
         for (auto filename : CrossPlatform::findFalloutDataFiles()) {
             std::string path = CrossPlatform::findFalloutDataPath() + "/" + filename;
@@ -68,7 +67,7 @@ namespace Falltergeist {
         }
 
         std::string falltergeistDataPath = CrossPlatform::findFalltergeistDataPath() + "/data";
-        _vfs->addMount("data", std::make_unique<VFS::NativeDriver>(falltergeistDataPath, vfsLogger));
+        _vfs->addMount("data", std::make_unique<VFS::NativeDriver>(falltergeistDataPath));
         _vfs->addMount("cache", std::make_unique<VFS::MemoryDriver>());
     }
 
