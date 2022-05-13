@@ -142,8 +142,3 @@ include(cmake/install/linux.cmake)
 include(cmake/install/apple.cmake)
 
 include(CPack)
-
-get_property(dirs DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY INCLUDE_DIRECTORIES)
-foreach(dir ${dirs})
-    message(STATUS "dir='${dir}'")
-endforeach()
