@@ -106,6 +106,7 @@ else()
 	target_link_libraries(
 		falltergeist
 		${ZLIB_LIBRARIES}
+		${SDL2MAIN_LIBRARY}
 		${SDL2_LIBRARY}
 		${SDL_MIXER_LIBRARY}
 		${SDL_IMAGE_LIBRARY}
