@@ -1,7 +1,7 @@
 # It must be set before project
 set(CMAKE_BUILD_TYPE "Debug" CACHE STRING "Choose the type of build (by default Debug)")
 
-cmake_minimum_required(VERSION 3.8)
+cmake_minimum_required(VERSION 3.19)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake/modules)
 
 project(falltergeist)
@@ -26,24 +26,32 @@ endif()
 find_package(ZLIB REQUIRED)
 if(NOT ZLIB_FOUND)
     message(FATAL_ERROR "zlib library not found")
+else()
+    message("ZLIB found: ${ZLIB_VERSION_STRING}")
 endif(NOT ZLIB_FOUND)
 include_directories(SYSTEM ${ZLIB_INCLUDE_DIRS})
 
 find_package(SDL2 REQUIRED)
 if(NOT SDL2_FOUND)
     message(FATAL_ERROR "SDL2 library not found")
+else()
+    message("SDL2 found: ${SDL2_VERSION}")
 endif(NOT SDL2_FOUND)
-include_directories(SYSTEM ${SDL2_INCLUDE_DIR})
+include_directories(SYSTEM ${SDL2_INCLUDE_DIRS})
 
-find_package(SDL2_mixer REQUIRED)
+find_package(SDL_mixer REQUIRED)
 if(NOT SDLMIXER_FOUND)
-    message(FATAL_ERROR "SDL2_mixer library not found")
+    message(FATAL_ERROR "SDL_mixer library not found")
+else()
+    message("SDL_mixer found: ${SDL_MIXER_VERSION_STRING}")
 endif(NOT SDLMIXER_FOUND)
 include_directories(SYSTEM ${SDL_MIXER_INCLUDE_DIR})
 
-find_package(SDL2_image REQUIRED)
+find_package(SDL_image REQUIRED)
 if(NOT SDLIMAGE_FOUND)
-    message(FATAL_ERROR "SDL2_image library not found")
+    message(FATAL_ERROR "SDL_image library not found")
+else()
+    message("SDL_image found: ${SDL_IMAGE_VERSION_STRING}")
 endif(NOT SDLIMAGE_FOUND)
 include_directories(SYSTEM ${SDL_IMAGE_INCLUDE_DIR})
 
@@ -105,12 +113,12 @@ if (CONAN_LIBS)
 else()
     target_link_libraries(
         ${PROJECT_NAME}
-        ${ZLIB_LIBRARIES}
-        ${SDL2MAIN_LIBRARY}
-        ${SDL2_LIBRARY}
-        ${SDL_MIXER_LIBRARY}
-        ${SDL_IMAGE_LIBRARY}
-        ${OPENGL_gl_LIBRARY}
+        ZLIB::ZLIB
+        SDL2::SDL2main
+        SDL2::SDL2
+        ${SDL_MIXER_LIBRARIES}
+        ${SDL_IMAGE_LIBRARIES}
+        OpenGL::GL
         GLEW::glew
     )
 endif()

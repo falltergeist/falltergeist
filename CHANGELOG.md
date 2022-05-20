@@ -1,5 +1,6 @@
 Under development
 =======================
+- [feature] Get rid of custom CMake modules for SDL (alexeevdv)
 
 0.4.0 (2022-05-20)
 =======================
