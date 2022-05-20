@@ -190,7 +190,12 @@ namespace Falltergeist
                 SDL_ConvertAudio(&cvt);
 
                 // make SDL_mixer chunk
+#if defined(_WIN32) || defined(WIN32)
+                // TODO: look into why cvt.len_ratio is 0 - probably SDL bug?
+                chunk = Mix_QuickLoad_RAW(cvt.buf, cvt.len_cvt);
+#else
                 chunk = Mix_QuickLoad_RAW(cvt.buf, static_cast<uint32_t>(cvt.len * cvt.len_ratio));
+#endif
                 // TODO: make this configurable
                 if (_sfx.size() > 100) {
                     Mix_FreeChunk(_sfx.begin()->second);
