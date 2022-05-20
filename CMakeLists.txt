@@ -5,7 +5,7 @@ cmake_minimum_required(VERSION 3.8)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake/modules)
 
 project(falltergeist)
-set(FALLTERGEIST_VERSION  0.3.1)
+set(FALLTERGEIST_VERSION 0.4.0)
 
 if (USE_CLANG_TIDY)
 	message(STATUS "Using clang-tidy")
