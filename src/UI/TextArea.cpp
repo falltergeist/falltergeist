@@ -18,7 +18,6 @@ namespace Falltergeist
         TextArea::TextArea(const Point& pos) : Base(pos)
         {
             _timestampCreated = SDL_GetTicks();
-
         }
 
         TextArea::TextArea(int x, int y) : TextArea(Point(x, y))
@@ -56,8 +55,7 @@ namespace Falltergeist
         void TextArea::_needUpdate(bool lines)
         {
             _changed = true;
-            if (lines)
-            {
+            if (lines) {
                 _lines.clear();
             }
         }
@@ -104,39 +102,33 @@ namespace Falltergeist
 
         Graphics::Font* TextArea::font()
         {
-            if (!_font)
-            {
+            if (!_font) {
                 _font = ResourceManager::getInstance()->font();
             }
             return _font;
         }
 
-        void TextArea::setFont(Graphics::Font* font)
-        {
+        void TextArea::setFont(Graphics::Font* font) {
             _font = font;
             _needUpdate(true);
         }
 
 
-        void TextArea::setFont(Graphics::Font *font, SDL_Color color)
-        {
+        void TextArea::setFont(Graphics::Font *font, SDL_Color color) {
             setFont(font);
             _color = color;
         }
 
-        void TextArea::setFont(const std::string& fontName, SDL_Color color)
-        {
+        void TextArea::setFont(const std::string& fontName, SDL_Color color) {
             setFont(ResourceManager::getInstance()->font(fontName));
             _color = color;
         }
 
-        std::string TextArea::fontName()
-        {
+        std::string TextArea::fontName() {
             return font()->filename();
         }
 
-        void TextArea::setWordWrap(bool wordWrap)
-        {
+        void TextArea::setWordWrap(bool wordWrap) {
             if (_wordWrap == wordWrap) {
                 return;
             }
@@ -144,8 +136,7 @@ namespace Falltergeist
             _needUpdate(true);
         }
 
-        bool TextArea::wordWrap() const
-        {
+        bool TextArea::wordWrap() const {
             return _wordWrap;
         }
 
