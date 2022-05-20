@@ -5,6 +5,7 @@
 #include "../Event/State.h"
 #include "../functions.h"
 #include "../Game/Game.h"
+#include "../Graphics/Color.h"
 #include "../Graphics/Point.h"
 #include "../Graphics/Renderer.h"
 #include "../Input/Mouse.h"
@@ -69,7 +70,7 @@ namespace Falltergeist
             // LABELS
 
             auto font3_907824ff = ResourceManager::getInstance()->font("font3.aaf");
-            SDL_Color color = {0x90, 0x78, 0x24, 0xff};
+            Graphics::Color color = {0x90, 0x78, 0x24, 0xff};
 
             // LOAD GAME LABEL
             auto saveGameLabel = new UI::TextArea(_t(MSG_LOAD_SAVE, 110), bgX+48, bgY+27);

@@ -5,6 +5,7 @@
 #include "../functions.h"
 #include "../Game/DudeObject.h"
 #include "../Game/Game.h"
+#include "../Graphics/Color.h"
 #include "../Graphics/Renderer.h"
 #include "../Input/Mouse.h"
 #include "../ResourceManager.h"
@@ -174,7 +175,7 @@ namespace Falltergeist
             _addButton("cancel",_imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {backgroundX + 554, backgroundY + 454}));
 
             auto font3_b89c28ff = ResourceManager::getInstance()->font("font3.aaf");
-            SDL_Color color = {0xb8, 0x9c, 0x28, 0xff};
+            Graphics::Color color = {0xb8, 0x9c, 0x28, 0xff};
 
             _addLabel("print", new UI::TextArea(_t(MSG_EDITOR, 103), backgroundX+365, backgroundY+453))->setFont(font3_b89c28ff, color);
             _addLabel("next",  new UI::TextArea(_t(MSG_EDITOR, 100), backgroundX+473, backgroundY+453))->setFont(font3_b89c28ff, color);
@@ -463,30 +464,26 @@ namespace Falltergeist
             {
                 std::string name = it->first;
 
-                SDL_Color font1_3ff800ff = {0x3f, 0xf8, 0x00, 0xff};
-                SDL_Color font1_a0a0a0ff = {0xa0, 0xa0, 0xa0, 0xff};
-                SDL_Color font1_183018ff = {0x18, 0x30, 0x18, 0xff};
+                Graphics::Color font1_3ff800ff = {0x3f, 0xf8, 0x00, 0xff};
+                Graphics::Color font1_a0a0a0ff = {0xa0, 0xa0, 0xa0, 0xff};
+                Graphics::Color font1_183018ff = {0x18, 0x30, 0x18, 0xff};
 
-                if (name.find("stats_") == 0 || name.find("params_") == 0)
-                {
+                if (name.find("stats_") == 0 || name.find("params_") == 0) {
                     it->second->setColor(font1_3ff800ff);
                 }
 
-                if (name.find("skills_") == 0)
-                {
+                if (name.find("skills_") == 0) {
                     unsigned number = atoi(name.substr(7).c_str()) - 1;
                     it->second->setColor(player->skillTagged((SKILL)number) ? font1_a0a0a0ff : font1_3ff800ff);
                 }
 
-                if (name.find("health_") == 0)
-                {
+                if (name.find("health_") == 0) {
                     it->second->setColor(name.compare("health_1") == 0 ? font1_3ff800ff : font1_183018ff);
                 }
             }
 
             // Selected labels colors
-            for(auto it = _labels.begin(); it != _labels.end(); ++it)
-            {
+            for(auto it = _labels.begin(); it != _labels.end(); ++it) {
                 if (_selectedLabel != it->second) {
                     continue;
                 }
@@ -498,17 +495,15 @@ namespace Falltergeist
 
                 _selectedImage  = _images.at(name);
 
-                SDL_Color font1_ffff7fff = {0xff, 0xff, 0x7f, 0xff};
-                SDL_Color font1_ffffffff = {0xff, 0xff, 0xff, 0xff};
-                SDL_Color font1_707820ff = {0x70, 0x78, 0x20, 0xff};
+                Graphics::Color font1_ffff7fff = {0xff, 0xff, 0x7f, 0xff};
+                Graphics::Color font1_ffffffff = {0xff, 0xff, 0xff, 0xff};
+                Graphics::Color font1_707820ff = {0x70, 0x78, 0x20, 0xff};
 
-                if (name.find("stats_") == 0)
-                {
+                if (name.find("stats_") == 0) {
                     it->second->setColor(font1_ffff7fff);
                 }
 
-                if (name.find("params_") == 0)
-                {
+                if (name.find("params_") == 0) {
                     it->second->setColor(font1_ffff7fff);
                     _labels.at(name+"_value")->setColor(font1_ffff7fff);
                 }
@@ -519,27 +514,22 @@ namespace Falltergeist
         //            it->second->setColor(player->trait(number - 1) ? font1_ffffffff : font1_ffff7fff);
         //        }
 
-                if (name.find("skills_") == 0)
-                {
+                if (name.find("skills_") == 0) {
                     unsigned number = atoi(name.substr(7).c_str()) - 1;
                     it->second->setColor(player->skillTagged((SKILL)number) ? font1_ffffffff : font1_ffff7fff);
                     _labels.at(name+"_value")->setColor(player->skillTagged((SKILL)number) ? font1_ffffffff : font1_ffff7fff);
                 }
 
-                if (name.find("health_") == 0)
-                {
+                if (name.find("health_") == 0) {
                     it->second->setColor(name.compare("health_1") == 0 ? font1_ffff7fff : font1_707820ff);
                 }
             }
 
         }
 
-        void PlayerEdit::_onButtonClick(UI::ImageButton* target)
-        {
-            for(auto it = _buttons.begin(); it != _buttons.end(); ++it)
-            {
-                if (it->second == target)
-                {
+        void PlayerEdit::_onButtonClick(UI::ImageButton* target) {
+            for (auto it = _buttons.begin(); it != _buttons.end(); ++it) {
+                if (it->second == target) {
                     std::string name = it->first;
 
                     if (name == "cancel") {
@@ -554,17 +544,13 @@ namespace Falltergeist
 
         void PlayerEdit::onLabelClick(UI::TextArea* target)
         {
-            for(auto it = _labels.begin(); it != _labels.end(); ++it)
-            {
+            for (auto it = _labels.begin(); it != _labels.end(); ++it) {
                 std::string name = it->first;
-                if (it->second == target)
-                {
+                if (it->second == target) {
                     // name.find("traits_") == 0 ||
-                    if (name.find("stats_") == 0 || name.find("skills_") == 0 || name.find("health_") == 0 || name.find("params_") == 0 || name.find("label_") == 0 || name.find("level_") == 0 )
-                    {
+                    if (name.find("stats_") == 0 || name.find("skills_") == 0 || name.find("health_") == 0 || name.find("params_") == 0 || name.find("label_") == 0 || name.find("level_") == 0 ) {
                         std::string label = name;
-                        if (name.find("_value") > 0)
-                        {
+                        if (name.find("_value") > 0) {
                             label = name.substr(0, name.find("_value"));
                         }
                         _selectedLabel = _labels.at(label.c_str());

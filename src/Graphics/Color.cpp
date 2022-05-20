@@ -19,4 +19,8 @@ namespace Falltergeist::Graphics {
     uint8_t Color::alpha() const {
         return _alpha;
     }
+
+    const Color Color::withAlpha(uint8_t alpha) const {
+        return Color(_red, _green, _blue, alpha);
+    }
 }

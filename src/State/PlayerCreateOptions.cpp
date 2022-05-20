@@ -2,6 +2,7 @@
 #include "../Audio/Mixer.h"
 #include "../functions.h"
 #include "../Game/Game.h"
+#include "../Graphics/Color.h"
 #include "../Graphics/Renderer.h"
 #include "../ResourceManager.h"
 #include "../State/ExitConfirm.h"
@@ -55,7 +56,7 @@ namespace Falltergeist
             doneButton->mouseClickHandler().add(       std::bind(&PlayerCreateOptions::onDoneButtonClick, this, std::placeholders::_1));
 
             auto font = ResourceManager::getInstance()->font("font3.aaf");
-            SDL_Color color = {0xb8, 0x9c, 0x28, 0xff};
+            Graphics::Color color = {0xb8, 0x9c, 0x28, 0xff};
 
             // label: save
             auto saveButtonLabel = new UI::TextArea(_t(MSG_EDITOR, 600), backgroundX+8, backgroundY+26);

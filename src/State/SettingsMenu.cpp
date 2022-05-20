@@ -2,6 +2,7 @@
 #include "../Audio/Mixer.h"
 #include "../functions.h"
 #include "../Game/Game.h"
+#include "../Graphics/Color.h"
 #include "../Graphics/Renderer.h"
 #include "../Input/Mouse.h"
 #include "../ResourceManager.h"
@@ -96,7 +97,7 @@ namespace Falltergeist
             addUI("item_highlight",itemHightlightSwitch);
 
             // LABELS
-            SDL_Color color = {0x90, 0x78, 0x24, 0xff};
+            Graphics::Color color = {0x90, 0x78, 0x24, 0xff};
 
             std::string font1_907824ff = "font1.aaf";
             std::string font3_907824ff = "font3.aaf";

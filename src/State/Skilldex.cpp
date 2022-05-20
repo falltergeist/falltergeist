@@ -2,6 +2,7 @@
 #include "../functions.h"
 #include "../Game/DudeObject.h"
 #include "../Game/Game.h"
+#include "../Graphics/Color.h"
 #include "../Graphics/Point.h"
 #include "../Graphics/Renderer.h"
 #include "../Input/Mouse.h"
@@ -101,7 +102,7 @@ namespace Falltergeist
 
             // LABELS
             std::string font = "font3.aaf";
-            SDL_Color color = {0xb8, 0x9c, 0x28, 0xff};
+            Graphics::Color color = {0xb8, 0x9c, 0x28, 0xff};
 
             // label: skilldex (100)
             auto skilldexLabel = new UI::TextArea(_t(MSG_SKILLDEX, 100), backgroundX+56, backgroundY+14);

@@ -98,7 +98,7 @@ namespace Falltergeist
 
                 bool _fadeDone = true;
 
-                SDL_Color _fadeColor = {0, 0, 0, 0};
+                Graphics::Color _fadeColor = {0, 0, 0, 0};
 
                 bool _inmovie = false;
 

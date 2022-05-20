@@ -114,12 +114,12 @@ namespace Falltergeist
         }
 
 
-        void TextArea::setFont(Graphics::Font *font, SDL_Color color) {
+        void TextArea::setFont(Graphics::Font *font, const Graphics::Color &color) {
             setFont(font);
             _color = color;
         }
 
-        void TextArea::setFont(const std::string& fontName, SDL_Color color) {
+        void TextArea::setFont(const std::string& fontName, const Graphics::Color &color) {
             setFont(ResourceManager::getInstance()->font(fontName));
             _color = color;
         }
@@ -140,27 +140,27 @@ namespace Falltergeist
             return _wordWrap;
         }
 
-        void TextArea::setColor(SDL_Color color)
+        void TextArea::setColor(const Graphics::Color &color)
         {
             _color = color;
         }
 
         void TextArea::setOutline(bool outline)
         {
-            _outlineColor.a = outline ? 255 : 0;
+            _outlineColor = outline ? _outlineColor.withAlpha(255) : _outlineColor.withAlpha(0);
         }
 
         bool TextArea::outline() const
         {
-            return _outlineColor.a != 0;
+            return _outlineColor.alpha() != 0;
         }
 
-        void TextArea::setOutlineColor(SDL_Color color)
+        void TextArea::setOutlineColor(const Graphics::Color &color)
         {
             _outlineColor = color;
         }
 
-        SDL_Color TextArea::outlineColor() const
+        const Graphics::Color& TextArea::outlineColor() const
         {
             return _outlineColor;
         }
@@ -392,32 +392,27 @@ namespace Falltergeist
             return _timestampCreated;
         }
 
-        void TextArea::render(bool eggTransparency)
-        {
-            if (_changed)
-            {
+        void TextArea::render(bool eggTransparency) {
+            if (_changed) {
                 _updateSymbols();
             }
 
             auto pos = position();
 
-            _textArea.render(pos,font(),_color, _outlineColor);
+            _textArea.render(pos, font(), _color, _outlineColor);
         }
 
-        TextArea& TextArea::operator<<(const std::string& text)
-        {
+        TextArea& TextArea::operator<<(const std::string& text) {
             appendText(text);
             return *this;
         }
 
-        TextArea& TextArea::operator<<(unsigned value)
-        {
+        TextArea& TextArea::operator<<(unsigned value) {
             appendText(std::to_string(value));
             return *this;
         }
 
-        TextArea& TextArea::operator<<(signed value)
-        {
+        TextArea& TextArea::operator<<(signed value) {
             appendText(std::to_string(value));
             return *this;
         }

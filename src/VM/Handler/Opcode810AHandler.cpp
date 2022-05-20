@@ -1,6 +1,7 @@
 #include <memory>
 #include "../../VM/Handler/Opcode810AHandler.h"
 #include "../../Game/Object.h"
+#include "../../Graphics/Color.h"
 #include "../../ResourceManager.h"
 #include "../../UI/TextArea.h"
 #include "../../VM/Script.h"
@@ -20,7 +21,7 @@ namespace Falltergeist
             {
                 logger->debug() << "[810A] [=] void float_msg(object who, string msg, int type) " << std::endl;
                 int type = _script->dataStack()->popInteger();
-                SDL_Color color = {0x00, 0x00, 0x00, 0xff};
+                Graphics::Color color = {0x00, 0x00, 0x00, 0xff};
                 switch (type) {
                     case -2:
                         // CAPITAL RED LETTERS  FF 00 00

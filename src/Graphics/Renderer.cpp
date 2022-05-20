@@ -186,7 +186,7 @@ namespace Falltergeist {
                     return;
                 }
             }
-            _fadeColor.a = _fadeAlpha;
+            _fadeColor = _fadeColor.withAlpha(_fadeAlpha);
         }
 
         bool Renderer::fading() {
@@ -479,7 +479,12 @@ namespace Falltergeist {
         }
 
         glm::vec4 Renderer::fadeColor() {
-            return glm::vec4((float)_fadeColor.r / 255.0, (float)_fadeColor.g / 255.0, (float)_fadeColor.b / 255.0, (float)_fadeColor.a / 255.0);
+            return glm::vec4(
+                (float)_fadeColor.red() / 255.0,
+                (float)_fadeColor.green() / 255.0,
+                (float)_fadeColor.blue() / 255.0,
+                (float)_fadeColor.alpha() / 255.0
+            );
         }
 
         int32_t Renderer::maxTextureSize() {

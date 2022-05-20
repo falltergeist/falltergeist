@@ -3,6 +3,7 @@
 #include <cstdint>
 #include <string>
 #include <vector>
+#include "../Graphics/Color.h"
 #include "../Graphics/Font.h"
 #include "../Graphics/TextArea.h"
 #include "../UI/Base.h"
@@ -144,7 +145,7 @@ namespace Falltergeist
              */
             void setPadding(const Size& topLeft, const Size& bottomRight);
 
-            void setColor(SDL_Color color);
+            void setColor(const Graphics::Color &color);
 
             /**
              * Whether text outline is currently enabled or not.
@@ -159,12 +160,12 @@ namespace Falltergeist
             /**
              * Current outline color.
              */
-            SDL_Color outlineColor() const;
+            const Graphics::Color& outlineColor() const;
 
             /**
              * Sets text outline color. 0 - disables outline, any other color will enable it.
              */
-            void setOutlineColor(SDL_Color color);
+            void setOutlineColor(const Graphics::Color &color);
 
             /**
              * Current line offset.
@@ -187,12 +188,12 @@ namespace Falltergeist
 
             void setFont(Graphics::Font* font);
 
-            void setFont(Graphics::Font* font, SDL_Color color);
+            void setFont(Graphics::Font* font, const Graphics::Color &color);
 
             /**
              * Sets font by font filename and color.
              */
-            void setFont(const std::string& fontName, SDL_Color color);
+            void setFont(const std::string& fontName, const Graphics::Color &color);
 
             /**
              * Current font filename.
@@ -302,12 +303,12 @@ namespace Falltergeist
             std::vector<int> _customLineShifts;
 
             // TODO: implement
-            SDL_Color _backgroundColor = {0,0,0,0};
+            Graphics::Color _backgroundColor = {0,0,0,0};
 
             // TODO: should be white, and properly set to green in states/ui
-            SDL_Color _color = {0x3f, 0xf8, 0x00, 0xff};
+            Graphics::Color _color = {0x3f, 0xf8, 0x00, 0xff};
 
-            SDL_Color _outlineColor = {0,0,0,0};
+            Graphics::Color _outlineColor = {0,0,0,0};
 
             unsigned int _timestampCreated = 0;
 
