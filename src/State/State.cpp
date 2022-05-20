@@ -1,30 +1,6 @@
-/*
- * Copyright 2012-2018 Falltergeist Developers.
- *
- * This file is part of Falltergeist.
- *
- * Falltergeist is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Falltergeist is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
- */
-
-// Related headers
-#include "../State/State.h"
-
-// C++ standard includes
 #include <algorithm>
 #include <memory>
-
-// Falltergeist includes
+#include "../State/State.h"
 #include "../Event/State.h"
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
@@ -32,13 +8,11 @@
 #include "../UI/SmallCounter.h"
 #include "../UI/TextArea.h"
 
-// Third party includes
-
 namespace Falltergeist
 {
     namespace State
     {
-        State::State() : Event::EventTarget(Game::getInstance()->eventDispatcher())
+        State::State() : Event::EventTarget(Game::Game::getInstance()->eventDispatcher())
         {
             activateHandler().add([this](Event::State* event) {
                 this->onStateActivate(event);
@@ -51,19 +25,15 @@ namespace Falltergeist
             });
         }
 
-        State::~State()
-        {
-        }
-
         void State::init()
         {
             _initialized = true;
         }
 
-        void State::think()
+        void State::think(const float &deltaTime)
         {
             for (auto& ui : _ui) {
-                ui->think();
+                ui->think(deltaTime);
             }
         }
 
@@ -171,7 +141,7 @@ namespace Falltergeist
 
         void State::handle(Event::Event* event)
         {
-            if (event->handled()) {
+            if (event->isHandled()) {
                 return;
             }
             // TODO: maybe make handle() a template function to get rid of dynamic_casts?
@@ -185,7 +155,7 @@ namespace Falltergeist
             }
 
             for (auto it = _ui.rbegin(); it != _ui.rend(); ++it) {
-                if (event->handled()) {
+                if (event->isHandled()) {
                     return;
                 }
                 (*it)->handle(event);
@@ -277,9 +247,9 @@ namespace Falltergeist
             });
 
             if (in) {
-                Game::getInstance()->renderer()->fadeIn(0, 0, 0, 1000);
+                Game::Game::getInstance()->renderer()->fadeIn(0, 0, 0, 1000);
             } else {
-                Game::getInstance()->renderer()->fadeOut(0, 0, 0, 1000);
+                Game::Game::getInstance()->renderer()->fadeOut(0, 0, 0, 1000);
             }
         }
     }

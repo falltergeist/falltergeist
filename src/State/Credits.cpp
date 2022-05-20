@@ -1,42 +1,16 @@
-/*
- * Copyright 2012-2018 Falltergeist Developers.
- *
- * This file is part of Falltergeist.
- *
- * Falltergeist is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Falltergeist is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
- */
-
-// Related headers
-#include "../State/Credits.h"
-
-// C++ standard includes
 #include <sstream>
-
-// Falltergeist includes
+#include "../State/Credits.h"
 #include "../CrossPlatform.h"
 #include "../Event/Keyboard.h"
 #include "../Event/Mouse.h"
 #include "../Event/State.h"
 #include "../Font.h"
-#include "../Format/Dat/MiscFile.h"
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
 #include "../Input/Mouse.h"
 #include "../ResourceManager.h"
 #include "../UI/TextArea.h"
-
-// Third party includes
+#include "../Exception.h"
 
 namespace Falltergeist
 {
@@ -48,25 +22,38 @@ namespace Falltergeist
 
         Credits::~Credits()
         {
+            if (_linePositions != nullptr) {
+                delete[] _linePositions;
+                _linePositions = nullptr;
+            }
         }
 
         void Credits::init()
         {
-            if (_initialized) return;
+            if (_initialized) {
+                return;
+            }
             State::init();
 
             setModal(true);
             setFullscreen(true);
 
-            Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::NONE);
-            auto renderer = Game::getInstance()->renderer();
+            Game::Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::NONE);
+            auto renderer = Game::Game::getInstance()->renderer();
             setPosition(Point((renderer->size().width() - 640) / 2, renderer->size().height()));
 
-            auto credits = ResourceManager::getInstance()->miscFileType("text/english/credits.txt");
-            std::stringstream ss;
-            credits->stream().setPosition(0);
-            ss << &credits->stream();
-            std::string line;
+            auto& vfs = ResourceManager::getInstance()->vfs();
+            auto file = vfs->open("text/english/credits.txt", VFS::IFile::OpenMode::Read);
+            if (!file || !file->isOpened()) {
+                throw Exception("Could not open credits file");
+            }
+
+            std::string content;
+            content.resize(file->size());
+            file->read(content.data(), file->size());
+            vfs->close(file);
+
+            std::istringstream contentStream(content);
 
             auto font_default = ResourceManager::getInstance()->font("font4.aaf");
             SDL_Color default_color = {0x90, 0x78, 0x24, 0xFF};
@@ -76,7 +63,8 @@ namespace Falltergeist
             SDL_Color hash_color = { 0x8c, 0x8c, 0x84, 0xFF};
 
             int y = 0;
-            while (std::getline(ss, line))
+            std::string line;
+            while (std::getline(contentStream, line))
             {
                 Graphics::Font* cur_font = font_default;
                 SDL_Color cur_color = default_color;
@@ -111,43 +99,34 @@ namespace Falltergeist
                 _lines.push_back(tx);
                 y += tx->textSize().height() + cur_font->verticalGap() + additionalGap;
             }
-            _lastTicks=SDL_GetTicks();
-        }
 
-        void Credits::think()
-        {
-            State::think();
+            _linePositions = new int[_lines.size()];
 
-            unsigned long int nt = SDL_GetTicks();
-            if (nt - _lastTicks > 50)
-            {
-                _position.ry() -= 1;
-                long int _lastY = 0;
-                for (auto ui: _lines)
-                {
-                    ui->setY(ui->y()-1);
-
-                    if ( (ui->y() > -30) && (ui->y() < (int)(Game::getInstance()->renderer()->height()+10) ) )
-                    {
-                        ui->setVisible(true);
-                    }
-                    else
-                    {
-                        ui->setVisible(false);
-                    }
-
-                    _lastY = ui->y();
-                }
-
-                _lastTicks=nt;
-
-                if (_lastY < -30)
-                {
-                    this->onCreditsFinished();
-                }
+            for (size_t i = 0; i < _lines.size(); i++) {
+                _linePositions[i] = _lines.at(i)->position().y();
             }
         }
 
+        void Credits::think(const float &deltaTime)
+        {
+            State::think(deltaTime);
+
+            auto scrollingSpeed = 1.0f / 33.0f;
+
+            _timePassed += deltaTime;
+
+            long int _lastY = 0;
+            for (size_t i = 0; i < _lines.size(); i++) {
+                auto ui = _lines.at(i);
+                int yPosition = _linePositions[i] - static_cast<int>(_timePassed * scrollingSpeed);
+                ui->setY(yPosition);
+                _lastY = ui->position().y();
+            }
+
+            if (_lastY < -30) {
+                this->onCreditsFinished();
+            }
+        }
 
         void Credits::handle(Event::Event* event)
         {
@@ -172,19 +151,19 @@ namespace Falltergeist
         {
             fadeDoneHandler().clear();
             fadeDoneHandler().add([this](Event::Event* event){ this->onCreditsFadeDone(dynamic_cast<Event::State*>(event)); });
-            Game::getInstance()->renderer()->fadeOut(0,0,0,1000);
+            Game::Game::getInstance()->renderer()->fadeOut(0,0,0,1000);
         }
 
         void Credits::onCreditsFadeDone(Event::State* event)
         {
             fadeDoneHandler().clear();
-            Game::getInstance()->mouse()->popState();
-            Game::getInstance()->popState();
+            Game::Game::getInstance()->mouse()->popState();
+            Game::Game::getInstance()->popState();
         }
 
         void Credits::onStateActivate(Event::State* event)
         {
-            Game::getInstance()->renderer()->fadeIn(0,0,0,1000);
+            Game::Game::getInstance()->renderer()->fadeIn(0,0,0,1000);
         }
     }
 }

@@ -1,43 +1,23 @@
-/*
- * Copyright 2012-2018 Falltergeist Developers.
- *
- * This file is part of Falltergeist.
- *
- * Falltergeist is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Falltergeist is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
- */
+#pragma once
 
-#ifndef FALLTERGEIST_STATE_LOCATION_H
-#define FALLTERGEIST_STATE_LOCATION_H
-
-// C++ standard includes
 #include <list>
 #include <memory>
-#include <Game/DudeObject.h>
-#include <Format/Map/File.h>
-
-// Falltergeist includes
+#include "../Format/Map/File.h"
+#include "../Game/DudeObject.h"
 #include "../Game/Object.h"
 #include "../Game/Timer.h"
 #include "../Graphics/Lightmap.h"
 #include "../Input/Mouse.h"
 #include "../State/State.h"
 #include "../UI/ImageButton.h"
-
-// Third party includes
+#include "../UI/IResourceManager.h"
 
 namespace Falltergeist
 {
+    namespace Audio
+    {
+        class Mixer;
+    }
     namespace Format
     {
         namespace Map
@@ -51,6 +31,7 @@ namespace Falltergeist
         class Location;
         class Object;
         class SpatialObject;
+        class Time;
     }
     namespace UI
     {
@@ -68,6 +49,7 @@ namespace Falltergeist
     class Hexagon;
     class HexagonGrid;
     class LocationCamera;
+    class Settings;
 
     namespace State
     {
@@ -78,14 +60,23 @@ namespace Falltergeist
          * pushed: when player starts new game or loads new game
          * popped: when player closes the game, exits to main menu or loads the game
          */
-        class Location : public State
+        class Location final : public State
         {
             public:
-                Location();
-                ~Location() override;
+                Location(
+                    std::shared_ptr<Game::DudeObject> player,
+                    std::shared_ptr<Input::Mouse> mouse,
+                    std::shared_ptr<Settings> settings,
+                    std::shared_ptr<Graphics::Renderer> renderer,
+                    std::shared_ptr<Audio::Mixer> audioMixer,
+                    std::shared_ptr<Game::Time> gameTime,
+                    std::shared_ptr<UI::IResourceManager> resourceManager,
+                    std::shared_ptr<ILogger> logger
+                );
+                ~Location() override = default;
 
                 void init() override;
-                void think() override;
+                void think(const float &deltaTime) override;
                 void handle(Event::Event* event) override;
                 void render() override;
 
@@ -115,7 +106,7 @@ namespace Falltergeist
 
                 void displayMessage(const std::string& message);
 
-                void addTimerEvent(Game::Object* obj, int delay, int fixedParam = 0);
+                void addTimerEvent(Game::Object* obj, int ticks, int fixedParam = 0);
                 void removeTimerEvent(Game::Object* obj);
                 void removeTimerEvent(Game::Object* obj, int fixedParam);
 
@@ -144,11 +135,21 @@ namespace Falltergeist
                 SKILL skillInUse() const;
                 void setSkillInUse(SKILL skill);
 
+            private:
+                std::shared_ptr<Game::DudeObject> player;
+                std::shared_ptr<Input::Mouse> mouse;
+                std::shared_ptr<Settings> settings;
+                std::shared_ptr<Graphics::Renderer> renderer;
+                std::shared_ptr<Audio::Mixer> audioMixer;
+                std::shared_ptr<Game::Time> gameTime;
+                std::shared_ptr<UI::IResourceManager> resourceManager;
+                std::shared_ptr<ILogger> logger;
+
             protected:
                 struct TimerEvent
                 {
                     Game::Object* object;
-                    Game::GameTimer timer;
+                    Game::Timer timer;
                     int fixedParam;
                 };
 
@@ -156,10 +157,7 @@ namespace Falltergeist
                 static const int DROPDOWN_DELAY;
 
                 // Timers
-                unsigned int _scrollTicks = 0;
-                unsigned int _scriptsTicks = 0;
-                unsigned int _actionCursorTicks = 0;
-                unsigned int _mouseMoveTicks = 0;
+                Game::Timer _locationScriptTimer;
                 Game::Timer _actionCursorTimer;
                 Game::Timer _ambientSfxTimer;
                 // for VM opcode add_timer_event
@@ -169,10 +167,7 @@ namespace Falltergeist
 
                 std::unique_ptr<HexagonGrid> _hexagonGrid;
                 std::unique_ptr<LocationCamera> _camera;
-                std::unique_ptr<UI::TileMap> _floor;
-                std::unique_ptr<UI::TileMap> _roof;
                 std::map<std::string, VM::StackValue> _EVARS;
-                std::vector<UI::Base*> _floatMessages;
 
                 std::shared_ptr<Falltergeist::Game::Location> _location;
                 unsigned int _elevation = 0;
@@ -221,18 +216,17 @@ namespace Falltergeist
 
                 void renderTestingOutline() const;
 
-                void thinkObjects() const;
+                void thinkObjects(const float &deltaTime) const;
 
-                void performScrolling();
+                void performScrolling(const float &deltaTime);
 
-                void firstLocationEnter() const;
+                void firstLocationEnter(const float &deltaTime) const;
 
-                void updateLocation();
+                void processTimers(const float &deltaTime);
 
-                void processTimers();
+                bool movePlayerToObject(Game::Object *object);
 
                 Game::Object* getGameObjectUnderCursor();
         };
     }
 }
-#endif // FALLTERGEIST_STATE_LOCATION_H

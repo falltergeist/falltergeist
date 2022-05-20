@@ -1,41 +1,14 @@
-﻿/*
- * Copyright 2012-2018 Falltergeist Developers.
- *
- * This file is part of Falltergeist.
- *
- * Falltergeist is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Falltergeist is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
- */
-
-// Related headers
+﻿#include <cmath>
 #include "../Game/Location.h"
-
-// C++ standard includes
-#include <cmath>
-
-// Falltergeist includes
 #include "../Format/Gam/File.h"
 #include "../Format/Map/File.h"
 #include "../Game/LocationElevation.h"
 #include "../Game/SpatialObject.h"
-#include "../Graphics/Point.h"
 #include "../Helpers/GameObjectHelper.h"
 #include "../ResourceManager.h"
 #include "../UI/Tile.h"
 #include "../UI/TileMap.h"
 #include "../VM/Script.h"
-
-// Third party includes
 
 namespace Falltergeist
 {
@@ -44,8 +17,9 @@ namespace Falltergeist
 
     namespace Game
     {
-        Location::Location()
+        Location::Location(std::shared_ptr<ILogger> logger)
         {
+            this->logger = std::move(logger);
         }
 
         Location::~Location()
@@ -76,10 +50,10 @@ namespace Falltergeist
                 );
             }
 
-            GameObjectHelper gameObjectHelper;
+            GameObjectHelper gameObjectHelper(logger);
 
             for (auto &mapElevation : mapFile->elevations()) {
-                auto elevation = std::make_shared<LocationElevation>();
+                auto elevation = std::make_shared<LocationElevation>(logger);
 
                 // load objects
                 for (auto &mapObject : mapElevation.objects()) {

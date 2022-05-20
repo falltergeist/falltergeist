@@ -1,48 +1,23 @@
-/*
- * Copyright 2012-2018 Falltergeist Developers.
- *
- * This file is part of Falltergeist.
- *
- * Falltergeist is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Falltergeist is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
- */
-
-// Related headers
 #include "../State/PlayerEditAlert.h"
-
-// C++ standard includes
-
-// Falltergeist includes
 #include "../functions.h"
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
 #include "../ResourceManager.h"
+#include "../UI/Factory/ImageButtonFactory.h"
 #include "../UI/Image.h"
 #include "../UI/ImageButton.h"
 #include "../UI/TextArea.h"
 
-// Third party includes
-
 namespace Falltergeist
 {
+    using ImageButtonType = UI::Factory::ImageButtonFactory::Type;
+
     namespace State
     {
-        PlayerEditAlert::PlayerEditAlert() : State()
+        PlayerEditAlert::PlayerEditAlert(std::shared_ptr<UI::IResourceManager> resourceManager) : State()
         {
-        }
-
-        PlayerEditAlert::~PlayerEditAlert()
-        {
+            this->resourceManager = resourceManager;
+            imageButtonFactory = std::make_unique<UI::Factory::ImageButtonFactory>(resourceManager);
         }
 
         void PlayerEditAlert::setMessage(const std::string& message)
@@ -52,15 +27,17 @@ namespace Falltergeist
 
         void PlayerEditAlert::init()
         {
-            if (_initialized) return;
+            if (_initialized) {
+                return;
+            }
             State::init();
 
             setFullscreen(false);
             setModal(true);
 
-            auto bg = new UI::Image("art/intrface/lgdialog.frm");
+            auto bg = resourceManager->getImage("art/intrface/lgdialog.frm");
 
-            Point bgPos = Point((Game::getInstance()->renderer()->size() - Point(640, 480)) / 2);
+            Point bgPos = Point((Game::Game::getInstance()->renderer()->size() - Point(640, 480)) / 2);
             int bgX = bgPos.x();
             int bgY = bgPos.y();
 
@@ -72,10 +49,10 @@ namespace Falltergeist
             message->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
             message->setFont("font1.aaf", {0xff, 0x9f, 0x48, 0xff});
 
-            auto doneBox = new UI::Image("art/intrface/donebox.frm");
+            auto doneBox = resourceManager->getImage("art/intrface/donebox.frm");
             doneBox->setPosition(bgPos + Point(254, 270));
 
-            auto doneButton = new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, bgX + 264, bgY + 273);
+            auto doneButton = imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {bgX + 264, bgY + 273});
             doneButton->mouseClickHandler().add([this](Event::Mouse* event)
             {
                 this->onDoneButtonClick(event);
@@ -93,7 +70,7 @@ namespace Falltergeist
 
         void PlayerEditAlert::onDoneButtonClick(Event::Mouse* event)
         {
-            Game::getInstance()->popState();
+            Game::Game::getInstance()->popState();
         }
     }
 }

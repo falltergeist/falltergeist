@@ -1,30 +1,6 @@
-/*
- * Copyright 2012-2018 Falltergeist Developers.
- *
- * This file is part of Falltergeist.
- *
- * Falltergeist is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Falltergeist is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
- */
-
-// Related headers
-#include "../State/CritterInteract.h"
-
-// C++ standard includes
 #include <cstdio>
 #include <memory>
-
-// Falltergeist includes
+#include "../State/CritterInteract.h"
 #include "../Format/Lst/File.h"
 #include "../Format/Lip/File.h"
 #include "../Game/CritterObject.h"
@@ -43,27 +19,26 @@
 #include "../UI/Animation.h"
 #include "../UI/AnimationFrame.h"
 #include "../UI/AnimationQueue.h"
+#include "../UI/Factory/ImageButtonFactory.h"
 #include "../Audio/Mixer.h"
-
-// Third party includes
 
 namespace Falltergeist
 {
     namespace State
     {
-
-        CritterInteract::CritterInteract() : State()
+        CritterInteract::CritterInteract(std::shared_ptr<UI::IResourceManager> resourceManager) : State()
         {
-            _dialog=new CritterDialog();
-            _review=new CritterDialogReview();
-            _barter=new CritterBarter();
+            this->resourceManager = resourceManager;
+            _dialog = new CritterDialog(resourceManager);
+            _review = new CritterDialogReview(resourceManager);
+            _barter = new CritterBarter(resourceManager);
             // pre-init review, so we can push questions/answers to it.
             _review->init();
         }
 
         CritterInteract::~CritterInteract()
         {
-            auto camera = Game::getInstance()->locationState()->camera();
+            auto camera = Game::Game::getInstance()->locationState()->camera();
             camera->setCenter(_oldCameraCenter);
             delete _dialog;
             delete _review;
@@ -72,7 +47,7 @@ namespace Falltergeist
 
         void CritterInteract::onStateActivate(Event::State* event)
         {
-            Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::BIG_ARROW);
+            Game::Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::BIG_ARROW);
             if (_headID >= 0)
             {
                 // stop music completely
@@ -82,39 +57,41 @@ namespace Falltergeist
             else
             {
                 // lower music volume
-                Game::getInstance()->mixer()->setMusicVolume(Game::getInstance()->mixer()->musicVolume()/2.0);
+                Game::Game::getInstance()->mixer()->setMusicVolume(Game::Game::getInstance()->mixer()->musicVolume()/2.0);
             }
         }
 
         void CritterInteract::onStateDeactivate(Event::State* event)
         {
-            Game::getInstance()->mouse()->popState();
+            Game::Game::getInstance()->mouse()->popState();
             if (_headID >= 0)
             {
-                Game::getInstance()->mixer()->playACMMusic(Game::getInstance()->mixer()->lastMusic(), true);
+                Game::Game::getInstance()->mixer()->playACMMusic(Game::Game::getInstance()->mixer()->lastMusic(), true);
             }
             else
             {
                 // restore music volume
-                Game::getInstance()->mixer()->setMusicVolume(Game::getInstance()->mixer()->musicVolume()*2.0);
+                Game::Game::getInstance()->mixer()->setMusicVolume(Game::Game::getInstance()->mixer()->musicVolume()*2.0);
             }
         }
 
         void CritterInteract::init()
         {
-            if (_initialized) return;
+            if (_initialized) {
+                return;
+            }
             State::init();
 
             setFullscreen(false);
             setModal(true);
 
-            setPosition((Game::getInstance()->renderer()->size() - Point(640, 480)) / 2);
+            setPosition((Game::Game::getInstance()->renderer()->size() - Point(640, 480)) / 2);
 
             if (backgroundID() >= 0 && headID() >= 0)
             {
                 auto lst = ResourceManager::getInstance()->lstFileType("art/backgrnd/backgrnd.lst");
                 std::string bgImage = "art/backgrnd/" + lst->strings()->at(backgroundID());
-                auto bg = new UI::Image(bgImage);
+                auto bg = resourceManager->getImage(bgImage);
                 bg->setPosition({128, 15});
                 addUI(bg);
 
@@ -158,26 +135,28 @@ namespace Falltergeist
                 auto head = new UI::AnimationQueue();
                 head->animations().push_back(std::make_unique<UI::Animation>("art/heads/" + headImage));
 
-                int offset = 388/2 - head->currentAnimation()->width()/2;
+                int offset = 388/2 - head->currentAnimation()->size().width()/2;
                 head->setPosition({128+offset, 15});
                 addUI("head",head);
             }
 
-            addUI("background", new UI::Image("art/intrface/alltlk.frm"));
+            addUI("background", resourceManager->getImage("art/intrface/alltlk.frm"));
 
-            auto hilight1 = new UI::Image("data/hilight1.png");
-            hilight1->setPosition({423,20});
+            auto hilight1 = resourceManager->getImage("data/hilight1.png");
+            hilight1->setPosition({423, 20});
             addUI(hilight1);
 
-            auto hilight2 = new UI::Image("data/hilight2.png");
-            hilight2->setPosition({128,84});
+            auto hilight2 = resourceManager->getImage("data/hilight2.png");
+            hilight2->setPosition({128, 84});
             addUI(hilight2);
 
             // Centering camera on critter position
-            auto locationState = Game::getInstance()->locationState();
+            auto locationState = Game::Game::getInstance()->locationState();
             _oldCameraCenter = locationState->camera()->center();
 
             locationState->camera()->setCenter(critter()->hexagon()->position() + Point(0, 100));
+
+            _barter->setTrader(critter());
         }
 
         int CritterInteract::backgroundID()
@@ -243,7 +222,7 @@ namespace Falltergeist
         void CritterInteract::playSpeech(const std::string &speech)
         {
             _fidgetTimer.stop();
-            Game::getInstance()->mixer()->playACMSpeech(_headName+"/"+speech+".acm");
+            Game::Game::getInstance()->mixer()->playACMSpeech(_headName+"/"+speech+".acm");
             // start timer
             _startTime = SDL_GetTicks();
             _nextIndex = 0;
@@ -280,15 +259,15 @@ namespace Falltergeist
             return 0;
         }
 
-        void CritterInteract::think()
+        void CritterInteract::think(const float &deltaTime)
         {
-            State::think();
+            State::think(deltaTime);
 
             // switch state
             switch (_phase)
             {
                 case Phase::FIDGET:
-                    _fidgetTimer.think();
+                    _fidgetTimer.think(deltaTime);
                     break;
                 case Phase::TALK:
                     // if playing speech - set phoneme frame
@@ -329,24 +308,24 @@ namespace Falltergeist
 
         void CritterInteract::switchSubState(CritterInteract::SubState state)
         {
-            Game::getInstance()->mixer()->stopMusic();
+            Game::Game::getInstance()->mixer()->stopMusic();
             _phase = Phase::FIDGET;
             _fidgetTimer.start(0);
             if (_state!=SubState::NONE)
             {
-                Game::getInstance()->popState(false);
+                Game::Game::getInstance()->popState(false);
             }
             _state = state;
             switch (state)
             {
                 case SubState::DIALOG:
-                    Game::getInstance()->pushState(_dialog);
+                    Game::Game::getInstance()->pushState(_dialog);
                     break;
                 case SubState::BARTER:
-                    Game::getInstance()->pushState(_barter);
+                    Game::Game::getInstance()->pushState(_barter);
                     break;
                 case SubState::REVIEW:
-                    Game::getInstance()->pushState(_review);
+                    Game::Game::getInstance()->pushState(_review);
                     break;
                 default:
                     break;
@@ -356,7 +335,7 @@ namespace Falltergeist
 
         void CritterInteract::transition(Reaction reaction)
         {
-            Game::getInstance()->mixer()->stopMusic();
+            Game::Game::getInstance()->mixer()->stopMusic();
             auto newmood = _mood;
 
             if (headID()!= -1)
@@ -453,8 +432,4 @@ namespace Falltergeist
             script()->run();
         }
     }
-
-
-
-
 }

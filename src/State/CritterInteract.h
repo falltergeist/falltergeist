@@ -1,32 +1,8 @@
-/*
- * Copyright 2012-2018 Falltergeist Developers.
- *
- * This file is part of Falltergeist.
- *
- * Falltergeist is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Falltergeist is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
- */
+#pragma once
 
-#ifndef FALLTERGEIST_STATE_CRITTERINTERACT_H
-#define FALLTERGEIST_STATE_CRITTERINTERACT_H
-
-// C++ standard includes
-
-// Falltergeist includes
 #include "../State/State.h"
 #include "../Game/Timer.h"
-
-// Third party includes
+#include "../UI/IResourceManager.h"
 
 namespace Falltergeist
 {
@@ -45,6 +21,13 @@ namespace Falltergeist
     {
         class CritterObject;
     }
+    namespace UI
+    {
+        namespace Factory
+        {
+            class ImageButtonFactory;
+        }
+    }
     namespace VM
     {
         class Script;
@@ -55,7 +38,7 @@ namespace Falltergeist
         class CritterBarter;
         class CritterDialogReview;
 
-        class CritterInteract : public State
+        class CritterInteract final : public State
         {
             public:
                 enum class Phase {
@@ -83,9 +66,9 @@ namespace Falltergeist
                     REVIEW,
                     CONTROL
                 };
-                virtual void think() override;
+                void think(const float &deltaTime) override;
 
-                CritterInteract();
+                CritterInteract(std::shared_ptr<UI::IResourceManager> resourceManager);
                 ~CritterInteract() override;
 
                 void init() override;
@@ -121,7 +104,7 @@ namespace Falltergeist
                 void onMoodTransitionEnded(Event::Event* event);
 
 
-        protected:
+            protected:
                 Point _oldCameraCenter;
                 int _backgroundID = -1;
                 int _headID = -1;
@@ -144,8 +127,8 @@ namespace Falltergeist
                 CritterDialogReview* _review;
 
                 SubState _state = SubState::NONE;
-
+            private:
+                std::shared_ptr<UI::IResourceManager> resourceManager;
         };
     }
 }
-#endif // FALLTERGEIST_STATE_CRITTERINTERACT_H

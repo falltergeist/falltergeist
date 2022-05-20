@@ -1,33 +1,9 @@
-/*
- * Copyright 2012-2018 Falltergeist Developers.
- *
- * This file is part of Falltergeist.
- *
- * Falltergeist is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Falltergeist is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
- */
-
-// C++ standard includes
-
-// Falltergeist includes
 #include "../Exception.h"
 #include "../Format/Lst/File.h"
 #include "../Game/Defines.h"
 #include "../Helpers/CritterAnimationHelper.h"
 #include "../Logger.h"
 #include "../ResourceManager.h"
-
-// Third party includes
 
 namespace Falltergeist
 {
@@ -38,7 +14,7 @@ namespace Falltergeist
             const auto baseId = FID & 0x00000FFF;
             auto lst = ResourceManager::getInstance()->lstFileType("art/critters/critters.lst");
             if (baseId >= lst->strings()->size()) {
-                Logger::error() << "CritterAnimationHelper::getPrefix - LST size: " << lst->strings()->size() << " <= baseId: " << baseId << " frmType: " << std::endl;
+                Logger::error("") << "CritterAnimationHelper::getPrefix - LST size: " << lst->strings()->size() << " <= baseId: " << baseId << " frmType: " << std::endl;
                 return "";
             }
             return lst->strings()->at(baseId).erase(6);

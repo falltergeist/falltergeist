@@ -1,41 +1,26 @@
-/*
- * Copyright 2012-2018 Falltergeist Developers.
- *
- * This file is part of Falltergeist.
- *
- * Falltergeist is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Falltergeist is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
- */
+#pragma once
 
-#ifndef FALLTERGEIST_STATE_MAINMENU_H
-#define FALLTERGEIST_STATE_MAINMENU_H
-
-// C++ standard includes
 #include <memory>
-
-// Falltergeist includes
+#include "../ILogger.h"
 #include "../State/State.h"
-
-// Third party includes
+#include "../UI/IResourceManager.h"
 
 namespace Falltergeist
 {
+    namespace UI
+    {
+        namespace Factory
+        {
+            class ImageButtonFactory;
+        }
+    }
+
     namespace State
     {
-        class MainMenu : public State
+        class MainMenu final : public State
         {
             public:
-                MainMenu();
+                MainMenu(std::shared_ptr<UI::IResourceManager> resourceManager, std::shared_ptr<ILogger> logger);
                 ~MainMenu() override;
 
                 void init() override;
@@ -61,7 +46,11 @@ namespace Falltergeist
                 void onLoadGameStart(Event::State* event);
                 void onIntroStart(Event::State* event);
                 void onCreditsStart(Event::State* event);
+
+            private:
+                std::shared_ptr<ILogger> logger;
+                std::shared_ptr<UI::IResourceManager> resourceManager;
+                std::unique_ptr<UI::Factory::ImageButtonFactory> imageButtonFactory;
         };
     }
 }
-#endif // FALLTERGEIST_STATE_MAINMENU_H

@@ -1,44 +1,15 @@
-/*
- * Copyright 2012-2018 Falltergeist Developers.
- *
- * This file is part of Falltergeist.
- *
- * Falltergeist is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Falltergeist is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
- */
-
-// C++ standard includes
-#include <fstream>
 #include <string>
-#include <stdexcept>
-
-// Falltergeist includes
 #include "CrossPlatform.h"
-#include "Exception.h"
 #include "Logger.h"
 #include "Ini/File.h"
-#include "Ini/Section.h"
 #include "Ini/Writer.h"
 #include "Settings.h"
-
-// Third party includes
 
 namespace Falltergeist
 {
     Settings::Settings()
     {
-        if (!load())
-        {
+        if (!load()) {
             save();
         }
     }
@@ -53,11 +24,11 @@ namespace Falltergeist
         std::string configFile = CrossPlatform::getConfigPath() + "/config.ini";
         std::ofstream stream(configFile);
 
-        Logger::info() << "Saving config to " << configFile << std::endl;
+        Logger::info("") << "Saving config to " << configFile << std::endl;
 
         if (!stream)
         {
-            Logger::warning() << "Cannot open config file at `" << configFile << "`;" << std::endl;
+            Logger::warning("") << "Cannot open config file at `" << configFile << "`;" << std::endl;
             return false;
         }
 
@@ -66,8 +37,11 @@ namespace Falltergeist
         auto video = file.section("video");
         video->setPropertyInt("width", _screenWidth);
         video->setPropertyInt("height", _screenHeight);
+        video->setPropertyInt("x", _screenX);
+        video->setPropertyInt("y", _screenY);
         video->setPropertyInt("scale", _scale);
         video->setPropertyBool("fullscreen", _fullscreen);
+        video->setPropertyBool("always_on_top", _alwaysOnTop);
 
         auto audio = file.section("audio");
         audio->setPropertyBool("enabled", _audioEnabled);
@@ -123,6 +97,16 @@ namespace Falltergeist
         return _screenHeight;
     }
 
+    int Settings::screenX() const
+    {
+        return _screenX;
+    }
+
+    int Settings::screenY() const
+    {
+        return _screenY;
+    }
+
     bool Settings::audioEnabled() const
     {
         return _audioEnabled;
@@ -143,11 +127,11 @@ namespace Falltergeist
         std::string configFile = CrossPlatform::getConfigPath() + "/config.ini";
         std::ifstream stream(configFile);
 
-        Logger::info() << "Loading config from " << configFile << std::endl;
+        Logger::info("") << "Loading config from " << configFile << std::endl;
 
         if (!stream)
         {
-            Logger::warning() << "Cannot open config file at `" << configFile << "`;" << std::endl;
+            Logger::warning("") << "Cannot open config file at `" << configFile << "`;" << std::endl;
             return false;
         }
 
@@ -159,8 +143,11 @@ namespace Falltergeist
         {
             _screenWidth = video->propertyInt("width", _screenWidth);
             _screenHeight = video->propertyInt("height", _screenHeight);
+            _screenX = video->propertyInt("x", _screenX);
+            _screenY = video->propertyInt("y", _screenY);
             _scale = video->propertyInt("scale", _scale);
             _fullscreen = video->propertyBool("fullscreen", _fullscreen);
+            _alwaysOnTop = video->propertyBool("always_on_top", _alwaysOnTop);
         }
 
         auto audio = file->section("audio");
@@ -455,6 +442,11 @@ namespace Falltergeist
     bool Settings::fullscreen() const
     {
         return _fullscreen;
+    }
+
+    bool Settings::alwaysOnTop() const
+    {
+        return _alwaysOnTop;
     }
 
     void Settings::setAudioBufferSize(int _audioBufferSize)

@@ -1,31 +1,7 @@
-/*
- * Copyright 2012-2018 Falltergeist Developers.
- *
- * This file is part of Falltergeist.
- *
- * Falltergeist is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Falltergeist is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
- */
-
-// Related headers
-#include "../Game/CritterObject.h"
-
-// C++ standard includes
 #include <array>
 #include <string>
 #include <memory>
-
-// Falltergeist includes
+#include "../Game/CritterObject.h"
 #include "../Exception.h"
 #include "../Game/ArmorItemObject.h"
 #include "../Game/Defines.h"
@@ -33,24 +9,19 @@
 #include "../Game/ExitMiscObject.h"
 #include "../Game/Game.h"
 #include "../Game/WeaponItemObject.h"
-#include "../Helpers/CritterAnimationHelper.h"
-#include "../Logger.h"
+#include "../Helpers/CritterHelper.h"
+#include "../Graphics/CritterAnimationFactory.h"
 #include "../PathFinding/Hexagon.h"
 #include "../ResourceManager.h"
 #include "../State/Location.h"
-#include "../UI/Animation.h"
 #include "../UI/AnimationFrame.h"
-#include "../VM/Script.h"
-
-// Third party includes
+#include "../UI/TextArea.h"
 
 namespace Falltergeist
 {
     namespace Game
     {
-        using namespace std;
         using namespace Base;
-        using Helpers::CritterAnimationHelper;
 
         CritterObject::CritterObject() : Object()
         {
@@ -58,7 +29,7 @@ namespace Falltergeist
             _setupNextIdleAnim();
         }
 
-        vector<ItemObject*>* CritterObject::inventory()
+        std::vector<ItemObject*>* CritterObject::inventory()
         {
             return &_inventory;
         }
@@ -152,10 +123,14 @@ namespace Falltergeist
             switch(num)
             {
                 case STAT::STRENGTH:
-                    if (traitTagged(TRAIT::BRUISER)) bonus += 2;
+                    if (traitTagged(TRAIT::BRUISER)) {
+                        bonus += 2;
+                    }
                     break;
                 case STAT::AGILITY:
-                    if (traitTagged(TRAIT::SMALL_FRAME)) bonus += 1;
+                    if (traitTagged(TRAIT::SMALL_FRAME)) {
+                        bonus += 1;
+                    }
                     break;
                 default:
                     break;
@@ -197,35 +172,51 @@ namespace Falltergeist
             {
                 case SKILL::SMALL_GUNS:
                     value += 5 + 4 * statTotal(STAT::AGILITY);
-                    if (traitTagged(TRAIT::GOOD_NATURED)) value -= 10;
+                    if (traitTagged(TRAIT::GOOD_NATURED)) {
+                        value -= 10;
+                    }
                     break;
                 case SKILL::BIG_GUNS:
                     value += 2*statTotal(STAT::AGILITY);
-                    if (traitTagged(TRAIT::GOOD_NATURED)) value -= 10;
+                    if (traitTagged(TRAIT::GOOD_NATURED)) {
+                        value -= 10;
+                    }
                     break;
                 case SKILL::ENERGY_WEAPONS:
                     value += 2*statTotal(STAT::AGILITY);
-                    if (traitTagged(TRAIT::GOOD_NATURED)) value -= 10;
+                    if (traitTagged(TRAIT::GOOD_NATURED)) {
+                        value -= 10;
+                    }
                     break;
                 case SKILL::UNARMED:
                     value += 30 + 2*(statTotal(STAT::AGILITY) + statTotal(STAT::STRENGTH));
-                    if (traitTagged(TRAIT::GOOD_NATURED)) value -= 10;
+                    if (traitTagged(TRAIT::GOOD_NATURED)) {
+                        value -= 10;
+                    }
                     break;
                 case SKILL::MELEE_WEAPONS:
                     value += 20 + 2*(statTotal(STAT::AGILITY) + statTotal(STAT::STRENGTH));
-                    if (traitTagged(TRAIT::GOOD_NATURED)) value -= 10;
+                    if (traitTagged(TRAIT::GOOD_NATURED)) {
+                        value -= 10;
+                    }
                     break;
                 case SKILL::THROWING:
                     value += 4*statTotal(STAT::AGILITY);
-                    if (traitTagged(TRAIT::GOOD_NATURED)) value -= 10;
+                    if (traitTagged(TRAIT::GOOD_NATURED)) {
+                        value -= 10;
+                    }
                     break;
                 case SKILL::FIRST_AID:
                     value += 20 + 2*(statTotal(STAT::PERCEPTION) + statTotal(STAT::INTELLIGENCE));
-                    if (traitTagged(TRAIT::GOOD_NATURED)) value += 15;
+                    if (traitTagged(TRAIT::GOOD_NATURED)) {
+                        value += 15;
+                    }
                     break;
                 case SKILL::DOCTOR:
                     value += 20 + 5 + (statTotal(STAT::PERCEPTION) + statTotal(STAT::INTELLIGENCE));
-                    if (traitTagged(TRAIT::GOOD_NATURED)) value += 15;
+                    if (traitTagged(TRAIT::GOOD_NATURED)) {
+                        value += 15;
+                    }
                     break;
                 case SKILL::SNEAK:
                     value += 20 + 5 + 3*statTotal(STAT::AGILITY);
@@ -247,11 +238,15 @@ namespace Falltergeist
                     break;
                 case SKILL::SPEECH:
                     value += 20 + 5*statTotal(STAT::CHARISMA);
-                    if (traitTagged(TRAIT::GOOD_NATURED)) value += 15;
+                    if (traitTagged(TRAIT::GOOD_NATURED)) {
+                        value += 15;
+                    }
                     break;
                 case SKILL::BARTER:
                     value += 20 + 4*statTotal(STAT::CHARISMA);
-                    if (traitTagged(TRAIT::GOOD_NATURED)) value += 15;
+                    if (traitTagged(TRAIT::GOOD_NATURED)) {
+                        value += 15;
+                    }
                     break;
                 case SKILL::GAMBLING:
                     value += 20 + 5*statTotal(STAT::LUCK);
@@ -288,6 +283,21 @@ namespace Falltergeist
                 throw Exception("CritterObject::setTraitTagged(num, value) - num out of range:" + std::to_string((unsigned)num));
             }
             _traitsTagged.at((unsigned)num) = value;
+        }
+
+        void CritterObject::setCritterFlags(unsigned int flags)
+        {
+            setCanTrade((flags & 0x00000002));
+            setCanStealFrom((flags & 0x00000020));
+            setCanDropItems((flags & 0x00000040));
+            setCanLoseLimbs((flags & 0x00000080));
+            setCanAge((flags & 0x00000100));
+            setCanHeal((flags & 0x00000200));
+            setInvulnerable((flags & 0x00000400));
+            setLeavesBody((flags & 0x00000800));
+            setHasSpecialDeath((flags & 0x00001000));
+            setHasMeleeRange((flags & 0x00002000));
+            setCanKnockdown((flags & 0x00004000));
         }
 
         int CritterObject::hitPoints() const
@@ -491,17 +501,17 @@ namespace Falltergeist
         {
         }
 
-        void CritterObject::use_skill_on_p_proc()
+        void CritterObject::use_skill_on_p_proc(SKILL skill, Object* objectUsed, CritterObject* usedBy)
         {
         }
 
         // TODO: probably need to remove movement queue logic to separate class.
-        vector<Hexagon*>* CritterObject::movementQueue()
+        std::vector<Hexagon*>* CritterObject::movementQueue()
         {
             return &_movementQueue;
         }
 
-        void CritterObject::think()
+        void CritterObject::think(const float &deltaTime)
         {
             if (!movementQueue()->empty()) {
                 if (!_moving) {
@@ -509,8 +519,8 @@ namespace Falltergeist
 
                     _orientation = hexagon()->orientationTo(movementQueue()->back());
                     auto animation = _generateMovementAnimation();
-                    animation->frameHandler().add(bind(&CritterObject::onMovementAnimationFrame, this, placeholders::_1));
-                    animation->animationEndedHandler().add(bind(&CritterObject::onMovementAnimationEnded, this, placeholders::_1));
+                    animation->frameHandler().add(std::bind(&CritterObject::onMovementAnimationFrame, this, std::placeholders::_1));
+                    animation->animationEndedHandler().add(std::bind(&CritterObject::onMovementAnimationEnded, this, std::placeholders::_1));
                     animation->play();
                     _ui = move(animation);
                 }
@@ -523,7 +533,7 @@ namespace Falltergeist
                     }
                 }
             }
-            Object::think();
+            Object::think(deltaTime);
         }
 
         static const std::array<int, 6> xTileOffsets = {{16, 32, 16, -16, -32, -16}};
@@ -578,8 +588,8 @@ namespace Falltergeist
                         _orientation = nextOrientation;
                         auto newAnimation = _generateMovementAnimation();
                         newAnimation->setCurrentFrame(animation->currentFrame());
-                        newAnimation->frameHandler().add(bind(&CritterObject::onMovementAnimationFrame, this, placeholders::_1));
-                        newAnimation->animationEndedHandler().add(bind(&CritterObject::onMovementAnimationEnded, this, placeholders::_1));
+                        newAnimation->frameHandler().add(std::bind(&CritterObject::onMovementAnimationFrame, this, std::placeholders::_1));
+                        newAnimation->animationEndedHandler().add(std::bind(&CritterObject::onMovementAnimationEnded, this, std::placeholders::_1));
                         newAnimation->play();
                         animation = newAnimation.get();
                         _ui = move(newAnimation);
@@ -598,7 +608,9 @@ namespace Falltergeist
         void CritterObject::onMovementAnimationEnded(Event::Event* event)
         {
             auto animation = dynamic_cast<UI::Animation*>(ui());
-            if (!animation) throw Exception("UI::Animation expected!");
+            if (!animation) {
+                throw Exception("UI::Animation expected!");
+            }
             // get offset of the last frame
             Point lastFrameOfs = animation->offset() + animation->currentFramePtr()->offset();
             animation->setCurrentFrame(0);
@@ -606,62 +618,163 @@ namespace Falltergeist
             animation->play();
         }
 
-        unique_ptr<UI::Animation> CritterObject::_generateMovementAnimation()
+        std::unique_ptr<UI::Animation> CritterObject::_generateMovementAnimation()
         {
-            CritterAnimationHelper critterAnimationHelper;
+            Graphics::CritterAnimationFactory animationFactory;
+            Helpers::CritterHelper critterHelper;
 
-            string frmString = _generateArmorFrmString();
-
-            unsigned weaponId = WEAPON_NONE;
-            if (auto weapon = dynamic_cast<WeaponItemObject*>(currentHandSlot())) {
-                weaponId = weapon->animationCode();
+            if (_running) {
+                return animationFactory.buildRunningAnimation(
+                    critterHelper.armorFID(this),
+                    critterHelper.weaponId(this),
+                    orientation()
+                );
             }
 
-            unsigned animationId = _running ? ANIM_RUNNING : ANIM_WALK;
-
-            frmString += critterAnimationHelper.getSuffix(animationId, weaponId);
-
-            return std::make_unique<UI::Animation>("art/critters/" + frmString + ".frm", orientation());
+            return animationFactory.buildWalkingAnimation(
+                critterHelper.armorFID(this),
+                critterHelper.weaponId(this),
+                orientation()
+            );
         }
 
-        UI::Animation* CritterObject::setActionAnimation(const string& action)
+        UI::Animation* CritterObject::setActionAnimation(const std::string& action)
         {
-            string animName = _generateArmorFrmString();
+            Graphics::CritterAnimationFactory animationFactory;
+            Helpers::CritterHelper critterHelper;
 
-            unsigned weaponId = WEAPON_NONE;
-            if (auto weapon = dynamic_cast<WeaponItemObject*>(currentHandSlot())) {
-                weaponId = weapon->animationCode();
-            }
-
-            if (action == "aa") {
-                CritterAnimationHelper critterAnimationHelper;
-                animName += critterAnimationHelper.getSuffix(ANIM_STAND, weaponId);
-            } else {
-                animName += action;
-            }
-
-            UI::Animation* animation = new UI::Animation("art/critters/" + animName + ".frm", orientation());
-            animation->animationEndedHandler().add([animation](Event::Event* event) {
-                animation->setCurrentFrame(0);
-            });
+            auto animation = animationFactory.buildActionAnimation(
+                critterHelper.armorFID(this),
+                critterHelper.weaponId(this),
+                action,
+                orientation()
+            );
             animation->play();
-            setUI(animation);
-            return animation;
+            _ui.reset(animation.get());
+            return animation.release();
+        }
+
+        bool CritterObject::canTrade() const
+        {
+            return _canTrade;
+        }
+
+        void CritterObject::setCanTrade(bool canTrade)
+        {
+            _canTrade = canTrade;
+        }
+
+        bool CritterObject::canStealFrom() const
+        {
+            return _canStealFrom;
+        }
+
+        void CritterObject::setCanStealFrom(bool canStealFrom)
+        {
+            _canStealFrom = canStealFrom;
+        }
+
+        bool CritterObject::canDropItems() const
+        {
+            return _canDropItems;
+        }
+
+        void CritterObject::setCanDropItems(bool canDropItems)
+        {
+            _canDropItems = canDropItems;
+        }
+
+        bool CritterObject::canLoseLimbs() const
+        {
+            return _canLoseLimbs;
+        }
+
+        void CritterObject::setCanLoseLimbs(bool canLoseLimbs)
+        {
+            _canLoseLimbs = canLoseLimbs;
+        }
+
+        bool CritterObject::canAge() const
+        {
+            return _canAge;
+        }
+
+        void CritterObject::setCanAge(bool canAge)
+        {
+            _canAge = canAge;
+        }
+
+        bool CritterObject::canHeal() const
+        {
+            return _canHeal;
+        }
+
+        void CritterObject::setCanHeal(bool canHeal)
+        {
+            _canHeal = canHeal;
+        }
+
+        bool CritterObject::invulnerable() const
+        {
+            return _invulnerable;
+        }
+
+        void CritterObject::setInvulnerable(bool invulnerable)
+        {
+            _invulnerable = invulnerable;
+        }
+
+        bool CritterObject::leavesBody() const
+        {
+            return _leavesBody;
+        }
+
+        void CritterObject::setLeavesBody(bool leavesBody)
+        {
+            _leavesBody = leavesBody;
+        }
+
+        bool CritterObject::hasSpecialDeath() const
+        {
+            return _hasSpecialDeath;
+        }
+
+        void CritterObject::setHasSpecialDeath(bool hasSpecialDeath)
+        {
+            _hasSpecialDeath = hasSpecialDeath;
+        }
+
+        bool CritterObject::hasMeleeRange() const
+        {
+            return _hasMeleeRange;
+        }
+
+        void CritterObject::setHasMeleeRange(bool hasMeleeRange)
+        {
+            _hasMeleeRange = hasMeleeRange;
+        }
+
+        bool CritterObject::canKnockdown() const
+        {
+            return _canKnockdown;
+        }
+
+        void CritterObject::setCanKnockdown(bool knockdown)
+        {
+            _canKnockdown = knockdown;
         }
 
         UI::Animation* CritterObject::setWeaponAnimation(unsigned animationId)
         {
-            unsigned weaponId = WEAPON_NONE;
-            if (auto weapon = dynamic_cast<WeaponItemObject*>(currentHandSlot())) {
-                weaponId = weapon->animationCode();
-            }
-
-            CritterAnimationHelper critterAnimationHelper;
-            auto anim = setActionAnimation(critterAnimationHelper.getSuffix(animationId, weaponId));
-            anim->animationEndedHandler().add([this](Event::Event* evt) {
-                setActionAnimation("aa")->stop();
-            });
-            return anim;
+            Helpers::CritterHelper critterHelper;
+            Graphics::CritterAnimationFactory animationFactory;
+            auto animation = animationFactory.buildActionAnimation(
+                critterHelper.armorFID(this),
+                critterHelper.weaponId(this),
+                animationId,
+                orientation()
+            );
+            return animation.release();
         }
 
         void CritterObject::_generateUi()
@@ -677,21 +790,6 @@ namespace Falltergeist
         int CritterObject::radiationLevel() const
         {
             return _radiationLevel;
-        }
-
-        string CritterObject::_generateArmorFrmString()
-        {
-            CritterAnimationHelper critterAnimationHelper;
-
-            if (!armorSlot()) {
-                return critterAnimationHelper.getPrefix(FID());
-            }
-
-            if (gender() == GENDER::FEMALE) {
-                return critterAnimationHelper.getPrefix(armorSlot()->femaleFID());
-            }
-
-            return critterAnimationHelper.getPrefix(armorSlot()->maleFID());
         }
 
         int CritterObject::poisonLevel() const

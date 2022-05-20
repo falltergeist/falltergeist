@@ -1,38 +1,18 @@
-/*
- * Copyright 2012-2018 Falltergeist Developers.
- *
- * This file is part of Falltergeist.
- *
- * Falltergeist is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Falltergeist is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
- */
+#pragma once
 
-#ifndef FALLTERGEIST_STATE_PLAYEREDIT_H
-#define	FALLTERGEIST_STATE_PLAYEREDIT_H
-
-// C++ standard includes
 #include <map>
 #include <vector>
-
-// Falltergeist includes
 #include "../State/State.h"
-
-// Third party includes
+#include "../UI/IResourceManager.h"
 
 namespace Falltergeist
 {
     namespace UI
     {
+        namespace Factory
+        {
+            class ImageButtonFactory;
+        }
         class BigCounter;
         class HiddenMask;
         class Image;
@@ -41,22 +21,19 @@ namespace Falltergeist
     }
     namespace State
     {
-        class PlayerEdit : public State
+        class PlayerEdit final : public State
         {
             public:
-                PlayerEdit();
-                ~PlayerEdit() override;
+                PlayerEdit(std::shared_ptr<UI::IResourceManager> resourceManager);
+                virtual ~PlayerEdit() = default;
 
                 void init() override;
-                void think() override;
+                void think(const float &deltaTime) override;
                 void render() override;
 
-                void onMaskClick(Event::Mouse* event);
-                void onButtonClick(Event::Mouse* event);
-                void onAgeButtonClick(Event::Mouse* event);
-                void onNameButtonClick(Event::Mouse* event);
-                void onGenderButtonClick(Event::Mouse* event);
-                void onLabelClick(Event::Mouse* event);
+                void onMaskClick(UI::HiddenMask* target);
+                void onLabelClick(UI::TextArea* target);
+                void onTabClick(Event::Mouse* event);
                 void doCancel();
                 void doDone();
                 void doPrint();
@@ -86,12 +63,13 @@ namespace Falltergeist
                 void _addDescription(const std::string& name, std::string description);
                 void _addImage(const std::string& name, UI::Image* image);
 
-                bool _statIncrease(unsigned int num);
-                bool _statDecrease(unsigned int num);
-                bool _traitToggle(unsigned int num);
-                bool _skillToggle(unsigned int num);
+            private:
+                std::shared_ptr<UI::IResourceManager> _resourceManager;
+
+                std::unique_ptr<UI::Factory::ImageButtonFactory> _imageButtonFactory;
+
+                void _onButtonClick(UI::ImageButton* target);
         };
     }
 }
-#endif // FALLTERGEIST_STATE_PLAYEREDIT_H
 

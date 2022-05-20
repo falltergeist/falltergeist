@@ -1,31 +1,6 @@
-/*
- * Copyright 2012-2018 Falltergeist Developers.
- *
- * This file is part of Falltergeist.
- *
- * Falltergeist is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Falltergeist is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
- */
-
-// Related headers
 #include "../Game/ObjectFactory.h"
-
-// C++ standard includes
-
-// Falltergeist includes
 #include "../Format/Int/File.h"
 #include "../Format/Msg/File.h"
-#include "../Format/Msg/Message.h"
 #include "../Format/Pro/File.h"
 #include "../Game/AmmoItemObject.h"
 #include "../Game/ArmorItemObject.h"
@@ -39,7 +14,6 @@
 #include "../Game/KeyItemObject.h"
 #include "../Game/LadderSceneryObject.h"
 #include "../Game/MiscItemObject.h"
-#include "../Game/MiscObject.h"
 #include "../Game/StairsSceneryObject.h"
 #include "../Game/WallObject.h"
 #include "../Game/WeaponItemObject.h"
@@ -47,18 +21,16 @@
 #include "../ResourceManager.h"
 #include "../VM/Script.h"
 
-// Third party includes
-
 namespace Falltergeist
 {
     namespace Game
     {
-        ObjectFactory* ObjectFactory::getInstance()
+        ObjectFactory::ObjectFactory(std::shared_ptr<ILogger> logger)
         {
-            return Base::Singleton<ObjectFactory>::get();
+            this->logger = std::move(logger);
         }
 
-        Object* ObjectFactory::createObject(unsigned int PID)
+        Object* ObjectFactory::createObjectByPID(unsigned int PID)
         {
             auto proto = ResourceManager::getInstance()->proFileType(PID);
             Object* object = 0;
@@ -131,6 +103,7 @@ namespace Falltergeist
                     ((ItemObject*)object)->setWeight(proto->weight());
                     // @TODO: ((GameItemObject*)object)->setVolume(proto->containerSize());
                     ((ItemObject*)object)->setInventoryFID(proto->inventoryFID());
+                    ((ItemObject*)object)->setPrice(proto->basePrice());
                     auto msg = ResourceManager::getInstance()->msgFileType("text/english/game/pro_item.msg");
                     try
                     {
@@ -162,6 +135,7 @@ namespace Falltergeist
                     }
                     ((CritterObject*)object)->setActionPoints(proto->critterActionPoints());
                     ((CritterObject*)object)->setActionPointsMax(proto->critterActionPoints());
+                    ((CritterObject*)object)->setCritterFlags(proto->critterFlags());
                     ((CritterObject*)object)->setHitPointsMax(proto->critterHitPointsMax());
                     ((CritterObject*)object)->setArmorClass(proto->critterArmorClass());
                     ((CritterObject*)object)->setCarryWeightMax(proto->critterCarryWeightMax());
@@ -184,7 +158,7 @@ namespace Falltergeist
                     {
                         case SCENERY_TYPE::DOOR:
                         {
-                            object = new DoorSceneryObject();
+                            object = new DoorSceneryObject(logger);
                             break;
                         }
                         case SCENERY_TYPE::ELEVATOR:
@@ -321,7 +295,9 @@ namespace Falltergeist
             if (proto->scriptId() > 0)
             {
                 auto intFile = ResourceManager::getInstance()->intFileType(proto->scriptId());
-                if (intFile) object->setScript(new VM::Script(intFile, object));
+                if (intFile) {
+                    object->setScript(new VM::Script(intFile, object));
+                }
             }
 
             return object;

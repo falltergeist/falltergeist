@@ -1,36 +1,9 @@
-/*
- * Copyright 2012-2018 Falltergeist Developers.
- *
- * This file is part of Falltergeist.
- *
- * Falltergeist is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Falltergeist is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
- */
-
-// Related headers
 #include "../../VM/Handler/Opcode80D5Handler.h"
-
-// C++ standard includes
-
-// Falltergeist includes
 #include "../../Game/Game.h"
-#include "../../Logger.h"
 #include "../../PathFinding/Hexagon.h"
 #include "../../PathFinding/HexagonGrid.h"
 #include "../../State/Location.h"
 #include "../../VM/Script.h"
-
-// Third party includes
 
 namespace Falltergeist
 {
@@ -38,13 +11,17 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            Opcode80D5::Opcode80D5(VM::Script* script) : OpcodeHandler(script)
+            Opcode80D5::Opcode80D5(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
             {
+                this->logger = std::move(logger);
             }
 
             void Opcode80D5::_run()
             {
-                Logger::debug("SCRIPT") << "[80D5] [*] int tile_num_in_direction(int start_tile, int dir, int distance)" << std::endl;
+                logger->debug()
+                    << "[80D5] [*] int tile_num_in_direction(int start_tile, int dir, int distance)"
+                    << std::endl
+                ;
 
                 auto dataStack = _script->dataStack();
 
@@ -52,22 +29,16 @@ namespace Falltergeist
                 auto dir = dataStack->popInteger();
                 auto start_tile = dataStack->popInteger();
 
-                if (dir < 0 || dir > 5 || distance < 0)
-                {
+                if (dir < 0 || dir > 5 || distance < 0) {
                     //error?
                     dataStack->push(start_tile);
-                }
-                else
-                {
-                    auto grid = Game::getInstance()->locationState()->hexagonGrid();
+                } else {
+                    auto grid = Game::Game::getInstance()->locationState()->hexagonGrid();
                     auto hex = grid->hexInDirection(grid->at(start_tile), dir, distance);
-                    if (hex)
-                    {
+                    if (hex) {
                         dataStack->push(hex->number());
 
-                    }
-                    else
-                    {
+                    } else {
                         dataStack->push(start_tile);
                     }
                 }

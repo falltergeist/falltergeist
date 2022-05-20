@@ -1,88 +1,65 @@
-/*
- * Copyright 2012-2018 Falltergeist Developers.
- *
- * This file is part of Falltergeist.
- *
- * Falltergeist is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Falltergeist is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
- */
-
-// Related headers
 #include "../State/PlayerEditAge.h"
-
-// C++ standard includes
-
-// Falltergeist includes
 #include "../functions.h"
 #include "../Game/DudeObject.h"
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
 #include "../ResourceManager.h"
 #include "../UI/BigCounter.h"
+#include "../UI/Factory/ImageButtonFactory.h"
 #include "../UI/Image.h"
 #include "../UI/ImageButton.h"
 #include "../UI/TextArea.h"
 
-// Third party includes
-
 namespace Falltergeist
 {
+    using ImageButtonType = UI::Factory::ImageButtonFactory::Type;
+
     namespace State
     {
-        PlayerEditAge::PlayerEditAge() : State()
+        PlayerEditAge::PlayerEditAge(std::shared_ptr<UI::IResourceManager> resourceManager) : State()
         {
-        }
-
-        PlayerEditAge::~PlayerEditAge()
-        {
+            this->resourceManager = resourceManager;
+            imageButtonFactory = std::make_unique<UI::Factory::ImageButtonFactory>(resourceManager);
         }
 
         void PlayerEditAge::init()
         {
-            if (_initialized) return;
+            if (_initialized) {
+                return;
+            }
             State::init();
 
             setFullscreen(false);
             setModal(true);
 
-            Point backgroundPos = Point((Game::getInstance()->renderer()->size() - Point(640, 480)) / 2);
+            Point backgroundPos = Point((Game::Game::getInstance()->renderer()->size() - Point(640, 480)) / 2);
             int backgroundX = backgroundPos.x();
             int backgroundY = backgroundPos.y();
 
-            auto bg = new UI::Image("art/intrface/charwin.frm");
+            auto bg = resourceManager->getImage("art/intrface/charwin.frm");
             bg->setPosition(backgroundPos + Point(160, 0));
 
-            auto ageBox = new UI::Image("art/intrface/agebox.frm");
+            auto ageBox = resourceManager->getImage("art/intrface/agebox.frm");
             ageBox->setPosition(backgroundPos + Point(168, 10));
 
-            auto doneBox = new UI::Image("art/intrface/donebox.frm");
+            auto doneBox = resourceManager->getImage("art/intrface/donebox.frm");
             doneBox->setPosition(backgroundPos + Point(175, 40));
 
-            auto decButton = new UI::ImageButton(UI::ImageButton::Type::LEFT_ARROW, backgroundX+178, backgroundY+14);
+            auto decButton = imageButtonFactory->getByType(ImageButtonType::LEFT_ARROW, {backgroundX + 178, backgroundY + 14});
             decButton->mouseClickHandler().add(std::bind(&PlayerEditAge::onDecButtonClick, this, std::placeholders::_1));
 
-            auto incButton = new UI::ImageButton(UI::ImageButton::Type::RIGHT_ARROW, backgroundX+262, backgroundY+14);
+            auto incButton = imageButtonFactory->getByType(ImageButtonType::RIGHT_ARROW, {backgroundX + 262, backgroundY + 14});
             incButton->mouseClickHandler().add(std::bind(&PlayerEditAge::onIncButtonClick, this, std::placeholders::_1));
 
-            auto doneButton= new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, backgroundX+188, backgroundY+43);
+            auto doneButton= imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {backgroundX + 188, backgroundY + 43});
             doneButton->mouseClickHandler().add(std::bind(&PlayerEditAge::onDoneButtonClick, this, std::placeholders::_1));
 
             auto doneLabel = new UI::TextArea(_t(MSG_EDITOR, 100), backgroundX+210, backgroundY+43);
 
             doneLabel->setFont("font3.aaf", {0xb8, 0x9c, 0x28, 0xff});
 
-            _counter = new UI::BigCounter(backgroundX+215, backgroundY+13);
-            _counter->setNumber(Game::getInstance()->player()->age());
+            _counter = new UI::BigCounter({backgroundX + 215, backgroundY + 13});
+            _counter->setNumber(Game::Game::getInstance()->player()->age());
 
             addUI(bg);
             addUI(ageBox);
@@ -112,7 +89,7 @@ namespace Falltergeist
 
         void PlayerEditAge::doBack()
         {
-            Game::getInstance()->popState();
+            Game::Game::getInstance()->popState();
         }
 
         void PlayerEditAge::doDec()
@@ -127,8 +104,8 @@ namespace Falltergeist
 
         void PlayerEditAge::doDone()
         {
-            Game::getInstance()->player()->setAge(_counter->number());
-            Game::getInstance()->popState();
+            Game::Game::getInstance()->player()->setAge(_counter->number());
+            Game::Game::getInstance()->popState();
         }
 
         void PlayerEditAge::doInc()

@@ -1,31 +1,8 @@
-/*
- * Copyright 2012-2018 Falltergeist Developers.
- *
- * This file is part of Falltergeist.
- *
- * Falltergeist is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Falltergeist is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
- */
+#pragma once
 
-#ifndef FALLTERGEIST_STATE_INVENTORY_H
-#define FALLTERGEIST_STATE_INVENTORY_H
-
-// C++ standard includes
-
-// Falltergeist includes
+#include "../ILogger.h"
 #include "../State/State.h"
-
-// Third party includes
+#include "../UI/IResourceManager.h"
 
 namespace Falltergeist
 {
@@ -33,35 +10,40 @@ namespace Falltergeist
     {
         class ItemObject;
     }
+    namespace UI
+    {
+        namespace Factory
+        {
+            class ImageButtonFactory;
+        }
+    }
     namespace State
     {
-        class Inventory : public State
+        class Inventory final : public State
         {
             public:
-                Inventory();
-                ~Inventory() override;
+                Inventory(std::shared_ptr<UI::IResourceManager> resourceManager, std::shared_ptr<ILogger> logger);
+                Inventory(const Inventory&) = delete;
+                Inventory& operator=(const Inventory&) = delete;
+                ~Inventory() override = default;
 
                 void init() override;
 
                 void onDoneButtonClick(Event::Mouse* event);
                 void onScrollUpButtonClick(Event::Mouse* event);
                 void onScrollDownButtonClick(Event::Mouse* event);
-                void onArmorSlotMouseDown(Event::Mouse* event);
-                void onLeftHandSlotMouseDown(Event::Mouse* event);
-                void onRightHandSlotMouseDown(Event::Mouse* event);
                 void enableScrollDownButton(bool enable);
                 void enableScrollUpButton(bool enable);
-                //void onSlotMouseDown(Event::Mouse* event);
-                //void onSlotMouseUp(Event::Mouse* event);
-                //void onSlotDrag(Event::Mouse* event);
                 void backgroundRightClick(Event::Mouse* event);
                 void onKeyDown(Event::Keyboard* event) override;
                 void onInventoryModified();
 
             private:
+                std::shared_ptr<ILogger> logger;
                 std::string _handItemSummary (Game::ItemObject* hand);
+                std::shared_ptr<UI::IResourceManager> resourceManager;
+                std::unique_ptr<UI::Factory::ImageButtonFactory> imageButtonFactory;
                 void _screenShow (unsigned int PID);
         };
     }
 }
-#endif // FALLTERGEIST_STATE_INVENTORY_H

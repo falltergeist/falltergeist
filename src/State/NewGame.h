@@ -1,32 +1,9 @@
-/*
- * Copyright 2012-2018 Falltergeist Developers.
- *
- * This file is part of Falltergeist.
- *
- * Falltergeist is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Falltergeist is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
- */
+#pragma once
 
-#ifndef FALLTERGEIST_STATE_NEWGAME_H
-#define FALLTERGEIST_STATE_NEWGAME_H
-
-// C++ standard includes
 #include <vector>
-
-// Falltergeist includes
-#include "State.h"
-
-// Third party includes
+#include "../ILogger.h"
+#include "../State/State.h"
+#include "../UI/IResourceManager.h"
 
 namespace Falltergeist
 {
@@ -34,16 +11,22 @@ namespace Falltergeist
     {
         class DudeObject;
     }
+    namespace UI
+    {
+        namespace Factory
+        {
+            class ImageButtonFactory;
+        }
+    }
     namespace State
     {
-        class NewGame : public State
+        class NewGame final : public State
         {
             public:
-                NewGame();
-                ~NewGame() override;
+                NewGame(std::shared_ptr<UI::IResourceManager> resourceManager, std::shared_ptr<ILogger> logger);
+                virtual ~NewGame() = default;
 
                 void init() override;
-                void think() override;
 
                 void onBackButtonClick(Event::Mouse* event);
                 void onBackFadeDone(Event::State* event);
@@ -61,12 +44,15 @@ namespace Falltergeist
                 void doPrev();
                 void onKeyDown(Event::Keyboard* event) override;
 
-            protected:
+            private:
                 unsigned char _selectedCharacter = 0;
                 std::vector<std::unique_ptr<Game::DudeObject>> _characters;
 
                 void _changeCharacter();
+
+                std::shared_ptr<ILogger> logger;
+                std::shared_ptr<UI::IResourceManager> resourceManager;
+                std::unique_ptr<UI::Factory::ImageButtonFactory> imageButtonFactory;
         };
     }
 }
-#endif // FALLTERGEIST_STATE_NEWGAME_H

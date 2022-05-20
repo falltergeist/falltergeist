@@ -1,31 +1,6 @@
-/*
- * Copyright 2012-2018 Falltergeist Developers.
- *
- * This file is part of Falltergeist.
- *
- * Falltergeist is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Falltergeist is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
- */
+#pragma once
 
-#ifndef FALLTERGEIST_SETTINGS_H
-#define FALLTERGEIST_SETTINGS_H
-
-// C++ standard includes
 #include <string>
-
-// Falltergeist includes
-
-// Third patry includes
 
 namespace Falltergeist
 {
@@ -51,6 +26,10 @@ namespace Falltergeist
             unsigned int screenWidth() const;
 
             unsigned int screenHeight() const;
+
+            int screenX() const;
+
+            int screenY() const;
 
             const std::string& initialLocation() const;
 
@@ -108,12 +87,16 @@ namespace Falltergeist
             unsigned int scale() const;
             void setFullscreen(bool _fullscreen);
             bool fullscreen() const;
+            bool alwaysOnTop() const;
             void setAudioBufferSize(int _audioBufferSize);
             int audioBufferSize() const;
 
         private:
             unsigned int _screenWidth = 640;
             unsigned int _screenHeight = 480;
+            int _screenX = -1;
+            int _screenY = -1;
+            bool _alwaysOnTop = false;
             std::string _initLocation = "klamall";
             bool _forceLocation = false;
             bool _displayFps = true;
@@ -149,6 +132,4 @@ namespace Falltergeist
             double _voiceVolume = 1.0;
             int _audioBufferSize = 512;
     };
-} // Falltergeist
-
-#endif // FALLTERGEIST_SETTINGS_H
+}

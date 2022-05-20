@@ -1,10 +1,11 @@
 [requires]
-zlib/1.2.11@lasote/stable
-SDL2/2.0.5@lasote/stable
-SDL2_image/2.0.1@lasote/stable
-SDL2_mixer/2.0.1@a_teammate/testing
-glew/2.0.0@coding3d/stable
-glm/0.9.7.6@dlarudgus20/stable
+zlib/1.2.11@conan/stable
+sdl2/2.0.10@bincrafters/stable
+sdl2_image/2.0.5@bincrafters/stable
+sdl2_mixer/2.0.4@bincrafters/stable
+glew/2.1.0@bincrafters/stable
+glm/0.9.9.5@g-truc/stable
+libiconv/1.16
 
 [generators]
 cmake

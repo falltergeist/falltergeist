@@ -1,36 +1,15 @@
-/*
- * Copyright 2012-2018 Falltergeist Developers.
- *
- * This file is part of Falltergeist.
- *
- * Falltergeist is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Falltergeist is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
- */
+#pragma once
 
-#ifndef FALLTERGEIST_GAME_GAME_H
-#define FALLTERGEIST_GAME_GAME_H
-
-// C++ standard includes
 #include <memory>
 #include <string>
 #include <vector>
-
-// Falltergeist includes
-#include "../Base/Singleton.h"
-#include "../Game/Time.h"
-
-// Third party includes
 #include <SDL.h>
+#include "../Game/Time.h"
+#include "../Graphics/IRendererConfig.h"
+#include "../Graphics/IWindow.h"
+#include "../ILogger.h"
+#include "../UI/IResourceManager.h"
+#include "../Input/SdlMouse.h"
 
 namespace Falltergeist
 {
@@ -67,10 +46,6 @@ namespace Falltergeist
         class FpsCounter;
         class TextArea;
     }
-    namespace VFS
-    {
-        class VFS;
-    }
 
     class Exception;
     class ResourceManager;
@@ -85,18 +60,26 @@ namespace Falltergeist
             public:
                 static Game* getInstance();
 
+                static Game* getInstance(std::shared_ptr<ILogger> logger);
+
                 void shutdown();
+
                 /**
                  * Returns pointer to a state at the top of stack.
                  * @param offset optional offset (1 means second from the top, and so on)
                  */
                 State::State* topState(unsigned offset = 0) const;
+
                 void pushState(State::State* state);
+
                 void setState(State::State* state);
+
                 void popState(bool doDelete = true);
 
                 void run();
+
                 void quit();
+
                 void init(std::unique_ptr<Settings> settings);
 
                 /**
@@ -106,73 +89,103 @@ namespace Falltergeist
                 /**
                  * @brief Process real-time logic.
                  */
-                void think();
+                void think(const float &deltaTime);
                 /**
                  * @brief Render the game.
                  */
                 void render();
 
                 void setPlayer(std::shared_ptr<DudeObject> player);
-                std::shared_ptr<DudeObject> player();
 
-                Input::Mouse* mouse() const;
-                Graphics::Renderer* renderer();
-                Time* gameTime();
+                std::shared_ptr<DudeObject> player() const;
+
+                std::shared_ptr<Input::Mouse> mouse() const;
+
+                std::shared_ptr<Graphics::Renderer> renderer() const;
+
+                std::shared_ptr<Time> gameTime() const;
+
                 State::Location* locationState();
-                Audio::Mixer* mixer();
+
+                std::shared_ptr<Audio::Mixer> mixer() const;
+
                 Event::Dispatcher* eventDispatcher();
 
+                std::shared_ptr<ILogger> logger() const;
+
                 void setGVAR(unsigned int number, int value);
+
                 int GVAR(unsigned int number);
 
-                Settings* settings() const;
+                std::shared_ptr<Settings> settings() const;
+
                 Graphics::AnimatedPalette* animatedPalette();
 
                 unsigned int frame() const;
 
+                void setUIResourceManager(std::shared_ptr<UI::IResourceManager> uiResourceManager);
+
             protected:
                 std::vector<int> _GVARS;
+
                 std::vector<std::unique_ptr<State::State>> _states;
+
                 std::vector<std::unique_ptr<State::State>> _statesForDelete;
 
-                Time _gameTime;
+                std::shared_ptr<Time> _gameTime;
 
                 unsigned int _frame = 0;
 
-                std::unique_ptr<VFS::VFS> _vfs;
-                std::unique_ptr<Graphics::Renderer> _renderer;
-                std::unique_ptr<Audio::Mixer> _mixer;
-                std::unique_ptr<Input::Mouse> _mouse;
-                std::unique_ptr<Settings> _settings;
+                std::shared_ptr<Graphics::Renderer> _renderer;
+
+                std::shared_ptr<Audio::Mixer> _mixer;
+
+                std::shared_ptr<Input::Mouse> _mouse;
+
+                std::shared_ptr<Settings> _settings;
+
                 std::unique_ptr<Graphics::AnimatedPalette> _animatedPalette;
+
                 std::unique_ptr<Event::Dispatcher> _eventDispatcher;
 
                 std::unique_ptr<UI::FpsCounter> _fpsCounter;
+
                 std::unique_ptr<UI::TextArea> _mousePosition, _currentTime, _falltergeistVersion;
 
                 std::shared_ptr<DudeObject> _player;
 
                 bool _quit = false;
+
                 bool _initialized = false;
 
                 SDL_Event _event;
 
                 std::vector<State::State*> _getVisibleStates();
+
                 std::vector<State::State*> _getActiveStates();
 
             private:
-                friend class Base::Singleton<Game>;
+                static Game* _instance;
+
+                std::shared_ptr<UI::IResourceManager> _uiResourceManager;
+
+                std::shared_ptr<ILogger> _logger;
+
                 void _initGVARS();
+
                 std::unique_ptr<Event::Event> _createEventFromSDL(const SDL_Event& sdlEvent);
 
+                std::unique_ptr<Graphics::IRendererConfig> createRendererConfigFromSettings();
+
                 Game();
+
+                Game(std::shared_ptr<ILogger> logger);
+
                 ~Game();
+
                 Game(Game const&) = delete;
+
                 void operator=(Game const&) = delete;
         };
-
-        Game* getInstance();
     }
 }
-
-#endif // FALLTERGEIST_GAME_GAME_H

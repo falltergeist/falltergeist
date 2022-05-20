@@ -1,90 +1,58 @@
-/*
- * Copyright 2012-2018 Falltergeist Developers.
- *
- * This file is part of Falltergeist.
- *
- * Falltergeist is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Falltergeist is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
- */
+#pragma once
 
-#ifndef FALLTERGEIST_GRAPHICS_SIZE_H
-#define FALLTERGEIST_GRAPHICS_SIZE_H
-
-// C++ standard includes
-
-// Falltergeist includes
 #include "../Graphics/Point.h"
 
-// Third party includes
+namespace Falltergeist {
+    namespace Graphics {
+        /**
+         * Represents a Size of a rectangular object: width and height, in pixels.
+         */
+        class Size {
+        public:
+            Size() : _width(0), _height(0) {
+            }
 
-namespace Falltergeist
-{
-namespace Graphics
-{
+            Size(int width, int height);
 
-/**
- * Represents a Size of a rectangular object: width and height, in pixels.
- */
-class Size
-{
-public:
-    Size() : _width(0), _height(0) {}
+            explicit Size(const Point& rhs);
 
-    Size(int width, int height);
+            Size& operator=(const Point& rhs);
 
-    explicit Size(const Point& rhs);
+            // Implicit conversion to Point
+            operator Point() const;
 
-    Size& operator=(const Point& rhs);
+            int width() const;
 
-    // Implicit conversion to Point
-    operator Point() const;
+            int height() const;
 
-    int width() const;
-    int height() const;
+            void setWidth(int width);
 
-    /*int& rwidth();
-    int& rheight();*/
+            void setHeight(int height);
 
-    void setWidth(int width);
-    void setHeight(int height);
+            Size& operator+=(const Size& rhs);
 
-    Size& operator +=(const Size& rhs);
-    Size& operator -=(const Size& rhs);
-    Size& operator *=(double rhs);
-    Size& operator /=(double rhs);
+            Size& operator-=(const Size& rhs);
 
-    bool operator ==(const Size& rhs) const;
-    bool operator !=(const Size& rhs) const;
+            Size& operator*=(double rhs);
 
-    friend Size operator +(Size lhs, const Size& rhs);
-    friend Size operator -(Size lhs, const Size& rhs);
-    friend Size operator *(Size lhs, double rhs);
-    friend Size operator /(Size lhs, double rhs);
+            Size& operator/=(double rhs);
 
-    // Addition of another Size
-    Size add(const Size& rhs) const;
-    // Subtraction of another Size
-    Size sub(const Size& rhs) const;
-    // Multiplication of width/height by given number
-    Size mul(double rhs) const;
-    // Division by given number
-    Size div(double rhs) const;
+            bool operator==(const Size& rhs) const;
 
-protected:
-    int _width;
-    int _height;
-};
+            bool operator!=(const Size& rhs) const;
 
+            friend Size operator+(Size lhs, const Size& rhs);
+
+            friend Size operator-(Size lhs, const Size& rhs);
+
+            friend Size operator*(Size lhs, double rhs);
+
+            friend Size operator/(Size lhs, double rhs);
+
+        private:
+            int _width;
+
+            int _height;
+        };
+    }
 }
-}
-#endif // FALLTERGEIST_GRAPHICS_SIZE_H

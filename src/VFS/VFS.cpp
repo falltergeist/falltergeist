@@ -1,89 +1,117 @@
-/*
- * Copyright 2012-2018 Falltergeist Developers.
- *
- * This file is part of Falltergeist.
- *
- * Falltergeist is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Falltergeist is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
- */
-
-// Related headers
 #include "../VFS/VFS.h"
+#include "../Utils/FormattedString.h"
 
-// C++ standard includes
-#include <string>
-#include <vector>
+namespace Falltergeist {
+    namespace VFS {
+        using Utils::FormattedString;
 
-// Falltergeist includes
-#include "../CrossPlatform.h"
-#include "../VFS/File.h"
-#include "../VFS/Plugin/DatFile.h"
-#include "../VFS/Plugin/System.h"
+        VFS::VFS(std::shared_ptr<ILogger> logger) : _logger(logger) {
+        }
 
-// Third party includes
+        void VFS::addMount(const std::string& path, std::unique_ptr<IDriver>&& driver) {
+            _logger->debug() << FormattedString("Mount point '%s' was added with driver '%s'", path.c_str(), driver->name().c_str()) << std::endl;
+            _mounts.insert(std::make_pair(path, std::move(driver)));
+        }
 
-namespace Falltergeist
-{
-namespace VFS
-{
+        void VFS::addMount(const std::string& path, std::unique_ptr<IDriver>& driver) {
+            addMount(path, std::move(driver));
+        }
 
-VFS::VFS()
-{
-    // OS filesystem plugin. Read directly from disk
-    _plugins.push_back(new Plugin::System);
+        bool VFS::exists(const std::string& pathToFile) {
+            for (auto it = _mounts.begin(); it != _mounts.end(); ++it) {
+                if (it->first.size() && pathToFile.find(it->first) == std::string::npos) {
+                    _logger->debug() << FormattedString(
+                        "Path '%s' does not match mount point '%s'(%s)",
+                        pathToFile.c_str(),
+                        it->first.c_str(),
+                        it->second->name().c_str()
+                    ) << std::endl;
+                    continue;
+                }
 
-    // one plugin instance per DAT file
-    for (auto filename : CrossPlatform::findFalloutDataFiles())
-    {
-        _plugins.push_back(new Plugin::DatFile(CrossPlatform::findFalloutDataPath() + "/" + filename));
-    }
+                if (it->second->exists(it->first.size() ? pathToFile.substr(it->first.length()) : pathToFile)) {
+                    _logger->debug() << FormattedString(
+                        "Path '%s' was found in mount point '%s'(%s)",
+                        pathToFile.c_str(),
+                        it->first.c_str(),
+                        it->second->name().c_str()
+                    ) << std::endl;
+                    return true;
+                }
+            }
 
-    // Here comes other plugins
-    // Zip archives... network repos... etc
-}
+            _logger->debug() << FormattedString(
+                "Path '%s' was not found in any mount point",
+                pathToFile.c_str()
+            ) << std::endl;
+            return false;
+        }
 
-VFS::~VFS()
-{
-    for (auto& item : _cache)
-    {
-        delete item.second;
-    }
+        std::shared_ptr<IFile> VFS::open(const std::string& path, IFile::OpenMode mode) {
+            if (_openedFiles.count(path) != 0) {
+                return _openedFiles.at(path);
+            }
 
-    for (auto plugin : _plugins)
-    {
-        delete plugin;
-    }
-}
+            for (auto it = _mounts.begin(); it != _mounts.end(); ++it) {
+                if (it->first.size() && path.find(it->first) == std::string::npos) {
+                    _logger->debug() << FormattedString(
+                        "Path '%s' does not match mount point '%s'(%s)",
+                        path.c_str(),
+                        it->first.c_str(),
+                        it->second->name().c_str()
+                    ) << std::endl;
+                    continue;
+                }
 
-File* VFS::open(const std::string& filename)
-{
-    if (_cache.find(filename) != _cache.end())
-    {
-        return _cache.at(filename);
-    }
+                if (mode == IFile::OpenMode::Read || mode == IFile::OpenMode::ReadWrite) {
+                    // File should exist in these modes
+                    if (!it->second->exists(it->first.size() ? path.substr(it->first.length() + 1) : path)) {
+                        _logger->debug() << FormattedString(
+                            "File '%s' was not found in mount point '%s'(%s)",
+                            path.c_str(),
+                            it->first.c_str(),
+                            it->second->name().c_str()
+                        ) << std::endl;
+                        continue;
+                    }
+                }
 
-    for(auto plugin : _plugins)
-    {
-        auto file = plugin->open(filename);
-        if (file)
-        {
-            _cache.insert(std::make_pair(filename, file));
-            return file;
+                _logger->debug() << FormattedString(
+                    "Opening '%s' in mount point '%s'(%s)",
+                    path.c_str(),
+                    it->first.c_str(),
+                    it->second->name().c_str()
+                ) << std::endl;
+                auto file = it->second->open(it->first.size() ? path.substr(it->first.length() + 1) : path, mode);
+                if (file) {
+                    _openedFiles.emplace(std::make_pair(path, file));
+                    return file;
+                }
+
+                _logger->debug() << FormattedString(
+                    "Could not open file '%s' in mount point '%s'(%s)",
+                    path.c_str(),
+                    it->first.c_str(),
+                    it->second->name().c_str()
+                ) << std::endl;
+            }
+
+            _logger->debug() << FormattedString(
+                "File '%s' not found in any mount point",
+                path.c_str()
+            ) << std::endl;
+            return nullptr;
+        }
+
+        void VFS::close(std::shared_ptr<IFile>& file) {
+            file->_close();
+
+            for (auto it = _openedFiles.begin(); it != _openedFiles.end(); ++it) {
+                if (it->second == file) {
+                    _openedFiles.erase(it->first);
+                    break;
+                }
+            }
         }
     }
-
-    return nullptr;
-}
-
-}
 }

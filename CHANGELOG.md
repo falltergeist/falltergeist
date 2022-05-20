@@ -1,5 +1,29 @@
-0.3.2 Under development
+Under development
 =======================
+
+0.4.0 (2022-05-20)
+=======================
+- [bugfix] sdl2main.lib is not linked with CMake (MrCool92)
+- [bugfix] Opcode810D (obj_carrying_pid_obj) checks containers as well (JanSimek)
+- [bugfix] Fix linking release builds on Windows and prevent closing console after a crash (JanSimek)
+- [bugfix] Fix GLEW initialization on Wayland (ids1024)
+- [feature] Logger interface introduced (alexeevdv)
+- [feature] Search data files in parent dir too (alexeevdv)
+- [feature] Basic barter system (Zervox, JanSimek)
+- [feature] Fix and update Travis build (JanSimek)
+- [feature] Load critter flags from PRO file (JanSimek)
+- [feature] Added 'Take All' and scroll buttons to the container window (JanSimek)
+- [feature] Show number of stacked items in the inventory (JanSimek)
+- [feature] Player moves to an adjacent hexagon when using (a skill on) an object (AdamFx990)
+- [feature] Doors can't be opened if they're locked (AdamFx990, 667bdrm)
+- [feature] Optimisations & code readability improvements to hexagon logic (AdamFx990)
+- [feature] Added missing tabs for perks, karma and kills in the Character window (JanSimek)
+- [feature] Added timediff to gameloop in order to make things to be independent from SDL ticks (alexeevdv)
+- [feature] Extract UI generation logic from game objects (alexeevdv)
+- [feature] New video settings: window position(x,y) and always_on_top flag (adamkewley)
+- [feature] Added missing logo in the Pipboy window and special date greetings (JanSimek)
+- [feature] Added ladders and stairs funtionality (667bdrm)
+- [feature] Added elevators support (667bdrm)
 
 0.3.1 (2018-01-14)
 =======================

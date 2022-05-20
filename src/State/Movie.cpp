@@ -1,33 +1,8 @@
-/*
- * Copyright 2012-2018 Falltergeist Developers.
- *
- * This file is part of Falltergeist.
- *
- * Falltergeist is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Falltergeist is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
- */
-
-// Related headers
 #include "../State/Movie.h"
-
-// C++ standard includes
-
-// Falltergeist includes
 #include "../Audio/Mixer.h"
 #include "../CrossPlatform.h"
 #include "../Event/Keyboard.h"
 #include "../Event/Mouse.h"
-#include "../Format/Dat/MiscFile.h"
 #include "../Format/Lst/File.h"
 #include "../Format/Sve/File.h"
 #include "../Game/Game.h"
@@ -36,11 +11,11 @@
 #include "../Ini/Parser.h"
 #include "../Input/Mouse.h"
 #include "../ResourceManager.h"
+#include "../State/State.h"
 #include "../State/MainMenu.h"
 #include "../UI/MvePlayer.h"
 #include "../UI/TextArea.h"
-
-// Third party includes
+#include "../Exception.h"
 
 namespace Falltergeist
 {
@@ -57,14 +32,16 @@ namespace Falltergeist
 
         void Movie::init()
         {
-            if (_initialized) return;
+            if (_initialized) {
+                return;
+            }
             State::init();
 
             setFullscreen(true);
             setModal(true);
 
-            Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::NONE);
-            auto renderer = Game::getInstance()->renderer();
+            Game::Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::NONE);
+            auto renderer = Game::Game::getInstance()->renderer();
             setPosition((renderer->size() - Point(640, 320)) / 2);
 
             auto lst = ResourceManager::getInstance()->lstFileType("data/movies.lst");
@@ -76,11 +53,20 @@ namespace Falltergeist
 
             if (cfglst->strings()->at(_id)!="reserved.cfg")
             {
-                auto moviecfg = ResourceManager::getInstance()->miscFileType(moviecfgfile);
-                //parse ini
-                moviecfg->stream().setPosition(0);
-                std::istream str(&moviecfg->stream());
-                auto inifile = new Ini::Parser(str);
+                auto& vfs = ResourceManager::getInstance()->vfs();
+                auto file = vfs->open(moviecfgfile, VFS::IFile::OpenMode::Read);
+                if (!file || !file->isOpened()) {
+                    throw Exception("Could not open movie config file");
+                }
+
+                std::string content;
+                content.resize(file->size());
+                file->read(content.data(), file->size());
+                vfs->close(file);
+
+                std::istringstream contentStream(content);
+
+                auto inifile = new Ini::Parser(contentStream);
                 auto ini = inifile->parse();
                 int total_effects = ini->section("info")->propertyInt("total_effects",0);
                 auto effect_frames = ini->section("info")->propertyArray("effect_frames");
@@ -108,7 +94,9 @@ namespace Falltergeist
             if (sublst->strings()->at(_id)!="reserved.sve")
             {
                 _subs = ResourceManager::getInstance()->sveFileType(subfile);
-                if (_subs) _hasSubs = true;
+                if (_subs) {
+                    _hasSubs = true;
+                }
             }
             addUI("movie", new UI::MvePlayer(ResourceManager::getInstance()->mveFileType(movie)));
 
@@ -120,38 +108,40 @@ namespace Falltergeist
             subLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
             addUI("subs",subLabel);
 
-            if (_hasSubs)
+            if (_hasSubs) {
                 _nextSubLine = _subs->getSubLine(0);
-            else
-                _nextSubLine = std::pair<int,std::string>(999999,"");
+            } else {
+                _nextSubLine = std::pair<int, std::string>(999999, "");
+            }
         }
 
-        void Movie::think()
+        void Movie::think(const float &deltaTime)
         {
-            State::think();
+            State::think(deltaTime);
+
+            if (!_active) {
+                return;
+            }
 
             unsigned int frame = dynamic_cast<UI::MvePlayer*>(getUI("movie"))->frame();
-            if ( frame >= _nextSubLine.first)
-            {
+            if (frame >= _nextSubLine.first) {
                 dynamic_cast<UI::TextArea*>(getUI("subs"))->setText(_nextSubLine.second);
-                if (_hasSubs) _nextSubLine = _subs->getSubLine(dynamic_cast<UI::MvePlayer*>(getUI("movie"))->frame());
-            }
-            if (_effect_index<_effects.size() && frame>=_effects[_effect_index].frame)
-            {
-                if (_effects[_effect_index].direction < 0)
-                {
-                    Game::getInstance()->renderer()->fadeIn(_effects[_effect_index].r, _effects[_effect_index].g, _effects[_effect_index].b, _effects[_effect_index].frames, true);
+                if (_hasSubs) {
+                    _nextSubLine = _subs->getSubLine(dynamic_cast<UI::MvePlayer*>(getUI("movie"))->frame());
                 }
-                else
-                {
-                    Game::getInstance()->renderer()->fadeOut(_effects[_effect_index].r, _effects[_effect_index].g, _effects[_effect_index].b, _effects[_effect_index].frames, true);
+            }
+            if (_effect_index<_effects.size() && frame>=_effects[_effect_index].frame) {
+                if (_effects[_effect_index].direction < 0) {
+                    Game::Game::getInstance()->renderer()->fadeIn(_effects[_effect_index].r, _effects[_effect_index].g, _effects[_effect_index].b, _effects[_effect_index].frames, true);
+                } else {
+                    Game::Game::getInstance()->renderer()->fadeOut(_effects[_effect_index].r, _effects[_effect_index].g, _effects[_effect_index].b, _effects[_effect_index].frames, true);
                 }
                 _effect_index++;
             }
 
             if (!_started)
             {
-                Game::getInstance()->mixer()->playMovieMusic(dynamic_cast<UI::MvePlayer*>(getUI("movie")));
+                Game::Game::getInstance()->mixer()->playMovieMusic(dynamic_cast<UI::MvePlayer*>(getUI("movie")));
                 _started = true;
             }
             if ((dynamic_cast<UI::MvePlayer*>(getUI("movie")))->finished())
@@ -182,9 +172,17 @@ namespace Falltergeist
 
         void Movie::onVideoFinished()
         {
-            Game::getInstance()->mixer()->stopMusic();
-            Game::getInstance()->mouse()->popState();
-            Game::getInstance()->popState();
+            Game::Game::getInstance()->mixer()->stopMusic();
+            Game::Game::getInstance()->mouse()->popState();
+
+            // without this the location will be absolutely dark if you didn't interrupted movie play
+            if (Game::Game::getInstance()->locationState())
+            {
+                fadeDoneHandler().clear();
+                Game::Game::getInstance()->renderer()->fadeIn(255, 255, 255, 500);
+            }
+
+            Game::Game::getInstance()->popState();
         }
     }
 }

@@ -1,33 +1,7 @@
-/*
- * Copyright 2012-2014 Falltergeist Developers.
- *
- * This file is part of Falltergeist.
- *
- * Falltergeist is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Falltergeist is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
- */
-
-// Related headers
-#include "../VM/Stack.h"
-
-// C++ standard includes
 #include <string>
-
-// Falltergeist includes
 #include "../Exception.h"
+#include "../VM/Stack.h"
 #include "../VM/StackValue.h"
-
-// Third party includes
 
 namespace Falltergeist
 {
@@ -41,14 +15,16 @@ namespace Falltergeist
         {
         }
 
-        void Stack::push(const StackValue& value)
+        void Stack::push(const StackValue &value)
         {
             _values.push_back(value);
         }
 
         const StackValue Stack::pop()
         {
-            if (_values.size() == 0) throw Exception("Stack::pop() - stack is empty");
+            if (_values.size() == 0) {
+                throw Exception("Stack::pop() - stack is empty");
+            }
             auto value = _values.back();
             _values.pop_back();
             return value;
@@ -61,15 +37,19 @@ namespace Falltergeist
 
         void Stack::swap()
         {
-            if (_values.size() < 2) throw Exception("Stack::swap() - size is < 2");
+            if (_values.size() < 2) {
+                throw Exception("Stack::swap() - size is < 2");
+            }
 
-            auto value1 = _values.back(); _values.pop_back();
-            auto value2 = _values.back(); _values.pop_back();
+            auto value1 = _values.back();
+            _values.pop_back();
+            auto value2 = _values.back();
+            _values.pop_back();
             _values.push_back(value1);
             _values.push_back(value2);
         }
 
-        std::vector<StackValue>* Stack::values()
+        std::vector<StackValue> *Stack::values()
         {
             return &_values;
         }
@@ -86,7 +66,7 @@ namespace Falltergeist
 
         void Stack::push(unsigned int value)
         {
-            push((int)value);
+            push((int) value);
         }
 
         void Stack::push(int value)
@@ -104,12 +84,12 @@ namespace Falltergeist
             push(StackValue(value));
         }
 
-        Game::Object* Stack::popObject()
+        Game::Object *Stack::popObject()
         {
             return pop().objectValue();
         }
 
-        void Stack::push(Game::Object* value)
+        void Stack::push(Game::Object *value)
         {
             push(StackValue(value));
         }

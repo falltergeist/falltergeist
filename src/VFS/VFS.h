@@ -1,62 +1,40 @@
-/*
- * Copyright 2012-2018 Falltergeist Developers.
- *
- * This file is part of Falltergeist.
- *
- * Falltergeist is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Falltergeist is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
- */
+#pragma once
 
-#ifndef FALLTERGEIST_VFS_VFS_H
-#define FALLTERGEIST_VFS_VFS_H
-
-// C++ standard includes
-#include <string>
+#include "../VFS/IDriver.h"
+#include "../VFS/IFile.h"
+#include "../ILogger.h"
 #include <map>
 #include <memory>
-#include <vector>
+#include <string>
 
-// Falltergeist includes
-#include "../VFS/Plugin/IPlugin.h"
+namespace Falltergeist {
+    namespace VFS {
+        class VFS final {
+        public:
+            VFS(std::shared_ptr<ILogger> logger);
 
-// Third party includes
+            VFS(const VFS& other) = delete;
 
-namespace Falltergeist
-{
-namespace VFS
-{
-class File;
+            VFS(VFS&& other) = delete;
 
-namespace Plugin
-{
-    class IPlugin;
+            VFS& operator=(VFS other) = delete;
+
+            void addMount(const std::string& mountPath, std::unique_ptr<IDriver>&& driver);
+
+            void addMount(const std::string& mountPath, std::unique_ptr<IDriver>& driver);
+
+            bool exists(const std::string& pathToFile);
+
+            std::shared_ptr<IFile> open(const std::string& path, IFile::OpenMode mode = IFile::OpenMode::Read);
+
+            void close(std::shared_ptr<IFile>& file);
+
+        private:
+            std::multimap<std::string, std::unique_ptr<IDriver>> _mounts;
+
+            std::map<std::string, std::shared_ptr<IFile>> _openedFiles;
+
+            std::shared_ptr<ILogger> _logger;
+        };
+    }
 }
-
-class VFS
-{
-
-public:
-    VFS();
-    virtual ~VFS();
-
-    File* open(const std::string& filename);
-
-protected:
-    std::vector<Plugin::IPlugin*> _plugins;
-    std::map<std::string, File*> _cache;
-};
-
-
-}
-}
-#endif // FALLTERGEIST_VFS_VFS_H

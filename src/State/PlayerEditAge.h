@@ -1,45 +1,25 @@
-/*
- * Copyright 2012-2018 Falltergeist Developers.
- *
- * This file is part of Falltergeist.
- *
- * Falltergeist is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Falltergeist is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
- */
+#pragma once
 
-#ifndef FALLTERGEIST_STATE_PLAYEREDITAGE_H
-#define FALLTERGEIST_STATE_PLAYEREDITAGE_H
-
-// C++ standard includes
-
-// Falltergeist includes
-#include "State.h"
-
-// Third party includes
+#include "../State/State.h"
+#include "../UI/IResourceManager.h"
 
 namespace Falltergeist
 {
     namespace UI
     {
+        namespace Factory
+        {
+            class ImageButtonFactory;
+        }
         class BigCounter;
     }
     namespace State
     {
-        class PlayerEditAge : public State
+        class PlayerEditAge final: public State
         {
             public:
-                PlayerEditAge();
-                ~PlayerEditAge() override;
+                PlayerEditAge(std::shared_ptr<UI::IResourceManager> resourceManager);
+                virtual ~PlayerEditAge() = default;
 
                 void init() override;
 
@@ -54,7 +34,10 @@ namespace Falltergeist
 
             protected:
                 UI::BigCounter* _counter = nullptr;
+
+            private:
+                std::shared_ptr<UI::IResourceManager> resourceManager;
+                std::unique_ptr<UI::Factory::ImageButtonFactory> imageButtonFactory;
         };
     }
 }
-#endif // FALLTERGEIST_STATE_PLAYEREDITAGE_H

@@ -1,32 +1,16 @@
-/*
- * Copyright 2012-2014 Falltergeist Developers.
- *
- * This file is part of Falltergeist.
- *
- * Falltergeist is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Falltergeist is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
- */
-
-// Related headers
 #include "../../VM/Handler/Opcode810BHandler.h"
+#include "../../Game/DudeObject.h"
+#include "../../Game/Object.h"
+#include "../../Game/SceneryObject.h"
+#include "../../Game/ElevatorSceneryObject.h"
+#include "../../Game/Game.h"
+#include "../../State/Location.h"
+#include "../../PathFinding/HexagonGrid.h"
+#include "../../PathFinding/Hexagon.h"
+#include "../../State/ElevatorDialog.h"
+#include "../../UI/ResourceManager.h"
 
-// C++ standard includes
-
-// Falltergeist includes
-#include "../../Logger.h"
-#include "../../VM/Script.h"
-
-// Third party includes
+#define PID_ELEVATOR_STUB (33555725)
 
 namespace Falltergeist
 {
@@ -34,21 +18,57 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            Opcode810B::Opcode810B(VM::Script* script) : OpcodeHandler(script)
+            Opcode810B::Opcode810B(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
             {
+                this->logger = std::move(logger);
             }
 
             void Opcode810B::_run()
             {
-                Logger::debug("SCRIPT") << "[810B] [*] int metarule(int type, value)" << std::endl;
+                logger->debug() << "[810B] [*] int metarule(int type, value)" << std::endl;
                 auto value = _script->dataStack()->pop();
                 auto type = _script->dataStack()->popInteger();
-                int result = 0;
 
-                switch(type)
-                {
+                int result = 0;
+                auto object = (Game::Object*)_script->sourceObject();
+
+                switch (type) {
                     case 14: // METARULE_TEST_FIRSTRUN
                         result = 1;
+                        break;
+                    case 15: // METARULE_ELEVATOR
+                        logger->info() << "[ELEVATOR] metarule value = " << value.toString() << std::endl;
+
+                        if (auto critter = dynamic_cast<Game::CritterObject *>(object)) {
+                            logger->info() << "Triggered critter PID = " << critter->PID() << std::endl;
+
+                            bool found = false;
+                            for (int i = 1; i < 6; i++) {
+                                if (!found) {
+                                    auto hexagons = Game::Game::getInstance()->locationState()->hexagonGrid()->ring(critter->hexagon(), i);
+
+                                    for (auto hexagon: hexagons) {
+                                        if (!found) {
+                                            auto position = hexagon->number();
+                                            auto objects = Game::Game::getInstance()->locationState()->hexagonGrid()->at(position)->objects();
+
+                                            for (auto object : *objects) {
+                                                if (object->type() == Game::Object::Type::SCENERY && object->PID() == PID_ELEVATOR_STUB) {
+                                                    if (auto elevatorStub = dynamic_cast<Game::ElevatorSceneryObject *>(object)) {
+                                                        logger->info() << "[ELEVATOR] stub found: type = " << (uint32_t)elevatorStub->elevatorType() << " level = " << (uint32_t)elevatorStub->elevatorLevel() << std::endl;
+                                                        found = true;
+                                                        auto elevatorDialog = new State::ElevatorDialog(std::make_shared<UI::ResourceManager>(), this->logger, elevatorStub->elevatorType(), elevatorStub->elevatorLevel());
+                                                        Game::Game::getInstance()->pushState(elevatorDialog);
+                                                    }
+                                                }
+                                            }        
+                                        }
+                                    }
+                                }
+                            }
+                        } 
+
+                        result = -1;
                         break;
                     case 16: // METARULE_PARTY_COUNT
                         result = 0;

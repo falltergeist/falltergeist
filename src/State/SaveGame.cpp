@@ -1,67 +1,44 @@
-/*
- * Copyright 2012-2018 Falltergeist Developers.
- *
- * This file is part of Falltergeist.
- *
- * Falltergeist is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Falltergeist is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
- */
-
-// Related headers
-#include "../State/SaveGame.h"
-
-// C++ standard includes
 #include <sstream>
-
-// Falltergeist includes
+#include "../State/SaveGame.h"
 #include "../functions.h"
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
 #include "../Input/Mouse.h"
 #include "../ResourceManager.h"
 #include "../State/State.h"
+#include "../UI/Factory/ImageButtonFactory.h"
 #include "../UI/Image.h"
 #include "../UI/ImageButton.h"
 #include "../UI/TextArea.h"
 #include "../UI/ImageList.h"
 
-// Third party includes
-
 namespace Falltergeist
 {
+    using ImageButtonType = UI::Factory::ImageButtonFactory::Type;
+
     namespace State
     {
-        SaveGame::SaveGame() : State()
+        SaveGame::SaveGame(std::shared_ptr<UI::IResourceManager> resourceManager) : State()
         {
-        }
-
-        SaveGame::~SaveGame()
-        {
+            this->resourceManager = resourceManager;
+            imageButtonFactory = std::make_unique<UI::Factory::ImageButtonFactory>(resourceManager);
         }
 
         void SaveGame::init()
         {
-            if (_initialized) return;
+            if (_initialized) {
+                return;
+            }
             State::init();
 
             setModal(true);
             setFullscreen(true);
 
-            auto game = Game::getInstance();
+            auto game = Game::Game::getInstance();
             //auto player = Game::getInstance()->player();
 
             // background
-            auto bg = new UI::Image("art/intrface/lsgame.frm");
+            auto bg = resourceManager->getImage("art/intrface/lsgame.frm");
             Point bgPos = Point((game->renderer()->size() - bg->size()) / 2);
             int bgX = bgPos.x();
             int bgY = bgPos.y();
@@ -71,17 +48,17 @@ namespace Falltergeist
             // BUTTONS
 
             // button: up arrow
-            addUI("button_up", new UI::ImageButton(UI::ImageButton::Type::SMALL_UP_ARROW, bgX+35, bgY+58));
+            addUI("button_up", imageButtonFactory->getByType(ImageButtonType::SMALL_UP_ARROW, {bgX + 35, bgY + 58}));
             // button: down arrow
-            addUI("button_down", new UI::ImageButton(UI::ImageButton::Type::SMALL_DOWN_ARROW, bgX+35, bgY+72));
+            addUI("button_down", imageButtonFactory->getByType(ImageButtonType::SMALL_DOWN_ARROW, {bgX + 35, bgY + 72}));
 
             // button: Done
-            auto doneButton = new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, bgX+391, bgY+349);
+            auto doneButton = imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {bgX + 391, bgY + 349});
             doneButton->mouseClickHandler().add(std::bind(&SaveGame::onDoneButtonClick, this, std::placeholders::_1));
             addUI(doneButton);
 
             // button: Cancel
-            auto cancelButton = new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, bgX+495, bgY+349);
+            auto cancelButton = imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {bgX + 495, bgY + 349});
             cancelButton->mouseClickHandler().add(std::bind(&SaveGame::onCancelButtonClick, this, std::placeholders::_1));
             addUI(cancelButton);
 
@@ -107,22 +84,22 @@ namespace Falltergeist
 
         void SaveGame::onDoneButtonClick(Event::Mouse* event)
         {
-            Game::getInstance()->popState();
+            Game::Game::getInstance()->popState();
         }
 
         void SaveGame::onCancelButtonClick(Event::Mouse* event)
         {
-            Game::getInstance()->popState();
+            Game::Game::getInstance()->popState();
         }
 
         void SaveGame::onStateActivate(Event::State* event)
         {
-            Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::BIG_ARROW);
+            Game::Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::BIG_ARROW);
         }
 
         void SaveGame::onStateDeactivate(Event::State* event)
         {
-            Game::getInstance()->mouse()->popState();
+            Game::Game::getInstance()->mouse()->popState();
         }
 
         void SaveGame::onKeyDown(Event::Keyboard* event)
@@ -130,7 +107,7 @@ namespace Falltergeist
             switch (event->keyCode())
             {
                 case SDLK_ESCAPE:
-                    Game::getInstance()->popState();
+                    Game::Game::getInstance()->popState();
                     break;
             }
         }

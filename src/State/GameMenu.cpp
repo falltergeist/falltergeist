@@ -1,28 +1,4 @@
-/*
- * Copyright 2012-2018 Falltergeist Developers.
- *
- * This file is part of Falltergeist.
- *
- * Falltergeist is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Falltergeist is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
- */
-
-// Related headers
 #include "../State/GameMenu.h"
-
-// C++ standard includes
-
-// Falltergeist includes
 #include "../Audio/Mixer.h"
 #include "../functions.h"
 #include "../Game/Game.h"
@@ -34,45 +10,47 @@
 #include "../State/Location.h"
 #include "../State/SaveGame.h"
 #include "../State/SettingsMenu.h"
+#include "../UI/Factory/ImageButtonFactory.h"
 #include "../UI/Image.h"
 #include "../UI/ImageButton.h"
 #include "../UI/PlayerPanel.h"
 #include "../UI/TextArea.h"
 
-// Third party includes
-
 namespace Falltergeist
 {
+    using ImageButtonType = UI::Factory::ImageButtonFactory::Type;
+
     namespace State
     {
-        GameMenu::GameMenu() : State()
+        GameMenu::GameMenu(std::shared_ptr<UI::IResourceManager> resourceManager, std::shared_ptr<ILogger> logger) : State()
         {
-        }
-
-        GameMenu::~GameMenu()
-        {
+            this->resourceManager = std::move(resourceManager);
+            this->logger = std::move(logger);
+            imageButtonFactory = std::make_unique<UI::Factory::ImageButtonFactory>(this->resourceManager);
         }
 
         void GameMenu::init()
         {
-            if (_initialized) return;
+            if (_initialized) {
+                return;
+            }
             State::init();
 
             setModal(true);
             setFullscreen(false);
 
-            auto background = new UI::Image("art/intrface/opbase.frm");
-            auto panelHeight = Game::getInstance()->locationState()->playerPanel()->size().height();
+            auto background = resourceManager->getImage("art/intrface/opbase.frm");
+            auto panelHeight = Game::Game::getInstance()->locationState()->playerPanel()->size().height();
 
-            auto backgroundPos = (Game::getInstance()->renderer()->size() - background->size() - Point(0, panelHeight)) / 2;
+            auto backgroundPos = (Game::Game::getInstance()->renderer()->size() - background->size() - Point(0, panelHeight)) / 2;
             int backgroundX = backgroundPos.x();
             int backgroundY = backgroundPos.y();
 
-            auto saveGameButton    = new UI::ImageButton(UI::ImageButton::Type::OPTIONS_BUTTON, backgroundX+14, backgroundY+18);
-            auto loadGameButton    = new UI::ImageButton(UI::ImageButton::Type::OPTIONS_BUTTON, backgroundX+14, backgroundY+18+37);
-            auto preferencesButton = new UI::ImageButton(UI::ImageButton::Type::OPTIONS_BUTTON, backgroundX+14, backgroundY+18+37*2);
-            auto exitGameButton    = new UI::ImageButton(UI::ImageButton::Type::OPTIONS_BUTTON, backgroundX+14, backgroundY+18+37*3);
-            auto doneButton        = new UI::ImageButton(UI::ImageButton::Type::OPTIONS_BUTTON, backgroundX+14, backgroundY+18+37*4);
+            auto saveGameButton    = imageButtonFactory->getByType(ImageButtonType::OPTIONS_BUTTON, {backgroundX + 14, backgroundY + 18});
+            auto loadGameButton    = imageButtonFactory->getByType(ImageButtonType::OPTIONS_BUTTON, {backgroundX + 14, backgroundY + 18 + 37});
+            auto preferencesButton = imageButtonFactory->getByType(ImageButtonType::OPTIONS_BUTTON, {backgroundX + 14, backgroundY + 18 + 37 * 2});
+            auto exitGameButton    = imageButtonFactory->getByType(ImageButtonType::OPTIONS_BUTTON, {backgroundX + 14, backgroundY + 18 + 37 * 3});
+            auto doneButton        = imageButtonFactory->getByType(ImageButtonType::OPTIONS_BUTTON, {backgroundX + 14, backgroundY + 18 + 37 * 4});
 
             preferencesButton->mouseClickHandler().add([this](Event::Event* event){ this->doPreferences(); });
             exitGameButton->mouseClickHandler().add(   [this](Event::Event* event){ this->doExit(); });
@@ -130,37 +108,37 @@ namespace Falltergeist
 
         void GameMenu::doSaveGame()
         {
-            Game::getInstance()->pushState(new SaveGame());
+            Game::Game::getInstance()->pushState(new SaveGame(resourceManager));
         }
 
         void GameMenu::doLoadGame()
         {
-            Game::getInstance()->pushState(new LoadGame());
+            Game::Game::getInstance()->pushState(new LoadGame(resourceManager));
         }
 
         void GameMenu::doPreferences()
         {
-            Game::getInstance()->pushState(new SettingsMenu());
+            Game::Game::getInstance()->pushState(new SettingsMenu(resourceManager));
         }
 
         void GameMenu::doExit()
         {
-            Game::getInstance()->pushState(new ExitConfirm());
+            Game::Game::getInstance()->pushState(new ExitConfirm(resourceManager, logger));
         }
 
         void GameMenu::closeMenu()
         {
-            Game::getInstance()->popState();
+            Game::Game::getInstance()->popState();
         }
 
         void GameMenu::onStateActivate(Event::State* event)
         {
-            Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::BIG_ARROW);
+            Game::Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::BIG_ARROW);
         }
 
         void GameMenu::onStateDeactivate(Event::State* event)
         {
-            Game::getInstance()->mouse()->popState();
+            Game::Game::getInstance()->mouse()->popState();
         }
 
         void GameMenu::onKeyDown(Event::Keyboard* event)

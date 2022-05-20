@@ -1,30 +1,6 @@
-/*
- * Copyright 2012-2018 Falltergeist Developers.
- *
- * This file is part of Falltergeist.
- *
- * Falltergeist is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Falltergeist is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
- */
-
-// Related headers
-#include "../State/NewGame.h"
-
-// C++ standard includes
-#include <sstream>
 #include <memory>
-
-// Falltergeist includes
+#include <sstream>
+#include "../State/NewGame.h"
 #include "../Event/State.h"
 #include "../functions.h"
 #include "../Format/Bio/File.h"
@@ -35,65 +11,66 @@
 #include "../ResourceManager.h"
 #include "../State/Location.h"
 #include "../State/PlayerCreate.h"
+#include "../UI/Factory/ImageButtonFactory.h"
 #include "../UI/Image.h"
 #include "../UI/ImageButton.h"
 #include "../UI/ImageList.h"
 #include "../UI/TextArea.h"
 
-// Third party includes
-
 namespace Falltergeist
 {
     using Helpers::StateLocationHelper;
+    using ImageButtonType = UI::Factory::ImageButtonFactory::Type;
 
     namespace State
     {
 
-        NewGame::NewGame() : State()
+        NewGame::NewGame(std::shared_ptr<UI::IResourceManager> resourceManager, std::shared_ptr<ILogger> logger) : State()
         {
-        }
-
-        NewGame::~NewGame()
-        {
+            this->resourceManager = std::move(resourceManager);
+            this->logger = std::move(logger);
+            imageButtonFactory = std::make_unique<UI::Factory::ImageButtonFactory>(this->resourceManager);
         }
 
         void NewGame::init()
         {
-            if (_initialized) return;
+            if (_initialized) {
+                return;
+            }
             State::init();
 
             setFullscreen(true);
             setModal(true);
 
-            auto renderer = Game::getInstance()->renderer();
+            auto renderer = Game::Game::getInstance()->renderer();
 
             setPosition((renderer->size() - Point(640, 480)) / 2);
 
-            addUI("background", new UI::Image("art/intrface/pickchar.frm"));
+            addUI("background", resourceManager->getImage("art/intrface/pickchar.frm"));
 
-            auto beginGameButton = addUI(new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, 81, 322));
+            auto beginGameButton = addUI(imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {81, 322}));
             beginGameButton->mouseClickHandler().add(std::bind(&NewGame::onBeginGameButtonClick, this, std::placeholders::_1));
 
-            auto editButton = addUI(new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, 436, 319));
+            auto editButton = addUI(imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {436, 319}));
             editButton->mouseClickHandler().add(std::bind(&NewGame::onEditButtonClick, this, std::placeholders::_1));
 
-            auto createButton = addUI(new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, 81, 424));
+            auto createButton = addUI(imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {81, 424}));
             createButton->mouseClickHandler().add(std::bind(&NewGame::onCreateButtonClick, this, std::placeholders::_1));
 
-            auto backButton = addUI(new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, 461, 424));
+            auto backButton = addUI(imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {461, 424}));
             backButton->mouseClickHandler().add(std::bind(&NewGame::onBackButtonClick, this, std::placeholders::_1));
 
-            auto prevCharacterButton = addUI(new UI::ImageButton(UI::ImageButton::Type::LEFT_ARROW, 292, 320));
+            auto prevCharacterButton = addUI(imageButtonFactory->getByType(ImageButtonType::LEFT_ARROW, {292, 320}));
             prevCharacterButton->mouseClickHandler().add(std::bind(&NewGame::onPrevCharacterButtonClick, this, std::placeholders::_1));
 
-            auto nextCharacterButton = addUI(new UI::ImageButton(UI::ImageButton::Type::RIGHT_ARROW, 318, 320));
+            auto nextCharacterButton = addUI(imageButtonFactory->getByType(ImageButtonType::RIGHT_ARROW, {318, 320}));
             nextCharacterButton->mouseClickHandler().add(std::bind(&NewGame::onNextCharacterButtonClick, this, std::placeholders::_1));
 
-            addUI("images", new UI::ImageList({
-                                            "art/intrface/combat.frm",
-                                            "art/intrface/stealth.frm",
-                                            "art/intrface/diplomat.frm"
-                                            }, 27, 23));
+            addUI("images", new UI::ImageList({27, 23}, {
+                resourceManager->getImage("art/intrface/combat.frm"),
+                resourceManager->getImage("art/intrface/stealth.frm"),
+                resourceManager->getImage("art/intrface/diplomat.frm")
+            }));
 
             addUI("name", new UI::TextArea(300, 40));
 
@@ -111,40 +88,35 @@ namespace Falltergeist
             addUI("stats3_values", new UI::TextArea(383, 150));
         }
 
-        void NewGame::think()
-        {
-            State::think();
-        }
-
         void NewGame::doBeginGame()
         {
-            Game::getInstance()->setPlayer(std::move(_characters.at(_selectedCharacter)));
+            Game::Game::getInstance()->setPlayer(std::move(_characters.at(_selectedCharacter)));
             _characters.clear();
 
-            StateLocationHelper stateLocationHelper;
-            Game::getInstance()->setState(stateLocationHelper.getInitialLocationState());
+            StateLocationHelper stateLocationHelper(logger);
+            Game::Game::getInstance()->setState(stateLocationHelper.getInitialLocationState());
         }
 
         void NewGame::doEdit()
         {
-            Game::getInstance()->setPlayer(std::move(_characters.at(_selectedCharacter)));
+            Game::Game::getInstance()->setPlayer(std::move(_characters.at(_selectedCharacter)));
             _characters.clear();
-            Game::getInstance()->pushState(new PlayerCreate());
+            Game::Game::getInstance()->pushState(new PlayerCreate(resourceManager, logger));
         }
 
         void NewGame::doCreate()
         {
             auto none = std::make_unique<Game::DudeObject>();
             none->loadFromGCDFile(ResourceManager::getInstance()->gcdFileType("premade/blank.gcd"));
-            Game::getInstance()->setPlayer(std::move(none));
-            Game::getInstance()->pushState(new PlayerCreate());
+            Game::Game::getInstance()->setPlayer(std::move(none));
+            Game::Game::getInstance()->pushState(new PlayerCreate(resourceManager, logger));
         }
 
         void NewGame::doBack()
         {
             fadeDoneHandler().clear();
             fadeDoneHandler().add([this](Event::Event* event){ this->onBackFadeDone(dynamic_cast<Event::State*>(event)); });
-            Game::getInstance()->renderer()->fadeOut(0,0,0,1000);
+            Game::Game::getInstance()->renderer()->fadeOut(0,0,0,1000);
         }
 
         void NewGame::doNext()
@@ -181,7 +153,7 @@ namespace Falltergeist
         void NewGame::onBackFadeDone(Event::State* event)
         {
             fadeDoneHandler().clear();
-            Game::getInstance()->popState();
+            Game::Game::getInstance()->popState();
         }
 
         void NewGame::onPrevCharacterButtonClick(Event::Mouse* event)
@@ -310,7 +282,7 @@ namespace Falltergeist
 
             _changeCharacter();
 
-            Game::getInstance()->renderer()->fadeIn(0,0,0,1000);
+            Game::Game::getInstance()->renderer()->fadeIn(0,0,0,1000);
         }
     }
 }

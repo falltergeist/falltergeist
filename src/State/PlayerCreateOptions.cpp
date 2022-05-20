@@ -1,28 +1,4 @@
-/*
- * Copyright 2012-2018 Falltergeist Developers.
- *
- * This file is part of Falltergeist.
- *
- * Falltergeist is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Falltergeist is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
- */
-
-// Related headers
 #include "../State/PlayerCreateOptions.h"
-
-// C++ standard includes
-
-// Falltergeist includes
 #include "../Audio/Mixer.h"
 #include "../functions.h"
 #include "../Game/Game.h"
@@ -33,43 +9,44 @@
 #include "../State/Location.h"
 #include "../State/SaveGame.h"
 #include "../State/SettingsMenu.h"
+#include "../UI/Factory/ImageButtonFactory.h"
 #include "../UI/Image.h"
 #include "../UI/ImageButton.h"
 #include "../UI/TextArea.h"
 
-// Third party includes
-
 namespace Falltergeist
 {
+    using ImageButtonType = UI::Factory::ImageButtonFactory::Type;
+
     namespace State
     {
-        PlayerCreateOptions::PlayerCreateOptions() : State()
+        PlayerCreateOptions::PlayerCreateOptions(std::shared_ptr<UI::IResourceManager> resourceManager) : State()
         {
-        }
-
-        PlayerCreateOptions::~PlayerCreateOptions()
-        {
+            this->resourceManager = resourceManager;
+            imageButtonFactory = std::make_unique<UI::Factory::ImageButtonFactory>(resourceManager);
         }
 
         void PlayerCreateOptions::init()
         {
-            if (_initialized) return;
+            if (_initialized) {
+                return;
+            }
             State::init();
 
             setModal(true);
             setFullscreen(false);
 
-            auto background = new UI::Image("art/intrface/opbase.frm");
+            auto background = resourceManager->getImage("art/intrface/opbase.frm");
 
-            Point backgroundPos = Point((Game::getInstance()->renderer()->size() - background->size()) / 2);
+            Point backgroundPos = Point((Game::Game::getInstance()->renderer()->size() - background->size()) / 2);
             int backgroundX = backgroundPos.x();
             int backgroundY = backgroundPos.y();
 
-            auto saveButton = new UI::ImageButton(UI::ImageButton::Type::OPTIONS_BUTTON, backgroundX+14, backgroundY+18);
-            auto loadButton = new UI::ImageButton(UI::ImageButton::Type::OPTIONS_BUTTON, backgroundX+14, backgroundY+18+37);
-            auto printToFileButton = new UI::ImageButton(UI::ImageButton::Type::OPTIONS_BUTTON, backgroundX+14, backgroundY+18+37*2);
-            auto eraseButton = new UI::ImageButton(UI::ImageButton::Type::OPTIONS_BUTTON, backgroundX+14, backgroundY+18+37*3);
-            auto doneButton = new UI::ImageButton(UI::ImageButton::Type::OPTIONS_BUTTON, backgroundX+14, backgroundY+18+37*4);
+            auto saveButton = imageButtonFactory->getByType(ImageButtonType::OPTIONS_BUTTON, {backgroundX + 14, backgroundY + 18});
+            auto loadButton = imageButtonFactory->getByType(ImageButtonType::OPTIONS_BUTTON, {backgroundX + 14, backgroundY + 18 + 37});
+            auto printToFileButton = imageButtonFactory->getByType(ImageButtonType::OPTIONS_BUTTON, {backgroundX + 14, backgroundY + 18 + 37 * 2});
+            auto eraseButton = imageButtonFactory->getByType(ImageButtonType::OPTIONS_BUTTON, {backgroundX + 14, backgroundY + 18 + 37 * 3});
+            auto doneButton = imageButtonFactory->getByType(ImageButtonType::OPTIONS_BUTTON, {backgroundX + 14, backgroundY + 18 + 37 * 4});
 
             saveButton->mouseClickHandler().add(   std::bind(&PlayerCreateOptions::onSaveButtonClick, this, std::placeholders::_1));
             loadButton->mouseClickHandler().add(   std::bind(&PlayerCreateOptions::onLoadButtonClick, this, std::placeholders::_1));
@@ -149,7 +126,7 @@ namespace Falltergeist
 
         void PlayerCreateOptions::onDoneButtonClick(Event::Mouse* event)
         {
-            Game::getInstance()->popState();
+            Game::Game::getInstance()->popState();
         }
 
         void PlayerCreateOptions::onKeyDown(Event::Keyboard* event)
@@ -159,7 +136,7 @@ namespace Falltergeist
                 case SDLK_ESCAPE:
                 case SDLK_RETURN:
                 case SDLK_d:
-                    Game::getInstance()->popState();
+                    Game::Game::getInstance()->popState();
                     break;
             }
         }

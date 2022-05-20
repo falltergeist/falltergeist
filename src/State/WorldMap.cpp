@@ -1,28 +1,4 @@
-/*
- * Copyright 2012-2018 Falltergeist Developers.
- *
- * This file is part of Falltergeist.
- *
- * Falltergeist is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Falltergeist is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
- */
-
-// Related headers
 #include "../State/WorldMap.h"
-
-// C++ standard includes
-
-// Falltergeist includes
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
 #include "../Input/Mouse.h"
@@ -30,68 +6,69 @@
 #include "../Settings.h"
 #include "../State/Location.h"
 #include "../State/MainMenu.h"
+#include "../UI/Factory/ImageButtonFactory.h"
 #include "../UI/Image.h"
 #include "../UI/ImageButton.h"
 #include "../UI/ImageList.h"
 #include "../UI/TextArea.h"
 
-// Third party includes
-
 namespace Falltergeist
 {
+    using ImageButtonType = UI::Factory::ImageButtonFactory::Type;
+
     namespace State
     {
-        WorldMap::WorldMap() : State()
+        WorldMap::WorldMap(std::shared_ptr<UI::IResourceManager> resourceManager) : State()
         {
-        }
-
-        WorldMap::~WorldMap()
-        {
+            this->resourceManager = resourceManager;
+            imageButtonFactory = std::make_unique<UI::Factory::ImageButtonFactory>(resourceManager);
         }
 
         void WorldMap::init()
         {
-            if (_initialized) return;
+            if (_initialized) {
+                return;
+            }
             State::init();
 
             setModal(true);
             setFullscreen(true);
 
-            unsigned int renderWidth = Game::getInstance()->renderer()->width();
-            unsigned int renderHeight = Game::getInstance()->renderer()->height();
+            unsigned int renderWidth = Game::Game::getInstance()->renderer()->size().width();
+            unsigned int renderHeight = Game::Game::getInstance()->renderer()->size().height();
 
             // loading map tiles
-            _tiles = new UI::ImageList({
-                                    "art/intrface/wrldmp00.frm",
-                                    "art/intrface/wrldmp01.frm",
-                                    "art/intrface/wrldmp02.frm",
-                                    "art/intrface/wrldmp03.frm",
-                                    "art/intrface/wrldmp04.frm",
-                                    "art/intrface/wrldmp05.frm",
-                                    "art/intrface/wrldmp06.frm",
-                                    "art/intrface/wrldmp07.frm",
-                                    "art/intrface/wrldmp08.frm",
-                                    "art/intrface/wrldmp09.frm",
-                                    "art/intrface/wrldmp10.frm",
-                                    "art/intrface/wrldmp11.frm",
-                                    "art/intrface/wrldmp12.frm",
-                                    "art/intrface/wrldmp13.frm",
-                                    "art/intrface/wrldmp14.frm",
-                                    "art/intrface/wrldmp15.frm",
-                                    "art/intrface/wrldmp16.frm",
-                                    "art/intrface/wrldmp17.frm",
-                                    "art/intrface/wrldmp18.frm",
-                                    "art/intrface/wrldmp19.frm"
-                                    }, 0, 0);
+            _tiles = new UI::ImageList({0, 0}, {
+                resourceManager->getImage("art/intrface/wrldmp00.frm"),
+                resourceManager->getImage("art/intrface/wrldmp01.frm"),
+                resourceManager->getImage("art/intrface/wrldmp02.frm"),
+                resourceManager->getImage("art/intrface/wrldmp03.frm"),
+                resourceManager->getImage("art/intrface/wrldmp04.frm"),
+                resourceManager->getImage("art/intrface/wrldmp05.frm"),
+                resourceManager->getImage("art/intrface/wrldmp06.frm"),
+                resourceManager->getImage("art/intrface/wrldmp07.frm"),
+                resourceManager->getImage("art/intrface/wrldmp08.frm"),
+                resourceManager->getImage("art/intrface/wrldmp09.frm"),
+                resourceManager->getImage("art/intrface/wrldmp10.frm"),
+                resourceManager->getImage("art/intrface/wrldmp11.frm"),
+                resourceManager->getImage("art/intrface/wrldmp12.frm"),
+                resourceManager->getImage("art/intrface/wrldmp13.frm"),
+                resourceManager->getImage("art/intrface/wrldmp14.frm"),
+                resourceManager->getImage("art/intrface/wrldmp15.frm"),
+                resourceManager->getImage("art/intrface/wrldmp16.frm"),
+                resourceManager->getImage("art/intrface/wrldmp17.frm"),
+                resourceManager->getImage("art/intrface/wrldmp18.frm"),
+                resourceManager->getImage("art/intrface/wrldmp19.frm")
+            });
 
             //auto cross = new Image("art/intrface/wmaploc.frm");
-            _hotspot = new UI::ImageButton(UI::ImageButton::Type::MAP_HOTSPOT, 0, 0);
+            _hotspot = imageButtonFactory->getByType(ImageButtonType::MAP_HOTSPOT, {0, 0});
             //addUI(_hotspot);
 
             // creating screen
-            if (Game::getInstance()->settings()->worldMapFullscreen())
+            if (Game::Game::getInstance()->settings()->worldMapFullscreen())
             {
-                _panel = new UI::Image("art/intrface/wminfce2.frm"); // panel small
+                _panel = resourceManager->getImage("art/intrface/wminfce2.frm"); // panel small
                 mapWidth = renderWidth - 168;
                 mapHeight = renderHeight;
                 mapMinX = 0;
@@ -99,7 +76,7 @@ namespace Falltergeist
             }
             else
             {
-                _panel = new UI::Image("art/intrface/wmapbox.frm"); // panel full
+                _panel = resourceManager->getImage("art/intrface/wmapbox.frm"); // panel full
                 mapWidth = 450;   // fallout 2 map screen width
                 mapHeight = 442;  // fallout 2 map screen height
                 mapMinX = (renderWidth - 640)/2 + 22;
@@ -110,8 +87,8 @@ namespace Falltergeist
         void WorldMap::render()
         {
             // calculating render size, screen size, etc
-            unsigned int renderWidth = Game::getInstance()->renderer()->width();
-            unsigned int renderHeight = Game::getInstance()->renderer()->height();
+            unsigned int renderWidth = Game::Game::getInstance()->renderer()->size().width();
+            unsigned int renderHeight = Game::Game::getInstance()->renderer()->size().height();
 
             // MAP SHOW
             // calculating delta (shift of map to fit to screen)
@@ -139,8 +116,8 @@ namespace Falltergeist
                 deltaY = worldMapSizeY - mapHeight;
             }
 
-            signed int worldTileMinX; // start X coordinate of current tile on world map
-            signed int worldTileMinY; // start Y coordinate of current tile on world map
+            signed int worldTileMinX = 0; // start X coordinate of current tile on world map
+            signed int worldTileMinY = 0; // start Y coordinate of current tile on world map
             // NB: can be unsigned, but it compared with signed deltaX and deltaY, so...
 
             // copy tiles to screen if needed
@@ -171,10 +148,10 @@ namespace Falltergeist
             _hotspot->render();
 
             // panel
-            unsigned int panelX;
-            unsigned int panelY;
+            unsigned int panelX = 0;
+            unsigned int panelY = 0;
 
-            if (Game::getInstance()->settings()->worldMapFullscreen())
+            if (Game::Game::getInstance()->settings()->worldMapFullscreen())
             {
                 panelX = renderWidth - 168; // only panel right
             }
@@ -191,41 +168,41 @@ namespace Falltergeist
 
         void WorldMap::handle(Event::Event* event)
         {
-            auto game = Game::getInstance();
+            auto game = Game::Game::getInstance();
 
             if (auto mouseEvent = dynamic_cast<Event::Mouse*>(event))
             {
                 auto mouse = game->mouse();
 
                 // Left button down
-                if (mouseEvent->name() == "mousedown" && mouseEvent->leftButton())
-                {
+                if (mouseEvent->name() == "mousedown" && mouseEvent->leftButton()) {
+                    Graphics::Rectangle mapRectangle(Point(mapMinX, mapMinY), Graphics::Size(mapWidth, mapHeight));
+
                     // check if point clicked belongs to the screen
-                    if ((mapMinX<=(unsigned int)mouse->x()) && ((unsigned int)mouse->x()<=(mapMinX+mapWidth)) &&
-                        (mapMinY<=(unsigned int)mouse->y()) && ((unsigned int)mouse->y()<=(mapMinY+mapHeight)))
-                    {
+                    if (mapRectangle.contains(mouse->position())){
                         // change destination point
-                        worldMapX = mouse->x()+deltaX-mapMinX;
-                        worldMapY = mouse->y()+deltaY-mapMinY;
+                        worldMapX = mouse->position().x() + deltaX - mapMinX;
+                        worldMapY = mouse->position().y() + deltaY - mapMinY;
                     }
                 }
             }
 
             if (auto keyboardEvent = dynamic_cast<Event::Keyboard*>(event))
             {
-                if (keyboardEvent->name() == "keydown")
+                if (keyboardEvent->name() == "keydown") {
                     onKeyDown(keyboardEvent);
+                }
             }
         }
 
         void WorldMap::onStateActivate(Event::State* event)
         {
-            Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::BIG_ARROW);
+            Game::Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::BIG_ARROW);
         }
 
         void WorldMap::onStateDeactivate(Event::State* event)
         {
-            Game::getInstance()->mouse()->popState();
+            Game::Game::getInstance()->mouse()->popState();
         }
 
         void WorldMap::onKeyDown(Event::Keyboard* event)
@@ -234,7 +211,7 @@ namespace Falltergeist
             {
                 case SDLK_ESCAPE:
                 {
-                    Game::getInstance()->popState();
+                    Game::Game::getInstance()->popState();
                 }
             }
         }

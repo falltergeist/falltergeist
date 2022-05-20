@@ -1,147 +1,131 @@
-/*
- * Copyright 2012-2018 Falltergeist Developers.
- *
- * This file is part of Falltergeist.
- *
- * Falltergeist is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Falltergeist is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
- */
+#pragma once
 
-#ifndef FALLTERGEIST_GRAPHICS_RENDERER_H
-#define FALLTERGEIST_GRAPHICS_RENDERER_H
-
-// C++ standard includes
 #include <memory>
 #include <string>
 #include <vector>
-
-// Falltergeist includes
-#include "../Graphics/Point.h"
-#include "../Graphics/Size.h"
-
-// Third party includes
 #include <glm/glm.hpp>
 #include <GL/glew.h>
 #include <SDL.h>
+#include "../Graphics/IRendererConfig.h"
+#include "../Graphics/Point.h"
+#include "../Graphics/Rectangle.h"
+#include "../Graphics/Shader.h"
+#include "../Graphics/Size.h"
+#include "../Graphics/SdlWindow.h"
+#include "../ILogger.h"
 
 namespace Falltergeist
 {
-namespace Graphics
-{
-
-class Texture;
-
-#define GL_CHECK(x) do { \
-    x; \
-    int _err = glGetError(); \
-    if (_err) { \
-        printf("GL Error %d at %d, %s in %s", _err, __LINE__, __func__, __FILE__); \
-        exit(-1); \
-    } \
-} while (0)
-
-class Renderer
-{
-public:
-    enum class RenderPath
+    namespace Graphics
     {
-        OGL21 = 0,
-        OGL32,
-        GLES1,
-        GLES2
-    };
+        class Texture;
 
-    Renderer(unsigned int width, unsigned int height);
-    Renderer(const Size& size);
-    ~Renderer();
+        class Renderer
+        {
+            public:
+                enum class RenderPath
+                {
+                    OGL21 = 0,
+                    OGL32,
+                    GLES1,
+                    GLES2
+                };
 
-    void init();
+                // It does not accept IWindow since Renderer implementation is still SDL specific
+                // This whole class should be abstracted away to interface and Renderer should become SdlRenderer
+                Renderer(std::unique_ptr<IRendererConfig> rendererConfig, std::shared_ptr<ILogger> logger, std::shared_ptr<SdlWindow> sdlWindow);
 
-    void beginFrame();
-    void endFrame();
-    void think();
+                ~Renderer();
 
-    int width();
-    int height();
-    const Size& size() const;
+                void init();
 
-    float scaleX();
-    float scaleY();
+                void beginFrame();
 
-    bool fadeDone();
-    bool fading();
+                void endFrame();
 
-    void fadeIn(uint8_t r, uint8_t g, uint8_t b, unsigned int time, bool inmovie = false);
-    void fadeOut(uint8_t r, uint8_t g, uint8_t b, unsigned int time, bool inmovie = false);
+                void think(const float deltaTime);
 
-    void setCaption(const std::string& caption);
-    SDL_Window* sdlWindow();
+                const Size& size() const;
 
-    GLuint getVAO();
-    GLuint getVVBO();
-    GLuint getTVBO();
-    GLuint getEBO();
-    glm::mat4 getMVP();
+                float scaleX();
 
-    void drawRect(int x, int y, int w, int h, SDL_Color color);
-    void drawRect(const Point &pos, const Size &size, SDL_Color color);
+                float scaleY();
 
-    glm::vec4 fadeColor();
+                bool fading();
 
+                void fadeIn(uint8_t r, uint8_t g, uint8_t b, unsigned int time, bool inmovie = false);
 
+                void fadeOut(uint8_t r, uint8_t g, uint8_t b, unsigned int time, bool inmovie = false);
 
-//    void drawTexture(Texture* texture, int x, int y, int sourceX = 0, int sourceY = 0, int unsigned sourceWidth = 0, unsigned int sourceHeight = 0);
-//    void drawTexture(Texture* texture, const Point& pos, const Point& src = Point(), const Size& srcSize = Size());
+                glm::mat4 getMVP();
 
-    void screenshot();
+                void drawRect(int x, int y, int w, int h, SDL_Color color);
 
-    int32_t maxTextureSize();
+                void drawRect(const Point &pos, const Size &size, SDL_Color color);
 
-    Texture* egg();
+                void drawRectangle(const Rectangle& rectangle, const Texture* const texture);
 
-    RenderPath renderPath();
+                // Draw rectangle part of the texture in the given position. unscaled
+                void drawPartialRectangle(const Point& point, const Rectangle& rectangle, const Texture* const texture);
 
-protected:
-    Size _size;
-    RenderPath _renderpath = RenderPath::OGL21;
+                // Draw scaled texture in the rectangle
+                void drawRectangle(const Rectangle& rectangle, const Texture* const texture, const Texture* const egg, const Shader* const shader);
 
-    short _fadeStep = 0;
-    unsigned int _fadeTimer = 0;
-    unsigned int _fadeDelay = 0;
-    unsigned int _fadeAlpha = 0;
-    bool _fadeDone = true;
-    SDL_Color _fadeColor = {0, 0, 0, 0};
+                // Draw rectangle part of the texture in the given position. unscaled
+                void drawPartialRectangle(const Point& position, const Rectangle& rectangle, const Texture* const texture, const Texture* const egg, const Shader* const shader);
 
-    bool _inmovie = false;
+                glm::vec4 fadeColor();
 
-    float _scaleX = 1.0;
-    float _scaleY = 1.0;
+                void screenshot();
 
-    SDL_Window* _sdlWindow;
-    SDL_GLContext _glcontext;
-    GLuint _vao;
-    GLuint _ebo;
-    GLuint _texcoord_vbo;
-    GLuint _coord_vbo;
-    glm::mat4 _MVP;
-    GLint _major;
-    GLint _minor;
-    int32_t _maxTexSize;
+                int32_t maxTextureSize();
 
-    Texture* _egg;
+                Texture* egg();
 
-};
+                RenderPath renderPath();
 
+            protected:
+                RenderPath _renderpath = RenderPath::OGL21;
+
+                short _fadeStep = 0;
+
+                float _fadeTimer = 0;
+
+                unsigned int _fadeDelay = 0;
+
+                unsigned int _fadeAlpha = 0;
+
+                bool _fadeDone = true;
+
+                SDL_Color _fadeColor = {0, 0, 0, 0};
+
+                bool _inmovie = false;
+
+                float _scaleX = 1.0;
+
+                float _scaleY = 1.0;
+
+                SDL_GLContext _glcontext;
+
+                glm::mat4 _MVP;
+
+                GLint _major;
+
+                GLint _minor;
+
+                int32_t _maxTexSize;
+
+                Texture* _egg;
+
+            private:
+                std::unique_ptr<IRendererConfig> _rendererConfig;
+
+                std::shared_ptr<ILogger> _logger;
+
+                // TODO use _sdlWindow boundaries instead
+                Size _size;
+
+                std::shared_ptr<SdlWindow> _sdlWindow;
+        };
+    }
 }
-}
-#endif // FALLTERGEIST_GRAPHICS_RENDERER_H

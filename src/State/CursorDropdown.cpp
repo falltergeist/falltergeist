@@ -1,29 +1,5 @@
-/*
- * Copyright 2012-2018 Falltergeist Developers.
- *
- * This file is part of Falltergeist.
- *
- * Falltergeist is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Falltergeist is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
- */
-
-// Related headers
-#include "../State/CursorDropdown.h"
-
-// C++ standard includes
 #include <memory>
-
-// Falltergeist includes
+#include "../State/CursorDropdown.h"
 #include "../Audio/Mixer.h"
 #include "../Exception.h"
 #include "../Game/CritterObject.h"
@@ -36,14 +12,17 @@
 #include "../UI/HiddenMask.h"
 #include "../UI/PlayerPanel.h"
 
-// Third party includes
-
 namespace Falltergeist
 {
     namespace State
     {
-        CursorDropdown::CursorDropdown(std::vector<Input::Mouse::Icon>&& icons, bool onlyIcon) : State()
+        CursorDropdown::CursorDropdown(
+            std::shared_ptr<UI::IResourceManager> resourceManager,
+            std::vector<Input::Mouse::Icon>&& icons,
+            bool onlyIcon
+        ) : State()
         {
+            this->resourceManager = resourceManager;
             if (icons.size() == 0) {
                 throw Exception("CursorDropdown::CursorDropdown() - empty icons list!");
             }
@@ -52,10 +31,6 @@ namespace Falltergeist
             if (onlyIcon && _icons.size() > 1) {
                 _icons.resize(1);
             }
-        }
-
-        CursorDropdown::~CursorDropdown()
-        {
         }
 
         void CursorDropdown::init()
@@ -69,9 +44,8 @@ namespace Falltergeist
                 setModal(true);
             }
 
-            auto mouse = Game::getInstance()->mouse();
-            _initialX = mouse->x();
-            _initialY = mouse->y();
+            auto mouse = Game::Game::getInstance()->mouse();
+            _initialMousePosition = mouse->position();
 
             showMenu();
 
@@ -82,14 +56,14 @@ namespace Falltergeist
             });
             auto moveHandler = [this](Event::Event* event) {
                 if (active() && _onlyShowIcon) {
-                    Game::getInstance()->popState();
-                    event->setHandled(true);
+                    Game::Game::getInstance()->popState();
+                    event->stopPropagation();
                 }
             };
             _mouseMoveHandler.add(moveHandler);
             _mouseDownHandler.add([this](Event::Mouse* event) {
                 if (active() && !event->leftButton()) {
-                    Game::getInstance()->popState();
+                    Game::Game::getInstance()->popState();
                 }
             });
         }
@@ -142,17 +116,17 @@ namespace Falltergeist
                         throw Exception("CursorDropdown::init() - unknown icon type");
 
                 }
-                _activeIcons.push_back(std::make_unique<UI::Image>("art/intrface/" + activeSurface));
+                _activeIcons.push_back(std::unique_ptr<UI::Image>(resourceManager->getImage("art/intrface/" + activeSurface)));
                 _activeIcons.back()->setY(40*i);
-                _inactiveIcons.push_back(std::make_unique<UI::Image>("art/intrface/" + inactiveSurface));
+                _inactiveIcons.push_back(std::unique_ptr<UI::Image>(resourceManager->getImage("art/intrface/" + inactiveSurface)));
                 _inactiveIcons.back()->setY(40*i);
                 i++;
             }
 
-            auto game = Game::getInstance();
+            auto game = Game::Game::getInstance();
 
-            _iconsPos = Point(_initialX + 29, _initialY);
-            Point delta = Point(_initialX + 29, _initialY)
+            _iconsPos = _initialMousePosition + Point(29, 0);
+            Point delta = _iconsPos
                           + Size(40, 40 * static_cast<int>(_icons.size()))
                           - game->renderer()->size()
                           + Point(0, game->locationState()->playerPanel()->size().height());
@@ -161,23 +135,23 @@ namespace Falltergeist
             int deltaY = delta.y();
             if (deltaX > 0) {
                 _iconsPos.setX(_iconsPos.x() - 40 - 29 - 29);
-                _cursor = new UI::Image("art/intrface/actarrom.frm");
-                _cursor->setOffset(-29, 0);
+                _cursor = resourceManager->getImage("art/intrface/actarrom.frm");
+                _cursor->setOffset(Point(-29, 0));
             } else {
-                _cursor = new UI::Image("art/intrface/actarrow.frm");
-                _cursor->setOffset(0, 0);
+                _cursor = resourceManager->getImage("art/intrface/actarrow.frm");
+                _cursor->setOffset(Point(0, 0));
             }
             if (deltaY > 0) {
                 _iconsPos.setY(_iconsPos.y() - deltaY);
             }
-            _cursor->setPosition({_initialX, _initialY});
+            _cursor->setPosition(_initialMousePosition);
             addUI(_cursor);
 
             if (!_onlyShowIcon) {
                 if (deltaY > 0) {
-                    game->mouse()->setPosition({_initialX, _iconsPos.y()});
+                    game->mouse()->setPosition({_initialMousePosition.x(), _iconsPos.y()});
                 }
-                Game::getInstance()->mixer()->playACMSound("sound/sfx/iaccuxx1.acm");
+                Game::Game::getInstance()->mixer()->playACMSound("sound/sfx/iaccuxx1.acm");
             }
         }
 
@@ -202,37 +176,40 @@ namespace Falltergeist
                     emitEvent(std::make_unique<Event::Mouse>(*mouseEvent), _mouseUpHandler);
                 } else if (mouseEvent->originalType() == Event::Mouse::Type::MOVE) {
                     emitEvent(std::make_unique<Event::Mouse>(*mouseEvent), _mouseMoveHandler);
-                    event->setHandled(true);
+                    event->stopPropagation();
                 }
             }
         }
 
-        void CursorDropdown::think()
+        void CursorDropdown::think(const float &deltaTime)
         {
-            State::think();
+            State::think(deltaTime);
 
-            auto game = Game::getInstance();
+            auto game = Game::Game::getInstance();
 
             const int mousePixelsForItem = 10;
+
+            auto mouse = game->mouse();
+
             // select current icon
-            _currentIcon = (game->mouse()->y() - _iconsPos.y())/mousePixelsForItem;
+            _currentIcon = (mouse->position().y() - _iconsPos.y()) / mousePixelsForItem;
 
             if (_currentIcon < 0) {
                 if (!_onlyShowIcon) {
-                    game->mouse()->setY(_iconsPos.y());
+                    mouse->setPosition(Point(mouse->position().x(), _iconsPos.y()));
                 }
                 _currentIcon = 0;
             }
             if ((unsigned int)_currentIcon >= _icons.size()) {
                 if (!_onlyShowIcon) {
-                    game->mouse()->setY(_iconsPos.y() + static_cast<int>(_icons.size()) * mousePixelsForItem);
+                    mouse->setPosition(Point(mouse->position().x(), _iconsPos.y() + static_cast<int>(_icons.size()) * mousePixelsForItem));
                 }
                 _currentIcon = static_cast<int>(_icons.size()) - 1;
             }
             if (!_onlyShowIcon) {
-                int xDelta = game->mouse()->x() - _iconsPos.x();
+                int xDelta = mouse->position().x() - _iconsPos.x();
                 if (xDelta > 40 || xDelta < 0) {
-                    game->mouse()->setX(_initialX);
+                    mouse->setPosition(Point(_initialMousePosition.x(), mouse->position().y()));
                 }
             }
         }
@@ -257,23 +234,23 @@ namespace Falltergeist
         {
             if (_deactivated) {
                 // TODO: why this kludge?
-                Game::getInstance()->popState(); // remove when re-activated
+                Game::Game::getInstance()->popState(); // remove when re-activated
                 return;
             }
 
-            auto mouse = Game::getInstance()->mouse();
-            _initialMouseStack = static_cast<unsigned>(mouse->states()->size());
+            auto mouse = Game::Game::getInstance()->mouse();
+            _initialMouseStack = static_cast<unsigned>(mouse->states().size());
             mouse->pushState(Input::Mouse::Cursor::NONE);
         }
 
         void CursorDropdown::onStateDeactivate(Event::State* event)
         {
             if (!_deactivated) {
-                auto game = Game::getInstance();
+                auto game = Game::Game::getInstance();
                 auto mouse = game->mouse();
                 // workaround to get rid of cursor disappearing issues
                 std::vector<Input::Mouse::Cursor> icons;
-                while (mouse->states()->size() > _initialMouseStack) {
+                while (mouse->states().size() > _initialMouseStack) {
                     icons.push_back(mouse->state());
                     mouse->popState();
                 }
@@ -284,18 +261,18 @@ namespace Falltergeist
                         mouse->pushState(*it);
                     }
                 }
-                mouse->setPosition({_initialX, _initialY});
+                mouse->setPosition(_initialMousePosition);
                 _deactivated = true;
             }
         }
 
         void CursorDropdown::onLeftButtonUp(Event::Mouse* event)
         {
-            auto game = Game::getInstance();
+            auto game = Game::Game::getInstance();
             game->popState();
             if (!_onlyShowIcon) {
                 game->locationState()->handleAction(object(), _icons.at(_currentIcon));
-                event->setHandled(true);
+                event->stopPropagation();
             }
         }
     }

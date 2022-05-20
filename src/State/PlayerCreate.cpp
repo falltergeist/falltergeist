@@ -1,29 +1,5 @@
-/*
- * Copyright 2012-2018 Falltergeist Developers.
- *
- * This file is part of Falltergeist.
- *
- * Falltergeist is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Falltergeist is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
- */
-
-// Related headers
-#include "../State/PlayerCreate.h"
-
-// C++ standard includes
 #include <sstream>
-
-// Falltergeist includes
+#include "../State/PlayerCreate.h"
 #include "../Font.h"
 #include "../functions.h"
 #include "../Game/DudeObject.h"
@@ -38,38 +14,37 @@
 #include "../State/PlayerEditName.h"
 #include "../State/PlayerCreateOptions.h"
 #include "../UI/BigCounter.h"
+#include "../UI/Factory/ImageButtonFactory.h"
 #include "../UI/HiddenMask.h"
 #include "../UI/Image.h"
 #include "../UI/TextArea.h"
 #include "../UI/Rectangle.h"
 
-// Third party includes
-
 namespace Falltergeist
 {
     using Helpers::StateLocationHelper;
+    using ImageButtonType = UI::Factory::ImageButtonFactory::Type;
 
     namespace State
     {
-        PlayerCreate::PlayerCreate() : State()
-        {
-        }
-
-        PlayerCreate::~PlayerCreate()
-        {
+        PlayerCreate::PlayerCreate(std::shared_ptr<UI::IResourceManager> resourceManager, std::shared_ptr<ILogger> logger)
+            : State(), _logger(logger), _resourceManager(resourceManager) {
+            _imageButtonFactory = std::make_unique<UI::Factory::ImageButtonFactory>(_resourceManager);
         }
 
         void PlayerCreate::init()
         {
-            if (_initialized) return;
+            if (_initialized) {
+                return;
+            }
             State::init();
 
             setFullscreen(true);
             setModal(true);
 
             // background
-            auto background = new UI::Image("art/intrface/edtrcrte.frm");
-            Point backgroundPos = Point((Game::getInstance()->renderer()->size() - background->size()) / 2);
+            auto background = _resourceManager->getImage("art/intrface/edtrcrte.frm");
+            Point backgroundPos = Point((Game::Game::getInstance()->renderer()->size() - background->size()) / 2);
             int backgroundX = backgroundPos.x();
             int backgroundY = backgroundPos.y();
             background->setPosition(backgroundPos);
@@ -84,15 +59,15 @@ namespace Falltergeist
 
                 _addTitle(ss.str(), _t(MSG_STATS, 100 + i));       // stat title
                 _addDescription(ss.str(), _t(MSG_STATS, 200 + i)); // stat description
-                _addImage(ss.str(), new UI::Image("art/skilldex/" + imagesStats[i] + ".frm")); // stat image
+                _addImage(ss.str(), _resourceManager->getImage("art/skilldex/" + imagesStats[i] + ".frm")); // stat image
                 _addLabel(ss.str(), new UI::TextArea("", backgroundX+104, backgroundY+46+33*i));      // stat value label
-                _addCounter(ss.str(), new UI::BigCounter(backgroundX+59, backgroundY+37+33*i));       // stat value counter
+                _addCounter(ss.str(), new UI::BigCounter({backgroundX + 59, static_cast<int>(backgroundY + 37 + 33 * i)}));       // stat value counter
                 _addMask(ss.str(), new UI::HiddenMask(133, 29, backgroundX+14, backgroundY+36+33*i)); // stat click mask
-                _addButton(ss.str() + "_increase", new UI::ImageButton(UI::ImageButton::Type::PLUS,  backgroundX+149, backgroundY+38+33*i)); // stat increase button
-                _addButton(ss.str() + "_decrease", new UI::ImageButton(UI::ImageButton::Type::MINUS, backgroundX+149, backgroundY+49+33*i)); // stat decrease button
+                _addButton(ss.str() + "_increase", _imageButtonFactory->getByType(ImageButtonType::PLUS,  {backgroundX + 149, static_cast<int>(backgroundY + 38 + 33 * i)})); // stat increase button
+                _addButton(ss.str() + "_decrease", _imageButtonFactory->getByType(ImageButtonType::MINUS, {backgroundX + 149, static_cast<int>(backgroundY + 49 + 33 * i)})); // stat decrease button
             }
 
-            _addCounter("statsPoints", new UI::BigCounter(backgroundX+126, backgroundY+282)); // Free stats points counter
+            _addCounter("statsPoints", new UI::BigCounter({backgroundX + 126, backgroundY + 282})); // Free stats points counter
 
             // TRAITS
             std::string imagesTraits[] =  { "fastmeta", "bruiser", "smlframe", "onehand", "finesse",  "kamikaze", "heavyhnd", "fastshot",
@@ -103,12 +78,12 @@ namespace Falltergeist
                 ss << "traits_" << (i+1);
                 _addTitle(ss.str(), _t(MSG_TRAITS, 100 + i)); // trait title
                 _addDescription(ss.str(), _t(MSG_TRAITS, 200 + i)); // trait description
-                _addImage(ss.str(), new UI::Image("art/skilldex/" + imagesTraits[i] + ".frm")); // trait image
+                _addImage(ss.str(), _resourceManager->getImage("art/skilldex/" + imagesTraits[i] + ".frm")); // trait image
                 // left column
                 if (i <= 7)
                 {
                     _addLabel(ss.str(),  new UI::TextArea(_t(MSG_TRAITS, 100 + i), backgroundX+48, backgroundY+353+13*i)); // trate label
-                    _addButton(ss.str(), new UI::ImageButton(UI::ImageButton::Type::SKILL_TOGGLE, backgroundX+23, backgroundY+352+13*i)); // trate toggle button
+                    _addButton(ss.str(), _imageButtonFactory->getByType(ImageButtonType::SKILL_TOGGLE, {backgroundX + 23, static_cast<int>(backgroundY + 352 + 13 * i)})); // trate toggle button
                 }
                 //right column
                 else
@@ -117,7 +92,7 @@ namespace Falltergeist
                     label->setWidth(122);
                     label->setHorizontalAlign(UI::TextArea::HorizontalAlign::RIGHT);
                     _addLabel(ss.str(),  label); // trate label
-                    _addButton(ss.str(), new UI::ImageButton(UI::ImageButton::Type::SKILL_TOGGLE, backgroundX+299, backgroundY+352+13*(i-8))); // trate toggle button
+                    _addButton(ss.str(), _imageButtonFactory->getByType(ImageButtonType::SKILL_TOGGLE, {backgroundX + 299, static_cast<int>(backgroundY + 352 + 13 * (i - 8))})); // trate toggle button
                 }
             }
 
@@ -130,20 +105,20 @@ namespace Falltergeist
                 ss << "skills_" << (i+1);
                 _addTitle(ss.str(), _t(MSG_SKILLS, 100 + i));
                 _addDescription(ss.str(), _t(MSG_SKILLS, 200 + i));
-                _addImage(ss.str(),  new UI::Image("art/skilldex/" + imagesSkills[i] + ".frm"));
-                _addButton(ss.str(), new UI::ImageButton(UI::ImageButton::Type::SKILL_TOGGLE, backgroundX+347, backgroundY+26+11*i));
+                _addImage(ss.str(),  _resourceManager->getImage("art/skilldex/" + imagesSkills[i] + ".frm"));
+                _addButton(ss.str(), _imageButtonFactory->getByType(ImageButtonType::SKILL_TOGGLE, {backgroundX + 347, static_cast<int>(backgroundY + 26 + 11 * i)}));
                 _addLabel(ss.str(),  new UI::TextArea(_t(MSG_SKILLS, 100 + i), backgroundX+377, backgroundY+27+11*i))->setWidth(240);
                 _addLabel(ss.str() + "_value",  new UI::TextArea("", backgroundX+577, backgroundY+27+11*i));
             }
             // Free skill points counts
-            _addCounter("skillsPoints", new UI::BigCounter(backgroundX+522, backgroundY+228));
+            _addCounter("skillsPoints", new UI::BigCounter({backgroundX + 522, backgroundY + 228}));
 
             // HEALTH CONDITION
             std::string imagesHealth[] = { "hitpoint", "poisoned", "radiated", "eyedamag", "armright", "armleft", "legright", "legleft"};
             _addTitle("health_1", _t(MSG_EDITOR, 300));
             _addLabel("health_1",  new UI::TextArea(_t(MSG_EDITOR, 300), backgroundX+194, backgroundY+46)); //health
             _addDescription("health_1", _t(MSG_STATS, 207));
-            _addImage("health_1", new UI::Image("art/skilldex/" + imagesHealth[0] + ".frm"));
+            _addImage("health_1", _resourceManager->getImage("art/skilldex/" + imagesHealth[0] + ".frm"));
 
             for (unsigned int i = 0; i != 7; ++i)
             {
@@ -152,7 +127,7 @@ namespace Falltergeist
                 _addTitle(ss.str(), _t(MSG_EDITOR, 312 + i));
                 _addDescription(ss.str(), _t(MSG_EDITOR, 400 + i));
                 _addLabel(ss.str(), new UI::TextArea(_t(MSG_EDITOR, 312 + i), backgroundX+194, backgroundY+46+13*(i+1)))->setFont("font1.aaf", {0x18, 0x30, 0x18, 0xff});
-                _addImage(ss.str(), new UI::Image("art/skilldex/" + imagesHealth[i+1] + ".frm"));
+                _addImage(ss.str(), _resourceManager->getImage("art/skilldex/" + imagesHealth[i+1] + ".frm"));
             }
 
             // PLAYER PARAMS
@@ -165,14 +140,14 @@ namespace Falltergeist
                 ss << "params_" << (i+1);
                 _addTitle(ss.str(), _t(MSG_STATS, params[i]));
                 _addDescription(ss.str(), _t(MSG_STATS, params[i] + 100));
-                _addImage(ss.str(), new UI::Image("art/skilldex/" + imagesParams[i] + ".frm"));
+                _addImage(ss.str(), _resourceManager->getImage("art/skilldex/" + imagesParams[i] + ".frm"));
                 _addLabel(ss.str(), new UI::TextArea(_t(MSG_EDITOR, labels[i]), backgroundX + 194, backgroundY + 179 + 13*i));
                 _addLabel(ss.str() + "_value", new UI::TextArea("", backgroundX + 288, backgroundY + 179 + 13*i));
             }
 
-            _addButton("options", new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, backgroundX+345, backgroundY+454));
-            _addButton("done",    new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, backgroundX+455, backgroundY+454));
-            _addButton("cancel",  new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, backgroundX+554, backgroundY+454));
+            _addButton("options", _imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {backgroundX + 345, backgroundY + 454}));
+            _addButton("done",    _imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {backgroundX + 455, backgroundY + 454}));
+            _addButton("cancel",  _imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {backgroundX + 554, backgroundY + 454}));
 
             auto font3_b89c28ff = ResourceManager::getInstance()->font("font3.aaf");
             SDL_Color color = {0xb8, 0x9c, 0x28, 0xff};
@@ -180,12 +155,12 @@ namespace Falltergeist
             _addLabel("options", new UI::TextArea(_t(MSG_EDITOR, 101), backgroundX+365, backgroundY+453))->setFont(font3_b89c28ff, color);
             _addLabel("next",    new UI::TextArea(_t(MSG_EDITOR, 100), backgroundX+473, backgroundY+453))->setFont(font3_b89c28ff, color);
             _addLabel("cancel",  new UI::TextArea(_t(MSG_EDITOR, 102), backgroundX+571, backgroundY+453))->setFont(font3_b89c28ff, color);
-            auto label = _addLabel("name",    new UI::TextArea(Game::getInstance()->player()->name(), backgroundX+17, backgroundY+7));
+            auto label = _addLabel("name",    new UI::TextArea(Game::Game::getInstance()->player()->name(), backgroundX+17, backgroundY+7));
             label->setWidth(150);
             label->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
             label->setFont(font3_b89c28ff, color);
             _addLabel("age",     new UI::TextArea(_t(MSG_EDITOR, 104), backgroundX+163, backgroundY+7))->setFont(font3_b89c28ff, color);
-            _addLabel("gender",  new UI::TextArea(_t(MSG_EDITOR, Game::getInstance()->player()->gender() == GENDER::MALE ? 107 : 108), backgroundX+250, backgroundY+7))->setFont(font3_b89c28ff, color);
+            _addLabel("gender",  new UI::TextArea(_t(MSG_EDITOR, Game::Game::getInstance()->player()->gender() == GENDER::MALE ? 107 : 108), backgroundX+250, backgroundY+7))->setFont(font3_b89c28ff, color);
             _addLabel("label_1", new UI::TextArea(_t(MSG_EDITOR, 116), backgroundX+14, backgroundY+286))->setFont(font3_b89c28ff, color);  // char points
             _addLabel("label_2", new UI::TextArea(_t(MSG_EDITOR, 139), backgroundX+50, backgroundY+326))->setFont(font3_b89c28ff, color);  // optinal traits
             _addLabel("label_3", new UI::TextArea(_t(MSG_EDITOR, 117), backgroundX+383, backgroundY+5))->setFont(font3_b89c28ff, color);   // skills
@@ -198,33 +173,33 @@ namespace Falltergeist
             _addDescription("label_2", _t(MSG_EDITOR, 147));
             _addDescription("label_3", _t(MSG_EDITOR, 151));
             _addDescription("label_4", _t(MSG_EDITOR, 145));
-            _addImage("label_1", new UI::Image("art/skilldex/generic.frm"));
-            _addImage("label_2", new UI::Image("art/skilldex/traits.frm"));
-            _addImage("label_3", new UI::Image("art/skilldex/skills.frm"));
-            _addImage("label_4", new UI::Image("art/skilldex/skills.frm"));
+            _addImage("label_1", _resourceManager->getImage("art/skilldex/generic.frm"));
+            _addImage("label_2", _resourceManager->getImage("art/skilldex/traits.frm"));
+            _addImage("label_3", _resourceManager->getImage("art/skilldex/skills.frm"));
+            _addImage("label_4", _resourceManager->getImage("art/skilldex/skills.frm"));
 
             // Name change button
-            _addButton("name",  new UI::ImageButton(UI::ImageButton::Type::PLAYER_NAME, backgroundX+13, backgroundY+0));
+            _addButton("name",  _imageButtonFactory->getByType(ImageButtonType::PLAYER_NAME, {backgroundX + 13, backgroundY + 0}));
 
             // Age change button
-            _addButton("age", new UI::ImageButton(UI::ImageButton::Type::PLAYER_AGE, backgroundX+156, backgroundY+0));
+            _addButton("age", _imageButtonFactory->getByType(ImageButtonType::PLAYER_AGE, {backgroundX + 156, backgroundY + 0}));
 
             //Gender change button
-            _addButton("gender", new UI::ImageButton(UI::ImageButton::Type::PLAYER_GENDER, backgroundX+236, backgroundY+0));
+            _addButton("gender", _imageButtonFactory->getByType(ImageButtonType::PLAYER_GENDER, {backgroundX + 236, backgroundY + 0}));
 
             // add buttons to the state
-            for(auto it = _buttons.begin(); it != _buttons.end(); ++it)
-            {
-                it->second->mouseClickHandler().add(std::bind(&PlayerCreate::onButtonClick, this, std::placeholders::_1));
-                addUI(it->second);
+            for (auto it = _buttons.begin(); it != _buttons.end(); ++it) {
+                auto button = it->second;
+                button->mouseClickHandler().add([=](Event::Mouse*) { _onButtonClick(button); });
+                addUI(button);
             }
 
             // add labels to the state
             // reverse iterator to change drawing order
-            for(auto it = _labels.rbegin(); it != _labels.rend(); ++it)
-            {
-                it->second->mouseDownHandler().add(std::bind(&PlayerCreate::onLabelClick, this, std::placeholders::_1));
-                addUI(it->second);
+            for(auto it = _labels.rbegin(); it != _labels.rend(); ++it) {
+                auto label = it->second;
+                label->mouseDownHandler().add([=](Event::Mouse*) { onLabelClick(label); });
+                addUI(label);
             }
 
             // add counters to the state
@@ -234,10 +209,10 @@ namespace Falltergeist
             }
 
             // add hidden masks
-            for(auto it = _masks.begin(); it != _masks.end(); ++it)
+            for (auto& mask : _masks)
             {
-                it->second->mouseDownHandler().add(std::bind(&PlayerCreate::onMaskClick, this, std::placeholders::_1));
-                addUI(it->second);
+                mask.second->mouseDownHandler().add([=](Event::Mouse*) { onMaskClick(mask.second); });
+                addUI(mask.second);
             }
 
             _selectedImage = _images.at("stats_1");
@@ -297,11 +272,11 @@ namespace Falltergeist
             _images.insert(std::pair<std::string, UI::Image*>(name, image));
         }
 
-        void PlayerCreate::think()
+        void PlayerCreate::think(const float &deltaTime)
         {
             // TODO: this shit shouldn't be updated each fucking frame, duh
-            State::think();
-            auto player = Game::getInstance()->player();
+            State::think(deltaTime);
+            auto player = Game::Game::getInstance()->player();
 
             *_labels.at("name") = player->name();
             *_labels.at("age") = _t(MSG_EDITOR, 104) +  " " + std::to_string(player->age());
@@ -392,7 +367,9 @@ namespace Falltergeist
             // Selected labels colors
             for(auto it = _labels.begin(); it != _labels.end(); ++it)
             {
-                if (_selectedLabel != it->second) continue;
+                if (_selectedLabel != it->second) {
+                    continue;
+                }
 
                 std::string name = it->first;
 
@@ -439,8 +416,10 @@ namespace Falltergeist
 
         bool PlayerCreate::_statDecrease(unsigned int num)
         {
-            auto player = Game::getInstance()->player();
-            if (player->stat((STAT)num) <= 1) return false;
+            auto player = Game::Game::getInstance()->player();
+            if (player->stat((STAT)num) <= 1) {
+                return false;
+            }
 
             player->setStat((STAT)num, player->stat((STAT)num) - 1);
             player->setStatsPoints(player->statsPoints() + 1);
@@ -449,10 +428,14 @@ namespace Falltergeist
 
         bool PlayerCreate::_statIncrease(unsigned int num)
         {
-            auto player = Game::getInstance()->player();
-            if (player->statsPoints() <= 0) return false;
+            auto player = Game::Game::getInstance()->player();
+            if (player->statsPoints() <= 0) {
+                return false;
+            }
 
-            if (player->stat((STAT)num) + player->statBonus((STAT)num) >= 10) return false;
+            if (player->stat((STAT)num) + player->statBonus((STAT)num) >= 10) {
+                return false;
+            }
 
             player->setStat((STAT)num, player->stat((STAT)num) + 1);
             player->setStatsPoints(player->statsPoints() - 1);
@@ -461,7 +444,7 @@ namespace Falltergeist
 
         bool PlayerCreate::_traitToggle(unsigned int num)
         {
-            auto player = Game::getInstance()->player();
+            auto player = Game::Game::getInstance()->player();
             if (player->traitTagged((TRAIT)num))
             {
                 player->setTraitTagged((TRAIT)num, 0);
@@ -472,7 +455,9 @@ namespace Falltergeist
                 unsigned int selectedTraits = 0;
                 for (unsigned i = (unsigned)TRAIT::FAST_METABOLISM; i <= (unsigned)TRAIT::GIFTED; i++)
                 {
-                    if (player->traitTagged((TRAIT)i)) selectedTraits++;
+                    if (player->traitTagged((TRAIT)i)) {
+                        selectedTraits++;
+                    }
                 }
                 if (selectedTraits < 2)
                 {
@@ -485,7 +470,7 @@ namespace Falltergeist
 
         bool PlayerCreate::_skillToggle(unsigned int num)
         {
-            auto player = Game::getInstance()->player();
+            auto player = Game::Game::getInstance()->player();
             if (player->skillTagged((SKILL)num))
             {
                 player->setSkillTagged((SKILL)num, 0);
@@ -504,25 +489,34 @@ namespace Falltergeist
             return false;
         }
 
-        void PlayerCreate::onButtonClick(Event::Mouse* event)
+        void PlayerCreate::_onButtonClick(UI::ImageButton* target)
         {
-            auto sender = dynamic_cast<UI::ImageButton*>(event->target());
-
             for(auto it = _buttons.begin(); it != _buttons.end(); ++it)
             {
-                if (it->second == sender)
+                if (it->second == target)
                 {
                     std::string name = it->first;
 
-                    if (name == "name") return onNameButtonClick(event);
-                    if (name == "age")  return onAgeButtonClick(event);
-                    if (name == "gender") return onGenderButtonClick(event);
-                    if (name == "cancel") return onBackButtonClick(event);
-                    if (name == "done") return onDoneButtonClick(event);
-                    if (name == "options") return onOptionsButtonClick(event);
+                    if (name == "name") {
+                        return _doName();
+                    }
+                    if (name == "age") {
+                        return _doAge();
+                    }
+                    if (name == "gender") {
+                        return _doGender();
+                    }
+                    if (name == "cancel") {
+                        return _doBack();
+                    }
+                    if (name == "done") {
+                        return _doDone();
+                    }
+                    if (name == "options") {
+                        return _doOptions();
+                    }
 
-                    if (name.find("stats_") == 0)
-                    {
+                    if (name.find("stats_") == 0) {
                         _selectedLabel = _labels.at(name.substr(0,7));
 
                         _selectedImage = _images.at(name.substr(0,7));
@@ -545,9 +539,9 @@ namespace Falltergeist
 
                         if (!_traitToggle(number - 1))
                         {
-                            auto state = new PlayerEditAlert();
+                            auto state = new PlayerEditAlert(_resourceManager);
                             state->setMessage(_t(MSG_EDITOR, 148) + "\n" + _t(MSG_EDITOR, 149));
-                            Game::getInstance()->pushState(state);
+                            Game::Game::getInstance()->pushState(state);
                         }
                     }
 
@@ -559,21 +553,21 @@ namespace Falltergeist
                         _selectedImage = _images.at(name);
                         if (!_skillToggle(number - 1))
                         {
-                            auto state = new PlayerEditAlert();
+                            auto state = new PlayerEditAlert(_resourceManager);
                             state->setMessage(_t(MSG_EDITOR, 140) + "\n" + _t(MSG_EDITOR, 141));
-                            Game::getInstance()->pushState(state);
+                            Game::Game::getInstance()->pushState(state);
                         }
                     }
                 }
             }
         }
 
-        void PlayerCreate::onLabelClick(Event::Mouse* event)
+        void PlayerCreate::onLabelClick(UI::TextArea* target)
         {
             for(auto it = _labels.begin(); it != _labels.end(); ++it)
             {
                 std::string name = it->first;
-                if (it->second == event->target())
+                if (it->second == target)
                 {
                     if (name.find("stats_") == 0 || name.find("traits_") == 0 || name.find("skills_") == 0 || name.find("health_") == 0 || name.find("params_") == 0 || name.find("label_") == 0)
                     {
@@ -589,11 +583,11 @@ namespace Falltergeist
             }
         }
 
-        void PlayerCreate::onMaskClick(Event::Mouse* event)
+        void PlayerCreate::onMaskClick(UI::HiddenMask* target)
         {
             for(auto it = _masks.begin(); it != _masks.end(); ++it)
             {
-                if (it->second == event->target())
+                if (it->second == target)
                 {
                     std::string name = it->first;
                     if (name.find("stats_") == 0)
@@ -606,68 +600,38 @@ namespace Falltergeist
         }
 
 
-        void PlayerCreate::onNameButtonClick(Event::Mouse* event)
+        void PlayerCreate::_doAge()
         {
-            doName();
+            Game::Game::getInstance()->pushState(new PlayerEditAge(_resourceManager));
         }
 
-        void PlayerCreate::onAgeButtonClick(Event::Mouse* event)
+        void PlayerCreate::_doBack()
         {
-            doAge();
+            Game::Game::getInstance()->popState();
         }
 
-        void PlayerCreate::onGenderButtonClick(Event::Mouse* event)
+        void PlayerCreate::_doDone()
         {
-            doGender();
-        }
-
-        void PlayerCreate::onBackButtonClick(Event::Mouse* event)
-        {
-            doBack();
-        }
-
-        void PlayerCreate::onDoneButtonClick(Event::Mouse* event)
-        {
-            doDone();
-        }
-
-        void PlayerCreate::onOptionsButtonClick(Event::Mouse* event)
-        {
-            doOptions();
-        }
-
-        void PlayerCreate::doAge()
-        {
-            Game::getInstance()->pushState(new PlayerEditAge());
-        }
-
-        void PlayerCreate::doBack()
-        {
-            Game::getInstance()->popState();
-        }
-
-        void PlayerCreate::doDone()
-        {
-            auto player = Game::getInstance()->player();
+            auto player = Game::Game::getInstance()->player();
             player->setHitPoints(player->hitPointsMax());
 
-            StateLocationHelper stateLocationHelper;
-            Game::getInstance()->setState(stateLocationHelper.getInitialLocationState());
+            StateLocationHelper stateLocationHelper(_logger);
+            Game::Game::getInstance()->setState(stateLocationHelper.getInitialLocationState());
         }
 
-        void PlayerCreate::doGender()
+        void PlayerCreate::_doGender()
         {
-            Game::getInstance()->pushState(new PlayerEditGender());
+            Game::Game::getInstance()->pushState(new PlayerEditGender(_resourceManager));
         }
 
-        void PlayerCreate::doName()
+        void PlayerCreate::_doName()
         {
-            Game::getInstance()->pushState(new PlayerEditName());
+            Game::Game::getInstance()->pushState(new PlayerEditName(_resourceManager));
         }
 
-        void PlayerCreate::doOptions()
+        void PlayerCreate::_doOptions()
         {
-            Game::getInstance()->pushState(new PlayerCreateOptions());
+            Game::Game::getInstance()->pushState(new PlayerCreateOptions(_resourceManager));
         }
 
         void PlayerCreate::onKeyDown(Event::Keyboard* event)
@@ -676,23 +640,23 @@ namespace Falltergeist
             {
                 case SDLK_ESCAPE:
                 case SDLK_c:
-                    doBack();
+                    _doBack();
                     break;
                 case SDLK_RETURN:
                 case SDLK_d:
-                    doDone();
+                    _doDone();
                     break;
                 case SDLK_o:
-                    doOptions();
+                    _doOptions();
                     break;
                 case SDLK_a:
-                    doAge();
+                    _doAge();
                     break;
                 case SDLK_s:
-                    doGender();
+                    _doGender();
                     break;
                 case SDLK_n:
-                    doName();
+                    _doName();
                     break;
             }
         }
@@ -701,7 +665,7 @@ namespace Falltergeist
         {
             State::render();
             auto background = getUI("bg");
-            Point backgroundPos = Point((Game::getInstance()->renderer()->size() - background->size()) / 2);
+            Point backgroundPos = Point((Game::Game::getInstance()->renderer()->size() - background->size()) / 2);
             _selectedImage->setPosition(backgroundPos + Point(480, 310));
             _selectedImage->render();
             _description->setPosition(backgroundPos + Point(350, 315));

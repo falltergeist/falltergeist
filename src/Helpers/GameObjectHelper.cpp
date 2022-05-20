@@ -1,25 +1,3 @@
-/*
- * Copyright 2012-2018 Falltergeist Developers.
- *
- * This file is part of Falltergeist.
- *
- * Falltergeist is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Falltergeist is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
- */
-
-// C++ standard includes
-
-// Falltergeist includes
 #include "../Exception.h"
 #include "../Format/Map/Object.h"
 #include "../Format/Map/Script.h"
@@ -27,8 +5,10 @@
 #include "../Game/ContainerItemObject.h"
 #include "../Game/CritterObject.h"
 #include "../Game/DoorSceneryObject.h"
+#include "../Game/ElevatorSceneryObject.h"
 #include "../Game/ExitMiscObject.h"
-#include "../Game/Object.h"
+#include "../Game/LadderSceneryObject.h"
+#include "../Game/StairsSceneryObject.h"
 #include "../Game/ObjectFactory.h"
 #include "../Game/SpatialObject.h"
 #include "../Helpers/GameObjectHelper.h"
@@ -36,12 +16,15 @@
 #include "../ResourceManager.h"
 #include "../VM/Script.h"
 
-// Third party includes
-
 namespace Falltergeist
 {
     namespace Helpers
     {
+        GameObjectHelper::GameObjectHelper(std::shared_ptr<ILogger> logger)
+        {
+            this->logger = std::move(logger);
+        }
+
         Game::Object* GameObjectHelper::createFromMapSpatialScript(const Format::Map::Script& mapScript) const
         {
             auto tile = mapScript.spatialTile();
@@ -61,9 +44,11 @@ namespace Falltergeist
 
         Game::Object* GameObjectHelper::createFromMapObject(const std::unique_ptr<Format::Map::Object> &mapObject) const
         {
-            auto object = Game::ObjectFactory::getInstance()->createObject(mapObject->PID());
+            Game::ObjectFactory objectFactory(logger);
+
+            auto object = objectFactory.createObjectByPID(mapObject->PID());
             if (!object) {
-                Logger::error() << "Location::setLocation() - can't create object with PID: " << mapObject->PID() << std::endl;
+                Logger::error("") << "Location::setLocation() - can't create object with PID: " << mapObject->PID() << std::endl;
                 return nullptr;
             }
 
@@ -87,11 +72,16 @@ namespace Falltergeist
                 door->setOpened(mapObject->opened());
             }
 
+            if (auto elevator = dynamic_cast<Game::ElevatorSceneryObject *>(object)) {
+                elevator->setElevatorType(mapObject->elevatorType());
+                elevator->setElevatorLevel(mapObject->elevatorLevel());
+            }
+
             if (auto container = dynamic_cast<Game::ContainerItemObject *>(object)) {
                 for (auto &child : mapObject->children()) {
-                    auto item = dynamic_cast<Game::ItemObject *>(Game::ObjectFactory::getInstance()->createObject(child->PID()));
+                    auto item = dynamic_cast<Game::ItemObject *>(objectFactory.createObjectByPID(child->PID()));
                     if (!item) {
-                        Logger::error() << "Location::setLocation() - can't create object with PID: " << child->PID() << std::endl;
+                        Logger::error("") << "Location::setLocation() - can't create object with PID: " << child->PID() << std::endl;
                         return nullptr;
                     }
                     item->setAmount(child->ammount());
@@ -99,13 +89,26 @@ namespace Falltergeist
                 }
             }
 
+            if (auto ladder = dynamic_cast<Game::LadderSceneryObject *>(object)) {
+                ladder->setExitMapNumber(mapObject->exitMap());
+                ladder->setExitElevationNumber(mapObject->exitElevation());
+                ladder->setExitHexagonNumber(mapObject->exitPosition());
+            }
+
+            if (auto stairs = dynamic_cast<Game::StairsSceneryObject *>(object)) {
+                stairs->setExitMapNumber(mapObject->exitMap());
+                stairs->setExitElevationNumber(mapObject->exitElevation());
+                stairs->setExitHexagonNumber(mapObject->exitPosition());
+            }
+
+
             // TODO: use common interface...
             if (auto critter = dynamic_cast<Game::CritterObject *>(object)) {
                 for (auto &child : mapObject->children()) {
-                    auto item = dynamic_cast<Game::ItemObject *>(Game::ObjectFactory::getInstance()->createObject(
+                    auto item = dynamic_cast<Game::ItemObject *>(objectFactory.createObjectByPID(
                             child->PID()));
                     if (!item) {
-                        Logger::error() << "Location::setLocation() - can't create object with PID: "
+                        Logger::error("") << "Location::setLocation() - can't create object with PID: "
                                         << child->PID() << std::endl;
                         return nullptr;
                     }

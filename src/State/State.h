@@ -1,38 +1,13 @@
-/*
- * Copyright 2012-2018 Falltergeist Developers.
- *
- * This file is part of Falltergeist.
- *
- * Falltergeist is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Falltergeist is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
- */
+#pragma once
 
-#ifndef FALLTERGEIST_STATE_H
-#define FALLTERGEIST_STATE_H
-
-// C++ standard includes
 #include <map>
 #include <memory>
 #include <vector>
-
-// Falltergeist includes
 #include "../Event/EventTarget.h"
 #include "../Event/Keyboard.h"
 #include "../Event/Mouse.h"
 #include "../Graphics/Point.h"
 #include "../VM/Script.h"
-
-// Third party includes
 
 namespace Falltergeist
 {
@@ -60,7 +35,9 @@ namespace Falltergeist
         {
             public:
                 State();
-                virtual ~State();
+                State(const State&) = delete;
+                State& operator=(const State&) = delete;
+                virtual ~State() = default;
 
                 template <class TUi, class ...TCtorArgs>
                 TUi* makeUI(TCtorArgs&&... args)
@@ -113,7 +90,7 @@ namespace Falltergeist
                  * @brief Process all real-time logic of this state.
                  * This method is called after handle() but before render() in the main loop.
                  */
-                virtual void think();
+                virtual void think(const float &deltaTime);
                 /**
                  * @brief Renders all visible objects of this state on screen.
                  * This method is called last in the main loop (after handle() and think()).
@@ -168,4 +145,3 @@ namespace Falltergeist
         };
     }
 }
-#endif // FALLTERGEIST_STATE_H

@@ -1,89 +1,118 @@
-/*
- * Copyright 2012-2018 Falltergeist Developers.
- *
- * This file is part of Falltergeist.
- *
- * Falltergeist is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Falltergeist is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
- */
-
-// Related headers
 #include "../State/Container.h"
-
-// C++ standard includes
-
-// Falltergeist includes
+#include "../ResourceManager.h"
 #include "../Game/ContainerItemObject.h"
 #include "../Game/DudeObject.h"
 #include "../Game/Game.h"
+#include "../Graphics/CritterAnimationFactory.h"
 #include "../Graphics/Renderer.h"
+#include "../Helpers/CritterHelper.h"
 #include "../Input/Mouse.h"
 #include "../Logger.h"
+#include "../UI/Animation.h"
+#include "../UI/Factory/ImageButtonFactory.h"
 #include "../UI/Image.h"
 #include "../UI/ImageButton.h"
 #include "../UI/ItemsList.h"
-
-// Third party includes
 
 namespace Falltergeist
 {
     namespace State
     {
-        Container::Container() : State()
-        {
-        }
+        using ImageButtonType = UI::Factory::ImageButtonFactory::Type;
 
-        Container::~Container()
+        Container::Container(std::shared_ptr<UI::IResourceManager> resourceManager) : State()
         {
+            this->resourceManager = resourceManager;
+            imageButtonFactory = std::make_unique<UI::Factory::ImageButtonFactory>(resourceManager);
         }
 
         void Container::init()
         {
-            if (_initialized) return;
+            if (_initialized) {
+                return;
+            }
 
             setModal(true);
             setFullscreen(false);
 
-            auto game = Game::getInstance();
+            auto game = Game::Game::getInstance();
 
             setPosition((game->renderer()->size() - Point(537, 376)) / 2);
 
-            addUI("background", new UI::Image("art/intrface/loot.frm"));
+            addUI("background", resourceManager->getImage("art/intrface/loot.frm"));
 
-            addUI("button_done", new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, 478, 331));
+            auto dude = Game::Game::getInstance()->player();
+
+            Helpers::CritterHelper critterHelper;
+            Graphics::CritterAnimationFactory animationFactory;
+
+            auto dudeCritter = animationFactory.buildStandingAnimation(
+                critterHelper.armorFID(dude.get()),
+                critterHelper.weaponId(dude.get()),
+                Game::Orientation::SC
+            );
+            dudeCritter->setPosition({56, 47});
+            addUI(dudeCritter.release());
+
+            // FIXME: chests and lockers should be shown opened and centered vertically
+            auto objectCopy = new Game::Object();
+            objectCopy->setFID(object()->FID());
+            objectCopy->ui()->setPosition({432, 38});
+            addUI(objectCopy->ui());
+
+            addUI("button_done", imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {478, 331}));
             getUI("button_done")->mouseClickHandler().add(std::bind(&Container::onDoneButtonClick, this, std::placeholders::_1));
 
+            // TODO: disable buttons if there is nowhere to scroll
+            auto scrollUp = [](UI::ItemsList *list) {
+                if (list->canScrollUp()) {
+                    list->scrollUp();
+                }
+            };
+            auto scrollDown = [](UI::ItemsList *list) {
+                if (list->canScrollDown()) {
+                    list->scrollDown();
+                }
+            };
 
-            // TAKEALL
-            // invmadn
-            // invmaup
-
-            // invupds
-            // invupin
-            // invupout
-
-
-            auto dudeList = new UI::ItemsList({170, 35});
-            dudeList->setItems(Game::getInstance()->player()->inventory());
+            auto dudeList = new UI::ItemsList({174, 35});
+            dudeList->setItems(Game::Game::getInstance()->player()->inventory());
             addUI(dudeList);
+
+            auto dudeListScrollUpButton = imageButtonFactory->getByType(ImageButtonType::DIALOG_UP_ARROW, {127, 40});
+            dudeListScrollUpButton->mouseClickHandler().add([=](...) { scrollUp(dudeList); });
+            addUI(dudeListScrollUpButton);
+
+            auto dudeListScrollDownButton = imageButtonFactory->getByType(ImageButtonType::DIALOG_DOWN_ARROW, {127, 66});
+            dudeListScrollDownButton->mouseClickHandler().add([=](...) { scrollDown(dudeList); });
+            addUI(dudeListScrollDownButton);
 
             auto containerList = new UI::ItemsList({292, 35});
             containerList->setItems(object()->inventory());
             addUI(containerList);
 
-            dudeList->itemDragStopHandler().add([containerList](Event::Mouse* event){ containerList->onItemDragStop(event); });
-            containerList->itemDragStopHandler().add([dudeList](Event::Mouse* event){ dudeList->onItemDragStop(event); });
+            auto containerListScrollUpButton = imageButtonFactory->getByType(ImageButtonType::DIALOG_UP_ARROW, {379, 40});
+            containerListScrollUpButton->mouseClickHandler().add([=](...) { scrollUp(containerList); });
+            addUI(containerListScrollUpButton);
 
+            auto containerListScrollDownButton = imageButtonFactory->getByType(ImageButtonType::DIALOG_DOWN_ARROW, {379, 66});
+            containerListScrollDownButton->mouseClickHandler().add([=](...) { scrollDown(containerList); });
+            addUI(containerListScrollDownButton);
+
+            auto btnTakeAll = imageButtonFactory->getByType(ImageButtonType::INVENTORY_TAKE_ALL, {432, 203});
+            btnTakeAll->mouseClickHandler().add([dudeList, containerList](...) {
+
+                for(const auto &i : *containerList->items()) {
+                    dudeList->items()->push_back(i);
+                }
+                containerList->items()->clear();
+                containerList->update();
+                dudeList->update();
+            });
+            addUI(btnTakeAll);
+
+            dudeList->itemDragStopHandler().add([containerList, dudeList](Event::Mouse* event){ containerList->onItemDragStop(event, dudeList); });
+            containerList->itemDragStopHandler().add([dudeList, containerList](Event::Mouse* event){ dudeList->onItemDragStop(event, containerList); });
         }
 
         Game::ContainerItemObject* Container::object()
@@ -96,26 +125,26 @@ namespace Falltergeist
             _object = object;
         }
 
-        void Container::onDoneButtonClick(Event::Mouse* event)
+        void Container::onDoneButtonClick(Event::Mouse*)
         {
-            Game::getInstance()->popState();
+            Game::Game::getInstance()->popState();
         }
 
-        void Container::onStateActivate(Event::State* event)
+        void Container::onStateActivate(Event::State*)
         {
-            Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::BIG_ARROW);
+            Game::Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::BIG_ARROW);
         }
 
-        void Container::onStateDeactivate(Event::State* event)
+        void Container::onStateDeactivate(Event::State*)
         {
-            Game::getInstance()->mouse()->popState();
+            Game::Game::getInstance()->mouse()->popState();
         }
 
         void Container::onKeyDown(Event::Keyboard* event)
         {
             if (event->keyCode() == SDLK_ESCAPE)
             {
-                Game::getInstance()->popState();
+                Game::Game::getInstance()->popState();
             }
         }
     }

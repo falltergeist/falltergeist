@@ -1,48 +1,27 @@
-/*
- * Copyright 2012-2018 Falltergeist Developers.
- *
- * This file is part of Falltergeist.
- *
- * Falltergeist is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Falltergeist is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
- */
+#pragma once
 
-#ifndef FALLTERGEIST_STATE_START_H
-#define FALLTERGEIST_STATE_START_H
-
-// C++ standard includes
-
-// Falltergeist includes
+#include "../Game/Timer.h"
+#include "../ILogger.h"
 #include "../State/State.h"
-
-// Third party includes
+#include "../UI/IResourceManager.h"
 
 namespace Falltergeist
 {
     namespace State
     {
-        class Start : public State
+        class Start final : public State
         {
             public:
-                Start();
-                ~Start() override;
+                Start(std::shared_ptr<UI::IResourceManager> resourceManager, std::shared_ptr<ILogger> logger);
+                virtual ~Start() = default;
 
-                void think() override;
+                void think(const float &deltaTime) override;
                 void init() override;
 
-            protected:
-                unsigned int _splashTicks = 0;
+            private:
+                std::shared_ptr<ILogger> logger;
+                std::unique_ptr<Game::Timer> _delayTimer;
+                std::shared_ptr<UI::IResourceManager> resourceManager;
         };
     }
 }
-#endif // FALLTERGEIST_START_START_H

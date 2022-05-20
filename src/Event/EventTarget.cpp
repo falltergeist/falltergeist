@@ -1,36 +1,9 @@
-/*
- * Copyright 2012-2018 Falltergeist Developers.
- *
- * This file is part of Falltergeist.
- *
- * Falltergeist is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Falltergeist is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
- */
-
-// Related headers
-#include "../Event/EventTarget.h"
-
-// C++ standard includes
 #include <type_traits>
-
-// Falltergeist includes
 #include "../Event/Dispatcher.h"
-#include "../Event/Event.h"
+#include "../Event/EventTarget.h"
 #include "../Event/Keyboard.h"
 #include "../Event/Mouse.h"
 #include "../Event/State.h"
-
-// Third party includes
 
 namespace Falltergeist
 {
@@ -52,7 +25,6 @@ namespace Falltergeist
             static_assert(std::is_base_of<Event, T>::value, "T should be derived from Event::Event.");
             if (handler)
             {
-                event->setTarget(this);
                 _eventDispatcher->scheduleEvent<T>(this, std::move(event), handler); // handler copy is necessary here
             }
         }

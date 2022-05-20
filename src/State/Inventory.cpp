@@ -1,29 +1,5 @@
-/*
- * Copyright 2012-2018 Falltergeist Developers.
- *
- * This file is part of Falltergeist.
- *
- * Falltergeist is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Falltergeist is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
- */
-
-// Related headers
-#include "../State/Inventory.h"
-
-// C++ standard includes
 #include <sstream>
-
-// Falltergeist includes
+#include "../State/Inventory.h"
 #include "../Event/Event.h"
 #include "../Event/Mouse.h"
 #include "../functions.h"
@@ -34,14 +10,18 @@
 #include "../Game/Object.h"
 #include "../Game/ObjectFactory.h"
 #include "../Game/WeaponItemObject.h"
-#include "../Graphics/Renderer.h"
+#include "../Graphics/CritterAnimationFactory.h"
 #include "../Graphics/Size.h"
+#include "../Helpers/CritterHelper.h"
 #include "../Input/Mouse.h"
+#include "../Logger.h"
 #include "../ResourceManager.h"
 #include "../State/State.h"
 #include "../State/GameMenu.h"
 #include "../State/InventoryDragItem.h"
 #include "../State/Location.h"
+#include "../UI/Animation.h"
+#include "../UI/Factory/ImageButtonFactory.h"
 #include "../UI/Image.h"
 #include "../UI/ImageButton.h"
 #include "../UI/ImageList.h"
@@ -51,59 +31,57 @@
 #include "../UI/Rectangle.h"
 #include "../UI/TextArea.h"
 
-// Third party includes
-
 namespace Falltergeist
 {
+    using ImageButtonType = UI::Factory::ImageButtonFactory::Type;
+
     namespace State
     {
-        Inventory::Inventory() : State()
+        Inventory::Inventory(std::shared_ptr<UI::IResourceManager> resourceManager, std::shared_ptr<ILogger> logger) : State()
         {
-            pushHandler().add([this](Event::State* ev)
-                {
-                    Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::ACTION);
-                });
-            popHandler().add([this](Event::State* ev)
-                {
-                    // If hand cursor now
-                    if (Game::getInstance()->mouse()->state() == Input::Mouse::Cursor::HAND)
-                    {
-                        Game::getInstance()->mouse()->popState();
-                    }
-                    Game::getInstance()->mouse()->popState();
-                });
-        }
+            this->resourceManager = std::move(resourceManager);
+            this->logger = std::move(logger);
+            imageButtonFactory = std::make_unique<UI::Factory::ImageButtonFactory>(this->resourceManager);
 
-        Inventory::~Inventory()
-        {
-
+            pushHandler().add([](Event::State* ev) {
+                Game::Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::ACTION);
+            });
+            popHandler().add([](Event::State* ev) {
+                // If hand cursor now
+                if (Game::Game::getInstance()->mouse()->state() == Input::Mouse::Cursor::HAND) {
+                    Game::Game::getInstance()->mouse()->popState();
+                }
+                Game::Game::getInstance()->mouse()->popState();
+            });
         }
 
         void Inventory::init()
         {
-            if (_initialized) return;
+            if (_initialized) {
+                return;
+            }
             State::init();
 
             setModal(true);
             setFullscreen(false);
 
-            auto game = Game::getInstance();
-            auto panelHeight = Game::getInstance()->locationState()->playerPanel()->size().height();
+            auto game = Game::Game::getInstance();
+            auto panelHeight = Game::Game::getInstance()->locationState()->playerPanel()->size().height();
 
             setPosition((game->renderer()->size() - Point(499, 377 + panelHeight)) / 2); // 499x377 = art/intrface/invbox.frm
 
-            addUI("background", new UI::Image("art/intrface/invbox.frm"));
+            addUI("background", resourceManager->getImage("art/intrface/invbox.frm"));
             getUI("background")->mouseClickHandler().add(std::bind(&Inventory::backgroundRightClick, this, std::placeholders::_1));
 
-            addUI("button_up",   new UI::ImageButton(UI::ImageButton::Type::INVENTORY_UP_ARROW,   128, 40));
-            addUI("button_down", new UI::ImageButton(UI::ImageButton::Type::INVENTORY_DOWN_ARROW, 128, 65));
-            auto buttonDownDisabled = new UI::Image("art/intrface/invdnds.frm");
-            auto buttonUpDisabled = new UI::Image("art/intrface/invupds.frm");
+            addUI("button_up",   imageButtonFactory->getByType(ImageButtonType::INVENTORY_UP_ARROW,   {128, 40}));
+            addUI("button_down", imageButtonFactory->getByType(ImageButtonType::INVENTORY_DOWN_ARROW, {128, 65}));
+            auto buttonDownDisabled = resourceManager->getImage("art/intrface/invdnds.frm");
+            auto buttonUpDisabled = resourceManager->getImage("art/intrface/invupds.frm");
             buttonUpDisabled->setPosition(Point(128, 40));
             buttonDownDisabled->setPosition(Point(128, 65));
             addUI("button_up_disabled", buttonUpDisabled);
             addUI("button_down_disabled", buttonDownDisabled);
-            addUI("button_done", new UI::ImageButton(UI::ImageButton::Type::SMALL_RED_CIRCLE, 438, 328));
+            addUI("button_done", imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {438, 328}));
 
             getUI("button_done")->mouseClickHandler().add(std::bind(&Inventory::onDoneButtonClick, this, std::placeholders::_1));
             getUI("button_up")->mouseClickHandler().add(  std::bind(&Inventory::onScrollUpButtonClick, this, std::placeholders::_1));
@@ -113,7 +91,7 @@ namespace Falltergeist
             auto screenX = 300;
             auto screenY = 47;
 
-            auto player = Game::getInstance()->player();
+            auto player = Game::Game::getInstance()->player();
 
             addUI("player_name", new UI::TextArea(player->name(), screenX, screenY));
 
@@ -266,13 +244,27 @@ namespace Falltergeist
             inventoryList->setItems(game->player()->inventory());
             addUI("inventory_list", inventoryList);
 
+            // TODO: this is a rotating animation in the vanilla engine
+            auto dude = Game::Game::getInstance()->player();
+
+            Helpers::CritterHelper critterHelper;
+            Graphics::CritterAnimationFactory animationFactory;
+
+            auto dudeCritter = animationFactory.buildStandingAnimation(
+                critterHelper.armorFID(dude.get()),
+                critterHelper.weaponId(dude.get()),
+                Game::Orientation::SC
+            );
+            dudeCritter->setPosition({188, 52});
+            addUI(dudeCritter.release());
+
             // BIG ICONS
             // icon: armor
             {
                 auto inventoryItem = new UI::InventoryItem(armorSlot, {154, 183});
                 inventoryItem->setType(UI::InventoryItem::Type::SLOT);
-                inventoryItem->itemDragStopHandler().add([inventoryList](Event::Mouse* event){ inventoryList->onItemDragStop(event); });
-                inventoryList->itemDragStopHandler().add([inventoryItem](Event::Mouse* event){ inventoryItem->onArmorDragStop(event); });
+                inventoryItem->itemDragStopHandler().add([inventoryList, inventoryItem](Event::Mouse* event){ inventoryList->onItemDragStop(event, inventoryItem); });
+                inventoryList->itemDragStopHandler().add([inventoryItem, inventoryList](Event::Mouse* event){ inventoryItem->onArmorDragStop(event, inventoryList); });
                 addUI(inventoryItem);
             }
 
@@ -280,8 +272,8 @@ namespace Falltergeist
             {
                 auto inventoryItem = new UI::InventoryItem(leftHand, {154, 286});
                 inventoryItem->setType(UI::InventoryItem::Type::SLOT);
-                inventoryItem->itemDragStopHandler().add([inventoryList](Event::Mouse* event){ inventoryList->onItemDragStop(event, HAND::LEFT); });
-                inventoryList->itemDragStopHandler().add([inventoryItem](Event::Mouse* event){ inventoryItem->onHandDragStop(event, HAND::LEFT); });
+                inventoryItem->itemDragStopHandler().add([inventoryList, inventoryItem](Event::Mouse* event){ inventoryList->onItemDragStop(event, HAND::LEFT, inventoryItem); });
+                inventoryList->itemDragStopHandler().add([inventoryItem, inventoryList](Event::Mouse* event){ inventoryItem->onHandDragStop(event, HAND::LEFT, inventoryList); });
                 addUI(inventoryItem);
             }
 
@@ -289,8 +281,8 @@ namespace Falltergeist
             {
                 auto inventoryItem = new UI::InventoryItem(rightHand, {247, 286});
                 inventoryItem->setType(UI::InventoryItem::Type::SLOT);
-                inventoryItem->itemDragStopHandler().add([inventoryList](Event::Mouse* event){ inventoryList->onItemDragStop(event, HAND::RIGHT); });
-                inventoryList->itemDragStopHandler().add([inventoryItem](Event::Mouse* event){ inventoryItem->onHandDragStop(event, HAND::RIGHT); });
+                inventoryItem->itemDragStopHandler().add([inventoryList, inventoryItem](Event::Mouse* event){ inventoryList->onItemDragStop(event, HAND::RIGHT, inventoryItem); });
+                inventoryList->itemDragStopHandler().add([inventoryItem, inventoryList](Event::Mouse* event){ inventoryItem->onHandDragStop(event, HAND::RIGHT, inventoryList); });
                 addUI(inventoryItem);
             }
 
@@ -310,7 +302,7 @@ namespace Falltergeist
 
         void Inventory::onDoneButtonClick(Event::Mouse* event)
         {
-            Game::getInstance()->popState();
+            Game::Game::getInstance()->popState();
         }
 
         void Inventory::onScrollUpButtonClick(Event::Mouse* event)
@@ -380,77 +372,10 @@ namespace Falltergeist
             scrollDownButton->setEnabled(enable);
         }
 
-        void Inventory::onArmorSlotMouseDown(Event::Mouse* event)
-        {
-            if (Game::getInstance()->mouse()->state() == Input::Mouse::Cursor::HAND)
-            {
-                auto itemUi = dynamic_cast<UI::ImageList*>(event->target());
-                Game::getInstance()->pushState(new InventoryDragItem(itemUi));
-            }
-            else
-            {
-                auto itemPID = Game::getInstance()->player()->armorSlot()->PID();
-                _screenShow(itemPID);
-            }
-        }
-
-        void Inventory::onLeftHandSlotMouseDown(Event::Mouse* event)
-        {
-            if (Game::getInstance()->mouse()->state() == Input::Mouse::Cursor::HAND)
-            {
-                auto itemUi = dynamic_cast<UI::ImageList*>(event->target());
-                Game::getInstance()->pushState(new InventoryDragItem(itemUi));
-            }
-            else
-            {
-                auto itemPID = Game::getInstance()->player()->leftHandSlot()->PID();
-                _screenShow(itemPID);
-            }
-        }
-
-        void Inventory::onRightHandSlotMouseDown(Event::Mouse* event)
-        {
-            if (Game::getInstance()->mouse()->state() == Input::Mouse::Cursor::HAND)
-            {
-                auto itemUi = dynamic_cast<UI::ImageList*>(event->target());
-                Game::getInstance()->pushState(new InventoryDragItem(itemUi));
-            }
-            else
-            {
-                auto itemPID = Game::getInstance()->player()->rightHandSlot()->PID();
-                _screenShow(itemPID);
-            }
-        }
-
-        //void Inventory::onSlotMouseDown(MouseEvent* event)
-        //{
-        //    auto state = dynamic_cast<Inventory*>(event->reciever());
-        //    auto itemUi = dynamic_cast<ImageList*>(event->target());
-        //    itemUi->setCurrentImage(1);
-        //    itemUi->setX(event->x() - itemUi->width()*0.5);
-        //    itemUi->setY(event->y() - itemUi->height()*0.5);
-        //}
-
-        //void Inventory::onSlotMouseUp(MouseEvent* event)
-        //{
-        //    auto itemUi = dynamic_cast<ImageList*>(event->target());
-        //    itemUi->setCurrentImage(0);
-        //    itemUi->setX(event->x() - itemUi->width()*0.5);
-        //    itemUi->setY(event->y() - itemUi->height()*0.5);
-        //}
-
-        //void Inventory::onSlotDrag(MouseEvent* event)
-        //{
-        //    //auto item = dynamic_cast<GameItemObject*>(event->reciever());
-        //    auto itemUi = dynamic_cast<ImageList*>(event->target());
-        //    //auto dragUi = item->inventoryDragUi();
-        //    itemUi->setX(itemUi->x() + event->xOffset());
-        //    itemUi->setY(itemUi->y() + event->yOffset());
-        //    //Game::getInstance()->states()->back()->ui()->push_back(dragUi);
-        //}
-
         std::string Inventory::_handItemSummary (Game::ItemObject* hand)
         {
+            Game::ObjectFactory objectFactory(logger);
+
             std::stringstream ss;
             if (hand)
             {
@@ -465,7 +390,7 @@ namespace Falltergeist
                     if (weapon->ammoType() != 0)
                     {
                         ss << "\nAmmo: /" << weapon->ammoCapacity() << " ";
-                        auto ammo = Game::ObjectFactory::getInstance()->createObject(weapon->ammoPID());
+                        auto ammo = objectFactory.createObjectByPID(weapon->ammoPID());
                         ss << ammo->name();
                     }
                 }
@@ -479,7 +404,7 @@ namespace Falltergeist
 
         void Inventory::backgroundRightClick(Event::Mouse* event)
         {
-            auto mouse = Game::getInstance()->mouse();
+            auto mouse = Game::Game::getInstance()->mouse();
             if (mouse->state() == Input::Mouse::Cursor::ACTION)
             {
                 mouse->pushState(Input::Mouse::Cursor::HAND);
@@ -494,7 +419,7 @@ namespace Falltergeist
 
         void Inventory::_screenShow (unsigned int PID)
         {
-            auto player = Game::getInstance()->player();
+            auto player = Game::Game::getInstance()->player();
             auto playerNameLabel = getTextArea("player_name");
             auto statsLabel = getTextArea("label_stats");
             auto statsValuesLabel = getTextArea("label_stats_values");
@@ -544,7 +469,7 @@ namespace Falltergeist
             switch (event->keyCode())
             {
                 case SDLK_ESCAPE:
-                    Game::getInstance()->popState();
+                    Game::Game::getInstance()->popState();
                     break;
             }
         }

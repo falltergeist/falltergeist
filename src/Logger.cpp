@@ -1,32 +1,11 @@
-/*
- * Copyright 2012-2018 Falltergeist Developers.
- *
- * This file is part of Falltergeist.
- *
- * Falltergeist is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Falltergeist is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
- */
-
-// C++ standard includes
 #include <sstream>
-
-// Falltergeist includes
 #include "Logger.h"
-
-// Third party includes
 
 namespace Falltergeist
 {
+    Logger::Logger(const std::string& channel) : _channel(channel) {
+    }
+
     Logger::Level Logger::level()
     {
         return _level;
@@ -48,6 +27,7 @@ namespace Falltergeist
         if (subsystem.size() > 0) {
             subsystemMsg = " [" + subsystem + "] ";
         }
+
         return std::cout << levelString(level) << subsystemMsg << std::dec;
     }
 
@@ -77,6 +57,8 @@ namespace Falltergeist
                     return "\x1b[31m[ERROR]\x1b[0m";
                 case Logger::Level::LOG_CRITICAL:
                     return "\x1b[31;1m[CRITICAL]\x1b[0m";
+                default:
+                    break;
             }
         }
         else
@@ -93,10 +75,12 @@ namespace Falltergeist
                     return "[ERROR]";
                 case Logger::Level::LOG_CRITICAL:
                     return "[CRITICAL]";
+                default:
+                    break;
             };
         }
 
-        return "[UNKOWN]";
+        return "[UNKNOWN]";
     }
 
     std::ostream &Logger::debug(const std::string &subsystem)
@@ -124,6 +108,31 @@ namespace Falltergeist
         return log(Logger::Level::LOG_CRITICAL, subsystem);
     }
 
+    std::ostream& Logger::debug()
+    {
+        return log(Logger::Level::LOG_DEBUG, "");
+    }
+
+    std::ostream& Logger::info()
+    {
+        return log(Logger::Level::LOG_INFO, "");
+    }
+
+    std::ostream& Logger::warning()
+    {
+        return log(Logger::Level::LOG_WARNING, "");
+    }
+
+    std::ostream& Logger::error()
+    {
+        return log(Logger::Level::LOG_ERROR, "");
+    }
+
+    std::ostream& Logger::critical()
+    {
+        return log(Logger::Level::LOG_CRITICAL, "");
+    }
+
     void Logger::useColors(bool useColors)
     {
         _useColors = useColors;
@@ -131,7 +140,7 @@ namespace Falltergeist
 
     void Logger::setLevel(const std::string &level)
     {
-        Logger::Level lvl;
+        Logger::Level lvl = Logger::Level::LOG_NONE;
 
         if (level == "debug")
         {
@@ -155,7 +164,7 @@ namespace Falltergeist
         }
         else
         {
-            warning() << "Unknown level " << level << " ignored";
+            warning("") << "Unknown level " << level << " ignored";
             return;
         }
 

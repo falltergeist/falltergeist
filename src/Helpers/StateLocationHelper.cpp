@@ -1,44 +1,62 @@
-/*
- * Copyright 2012-2018 Falltergeist Developers.
- *
- * This file is part of Falltergeist.
- *
- * Falltergeist is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Falltergeist is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
- */
-
-// C++ standard includes
-
-// Falltergeist includes
+#include "../Game/Game.h"
 #include "../Game/Location.h"
 #include "../Helpers/GameLocationHelper.h"
 #include "../Helpers/StateLocationHelper.h"
 #include "../State/Location.h"
-
-// Third party includes
+#include "../UI/ResourceManager.h"
+#include "../PathFinding/Hexagon.h"
 
 namespace Falltergeist
 {
     namespace Helpers
     {
+        StateLocationHelper::StateLocationHelper(std::shared_ptr<ILogger> logger)
+        {
+            this->logger = std::move(logger);
+        }
+
         State::Location* StateLocationHelper::getInitialLocationState() const
         {
-            GameLocationHelper gameLocationHelper;
+            GameLocationHelper gameLocationHelper(logger);
             auto initialLocation = gameLocationHelper.getInitialLocation();
 
-            auto locationState = new State::Location();
+            auto game = Game::Game::getInstance();
+
+            auto locationState = new State::Location(
+                game->player(),
+                game->mouse(),
+                game->settings(),
+                game->renderer(),
+                game->mixer(),
+                game->gameTime(),
+                std::make_shared<UI::ResourceManager>(),
+                logger
+            );
             locationState->setElevation(initialLocation->defaultElevationIndex());
             locationState->setLocation(initialLocation);
+            return locationState;
+        }
+
+        State::Location* StateLocationHelper::getCustomLocationState(const std::string& name, uint32_t elevation, uint32_t position) const
+        {
+            GameLocationHelper gameLocationHelper(logger);
+            auto initialLocation = gameLocationHelper.getByName(name);
+            auto game = Game::Game::getInstance();
+
+            auto locationState = new State::Location(
+                game->player(),
+                game->mouse(),
+                game->settings(),
+                game->renderer(),
+                game->mixer(),
+                game->gameTime(),
+                std::make_shared<UI::ResourceManager>(),
+                logger
+            );
+            locationState->setElevation(elevation);
+            initialLocation->setDefaultPosition(position);
+            locationState->setLocation(initialLocation);
+
             return locationState;
         }
     }

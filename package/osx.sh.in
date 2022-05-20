@@ -38,8 +38,8 @@ cp -r data /Volumes/Falltergeist/Falltergeist.app/Contents/Resources
 
 #create final dmg
 diskutil eject /Volumes/falltergeist
-hdiutil convert /Volumes/falltergeist.sparseimage -format UDZO -o "Falltergeist-@falltergeist_VERSION@"
-rm /Volumes/falltergeist.sparseimage 
+hdiutil convert /Volumes/falltergeist.sparseimage -format UDZO -o "Falltergeist-@FALLTERGEIST_VERSION@"
+rm /Volumes/falltergeist.sparseimage
 
 echo "Done!"
 

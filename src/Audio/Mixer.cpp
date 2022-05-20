@@ -1,47 +1,23 @@
-/*
- * Copyright 2012-2018 Falltergeist Developers.
- *
- * This file is part of Falltergeist.
- *
- * Falltergeist is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Falltergeist is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
- */
-
-// Related headers
-#include "../Audio/Mixer.h"
-
-// C++ standard includes
 #include <string>
-
-// Falltergeist includes
+#include <SDL.h>
+#include "../Audio/Mixer.h"
 #include "../Base/Buffer.h"
 #include "../Exception.h"
 #include "../Format/Acm/File.h"
 #include "../Game/Game.h"
-#include "../Logger.h"
 #include "../ResourceManager.h"
 #include "../Settings.h"
 #include "../UI/MvePlayer.h"
-
-// Third party includes
-#include <SDL.h>
 
 namespace Falltergeist
 {
     namespace Audio
     {
-        Mixer::Mixer()
+        using Game::Game;
+
+        Mixer::Mixer(std::shared_ptr<ILogger> logger)
         {
+            this->logger = std::move(logger);
             _init();
         }
 
@@ -60,19 +36,19 @@ namespace Falltergeist
             std::string message = "[AUDIO] - SDL_Init - ";
             if (SDL_InitSubSystem(SDL_INIT_AUDIO) < 0)
             {
-                Logger::critical() << message + "[FAIL]" << std::endl;
+                logger->critical() << message + "[FAIL]" << std::endl;
                 throw Exception(SDL_GetError());
             }
-            Logger::info() << message + "[OK]" << std::endl;
+            logger->info() << message + "[OK]" << std::endl;
 
             message = "[AUDIO] - Mix_OpenAudio - ";
             if (Mix_OpenAudio(22050, AUDIO_S16LSB, 2, Game::getInstance()->settings()->audioBufferSize()) < 0)
             {
-                Logger::critical() << message + "[FAIL]" << std::endl;
+                logger->critical() << message + "[FAIL]" << std::endl;
                 throw Exception(Mix_GetError());
             }
-            Logger::info() << message + "[OK]" << std::endl;
-            int frequency, channels;
+            logger->info() << message + "[OK]" << std::endl;
+            int frequency = 0, channels = 0;
             Mix_QuerySpec(&frequency, &_format, &channels);
         }
 
@@ -90,7 +66,9 @@ namespace Falltergeist
 
         void Mixer::_musicCallback(void *udata, uint8_t *stream, uint32_t len)
         {
-            if (_paused) return;
+            if (_paused) {
+                return;
+            }
 
             auto pacm = (Format::Acm::File*)(udata);
             if (pacm->samplesLeft() <= 0)
@@ -117,7 +95,9 @@ namespace Falltergeist
         {
             Mix_HookMusic(NULL, NULL);
             auto acm = ResourceManager::getInstance()->acmFileType(Game::getInstance()->settings()->musicPath()+filename);
-            if (!acm) return;
+            if (!acm) {
+                return;
+            }
             _lastMusic = filename;
             _loop = loop;
             musicCallback = std::bind(&Mixer::_musicCallback, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
@@ -127,7 +107,9 @@ namespace Falltergeist
 
         void Mixer::_speechCallback(void *udata, uint8_t *stream, uint32_t len)
         {
-            if (_paused) return;
+            if (_paused) {
+                return;
+            }
 
             auto pacm = (Format::Acm::File*)(udata);
             if (pacm->samplesLeft() <= 0)
@@ -150,7 +132,9 @@ namespace Falltergeist
         {
             Mix_HookMusic(NULL, NULL);
             auto acm = ResourceManager::getInstance()->acmFileType("sound/speech/"+filename);
-            if (!acm) return;
+            if (!acm) {
+                return;
+            }
             musicCallback = std::bind(&Mixer::_speechCallback, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
             acm->rewind();
             Mix_HookMusic(myMusicPlayer, (void *)acm);
@@ -161,7 +145,7 @@ namespace Falltergeist
             auto pmve = (UI::MvePlayer*)(udata);
             if (pmve->samplesLeft() <= 0)
             {
-                Logger::debug("AUDIO") << "buffer underrun?" << std::endl;
+                logger->debug() << "[AUDIO] buffer underrun?" << std::endl;
                 Mix_HookMusic(NULL, NULL);
                 return;
             }
@@ -178,8 +162,10 @@ namespace Falltergeist
         void Mixer::playACMSound(const std::string& filename)
         {
             auto acm = ResourceManager::getInstance()->acmFileType(filename);
-            if (!acm) return;
-            Logger::debug("Mixer") << "playing: " << acm->filename() << std::endl;
+            if (!acm) {
+                return;
+            }
+            logger->debug() << "[Mixer] playing: " << acm->filename() << std::endl;
             Mix_Chunk *chunk = NULL;
 
             auto it = _sfx.find(acm->filename());
@@ -205,8 +191,8 @@ namespace Falltergeist
 
                 // make SDL_mixer chunk
                 chunk = Mix_QuickLoad_RAW(cvt.buf, static_cast<uint32_t>(cvt.len * cvt.len_ratio));
-                if (_sfx.size() > 100) // TODO: make this configurable
-                {
+                // TODO: make this configurable
+                if (_sfx.size() > 100) {
                     Mix_FreeChunk(_sfx.begin()->second);
                     _sfx.erase(_sfx.begin());
                 }
@@ -237,8 +223,11 @@ namespace Falltergeist
 
         void Mixer::setMusicVolume(double volume)
         {
-            if (volume < 0.0) volume = 0.0;
-            else if (volume > 1.0) volume = 1.0;
+            if (volume < 0.0) {
+                volume = 0.0;
+            } else if (volume > 1.0) {
+                volume = 1.0;
+            }
             _musicVolume = volume;
         }
 
@@ -247,8 +236,4 @@ namespace Falltergeist
             return _lastMusic;
         }
     }
-
-
-
-
 }
