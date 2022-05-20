@@ -1,5 +1,8 @@
 Under development
 =======================
+
+0.4.0 (2022-05-20)
+=======================
 - [bugfix] sdl2main.lib is not linked with CMake (MrCool92)
 - [bugfix] Opcode810D (obj_carrying_pid_obj) checks containers as well (JanSimek)
 - [bugfix] Fix linking release builds on Windows and prevent closing console after a crash (JanSimek)
