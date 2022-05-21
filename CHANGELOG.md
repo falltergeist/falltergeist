@@ -1,6 +1,7 @@
 Under development
 =======================
 - [feature] Replace SDL_Color with Graphics::Color (alexeevdv)
+
 0.4.0 (2022-05-20)
 =======================
 - [bugfix] sdl2main.lib is not linked with CMake (MrCool92)
