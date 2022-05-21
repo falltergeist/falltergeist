@@ -5,6 +5,8 @@
 
 namespace Falltergeist {
     namespace UI {
+        using Point = Graphics::Point;
+
         AnimationQueue::AnimationQueue() : Base(Point(0, 0)) {
         }
 
@@ -73,11 +75,11 @@ namespace Falltergeist {
             return _animations.at(_currentAnimation).get();
         }
 
-        const Size& AnimationQueue::size() const {
+        const Graphics::Size& AnimationQueue::size() const {
             return currentAnimation()->size();
         }
 
-        const Point& AnimationQueue::offset() const {
+        const Graphics::Point& AnimationQueue::offset() const {
             return currentAnimation()->offset();
         }
 
@@ -85,7 +87,7 @@ namespace Falltergeist {
             return _animationEndedHandler;
         }
 
-        bool AnimationQueue::opaque(const Point& pos) {
+        bool AnimationQueue::opaque(const Graphics::Point& pos) {
             currentAnimation()->setPosition(this->position());
             return currentAnimation()->opaque(pos);
         }

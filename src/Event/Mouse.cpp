@@ -82,12 +82,12 @@ namespace Falltergeist
             return _shiftPressed;
         }
 
-        const Point& Mouse::position() const
+        const Graphics::Point& Mouse::position() const
         {
             return _position;
         }
 
-        void Mouse::setPosition(const Point& position)
+        void Mouse::setPosition(const Graphics::Point& position)
         {
             _position = position;
         }

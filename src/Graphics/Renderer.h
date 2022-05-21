@@ -6,6 +6,7 @@
 #include <glm/glm.hpp>
 #include <GL/glew.h>
 #include <SDL.h>
+#include "../Graphics/Color.h"
 #include "../Graphics/IRendererConfig.h"
 #include "../Graphics/Point.h"
 #include "../Graphics/Rectangle.h"
@@ -59,9 +60,9 @@ namespace Falltergeist
 
                 glm::mat4 getMVP();
 
-                void drawRect(int x, int y, int w, int h, SDL_Color color);
+                void drawRect(int x, int y, int w, int h, Color color);
 
-                void drawRect(const Point &pos, const Size &size, SDL_Color color);
+                void drawRect(const Point &pos, const Size &size, Color color);
 
                 void drawRectangle(const Rectangle& rectangle, const Texture* const texture);
 
@@ -97,7 +98,7 @@ namespace Falltergeist
 
                 bool _fadeDone = true;
 
-                SDL_Color _fadeColor = {0, 0, 0, 0};
+                Graphics::Color _fadeColor = {0, 0, 0, 0};
 
                 bool _inmovie = false;
 

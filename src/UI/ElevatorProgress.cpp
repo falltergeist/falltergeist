@@ -5,7 +5,10 @@ namespace Falltergeist
 {
     namespace UI
     {
-        ElevatorProgress::ElevatorProgress(uint8_t progress, const Point& pos) : Base(pos), _progress(progress)
+        using Point = Graphics::Point;
+        using Size = Graphics::Size;
+
+        ElevatorProgress::ElevatorProgress(uint8_t progress, const Graphics::Point& pos) : Base(pos), _progress(progress)
         {
             _sprite = std::make_shared<Graphics::Sprite>("art/intrface/gaj000.frm");
 
@@ -15,7 +18,7 @@ namespace Falltergeist
             _size = Size(92, 56);
         }
 
-        ElevatorProgress::ElevatorProgress(const Point& pos) : ElevatorProgress(0, pos)
+        ElevatorProgress::ElevatorProgress(const Graphics::Point& pos) : ElevatorProgress(0, pos)
         {
         }
 
@@ -31,7 +34,7 @@ namespace Falltergeist
             }
         }
 
-        bool ElevatorProgress::opaque(const Point &pos)
+        bool ElevatorProgress::opaque(const Graphics::Point &pos)
         {
             if (pos.x() > _size.width() || pos.x() < 0 || pos.y() > _size.height() || pos.y() < 0) {
                 return false;

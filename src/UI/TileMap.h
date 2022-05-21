@@ -16,9 +16,6 @@ namespace Falltergeist
     }
     namespace UI
     {
-        using Graphics::Point;
-        using Graphics::Rect;
-
         class Tile;
 
         class TileMap
@@ -43,7 +40,7 @@ namespace Falltergeist
                 void disable(unsigned int num);
 
                 // Tests if there is a non-transparent pixel at the given point.
-                bool opaque(const Point& pos);
+                bool opaque(const Graphics::Point& pos);
 
             private:
                 std::shared_ptr<ILogger> logger;

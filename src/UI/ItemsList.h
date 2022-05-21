@@ -19,7 +19,7 @@ namespace Falltergeist
         class ItemsList : public Falltergeist::UI::Base
         {
             public:
-                ItemsList(const Point& pos);
+                ItemsList(const Graphics::Point& pos);
 
                 void setItems(std::vector<Game::ItemObject*>* items);
 
@@ -70,14 +70,14 @@ namespace Falltergeist
 
                 Event::Handler& itemsListModifiedHandler();
 
-                virtual bool opaque(const Point &pos) override;
+                virtual bool opaque(const Graphics::Point &pos) override;
 
             private:
                 std::vector<Game::ItemObject*>* _items = nullptr;
 
                 InventoryItem* _draggedItem = nullptr;
 
-                Point _draggedItemInitialPosition;
+                Graphics::Point _draggedItemInitialPosition;
 
                 std::vector<std::unique_ptr<InventoryItem>> _inventoryItems;
 

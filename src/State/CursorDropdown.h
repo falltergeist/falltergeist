@@ -46,12 +46,12 @@ namespace Falltergeist
                 Game::Object* _object = nullptr;
                 bool _onlyShowIcon;
                 std::vector<Input::Mouse::Icon> _icons;
-                Point _initialMousePosition;
+                Graphics::Point _initialMousePosition;
                 int _currentIcon = 0;
                 std::vector<std::unique_ptr<UI::Base>> _activeIcons;
                 std::vector<std::unique_ptr<UI::Base>> _inactiveIcons;
                 UI::Base* _cursor = nullptr;
-                Point _iconsPos;
+                Graphics::Point _iconsPos;
                 bool _deactivated = false;
                 unsigned int _initialMouseStack;
 

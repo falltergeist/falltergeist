@@ -230,7 +230,7 @@ namespace Falltergeist
             if (SDL_GetTicks() - message->timestampCreated() >= 7000) {
                 setFloatMessage(nullptr);
             } else {
-                message->setPosition(_ui->position() + Point(
+                message->setPosition(_ui->position() + Graphics::Point(
                         _ui->size().width() / 2 - message->size().width() / 2,
                         -4 - message->textSize().height()
                 ));
@@ -248,11 +248,11 @@ namespace Falltergeist
             _ui->setPosition(
                 hexagon()->position()
                 - camera->topLeft()
-                - Point(_ui->size().width() / 2, _ui->size().height())
+                - Graphics::Point(_ui->size().width() / 2, _ui->size().height())
             );
 
             // don't draw if outside of screen
-            if (!Graphics::Rect::intersects(_ui->position(), _ui->size(), Point(0, 0), camera->size())) {
+            if (!Graphics::Rect::intersects(_ui->position(), _ui->size(), Graphics::Point(0, 0), camera->size())) {
                 setInRender(false);
                 return;
             }
@@ -529,11 +529,11 @@ namespace Falltergeist
             _ui->setPosition(
                     hexagon()->position()
                     - camera->topLeft()
-                    - Point(_ui->size().width() / 2, _ui->size().height())
+                    - Graphics::Point(_ui->size().width() / 2, _ui->size().height())
             );
 
             // don't draw if outside of screen
-            if (!Graphics::Rect::intersects(_ui->position(), _ui->size(), Point(0, 0), camera->size())) {
+            if (!Graphics::Rect::intersects(_ui->position(), _ui->size(), Graphics::Point(0, 0), camera->size())) {
                 setInRender(false);
                 return;
             }

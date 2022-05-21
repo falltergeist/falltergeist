@@ -6,6 +6,7 @@
 #include "../Event/State.h"
 #include "../Font.h"
 #include "../Game/Game.h"
+#include "../Graphics/Color.h"
 #include "../Graphics/Renderer.h"
 #include "../Input/Mouse.h"
 #include "../ResourceManager.h"
@@ -40,7 +41,7 @@ namespace Falltergeist
 
             Game::Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::NONE);
             auto renderer = Game::Game::getInstance()->renderer();
-            setPosition(Point((renderer->size().width() - 640) / 2, renderer->size().height()));
+            setPosition(Graphics::Point((renderer->size().width() - 640) / 2, renderer->size().height()));
 
             auto& vfs = ResourceManager::getInstance()->vfs();
             auto file = vfs->open("text/english/credits.txt", VFS::IFile::OpenMode::Read);
@@ -56,38 +57,32 @@ namespace Falltergeist
             std::istringstream contentStream(content);
 
             auto font_default = ResourceManager::getInstance()->font("font4.aaf");
-            SDL_Color default_color = {0x90, 0x78, 0x24, 0xFF};
+            Graphics::Color default_color = {0x90, 0x78, 0x24, 0xFF};
             auto font_at = ResourceManager::getInstance()->font("font3.aaf");
-            SDL_Color at_color = { 0x70, 0x60, 0x50, 0xFF};
+            Graphics::Color at_color = { 0x70, 0x60, 0x50, 0xFF};
             auto font_hash = ResourceManager::getInstance()->font("font4.aaf");
-            SDL_Color hash_color = { 0x8c, 0x8c, 0x84, 0xFF};
+            Graphics::Color hash_color = { 0x8c, 0x8c, 0x84, 0xFF};
 
             int y = 0;
             std::string line;
             while (std::getline(contentStream, line))
             {
                 Graphics::Font* cur_font = font_default;
-                SDL_Color cur_color = default_color;
+                Graphics::Color cur_color = default_color;
                 int additionalGap = 0;
-                if (line.find('\r') != std::string::npos)
-                {
+                if (line.find('\r') != std::string::npos) {
                     line.erase(line.find('\r'));
                 }
-                if (line[0] == '#')
-                {
+                if (line[0] == '#') {
                     line.erase(line.begin());
                     cur_font = font_hash;
                     cur_color = hash_color;
-                }
-                else if (line[0] == '@')
-                {
+                } else if (line[0] == '@') {
                     line.erase(line.begin());
                     cur_font = font_at;
                     cur_color = at_color;
                     additionalGap = 6;
-                }
-                else if (line.empty())
-                {
+                } else if (line.empty()) {
                     line = "    ";
                 }
 

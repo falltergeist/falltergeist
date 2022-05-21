@@ -44,10 +44,10 @@
 #include "VFS/MemoryDriver.h"
 
 namespace Falltergeist {
-    using namespace Format;
+    using Size = Graphics::Size;
 
     namespace {
-        Pro::File *fetchProFileType(unsigned int PID) {
+        Format::Pro::File *fetchProFileType(unsigned int PID) {
             return ResourceManager::getInstance()->proFileType(PID);
         }
     }
@@ -58,7 +58,7 @@ namespace Falltergeist {
 
         for (auto filename : CrossPlatform::findFalloutDataFiles()) {
             std::string path = CrossPlatform::findFalloutDataPath() + "/" + filename;
-            _datFiles.push_back(std::make_unique<Dat::File>(path));
+            _datFiles.push_back(std::make_unique<Format::Dat::File>(path));
             _vfs->addMount("", std::make_unique<VFS::DatArchiveDriver>(path));
         }
 
@@ -72,7 +72,7 @@ namespace Falltergeist {
         return Base::Singleton<ResourceManager>::get();
     }
 
-    void ResourceManager::_loadStreamForFile(std::string filename, std::function<void(Dat::Stream &&)> callback) {
+    void ResourceManager::_loadStreamForFile(std::string filename, std::function<void(Format::Dat::Stream &&)> callback) {
         // Searching file in Fallout data directory
         {
             std::string path = CrossPlatform::findFalloutDataPath() + "/" + filename;
@@ -91,7 +91,7 @@ namespace Falltergeist {
             }
 
             if (stream.is_open()) {
-                callback(Dat::Stream(stream));
+                callback(Format::Dat::Stream(stream));
                 stream.close();
                 return;
             }
@@ -103,7 +103,7 @@ namespace Falltergeist {
             if (entry != nullptr) {
                 Logger::debug("RESOURCE MANAGER") << "Loading file: " << filename << " [FROM " << datfile->filename()
                                                   << "]" << std::endl;
-                callback(Dat::Stream(*entry));
+                callback(Format::Dat::Stream(*entry));
                 return;
             }
         }
@@ -126,7 +126,7 @@ namespace Falltergeist {
         }
 
         T *itemPtr = nullptr;
-        _loadStreamForFile(filename, [this, &filename, &itemPtr](Dat::Stream &&stream) {
+        _loadStreamForFile(filename, [this, &filename, &itemPtr](Format::Dat::Stream &&stream) {
             auto item = std::make_unique<T>(std::move(stream));
             itemPtr = item.get();
             item->setFilename(filename);
@@ -136,113 +136,113 @@ namespace Falltergeist {
         return itemPtr;
     }
 
-    Frm::File *ResourceManager::frmFileType(const std::string &filename) {
+    Format::Frm::File *ResourceManager::frmFileType(const std::string &filename) {
         // TODO: Maybe get rid of all wrappers like this and call template function directly from outside.
-        return _datFileItem<Frm::File>(filename);
+        return _datFileItem<Format::Frm::File>(filename);
     }
 
-    Pal::File *ResourceManager::palFileType(const std::string &filename) {
-        return _datFileItem<Pal::File>(filename);
+    Format::Pal::File *ResourceManager::palFileType(const std::string &filename) {
+        return _datFileItem<Format::Pal::File>(filename);
     }
 
-    Lip::File *ResourceManager::lipFileType(const std::string &filename) {
-        return _datFileItem<Lip::File>(filename);
+    Format::Lip::File *ResourceManager::lipFileType(const std::string &filename) {
+        return _datFileItem<Format::Lip::File>(filename);
     }
 
-    Lst::File *ResourceManager::lstFileType(const std::string &filename) {
-        return _datFileItem<Lst::File>(filename);
+    Format::Lst::File *ResourceManager::lstFileType(const std::string &filename) {
+        return _datFileItem<Format::Lst::File>(filename);
     }
 
-    Aaf::File *ResourceManager::aafFileType(const std::string &filename) {
-        return _datFileItem<Aaf::File>(filename);
+    Format::Aaf::File *ResourceManager::aafFileType(const std::string &filename) {
+        return _datFileItem<Format::Aaf::File>(filename);
     }
 
-    Acm::File *ResourceManager::acmFileType(const std::string &filename) {
-        return _datFileItem<Acm::File>(filename);
+    Format::Acm::File *ResourceManager::acmFileType(const std::string &filename) {
+        return _datFileItem<Format::Acm::File>(filename);
     }
 
-    Fon::File *ResourceManager::fonFileType(const std::string &filename) {
-        return _datFileItem<Fon::File>(filename);
+    Format::Fon::File *ResourceManager::fonFileType(const std::string &filename) {
+        return _datFileItem<Format::Fon::File>(filename);
     }
 
-    Gam::File *ResourceManager::gamFileType(const std::string &filename) {
-        return _datFileItem<Gam::File>(filename);
+    Format::Gam::File *ResourceManager::gamFileType(const std::string &filename) {
+        return _datFileItem<Format::Gam::File>(filename);
     }
 
-    Gcd::File *ResourceManager::gcdFileType(const std::string &filename) {
-        return _datFileItem<Gcd::File>(filename);
+    Format::Gcd::File *ResourceManager::gcdFileType(const std::string &filename) {
+        return _datFileItem<Format::Gcd::File>(filename);
     }
 
-    Int::File *ResourceManager::intFileType(const std::string &filename) {
-        return _datFileItem<Int::File>(filename);
+    Format::Int::File *ResourceManager::intFileType(const std::string &filename) {
+        return _datFileItem<Format::Int::File>(filename);
     }
 
-    Msg::File *ResourceManager::msgFileType(const std::string &filename) {
-        return _datFileItem<Msg::File>(filename);
+    Format::Msg::File *ResourceManager::msgFileType(const std::string &filename) {
+        return _datFileItem<Format::Msg::File>(filename);
     }
 
-    Mve::File *ResourceManager::mveFileType(const std::string &filename) {
-        return _datFileItem<Mve::File>(filename);
+    Format::Mve::File *ResourceManager::mveFileType(const std::string &filename) {
+        return _datFileItem<Format::Mve::File>(filename);
     }
 
-    Bio::File *ResourceManager::bioFileType(const std::string &filename) {
-        return _datFileItem<Bio::File>(filename);
+    Format::Bio::File *ResourceManager::bioFileType(const std::string &filename) {
+        return _datFileItem<Format::Bio::File>(filename);
     }
 
-    Map::File *ResourceManager::mapFileType(const std::string &filename) {
-        auto item = _datFileItem<Map::File>(filename);
+    Format::Map::File *ResourceManager::mapFileType(const std::string &filename) {
+        auto item = _datFileItem<Format::Map::File>(filename);
         if (item) {
             item->init(&fetchProFileType);
         }
         return item;
     }
 
-    Pro::File *ResourceManager::proFileType(const std::string &filename) {
-        return _datFileItem<Pro::File>(filename);
+    Format::Pro::File *ResourceManager::proFileType(const std::string &filename) {
+        return _datFileItem<Format::Pro::File>(filename);
     }
 
-    Rix::File *ResourceManager::rixFileType(const std::string &filename) {
-        return _datFileItem<Rix::File>(filename);
+    Format::Rix::File *ResourceManager::rixFileType(const std::string &filename) {
+        return _datFileItem<Format::Rix::File>(filename);
     }
 
-    Sve::File *ResourceManager::sveFileType(const std::string &filename) {
-        return _datFileItem<Sve::File>(filename);
+    Format::Sve::File *ResourceManager::sveFileType(const std::string &filename) {
+        return _datFileItem<Format::Sve::File>(filename);
     }
 
-    Txt::CityFile *ResourceManager::cityTxt() {
-        return _datFileItem<Txt::CityFile>("data/city.txt");
+    Format::Txt::CityFile *ResourceManager::cityTxt() {
+        return _datFileItem<Format::Txt::CityFile>("data/city.txt");
     }
 
-    Txt::MapsFile *ResourceManager::mapsTxt() {
-        return _datFileItem<Txt::MapsFile>("data/maps.txt");
+    Format::Txt::MapsFile *ResourceManager::mapsTxt() {
+        return _datFileItem<Format::Txt::MapsFile>("data/maps.txt");
     }
 
-    Txt::WorldmapFile *ResourceManager::worldmapTxt() {
-        return _datFileItem<Txt::WorldmapFile>("data/worldmap.txt");
+    Format::Txt::WorldmapFile *ResourceManager::worldmapTxt() {
+        return _datFileItem<Format::Txt::WorldmapFile>("data/worldmap.txt");
     }
 
-    Txt::EndDeathFile *ResourceManager::endDeathTxt() {
-        return _datFileItem<Txt::EndDeathFile>("data/enddeath.txt");
+    Format::Txt::EndDeathFile *ResourceManager::endDeathTxt() {
+        return _datFileItem<Format::Txt::EndDeathFile>("data/enddeath.txt");
     }
 
-    Txt::EndGameFile *ResourceManager::endGameTxt() {
-        return _datFileItem<Txt::EndGameFile>("data/endgame.txt");
+    Format::Txt::EndGameFile *ResourceManager::endGameTxt() {
+        return _datFileItem<Format::Txt::EndGameFile>("data/endgame.txt");
     }
 
-    Txt::GenRepFile *ResourceManager::genRepTxt() {
-        return _datFileItem<Txt::GenRepFile>("data/genrep.txt");
+    Format::Txt::GenRepFile *ResourceManager::genRepTxt() {
+        return _datFileItem<Format::Txt::GenRepFile>("data/genrep.txt");
     }
 
-    Txt::HolodiskFile *ResourceManager::holodiskTxt() {
-        return _datFileItem<Txt::HolodiskFile>("data/holodisk.txt");
+    Format::Txt::HolodiskFile *ResourceManager::holodiskTxt() {
+        return _datFileItem<Format::Txt::HolodiskFile>("data/holodisk.txt");
     }
 
-    Txt::KarmaVarFile *ResourceManager::karmaVarTxt() {
-        return _datFileItem<Txt::KarmaVarFile>("data/karmavar.txt");
+    Format::Txt::KarmaVarFile *ResourceManager::karmaVarTxt() {
+        return _datFileItem<Format::Txt::KarmaVarFile>("data/karmavar.txt");
     }
 
-    Txt::QuestsFile *ResourceManager::questsTxt() {
-        return _datFileItem<Txt::QuestsFile>("data/quests.txt");
+    Format::Txt::QuestsFile *ResourceManager::questsTxt() {
+        return _datFileItem<Format::Txt::QuestsFile>("data/quests.txt");
     }
 
     Graphics::Texture *ResourceManager::texture(const std::string &filename) {
@@ -348,7 +348,7 @@ namespace Falltergeist {
     }
 
 
-    Pro::File *ResourceManager::proFileType(unsigned int PID) {
+    Format::Pro::File *ResourceManager::proFileType(unsigned int PID) {
         unsigned int typeId = PID >> 24;
         std::string listFile;
         switch ((OBJECT_TYPE) typeId) {
@@ -407,7 +407,7 @@ namespace Falltergeist {
         _datItems.clear();
     }
 
-    Frm::File *ResourceManager::frmFileType(unsigned int FID) {
+    Format::Frm::File *ResourceManager::frmFileType(unsigned int FID) {
         const auto &frmName = FIDtoFrmName(FID);
 
         if (frmName.empty()) {
@@ -416,7 +416,7 @@ namespace Falltergeist {
         return frmFileType(frmName);
     }
 
-    Int::File *ResourceManager::intFileType(unsigned int SID) {
+    Format::Int::File *ResourceManager::intFileType(unsigned int SID) {
         auto lst = lstFileType("scripts/scripts.lst");
         if (SID >= lst->strings()->size()) {
             throw Exception("ResourceManager::intFileType() - wrong SID: " + std::to_string(SID));

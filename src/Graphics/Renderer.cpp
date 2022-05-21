@@ -186,7 +186,7 @@ namespace Falltergeist {
                     return;
                 }
             }
-            _fadeColor.a = _fadeAlpha;
+            _fadeColor = _fadeColor.withAlpha(_fadeAlpha);
         }
 
         bool Renderer::fading() {
@@ -295,10 +295,15 @@ namespace Falltergeist {
             return _MVP;
         }
 
-        void Renderer::drawRect(int x, int y, int w, int h, SDL_Color color) {
+        void Renderer::drawRect(int x, int y, int w, int h, Color color) {
             std::vector<glm::vec2> vertices;
 
-            glm::vec4 fcolor = glm::vec4((float)color.r / 255.0f, (float)color.g / 255.0f, (float)color.b / 255.0f, (float)color.a / 255.0f);
+            glm::vec4 fcolor = glm::vec4(
+                (float) color.red() / 255.0f,
+                (float) color.green() / 255.0f,
+                (float) color.blue() / 255.0f,
+                (float) color.alpha() / 255.0f
+            );
 
             vertices.push_back(glm::vec2((float)x, (float)y));
             vertices.push_back(glm::vec2((float)x, (float)y + (float)h));
@@ -324,7 +329,7 @@ namespace Falltergeist {
             GL_CHECK(glDrawElements(GL_TRIANGLES, indexBuffer.count(), GL_UNSIGNED_INT, nullptr));
         }
 
-        void Renderer::drawRect(const Point& pos, const Size& size, SDL_Color color) {
+        void Renderer::drawRect(const Point& pos, const Size& size, Color color) {
             drawRect(pos.x(), pos.y(), size.width(), size.height(), color);
         }
 
@@ -474,7 +479,12 @@ namespace Falltergeist {
         }
 
         glm::vec4 Renderer::fadeColor() {
-            return glm::vec4((float)_fadeColor.r / 255.0, (float)_fadeColor.g / 255.0, (float)_fadeColor.b / 255.0, (float)_fadeColor.a / 255.0);
+            return glm::vec4(
+                (float)_fadeColor.red() / 255.0,
+                (float)_fadeColor.green() / 255.0,
+                (float)_fadeColor.blue() / 255.0,
+                (float)_fadeColor.alpha() / 255.0
+            );
         }
 
         int32_t Renderer::maxTextureSize() {

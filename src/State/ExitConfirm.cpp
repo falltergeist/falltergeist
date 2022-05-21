@@ -14,10 +14,11 @@
 
 namespace Falltergeist
 {
-    using ImageButtonType = UI::Factory::ImageButtonFactory::Type;
-
     namespace State
     {
+        using ImageButtonType = UI::Factory::ImageButtonFactory::Type;
+        using Point = Graphics::Point;
+
         ExitConfirm::ExitConfirm(std::shared_ptr<UI::IResourceManager> resourceManager, std::shared_ptr<ILogger> logger) : State()
         {
             this->resourceManager = std::move(resourceManager);

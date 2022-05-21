@@ -16,13 +16,10 @@ namespace Falltergeist
 
     namespace UI
     {
-        using Graphics::Point;
-        using Graphics::Size;
-
         class Base : public Event::EventTarget
         {
             public:
-                Base(const Point& pos);
+                Base(const Graphics::Point& pos);
 
                 ~Base() override;
 
@@ -30,17 +27,17 @@ namespace Falltergeist
 
                 void setY(int value);
 
-                virtual const Point& position() const;
+                virtual const Graphics::Point& position() const;
 
-                virtual void setPosition(const Point& pos);
+                virtual void setPosition(const Graphics::Point& pos);
 
-                virtual const Point& offset() const;
+                virtual const Graphics::Point& offset() const;
 
-                virtual void setOffset(const Point& pos);
+                virtual void setOffset(const Graphics::Point& pos);
 
-                virtual const Size& size() const;
+                virtual const Graphics::Size& size() const;
 
-                virtual bool opaque(const Point &pos);
+                virtual bool opaque(const Graphics::Point &pos);
 
                 virtual bool visible() const;
 
@@ -70,7 +67,7 @@ namespace Falltergeist
                  */
                 virtual void render(bool eggTransparency = false);
 
-                virtual void render(const Size& size, bool eggTransparency = false);
+                virtual void render(const Graphics::Size& size, bool eggTransparency = false);
 
                 Event::KeyboardHandler& keyDownHandler();
 
@@ -111,9 +108,9 @@ namespace Falltergeist
                 void setOutline(int outline);
 
             protected:
-                Point _position;
+                Graphics::Point _position;
 
-                Point _offset;
+                Graphics::Point _offset;
 
                 bool _light = false;
 
@@ -156,7 +153,7 @@ namespace Falltergeist
                 unsigned int _lightLevel;
 
             private:
-                Size _size;
+                Graphics::Size _size;
         };
     }
 }

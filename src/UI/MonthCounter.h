@@ -29,22 +29,22 @@ namespace Falltergeist
                     DECEMBER
                 };
 
-                MonthCounter(const Point& pos = Point(0, 0));
+                MonthCounter(const Graphics::Point& pos = Graphics::Point(0, 0));
 
-                MonthCounter(Month month, const Point& pos = Point(0, 0));
+                MonthCounter(Month month, const Graphics::Point& pos = Graphics::Point(0, 0));
 
                 Month month() const;
 
                 void setMonth(Month month);
 
-                bool opaque(const Point &pos) override;
+                bool opaque(const Graphics::Point &pos) override;
 
                 void render(bool eggTransparency) override;
 
             private:
                 Month _month;
 
-                Size _size;
+                Graphics::Size _size;
 
                 std::shared_ptr<Graphics::Sprite> _sprite;
 

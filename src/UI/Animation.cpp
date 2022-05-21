@@ -20,7 +20,7 @@ namespace Falltergeist
 {
     namespace UI
     {
-        using Graphics::Rect;
+        using Point = Graphics::Point;
 
         Animation::Animation() : Base(Point(0, 0))
         {
@@ -132,7 +132,7 @@ namespace Falltergeist
                                _outline, _lightLevel);
         }
 
-        const Size& Animation::size() const
+        const Graphics::Size& Animation::size() const
         {
             if (!_animation) {
                 return _zeroSize;
@@ -140,12 +140,12 @@ namespace Falltergeist
             return _animationFrames.at(_currentFrame)->size();
         }
 
-        const Point& Animation::shift() const
+        const Graphics::Point& Animation::shift() const
         {
             return _shift;
         }
 
-        void Animation::setShift(const Point& value)
+        void Animation::setShift(const Graphics::Point& value)
         {
             _shift = value;
         }
@@ -199,7 +199,7 @@ namespace Falltergeist
             return _animationFrames.at(_currentFrame).get();
         }
 
-        Point Animation::frameOffset() const
+        Graphics::Point Animation::frameOffset() const
         {
             return offset() + currentFramePtr()->offset();
         }
@@ -234,14 +234,14 @@ namespace Falltergeist
             return _animationEndedHandler;
         }
 
-        bool Animation::opaque(const Point &pos) {
+        bool Animation::opaque(const Graphics::Point &pos) {
             if (!_animation) {
                 return true;
             }
             const auto& frame = _animationFrames.at(_currentFrame);
 
             Point offsetPos = pos - offset();
-            if (!Rect::inRect(offsetPos, frame->size())) {
+            if (!Graphics::Rect::inRect(offsetPos, frame->size())) {
                 return false;
             }
             offsetPos +=frame->position();

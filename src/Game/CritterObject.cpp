@@ -21,8 +21,6 @@ namespace Falltergeist
 {
     namespace Game
     {
-        using namespace Base;
-
         CritterObject::CritterObject() : Object()
         {
             _type = Type::CRITTER;
@@ -540,7 +538,7 @@ namespace Falltergeist
         static const std::array<int, 6> yTileOffsets = {{-12, 0, 12,  12,   0, -12}};
 
         // TODO: move somewhere appropriate
-        bool isOutsideOfHexForDirection(Point offset, Orientation orient)
+        bool isOutsideOfHexForDirection(Graphics::Point offset, Orientation orient)
         {
             int xThreshold = xTileOffsets[orient];
             int yThreshold = yTileOffsets[orient];
@@ -583,7 +581,7 @@ namespace Falltergeist
                 } else {
                     auto nextHexagon = moveQueue->back();
                     auto nextOrientation = this->hexagon()->orientationTo(nextHexagon);
-                    Point ofs;
+                    Graphics::Point ofs;
                     if (nextOrientation != _orientation) {
                         _orientation = nextOrientation;
                         auto newAnimation = _generateMovementAnimation();
@@ -598,7 +596,7 @@ namespace Falltergeist
                         // on turns, center frames on current hex
                         ofs -= curFrameOfs;
                     } else {
-                        ofs -= Point(xTileOffsets[_orientation], yTileOffsets[_orientation]);
+                        ofs -= Graphics::Point(xTileOffsets[_orientation], yTileOffsets[_orientation]);
                     }
                     animation->setOffset(animation->offset() + ofs);
                 }
@@ -612,7 +610,7 @@ namespace Falltergeist
                 throw Exception("UI::Animation expected!");
             }
             // get offset of the last frame
-            Point lastFrameOfs = animation->offset() + animation->currentFramePtr()->offset();
+            Graphics::Point lastFrameOfs = animation->offset() + animation->currentFramePtr()->offset();
             animation->setCurrentFrame(0);
             animation->setOffset(lastFrameOfs);
             animation->play();

@@ -42,12 +42,11 @@
 
 namespace Falltergeist
 {
-    using Helpers::GameLocationHelper;
-    using Helpers::GameObjectHelper;
-
     namespace State
     {
-        using namespace Base;
+        using Helpers::GameLocationHelper;
+        using Helpers::GameObjectHelper;
+        using Point = Graphics::Point;
 
         const int Location::DROPDOWN_DELAY = 350;
         const int Location::KEYBOARD_SCROLL_STEP = 35;

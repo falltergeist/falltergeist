@@ -17,9 +17,10 @@ namespace Falltergeist
 {
     namespace UI
     {
-        using Graphics::Rect;
+        using Rect = Graphics::Rect;
+        using Size = Graphics::Size;
 
-        InventoryItem::InventoryItem(Game::ItemObject *item, const Point& pos) : Falltergeist::UI::Base(pos)
+        InventoryItem::InventoryItem(Game::ItemObject *item, const Graphics::Point& pos) : Falltergeist::UI::Base(pos)
         {
             _item = item;
             mouseDownHandler().add(std::bind(&InventoryItem::onMouseLeftDown, this, std::placeholders::_1));
@@ -191,7 +192,7 @@ namespace Falltergeist
             }
         }
 
-        const Size& InventoryItem::size() const
+        const Graphics::Size& InventoryItem::size() const
         {
             switch (_type)
             {
@@ -209,7 +210,7 @@ namespace Falltergeist
             return _itemDragStopHandler;
         }
 
-        bool InventoryItem::opaque(const Point &pos)
+        bool InventoryItem::opaque(const Graphics::Point &pos)
         {
             if (!_item) {
                 return false;

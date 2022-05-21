@@ -21,6 +21,8 @@ namespace Falltergeist
 {
     namespace State
     {
+        using Point = Graphics::Point;
+
         Movie::Movie(int id) : State()
         {
             _id = id;
@@ -70,7 +72,7 @@ namespace Falltergeist
                 auto ini = inifile->parse();
                 int total_effects = ini->section("info")->propertyInt("total_effects",0);
                 auto effect_frames = ini->section("info")->propertyArray("effect_frames");
-                for (int i =0;i<total_effects;i++)
+                for (int i = 0; i < total_effects; i++)
                 {
                     unsigned int effect_frame = effect_frames.at(i).intValue();
                     std::string effect_section = effect_frames.at(i).value();

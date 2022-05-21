@@ -37,7 +37,7 @@ namespace Falltergeist
 
             auto game = Game::Game::getInstance();
 
-            setPosition((game->renderer()->size() - Point(537, 376)) / 2);
+            setPosition((game->renderer()->size() - Graphics::Point(537, 376)) / 2);
 
             addUI("background", resourceManager->getImage("art/intrface/loot.frm"));
 

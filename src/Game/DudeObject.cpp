@@ -229,9 +229,9 @@ namespace Falltergeist
             CritterObject::_generateUi();
         }
 
-        Point DudeObject::eggOffset()
+        Graphics::Point DudeObject::eggOffset()
         {
-            return animation()->frameOffset() + animation()->shift() - Point(63, 78);
+            return animation()->frameOffset() + animation()->shift() - Graphics::Point(63, 78);
         }
 
         std::string DudeObject::scrName() const

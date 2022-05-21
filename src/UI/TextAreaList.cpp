@@ -6,7 +6,9 @@ namespace Falltergeist
 {
     namespace UI
     {
-        TextAreaList::TextAreaList(const Point &pos) : Falltergeist::UI::Base(pos)
+        using Size = Graphics::Size;
+
+        TextAreaList::TextAreaList(const Graphics::Point &pos) : Falltergeist::UI::Base(pos)
         {
         }
 
@@ -14,7 +16,7 @@ namespace Falltergeist
         {
         }
 
-        void  TextAreaList::setSize(Size size)
+        void  TextAreaList::setSize(Graphics::Size size)
         {
             _size=size;
         }
@@ -30,7 +32,7 @@ namespace Falltergeist
             return _areas;
         }
 
-        bool TextAreaList::opaque(const Point &pos)
+        bool TextAreaList::opaque(const Graphics::Point &pos)
         {
             return Graphics::Rect::inRect(pos, this->size());
         }
@@ -78,7 +80,7 @@ namespace Falltergeist
             _totalHeight = 0;
             _visibleCount = 0;
             for (unsigned int i = _areaIndex; i < _areas.size(); i++) {
-                _areas.at(i)->setPosition(position()+Size(0,_totalHeight));
+                _areas.at(i)->setPosition(position() + Size(0, _totalHeight));
                 _totalHeight+=_areas.at(i)->textSize().height()+_areas.at(i)->font()->verticalGap()*2;
 
                 if (_totalHeight>_size.height()) {

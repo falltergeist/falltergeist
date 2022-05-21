@@ -18,10 +18,11 @@
 
 namespace Falltergeist
 {
-    using Helpers::StateLocationHelper;
-
     namespace State
     {
+        using Helpers::StateLocationHelper;
+        using Point = Graphics::Point;
+
         Start::Start(std::shared_ptr<UI::IResourceManager> resourceManager, std::shared_ptr<ILogger> logger) : State()
         {
             this->resourceManager = std::move(resourceManager);

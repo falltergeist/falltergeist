@@ -8,7 +8,9 @@
 
 namespace Falltergeist {
     namespace UI {
-        Slider::Slider(const Point& pos, std::unique_ptr<Image> imageOn, std::unique_ptr<Image> imageOff)
+        using Point = Graphics::Point;
+
+        Slider::Slider(const Graphics::Point& pos, std::unique_ptr<Image> imageOn, std::unique_ptr<Image> imageOff)
             : Base(pos), _imageOn(std::move(imageOn)), _imageOff(std::move(imageOff)) {
             mouseDragHandler().add([=](Event::Mouse* event) { _onDrag(event); });
             mouseDownHandler().add([=](Event::Mouse* event) { _onMouseDown(event); });
@@ -97,15 +99,15 @@ namespace Falltergeist {
             }
         }
 
-        bool Slider::opaque(const Point& pos) {
+        bool Slider::opaque(const Graphics::Point& pos) {
             return pos >= Point(0, 0) && pos < size();
         }
 
-        const Size& Slider::size() const {
+        const Graphics::Size& Slider::size() const {
             return _sliderSize;
         }
 
-        double Slider::_offsetToValue(const Point& offset) {
+        double Slider::_offsetToValue(const Graphics::Point& offset) {
             if (offset.x() < 0) {
                 return minValue();
             }
@@ -117,7 +119,7 @@ namespace Falltergeist {
             return ((maxValue() - minValue()) / static_cast<float>(maxThumbOffset)) * (float)offset.x();
         }
 
-        Point Slider::_valueToOffset(double value) {
+        Graphics::Point Slider::_valueToOffset(double value) {
             auto maxThumbOffset = _sliderSize.width() - _thumbSize.width();
             return Point(static_cast<int>(static_cast<float>(maxThumbOffset) / (maxValue() - minValue()) * _value), 0);
         }

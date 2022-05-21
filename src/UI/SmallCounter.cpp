@@ -7,7 +7,10 @@ namespace Falltergeist
 {
     namespace UI
     {
-        SmallCounter::SmallCounter(const Point& pos) : Falltergeist::UI::Base(pos)
+        using Point = Graphics::Point;
+        using Size = Graphics::Size;
+
+        SmallCounter::SmallCounter(const Graphics::Point& pos) : Falltergeist::UI::Base(pos)
         {
             _sprite = std::make_shared<Graphics::Sprite>("art/intrface/numbers.frm");
 
@@ -106,7 +109,7 @@ namespace Falltergeist
             }
         }
 
-        bool SmallCounter::opaque(const Point &pos)
+        bool SmallCounter::opaque(const Graphics::Point &pos)
         {
             return false;
         }

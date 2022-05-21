@@ -5,7 +5,7 @@ namespace Falltergeist
 {
     namespace UI
     {
-        FpsCounter::FpsCounter(const Point& pos) : TextArea(pos)
+        FpsCounter::FpsCounter(const Graphics::Point& pos) : TextArea(pos)
         {
             _millisecondsTracked = 0;
             setText("0");

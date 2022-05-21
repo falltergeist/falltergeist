@@ -23,12 +23,13 @@
 
 namespace Falltergeist
 {
-    using ImageButtonType = UI::Factory::ImageButtonFactory::Type;
-    using Helpers::StateLocationHelper;
-    using Helpers::GameLocationHelper;
-
     namespace State
     {
+        using ImageButtonType = UI::Factory::ImageButtonFactory::Type;
+        using Helpers::StateLocationHelper;
+        using Helpers::GameLocationHelper;
+        using Point = Graphics::Point;
+
         ElevatorDialog::ElevatorDialog(std::shared_ptr<UI::IResourceManager> resourceManager, std::shared_ptr<ILogger> logger, uint32_t elevatorType, uint32_t elevatorLevel) : State()
         {
             this->resourceManager = std::move(resourceManager);
@@ -58,7 +59,7 @@ namespace Falltergeist
             auto labelsFrmLstId = -1;
             uint8_t elevatorPosition = 0;
             uint8_t elevatorScale = 0;
-            
+
             if (_elevator->size() > 1) {
                 elevatorScale = (uint8_t)(12 / (_elevator->size() - 1));
             }

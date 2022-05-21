@@ -3,6 +3,7 @@
 #include <cstdint>
 #include <string>
 #include <vector>
+#include "../Graphics/Color.h"
 #include "../Graphics/Font.h"
 #include "../Graphics/TextArea.h"
 #include "../UI/Base.h"
@@ -35,7 +36,7 @@ namespace Falltergeist
             /**
              * Creates empty TextArea at the given position.
              */
-            TextArea(const Point& pos = Point());
+            TextArea(const Graphics::Point& pos = Graphics::Point());
 
             /**
              * Creates empty TextArea at the given position.
@@ -45,7 +46,7 @@ namespace Falltergeist
             /**
              * Creates TextArea with given text at the given position.
              */
-            TextArea(const std::string& text, const Point& pos = Point());
+            TextArea(const std::string& text, const Graphics::Point& pos = Graphics::Point());
 
             /**
              * Creates TextArea with given text at the given position.
@@ -55,7 +56,7 @@ namespace Falltergeist
             /**
              * Creates TextArea as copy of another TextArea, placed at the given position (0,0 by default).
              */
-            TextArea(const TextArea& textArea, Point pos = Point());
+            TextArea(const TextArea& textArea, Graphics::Point pos = Graphics::Point());
 
             ~TextArea() override;
 
@@ -85,14 +86,14 @@ namespace Falltergeist
             /**
              * Size of text area. It's either fixed value given to setSize() or previously calculated size.
              */
-            const Size& size() const override;
+            const Graphics::Size& size() const override;
 
             /**
              * Sets fixed size of TextArea. If this is not (0, 0) - calls to size() will always return this value,
              * regardless of actual width/height of TextArea on screen.
              * If wordWrap is also set to true, lines width will be limited to width provided.
              */
-            void setSize(const Size& size);
+            void setSize(const Graphics::Size& size);
 
             void setWidth(int width);
 
@@ -101,7 +102,7 @@ namespace Falltergeist
             /**
              * Size of actual text content of the text area.
              */
-            Size textSize();
+            Graphics::Size textSize();
 
             /**
              * Actual number of lines contained within TextArea. Will be greater than number of visible lines when overflown.
@@ -121,30 +122,30 @@ namespace Falltergeist
             /**
              * Top and left text padding.
              */
-            const Size& paddingTopLeft() const;
+            const Graphics::Size& paddingTopLeft() const;
 
             /**
              * Sets top and left text padding, in pixels, relative to TextArea position.
              */
-            void setPaddingTopLeft(const Size& paddingTopLeft);
+            void setPaddingTopLeft(const Graphics::Size& paddingTopLeft);
 
             /**
              * Bottom and right text padding.
              */
-            const Size& paddingBottomRight() const;
+            const Graphics::Size& paddingBottomRight() const;
 
             /**
              * Sets bottom and right text padding, ix pixels, relative to TextArea position + size.
              * Has no effect if size is not set.
              */
-            void setPaddingBottomRight(const Size& paddingBottomRight);
+            void setPaddingBottomRight(const Graphics::Size& paddingBottomRight);
 
             /**
              * Sets both top-left and bottom-right padding.
              */
-            void setPadding(const Size& topLeft, const Size& bottomRight);
+            void setPadding(const Graphics::Size& topLeft, const Graphics::Size& bottomRight);
 
-            void setColor(SDL_Color color);
+            void setColor(const Graphics::Color &color);
 
             /**
              * Whether text outline is currently enabled or not.
@@ -159,12 +160,12 @@ namespace Falltergeist
             /**
              * Current outline color.
              */
-            SDL_Color outlineColor() const;
+            const Graphics::Color& outlineColor() const;
 
             /**
              * Sets text outline color. 0 - disables outline, any other color will enable it.
              */
-            void setOutlineColor(SDL_Color color);
+            void setOutlineColor(const Graphics::Color &color);
 
             /**
              * Current line offset.
@@ -187,12 +188,12 @@ namespace Falltergeist
 
             void setFont(Graphics::Font* font);
 
-            void setFont(Graphics::Font* font, SDL_Color color);
+            void setFont(Graphics::Font* font, const Graphics::Color &color);
 
             /**
              * Sets font by font filename and color.
              */
-            void setFont(const std::string& fontName, SDL_Color color);
+            void setFont(const std::string& fontName, const Graphics::Color &color);
 
             /**
              * Current font filename.
@@ -201,7 +202,7 @@ namespace Falltergeist
 
             void render(bool eggTransparency = false) override;
 
-            bool opaque(const Point &pos) override;
+            bool opaque(const Graphics::Point &pos) override;
 
             unsigned int timestampCreated() const;
 
@@ -281,12 +282,12 @@ namespace Falltergeist
             /**
              * User-defined size. 0 for each dimension represents "auto-size" for this dimension, so size() will return calculated size.
              */
-            Size _size;
+            Graphics::Size _size;
 
             /**
              * Real size of TextArea on screen, as determined by previous _updateSymbols() call.
              */
-            Size _calculatedSize;
+            Graphics::Size _calculatedSize;
 
             /**
              * Lines of text. Cleared along with _changed flag when it is required to recalculate symbol positions.
@@ -297,17 +298,17 @@ namespace Falltergeist
 
             bool _wordWrap = false;
 
-            Size _paddingTopLeft, _paddingBottomRight;
+            Graphics::Size _paddingTopLeft, _paddingBottomRight;
 
             std::vector<int> _customLineShifts;
 
             // TODO: implement
-            SDL_Color _backgroundColor = {0,0,0,0};
+            Graphics::Color _backgroundColor = {0,0,0,0};
 
             // TODO: should be white, and properly set to green in states/ui
-            SDL_Color _color = {0x3f, 0xf8, 0x00, 0xff};
+            Graphics::Color _color = {0x3f, 0xf8, 0x00, 0xff};
 
-            SDL_Color _outlineColor = {0,0,0,0};
+            Graphics::Color _outlineColor = {0,0,0,0};
 
             unsigned int _timestampCreated = 0;
 

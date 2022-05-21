@@ -7,8 +7,6 @@ namespace Falltergeist
 {
     namespace Event
     {
-        using Graphics::Point;
-
         class Mouse : public Event
         {
             public:
@@ -44,13 +42,15 @@ namespace Falltergeist
                 /**
                  * Cursor position on screen.
                  */
-                const Point& position() const;
-                void setPosition(const Point& position);
+                const Graphics::Point& position() const;
+
+                void setPosition(const Graphics::Point& position);
 
                 /**
                  * @brief Which button was pressed during mouse button events.
                  */
                 Button button() const;
+
                 void setButton(Button);
 
                 bool leftButton() const;
@@ -97,7 +97,7 @@ namespace Falltergeist
 
                 Type _type;
 
-                Point _position;
+                Graphics::Point _position;
         };
     }
 }

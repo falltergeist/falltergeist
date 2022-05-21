@@ -26,16 +26,16 @@ namespace Falltergeist
 
                 void render(bool eggTransparency = false) override;
 
-                virtual bool opaque(const Point &pos) override;
+                virtual bool opaque(const Graphics::Point &pos) override;
 
                 /**
                  * Additional offset, specific to current direction and taken from source FRM file.
                  */
-                const Point& shift() const;
+                const Graphics::Point& shift() const;
 
-                void setShift(const Point& value);
+                void setShift(const Graphics::Point& value);
 
-                const Size& size() const override;
+                const Graphics::Size& size() const override;
 
                 void play();
 
@@ -52,7 +52,7 @@ namespace Falltergeist
                 /**
                  * Offset of the current frame.
                  */
-                Point frameOffset() const;
+                Graphics::Point frameOffset() const;
 
                 unsigned int actionFrame() const;
 
@@ -88,7 +88,7 @@ namespace Falltergeist
 
                 std::vector<std::unique_ptr<AnimationFrame>> _animationFrames;
 
-                Point _shift;
+                Graphics::Point _shift;
 
                 unsigned int _currentFrame = 0;
 
@@ -104,7 +104,7 @@ namespace Falltergeist
 
                 unsigned int _direction;
 
-                Size _zeroSize = Size(0, 0);
+                Graphics::Size _zeroSize = Graphics::Size(0, 0);
         };
     }
 }

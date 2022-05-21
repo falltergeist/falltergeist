@@ -11,7 +11,10 @@ namespace Falltergeist
 {
     namespace UI
     {
-        MultistateImageButton::MultistateImageButton(Type type, const Point& pos) : Base(pos)
+        using Point = Graphics::Point;
+        using Size = Graphics::Size;
+
+        MultistateImageButton::MultistateImageButton(Type type, const Graphics::Point& pos) : Base(pos)
         {
             mouseClickHandler() += [=](Event::Mouse* event){ _onMouseClick(event); };
             mouseUpHandler().add([=](Event::Mouse* event) { _onMouseUp(event); });
@@ -155,7 +158,7 @@ namespace Falltergeist
             _sprite->renderCropped(position(), _rects.at(_currentState));
         }
 
-        bool MultistateImageButton::opaque(const Point &pos)
+        bool MultistateImageButton::opaque(const Graphics::Point &pos)
         {
             if (pos.x() > _size.width() || pos.x()<0 || pos.y() > _size.height() || pos.y()<0) {
                 return false;
@@ -164,7 +167,7 @@ namespace Falltergeist
             return _sprite->opaque(_rects.at(_currentState).position() + pos);
         }
 
-        const Size& MultistateImageButton::size() const
+        const Graphics::Size& MultistateImageButton::size() const
         {
             return _size;
         }

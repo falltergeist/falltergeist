@@ -4,6 +4,7 @@
 #include "../functions.h"
 #include "../Game/DudeObject.h"
 #include "../Game/Game.h"
+#include "../Graphics/Color.h"
 #include "../Graphics/Renderer.h"
 #include "../Helpers/StateLocationHelper.h"
 #include "../ResourceManager.h"
@@ -22,11 +23,12 @@
 
 namespace Falltergeist
 {
-    using Helpers::StateLocationHelper;
-    using ImageButtonType = UI::Factory::ImageButtonFactory::Type;
-
     namespace State
     {
+        using Helpers::StateLocationHelper;
+        using ImageButtonType = UI::Factory::ImageButtonFactory::Type;
+        using Point = Graphics::Point;
+
         PlayerCreate::PlayerCreate(std::shared_ptr<UI::IResourceManager> resourceManager, std::shared_ptr<ILogger> logger)
             : State(), _logger(logger), _resourceManager(resourceManager) {
             _imageButtonFactory = std::make_unique<UI::Factory::ImageButtonFactory>(_resourceManager);
@@ -150,7 +152,7 @@ namespace Falltergeist
             _addButton("cancel",  _imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {backgroundX + 554, backgroundY + 454}));
 
             auto font3_b89c28ff = ResourceManager::getInstance()->font("font3.aaf");
-            SDL_Color color = {0xb8, 0x9c, 0x28, 0xff};
+            Graphics::Color color = {0xb8, 0x9c, 0x28, 0xff};
 
             _addLabel("options", new UI::TextArea(_t(MSG_EDITOR, 101), backgroundX+365, backgroundY+453))->setFont(font3_b89c28ff, color);
             _addLabel("next",    new UI::TextArea(_t(MSG_EDITOR, 100), backgroundX+473, backgroundY+453))->setFont(font3_b89c28ff, color);
@@ -337,29 +339,25 @@ namespace Falltergeist
             {
                 std::string name = it->first;
 
-                SDL_Color font1_3ff800ff = {0x3f, 0xf8, 0x00, 0xff};
-                SDL_Color font1_a0a0a0ff = {0xa0, 0xa0, 0xa0, 0xff};
-                SDL_Color font1_183018ff = {0x18, 0x30, 0x18, 0xff};
+                Graphics::Color font1_3ff800ff = {0x3f, 0xf8, 0x00, 0xff};
+                Graphics::Color font1_a0a0a0ff = {0xa0, 0xa0, 0xa0, 0xff};
+                Graphics::Color font1_183018ff = {0x18, 0x30, 0x18, 0xff};
 
-                if (name.find("stats_") == 0 || name.find("params_") == 0)
-                {
+                if (name.find("stats_") == 0 || name.find("params_") == 0) {
                     it->second->setColor(font1_3ff800ff);
                 }
 
-                if (name.find("traits_") == 0)
-                {
+                if (name.find("traits_") == 0) {
                     unsigned number = atoi(name.substr(7).c_str()) - 1;
                     it->second->setColor(player->traitTagged((TRAIT)number) ? font1_a0a0a0ff : font1_3ff800ff);
                 }
 
-                if (name.find("skills_") == 0)
-                {
+                if (name.find("skills_") == 0) {
                     unsigned number = atoi(name.substr(7).c_str()) - 1;
                     it->second->setColor(player->skillTagged((SKILL)number) ? font1_a0a0a0ff : font1_3ff800ff);
                 }
 
-                if (name.find("health_") == 0)
-                {
+                if (name.find("health_") == 0) {
                     it->second->setColor(name.compare("health_1") == 0 ? font1_3ff800ff : font1_183018ff);
                 }
             }
@@ -378,9 +376,9 @@ namespace Falltergeist
 
                 _selectedImage = _images.at(name);
 
-                SDL_Color font1_ffff7fff = {0xff, 0xff, 0x7f, 0xff};
-                SDL_Color font1_ffffffff = {0xff, 0xff, 0xff, 0xff};
-                SDL_Color font1_707820ff = {0x70, 0x78, 0x20, 0xff};
+                Graphics::Color font1_ffff7fff = {0xff, 0xff, 0x7f, 0xff};
+                Graphics::Color font1_ffffffff = {0xff, 0xff, 0xff, 0xff};
+                Graphics::Color font1_707820ff = {0x70, 0x78, 0x20, 0xff};
 
                 if (name.find("stats_") == 0)
                 {

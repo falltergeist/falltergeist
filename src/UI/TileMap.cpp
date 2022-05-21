@@ -19,6 +19,10 @@ namespace  Falltergeist
 {
     namespace UI
     {
+        using Point = Graphics::Point;
+        using Rect = Graphics::Rect;
+        using Size = Graphics::Size;
+
         TileMap::TileMap(std::shared_ptr<ILogger> logger)
         {
             this->logger = std::move(logger);
@@ -227,7 +231,7 @@ namespace  Falltergeist
             }
         }
 
-        bool TileMap::opaque(const Point &pos)
+        bool TileMap::opaque(const Graphics::Point &pos)
         {
             auto camera = Game::Game::getInstance()->locationState()->camera();
 

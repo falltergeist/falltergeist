@@ -30,7 +30,7 @@ namespace Falltergeist
                     BIG_SWITCH = 1,
                     SMALL_SWITCH
                 };
-                MultistateImageButton(Type type, const Point& pos);
+                MultistateImageButton(Type type, const Graphics::Point& pos);
 
                 virtual ~MultistateImageButton() = default;
 
@@ -56,11 +56,11 @@ namespace Falltergeist
 
                 void handle(Event::Mouse* mouseEvent) override;
 
-                bool opaque(const Point &pos) override;
+                bool opaque(const Graphics::Point &pos) override;
 
                 void render(bool eggTransparency) override;
 
-                const Size& size() const override;
+                const Graphics::Size& size() const override;
 
             private:
                 std::shared_ptr<Graphics::Sprite> _sprite;
@@ -71,7 +71,7 @@ namespace Falltergeist
 
                 Mode _mode = Mode::CYCLIC;
 
-                Size _size;
+                Graphics::Size _size;
 
                 int _modeFactor = 1; // or -1
 

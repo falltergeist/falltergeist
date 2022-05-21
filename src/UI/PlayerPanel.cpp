@@ -26,10 +26,11 @@
 
 namespace Falltergeist
 {
-    using ImageButtonType = UI::Factory::ImageButtonFactory::Type;
-
     namespace UI
     {
+        using ImageButtonType = UI::Factory::ImageButtonFactory::Type;
+        using Point = Graphics::Point;
+
         PlayerPanel::PlayerPanel(std::shared_ptr<ILogger> logger) : UI::Base(Point(0, 0))
         {
             this->logger = std::move(logger);
@@ -199,7 +200,7 @@ namespace Falltergeist
         {
         }
 
-        const Size& PlayerPanel::size() const
+        const Graphics::Size& PlayerPanel::size() const
         {
             return _background->size();
         }
@@ -464,7 +465,7 @@ namespace Falltergeist
             _messageLog->setLineOffset(_messageLog->numLines() - 6);
         }
 
-        bool PlayerPanel::opaque(const Point &pos)
+        bool PlayerPanel::opaque(const Graphics::Point &pos)
         {
             return _background->opaque(pos);
         }

@@ -8,7 +8,7 @@
 
 namespace Falltergeist {
     namespace UI {
-        ImageButton::ImageButton(const Point& pos, std::shared_ptr<Graphics::Sprite> buttonUpSprite,
+        ImageButton::ImageButton(const Graphics::Point& pos, std::shared_ptr<Graphics::Sprite> buttonUpSprite,
                                  std::shared_ptr<Graphics::Sprite> buttonDownSprite, std::string buttonUpSoundFilename,
                                  std::string buttonDownSoundFilename, bool checkBoxMode)
             : Base(pos), _checkboxMode(checkBoxMode), _buttonDownSoundFilename(buttonDownSoundFilename),
@@ -76,7 +76,7 @@ namespace Falltergeist {
             _buttonUpSprite->render(position());
         }
 
-        bool ImageButton::opaque(const Point& pos) {
+        bool ImageButton::opaque(const Graphics::Point& pos) {
             if ((_checkboxMode && _checked) || (_hovered && _leftButtonPressed)) {
                 return _buttonDownSprite->opaque(pos);
             }

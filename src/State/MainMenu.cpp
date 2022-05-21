@@ -4,6 +4,7 @@
 #include "../Event/State.h"
 #include "../functions.h"
 #include "../Game/Game.h"
+#include "../Graphics/Color.h"
 #include "../Graphics/Renderer.h"
 #include "../Input/Mouse.h"
 #include "../Logger.h"
@@ -21,10 +22,11 @@
 
 namespace Falltergeist
 {
-    using ImageButtonType = UI::Factory::ImageButtonFactory::Type;
-
     namespace State
     {
+        using ImageButtonType = UI::Factory::ImageButtonFactory::Type;
+        using Point = Graphics::Point;
+
         MainMenu::MainMenu(std::shared_ptr<UI::IResourceManager> resourceManager, std::shared_ptr<ILogger> logger) : State()
         {
             this->resourceManager = std::move(resourceManager);
@@ -77,7 +79,7 @@ namespace Falltergeist
             exitButton->mouseClickHandler().add(std::bind(&MainMenu::onExitButtonClick, this, std::placeholders::_1));
 
             auto font4 = ResourceManager::getInstance()->font("font4.aaf");
-            SDL_Color color = {0xb8, 0x9c, 0x28, 0xff};
+            Graphics::Color color = {0xb8, 0x9c, 0x28, 0xff};
 
             // "Intro" label
             auto introButtonLabel = new UI::TextArea("INTRO", 50, 20);

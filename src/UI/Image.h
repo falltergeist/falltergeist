@@ -21,11 +21,11 @@ namespace Falltergeist
 
                 virtual void render(bool eggTransparency = false) override;
 
-                virtual void render(const Size &size, bool eggTransparency = false) override;
+                virtual void render(const Graphics::Size &size, bool eggTransparency = false) override;
 
-                virtual bool opaque(const Point &position) override;
+                virtual bool opaque(const Graphics::Point &position) override;
 
-                const Size& size() const override;
+                const Graphics::Size& size() const override;
 
             private:
                 std::unique_ptr<Graphics::Sprite> _sprite;

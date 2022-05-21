@@ -2,6 +2,7 @@
 #include "../State/SaveGame.h"
 #include "../functions.h"
 #include "../Game/Game.h"
+#include "../Graphics/Color.h"
 #include "../Graphics/Renderer.h"
 #include "../Input/Mouse.h"
 #include "../ResourceManager.h"
@@ -14,10 +15,11 @@
 
 namespace Falltergeist
 {
-    using ImageButtonType = UI::Factory::ImageButtonFactory::Type;
-
     namespace State
     {
+        using ImageButtonType = UI::Factory::ImageButtonFactory::Type;
+        using Point = Graphics::Point;
+
         SaveGame::SaveGame(std::shared_ptr<UI::IResourceManager> resourceManager) : State()
         {
             this->resourceManager = resourceManager;
@@ -64,7 +66,7 @@ namespace Falltergeist
 
             // LABELS
             std::string font3_907824ff = "font3.aaf";
-            SDL_Color color = {0x90, 0x78, 0x24, 0xff};
+            Graphics::Color color = {0x90, 0x78, 0x24, 0xff};
 
             // SAVE GAME LABEL
             auto saveGameLabel = new UI::TextArea(_t(MSG_LOAD_SAVE, 109), bgX+48, bgY+27);

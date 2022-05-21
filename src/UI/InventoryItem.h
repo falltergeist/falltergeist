@@ -27,7 +27,7 @@ namespace Falltergeist
                     DRAG
                 };
 
-                InventoryItem(Game::ItemObject* item, const Point& pos = Point());
+                InventoryItem(Game::ItemObject* item, const Graphics::Point& pos = Graphics::Point());
 
                 ~InventoryItem() override;
 
@@ -41,9 +41,9 @@ namespace Falltergeist
 
                 void render(bool eggTransparency = false) override;
 
-                const Size& size() const override;
+                const Graphics::Size& size() const override;
 
-                virtual bool opaque(const Point &pos) override;
+                virtual bool opaque(const Graphics::Point &pos) override;
 
                 void onMouseLeftDown(Event::Mouse* event);
 
@@ -68,11 +68,11 @@ namespace Falltergeist
 
                 Event::MouseHandler _itemDragStopHandler;
 
-                Size _inventorySize = Size(70, 49);
+                Graphics::Size _inventorySize = Graphics::Size(70, 49);
 
-                Size _slotSize = Size(90, 63);
+                Graphics::Size _slotSize = Graphics::Size(90, 63);
 
-                Size _defaultSize = Size(57, 40);
+                Graphics::Size _defaultSize = Graphics::Size(57, 40);
         };
     }
 }

@@ -12,7 +12,6 @@
 
 namespace Falltergeist
 {
-    using Graphics::Size;
     using ImageButtonType = UI::Factory::ImageButtonFactory::Type;
 
     namespace State
@@ -34,25 +33,25 @@ namespace Falltergeist
             setModal(false);
 
             auto background = resourceManager->getImage("art/intrface/review.frm");
-            Point backgroundPos = Point((Game::Game::getInstance()->renderer()->size() - background->size()) / 2);
+            Graphics::Point backgroundPos = Graphics::Point((Game::Game::getInstance()->renderer()->size() - background->size()) / 2);
             background->setPosition(backgroundPos);
 
             // Interface buttons
-            auto doneButton = imageButtonFactory->getByType(ImageButtonType::DIALOG_DONE_BUTTON, backgroundPos + Point(500, 398));
+            auto doneButton = imageButtonFactory->getByType(ImageButtonType::DIALOG_DONE_BUTTON, backgroundPos + Graphics::Point(500, 398));
             doneButton->mouseClickHandler().add(std::bind(&CritterDialogReview::onDoneButtonClick, this, std::placeholders::_1));
 
-            auto upButton = imageButtonFactory->getByType(ImageButtonType::DIALOG_BIG_UP_ARROW, backgroundPos + Point(476, 154));
+            auto upButton = imageButtonFactory->getByType(ImageButtonType::DIALOG_BIG_UP_ARROW, backgroundPos + Graphics::Point(476, 154));
             upButton->mouseClickHandler().add(std::bind(&CritterDialogReview::onUpButtonClick, this, std::placeholders::_1));
 
-            auto downButton = imageButtonFactory->getByType(ImageButtonType::DIALOG_BIG_DOWN_ARROW, backgroundPos + Point(476, 192));
+            auto downButton = imageButtonFactory->getByType(ImageButtonType::DIALOG_BIG_DOWN_ARROW, backgroundPos + Graphics::Point(476, 192));
             downButton->mouseClickHandler().add(std::bind(&CritterDialogReview::onDownButtonClick, this, std::placeholders::_1));
 
             addUI(background);
             addUI(doneButton);
             addUI(upButton);
             addUI(downButton);
-            auto list = new UI::TextAreaList(Point(88,76));
-            list->setSize(Size(340,340));
+            auto list = new UI::TextAreaList(Graphics::Point(88,76));
+            list->setSize(Graphics::Size(340, 340));
             addUI("list",list);
         }
 
@@ -98,7 +97,7 @@ namespace Falltergeist
 
             auto answer = new UI::TextArea(0, 0);
             answer->setWidth(316);
-            answer->setOffset(Point(26, 0));
+            answer->setOffset(Graphics::Point(26, 0));
             answer->setWordWrap(true);
             answer->setFont("font1.aaf", {0x74,0x74, 0x74, 0xff});
             answer->setText(value);
@@ -118,7 +117,7 @@ namespace Falltergeist
 
             auto question = new UI::TextArea(0, 0);
             question->setWidth(316);
-            question->setOffset(Point(26, 0));
+            question->setOffset(Graphics::Point(26, 0));
             question->setWordWrap(true);
             question->setFont("font1.aaf", {0x00,0xa4, 0x00, 0xff});
             question->setText(value);

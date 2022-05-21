@@ -12,7 +12,7 @@ namespace Falltergeist
         class ImageList : public Falltergeist::UI::Base
         {
             public:
-                ImageList(const Point& pos, const std::vector<Image*> &imageList);
+                ImageList(const Graphics::Point& pos, const std::vector<Image*> &imageList);
 
                 virtual ~ImageList() = default;
 
@@ -24,11 +24,11 @@ namespace Falltergeist
 
                 const std::vector<std::unique_ptr<Image>>& images() const;
 
-                virtual bool opaque(const Point &pos) override;
+                virtual bool opaque(const Graphics::Point &pos) override;
 
                 virtual void render(bool eggTransparency) override;
 
-                virtual void setPosition(const Point &pos) override;
+                virtual void setPosition(const Graphics::Point &pos) override;
 
             private:
                 std::vector<std::unique_ptr<Image>> _images;

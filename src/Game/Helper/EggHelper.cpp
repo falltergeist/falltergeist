@@ -9,12 +9,14 @@ namespace Falltergeist
     {
         namespace Helper
         {
-            static bool to_right_of(const Point &p1, const Point &p2)
+            // TODO: move to Point class?
+            static bool to_right_of(const Graphics::Point &p1, const Graphics::Point &p2)
             {
                 return (double) (p2.x() - p1.x()) <= ((double) (p2.y() - p1.y()) * (4.0 / 3.0));
             }
 
-            static bool in_front_of(const Point &p1, const Point &p2)
+            // TODO: move to Point class?
+            static bool in_front_of(const Graphics::Point &p1, const Graphics::Point &p2)
             {
                 return (double) (p2.x() - p1.x()) <= ((double) (p2.y() - p1.y()) * -4.0);
             }

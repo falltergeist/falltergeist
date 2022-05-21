@@ -12,7 +12,7 @@ namespace Falltergeist {
     namespace UI {
         class ImageButton final : public Falltergeist::UI::Base {
         public:
-            ImageButton(const Point& pos, std::shared_ptr<Graphics::Sprite> buttonUpSprite, std::shared_ptr<Graphics::Sprite> buttonDownSprite,
+            ImageButton(const Graphics::Point& pos, std::shared_ptr<Graphics::Sprite> buttonUpSprite, std::shared_ptr<Graphics::Sprite> buttonDownSprite,
                         std::string buttonUpSoundFilename, std::string buttonDownSoundFilename, bool checkBoxMode);
 
             virtual ~ImageButton() = default;
@@ -29,7 +29,7 @@ namespace Falltergeist {
 
             virtual void render(bool eggTransparency = false) override;
 
-            virtual bool opaque(const Point& pos) override;
+            virtual bool opaque(const Graphics::Point& pos) override;
 
         protected:
             bool _checkboxMode = false; // remember new state after click

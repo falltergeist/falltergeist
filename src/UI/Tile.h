@@ -12,16 +12,14 @@ namespace Falltergeist
 
     namespace UI
     {
-        using Graphics::Point;
-
         class Tile
         {
             public:
-                Tile(unsigned int number, const Point &pos);
+                Tile(unsigned int number, const Graphics::Point &pos);
 
                 unsigned int number() const;
 
-                const Point& position() const;
+                const Graphics::Point& position() const;
 
                 unsigned int index() const;
 
@@ -38,7 +36,7 @@ namespace Falltergeist
 
                 unsigned int _number = 0;
 
-                Point _position;
+                Graphics::Point _position;
 
                 bool _enabled = true;
         };

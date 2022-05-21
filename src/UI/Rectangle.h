@@ -1,28 +1,23 @@
 #pragma once
 
-#include <SDL.h>
+#include "../Graphics/Color.h"
 #include "../Graphics/Point.h"
 #include "../UI/Base.h"
 
-namespace Falltergeist
-{
-    namespace UI
-    {
-        class Rectangle final : public Base
-        {
-            public:
-                Rectangle(const Point& pos, const Size& size, SDL_Color color);
+namespace Falltergeist::UI {
+    class Rectangle final : public Base {
+    public:
+        Rectangle(const Graphics::Point& pos, const Graphics::Size& size, Graphics::Color color);
 
-                void render(bool eggTransparency = false) override;
+        void render(bool eggTransparency = false) override;
 
-                bool opaque(const Point &pos) override;
+        bool opaque(const Graphics::Point& pos) override;
 
-                const Size& size() const override;
+        const Graphics::Size& size() const override;
 
-            private:
-                Size _size;
+    private:
+        Graphics::Size _size;
 
-                SDL_Color _color;
-        };
-    }
+        Graphics::Color _color;
+    };
 }
