@@ -31,12 +31,18 @@ namespace Falltergeist
 
                 void onKeyDown(Event::Keyboard* event) override;
 
+                void onStateActivate(Event::State* event) override;
+
+                void onStateDeactivate(Event::State* event) override;
+
             private:
                 std::string _getSpecialGreeting(int month, int day);
 
                 std::shared_ptr<UI::IResourceManager> _resourceManager;
 
                 std::unique_ptr<UI::Factory::ImageButtonFactory> _imageButtonFactory;
+
+                Input::Mouse::Cursor _previousCursor = Input::Mouse::Cursor::NONE;
         };
     }
 }

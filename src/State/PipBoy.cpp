@@ -28,13 +28,11 @@ namespace Falltergeist
             _imageButtonFactory = std::make_unique<UI::Factory::ImageButtonFactory>(_resourceManager);
         }
 
-        PipBoy::~PipBoy()
-        {
+        PipBoy::~PipBoy() {
             Game::Game::getInstance()->mouse()->popState();
         }
 
-        void PipBoy::init()
-        {
+        void PipBoy::init() {
             if (_initialized) {
                 return;
             }
@@ -42,8 +40,6 @@ namespace Falltergeist
 
             setModal(true);
             setFullscreen(true);
-
-            Game::Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::BIG_ARROW);
 
             // Background
             auto background = _resourceManager->getImage("art/intrface/pip.frm");
@@ -114,21 +110,17 @@ namespace Falltergeist
             }
         }
 
-        void PipBoy::onCloseButtonClick(Event::Mouse* event)
-        {
+        void PipBoy::onCloseButtonClick(Event::Mouse* event) {
             Game::Game::getInstance()->popState();
         }
 
-        void PipBoy::onKeyDown(Event::Keyboard* event)
-        {
-            if (event->keyCode() == SDLK_ESCAPE)
-            {
+        void PipBoy::onKeyDown(Event::Keyboard* event) {
+            if (event->keyCode() == SDLK_ESCAPE) {
                 Game::Game::getInstance()->popState();
             }
         }
 
         std::string PipBoy::_getSpecialGreeting(int month, int day) {
-
             if (month == 1 && day == 1) {
                 return _t(MSG_PIPBOY, 100); // New Year
             }
@@ -155,6 +147,15 @@ namespace Falltergeist
             }
 
             return std::string();
+        }
+
+        void PipBoy::onStateActivate(Event::State* event) {
+            _previousCursor = mouse()->cursor();
+            mouse()->setCursor(Input::Mouse::Cursor::BIG_ARROW);
+        }
+
+        void PipBoy::onStateDeactivate(Event::State* event) {
+            mouse()->setCursor(_previousCursor);
         }
     }
 }
