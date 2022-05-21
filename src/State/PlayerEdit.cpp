@@ -630,12 +630,7 @@ namespace Falltergeist
 
         void PlayerEdit::onStateActivate(Event::State* event)
         {
-            Game::Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::BIG_ARROW);
-        }
-
-        void PlayerEdit::onStateDeactivate(Event::State* event)
-        {
-            Game::Game::getInstance()->mouse()->popState();
+            mouse()->setCursor(Input::Mouse::Cursor::BIG_ARROW);
         }
 
         void PlayerEdit::onKeyDown(Event::Keyboard* event)

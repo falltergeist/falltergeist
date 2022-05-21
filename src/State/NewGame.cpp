@@ -266,6 +266,8 @@ namespace Falltergeist
 
         void NewGame::onStateActivate(Event::State* event)
         {
+            mouse()->setCursor(Input::Mouse::Cursor::BIG_ARROW);
+
             auto combat = std::make_unique<Game::DudeObject>();
             combat->loadFromGCDFile(ResourceManager::getInstance()->gcdFileType("premade/combat.gcd"));
             combat->setBiography(ResourceManager::getInstance()->bioFileType("premade/combat.bio")->text());

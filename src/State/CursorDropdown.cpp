@@ -238,30 +238,15 @@ namespace Falltergeist::State {
             return;
         }
 
-        auto mouse = Game::Game::getInstance()->mouse();
-        _initialMouseStack = static_cast<unsigned>(mouse->states().size());
-        mouse->pushState(Input::Mouse::Cursor::NONE);
+        _previousCursor = mouse()->cursor();
+        mouse()->setCursor(Input::Mouse::Cursor::NONE);
     }
 
     void CursorDropdown::onStateDeactivate(Event::State* event)
     {
         if (!_deactivated) {
-            auto game = Game::Game::getInstance();
-            auto mouse = game->mouse();
-            // workaround to get rid of cursor disappearing issues
-            std::vector<Input::Mouse::Cursor> icons;
-            while (mouse->states().size() > _initialMouseStack) {
-                icons.push_back(mouse->state());
-                mouse->popState();
-            }
-            if (icons.size() > 0) {
-                icons.pop_back(); // remove empty icon from CursorDropdown state
-                // place only new icons back in stack
-                for (auto it = icons.rbegin(); it != icons.rend(); ++it) {
-                    mouse->pushState(*it);
-                }
-            }
-            mouse->setPosition(_initialMousePosition);
+            mouse()->setCursor(_previousCursor);
+            mouse()->setPosition(_initialMousePosition);
             _deactivated = true;
         }
     }

@@ -78,8 +78,6 @@ namespace Falltergeist
             }
             State::init();
 
-            mouse()->setState(Input::Mouse::Cursor::ACTION);
-
             _camera = std::make_unique<LocationCamera>(_renderer->size(), Point(0, 0));
 
             _hexagonInfo = std::make_unique<UI::TextArea>("", _renderer->size().width() - 135, 25);
@@ -242,6 +240,8 @@ namespace Falltergeist
             auto hexagon = hexagonGrid()->hexagonAt(mouse()->position() + _camera->topLeft());
             if (mouse()->state() == Input::Mouse::Cursor::HEXAGON_RED && hexagon) {
                 mouse()->ui()->setPosition(hexagon->position() - _camera->topLeft());
+            } else {
+                mouse()->setCursor(Input::Mouse::Cursor::ACTION);
             }
         }
 

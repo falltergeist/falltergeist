@@ -207,9 +207,13 @@ namespace Falltergeist
             }
         }
 
-        void Skilldex::onStateActivate(Event::State* event)
-        {
-            Game::Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::BIG_ARROW);
+        void Skilldex::onStateActivate(Event::State* event) {
+            _previousCursor = mouse()->cursor();
+            mouse()->setCursor(Input::Mouse::Cursor::BIG_ARROW);
+        }
+
+        void Skilldex::onStateDeactivate(Event::State* event) {
+            mouse()->setCursor(_previousCursor);
         }
 
         void Skilldex::onSkillButtonClick(SKILL skill)

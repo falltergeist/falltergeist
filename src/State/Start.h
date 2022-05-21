@@ -24,6 +24,8 @@ namespace Falltergeist
 
                 void init() override;
 
+                void onStateActivate(Event::State* event) override;
+
             private:
                 std::shared_ptr<ILogger> _logger;
 

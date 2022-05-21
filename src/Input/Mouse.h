@@ -77,7 +77,13 @@ namespace Falltergeist {
 
             UI::Base* ui();
 
+            Input::Mouse::Cursor cursor() const;
+
+            void setCursor(Input::Mouse::Cursor cursor);
+
         private:
+            void _setType(Cursor type);
+
             std::shared_ptr<UI::IResourceManager> _resourceManager;
 
             std::vector<Cursor> _states;
@@ -86,8 +92,6 @@ namespace Falltergeist {
 
             // It will wrap mouse for now. Until cursor render and state management refactoring
             std::shared_ptr<IMouse> _mouse;
-
-            void _setType(Cursor type);
         };
     }
 }

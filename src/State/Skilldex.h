@@ -32,6 +32,8 @@ namespace Falltergeist
 
                 void onStateActivate(Event::State* event) override;
 
+                void onStateDeactivate(Event::State* event) override;
+
                 void onCancelButtonClick();
 
                 void onSkillButtonClick(SKILL skill);
@@ -40,6 +42,8 @@ namespace Falltergeist
                 std::shared_ptr<UI::IResourceManager> _resourceManager;
 
                 std::unique_ptr<UI::Factory::ImageButtonFactory> _imageButtonFactory;
+
+                Input::Mouse::Cursor _previousCursor = Input::Mouse::Cursor::NONE;
         };
     }
 }

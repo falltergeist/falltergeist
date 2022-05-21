@@ -77,6 +77,8 @@ namespace Falltergeist
                 Event::MouseHandler _mouseDownHandler, _mouseUpHandler, _mouseMoveHandler;
 
                 std::shared_ptr<UI::IResourceManager> _resourceManager;
+
+                Input::Mouse::Cursor _previousCursor = Input::Mouse::Cursor::NONE;
         };
     }
 }

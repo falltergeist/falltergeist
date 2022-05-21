@@ -67,6 +67,8 @@ namespace Falltergeist
 
                 Game::Elevator* _elevator;
 
+                Input::Mouse::Cursor _previousCursor = Input::Mouse::Cursor::NONE;
+
                 uint32_t _elevatorType;
 
                 uint32_t _elevatorLevel;

@@ -197,14 +197,13 @@ namespace Falltergeist
             }
         }
 
-        void WorldMap::onStateActivate(Event::State* event)
-        {
-            Game::Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::BIG_ARROW);
+        void WorldMap::onStateActivate(Event::State* event) {
+            _previousCursor = mouse()->cursor();
+            mouse()->setCursor(Input::Mouse::Cursor::BIG_ARROW);
         }
 
-        void WorldMap::onStateDeactivate(Event::State* event)
-        {
-            Game::Game::getInstance()->mouse()->popState();
+        void WorldMap::onStateDeactivate(Event::State* event) {
+            mouse()->setCursor(_previousCursor);
         }
 
         void WorldMap::onKeyDown(Event::Keyboard* event)

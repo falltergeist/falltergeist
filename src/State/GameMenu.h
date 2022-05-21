@@ -51,6 +51,8 @@ namespace Falltergeist
                 std::shared_ptr<UI::IResourceManager> _resourceManager;
 
                 std::unique_ptr<UI::Factory::ImageButtonFactory> _imageButtonFactory;
+
+                Input::Mouse::Cursor _previousCursor = Input::Mouse::Cursor::NONE;
         };
     }
 }

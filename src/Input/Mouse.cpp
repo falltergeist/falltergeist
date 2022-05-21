@@ -262,5 +262,13 @@ namespace Falltergeist
                 _ui->setOutline(0);
             }
         }
+
+        Input::Mouse::Cursor Mouse::cursor() const {
+           return state();
+        }
+
+        void Mouse::setCursor(Input::Mouse::Cursor cursor) {
+            setState(cursor);
+        }
     }
 }

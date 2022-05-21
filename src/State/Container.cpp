@@ -127,14 +127,14 @@ namespace Falltergeist
             Game::Game::getInstance()->popState();
         }
 
-        void Container::onStateActivate(Event::State*)
+        void Container::onStateActivate(Event::State* event)
         {
-            Game::Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::BIG_ARROW);
+            _previousCursor = mouse()->cursor();
+            mouse()->setCursor(Input::Mouse::Cursor::BIG_ARROW);
         }
 
-        void Container::onStateDeactivate(Event::State*)
-        {
-            Game::Game::getInstance()->mouse()->popState();
+        void Container::onStateDeactivate(Event::State* event) {
+            mouse()->setCursor(_previousCursor);
         }
 
         void Container::onKeyDown(Event::Keyboard* event)

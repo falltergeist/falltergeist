@@ -105,12 +105,11 @@ namespace Falltergeist
 
         void ExitConfirm::onStateActivate(Event::State* event)
         {
-            Game::Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::BIG_ARROW);
+            _previousCursor = mouse()->cursor();
+            mouse()->setCursor(Input::Mouse::Cursor::BIG_ARROW);
         }
-
-        void ExitConfirm::onStateDeactivate(Event::State* event)
-        {
-            Game::Game::getInstance()->mouse()->popState();
+        void ExitConfirm::onStateDeactivate(Event::State* event) {
+            mouse()->setCursor(_previousCursor);
         }
     }
 }

@@ -38,7 +38,6 @@ namespace Falltergeist
             setModal(true);
             setFullscreen(true);
 
-            Game::Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::NONE);
             auto renderer = Game::Game::getInstance()->renderer();
             setPosition(Graphics::Point((renderer->size().width() - 640) / 2, renderer->size().height()));
 
@@ -151,12 +150,12 @@ namespace Falltergeist
         void Credits::onCreditsFadeDone(Event::State* event)
         {
             fadeDoneHandler().clear();
-            Game::Game::getInstance()->mouse()->popState();
             Game::Game::getInstance()->popState();
         }
 
         void Credits::onStateActivate(Event::State* event)
         {
+            mouse()->setCursor(Input::Mouse::Cursor::NONE);
             Game::Game::getInstance()->renderer()->fadeIn(0,0,0,1000);
         }
     }

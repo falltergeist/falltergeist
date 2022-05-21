@@ -12,7 +12,7 @@
 #include "../State/CritterDialog.h"
 #include "../State/Location.h"
 #include "../State/MainMenu.h"
-#include "../State/Movie.h"
+#include "../State/Intro.h"
 #include "../UI/Image.h"
 #include "../UI/TextArea.h"
 
@@ -22,6 +22,7 @@ namespace Falltergeist
     {
         using Helpers::StateLocationHelper;
         using Point = Graphics::Point;
+        using Cursor = Input::Mouse::Cursor;
 
         Start::Start(
             std::shared_ptr<UI::IResourceManager> resourceManager,
@@ -52,13 +53,9 @@ namespace Falltergeist
             _delayTimer = std::make_unique<Game::Timer>(3000);
             _delayTimer->start();
             _delayTimer->tickHandler().add([game, this](Event::Event*) {
-                game->setState(new MainMenu(_resourceManager, mouse(), _logger));
-                game->pushState(new Movie(mouse(), 17)); // TODO replace raw integers with consts
-                game->pushState(new Movie(mouse(), 1));
-                game->pushState(new Movie(mouse(), 0));
+                game->setState(new Intro(_resourceManager, mouse(), _logger));
             });
 
-            Game::Game::getInstance()->mouse()->setState(Input::Mouse::Cursor::WAIT);
         }
 
         void Start::think(const float &deltaTime)
@@ -76,6 +73,10 @@ namespace Falltergeist
                 game->setState(stateLocationHelper.getInitialLocationState());
                 return;
             }
+        }
+
+        void Start::onStateActivate(Event::State* event) {
+            mouse()->setCursor(Cursor::WAIT);
         }
     }
 }

@@ -22,6 +22,7 @@ namespace Falltergeist
     namespace State
     {
         using Point = Graphics::Point;
+        using Cursor = Input::Mouse::Cursor;
 
         Movie::Movie(std::shared_ptr<Input::Mouse> mouse, int id) : State(mouse), _id(id) {
         }
@@ -40,7 +41,6 @@ namespace Falltergeist
             setFullscreen(true);
             setModal(true);
 
-            Game::Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::NONE);
             auto renderer = Game::Game::getInstance()->renderer();
             setPosition((renderer->size() - Point(640, 320)) / 2);
 
@@ -173,7 +173,6 @@ namespace Falltergeist
         void Movie::onVideoFinished()
         {
             Game::Game::getInstance()->mixer()->stopMusic();
-            Game::Game::getInstance()->mouse()->popState();
 
             // without this the location will be absolutely dark if you didn't interrupted movie play
             if (Game::Game::getInstance()->locationState())
@@ -183,6 +182,15 @@ namespace Falltergeist
             }
 
             Game::Game::getInstance()->popState();
+        }
+
+        void Movie::onStateActivate(Event::State* event) {
+            _previousCursor = mouse()->cursor();
+            mouse()->setCursor(Cursor::NONE);
+        }
+
+        void Movie::onStateDeactivate(Event::State* event) {
+            mouse()->setCursor(_previousCursor);
         }
     }
 }

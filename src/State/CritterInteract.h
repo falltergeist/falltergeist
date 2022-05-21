@@ -160,6 +160,8 @@ namespace Falltergeist
                 SubState _state = SubState::NONE;
 
                 std::shared_ptr<UI::IResourceManager> _resourceManager;
+
+                Input::Mouse::Cursor _previousCursor = Input::Mouse::Cursor::NONE;
         };
     }
 }

@@ -51,15 +51,13 @@ namespace Falltergeist
 
         void CritterInteract::onStateActivate(Event::State* event)
         {
-            Game::Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::BIG_ARROW);
-            if (_headID >= 0)
-            {
+            _previousCursor = mouse()->cursor();
+            mouse()->setCursor(Input::Mouse::Cursor::BIG_ARROW);
+            if (_headID >= 0) {
                 // stop music completely
                 // TODO: because Dialog state is activated *before* Interact, this stops speech too =/
                 //Game::getInstance()->mixer()->stopMusic();
-            }
-            else
-            {
+            } else {
                 // lower music volume
                 Game::Game::getInstance()->mixer()->setMusicVolume(Game::Game::getInstance()->mixer()->musicVolume()/2.0);
             }
@@ -67,13 +65,10 @@ namespace Falltergeist
 
         void CritterInteract::onStateDeactivate(Event::State* event)
         {
-            Game::Game::getInstance()->mouse()->popState();
-            if (_headID >= 0)
-            {
+            mouse()->setCursor(_previousCursor);
+            if (_headID >= 0) {
                 Game::Game::getInstance()->mixer()->playACMMusic(Game::Game::getInstance()->mixer()->lastMusic(), true);
-            }
-            else
-            {
+            } else {
                 // restore music volume
                 Game::Game::getInstance()->mixer()->setMusicVolume(Game::Game::getInstance()->mixer()->musicVolume()*2.0);
             }

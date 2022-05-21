@@ -50,6 +50,8 @@ namespace Falltergeist
 
                 UI::ImageButton* _hotspot = nullptr;
 
+                Input::Mouse::Cursor _previousCursor = Input::Mouse::Cursor::NONE;
+
                 // temporary!
                 // @todo: move it to other place!
                 // coordinates of the player on world map

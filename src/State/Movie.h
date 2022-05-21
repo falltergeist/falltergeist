@@ -38,6 +38,10 @@ namespace Falltergeist
 
                 void handle(Event::Event* event) override;
 
+                void onStateActivate(Event::State* event) override;
+
+                void onStateDeactivate(Event::State* event) override;
+
                 void onVideoFinished();
 
             private:
@@ -54,6 +58,8 @@ namespace Falltergeist
                 std::vector<effect_t> _effects;
 
                 unsigned int _effectIndex = 0;
+
+                Input::Mouse::Cursor _previousCursor = Input::Mouse::Cursor::NONE;
         };
     }
 }

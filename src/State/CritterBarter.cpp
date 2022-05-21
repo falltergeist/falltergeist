@@ -246,7 +246,7 @@ namespace Falltergeist
             }
         }
 
-        void CritterBarter::onStateDeactivate(Event::State*)
+        void CritterBarter::onStateDeactivate(Event::State* event)
         {
             for (const auto &v : _itemsToSell) {
                 Game::Game::getInstance()->player()->inventory()->push_back(v);

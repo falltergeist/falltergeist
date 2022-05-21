@@ -15,13 +15,13 @@ namespace Falltergeist
         State::State(std::shared_ptr<Input::Mouse> mouse) : Event::EventTarget(Game::Game::getInstance()->eventDispatcher()), _mouse(mouse)
         {
             activateHandler().add([this](Event::State* event) {
-                this->onStateActivate(event);
+                onStateActivate(event);
             });
             deactivateHandler().add([this](Event::State* event) {
-                this->onStateDeactivate(event);
+                onStateDeactivate(event);
             });
             keyDownHandler().add([this](Event::Keyboard* event) {
-                this->onKeyDown(event);
+                onKeyDown(event);
             });
         }
 
@@ -182,12 +182,10 @@ namespace Falltergeist
 
         void State::onStateActivate(Event::State* event)
         {
-            _previousCursor = _mouse->state();
         }
 
         void State::onStateDeactivate(Event::State* event)
         {
-            _mouse->setState(_previousCursor);
         }
 
         void State::onKeyDown(Event::Keyboard* event)

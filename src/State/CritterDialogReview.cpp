@@ -57,12 +57,10 @@ namespace Falltergeist
             addUI("list",list);
         }
 
-        void CritterDialogReview::onStateActivate(Event::State *event)
-        {
+        void CritterDialogReview::onStateActivate(Event::State *event) {
             auto list = dynamic_cast<UI::TextAreaList*>(getUI("list"));
             list->scrollTo(0);
         }
-
 
         void CritterDialogReview::onDoneButtonClick(Event::Mouse* event)
         {

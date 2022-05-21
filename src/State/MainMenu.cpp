@@ -137,7 +137,9 @@ namespace Falltergeist
         void MainMenu::doNewGame()
         {
             fadeDoneHandler().clear();
-            fadeDoneHandler().add([this](Event::Event* event){ this->onNewGameStart(dynamic_cast<Event::State*>(event)); });
+            fadeDoneHandler().add([this](Event::Event* event){
+                onNewGameStart(dynamic_cast<Event::State*>(event));
+            });
             Game::Game::getInstance()->renderer()->fadeOut(0,0,0,1000);
         }
 
@@ -255,9 +257,8 @@ namespace Falltergeist
             }
         }
 
-        void MainMenu::onStateActivate(Event::State* event)
-        {
-            Game::Game::getInstance()->mouse()->setState(Input::Mouse::Cursor::BIG_ARROW);
+        void MainMenu::onStateActivate(Event::State* event) {
+            mouse()->setCursor(Input::Mouse::Cursor::BIG_ARROW);
             Game::Game::getInstance()->mixer()->playACMMusic("07desert.acm",true);
             Game::Game::getInstance()->renderer()->fadeIn(0,0,0,1000);
         }
