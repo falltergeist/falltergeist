@@ -475,5 +475,12 @@ namespace Falltergeist
                     break;
             }
         }
+        void Inventory::onStateActivate(Event::State* event) {
+            _previousCursor = mouse()->cursor();
+        }
+
+        void Inventory::onStateDeactivate(Event::State* event) {
+            mouse()->setCursor(_previousCursor);
+        }
     }
 }

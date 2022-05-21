@@ -59,6 +59,11 @@ namespace Falltergeist
             auto dragUi = _item->inventoryDragUi();
             auto inventoryUi = _item->inventoryUi();
 
+            if (slotUi == nullptr || dragUi == nullptr || inventoryUi == nullptr) {
+                // TODO log critical message or throw exception
+                return;
+            }
+
             switch (_type)
             {
                 case Type::SLOT:
