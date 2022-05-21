@@ -44,11 +44,33 @@ namespace Falltergeist
                 void playWindowOpenSfx();
 
             private:
-                std::shared_ptr<ILogger> logger;
+                void _renderHandSlot();
 
-                std::shared_ptr<UI::IResourceManager> resourceManager;
+                void _changeHand();
 
-                std::unique_ptr<UI::Factory::ImageButtonFactory> imageButtonFactory;
+                void _openCharacterScreen();
+
+                void _openGameMenu();
+
+                void _openInventory();
+
+                void _openMap();
+
+                void _openPipBoy();
+
+                void _openSkilldex();
+
+                void _openSaveGame();
+
+                void _openLoadGame();
+
+                void _onKeyDown(Event::Keyboard* event);
+
+                std::shared_ptr<ILogger> _logger;
+
+                std::shared_ptr<UI::IResourceManager> _resourceManager;
+
+                std::unique_ptr<UI::Factory::ImageButtonFactory> _imageButtonFactory;
 
                 std::shared_ptr<Image> _background;
 
@@ -60,34 +82,14 @@ namespace Falltergeist
 
                 std::vector<std::shared_ptr<UI::Base>> _ui;
 
+                Input::Mouse::Cursor _previousCursor = Input::Mouse::Cursor::NONE;
+
                 bool _isAttackBtnPressed;
 
                 char _scrollingLog = 0;
 
                 // TODO: replace with real timer
                 unsigned int _scrollingLogTimer = 0;
-
-                void renderHandSlot();
-
-                void changeHand();
-
-                void openCharacterScreen();
-
-                void openGameMenu();
-
-                void openInventory();
-
-                void openMap();
-
-                void openPipBoy();
-
-                void openSkilldex();
-
-                void openSaveGame();
-
-                void openLoadGame();
-
-                void onKeyDown(Event::Keyboard* event);
         };
     }
 }

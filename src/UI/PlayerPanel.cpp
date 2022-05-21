@@ -31,18 +31,17 @@ namespace Falltergeist
         using ImageButtonType = UI::Factory::ImageButtonFactory::Type;
         using Point = Graphics::Point;
 
-        PlayerPanel::PlayerPanel(std::shared_ptr<ILogger> logger) : UI::Base(Point(0, 0))
-        {
-            this->logger = std::move(logger);
-
+        PlayerPanel::PlayerPanel(
+            std::shared_ptr<ILogger> logger
+        ) : UI::Base(Point(0, 0)), _logger(logger) {
             auto game = Game::Game::getInstance();
             auto renderer = game->renderer();
             auto mouse = game->mouse();
 
-            resourceManager = std::make_shared<UI::ResourceManager>();
-            imageButtonFactory = std::make_unique<UI::Factory::ImageButtonFactory>(resourceManager);
+            _resourceManager = std::make_shared<UI::ResourceManager>();
+            _imageButtonFactory = std::make_unique<UI::Factory::ImageButtonFactory>(_resourceManager);
 
-            _background = std::shared_ptr<Image>(resourceManager->getImage("art/intrface/iface.frm"));
+            _background = std::shared_ptr<Image>(_resourceManager->getImage("art/intrface/iface.frm"));
             _ui.push_back(_background);
 
             setX((renderer->size().width() - 640) / 2);
@@ -50,39 +49,30 @@ namespace Falltergeist
 
             _background->setPosition(this->position());
 
-            mouseInHandler().add([mouse](Event::Event* event) {
-                mouse->pushState(Input::Mouse::Cursor::BIG_ARROW);
+            mouseInHandler().add([=](Event::Event* event) {
+                _previousCursor = mouse->cursor();
+                mouse->setCursor(Input::Mouse::Cursor::BIG_ARROW);
             });
 
-            mouseOutHandler().add([mouse](Event::Event* event) {
-                if (mouse->scrollState()) {
-                    // this trick is needed for correct cursor type returning on scrolling
-                    auto state = mouse->state();
-                    mouse->popState();
-                    mouse->popState();
-                    mouse->pushState(state);
-                } else {
-                    if (mouse->state() != Input::Mouse::Cursor::USE) {
-                        mouse->popState();
-                    }
-                }
+            mouseOutHandler().add([=](Event::Event* event) {
+                mouse->setCursor(_previousCursor);
             });
 
             // Change hand button
-            _ui.push_back(std::shared_ptr<ImageButton>(imageButtonFactory->getByType(ImageButtonType::BIG_RED_CIRCLE, position() + Point(218, 5))));
-            _ui.back()->mouseClickHandler().add([this](Event::Event* event){ this->changeHand(); });
+            _ui.push_back(std::shared_ptr<ImageButton>(_imageButtonFactory->getByType(ImageButtonType::BIG_RED_CIRCLE, position() + Point(218, 5))));
+            _ui.back()->mouseClickHandler().add([this](Event::Event* event){ this->_changeHand(); });
 
             // Inventory button
-            _ui.push_back(std::shared_ptr<ImageButton>(imageButtonFactory->getByType(ImageButtonType::PANEL_INVENTORY, position() + Point(211, 40))));
-            _ui.back()->mouseClickHandler().add([this](Event::Event* event){ this->openInventory(); });
+            _ui.push_back(std::shared_ptr<ImageButton>(_imageButtonFactory->getByType(ImageButtonType::PANEL_INVENTORY, position() + Point(211, 40))));
+            _ui.back()->mouseClickHandler().add([this](Event::Event* event){ this->_openInventory(); });
 
             // Options button
-            _ui.push_back(std::shared_ptr<ImageButton>(imageButtonFactory->getByType(ImageButtonType::PANEL_OPTIONS, position() + Point(210, 61))));
-            _ui.back()->mouseClickHandler().add([this](Event::Event* event){ this->openGameMenu(); });
+            _ui.push_back(std::shared_ptr<ImageButton>(_imageButtonFactory->getByType(ImageButtonType::PANEL_OPTIONS, position() + Point(210, 61))));
+            _ui.back()->mouseClickHandler().add([this](Event::Event* event){ this->_openGameMenu(); });
 
             // Attack button
             _isAttackBtnPressed = false;
-            _ui.push_back(std::shared_ptr<ImageButton>(imageButtonFactory->getByType(ImageButtonType::PANEL_ATTACK, position() + Point(267, 25))));
+            _ui.push_back(std::shared_ptr<ImageButton>(_imageButtonFactory->getByType(ImageButtonType::PANEL_ATTACK, position() + Point(267, 25))));
 
             _ui.back()->mouseDownHandler().add([this](Event::Event* event){
                 if(auto mouse = dynamic_cast<Event::Mouse*>(event))
@@ -111,27 +101,23 @@ namespace Falltergeist
             _ui.push_back(_armorClass);
 
             // Skilldex button
-            _ui.push_back(std::shared_ptr<ImageButton>(imageButtonFactory->getByType(ImageButtonType::BIG_RED_CIRCLE, position() + Point(523, 5))));
-            _ui.back()->mouseClickHandler().add([this](Event::Event* event){
-                this->openSkilldex();
+            _ui.push_back(std::shared_ptr<ImageButton>(_imageButtonFactory->getByType(ImageButtonType::BIG_RED_CIRCLE, position() + Point(523, 5))));
+            _ui.back()->mouseClickHandler().add([this](Event::Event* event){ this->_openSkilldex();
             });
 
             // MAP button
-            _ui.push_back(std::shared_ptr<ImageButton>(imageButtonFactory->getByType(ImageButtonType::PANEL_MAP, position() + Point(526, 39))));
-            _ui.back()->mouseClickHandler().add([this](Event::Event* event){
-                this->openMap();
+            _ui.push_back(std::shared_ptr<ImageButton>(_imageButtonFactory->getByType(ImageButtonType::PANEL_MAP, position() + Point(526, 39))));
+            _ui.back()->mouseClickHandler().add([this](Event::Event* event){ this->_openMap();
             });
 
             // CHA button
-            _ui.push_back(std::shared_ptr<ImageButton>(imageButtonFactory->getByType(ImageButtonType::PANEL_CHA, position() + Point(526, 58))));
-            _ui.back()->mouseClickHandler().add([this](Event::Event* event){
-                this->openCharacterScreen();
+            _ui.push_back(std::shared_ptr<ImageButton>(_imageButtonFactory->getByType(ImageButtonType::PANEL_CHA, position() + Point(526, 58))));
+            _ui.back()->mouseClickHandler().add([this](Event::Event* event){ this->_openCharacterScreen();
             });
 
             // PIP button
-            _ui.push_back(std::shared_ptr<ImageButton>(imageButtonFactory->getByType(ImageButtonType::PANEL_PIP, position() + Point(526, 77))));
-            _ui.back()->mouseClickHandler().add([this](Event::Event* event){
-                this->openPipBoy();
+            _ui.push_back(std::shared_ptr<ImageButton>(_imageButtonFactory->getByType(ImageButtonType::PANEL_PIP, position() + Point(526, 77))));
+            _ui.back()->mouseClickHandler().add([this](Event::Event* event){ this->_openPipBoy();
             });
 
             // Message log
@@ -184,15 +170,15 @@ namespace Falltergeist
                     }
                 });
 
-             _messageLog->mouseOutHandler().add([this](Event::Mouse* event)
+             _messageLog->mouseOutHandler().add([=](Event::Mouse* event)
                 {
                     _scrollingLog = 0;
                     _scrollingLogTimer = 0;
-                    Game::Game::getInstance()->mouse()->setState(Input::Mouse::Cursor::BIG_ARROW);
+                    mouse->setCursor(Input::Mouse::Cursor::BIG_ARROW);
                 });
 
             keyDownHandler().add([this](Event::Event* event) {
-                this->onKeyDown(dynamic_cast<Event::Keyboard*>(event));
+                 this->_onKeyDown(dynamic_cast<Event::Keyboard*>(event));
             });
         }
 
@@ -205,7 +191,7 @@ namespace Falltergeist
             return _background->size();
         }
 
-        void PlayerPanel::renderHandSlot()
+        void PlayerPanel::_renderHandSlot()
         {
             if (auto item = Game::Game::getInstance()->player()->currentHandSlot())
             {
@@ -224,7 +210,7 @@ namespace Falltergeist
             }
 
             // object in hand
-            renderHandSlot();
+            _renderHandSlot();
 
         //    if (auto item = Game::getInstance()->player()->currentHandSlot())
         //    {
@@ -279,7 +265,7 @@ namespace Falltergeist
             Game::Game::getInstance()->mixer()->playACMSound("sound/sfx/ib1p1xx1.acm");
         }
 
-        void PlayerPanel::changeHand()
+        void PlayerPanel::_changeHand()
         {
             auto player = Game::Game::getInstance()->player();
             auto lastSlot = player->currentHandSlot();
@@ -308,49 +294,49 @@ namespace Falltergeist
 
         }
 
-        void PlayerPanel::openGameMenu()
+        void PlayerPanel::_openGameMenu()
         {
             auto game = Game::Game::getInstance();
-            game->pushState(new State::GameMenu(resourceManager, game->mouse(), logger));
+            game->pushState(new State::GameMenu(_resourceManager, game->mouse(), _logger));
             playWindowOpenSfx();
         }
 
-        void PlayerPanel::openInventory()
+        void PlayerPanel::_openInventory()
         {
             auto game = Game::Game::getInstance();
-            game->pushState(new State::Inventory(resourceManager, game->mouse(), logger));
+            game->pushState(new State::Inventory(_resourceManager, game->mouse(), _logger));
             playWindowOpenSfx();
         }
 
-        void PlayerPanel::openSkilldex()
+        void PlayerPanel::_openSkilldex()
         {
             auto game = Game::Game::getInstance();
-            game->pushState(new State::Skilldex(resourceManager, game->mouse()));
+            game->pushState(new State::Skilldex(_resourceManager, game->mouse()));
             playWindowOpenSfx();
         }
 
-        void PlayerPanel::openMap()
+        void PlayerPanel::_openMap()
         {
             auto game = Game::Game::getInstance();
-            game->pushState(new State::WorldMap(resourceManager, game->mouse()));
+            game->pushState(new State::WorldMap(_resourceManager, game->mouse()));
             playWindowOpenSfx();
         }
 
-        void PlayerPanel::openCharacterScreen()
+        void PlayerPanel::_openCharacterScreen()
         {
             auto game = Game::Game::getInstance();
-            game->pushState(new State::PlayerEdit(resourceManager, game->mouse()));
+            game->pushState(new State::PlayerEdit(_resourceManager, game->mouse()));
             playWindowOpenSfx();
         }
 
-        void PlayerPanel::openPipBoy()
+        void PlayerPanel::_openPipBoy()
         {
             auto game = Game::Game::getInstance();
-            game->pushState(new State::PipBoy(resourceManager, game->mouse()));
+            game->pushState(new State::PipBoy(_resourceManager, game->mouse()));
             playWindowOpenSfx();
         }
 
-        void PlayerPanel::onKeyDown(Event::Keyboard* event)
+        void PlayerPanel::_onKeyDown(Event::Keyboard* event)
         {
             switch (event->keyCode())
             {
@@ -358,10 +344,10 @@ namespace Falltergeist
                     // @TODO: initiateCombat();
                     break;
                 case SDLK_c:
-                    openCharacterScreen();
+                    _openCharacterScreen();
                     break;
                 case SDLK_i:
-                    openInventory();
+                    _openInventory();
                     break;
                 case SDLK_p:
                     if (event->controlPressed())
@@ -370,18 +356,18 @@ namespace Falltergeist
                     }
                     else
                     {
-                        openPipBoy();
+                        _openPipBoy();
                     }
                     break;
                 case SDLK_z:
-                    openPipBoy(); // @TODO: go to clock
+                    _openPipBoy(); // @TODO: go to clock
                     break;
                 case SDLK_ESCAPE:
                 case SDLK_o:
-                    openGameMenu();
+                    _openGameMenu();
                     break;
                 case SDLK_b:
-                    changeHand();
+                    _changeHand();
                     break;
                 // M button is handled in State::Location
                 case SDLK_n:
@@ -390,23 +376,23 @@ namespace Falltergeist
                 case SDLK_s:
                     if (event->controlPressed())
                     {
-                        openSaveGame();
+                        _openSaveGame();
                     }
                     else
                     {
-                        openSkilldex();
+                        _openSkilldex();
                     }
                     break;
                 case SDLK_l:
                     if (event->controlPressed())
                     {
-                        openLoadGame();
+                        _openLoadGame();
                     }
                     break;
                 case SDLK_x: {
                     if (event->controlPressed()) {
                         auto game = Game::Game::getInstance();
-                        game->pushState(new State::ExitConfirm(resourceManager, game->mouse(), logger));
+                        game->pushState(new State::ExitConfirm(_resourceManager, game->mouse(), _logger));
                         playWindowOpenSfx();
                     }
                     break;
@@ -415,7 +401,7 @@ namespace Falltergeist
                     // @TODO: printCurrentTime();
                     break;
                 case SDLK_TAB:
-                    openMap();
+                    _openMap();
                     break;
                 case SDLK_F1:
                     // @TODO: help screen
@@ -429,11 +415,11 @@ namespace Falltergeist
                 case SDLK_F4:
                     if (!event->altPressed())
                     {
-                        openSaveGame();
+                        _openSaveGame();
                     }
                     break;
                 case SDLK_F5:
-                    openLoadGame();
+                    _openLoadGame();
                     break;
                 case SDLK_F6:
                     // @TODO: quick save logic
@@ -443,7 +429,7 @@ namespace Falltergeist
                     break;
                 case SDLK_F10: {
                     auto game = Game::Game::getInstance();
-                    game->pushState(new State::ExitConfirm(resourceManager, game->mouse(), logger));
+                    game->pushState(new State::ExitConfirm(_resourceManager, game->mouse(), _logger));
                     playWindowOpenSfx();
                     break;
                 }
@@ -453,17 +439,17 @@ namespace Falltergeist
             }
         }
 
-        void PlayerPanel::openSaveGame()
+        void PlayerPanel::_openSaveGame()
         {
             auto game = Game::Game::getInstance();
-            game->pushState(new State::SaveGame(resourceManager, game->mouse()));
+            game->pushState(new State::SaveGame(_resourceManager, game->mouse()));
             playWindowOpenSfx();
         }
 
-        void PlayerPanel::openLoadGame()
+        void PlayerPanel::_openLoadGame()
         {
             auto game = Game::Game::getInstance();
-            game->pushState(new State::LoadGame(resourceManager, game->mouse()));
+            game->pushState(new State::LoadGame(_resourceManager, game->mouse()));
             playWindowOpenSfx();
         }
 
