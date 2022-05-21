@@ -1,7 +1,7 @@
 # It must be set before project
 set(CMAKE_BUILD_TYPE "Debug" CACHE STRING "Choose the type of build (by default Debug)")
 
-cmake_minimum_required(VERSION 3.11)
+cmake_minimum_required(VERSION 3.8)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake/modules)
 
 project(falltergeist)
@@ -103,13 +103,16 @@ endif()
 if (CONAN_LIBS)
     target_link_libraries(${PROJECT_NAME} ${CONAN_LIBS})
 else()
-    target_link_libraries(${PROJECT_NAME} PRIVATE ZLIB::ZLIB)
-    target_link_libraries(${PROJECT_NAME} PRIVATE ${SDL2MAIN_LIBRARY})
-    target_link_libraries(${PROJECT_NAME} PRIVATE ${SDL2_LIBRARY})
-    target_link_libraries(${PROJECT_NAME} PRIVATE ${SDL_MIXER_LIBRARY})
-    target_link_libraries(${PROJECT_NAME} PRIVATE ${SDL_IMAGE_LIBRARY})
-    target_link_libraries(${PROJECT_NAME} PRIVATE OpenGL::OpenGL)
-    target_link_libraries(${PROJECT_NAME} PRIVATE GLEW::glew)
+    target_link_libraries(
+        ${PROJECT_NAME}
+        ${ZLIB_LIBRARIES}
+        ${SDL2MAIN_LIBRARY}
+        ${SDL2_LIBRARY}
+        ${SDL_MIXER_LIBRARY}
+        ${SDL_IMAGE_LIBRARY}
+        ${OPENGL_gl_LIBRARY}
+        GLEW::glew
+    )
 endif()
 
 include(cmake/install/windows.cmake)
