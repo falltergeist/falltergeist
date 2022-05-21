@@ -11,13 +11,13 @@ namespace Falltergeist {
     namespace UI {
         class Slider : public Falltergeist::UI::Base {
         public:
-            Slider(const Point& pos, std::unique_ptr<Image> imageOn, std::unique_ptr<Image> imageOff);
+            Slider(const Graphics::Point& pos, std::unique_ptr<Image> imageOn, std::unique_ptr<Image> imageOff);
 
             virtual ~Slider() = default;
 
-            const Size& size() const override;
+            const Graphics::Size& size() const override;
 
-            bool opaque(const Point& pos) override;
+            bool opaque(const Graphics::Point& pos) override;
 
             void render(bool eggTransparency) override;
 
@@ -36,11 +36,11 @@ namespace Falltergeist {
             Event::Handler& changeHandler();
 
         private:
-            Size _sliderSize = Size(241, 14);
+            Graphics::Size _sliderSize = Graphics::Size(241, 14);
 
-            Point _sliderOffset = Point(0, 0);
+            Graphics::Point _sliderOffset = Graphics::Point(0, 0);
 
-            Size _thumbSize = Size(21, 14);
+            Graphics::Size _thumbSize = Graphics::Size(21, 14);
 
             std::unique_ptr<Image> _imageOn;
 
@@ -64,9 +64,9 @@ namespace Falltergeist {
 
             void _onMouseUp(Event::Mouse* event);
 
-            double _offsetToValue(const Point& offset);
+            double _offsetToValue(const Graphics::Point& offset);
 
-            Point _valueToOffset(double value);
+            Graphics::Point _valueToOffset(double value);
         };
     }
 }

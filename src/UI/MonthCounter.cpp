@@ -4,6 +4,9 @@ namespace Falltergeist
 {
     namespace UI
     {
+        using Point = Graphics::Point;
+        using Size = Graphics::Size;
+
         enum
         {
             MONTH_TEXTURE_WIDTH  = 28,
@@ -11,7 +14,7 @@ namespace Falltergeist
             MONTH_TEXTURE_HORIZONTAL_OFFSET = 15
         };
 
-        MonthCounter::MonthCounter(Month month, const Point& pos) : Base(pos), _month(month)
+        MonthCounter::MonthCounter(Month month, const Graphics::Point& pos) : Base(pos), _month(month)
         {
             _sprite = std::make_shared<Graphics::Sprite>("art/intrface/months.frm");
 
@@ -21,7 +24,7 @@ namespace Falltergeist
             _size = Size(29,14);
         }
 
-        MonthCounter::MonthCounter(const Point& pos) : MonthCounter(Month::JANUARY, pos)
+        MonthCounter::MonthCounter(const Graphics::Point& pos) : MonthCounter(Month::JANUARY, pos)
         {
         }
 
@@ -35,7 +38,7 @@ namespace Falltergeist
             _month = month;
         }
 
-        bool MonthCounter::opaque(const Point &pos)
+        bool MonthCounter::opaque(const Graphics::Point &pos)
         {
             if (pos.x() > _size.width() || pos.x()<0 || pos.y() > _size.height() || pos.y()<0) {
                 return false;

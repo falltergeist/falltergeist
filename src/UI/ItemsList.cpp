@@ -16,9 +16,11 @@ namespace Falltergeist
 {
     namespace UI
     {
-        using Graphics::Rect;
+        using Point = Graphics::Point;
+        using Rect = Graphics::Rect;
+        using Size = Graphics::Size;
 
-        ItemsList::ItemsList(const Point& pos) : Falltergeist::UI::Base(pos)
+        ItemsList::ItemsList(const Graphics::Point& pos) : Falltergeist::UI::Base(pos)
         {
             mouseDownHandler().add(std::bind(&ItemsList::onMouseLeftDown, this, std::placeholders::_1));
             mouseDragStartHandler().add(std::bind(&ItemsList::onMouseDragStart, this, std::placeholders::_1));
@@ -224,7 +226,7 @@ namespace Falltergeist
             return _itemsListModifiedHandler;
         }
 
-        bool ItemsList::opaque(const Point &pos) {
+        bool ItemsList::opaque(const Graphics::Point &pos) {
             unsigned int i = 0;
             for (auto& item : _inventoryItems) {
                 bool pixel = item->opaque(pos - Point(0, _slotHeight*i));

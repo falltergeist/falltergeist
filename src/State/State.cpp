@@ -57,12 +57,12 @@ namespace Falltergeist
             _position.setY(y);
         }
 
-        const Point& State::position() const
+        const Graphics::Point& State::position() const
         {
             return _position;
         }
 
-        void State::setPosition(const Point& pos)
+        void State::setPosition(const Graphics::Point& pos)
         {
             _position = pos;
         }

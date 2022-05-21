@@ -12,12 +12,12 @@ namespace Falltergeist
         {
         }
 
-        Point AnimationFrame::position() const
+        Graphics::Point AnimationFrame::position() const
         {
             return _position;
         }
 
-        void AnimationFrame::setPosition(const Point& pos)
+        void AnimationFrame::setPosition(const Graphics::Point& pos)
         {
             _position = pos;
         }
@@ -32,22 +32,22 @@ namespace Falltergeist
             return _position.y();
         }
 
-        const Size& AnimationFrame::size() const
+        const Graphics::Size& AnimationFrame::size() const
         {
             return _size;
         }
 
-        void AnimationFrame::setSize(const Size& size)
+        void AnimationFrame::setSize(const Graphics::Size& size)
         {
             _size = size;
         }
 
-        Point AnimationFrame::offset() const
+        Graphics::Point AnimationFrame::offset() const
         {
             return _offset;
         }
 
-        void AnimationFrame::setOffset(const Point& ofs)
+        void AnimationFrame::setOffset(const Graphics::Point& ofs)
         {
             _offset = ofs;
         }

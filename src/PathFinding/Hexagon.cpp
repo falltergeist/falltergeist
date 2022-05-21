@@ -20,12 +20,12 @@ namespace Falltergeist
         return &_objects;
     }
 
-    const Point& Hexagon::position() const
+    const Graphics::Point& Hexagon::position() const
     {
         return _position;
     }
 
-    void Hexagon::setPosition(const Point& pos)
+    void Hexagon::setPosition(const Graphics::Point& pos)
     {
         _position = pos;
     }
@@ -43,7 +43,7 @@ namespace Falltergeist
 
     Game::Orientation Hexagon::orientationTo(Hexagon *hexagon)
     {
-        Point delta = hexagon->position() - _position;
+        Graphics::Point delta = hexagon->position() - _position;
         int dx = delta.x();
         int dy = delta.y();
 

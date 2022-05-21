@@ -21,6 +21,8 @@ namespace Falltergeist
 {
     namespace State
     {
+        using Point = Graphics::Point;
+
         Movie::Movie(int id) : State()
         {
             _id = id;

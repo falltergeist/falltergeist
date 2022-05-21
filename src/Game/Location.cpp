@@ -12,9 +12,6 @@
 
 namespace Falltergeist
 {
-    using Graphics::Point;
-    using Helpers::GameObjectHelper;
-
     namespace Game
     {
         Location::Location(std::shared_ptr<ILogger> logger)
@@ -50,7 +47,7 @@ namespace Falltergeist
                 );
             }
 
-            GameObjectHelper gameObjectHelper(logger);
+            Helpers::GameObjectHelper gameObjectHelper(logger);
 
             for (auto &mapElevation : mapFile->elevations()) {
                 auto elevation = std::make_shared<LocationElevation>(logger);
@@ -76,12 +73,12 @@ namespace Falltergeist
 
                     unsigned int tileNum = mapElevation.floorTiles().at(i);
                     if (tileNum > 1) {
-                        elevation->floor()->tiles()[i] = std::make_unique<UI::Tile>(tileNum, Point(x, y));
+                        elevation->floor()->tiles()[i] = std::make_unique<UI::Tile>(tileNum, Graphics::Point(x, y));
                     }
 
                     tileNum = mapElevation.roofTiles().at(i);
                     if (tileNum > 1) {
-                        elevation->roof()->tiles()[i] = std::make_unique<UI::Tile>(tileNum, Point(x, y - 96));
+                        elevation->roof()->tiles()[i] = std::make_unique<UI::Tile>(tileNum, Graphics::Point(x, y - 96));
                     }
                 }
 

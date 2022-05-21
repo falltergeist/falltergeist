@@ -26,6 +26,8 @@ namespace Falltergeist
 {
     namespace State
     {
+        using Point = Graphics::Point;
+
         CritterInteract::CritterInteract(std::shared_ptr<UI::IResourceManager> resourceManager) : State()
         {
             this->resourceManager = resourceManager;

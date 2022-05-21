@@ -6,7 +6,7 @@ namespace Falltergeist
 {
     namespace UI
     {
-        ImageList::ImageList(const Point& pos, const std::vector<Image*> &imageList) : Falltergeist::UI::Base(pos)
+        ImageList::ImageList(const Graphics::Point& pos, const std::vector<Image*> &imageList) : Falltergeist::UI::Base(pos)
         {
             for (auto& image : imageList) {
                 auto imagePtr = std::unique_ptr<Image>(image);
@@ -40,12 +40,12 @@ namespace Falltergeist
             _images.at(currentImage())->render(eggTransparency);
         }
 
-        bool ImageList::opaque(const Point &pos)
+        bool ImageList::opaque(const Graphics::Point &pos)
         {
             return _images.at(currentImage())->opaque(pos);
         }
 
-        void ImageList::setPosition(const Point &pos)
+        void ImageList::setPosition(const Graphics::Point &pos)
         {
             Base::setPosition(pos);
             for (auto& image: _images) {

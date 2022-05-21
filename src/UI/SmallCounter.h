@@ -25,7 +25,7 @@ namespace Falltergeist
                     SIGNED
                 };
 
-                SmallCounter(const Point& pos);
+                SmallCounter(const Graphics::Point& pos);
 
                 SmallCounter(const SmallCounter&) = delete;
 
@@ -51,7 +51,7 @@ namespace Falltergeist
 
                 void render(bool eggTransparency) override;
 
-                bool opaque(const Point &pos) override;
+                bool opaque(const Graphics::Point &pos) override;
 
             private:
                 Color _color = Color::WHITE;

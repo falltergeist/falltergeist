@@ -107,7 +107,7 @@ namespace Falltergeist
         return _hexagons.at(index).get();
     }
 
-    Hexagon* HexagonGrid::hexagonAt(const Point& pos)
+    Hexagon* HexagonGrid::hexagonAt(const Graphics::Point& pos)
     {
         for (auto& hexagon : _hexagons)
         {

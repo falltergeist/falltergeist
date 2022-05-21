@@ -36,7 +36,7 @@ namespace Falltergeist
             /**
              * Creates empty TextArea at the given position.
              */
-            TextArea(const Point& pos = Point());
+            TextArea(const Graphics::Point& pos = Graphics::Point());
 
             /**
              * Creates empty TextArea at the given position.
@@ -46,7 +46,7 @@ namespace Falltergeist
             /**
              * Creates TextArea with given text at the given position.
              */
-            TextArea(const std::string& text, const Point& pos = Point());
+            TextArea(const std::string& text, const Graphics::Point& pos = Graphics::Point());
 
             /**
              * Creates TextArea with given text at the given position.
@@ -56,7 +56,7 @@ namespace Falltergeist
             /**
              * Creates TextArea as copy of another TextArea, placed at the given position (0,0 by default).
              */
-            TextArea(const TextArea& textArea, Point pos = Point());
+            TextArea(const TextArea& textArea, Graphics::Point pos = Graphics::Point());
 
             ~TextArea() override;
 
@@ -86,14 +86,14 @@ namespace Falltergeist
             /**
              * Size of text area. It's either fixed value given to setSize() or previously calculated size.
              */
-            const Size& size() const override;
+            const Graphics::Size& size() const override;
 
             /**
              * Sets fixed size of TextArea. If this is not (0, 0) - calls to size() will always return this value,
              * regardless of actual width/height of TextArea on screen.
              * If wordWrap is also set to true, lines width will be limited to width provided.
              */
-            void setSize(const Size& size);
+            void setSize(const Graphics::Size& size);
 
             void setWidth(int width);
 
@@ -102,7 +102,7 @@ namespace Falltergeist
             /**
              * Size of actual text content of the text area.
              */
-            Size textSize();
+            Graphics::Size textSize();
 
             /**
              * Actual number of lines contained within TextArea. Will be greater than number of visible lines when overflown.
@@ -122,28 +122,28 @@ namespace Falltergeist
             /**
              * Top and left text padding.
              */
-            const Size& paddingTopLeft() const;
+            const Graphics::Size& paddingTopLeft() const;
 
             /**
              * Sets top and left text padding, in pixels, relative to TextArea position.
              */
-            void setPaddingTopLeft(const Size& paddingTopLeft);
+            void setPaddingTopLeft(const Graphics::Size& paddingTopLeft);
 
             /**
              * Bottom and right text padding.
              */
-            const Size& paddingBottomRight() const;
+            const Graphics::Size& paddingBottomRight() const;
 
             /**
              * Sets bottom and right text padding, ix pixels, relative to TextArea position + size.
              * Has no effect if size is not set.
              */
-            void setPaddingBottomRight(const Size& paddingBottomRight);
+            void setPaddingBottomRight(const Graphics::Size& paddingBottomRight);
 
             /**
              * Sets both top-left and bottom-right padding.
              */
-            void setPadding(const Size& topLeft, const Size& bottomRight);
+            void setPadding(const Graphics::Size& topLeft, const Graphics::Size& bottomRight);
 
             void setColor(const Graphics::Color &color);
 
@@ -202,7 +202,7 @@ namespace Falltergeist
 
             void render(bool eggTransparency = false) override;
 
-            bool opaque(const Point &pos) override;
+            bool opaque(const Graphics::Point &pos) override;
 
             unsigned int timestampCreated() const;
 
@@ -282,12 +282,12 @@ namespace Falltergeist
             /**
              * User-defined size. 0 for each dimension represents "auto-size" for this dimension, so size() will return calculated size.
              */
-            Size _size;
+            Graphics::Size _size;
 
             /**
              * Real size of TextArea on screen, as determined by previous _updateSymbols() call.
              */
-            Size _calculatedSize;
+            Graphics::Size _calculatedSize;
 
             /**
              * Lines of text. Cleared along with _changed flag when it is required to recalculate symbol positions.
@@ -298,7 +298,7 @@ namespace Falltergeist
 
             bool _wordWrap = false;
 
-            Size _paddingTopLeft, _paddingBottomRight;
+            Graphics::Size _paddingTopLeft, _paddingBottomRight;
 
             std::vector<int> _customLineShifts;
 

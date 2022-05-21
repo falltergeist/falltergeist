@@ -48,7 +48,7 @@ namespace Falltergeist
             setFullscreen(false);
             setModal(false);
 
-            setPosition((Game::Game::getInstance()->renderer()->size() - Point(640, 480)) / 2 + Point(0, 291));
+            setPosition((Game::Game::getInstance()->renderer()->size() - Graphics::Point(640, 480)) / 2 + Graphics::Point(0, 291));
 
             addUI("background", resourceManager->getImage("art/intrface/barter.frm"));
 

@@ -6,6 +6,8 @@ namespace Falltergeist
 {
     namespace UI
     {
+        using Point = Graphics::Point;
+
         HiddenMask::HiddenMask(unsigned int width, unsigned int height, int x, int y) : Base(Point(x, y)) {
         }
 
@@ -21,7 +23,7 @@ namespace Falltergeist
         {
         }
 
-        bool HiddenMask::opaque(const Point &pos)
+        bool HiddenMask::opaque(const Graphics::Point &pos)
         {
             return Graphics::Rect::inRect(pos, this->size());
         }

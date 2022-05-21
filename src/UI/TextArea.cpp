@@ -13,9 +13,11 @@ namespace Falltergeist
 {
     namespace UI
     {
-        using Graphics::Rect;
+        using Point = Graphics::Point;
+        using Rect = Graphics::Rect;
+        using Size = Graphics::Size;
 
-        TextArea::TextArea(const Point& pos) : Base(pos)
+        TextArea::TextArea(const Graphics::Point& pos) : Base(pos)
         {
             _timestampCreated = SDL_GetTicks();
         }
@@ -24,7 +26,7 @@ namespace Falltergeist
         {
         }
 
-        TextArea::TextArea(const std::string& text, const Point& pos) : Base(pos)
+        TextArea::TextArea(const std::string& text, const Graphics::Point& pos) : Base(pos)
         {
             _timestampCreated = SDL_GetTicks();
             setText(text);
@@ -34,7 +36,7 @@ namespace Falltergeist
         {
         }
 
-        TextArea::TextArea(const TextArea& textArea, Point pos) : Base(pos)
+        TextArea::TextArea(const TextArea& textArea, Graphics::Point pos) : Base(pos)
         {
             _timestampCreated = textArea._timestampCreated;
             _text = textArea._text;
@@ -176,12 +178,12 @@ namespace Falltergeist
             _needUpdate();
         }
 
-        const Size& TextArea::size() const
+        const Graphics::Size& TextArea::size() const
         {
             return _size.width() && _size.height() ? _size : _calculatedSize;
         }
 
-        Size TextArea::textSize()
+        Graphics::Size TextArea::textSize()
         {
             _updateSymbols();
             return _calculatedSize;
@@ -193,7 +195,7 @@ namespace Falltergeist
             return static_cast<int>(_lines.size());
         }
 
-        void TextArea::setSize(const Size& size)
+        void TextArea::setSize(const Graphics::Size& size)
         {
             if (_size == size) {
                 return;
@@ -462,29 +464,29 @@ namespace Falltergeist
             }
         }
 
-        const Size& TextArea::paddingTopLeft() const
+        const Graphics::Size& TextArea::paddingTopLeft() const
         {
             return _paddingTopLeft;
         }
 
-        void TextArea::setPaddingTopLeft(const Size& pad)
+        void TextArea::setPaddingTopLeft(const Graphics::Size& pad)
         {
             _needUpdate(_paddingTopLeft.width() != pad.width());
             _paddingTopLeft = pad;
         }
 
-        const Size& TextArea::paddingBottomRight() const
+        const Graphics::Size& TextArea::paddingBottomRight() const
         {
             return _paddingBottomRight;
         }
 
-        void TextArea::setPaddingBottomRight(const Size& pad)
+        void TextArea::setPaddingBottomRight(const Graphics::Size& pad)
         {
             _needUpdate(_paddingBottomRight.width() != pad.width());
             _paddingBottomRight = pad;
         }
 
-        void TextArea::setPadding(const Size& topLeft, const Size& bottomRight)
+        void TextArea::setPadding(const Graphics::Size& topLeft, const Graphics::Size& bottomRight)
         {
             setPaddingTopLeft(topLeft);
             setPaddingBottomRight(bottomRight);
@@ -546,7 +548,7 @@ namespace Falltergeist
             _textArea.updateBuffers(vertices,UV,indexes);
         }
 
-        bool TextArea::opaque(const Point &pos)
+        bool TextArea::opaque(const Graphics::Point &pos)
         {
             return Rect::inRect(pos, this->size());
         }

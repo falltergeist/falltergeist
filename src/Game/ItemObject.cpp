@@ -9,8 +9,6 @@ namespace Falltergeist
 {
     namespace Game
     {
-        using namespace Base;
-
         ItemObject::ItemObject() : Object()
         {
             _type = Type::ITEM;

@@ -172,26 +172,26 @@ namespace Falltergeist
 
     }
 
-    std::ostream& operator <<(std::ostream& lhs, const Point& rhs)
+    std::ostream& operator <<(std::ostream& lhs, const Graphics::Point& rhs)
     {
         lhs << "(" << rhs.x() << "," << rhs.y() << ")";
         return lhs;
     }
 
-    std::ostream& operator <<(std::ostream& lhs, const Size& rhs)
+    std::ostream& operator <<(std::ostream& lhs, const Graphics::Size& rhs)
     {
         lhs << rhs.width() << "x" << rhs.height();
         return lhs;
     }
 
-    std::string to_string(const Point& point)
+    std::string to_string(const Graphics::Point& point)
     {
         std::ostringstream sstr;
         sstr << point;
         return sstr.str();
     }
 
-    std::string to_string(const Size& size)
+    std::string to_string(const Graphics::Size& size)
     {
         std::ostringstream sstr;
         sstr << size;

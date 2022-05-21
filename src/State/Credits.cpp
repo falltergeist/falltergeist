@@ -41,7 +41,7 @@ namespace Falltergeist
 
             Game::Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::NONE);
             auto renderer = Game::Game::getInstance()->renderer();
-            setPosition(Point((renderer->size().width() - 640) / 2, renderer->size().height()));
+            setPosition(Graphics::Point((renderer->size().width() - 640) / 2, renderer->size().height()));
 
             auto& vfs = ResourceManager::getInstance()->vfs();
             auto file = vfs->open("text/english/credits.txt", VFS::IFile::OpenMode::Read);

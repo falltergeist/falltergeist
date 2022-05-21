@@ -23,11 +23,12 @@
 
 namespace Falltergeist
 {
-    using Helpers::StateLocationHelper;
-    using ImageButtonType = UI::Factory::ImageButtonFactory::Type;
-
     namespace State
     {
+        using Helpers::StateLocationHelper;
+        using ImageButtonType = UI::Factory::ImageButtonFactory::Type;
+        using Point = Graphics::Point;
+
         PlayerCreate::PlayerCreate(std::shared_ptr<UI::IResourceManager> resourceManager, std::shared_ptr<ILogger> logger)
             : State(), _logger(logger), _resourceManager(resourceManager) {
             _imageButtonFactory = std::make_unique<UI::Factory::ImageButtonFactory>(_resourceManager);

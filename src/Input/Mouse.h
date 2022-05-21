@@ -12,8 +12,6 @@ namespace Falltergeist {
         class Base;
     }
     namespace Input {
-        using Graphics::Point;
-
         class Mouse final {
         public:
             // TODO: need to consider getting rid of mouse cursor state stack,
@@ -55,9 +53,9 @@ namespace Falltergeist {
 
             ~Mouse();
 
-            const Point& position() const;
+            const Graphics::Point& position() const;
 
-            void setPosition(const Point& pos);
+            void setPosition(const Graphics::Point& pos);
 
             void pushState(Cursor state);
 

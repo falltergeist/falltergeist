@@ -7,16 +7,16 @@
 namespace Falltergeist::UI {
     class Rectangle final : public Base {
     public:
-        Rectangle(const Point& pos, const Size& size, Graphics::Color color);
+        Rectangle(const Graphics::Point& pos, const Graphics::Size& size, Graphics::Color color);
 
         void render(bool eggTransparency = false) override;
 
-        bool opaque(const Point& pos) override;
+        bool opaque(const Graphics::Point& pos) override;
 
-        const Size& size() const override;
+        const Graphics::Size& size() const override;
 
     private:
-        Size _size;
+        Graphics::Size _size;
 
         Graphics::Color _color;
     };

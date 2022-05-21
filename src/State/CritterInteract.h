@@ -105,7 +105,7 @@ namespace Falltergeist
 
 
             protected:
-                Point _oldCameraCenter;
+                Graphics::Point _oldCameraCenter;
                 int _backgroundID = -1;
                 int _headID = -1;
                 Mood _mood = Mood::NEUTRAL;

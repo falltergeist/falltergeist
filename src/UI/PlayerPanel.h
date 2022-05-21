@@ -29,7 +29,7 @@ namespace Falltergeist
 
                 ~PlayerPanel() override;
 
-                const Size& size() const override;
+                const Graphics::Size& size() const override;
 
                 void render(bool eggTransparency = false) override;
 
@@ -37,7 +37,7 @@ namespace Falltergeist
 
                 void think(const float &deltaTime) override;
 
-                virtual bool opaque(const Point &pos) override;
+                virtual bool opaque(const Graphics::Point &pos) override;
 
                 void displayMessage(const std::string& message);
 

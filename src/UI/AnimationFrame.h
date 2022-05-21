@@ -7,9 +7,6 @@ namespace Falltergeist
 {
     namespace UI
     {
-        using Graphics::Point;
-        using Graphics::Size;
-
         class AnimationFrame
         {
             public:
@@ -17,21 +14,21 @@ namespace Falltergeist
 
                 ~AnimationFrame();
 
-                Point position() const;
+                Graphics::Point position() const;
 
-                void setPosition(const Point&);
+                void setPosition(const Graphics::Point&);
 
                 unsigned int x() const;
 
                 unsigned int y() const;
 
-                const Size& size() const;
+                const Graphics::Size& size() const;
 
-                void setSize(const Size&);
+                void setSize(const Graphics::Size&);
 
-                Point offset() const;
+                Graphics::Point offset() const;
 
-                void setOffset(const Point&);
+                void setOffset(const Graphics::Point&);
 
                 int xOffset() const;
 
@@ -43,13 +40,13 @@ namespace Falltergeist
 
             protected:
                 // Offset of animation frame position relative to sprite position
-                Point _position;
+                Graphics::Point _position;
 
                 // Animation frame width and height
-                Size _size;
+                Graphics::Size _size;
 
                 // Offset of animation frame on screen relative to first animation frame
-                Point _offset;
+                Graphics::Point _offset;
 
                 // Duration of animation frame in milliseconds
                 unsigned int _duration = 0;

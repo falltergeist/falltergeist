@@ -16,16 +16,16 @@ namespace Falltergeist
         class Object;
     }
 
-    using Graphics::Point;
-
     class Hexagon
     {
         public:
             Hexagon() = default;
+
             explicit Hexagon(unsigned int number);
 
-            const Point& position() const;
-            void setPosition(const Point& pos);
+            const Graphics::Point& position() const;
+
+            void setPosition(const Graphics::Point& pos);
 
             inline unsigned int number()
             {
@@ -95,7 +95,7 @@ namespace Falltergeist
             std::list<Game::Object*> _objects;
             unsigned int _number = 0; // position in hexagonal grid
 
-            Point _position;
+            Graphics::Point _position;
 
             int _cubeX = 0;
             int _cubeY = 0;

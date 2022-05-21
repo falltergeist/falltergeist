@@ -12,22 +12,22 @@ namespace Falltergeist
         class ElevatorProgress : public Base
         {
             public:
-                ElevatorProgress(const Point& pos = Point(0, 0));
+                ElevatorProgress(const Graphics::Point& pos = Graphics::Point(0, 0));
 
-                ElevatorProgress(uint8_t progress, const Point& pos = Point(0, 0));
+                ElevatorProgress(uint8_t progress, const Graphics::Point& pos = Graphics::Point(0, 0));
 
                 uint8_t progress() const;
 
                 void setProgress(uint8_t progress);
 
-                bool opaque(const Point &pos) override;
+                bool opaque(const Graphics::Point &pos) override;
 
                 void render(bool eggTransparency) override;
 
             private:
                 uint8_t _progress;
 
-                Size _size;
+                Graphics::Size _size;
 
                 std::shared_ptr<Graphics::Sprite> _sprite;
 

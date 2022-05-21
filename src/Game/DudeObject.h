@@ -5,8 +5,6 @@
 
 namespace Falltergeist
 {
-    using Graphics::Point;
-
     namespace Format
     {
         namespace Gcd
@@ -60,7 +58,7 @@ namespace Falltergeist
                 /**
                  * Offset where to draw egg relative to dude hex.
                  */
-                Point eggOffset();
+                Graphics::Point eggOffset();
 
             protected:
                 int _level = 1;

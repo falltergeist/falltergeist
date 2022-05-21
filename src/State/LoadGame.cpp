@@ -19,10 +19,11 @@
 
 namespace Falltergeist
 {
-    using ImageButtonType = UI::Factory::ImageButtonFactory::Type;
-
     namespace State
     {
+        using ImageButtonType = UI::Factory::ImageButtonFactory::Type;
+        using Point = Graphics::Point;
+
         LoadGame::LoadGame(std::shared_ptr<UI::IResourceManager> resourceManager) : State()
         {
             this->resourceManager = resourceManager;

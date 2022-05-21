@@ -9,7 +9,7 @@ namespace Falltergeist
         class FpsCounter final : public TextArea
         {
             public:
-                FpsCounter(const Point& pos);
+                FpsCounter(const Graphics::Point& pos);
 
                 virtual ~FpsCounter() = default;
 

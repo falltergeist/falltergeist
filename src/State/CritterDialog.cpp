@@ -38,7 +38,7 @@ namespace Falltergeist {
             setFullscreen(false);
             setModal(false);
 
-            setPosition((Game::Game::getInstance()->renderer()->size() - Point(640, 480)) / 2 + Point(0, 291));
+            setPosition((Game::Game::getInstance()->renderer()->size() - Graphics::Point(640, 480)) / 2 + Graphics::Point(0, 291));
 
             auto background = resourceManager->getImage("art/intrface/di_talk.frm");
             addUI("background", background);
@@ -52,7 +52,7 @@ namespace Falltergeist {
 
             // TODO: maybe move text scrolling into separate UI? Though it is only in two places and works slightly differently...
             question->mouseClickHandler().add([question](Event::Mouse* event) {
-                Point relPos = event->position() - question->position();
+                Graphics::Point relPos = event->position() - question->position();
                 if (relPos.y() < (question->size().height() / 2)) {
                     if (question->lineOffset() > 0) {
                         question->setLineOffset(question->lineOffset() - 4);
@@ -65,7 +65,7 @@ namespace Falltergeist {
             question->mouseMoveHandler().add([question](Event::Mouse* event) {
                 if (question->numLines() > 4) {
                     auto mouse = Game::Game::getInstance()->mouse();
-                    Point relPos = event->position() - question->position();
+                    Graphics::Point relPos = event->position() - question->position();
                     auto state =
                         relPos.y() < (question->size().height() / 2) ? Input::Mouse::Cursor::SMALL_UP_ARROW : Input::Mouse::Cursor::SMALL_DOWN_ARROW;
 

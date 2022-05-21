@@ -4,7 +4,7 @@ namespace Falltergeist
 {
     namespace UI
     {
-        Tile::Tile(unsigned int number, const Point &pos)
+        Tile::Tile(unsigned int number, const Graphics::Point &pos)
         {
             _number = number;
             _position = pos;
@@ -15,7 +15,7 @@ namespace Falltergeist
             return _number;
         }
 
-        const Point& Tile::position() const
+        const Graphics::Point& Tile::position() const
         {
             return _position;
         }

@@ -12,9 +12,10 @@
 
 namespace Falltergeist {
     namespace UI {
-        using namespace Base;
+        using Point = Graphics::Point;
+        using Size = Graphics::Size;
 
-        Base::Base(const Point& pos) : Event::EventTarget(Game::Game::getInstance()->eventDispatcher()), _position(pos), _size(Size(0, 0)) {
+        Base::Base(const Graphics::Point& pos) : Event::EventTarget(Game::Game::getInstance()->eventDispatcher()), _position(pos), _size(Size(0, 0)) {
         }
 
         Base::~Base() {
@@ -42,27 +43,27 @@ namespace Falltergeist {
             return _visible;
         }
 
-        const Point& Base::position() const {
+        const Graphics::Point& Base::position() const {
             return _position;
         }
 
-        void Base::setPosition(const Point& pos) {
+        void Base::setPosition(const Graphics::Point& pos) {
             _position = pos;
         }
 
-        const Point& Base::offset() const {
+        const Graphics::Point& Base::offset() const {
             return _offset;
         }
 
-        void Base::setOffset(const Point& pos) {
+        void Base::setOffset(const Graphics::Point& pos) {
             _offset = pos;
         }
 
-        const Size& Base::size() const {
+        const Graphics::Size& Base::size() const {
             return _size;
         }
 
-        bool Base::opaque(const Point& pos) {
+        bool Base::opaque(const Graphics::Point& pos) {
             return false;
         }
 
@@ -259,7 +260,7 @@ namespace Falltergeist {
             return _mouseUpHandler;
         }
 
-        void Base::render(const Size& size, bool eggTransparency) {
+        void Base::render(const Graphics::Size& size, bool eggTransparency) {
             render(eggTransparency);
         }
 

@@ -29,8 +29,6 @@ namespace Falltergeist
     }
     namespace State
     {
-        using Graphics::Point;
-
         class State : public Event::EventTarget
         {
             public:
@@ -60,24 +58,31 @@ namespace Falltergeist
 
                 // @todo: remove getters/setters for x, y?
                 virtual int x() const;
+
                 virtual void setX(int x);
 
                 virtual int y() const;
+
                 virtual void setY(int y);
 
-                virtual const Point& position() const;
-                virtual void setPosition(const Point& pos);
+                virtual const Graphics::Point& position() const;
+
+                virtual void setPosition(const Graphics::Point& pos);
 
                 virtual bool fullscreen() const;
+
                 virtual void setFullscreen(bool value);
 
                 virtual bool modal() const;
+
                 virtual void setModal(bool value);
 
                 virtual bool active();
+
                 virtual void setActive(bool value);
 
                 virtual bool initialized();
+
                 virtual void init();
 
                 /**
@@ -132,7 +137,7 @@ namespace Falltergeist
                 std::vector<std::unique_ptr<UI::Base>> _uiToDelete;
                 std::map<std::string, UI::Base*> _labeledUI;
 
-                Point _position;
+                Graphics::Point _position;
 
                 bool _modal = false; // prevents all states before this one to call think() method
                 bool _active = false;

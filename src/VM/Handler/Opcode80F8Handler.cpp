@@ -13,6 +13,8 @@ namespace Falltergeist
     {
         namespace Handler
         {
+            using Point = Graphics::Point;
+
             Opcode80F8::Opcode80F8(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
             {
                 this->logger = std::move(logger);

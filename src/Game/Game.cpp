@@ -71,7 +71,7 @@ namespace Falltergeist
             auto sdlWindow = std::make_shared<Graphics::SdlWindow>(
                 version.c_str(),
                 Graphics::Rectangle(
-                    Point(rendererConfig->x(), rendererConfig->y()),
+                    Graphics::Point(rendererConfig->x(), rendererConfig->y()),
                     Graphics::Size(rendererConfig->width(), rendererConfig->height())
                 ),
                 rendererConfig->isFullscreen(),
@@ -102,7 +102,7 @@ namespace Falltergeist
             _mixer->setMusicVolume(_settings->musicVolume());
             _mouse = std::make_shared<Input::Mouse>(_uiResourceManager, sdlMouse);
             _mouse->setPosition({320, 240});
-            _fpsCounter = std::make_unique<UI::FpsCounter>(Point(renderer()->size().width() - 42, 2));
+            _fpsCounter = std::make_unique<UI::FpsCounter>(Graphics::Point(renderer()->size().width() - 42, 2));
             _fpsCounter->setWidth(42);
             _fpsCounter->setHorizontalAlign(UI::TextArea::HorizontalAlign::RIGHT);
 
@@ -114,7 +114,7 @@ namespace Falltergeist
             _mousePosition->setHorizontalAlign(UI::TextArea::HorizontalAlign::RIGHT);
             _animatedPalette = std::make_unique<Graphics::AnimatedPalette>();
             _gameTime = std::make_shared<Time>();
-            _currentTime = std::make_unique<UI::TextArea>("", renderer()->size() - Point(150, 10));
+            _currentTime = std::make_unique<UI::TextArea>("", renderer()->size() - Graphics::Point(150, 10));
             _currentTime->setWidth(150);
             _currentTime->setHorizontalAlign(UI::TextArea::HorizontalAlign::RIGHT);
 

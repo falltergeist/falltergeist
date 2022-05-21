@@ -12,7 +12,7 @@ namespace Falltergeist
         class TextAreaList : public Falltergeist::UI::Base
         {
             public:
-                TextAreaList(const Point& pos = Point());
+                TextAreaList(const Graphics::Point& pos = Graphics::Point());
 
                 ~TextAreaList() override;
 
@@ -26,14 +26,14 @@ namespace Falltergeist
 
                 void scrollTo(int index);
 
-                bool opaque(const Point &pos) override;
+                bool opaque(const Graphics::Point &pos) override;
 
                 void render(bool eggTransparency) override;
 
-                void setSize(Size size);
+                void setSize(Graphics::Size size);
 
             private:
-                Size _size;
+                Graphics::Size _size;
 
                 std::vector<std::unique_ptr<TextArea>> _areas;
 
