@@ -516,6 +516,10 @@ namespace Falltergeist
 
         void Location::think(const float &deltaTime)
         {
+            if (skillInUse() != SKILL::NONE) {
+                mouse()->setCursor(Input::Mouse::Cursor::USE);
+            }
+
             _gameTime->think(deltaTime);
             _thinkObjects(deltaTime);
             _player->think(deltaTime);
@@ -588,29 +592,30 @@ namespace Falltergeist
         void Location::toggleCursorMode()
         {
             // Just for testing. This case should never happen in real life
-            if (mouse()->state() == Input::Mouse::Cursor::NONE) {
-                mouse()->pushState(Input::Mouse::Cursor::ACTION);
+            if (mouse()->cursor() == Input::Mouse::Cursor::NONE) {
+                mouse()->setCursor(Input::Mouse::Cursor::ACTION);
                 return;
             }
 
-            if (mouse()->state() == Input::Mouse::Cursor::ACTION) {
+            if (mouse()->cursor() == Input::Mouse::Cursor::ACTION) {
                 auto hexagon = hexagonGrid()->hexagonAt(mouse()->position() + _camera->topLeft());
                 if (!hexagon) {
                     return;
                 }
-                mouse()->pushState(Input::Mouse::Cursor::HEXAGON_RED);
+                mouse()->setCursor(Input::Mouse::Cursor::HEXAGON_RED);
                 mouse()->ui()->setPosition(hexagon->position() - _camera->topLeft());
                 _objectUnderCursor = nullptr;
                 return;
             }
 
-            if (mouse()->state() == Input::Mouse::Cursor::HEXAGON_RED) {
-                mouse()->popState();
+            if (mouse()->cursor() == Input::Mouse::Cursor::HEXAGON_RED) {
+                mouse()->setCursor(Input::Mouse::Cursor::ACTION);
                 return;
             }
 
-            if (mouse()->state() == Input::Mouse::Cursor::USE) {
-                mouse()->setState(Input::Mouse::Cursor::ACTION);
+            if (mouse()->cursor() == Input::Mouse::Cursor::USE) {
+                setSkillInUse(SKILL::NONE);
+                mouse()->setCursor(Input::Mouse::Cursor::ACTION);
                 return;
             }
         }

@@ -194,14 +194,11 @@ namespace Falltergeist
             addUI(repairCounter);
         }
 
-        void Skilldex::onCancelButtonClick()
-        {
-            Game::Game::getInstance()->mouse()->popState();
+        void Skilldex::onCancelButtonClick() {
             Game::Game::getInstance()->popState();
         }
 
-        void Skilldex::onKeyDown(Event::Keyboard* event)
-        {
+        void Skilldex::onKeyDown(Event::Keyboard* event) {
             if (event->keyCode() == SDLK_ESCAPE) {
                 onCancelButtonClick();
             }
@@ -216,12 +213,8 @@ namespace Falltergeist
             mouse()->setCursor(_previousCursor);
         }
 
-        void Skilldex::onSkillButtonClick(SKILL skill)
-        {
+        void Skilldex::onSkillButtonClick(SKILL skill) {
             Game::Game::getInstance()->locationState()->setSkillInUse(skill);
-            auto mouse = Game::Game::getInstance()->mouse();
-            mouse->popState();
-            mouse->setState(Input::Mouse::Cursor::USE);
             Game::Game::getInstance()->popState();
         }
     }
