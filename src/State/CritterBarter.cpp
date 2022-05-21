@@ -20,10 +20,12 @@ namespace Falltergeist
     {
         using ImageButtonType = UI::Factory::ImageButtonFactory::Type;
 
-        CritterBarter::CritterBarter(std::shared_ptr<UI::IResourceManager> resourceManager) : State()
-        {
-            this->resourceManager = resourceManager;
-            imageButtonFactory = std::make_unique<UI::Factory::ImageButtonFactory>(resourceManager);
+        CritterBarter::CritterBarter(
+            std::shared_ptr<UI::IResourceManager> resourceManager,
+            std::shared_ptr<Input::Mouse> mouse,
+            Game::CritterObject* trader
+        ) : State(mouse), _trader(trader), _resourceManager(resourceManager) {
+            _imageButtonFactory = std::make_unique<UI::Factory::ImageButtonFactory>(resourceManager);
         }
 
         CritterBarter::~CritterBarter()
@@ -50,7 +52,7 @@ namespace Falltergeist
 
             setPosition((Game::Game::getInstance()->renderer()->size() - Graphics::Point(640, 480)) / 2 + Graphics::Point(0, 291));
 
-            addUI("background", resourceManager->getImage("art/intrface/barter.frm"));
+            addUI("background", _resourceManager->getImage("art/intrface/barter.frm"));
 
             auto dude = Game::Game::getInstance()->player();
 
@@ -78,10 +80,10 @@ namespace Falltergeist
             reaction->setPadding({0, 5}, {0, 5});
             addUI("reaction", reaction);
 
-            addUI("offerButton", imageButtonFactory->getByType(ImageButtonType::DIALOG_RED_BUTTON, {40, 162}));
+            addUI("offerButton", _imageButtonFactory->getByType(ImageButtonType::DIALOG_RED_BUTTON, {40, 162}));
             getUI("offerButton")->mouseClickHandler().add(std::bind(&CritterBarter::onOfferButtonClick, this, std::placeholders::_1));
 
-            addUI("talkButton", imageButtonFactory->getByType(ImageButtonType::DIALOG_RED_BUTTON, {583, 162}));
+            addUI("talkButton", _imageButtonFactory->getByType(ImageButtonType::DIALOG_RED_BUTTON, {583, 162}));
             getUI("talkButton")->mouseClickHandler().add(std::bind(&CritterBarter::onTalkButtonClick, this, std::placeholders::_1));
 
             auto scrollUp = [](UI::ItemsList *list) {
@@ -100,11 +102,11 @@ namespace Falltergeist
             mineList->setItems(Game::Game::getInstance()->player()->inventory());
             addUI("mineList", mineList);
 
-            auto mineInventoryScrollUpButton = imageButtonFactory->getByType(ImageButtonType::DIALOG_UP_ARROW, {190, 56});
+            auto mineInventoryScrollUpButton = _imageButtonFactory->getByType(ImageButtonType::DIALOG_UP_ARROW, {190, 56});
             mineInventoryScrollUpButton->mouseClickHandler().add([=](...) { scrollUp(mineList); });
             addUI(mineInventoryScrollUpButton);
 
-            auto mineInventoryScrollDownButton = imageButtonFactory->getByType(ImageButtonType::DIALOG_DOWN_ARROW, {190, 82});
+            auto mineInventoryScrollDownButton = _imageButtonFactory->getByType(ImageButtonType::DIALOG_DOWN_ARROW, {190, 82});
             mineInventoryScrollDownButton->mouseClickHandler().add([=](...) { scrollDown(mineList); });
             addUI(mineInventoryScrollDownButton);
 
@@ -113,11 +115,11 @@ namespace Falltergeist
             sellList->setSlotsNumber(3);
             addUI("sellList", sellList);
 
-            auto sellInventoryScrollUpButton = imageButtonFactory->getByType(ImageButtonType::INVENTORY_UP_ARROW, {208, 114});
+            auto sellInventoryScrollUpButton = _imageButtonFactory->getByType(ImageButtonType::INVENTORY_UP_ARROW, {208, 114});
             sellInventoryScrollUpButton->mouseClickHandler().add([=](...) { scrollUp(sellList); });
             addUI(sellInventoryScrollUpButton);
 
-            auto sellInventoryScrollDownButton = imageButtonFactory->getByType(ImageButtonType::INVENTORY_DOWN_ARROW, {208, 137});
+            auto sellInventoryScrollDownButton = _imageButtonFactory->getByType(ImageButtonType::INVENTORY_DOWN_ARROW, {208, 137});
             sellInventoryScrollDownButton->mouseClickHandler().add([=](...) { scrollDown(sellList); });
             addUI(sellInventoryScrollDownButton);
 
@@ -126,11 +128,11 @@ namespace Falltergeist
             theirsList->setSlotsNumber(3);
             addUI("theirsList", theirsList);
 
-            auto theirsInventoryScrollUpButton = imageButtonFactory->getByType(ImageButtonType::DIALOG_UP_ARROW, {421, 56});
+            auto theirsInventoryScrollUpButton = _imageButtonFactory->getByType(ImageButtonType::DIALOG_UP_ARROW, {421, 56});
             theirsInventoryScrollUpButton->mouseClickHandler().add([=](...) { scrollUp(theirsList); });
             addUI(theirsInventoryScrollUpButton);
 
-            auto theirsInventoryScrollDownButton = imageButtonFactory->getByType(ImageButtonType::DIALOG_DOWN_ARROW, {421, 82});
+            auto theirsInventoryScrollDownButton = _imageButtonFactory->getByType(ImageButtonType::DIALOG_DOWN_ARROW, {421, 82});
             theirsInventoryScrollDownButton->mouseClickHandler().add([=](...) { scrollDown(theirsList); });
             addUI(theirsInventoryScrollDownButton);
 
@@ -139,11 +141,11 @@ namespace Falltergeist
             buyList->setSlotsNumber(3);
             addUI("buyList", buyList);
 
-            auto buyInventoryScrollUpButton = imageButtonFactory->getByType(ImageButtonType::INVENTORY_UP_ARROW, {413, 114});
+            auto buyInventoryScrollUpButton = _imageButtonFactory->getByType(ImageButtonType::INVENTORY_UP_ARROW, {413, 114});
             buyInventoryScrollUpButton->mouseClickHandler().add([=](...) { scrollUp(buyList); });
             addUI(buyInventoryScrollUpButton);
 
-            auto buyInventoryScrollDownButton = imageButtonFactory->getByType(ImageButtonType::INVENTORY_DOWN_ARROW, {413, 137});
+            auto buyInventoryScrollDownButton = _imageButtonFactory->getByType(ImageButtonType::INVENTORY_DOWN_ARROW, {413, 137});
             buyInventoryScrollDownButton->mouseClickHandler().add([=](...) { scrollDown(buyList); });
             addUI(buyInventoryScrollDownButton);
 
@@ -259,14 +261,9 @@ namespace Falltergeist
             resetTransaction();
         }
 
-        Game::CritterObject *CritterBarter::trader()
+        Game::CritterObject *CritterBarter::trader() const
         {
             return _trader;
-        }
-
-        void CritterBarter::setTrader(Game::CritterObject *trader)
-        {
-            _trader = trader;
         }
     }
 }

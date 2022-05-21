@@ -38,11 +38,12 @@ namespace Falltergeist
         using ImageButtonType = UI::Factory::ImageButtonFactory::Type;
         using Point = Graphics::Point;
 
-        Inventory::Inventory(std::shared_ptr<UI::IResourceManager> resourceManager, std::shared_ptr<ILogger> logger) : State()
-        {
-            this->resourceManager = std::move(resourceManager);
-            this->logger = std::move(logger);
-            imageButtonFactory = std::make_unique<UI::Factory::ImageButtonFactory>(this->resourceManager);
+        Inventory::Inventory(
+            std::shared_ptr<UI::IResourceManager> resourceManager,
+            std::shared_ptr<Input::Mouse> mouse,
+            std::shared_ptr<ILogger> logger
+        ) : State(mouse), _logger(logger), _resourceManager(resourceManager) {
+            _imageButtonFactory = std::make_unique<UI::Factory::ImageButtonFactory>(_resourceManager);
 
             pushHandler().add([](Event::State* ev) {
                 Game::Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::ACTION);
@@ -71,18 +72,18 @@ namespace Falltergeist
 
             setPosition((game->renderer()->size() - Point(499, 377 + panelHeight)) / 2); // 499x377 = art/intrface/invbox.frm
 
-            addUI("background", resourceManager->getImage("art/intrface/invbox.frm"));
+            addUI("background", _resourceManager->getImage("art/intrface/invbox.frm"));
             getUI("background")->mouseClickHandler().add(std::bind(&Inventory::backgroundRightClick, this, std::placeholders::_1));
 
-            addUI("button_up",   imageButtonFactory->getByType(ImageButtonType::INVENTORY_UP_ARROW,   {128, 40}));
-            addUI("button_down", imageButtonFactory->getByType(ImageButtonType::INVENTORY_DOWN_ARROW, {128, 65}));
-            auto buttonDownDisabled = resourceManager->getImage("art/intrface/invdnds.frm");
-            auto buttonUpDisabled = resourceManager->getImage("art/intrface/invupds.frm");
+            addUI("button_up",   _imageButtonFactory->getByType(ImageButtonType::INVENTORY_UP_ARROW,   {128, 40}));
+            addUI("button_down", _imageButtonFactory->getByType(ImageButtonType::INVENTORY_DOWN_ARROW, {128, 65}));
+            auto buttonDownDisabled = _resourceManager->getImage("art/intrface/invdnds.frm");
+            auto buttonUpDisabled = _resourceManager->getImage("art/intrface/invupds.frm");
             buttonUpDisabled->setPosition(Point(128, 40));
             buttonDownDisabled->setPosition(Point(128, 65));
             addUI("button_up_disabled", buttonUpDisabled);
             addUI("button_down_disabled", buttonDownDisabled);
-            addUI("button_done", imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {438, 328}));
+            addUI("button_done", _imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {438, 328}));
 
             getUI("button_done")->mouseClickHandler().add(std::bind(&Inventory::onDoneButtonClick, this, std::placeholders::_1));
             getUI("button_up")->mouseClickHandler().add(  std::bind(&Inventory::onScrollUpButtonClick, this, std::placeholders::_1));
@@ -375,7 +376,7 @@ namespace Falltergeist
 
         std::string Inventory::_handItemSummary (Game::ItemObject* hand)
         {
-            Game::ObjectFactory objectFactory(logger);
+            Game::ObjectFactory objectFactory(_logger);
 
             std::stringstream ss;
             if (hand)

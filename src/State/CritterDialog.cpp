@@ -24,9 +24,11 @@ namespace Falltergeist {
     namespace State {
         using ImageButtonType = UI::Factory::ImageButtonFactory::Type;
 
-        CritterDialog::CritterDialog(std::shared_ptr<UI::IResourceManager> resourceManager) : State() {
-            this->resourceManager = resourceManager;
-            imageButtonFactory = std::make_unique<UI::Factory::ImageButtonFactory>(resourceManager);
+        CritterDialog::CritterDialog(
+            std::shared_ptr<UI::IResourceManager> resourceManager,
+            std::shared_ptr<Input::Mouse> mouse
+        ) : State(mouse), _resourceManager(resourceManager) {
+            _imageButtonFactory = std::make_unique<UI::Factory::ImageButtonFactory>(resourceManager);
         }
 
         void CritterDialog::init() {
@@ -40,7 +42,7 @@ namespace Falltergeist {
 
             setPosition((Game::Game::getInstance()->renderer()->size() - Graphics::Point(640, 480)) / 2 + Graphics::Point(0, 291));
 
-            auto background = resourceManager->getImage("art/intrface/di_talk.frm");
+            auto background = _resourceManager->getImage("art/intrface/di_talk.frm");
             addUI("background", background);
 
             auto question = new UI::TextArea("question", 140, -62);
@@ -79,11 +81,11 @@ namespace Falltergeist {
                 [](Event::Mouse* event) { Game::Game::getInstance()->mouse()->setState(Input::Mouse::Cursor::BIG_ARROW); });
 
             // Interface buttons
-            auto reviewButton = imageButtonFactory->getByType(ImageButtonType::DIALOG_REVIEW_BUTTON, {13, 154});
+            auto reviewButton = _imageButtonFactory->getByType(ImageButtonType::DIALOG_REVIEW_BUTTON, {13, 154});
             reviewButton->mouseClickHandler().add(std::bind(&CritterDialog::onReviewButtonClick, this, std::placeholders::_1));
             addUI(reviewButton);
 
-            auto barterButton = imageButtonFactory->getByType(ImageButtonType::DIALOG_RED_BUTTON, {593, 40});
+            auto barterButton = _imageButtonFactory->getByType(ImageButtonType::DIALOG_RED_BUTTON, {593, 40});
             barterButton->mouseClickHandler().add(std::bind(&CritterDialog::onBarterButtonClick, this, std::placeholders::_1));
             addUI(barterButton);
         }
@@ -100,11 +102,11 @@ namespace Falltergeist {
             question->setLineOffset(0);
         }
 
-        void CritterDialog::onAnswerIn(UI::TextArea* target) {
+        void CritterDialog::_onAnswerIn(UI::TextArea* target) {
             target->setFont("font1.aaf", {0xff, 0xff, 0x7f, 0xff});
         }
 
-        void CritterDialog::onAnswerOut(UI::TextArea* target) {
+        void CritterDialog::_onAnswerOut(UI::TextArea* target) {
             target->setFont("font1.aaf", {0x3f, 0xf8, 0x00, 0xff});
         }
 
@@ -221,9 +223,9 @@ namespace Falltergeist {
             answer->setWordWrap(true);
             answer->setSize({370, 0});
 
-            answer->mouseInHandler().add([=](Event::Mouse* event) { onAnswerIn(answer); });
-            answer->mouseOutHandler().add([=](Event::Mouse* event) { onAnswerOut(answer); });
-            answer->mouseClickHandler().add([=](Event::Mouse* event) { onAnswerClick(answer); });
+            answer->mouseInHandler().add([=](Event::Mouse* event) { _onAnswerIn(answer); });
+            answer->mouseOutHandler().add([=](Event::Mouse* event) { _onAnswerOut(answer); });
+            answer->mouseClickHandler().add([=](Event::Mouse* event) { _onAnswerClick(answer); });
             _answers.push_back(answer);
             addUI(answer);
         }
@@ -232,7 +234,7 @@ namespace Falltergeist {
             return _answers.size() > 0;
         }
 
-        void CritterDialog::onAnswerClick(UI::TextArea* target) {
+        void CritterDialog::_onAnswerClick(UI::TextArea* target) {
             size_t i = 0;
             for (auto answer : _answers) {
                 if (answer == target) {

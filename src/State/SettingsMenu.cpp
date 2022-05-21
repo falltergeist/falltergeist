@@ -21,10 +21,11 @@ namespace Falltergeist
         using ImageButtonType = UI::Factory::ImageButtonFactory::Type;
         using Point = Graphics::Point;
 
-        SettingsMenu::SettingsMenu(std::shared_ptr<UI::IResourceManager> resourceManager) : State()
-        {
-            this->resourceManager = resourceManager;
-            imageButtonFactory = std::make_unique<UI::Factory::ImageButtonFactory>(resourceManager);
+        SettingsMenu::SettingsMenu(
+            std::shared_ptr<UI::IResourceManager> resourceManager,
+            std::shared_ptr<Input::Mouse> mouse
+        ) : State(mouse), _resourceManager(resourceManager) {
+            _imageButtonFactory = std::make_unique<UI::Factory::ImageButtonFactory>(_resourceManager);
         }
 
         void SettingsMenu::init()
@@ -38,7 +39,7 @@ namespace Falltergeist
             setFullscreen(true);
 
             // background
-            auto background = resourceManager->getImage("art/intrface/prefscrn.frm");
+            auto background = _resourceManager->getImage("art/intrface/prefscrn.frm");
             Point backgroundPos = Point((Game::Game::getInstance()->renderer()->size() - background->size()) / 2);
             int backgroundX = backgroundPos.x();
             int backgroundY = backgroundPos.y();
@@ -292,22 +293,22 @@ namespace Falltergeist
             // BUTTONS
 
             // button: Default
-            auto defaultButton = imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {backgroundX + 23, backgroundY + 450});
+            auto defaultButton = _imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {backgroundX + 23, backgroundY + 450});
             defaultButton->mouseClickHandler().add(std::bind(&SettingsMenu::onDefaultButtonClick, this, std::placeholders::_1));
             addUI(defaultButton);
 
             // button: Done
-            auto doneButton = imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {backgroundX + 148, backgroundY + 450});
+            auto doneButton = _imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {backgroundX + 148, backgroundY + 450});
             doneButton->mouseClickHandler().add([this](Event::Event* event){ this->doSave(); });
             addUI(doneButton);
 
             // button: Cancel
-            auto cancelButton = imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {backgroundX + 263, backgroundY + 450});
+            auto cancelButton = _imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {backgroundX + 263, backgroundY + 450});
             cancelButton->mouseClickHandler().add([this](Event::Event* event){ this->doCancel(); });
             addUI(cancelButton);
 
             // button: Affect player speed
-            auto affectPlayerSpeedCheckBox = imageButtonFactory->getByType(ImageButtonType::CHECKBOX, {backgroundX + 383, backgroundY + 68});
+            auto affectPlayerSpeedCheckBox = _imageButtonFactory->getByType(ImageButtonType::CHECKBOX, {backgroundX + 383, backgroundY + 68});
             affectPlayerSpeedCheckBox->setChecked(settings->playerSpeedup());
             addUI("player_speedup", affectPlayerSpeedCheckBox);
 
@@ -315,8 +316,8 @@ namespace Falltergeist
             // COMBAT SPEED SLIDER
             auto combatSpeedSlider = new UI::Slider(
                 {backgroundX + 384, backgroundY + 50},
-                std::unique_ptr<UI::Image>(resourceManager->getImage("art/intrface/prfsldon.frm")),
-                std::unique_ptr<UI::Image>(resourceManager->getImage("art/intrface/prfsldof.frm"))
+                std::unique_ptr<UI::Image>(_resourceManager->getImage("art/intrface/prfsldon.frm")),
+                std::unique_ptr<UI::Image>(_resourceManager->getImage("art/intrface/prfsldof.frm"))
             );
             combatSpeedSlider->setMinValue(0.0);
             combatSpeedSlider->setMaxValue(50.0);
@@ -326,8 +327,8 @@ namespace Falltergeist
             // TEXT DELAY SLIDER
             auto textDelaySlider = new UI::Slider(
                 {backgroundX + 384, backgroundY + 125},
-                std::unique_ptr<UI::Image>(resourceManager->getImage("art/intrface/prfsldon.frm")),
-                std::unique_ptr<UI::Image>(resourceManager->getImage("art/intrface/prfsldof.frm"))
+                std::unique_ptr<UI::Image>(_resourceManager->getImage("art/intrface/prfsldon.frm")),
+                std::unique_ptr<UI::Image>(_resourceManager->getImage("art/intrface/prfsldof.frm"))
             );
             textDelaySlider->setValue(settings->textDelay());
             addUI("text_delay",textDelaySlider);
@@ -335,8 +336,8 @@ namespace Falltergeist
             // MASTER AUDIO VOLUME SLIDER
             auto masterAudioVolumeSlider = new UI::Slider(
                 {backgroundX + 384, backgroundY + 196},
-                std::unique_ptr<UI::Image>(resourceManager->getImage("art/intrface/prfsldon.frm")),
-                std::unique_ptr<UI::Image>(resourceManager->getImage("art/intrface/prfsldof.frm"))
+                std::unique_ptr<UI::Image>(_resourceManager->getImage("art/intrface/prfsldon.frm")),
+                std::unique_ptr<UI::Image>(_resourceManager->getImage("art/intrface/prfsldof.frm"))
             );
             masterAudioVolumeSlider->setValue(settings->masterVolume());
             addUI("master_volume", masterAudioVolumeSlider);
@@ -344,8 +345,8 @@ namespace Falltergeist
             // MUSIC VOLUME SLIDER
             auto musicVolumeSlider = new UI::Slider(
                 {backgroundX + 384, backgroundY + 196 + 51},
-                std::unique_ptr<UI::Image>(resourceManager->getImage("art/intrface/prfsldon.frm")),
-                std::unique_ptr<UI::Image>(resourceManager->getImage("art/intrface/prfsldof.frm"))
+                std::unique_ptr<UI::Image>(_resourceManager->getImage("art/intrface/prfsldon.frm")),
+                std::unique_ptr<UI::Image>(_resourceManager->getImage("art/intrface/prfsldof.frm"))
             );
             musicVolumeSlider->setValue(settings->musicVolume());
             addUI("music_volume", musicVolumeSlider);
@@ -357,8 +358,8 @@ namespace Falltergeist
             // SOUND EFFECTS VOLUME SLIDER
             auto soundEffectsVolumeSlider = new UI::Slider(
                 {backgroundX + 384, backgroundY + 196 + 51 * 2},
-                std::unique_ptr<UI::Image>(resourceManager->getImage("art/intrface/prfsldon.frm")),
-                std::unique_ptr<UI::Image>(resourceManager->getImage("art/intrface/prfsldof.frm"))
+                std::unique_ptr<UI::Image>(_resourceManager->getImage("art/intrface/prfsldon.frm")),
+                std::unique_ptr<UI::Image>(_resourceManager->getImage("art/intrface/prfsldof.frm"))
             );
             soundEffectsVolumeSlider->setValue(settings->sfxVolume());
             addUI("sfx_volume", soundEffectsVolumeSlider);
@@ -366,8 +367,8 @@ namespace Falltergeist
             // SPEECH VOLUME SLIDER
             auto speechVolumeSlider = new UI::Slider(
                 {backgroundX + 384, backgroundY + 196 + 51 * 3},
-                std::unique_ptr<UI::Image>(resourceManager->getImage("art/intrface/prfsldon.frm")),
-                std::unique_ptr<UI::Image>(resourceManager->getImage("art/intrface/prfsldof.frm"))
+                std::unique_ptr<UI::Image>(_resourceManager->getImage("art/intrface/prfsldon.frm")),
+                std::unique_ptr<UI::Image>(_resourceManager->getImage("art/intrface/prfsldof.frm"))
             );
             speechVolumeSlider->setValue(settings->voiceVolume());
             addUI("voice_volume", speechVolumeSlider);
@@ -375,8 +376,8 @@ namespace Falltergeist
             // BRIGHTNESS LEVEL SLIDER
             auto brightnessLevelSlider = new UI::Slider(
                 {backgroundX + 384, backgroundY + 196 + 51 * 4},
-                std::unique_ptr<UI::Image>(resourceManager->getImage("art/intrface/prfsldon.frm")),
-                std::unique_ptr<UI::Image>(resourceManager->getImage("art/intrface/prfsldof.frm"))
+                std::unique_ptr<UI::Image>(_resourceManager->getImage("art/intrface/prfsldon.frm")),
+                std::unique_ptr<UI::Image>(_resourceManager->getImage("art/intrface/prfsldof.frm"))
             );
             brightnessLevelSlider->setValue(settings->brightness());
             addUI("brightness", brightnessLevelSlider);
@@ -384,8 +385,8 @@ namespace Falltergeist
             // MOUSE SENSITIVITY SLIDER
             auto mouseSensitivitySlider = new UI::Slider(
                 {backgroundX + 384, backgroundY + 196 + 51 * 5},
-                std::unique_ptr<UI::Image>(resourceManager->getImage("art/intrface/prfsldon.frm")),
-                std::unique_ptr<UI::Image>(resourceManager->getImage("art/intrface/prfsldof.frm"))
+                std::unique_ptr<UI::Image>(_resourceManager->getImage("art/intrface/prfsldon.frm")),
+                std::unique_ptr<UI::Image>(_resourceManager->getImage("art/intrface/prfsldof.frm"))
             );
             mouseSensitivitySlider->setValue(settings->mouseSensitivity());
             addUI("mouse_sensitivity",mouseSensitivitySlider);

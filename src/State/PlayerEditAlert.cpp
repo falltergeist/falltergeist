@@ -15,15 +15,12 @@ namespace Falltergeist
         using ImageButtonType = UI::Factory::ImageButtonFactory::Type;
         using Point = Graphics::Point;
 
-        PlayerEditAlert::PlayerEditAlert(std::shared_ptr<UI::IResourceManager> resourceManager) : State()
-        {
-            this->resourceManager = resourceManager;
-            imageButtonFactory = std::make_unique<UI::Factory::ImageButtonFactory>(resourceManager);
-        }
-
-        void PlayerEditAlert::setMessage(const std::string& message)
-        {
-            _message = message;
+        PlayerEditAlert::PlayerEditAlert(
+            std::shared_ptr<UI::IResourceManager> resourceManager,
+            std::shared_ptr<Input::Mouse> mouse,
+            const std::string& message
+        ) : State(mouse), _message(message), _resourceManager(resourceManager) {
+            _imageButtonFactory = std::make_unique<UI::Factory::ImageButtonFactory>(_resourceManager);
         }
 
         void PlayerEditAlert::init()
@@ -36,7 +33,7 @@ namespace Falltergeist
             setFullscreen(false);
             setModal(true);
 
-            auto bg = resourceManager->getImage("art/intrface/lgdialog.frm");
+            auto bg = _resourceManager->getImage("art/intrface/lgdialog.frm");
 
             Point bgPos = Point((Game::Game::getInstance()->renderer()->size() - Point(640, 480)) / 2);
             int bgX = bgPos.x();
@@ -50,10 +47,10 @@ namespace Falltergeist
             message->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
             message->setFont("font1.aaf", {0xff, 0x9f, 0x48, 0xff});
 
-            auto doneBox = resourceManager->getImage("art/intrface/donebox.frm");
+            auto doneBox = _resourceManager->getImage("art/intrface/donebox.frm");
             doneBox->setPosition(bgPos + Point(254, 270));
 
-            auto doneButton = imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {bgX + 264, bgY + 273});
+            auto doneButton = _imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {bgX + 264, bgY + 273});
             doneButton->mouseClickHandler().add([this](Event::Mouse* event)
             {
                 this->onDoneButtonClick(event);

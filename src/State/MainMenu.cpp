@@ -27,11 +27,12 @@ namespace Falltergeist
         using ImageButtonType = UI::Factory::ImageButtonFactory::Type;
         using Point = Graphics::Point;
 
-        MainMenu::MainMenu(std::shared_ptr<UI::IResourceManager> resourceManager, std::shared_ptr<ILogger> logger) : State()
-        {
-            this->resourceManager = std::move(resourceManager);
-            this->logger = std::move(logger);
-            imageButtonFactory = std::make_unique<UI::Factory::ImageButtonFactory>(this->resourceManager);
+        MainMenu::MainMenu(
+            std::shared_ptr<UI::IResourceManager> resourceManager,
+            std::shared_ptr<Input::Mouse> mouse,
+            std::shared_ptr<ILogger> logger
+        ) : State(mouse), _logger(logger), _resourceManager(resourceManager) {
+            _imageButtonFactory = std::make_unique<UI::Factory::ImageButtonFactory>(_resourceManager);
         }
 
         MainMenu::~MainMenu()
@@ -52,30 +53,30 @@ namespace Falltergeist
             auto renderer = Game::Game::getInstance()->renderer();
             setPosition((renderer->size() - Point(640, 480)) / 2);
 
-            addUI("background", resourceManager->getImage("art/intrface/mainmenu.frm"));
+            addUI("background", _resourceManager->getImage("art/intrface/mainmenu.frm"));
 
             // intro button
-            auto introButton = addUI(imageButtonFactory->getByType(ImageButtonType::MENU_RED_CIRCLE, {30, 19}));
+            auto introButton = addUI(_imageButtonFactory->getByType(ImageButtonType::MENU_RED_CIRCLE, {30, 19}));
             introButton->mouseClickHandler().add(std::bind(&MainMenu::onIntroButtonClick, this, std::placeholders::_1));
 
             // new game button
-            auto newGameButton = addUI(imageButtonFactory->getByType(ImageButtonType::MENU_RED_CIRCLE, {30, 19 + 41}));
+            auto newGameButton = addUI(_imageButtonFactory->getByType(ImageButtonType::MENU_RED_CIRCLE, {30, 19 + 41}));
             newGameButton->mouseClickHandler().add(std::bind(&MainMenu::onNewGameButtonClick, this, std::placeholders::_1));
 
             // load game button
-            auto loadGameButton = addUI(imageButtonFactory->getByType(ImageButtonType::MENU_RED_CIRCLE, {30, 19 + 41 * 2}));
+            auto loadGameButton = addUI(_imageButtonFactory->getByType(ImageButtonType::MENU_RED_CIRCLE, {30, 19 + 41 * 2}));
             loadGameButton->mouseClickHandler().add(std::bind(&MainMenu::onLoadGameButtonClick, this, std::placeholders::_1));
 
             // settings button
-            auto settingsButton = addUI(imageButtonFactory->getByType(ImageButtonType::MENU_RED_CIRCLE, {30, 19 + 41 * 3}));
+            auto settingsButton = addUI(_imageButtonFactory->getByType(ImageButtonType::MENU_RED_CIRCLE, {30, 19 + 41 * 3}));
             settingsButton->mouseClickHandler().add(std::bind(&MainMenu::onSettingsButtonClick, this, std::placeholders::_1));
 
             // credits button
-            auto creditsButton = addUI(imageButtonFactory->getByType(ImageButtonType::MENU_RED_CIRCLE, {30, 19 + 41 * 4}));
+            auto creditsButton = addUI(_imageButtonFactory->getByType(ImageButtonType::MENU_RED_CIRCLE, {30, 19 + 41 * 4}));
             creditsButton->mouseClickHandler().add(std::bind(&MainMenu::onCreditsButtonClick, this, std::placeholders::_1));
 
             // exit button
-            auto exitButton = addUI(imageButtonFactory->getByType(ImageButtonType::MENU_RED_CIRCLE, {30, 19 + 41 * 5}));
+            auto exitButton = addUI(_imageButtonFactory->getByType(ImageButtonType::MENU_RED_CIRCLE, {30, 19 + 41 * 5}));
             exitButton->mouseClickHandler().add(std::bind(&MainMenu::onExitButtonClick, this, std::placeholders::_1));
 
             auto font4 = ResourceManager::getInstance()->font("font4.aaf");
@@ -149,7 +150,7 @@ namespace Falltergeist
 
         void MainMenu::doSettings()
         {
-            Game::Game::getInstance()->pushState(new SettingsMenu(resourceManager));
+            Game::Game::getInstance()->pushState(new SettingsMenu(_resourceManager, mouse()));
         }
 
         void MainMenu::doIntro()
@@ -186,7 +187,7 @@ namespace Falltergeist
         void MainMenu::onNewGameStart(Event::State* event)
         {
             fadeDoneHandler().clear();
-            Game::Game::getInstance()->pushState(new NewGame(resourceManager, logger));
+            Game::Game::getInstance()->pushState(new NewGame(_resourceManager, mouse(), _logger));
         }
 
         void MainMenu::onLoadGameButtonClick(Event::Mouse* event)
@@ -197,7 +198,7 @@ namespace Falltergeist
         void MainMenu::onLoadGameStart(Event::State* event)
         {
             fadeDoneHandler().clear();
-            Game::Game::getInstance()->pushState(new LoadGame(resourceManager));
+            Game::Game::getInstance()->pushState(new LoadGame(_resourceManager, mouse()));
         }
 
         void MainMenu::onSettingsButtonClick(Event::Mouse* event)
@@ -213,8 +214,8 @@ namespace Falltergeist
         void MainMenu::onIntroStart(Event::State* event)
         {
             fadeDoneHandler().clear();
-            Game::Game::getInstance()->pushState(new Movie(17));
-            Game::Game::getInstance()->pushState(new Movie(1));
+            Game::Game::getInstance()->pushState(new Movie(mouse(), 17)); // TODO replace raw integers with consts
+            Game::Game::getInstance()->pushState(new Movie(mouse(), 1));
         }
 
         void MainMenu::onCreditsButtonClick(Event::Mouse* event)
@@ -225,7 +226,7 @@ namespace Falltergeist
         void MainMenu::onCreditsStart(Event::State* event)
         {
             fadeDoneHandler().clear();
-            Game::Game::getInstance()->pushState(new Credits());
+            Game::Game::getInstance()->pushState(new Credits(mouse()));
         }
 
         void MainMenu::onKeyDown(Event::Keyboard* event)

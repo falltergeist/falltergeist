@@ -17,8 +17,7 @@ namespace Falltergeist
 {
     namespace State
     {
-        Credits::Credits() : State()
-        {
+        Credits::Credits(std::shared_ptr<Input::Mouse> mouse) : State(mouse) {
         }
 
         Credits::~Credits()

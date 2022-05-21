@@ -18,19 +18,25 @@ namespace Falltergeist
         class PipBoy final: public State
         {
             public:
-                PipBoy(std::shared_ptr<UI::IResourceManager> resourceManager);
+                PipBoy(
+                    std::shared_ptr<UI::IResourceManager> resourceManager,
+                    std::shared_ptr<Input::Mouse> mouse
+                );
+
                 ~PipBoy() override;
 
                 void init() override;
 
                 void onCloseButtonClick(Event::Mouse* event);
+
                 void onKeyDown(Event::Keyboard* event) override;
 
             private:
-                std::shared_ptr<UI::IResourceManager> resourceManager;
-                std::unique_ptr<UI::Factory::ImageButtonFactory> imageButtonFactory;
+                std::string _getSpecialGreeting(int month, int day);
 
-                std::string getSpecialGreeting(int month, int day);
+                std::shared_ptr<UI::IResourceManager> _resourceManager;
+
+                std::unique_ptr<UI::Factory::ImageButtonFactory> _imageButtonFactory;
         };
     }
 }

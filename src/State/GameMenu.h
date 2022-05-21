@@ -19,25 +19,38 @@ namespace Falltergeist
         class GameMenu final : public State
         {
             public:
-                GameMenu(std::shared_ptr<UI::IResourceManager> resourceManager, std::shared_ptr<ILogger> logger);
+                GameMenu(
+                    std::shared_ptr<UI::IResourceManager> resourceManager,
+                    std::shared_ptr<Input::Mouse> mouse,
+                    std::shared_ptr<ILogger> logger
+                );
+
                 virtual ~GameMenu() = default;
 
                 void init() override;
 
                 void doSaveGame();
+
                 void doLoadGame();
+
                 void doPreferences();
+
                 void doExit();
+
                 void closeMenu();
 
                 void onKeyDown(Event::Keyboard* event) override;
+
                 void onStateActivate(Event::State* event) override;
+
                 void onStateDeactivate(Event::State* event) override;
 
             private:
-                std::shared_ptr<ILogger> logger;
-                std::shared_ptr<UI::IResourceManager> resourceManager;
-                std::unique_ptr<UI::Factory::ImageButtonFactory> imageButtonFactory;
+                std::shared_ptr<ILogger> _logger;
+
+                std::shared_ptr<UI::IResourceManager> _resourceManager;
+
+                std::unique_ptr<UI::Factory::ImageButtonFactory> _imageButtonFactory;
         };
     }
 }

@@ -20,7 +20,10 @@ namespace Falltergeist
         class PlayerEditName final : public State
         {
             public:
-                PlayerEditName(std::shared_ptr<UI::IResourceManager> resourceManager);
+                PlayerEditName(
+                    std::shared_ptr<UI::IResourceManager> resourceManager,
+                    std::shared_ptr<Input::Mouse> mouse
+                );
 
                 virtual ~PlayerEditName() = default;
 
@@ -34,7 +37,9 @@ namespace Falltergeist
 
                 void doBack();
 
-            protected:
+            private:
+                void _onTextAreaKeyDown(Event::Keyboard* event, UI::TextArea* target);
+
                 float _blinkingCursorMillisecondsTracked = 0;
 
                 UI::TextArea* _name = nullptr;
@@ -43,12 +48,9 @@ namespace Falltergeist
 
                 std::map<char,char> _keyCodes;
 
-            private:
                 std::shared_ptr<UI::IResourceManager> _resourceManager;
 
                 std::unique_ptr<UI::Factory::ImageButtonFactory> _imageButtonFactory;
-
-                void _onTextAreaKeyDown(Event::Keyboard* event, UI::TextArea* target);
         };
     }
 }

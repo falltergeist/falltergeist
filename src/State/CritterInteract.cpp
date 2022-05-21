@@ -28,12 +28,14 @@ namespace Falltergeist
     {
         using Point = Graphics::Point;
 
-        CritterInteract::CritterInteract(std::shared_ptr<UI::IResourceManager> resourceManager) : State()
-        {
-            this->resourceManager = resourceManager;
-            _dialog = new CritterDialog(resourceManager);
-            _review = new CritterDialogReview(resourceManager);
-            _barter = new CritterBarter(resourceManager);
+        CritterInteract::CritterInteract(
+            std::shared_ptr<UI::IResourceManager> resourceManager,
+            std::shared_ptr<Input::Mouse> mouse,
+            Game::CritterObject* critter
+        ) : State(mouse), _critter(critter), _resourceManager(resourceManager) {
+            _dialog = new CritterDialog(_resourceManager, mouse);
+            _review = new CritterDialogReview(_resourceManager, mouse);
+            _barter = new CritterBarter(_resourceManager, mouse, critter);
             // pre-init review, so we can push questions/answers to it.
             _review->init();
         }
@@ -93,7 +95,7 @@ namespace Falltergeist
             {
                 auto lst = ResourceManager::getInstance()->lstFileType("art/backgrnd/backgrnd.lst");
                 std::string bgImage = "art/backgrnd/" + lst->strings()->at(backgroundID());
-                auto bg = resourceManager->getImage(bgImage);
+                auto bg = _resourceManager->getImage(bgImage);
                 bg->setPosition({128, 15});
                 addUI(bg);
 
@@ -142,13 +144,13 @@ namespace Falltergeist
                 addUI("head",head);
             }
 
-            addUI("background", resourceManager->getImage("art/intrface/alltlk.frm"));
+            addUI("background", _resourceManager->getImage("art/intrface/alltlk.frm"));
 
-            auto hilight1 = resourceManager->getImage("data/hilight1.png");
+            auto hilight1 = _resourceManager->getImage("data/hilight1.png");
             hilight1->setPosition({423, 20});
             addUI(hilight1);
 
-            auto hilight2 = resourceManager->getImage("data/hilight2.png");
+            auto hilight2 = _resourceManager->getImage("data/hilight2.png");
             hilight2->setPosition({128, 84});
             addUI(hilight2);
 
@@ -157,8 +159,6 @@ namespace Falltergeist
             _oldCameraCenter = locationState->camera()->center();
 
             locationState->camera()->setCenter(critter()->hexagon()->position() + Point(0, 100));
-
-            _barter->setTrader(critter());
         }
 
         int CritterInteract::backgroundID()
@@ -194,11 +194,6 @@ namespace Falltergeist
         Game::CritterObject* CritterInteract::critter()
         {
             return _critter;
-        }
-
-        void CritterInteract::setCritter(Game::CritterObject* critter)
-        {
-            _critter = critter;
         }
 
         int CritterInteract::msgFileID()

@@ -12,7 +12,7 @@ namespace Falltergeist
 {
     namespace State
     {
-        State::State() : Event::EventTarget(Game::Game::getInstance()->eventDispatcher())
+        State::State(std::shared_ptr<Input::Mouse> mouse) : Event::EventTarget(Game::Game::getInstance()->eventDispatcher()), _mouse(mouse)
         {
             activateHandler().add([this](Event::State* event) {
                 this->onStateActivate(event);
@@ -25,8 +25,7 @@ namespace Falltergeist
             });
         }
 
-        void State::init()
-        {
+        void State::init() {
             _initialized = true;
         }
 
@@ -183,10 +182,12 @@ namespace Falltergeist
 
         void State::onStateActivate(Event::State* event)
         {
+            _previousCursor = _mouse->state();
         }
 
         void State::onStateDeactivate(Event::State* event)
         {
+            _mouse->setState(_previousCursor);
         }
 
         void State::onKeyDown(Event::Keyboard* event)
@@ -251,6 +252,10 @@ namespace Falltergeist
             } else {
                 Game::Game::getInstance()->renderer()->fadeOut(0, 0, 0, 1000);
             }
+        }
+
+        std::shared_ptr<Input::Mouse> State::mouse() const {
+            return _mouse;
         }
     }
 }

@@ -18,8 +18,10 @@ namespace Falltergeist
         using ImageButtonType = UI::Factory::ImageButtonFactory::Type;
         using Point = Graphics::Point;
 
-        PlayerEditName::PlayerEditName(std::shared_ptr<UI::IResourceManager> resourceManager)
-            : State(), _resourceManager(resourceManager) {
+        PlayerEditName::PlayerEditName(
+            std::shared_ptr<UI::IResourceManager> resourceManager,
+            std::shared_ptr<Input::Mouse> mouse
+        ) : State(mouse), _resourceManager(resourceManager) {
             _imageButtonFactory = std::make_unique<UI::Factory::ImageButtonFactory>(_resourceManager);
         }
 

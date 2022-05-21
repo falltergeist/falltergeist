@@ -29,8 +29,11 @@ namespace Falltergeist
         using ImageButtonType = UI::Factory::ImageButtonFactory::Type;
         using Point = Graphics::Point;
 
-        PlayerCreate::PlayerCreate(std::shared_ptr<UI::IResourceManager> resourceManager, std::shared_ptr<ILogger> logger)
-            : State(), _logger(logger), _resourceManager(resourceManager) {
+        PlayerCreate::PlayerCreate(
+            std::shared_ptr<UI::IResourceManager> resourceManager,
+            std::shared_ptr<Input::Mouse> mouse,
+            std::shared_ptr<ILogger> logger
+        ): State(mouse), _logger(logger), _resourceManager(resourceManager) {
             _imageButtonFactory = std::make_unique<UI::Factory::ImageButtonFactory>(_resourceManager);
         }
 
@@ -537,8 +540,11 @@ namespace Falltergeist
 
                         if (!_traitToggle(number - 1))
                         {
-                            auto state = new PlayerEditAlert(_resourceManager);
-                            state->setMessage(_t(MSG_EDITOR, 148) + "\n" + _t(MSG_EDITOR, 149));
+                            auto state = new PlayerEditAlert(
+                                _resourceManager,
+                                mouse(),
+                                _t(MSG_EDITOR, 148) + "\n" + _t(MSG_EDITOR, 149)
+                            );
                             Game::Game::getInstance()->pushState(state);
                         }
                     }
@@ -551,8 +557,11 @@ namespace Falltergeist
                         _selectedImage = _images.at(name);
                         if (!_skillToggle(number - 1))
                         {
-                            auto state = new PlayerEditAlert(_resourceManager);
-                            state->setMessage(_t(MSG_EDITOR, 140) + "\n" + _t(MSG_EDITOR, 141));
+                            auto state = new PlayerEditAlert(
+                                _resourceManager,
+                                mouse(),
+                                _t(MSG_EDITOR, 140) + "\n" + _t(MSG_EDITOR, 141)
+                            );
                             Game::Game::getInstance()->pushState(state);
                         }
                     }
@@ -600,7 +609,7 @@ namespace Falltergeist
 
         void PlayerCreate::_doAge()
         {
-            Game::Game::getInstance()->pushState(new PlayerEditAge(_resourceManager));
+            Game::Game::getInstance()->pushState(new PlayerEditAge(_resourceManager, mouse()));
         }
 
         void PlayerCreate::_doBack()
@@ -619,17 +628,17 @@ namespace Falltergeist
 
         void PlayerCreate::_doGender()
         {
-            Game::Game::getInstance()->pushState(new PlayerEditGender(_resourceManager));
+            Game::Game::getInstance()->pushState(new PlayerEditGender(_resourceManager, mouse()));
         }
 
         void PlayerCreate::_doName()
         {
-            Game::Game::getInstance()->pushState(new PlayerEditName(_resourceManager));
+            Game::Game::getInstance()->pushState(new PlayerEditName(_resourceManager, mouse()));
         }
 
         void PlayerCreate::_doOptions()
         {
-            Game::Game::getInstance()->pushState(new PlayerCreateOptions(_resourceManager));
+            Game::Game::getInstance()->pushState(new PlayerCreateOptions(_resourceManager, mouse()));
         }
 
         void PlayerCreate::onKeyDown(Event::Keyboard* event)

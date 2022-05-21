@@ -310,38 +310,43 @@ namespace Falltergeist
 
         void PlayerPanel::openGameMenu()
         {
-            Game::Game::getInstance()->pushState(new State::GameMenu(resourceManager, logger));
+            auto game = Game::Game::getInstance();
+            game->pushState(new State::GameMenu(resourceManager, game->mouse(), logger));
             playWindowOpenSfx();
         }
 
         void PlayerPanel::openInventory()
         {
-            auto state = new State::Inventory(resourceManager, logger);
-            Game::Game::getInstance()->pushState(state);
+            auto game = Game::Game::getInstance();
+            game->pushState(new State::Inventory(resourceManager, game->mouse(), logger));
             playWindowOpenSfx();
         }
 
         void PlayerPanel::openSkilldex()
         {
-            Game::Game::getInstance()->pushState(new State::Skilldex(resourceManager));
+            auto game = Game::Game::getInstance();
+            game->pushState(new State::Skilldex(resourceManager, game->mouse()));
             playWindowOpenSfx();
         }
 
         void PlayerPanel::openMap()
         {
-            Game::Game::getInstance()->pushState(new State::WorldMap(resourceManager));
+            auto game = Game::Game::getInstance();
+            game->pushState(new State::WorldMap(resourceManager, game->mouse()));
             playWindowOpenSfx();
         }
 
         void PlayerPanel::openCharacterScreen()
         {
-            Game::Game::getInstance()->pushState(new State::PlayerEdit(resourceManager));
+            auto game = Game::Game::getInstance();
+            game->pushState(new State::PlayerEdit(resourceManager, game->mouse()));
             playWindowOpenSfx();
         }
 
         void PlayerPanel::openPipBoy()
         {
-            Game::Game::getInstance()->pushState(new State::PipBoy(resourceManager));
+            auto game = Game::Game::getInstance();
+            game->pushState(new State::PipBoy(resourceManager, game->mouse()));
             playWindowOpenSfx();
         }
 
@@ -398,12 +403,14 @@ namespace Falltergeist
                         openLoadGame();
                     }
                     break;
-                case SDLK_x:
-                    if (event->controlPressed())
-                    {
-                        Game::Game::getInstance()->pushState(new State::ExitConfirm(resourceManager, logger));
+                case SDLK_x: {
+                    if (event->controlPressed()) {
+                        auto game = Game::Game::getInstance();
+                        game->pushState(new State::ExitConfirm(resourceManager, game->mouse(), logger));
                         playWindowOpenSfx();
                     }
+                    break;
+                }
                 case SDLK_SLASH:
                     // @TODO: printCurrentTime();
                     break;
@@ -434,10 +441,12 @@ namespace Falltergeist
                 case SDLK_F7:
                     // @TODO: quick load logic
                     break;
-                case SDLK_F10:
-                    Game::Game::getInstance()->pushState(new State::ExitConfirm(resourceManager, logger));
+                case SDLK_F10: {
+                    auto game = Game::Game::getInstance();
+                    game->pushState(new State::ExitConfirm(resourceManager, game->mouse(), logger));
                     playWindowOpenSfx();
                     break;
+                }
                 case SDLK_F12:
                     // @TODO: save screenshot
                     break;
@@ -446,13 +455,15 @@ namespace Falltergeist
 
         void PlayerPanel::openSaveGame()
         {
-            Game::Game::getInstance()->pushState(new State::SaveGame(resourceManager));
+            auto game = Game::Game::getInstance();
+            game->pushState(new State::SaveGame(resourceManager, game->mouse()));
             playWindowOpenSfx();
         }
 
         void PlayerPanel::openLoadGame()
         {
-            Game::Game::getInstance()->pushState(new State::LoadGame(resourceManager));
+            auto game = Game::Game::getInstance();
+            game->pushState(new State::LoadGame(resourceManager, game->mouse()));
             playWindowOpenSfx();
         }
 

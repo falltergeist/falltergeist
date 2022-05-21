@@ -23,9 +23,7 @@ namespace Falltergeist
     {
         using Point = Graphics::Point;
 
-        Movie::Movie(int id) : State()
-        {
-            _id = id;
+        Movie::Movie(std::shared_ptr<Input::Mouse> mouse, int id) : State(mouse), _id(id) {
         }
 
         Movie::~Movie()
@@ -132,13 +130,13 @@ namespace Falltergeist
                     _nextSubLine = _subs->getSubLine(dynamic_cast<UI::MvePlayer*>(getUI("movie"))->frame());
                 }
             }
-            if (_effect_index<_effects.size() && frame>=_effects[_effect_index].frame) {
-                if (_effects[_effect_index].direction < 0) {
-                    Game::Game::getInstance()->renderer()->fadeIn(_effects[_effect_index].r, _effects[_effect_index].g, _effects[_effect_index].b, _effects[_effect_index].frames, true);
+            if (_effectIndex <_effects.size() && frame>=_effects[_effectIndex].frame) {
+                if (_effects[_effectIndex].direction < 0) {
+                    Game::Game::getInstance()->renderer()->fadeIn(_effects[_effectIndex].r, _effects[_effectIndex].g, _effects[_effectIndex].b, _effects[_effectIndex].frames, true);
                 } else {
-                    Game::Game::getInstance()->renderer()->fadeOut(_effects[_effect_index].r, _effects[_effect_index].g, _effects[_effect_index].b, _effects[_effect_index].frames, true);
+                    Game::Game::getInstance()->renderer()->fadeOut(_effects[_effectIndex].r, _effects[_effectIndex].g, _effects[_effectIndex].b, _effects[_effectIndex].frames, true);
                 }
-                _effect_index++;
+                _effectIndex++;
             }
 
             if (!_started)
