@@ -78,6 +78,7 @@ namespace Falltergeist {
             // TODO: get rid of dynamic_casts by using template member function?
             if (auto mouseEvent = dynamic_cast<Event::Mouse*>(event)) {
                 handle(mouseEvent);
+                return;
             }
 
             if (auto keyboardEvent = dynamic_cast<Event::Keyboard*>(event)) {
@@ -91,6 +92,7 @@ namespace Falltergeist {
                         break;
                     }
                 }
+                return;
             }
         }
 
@@ -99,10 +101,9 @@ namespace Falltergeist {
                 return;
             }
             using Mouse = Event::Mouse;
-            Point relPos = mouseEvent->position() - this->position();
+            Point relPos = mouseEvent->position() - position();
 
-            if (this->opaque(relPos)) // mouse cursor is over the element
-            {
+            if (opaque(relPos)) { // mouse cursor is over the element
                 switch (mouseEvent->originalType()) {
                     case Mouse::Type::MOVE: {
 
@@ -165,8 +166,7 @@ namespace Falltergeist {
                         break;
                     }
                 }
-            } else // mouse cursor is outside of this element or other element is in front
-            {
+            } else { // mouse cursor is outside of this element or other element is in front
                 // stop processing if this element has no active interactions with the mouse
                 if (!_hovered && !_leftButtonPressed && !_rightButtonPressed && !_drag) {
                     return;

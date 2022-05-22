@@ -39,7 +39,12 @@ namespace Falltergeist
 
                 virtual const Graphics::Size& size() const;
 
-                virtual bool opaque(const Graphics::Point &pos);
+                /**
+                 * Check if given "pixel" is "opaque". Used for mouse event handling.
+                 * "at" value is relative to upper left corner of ui element (not entire scene/screne/etc).
+                 * at = mouse.position() - ui.position()
+                 */
+                virtual bool opaque(const Graphics::Point &at);
 
                 virtual bool visible() const;
 

@@ -47,7 +47,7 @@ namespace Falltergeist
             setX((renderer->size().width() - 640) / 2);
             setY(renderer->size().height() - _background->size().height());
 
-            _background->setPosition(this->position());
+            _background->setPosition(position());
 
             mouseInHandler().add([=](Event::Event* event) {
                 _previousCursor = mouse->cursor();
@@ -60,24 +60,29 @@ namespace Falltergeist
 
             // Change hand button
             _ui.push_back(std::shared_ptr<ImageButton>(_imageButtonFactory->getByType(ImageButtonType::BIG_RED_CIRCLE, position() + Point(218, 5))));
-            _ui.back()->mouseClickHandler().add([this](Event::Event* event){ this->_changeHand(); });
+            _ui.back()->mouseClickHandler().add([this](Event::Event* event){
+                _changeHand();
+            });
 
             // Inventory button
             _ui.push_back(std::shared_ptr<ImageButton>(_imageButtonFactory->getByType(ImageButtonType::PANEL_INVENTORY, position() + Point(211, 40))));
-            _ui.back()->mouseClickHandler().add([this](Event::Event* event){ this->_openInventory(); });
+            _ui.back()->mouseClickHandler().add([this](Event::Event* event){
+                _openInventory();
+            });
 
             // Options button
             _ui.push_back(std::shared_ptr<ImageButton>(_imageButtonFactory->getByType(ImageButtonType::PANEL_OPTIONS, position() + Point(210, 61))));
-            _ui.back()->mouseClickHandler().add([this](Event::Event* event){ this->_openGameMenu(); });
+            _ui.back()->mouseClickHandler().add([this](Event::Event* event){
+                _openGameMenu();
+            });
 
             // Attack button
             _isAttackBtnPressed = false;
             _ui.push_back(std::shared_ptr<ImageButton>(_imageButtonFactory->getByType(ImageButtonType::PANEL_ATTACK, position() + Point(267, 25))));
 
             _ui.back()->mouseDownHandler().add([this](Event::Event* event){
-                if(auto mouse = dynamic_cast<Event::Mouse*>(event))
-                {
-                    if(mouse->leftButton()) {
+                if (auto mouse = dynamic_cast<Event::Mouse*>(event)) {
+                    if (mouse->leftButton()) {
                         _isAttackBtnPressed = true;
                     }
                 }
@@ -102,22 +107,26 @@ namespace Falltergeist
 
             // Skilldex button
             _ui.push_back(std::shared_ptr<ImageButton>(_imageButtonFactory->getByType(ImageButtonType::BIG_RED_CIRCLE, position() + Point(523, 5))));
-            _ui.back()->mouseClickHandler().add([this](Event::Event* event){ this->_openSkilldex();
+            _ui.back()->mouseClickHandler().add([this](Event::Event* event){
+                _openSkilldex();
             });
 
             // MAP button
             _ui.push_back(std::shared_ptr<ImageButton>(_imageButtonFactory->getByType(ImageButtonType::PANEL_MAP, position() + Point(526, 39))));
-            _ui.back()->mouseClickHandler().add([this](Event::Event* event){ this->_openMap();
+            _ui.back()->mouseClickHandler().add([this](Event::Event* event){
+                _openMap();
             });
 
             // CHA button
             _ui.push_back(std::shared_ptr<ImageButton>(_imageButtonFactory->getByType(ImageButtonType::PANEL_CHA, position() + Point(526, 58))));
-            _ui.back()->mouseClickHandler().add([this](Event::Event* event){ this->_openCharacterScreen();
+            _ui.back()->mouseClickHandler().add([this](Event::Event* event){
+                _openCharacterScreen();
             });
 
             // PIP button
             _ui.push_back(std::shared_ptr<ImageButton>(_imageButtonFactory->getByType(ImageButtonType::PANEL_PIP, position() + Point(526, 77))));
-            _ui.back()->mouseClickHandler().add([this](Event::Event* event){ this->_openPipBoy();
+            _ui.back()->mouseClickHandler().add([=](Event::Event* event){
+                _openPipBoy();
             });
 
             // Message log
@@ -222,8 +231,7 @@ namespace Falltergeist
 
         void PlayerPanel::handle(Event::Event *event)
         {
-            for (auto it = _ui.rbegin(); it != _ui.rend(); ++it)
-            {
+            for (auto it = _ui.rbegin(); it != _ui.rend(); ++it) {
                 if (event->isHandled()) {
                     return;
                 }
@@ -239,8 +247,7 @@ namespace Falltergeist
 
             auto game = Game::Game::getInstance();
 
-            for (auto it = _ui.begin(); it != _ui.end(); ++it)
-            {
+            for (auto it = _ui.begin(); it != _ui.end(); ++it) {
                 (*it)->think(deltaTime);
             }
 
