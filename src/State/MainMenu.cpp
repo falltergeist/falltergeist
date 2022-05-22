@@ -57,27 +57,27 @@ namespace Falltergeist
 
             // intro button
             auto introButton = addUI(_imageButtonFactory->getByType(ImageButtonType::MENU_RED_CIRCLE, {30, 19}));
-            introButton->mouseClickHandler().add(std::bind(&MainMenu::onIntroButtonClick, this, std::placeholders::_1));
+            introButton->mouseClickHandler().add(std::bind(&MainMenu::_doIntro, this));
 
             // new game button
             auto newGameButton = addUI(_imageButtonFactory->getByType(ImageButtonType::MENU_RED_CIRCLE, {30, 19 + 41}));
-            newGameButton->mouseClickHandler().add(std::bind(&MainMenu::onNewGameButtonClick, this, std::placeholders::_1));
+            newGameButton->mouseClickHandler().add(std::bind(&MainMenu::_doNewGame, this));
 
             // load game button
             auto loadGameButton = addUI(_imageButtonFactory->getByType(ImageButtonType::MENU_RED_CIRCLE, {30, 19 + 41 * 2}));
-            loadGameButton->mouseClickHandler().add(std::bind(&MainMenu::onLoadGameButtonClick, this, std::placeholders::_1));
+            loadGameButton->mouseClickHandler().add(std::bind(&MainMenu::_doLoadGame, this));
 
             // settings button
             auto settingsButton = addUI(_imageButtonFactory->getByType(ImageButtonType::MENU_RED_CIRCLE, {30, 19 + 41 * 3}));
-            settingsButton->mouseClickHandler().add(std::bind(&MainMenu::onSettingsButtonClick, this, std::placeholders::_1));
+            settingsButton->mouseClickHandler().add(std::bind(&MainMenu::_doSettings, this));
 
             // credits button
             auto creditsButton = addUI(_imageButtonFactory->getByType(ImageButtonType::MENU_RED_CIRCLE, {30, 19 + 41 * 4}));
-            creditsButton->mouseClickHandler().add(std::bind(&MainMenu::onCreditsButtonClick, this, std::placeholders::_1));
+            creditsButton->mouseClickHandler().add(std::bind(&MainMenu::_doCredits, this));
 
             // exit button
             auto exitButton = addUI(_imageButtonFactory->getByType(ImageButtonType::MENU_RED_CIRCLE, {30, 19 + 41 * 5}));
-            exitButton->mouseClickHandler().add(std::bind(&MainMenu::onExitButtonClick, this, std::placeholders::_1));
+            exitButton->mouseClickHandler().add(std::bind(&MainMenu::_doExit, this));
 
             auto font4 = ResourceManager::getInstance()->font("font4.aaf");
             Graphics::Color color = {0xb8, 0x9c, 0x28, 0xff};
@@ -127,15 +127,13 @@ namespace Falltergeist
             addUI(exitButtonLabel);
         }
 
-        void MainMenu::doExit()
-        {
+        void MainMenu::_doExit() {
             fadeDoneHandler().clear();
             fadeDoneHandler().add([this](Event::Event* event){ this->onExitStart(dynamic_cast<Event::State*>(event)); });
             Game::Game::getInstance()->renderer()->fadeOut(0,0,0,1000);
         }
 
-        void MainMenu::doNewGame()
-        {
+        void MainMenu::_doNewGame() {
             fadeDoneHandler().clear();
             fadeDoneHandler().add([this](Event::Event* event){
                 onNewGameStart(dynamic_cast<Event::State*>(event));
@@ -143,116 +141,78 @@ namespace Falltergeist
             Game::Game::getInstance()->renderer()->fadeOut(0,0,0,1000);
         }
 
-        void MainMenu::doLoadGame()
-        {
+        void MainMenu::_doLoadGame() {
             fadeDoneHandler().clear();
             fadeDoneHandler().add([this](Event::Event* event){ this->onLoadGameStart(dynamic_cast<Event::State*>(event)); });
             Game::Game::getInstance()->renderer()->fadeOut(0,0,0,1000);
         }
 
-        void MainMenu::doSettings()
-        {
+        void MainMenu::_doSettings() {
             Game::Game::getInstance()->pushState(new SettingsMenu(_resourceManager, mouse()));
         }
 
-        void MainMenu::doIntro()
-        {
+        void MainMenu::_doIntro() {
             fadeDoneHandler().clear();
-            fadeDoneHandler().add([this](Event::Event* event){ this->onIntroStart(dynamic_cast<Event::State*>(event)); });
+            fadeDoneHandler().add([this](Event::Event* event){
+                onIntroStart(dynamic_cast<Event::State*>(event));
+            });
             Game::Game::getInstance()->renderer()->fadeOut(0,0,0,1000);
         }
 
-        void MainMenu::doCredits()
-        {
+        void MainMenu::_doCredits() {
             fadeDoneHandler().clear();
             fadeDoneHandler().add([this](Event::Event* event){ this->onCreditsStart(dynamic_cast<Event::State*>(event)); });
             Game::Game::getInstance()->renderer()->fadeOut(0,0,0,1000);
         }
 
-        void MainMenu::onExitButtonClick(Event::Mouse* event)
-        {
-            doExit();
-        }
-
-        void MainMenu::onExitStart(Event::State* event)
-        {
+        void MainMenu::onExitStart(Event::State* event) {
             fadeDoneHandler().clear();
             Game::Game::getInstance()->mixer()->stopMusic();
             Game::Game::getInstance()->quit();
         }
 
-        void MainMenu::onNewGameButtonClick(Event::Mouse* event)
-        {
-            doNewGame();
-        }
-
-        void MainMenu::onNewGameStart(Event::State* event)
-        {
+        void MainMenu::onNewGameStart(Event::State* event) {
             fadeDoneHandler().clear();
             Game::Game::getInstance()->pushState(new NewGame(_resourceManager, mouse(), _logger));
         }
 
-        void MainMenu::onLoadGameButtonClick(Event::Mouse* event)
-        {
-            doLoadGame();
-        }
-
-        void MainMenu::onLoadGameStart(Event::State* event)
-        {
+        void MainMenu::onLoadGameStart(Event::State* event) {
             fadeDoneHandler().clear();
             Game::Game::getInstance()->pushState(new LoadGame(_resourceManager, mouse()));
         }
 
-        void MainMenu::onSettingsButtonClick(Event::Mouse* event)
-        {
-            doSettings();
-        }
-
-        void MainMenu::onIntroButtonClick(Event::Mouse* event)
-        {
-            doIntro();
-        }
-
-        void MainMenu::onIntroStart(Event::State* event)
-        {
+        void MainMenu::onIntroStart(Event::State* event) {
             fadeDoneHandler().clear();
+            // TODO replace this with Intro state
             Game::Game::getInstance()->pushState(new Movie(mouse(), 17)); // TODO replace raw integers with consts
             Game::Game::getInstance()->pushState(new Movie(mouse(), 1));
         }
 
-        void MainMenu::onCreditsButtonClick(Event::Mouse* event)
-        {
-            doCredits();
-        }
-
-        void MainMenu::onCreditsStart(Event::State* event)
-        {
+        void MainMenu::onCreditsStart(Event::State* event) {
             fadeDoneHandler().clear();
             Game::Game::getInstance()->pushState(new Credits(mouse()));
         }
 
-        void MainMenu::onKeyDown(Event::Keyboard* event)
-        {
-            switch (event->keyCode())
-            {
+        void MainMenu::onKeyDown(Event::Keyboard* event) {
+            switch (event->keyCode()) {
                 case SDLK_e:
                 case SDLK_ESCAPE:
-                    doExit();
+                    _doExit();
                     break;
                 case SDLK_n:
-                    doNewGame();
+                    _doNewGame();
                     break;
                 case SDLK_l:
-                    doLoadGame();
+                    _doLoadGame();
                     break;
                 case SDLK_i:
-                    doIntro();
+                    _doIntro();
                     break;
                 case SDLK_c:
-                    doCredits();
+                    _doCredits();
                     break;
                 case SDLK_o:
-                    doSettings();
+                    _doSettings();
                     break;
             }
         }

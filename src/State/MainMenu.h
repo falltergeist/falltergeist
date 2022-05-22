@@ -30,34 +30,11 @@ namespace Falltergeist
 
                 void init() override;
 
-                void onExitButtonClick(Event::Mouse* event);
-
-                void onNewGameButtonClick(Event::Mouse* event);
-
-                void onLoadGameButtonClick(Event::Mouse* event);
-
-                void onSettingsButtonClick(Event::Mouse* event);
-
-                void onIntroButtonClick(Event::Mouse* event);
-
-                void onCreditsButtonClick(Event::Mouse* event);
-
-                void doExit();
-
-                void doNewGame();
-
-                void doLoadGame();
-
-                void doSettings();
-
-                void doIntro();
-
-                void doCredits();
-
                 void onKeyDown(Event::Keyboard* event) override;
 
                 void onStateActivate(Event::State* event) override;
 
+                // TODO get rid of these 6 methods
                 void onExitStart(Event::State* event);
 
                 void onNewGameStart(Event::State* event);
@@ -69,6 +46,18 @@ namespace Falltergeist
                 void onCreditsStart(Event::State* event);
 
             private:
+                void _doIntro();
+
+                void _doNewGame();
+
+                void _doLoadGame();
+
+                void _doSettings();
+
+                void _doCredits();
+
+                void _doExit();
+
                 std::shared_ptr<ILogger> _logger;
 
                 std::shared_ptr<UI::IResourceManager> _resourceManager;
