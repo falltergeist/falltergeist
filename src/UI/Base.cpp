@@ -78,7 +78,6 @@ namespace Falltergeist {
             // TODO: get rid of dynamic_casts by using template member function?
             if (auto mouseEvent = dynamic_cast<Event::Mouse*>(event)) {
                 handle(mouseEvent);
-                return;
             }
 
             if (auto keyboardEvent = dynamic_cast<Event::Keyboard*>(event)) {
@@ -100,6 +99,7 @@ namespace Falltergeist {
             if (!_visible) {
                 return;
             }
+
             using Mouse = Event::Mouse;
             Point relPos = mouseEvent->position() - position();
 
