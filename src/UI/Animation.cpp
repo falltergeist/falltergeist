@@ -45,7 +45,7 @@ namespace Falltergeist
 
             for (unsigned int d = 0; d != direction; ++d)
             {
-                y += frm->directions().at(d).height(); //? может i - 1
+                y += frm->directions().at(d).height();
             }
 
             int xOffset = 0;
