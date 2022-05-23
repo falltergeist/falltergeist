@@ -48,8 +48,8 @@ namespace Falltergeist
                 y += frm->directions().at(d).height(); //? может i - 1
             }
 
-            int xOffset = 1;
-            int yOffset = 1;
+            int xOffset = 0;
+            int yOffset = 0;
             for (unsigned int f = 0; f != frm->framesPerDirection(); ++f)
             {
                 xOffset += frm->offsetX(direction, f);
@@ -71,7 +71,7 @@ namespace Falltergeist
                     frame->setDuration((unsigned)std::round(1000.0 / static_cast<double>(frm->framesPerSecond())));
                 }
 
-                x += frame->size().width()+2;
+                x += frame->size().width();
                 _animationFrames.push_back(std::move(frame));
             }
 

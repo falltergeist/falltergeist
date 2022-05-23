@@ -127,10 +127,10 @@ namespace Falltergeist
 
                 uint16_t w = width();
 
-                size_t positionY = 1;
+                size_t positionY = 0;
                 for (auto& direction : _directions)
                 {
-                    size_t positionX = 1;
+                    size_t positionX = 0;
                     for (auto& frame : direction.frames())
                     {
                         // TODO: more efficient way to generate texture?
@@ -141,7 +141,7 @@ namespace Falltergeist
                                 _rgba[((y + positionY)*w) + x + positionX] = *palFile->color(frame.index(x, y));
                             }
                         }
-                        positionX += frame.width() + 2;
+                        positionX += frame.width();
                     }
                     positionY += direction.height();
                 }
@@ -159,10 +159,10 @@ namespace Falltergeist
 
                 _mask.resize(w*h, true);
 
-                unsigned positionY = 1;
+                unsigned positionY = 0;
                 for (auto& direction : _directions)
                 {
-                    unsigned positionX = 1;
+                    unsigned positionX = 0;
                     for (auto& frame : direction.frames())
                     {
                         // TODO: optimize
@@ -173,7 +173,7 @@ namespace Falltergeist
                                 _mask[((y + positionY)*w) + x + positionX] = (palFile->color(frame.index(x, y))->alpha() > 0);
                             }
                         }
-                        positionX += frame.width() + 2;
+                        positionX += frame.width();
                     }
                     positionY += direction.height();
                 }

@@ -124,11 +124,11 @@ namespace  Falltergeist
                 {
                     auto frm = ResourceManager::getInstance()->frmFileType("art/tiles/" + tilesLst->strings()->at(numbers.at(j)));
 
-                    SDL_Surface* tileSurf = SDL_CreateRGBSurfaceFrom(frm->rgba(ResourceManager::getInstance()->palFileType("color.pal")), 82, 38, 32, 82 * 4, 0xff000000, 0x00ff0000, 0x0000ff00, 0x000000ff);
+                    SDL_Surface* tileSurf = SDL_CreateRGBSurfaceFrom(frm->rgba(ResourceManager::getInstance()->palFileType("color.pal")), 80, 36, 32, 80 * 4, 0xff000000, 0x00ff0000, 0x0000ff00, 0x000000ff);
                     SDL_SetSurfaceBlendMode(tileSurf, SDL_BLENDMODE_NONE);
                     int x = (j % maxW) * 80;
                     int y = (j / maxW) * 36;
-                    SDL_Rect srcrect = { 1,1,80,36 };
+                    SDL_Rect srcrect = { 0,0,80,36 };
                     SDL_Rect rect = { x,y,80,36 };
                     SDL_BlitSurface(tileSurf, &srcrect, tmp, &rect);
                     SDL_FreeSurface(tileSurf);
@@ -246,9 +246,9 @@ namespace  Falltergeist
                     auto& mask = frm->mask(ResourceManager::getInstance()->palFileType("color.pal"));
                     auto position = pos - tile->position() + camera->topLeft() + Point(1, 1);
 
-                    if ((position.y() * 82 + position.x()) > 0 && ((unsigned)(position.y() * 82 + position.x()) < mask.size()))
+                    if ((position.y() * 80 + position.x()) > 0 && ((unsigned)(position.y() * 80 + position.x()) < mask.size()))
                     {
-                        if (mask.at(position.y() * 82 + position.x()))
+                        if (mask.at(position.y() * 80 + position.x()))
                         {
                             return true;
                         }

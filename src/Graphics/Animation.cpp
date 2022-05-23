@@ -22,39 +22,39 @@ namespace Falltergeist
 
             _stride = frm->framesPerDirection();
 
-            int offsetX = 1;
-            int offsetY = 1;
+            int offsetX = 0;
+            int offsetY = 0;
 
             for (auto& direction : frm->directions())
             {
-                offsetX = 1;
+                offsetX = 0;
                 for (unsigned int f = 0; f != frm->framesPerDirection(); ++f)
                 {
                     auto& srcFrame = direction.frames().at(f);
 
                     _vertices.push_back(glm::vec2(0.0, 0.0));
-                    _vertices.push_back(glm::vec2(0.0, (float)srcFrame.height() + 2.0));
-                    _vertices.push_back(glm::vec2((float)srcFrame.width() + 2.0, 0.0));
-                    _vertices.push_back(glm::vec2((float)srcFrame.width() + 2.0, (float)srcFrame.height() + 2.0));
+                    _vertices.push_back(glm::vec2(0.0, (float)srcFrame.height()));
+                    _vertices.push_back(glm::vec2((float)srcFrame.width(), 0.0));
+                    _vertices.push_back(glm::vec2((float)srcFrame.width(), (float)srcFrame.height()));
 
                     _texCoords.push_back(glm::vec2(
-                        (float)(offsetX - 1.0) / (float)_texture->size().width(),
-                        (float)(offsetY - 1.0) / (float)_texture->size().height()
+                        (float)offsetX / (float)_texture->size().width(),
+                        (float)offsetY / (float)_texture->size().height()
                     ));
                     _texCoords.push_back(glm::vec2(
-                        (float)(offsetX - 1.0) / (float)_texture->size().width(),
-                        (float)(offsetY + srcFrame.height() + 1.0) / (float)_texture->size().height()
+                        (float)offsetX / (float)_texture->size().width(),
+                        (float)(offsetY + srcFrame.height()) / (float)_texture->size().height()
                     ));
                     _texCoords.push_back(glm::vec2(
-                        (float)(offsetX + srcFrame.width() + 1.0) / (float)_texture->size().width(),
-                        (float)(offsetY - 1.0) / (float)_texture->size().height()
+                        (float)(offsetX + srcFrame.width()) / (float)_texture->size().width(),
+                        (float)offsetY / (float)_texture->size().height()
                     ));
                     _texCoords.push_back(glm::vec2(
-                        (float)(offsetX + srcFrame.width() + 1.0) / (float)_texture->size().width(),
-                        (float)(offsetY + srcFrame.height() + 1.0) / (float)_texture->size().height()
+                        (float)(offsetX + srcFrame.width()) / (float)_texture->size().width(),
+                        (float)(offsetY + srcFrame.height()) / (float)_texture->size().height()
                     ));
 
-                    offsetX += srcFrame.width()+2;
+                    offsetX += srcFrame.width();
 
                 }
                 offsetY += direction.height();
