@@ -214,7 +214,7 @@ namespace Falltergeist
         }
 
         void Skilldex::onSkillButtonClick(SKILL skill) {
-            Game::Game::getInstance()->locationState()->setSkillInUse(skill);
+            Game::Game::getInstance()->locationState()->useSkill(skill);
             Game::Game::getInstance()->popState();
         }
     }

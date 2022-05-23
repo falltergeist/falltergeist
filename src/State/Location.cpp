@@ -236,13 +236,13 @@ namespace Falltergeist
 
         void Location::onStateActivate(Event::State *event)
         {
-            // correct position of "red hexagon" after popups
-            auto hexagon = hexagonGrid()->hexagonAt(mouse()->position() + _camera->topLeft());
-            if (mouse()->state() == Input::Mouse::Cursor::HEXAGON_RED && hexagon) {
-                mouse()->ui()->setPosition(hexagon->position() - _camera->topLeft());
-            } else {
-                mouse()->setCursor(Input::Mouse::Cursor::ACTION);
-            }
+//            // correct position of "red hexagon" after popups
+//            auto hexagon = hexagonGrid()->hexagonAt(mouse()->position() + _camera->topLeft());
+//            if (mouse()->state() == Input::Mouse::Cursor::HEXAGON_RED && hexagon) {
+//                mouse()->ui()->setPosition(hexagon->position() - _camera->topLeft());
+//            } else {
+//                mouse()->setCursor(Input::Mouse::Cursor::ACTION);
+//            }
         }
 
         void Location::onStateDeactivate(Event::State *event)
@@ -480,9 +480,9 @@ namespace Falltergeist
         }
 
         // render hex object outline
-        void Location::_renderCursorOutline() const
-        {
-            if (mouse()->state() == Input::Mouse::Cursor::HEXAGON_RED) {
+        void Location::_renderCursorOutline() const {
+            // TODO move this logic to mouse ?
+            if (playerAction() == Location::PlayerAction::MOVE) {
                 mouse()->renderOutline();
             }
         }
@@ -509,15 +509,34 @@ namespace Falltergeist
         // render hex cursor
         void Location::_renderCursor() const
         {
-            if (mouse()->state() == Input::Mouse::Cursor::HEXAGON_RED) {
+            if (playerAction() == PlayerAction::MOVE) {
                 mouse()->render();
             }
         }
 
         void Location::think(const float &deltaTime)
         {
-            if (skillInUse() != SKILL::NONE) {
-                mouse()->setCursor(Input::Mouse::Cursor::USE);
+            switch (playerAction()) {
+                case Location::PlayerAction::DEFAULT: {
+                    mouse()->setCursor(Input::Mouse::Cursor::ACTION);
+                    break;
+                }
+                case Location::PlayerAction::MOVE: {
+                    auto hexagon = hexagonGrid()->hexagonAt(mouse()->position() + _camera->topLeft());
+                    if (!hexagon) {
+                        // TODO debug this case. This should never happen on location
+                        mouse()->setCursor(Input::Mouse::Cursor::NONE);
+                        break;
+                    }
+                    mouse()->setCursor(Input::Mouse::Cursor::HEXAGON_RED);
+                    mouse()->ui()->setPosition(hexagon->position() - _camera->topLeft());
+                    _objectUnderCursor = nullptr;
+                    break;
+                }
+                case Location::PlayerAction::USE_SKILL: {
+                    mouse()->setCursor(Input::Mouse::Cursor::USE);
+                    break;
+                }
             }
 
             _gameTime->think(deltaTime);
@@ -589,34 +608,31 @@ namespace Falltergeist
             }
         }
 
-        void Location::toggleCursorMode()
+        void Location::_togglePlayerAction()
         {
-            // Just for testing. This case should never happen in real life
-            if (mouse()->cursor() == Input::Mouse::Cursor::NONE) {
-                mouse()->setCursor(Input::Mouse::Cursor::ACTION);
-                return;
-            }
-
-            if (mouse()->cursor() == Input::Mouse::Cursor::ACTION) {
-                auto hexagon = hexagonGrid()->hexagonAt(mouse()->position() + _camera->topLeft());
-                if (!hexagon) {
-                    return;
+            switch (playerAction()) {
+                case Location::PlayerAction::DEFAULT: {
+                    _setMovePlayerAction();
+                    auto hexagon = hexagonGrid()->hexagonAt(mouse()->position() + _camera->topLeft());
+                    if (!hexagon) {
+                        break;
+                    }
+                    mouse()->setCursor(Input::Mouse::Cursor::HEXAGON_RED);
+                    mouse()->ui()->setPosition(hexagon->position() - _camera->topLeft());
+                    _objectUnderCursor = nullptr;
+                    break;
                 }
-                mouse()->setCursor(Input::Mouse::Cursor::HEXAGON_RED);
-                mouse()->ui()->setPosition(hexagon->position() - _camera->topLeft());
-                _objectUnderCursor = nullptr;
-                return;
-            }
-
-            if (mouse()->cursor() == Input::Mouse::Cursor::HEXAGON_RED) {
-                mouse()->setCursor(Input::Mouse::Cursor::ACTION);
-                return;
-            }
-
-            if (mouse()->cursor() == Input::Mouse::Cursor::USE) {
-                setSkillInUse(SKILL::NONE);
-                mouse()->setCursor(Input::Mouse::Cursor::ACTION);
-                return;
+                case Location::PlayerAction::MOVE: {
+                    _setDefaultPlayerAction();
+                    mouse()->setCursor(Input::Mouse::Cursor::ACTION);
+                    break;
+                }
+                case Location::PlayerAction::USE_SKILL: {
+                    _setDefaultPlayerAction();
+                    useSkill(SKILL::NONE);
+                    mouse()->setCursor(Input::Mouse::Cursor::ACTION);
+                    break;
+                }
             }
         }
 
@@ -698,7 +714,7 @@ namespace Falltergeist
         void Location::onMouseDown(Event::Mouse *event)
         {
             if (event->rightButton()) {
-                toggleCursorMode();
+                _togglePlayerAction();
                 event->stopPropagation();
             }
         }
@@ -707,7 +723,7 @@ namespace Falltergeist
         {
             // Player movement
             if (event->leftButton()) {
-                if (mouse()->state() == Input::Mouse::Cursor::HEXAGON_RED) {
+                if (playerAction() == Location::PlayerAction::MOVE) {
                     // Here goes the movement
                     auto hexagon = hexagonGrid()->hexagonAt(mouse()->position() + _camera->topLeft());
                     if (hexagon) {
@@ -726,7 +742,9 @@ namespace Falltergeist
                 }
 
                 // Using a skill
-                if (mouse()->state() == Input::Mouse::Cursor::USE) {
+                if (playerAction() == Location::PlayerAction::USE_SKILL) {
+                    _setDefaultPlayerAction();
+
                     auto object = _getGameObjectUnderCursor();
 
                     if (!object) {
@@ -740,7 +758,6 @@ namespace Falltergeist
 
                     // Use
                     object->use_skill_on_p_proc(skillInUse(), object, _player.get());
-                    mouse()->setState(Input::Mouse::Cursor::ACTION);
                 }
             }
         }
@@ -748,11 +765,13 @@ namespace Falltergeist
         void Location::onMouseMove(Event::Mouse *mouseEvent)
         {
             auto hexagon = hexagonGrid()->hexagonAt(mouse()->position() + _camera->topLeft());
-            if (mouse()->states().empty()) {
-                mouse()->setState(Input::Mouse::Cursor::ACTION);
-            }
-            if (mouse()->state() == Input::Mouse::Cursor::HEXAGON_RED && hexagon) {
-                mouse()->ui()->setPosition(hexagon->position() - _camera->topLeft());
+
+            if (playerAction() == PlayerAction::MOVE) {
+                if (hexagon) {
+                    mouse()->ui()->setPosition(hexagon->position() - _camera->topLeft());
+                } else {
+                    // TODO debug this case. this should never happen
+                }
             }
 
             if (hexagon) {
@@ -775,7 +794,7 @@ namespace Falltergeist
         void Location::onKeyDown(Event::Keyboard *event)
         {
             if (event->keyCode() == SDLK_m) {
-                toggleCursorMode();
+                _togglePlayerAction();
             }
 
             if (event->keyCode() == SDLK_COMMA) {
@@ -1241,9 +1260,22 @@ namespace Falltergeist
             return _skillInUse;
         }
 
-        void Location::setSkillInUse(SKILL skill)
+        void Location::useSkill(SKILL skill)
         {
+            _playerAction = Location::PlayerAction::USE_SKILL;
             _skillInUse = skill;
+        }
+
+        Location::PlayerAction Location::playerAction() const {
+            return _playerAction;
+        }
+
+        void Location::_setDefaultPlayerAction() {
+            _playerAction = Location::PlayerAction::DEFAULT;
+        }
+
+        void Location::_setMovePlayerAction() {
+            _playerAction = Location::PlayerAction::MOVE;
         }
     }
 }

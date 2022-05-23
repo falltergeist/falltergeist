@@ -65,6 +65,15 @@ namespace Falltergeist
         class Location final : public State
         {
             public:
+                /**
+                 * Current player action. What user is doing at location: using skill, attacking, pointing on smth, etc...
+                 */
+                enum class PlayerAction {
+                    DEFAULT,
+                    MOVE,
+                    USE_SKILL,
+                };
+
                 Location(
                     std::shared_ptr<Game::DudeObject> player,
                     std::shared_ptr<Input::Mouse> mouse,
@@ -118,8 +127,6 @@ namespace Falltergeist
 
                 void handleAction(Game::Object* object, Input::Mouse::Icon action);
 
-                void toggleCursorMode();
-
                 void displayMessage(const std::string& message);
 
                 void addTimerEvent(Game::Object* obj, int ticks, int fixedParam = 0);
@@ -160,7 +167,9 @@ namespace Falltergeist
 
                 SKILL skillInUse() const;
 
-                void setSkillInUse(SKILL skill);
+                void useSkill(SKILL skill);
+
+                PlayerAction playerAction() const;
 
             private:
                 struct TimerEvent
@@ -197,6 +206,12 @@ namespace Falltergeist
                 void _processTimers(const float &deltaTime);
 
                 bool _movePlayerToObject(Game::Object *object);
+
+                void _setDefaultPlayerAction();
+
+                void _setMovePlayerAction();
+
+                void _togglePlayerAction();
 
                 Game::Object* _getGameObjectUnderCursor();
 
@@ -272,6 +287,8 @@ namespace Falltergeist
                 Falltergeist::Graphics::Lightmap* _lightmap;
 
                 std::vector<Game::SpatialObject*> _spatials;
+
+                PlayerAction _playerAction = PlayerAction::DEFAULT;
         };
     }
 }
