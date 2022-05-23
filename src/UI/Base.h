@@ -21,6 +21,8 @@ namespace Falltergeist
             public:
                 Base(const Graphics::Point& pos);
 
+                Base(const Graphics::Point& pos, const Graphics::Size& size);
+
                 ~Base() override;
 
                 void setX(int value);

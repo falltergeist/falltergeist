@@ -92,16 +92,6 @@ namespace Falltergeist
             _position = position;
         }
 
-        bool Mouse::obstacle() const
-        {
-            return _obstacle;
-        }
-
-        void Mouse::setObstacle(bool obstacle)
-        {
-            _obstacle = obstacle;
-        }
-
         bool Mouse::altPressed() const
         {
             return _altPressed;

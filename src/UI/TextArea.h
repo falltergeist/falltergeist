@@ -97,8 +97,6 @@ namespace Falltergeist
 
             void setWidth(int width);
 
-            void handle(Event::Event* event) override;
-
             /**
              * Size of actual text content of the text area.
              */

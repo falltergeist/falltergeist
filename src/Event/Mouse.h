@@ -75,15 +75,6 @@ namespace Falltergeist
                 bool altPressed() const;
                 void setAltPressed(bool altPressed);
 
-                /**
-                 * Indicates that an obstacle was detected under mouse cursor during event capturing.
-                 */
-                bool obstacle() const;
-                /**
-                 * Sets obstacle flag. Used for event capturing.
-                 */
-                void setObstacle(bool obstacle);
-
             protected:
                 bool _controlPressed = false;
 
