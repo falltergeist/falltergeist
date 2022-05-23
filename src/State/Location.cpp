@@ -203,7 +203,7 @@ namespace Falltergeist
                     return;
                 }
 
-                if (_actionCursorButtonPressed || mouse()->state() == Input::Mouse::Cursor::ACTION) {
+                if (_actionCursorButtonPressed || playerAction() == PlayerAction::DEFAULT) {
                     if (!_actionCursorButtonPressed && (_actionCursorLastObject != _objectUnderCursor)) {
                         _objectUnderCursor->look_at_p_proc();
                         _actionCursorLastObject = _objectUnderCursor;
@@ -516,29 +516,6 @@ namespace Falltergeist
 
         void Location::think(const float &deltaTime)
         {
-            switch (playerAction()) {
-                case Location::PlayerAction::DEFAULT: {
-                    mouse()->setCursor(Input::Mouse::Cursor::ACTION);
-                    break;
-                }
-                case Location::PlayerAction::MOVE: {
-                    auto hexagon = hexagonGrid()->hexagonAt(mouse()->position() + _camera->topLeft());
-                    if (!hexagon) {
-                        // TODO debug this case. This should never happen on location
-                        mouse()->setCursor(Input::Mouse::Cursor::NONE);
-                        break;
-                    }
-                    mouse()->setCursor(Input::Mouse::Cursor::HEXAGON_RED);
-                    mouse()->ui()->setPosition(hexagon->position() - _camera->topLeft());
-                    _objectUnderCursor = nullptr;
-                    break;
-                }
-                case Location::PlayerAction::USE_SKILL: {
-                    mouse()->setCursor(Input::Mouse::Cursor::USE);
-                    break;
-                }
-            }
-
             _gameTime->think(deltaTime);
             _thinkObjects(deltaTime);
             _player->think(deltaTime);
@@ -613,24 +590,15 @@ namespace Falltergeist
             switch (playerAction()) {
                 case Location::PlayerAction::DEFAULT: {
                     _setMovePlayerAction();
-                    auto hexagon = hexagonGrid()->hexagonAt(mouse()->position() + _camera->topLeft());
-                    if (!hexagon) {
-                        break;
-                    }
-                    mouse()->setCursor(Input::Mouse::Cursor::HEXAGON_RED);
-                    mouse()->ui()->setPosition(hexagon->position() - _camera->topLeft());
-                    _objectUnderCursor = nullptr;
                     break;
                 }
                 case Location::PlayerAction::MOVE: {
                     _setDefaultPlayerAction();
-                    mouse()->setCursor(Input::Mouse::Cursor::ACTION);
                     break;
                 }
                 case Location::PlayerAction::USE_SKILL: {
                     _setDefaultPlayerAction();
-                    useSkill(SKILL::NONE);
-                    mouse()->setCursor(Input::Mouse::Cursor::ACTION);
+                    // useSkill(SKILL::NONE);
                     break;
                 }
             }
@@ -1255,15 +1223,14 @@ namespace Falltergeist
             return nullptr;
         }
 
-        SKILL Location::skillInUse() const
-        {
+        SKILL Location::skillInUse() const {
             return _skillInUse;
         }
 
-        void Location::useSkill(SKILL skill)
-        {
+        void Location::useSkill(SKILL skill) {
             _playerAction = Location::PlayerAction::USE_SKILL;
             _skillInUse = skill;
+            mouse()->setCursor(Input::Mouse::Cursor::USE);
         }
 
         Location::PlayerAction Location::playerAction() const {
@@ -1272,10 +1239,18 @@ namespace Falltergeist
 
         void Location::_setDefaultPlayerAction() {
             _playerAction = Location::PlayerAction::DEFAULT;
+            mouse()->setCursor(Input::Mouse::Cursor::ACTION);
         }
 
         void Location::_setMovePlayerAction() {
             _playerAction = Location::PlayerAction::MOVE;
+            auto hexagon = hexagonGrid()->hexagonAt(mouse()->position() + _camera->topLeft());
+            if (!hexagon) {
+                return;
+            }
+            mouse()->setCursor(Input::Mouse::Cursor::HEXAGON_RED);
+            mouse()->ui()->setPosition(hexagon->position() - _camera->topLeft());
+            _objectUnderCursor = nullptr;
         }
     }
 }

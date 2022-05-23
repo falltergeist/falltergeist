@@ -72,6 +72,7 @@ namespace Falltergeist
                     DEFAULT,
                     MOVE,
                     USE_SKILL,
+                    SCROLL
                 };
 
                 Location(

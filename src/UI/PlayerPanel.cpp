@@ -58,6 +58,21 @@ namespace Falltergeist
                 mouse->setCursor(_previousCursor);
             });
 
+            mouseUpHandler().add([=](Event::Event* event) {
+                // Prevent event from bubbling up back to location
+                event->stopPropagation();
+            });
+
+            mouseDownHandler().add([=](Event::Event* event) {
+                // Prevent event from bubbling up back to location
+                event->stopPropagation();
+            });
+
+            mouseMoveHandler().add([=](Event::Event* event) {
+                // Prevent event from bubbling up back to location
+                event->stopPropagation();
+            });
+
             // Change hand button
             _ui.push_back(std::shared_ptr<ImageButton>(_imageButtonFactory->getByType(ImageButtonType::BIG_RED_CIRCLE, position() + Point(218, 5))));
             _ui.back()->mouseClickHandler().add([this](Event::Event* event){
@@ -158,33 +173,29 @@ namespace Falltergeist
                     }
                 });
 
-            _messageLog->mouseUpHandler().add([this](Event::Mouse* event)
-                {
-                    _scrollingLog = 0;
-                    _scrollingLogTimer = 0;
-                });
+            _messageLog->mouseUpHandler().add([this](Event::Mouse* event) {
+                _scrollingLog = 0;
+                _scrollingLogTimer = 0;
+            });
 
-            _messageLog->mouseMoveHandler().add([this](Event::Mouse* event)
-                {
-                    auto mouse = Game::Game::getInstance()->mouse();
-                    Point relPos = event->position() - _messageLog->position();
+            _messageLog->mouseMoveHandler().add([this](Event::Mouse* event) {
+                auto mouse = Game::Game::getInstance()->mouse();
+                Point relPos = event->position() - _messageLog->position();
 
-                    auto state = relPos.y() < (_messageLog->size().height() / 2)
-                        ? Input::Mouse::Cursor::SMALL_UP_ARROW
-                        : Input::Mouse::Cursor::SMALL_DOWN_ARROW;
+                auto state = relPos.y() < (_messageLog->size().height() / 2)
+                    ? Input::Mouse::Cursor::SMALL_UP_ARROW
+                    : Input::Mouse::Cursor::SMALL_DOWN_ARROW;
 
-                    if (mouse->state() != state)
-                    {
-                        mouse->setState(state);
-                    }
-                });
+                if (mouse->state() != state) {
+                    mouse->setState(state);
+                }
+            });
 
-             _messageLog->mouseOutHandler().add([=](Event::Mouse* event)
-                {
-                    _scrollingLog = 0;
-                    _scrollingLogTimer = 0;
-                    mouse->setCursor(Input::Mouse::Cursor::BIG_ARROW);
-                });
+             _messageLog->mouseOutHandler().add([=](Event::Mouse* event) {
+                _scrollingLog = 0;
+                _scrollingLogTimer = 0;
+                mouse->setCursor(Input::Mouse::Cursor::BIG_ARROW);
+            });
 
             keyDownHandler().add([this](Event::Event* event) {
                  this->_onKeyDown(dynamic_cast<Event::Keyboard*>(event));
