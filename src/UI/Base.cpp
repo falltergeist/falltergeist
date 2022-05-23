@@ -18,6 +18,9 @@ namespace Falltergeist {
         Base::Base(const Graphics::Point& pos) : Event::EventTarget(Game::Game::getInstance()->eventDispatcher()), _position(pos), _size(Size(0, 0)) {
         }
 
+        Base::Base(const Graphics::Point& pos, const Graphics::Size& size) : Event::EventTarget(Game::Game::getInstance()->eventDispatcher()), _position(pos), _size(size) {
+        }
+
         Base::~Base() {
         }
 
@@ -98,7 +101,7 @@ namespace Falltergeist {
             using Mouse = Event::Mouse;
             Point relPos = mouseEvent->position() - this->position();
 
-            if (!mouseEvent->obstacle() && this->opaque(relPos)) // mouse cursor is over the element
+            if (this->opaque(relPos)) // mouse cursor is over the element
             {
                 switch (mouseEvent->originalType()) {
                     case Mouse::Type::MOVE: {
@@ -133,9 +136,6 @@ namespace Falltergeist {
                             default:
                                 break;
                         }
-                        // mousedown event can not be "interesting" for any other UI's that "behind" this UI,
-                        // so we can safely stop event capturing now
-                        mouseEvent->stopPropagation();
                         break;
                     }
                     case Mouse::Type::BUTTON_UP: {
@@ -165,7 +165,6 @@ namespace Falltergeist {
                         break;
                     }
                 }
-                mouseEvent->setObstacle(true);
             } else // mouse cursor is outside of this element or other element is in front
             {
                 // stop processing if this element has no active interactions with the mouse

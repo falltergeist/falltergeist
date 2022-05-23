@@ -185,6 +185,16 @@ namespace Falltergeist
 
             _playerPanel = makeUI<UI::PlayerPanel>(logger);
 
+            _scrollHandler = std::make_unique<Game::LocationState::ScrollHandler>(mouse);
+            _scrollHandler->scrollDeltaHandler().add([=](const Graphics::Point& scrollDelta) {
+                _camera->setCenter(_camera->center() + scrollDelta);
+            });
+
+            _scrollHitBox = makeUI<UI::ScrollHitBox>(renderer->size());
+            _scrollHitBox->directionChangeHandler().add([=](UI::ScrollHitBox::Direction direction){
+                _scrollHandler->onMouseScrollDirectionChanged(direction);
+            });
+
             _mouseDownHandler.add(std::bind(&Location::onMouseDown, this, std::placeholders::_1));
             _mouseUpHandler.add(std::bind(&Location::onMouseUp, this, std::placeholders::_1));
             _mouseMoveHandler.add(std::bind(&Location::onMouseMove, this, std::placeholders::_1));
@@ -510,7 +520,7 @@ namespace Falltergeist
             gameTime->think(deltaTime);
             thinkObjects(deltaTime);
             player->think(deltaTime);
-            performScrolling(deltaTime);
+            _scrollHandler->think(deltaTime);
             if (_locationEnter) {
                 _locationEnter = false;
                 firstLocationEnter(deltaTime);
@@ -566,57 +576,6 @@ namespace Falltergeist
             player->map_enter_p_proc();
             for (auto it = _objects.rbegin(); it != _objects.rend(); ++it) {
                 (*it)->map_enter_p_proc();
-            }
-        }
-
-        void Location::performScrolling(const float &deltaTime)
-        {
-            float scrollSpeed = 5.0f /* pixels */ / 10.0f /* ms */;
-            int scrollDelta = scrollSpeed * deltaTime;
-
-            Point pScrollDelta = Point(
-                this->_scrollLeft ? -scrollDelta : (this->_scrollRight ? scrollDelta : 0),
-                this->_scrollTop ? -scrollDelta : (this->_scrollBottom ? scrollDelta : 0)
-            );
-            this->_camera->setCenter(this->_camera->center() + pScrollDelta);
-
-            // if scrolling is active
-            if (this->_scrollLeft || this->_scrollRight || this->_scrollTop || this->_scrollBottom) {
-                Input::Mouse::Cursor state = Input::Mouse::Cursor::NONE;
-                if (this->_scrollLeft) {
-                    state = Input::Mouse::Cursor::SCROLL_W;
-                }
-                if (this->_scrollRight) {
-                    state = Input::Mouse::Cursor::SCROLL_E;
-                }
-                if (this->_scrollTop) {
-                    state = Input::Mouse::Cursor::SCROLL_N;
-                }
-                if (this->_scrollBottom) {
-                    state = Input::Mouse::Cursor::SCROLL_S;
-                }
-                if (this->_scrollLeft && this->_scrollTop) {
-                    state = Input::Mouse::Cursor::SCROLL_NW;
-                }
-                if (this->_scrollLeft && this->_scrollBottom) {
-                    state = Input::Mouse::Cursor::SCROLL_SW;
-                }
-                if (this->_scrollRight && this->_scrollTop) {
-                    state = Input::Mouse::Cursor::SCROLL_NE;
-                }
-                if (this->_scrollRight && this->_scrollBottom) {
-                    state = Input::Mouse::Cursor::SCROLL_SE;
-                }
-                if (mouse->state() != state) {
-                    if (mouse->scrollState()) {
-                        mouse->popState();
-                    }
-                    mouse->pushState(state);
-                }
-            } else {
-                if (mouse->scrollState()) {
-                    mouse->popState();
-                }
             }
         }
 
@@ -792,13 +751,6 @@ namespace Falltergeist
                 mouse->ui()->setPosition(hexagon->position() - _camera->topLeft());
             }
 
-            int scrollArea = 8;
-            Point mpos = mouse->position();
-            _scrollLeft = (mpos.x() < scrollArea);
-            _scrollRight = (mpos.x() > renderer->size().width() - scrollArea);
-            _scrollTop = (mpos.y() < scrollArea);
-            _scrollBottom = (mpos.y() > renderer->size().height() - scrollArea);
-
             if (hexagon) {
                 std::string text = "Hex number: " + std::to_string(hexagon->number()) + "\n";
                 text += "Hex position: " + std::to_string(hexagon->number() % 200) + "," +
@@ -847,6 +799,7 @@ namespace Falltergeist
             // @TODO: SDLK_7 - use skill: science
             // @TODO: SDLK_8 - use skill: repair
 
+            // TODO extract keyboard scrolling logic to LocationState::ScrollHandler
             if (event->keyCode() == SDLK_LEFT) {
                 _camera->setCenter(_camera->center() + Point(-KEYBOARD_SCROLL_STEP, 0));
             }

@@ -455,15 +455,6 @@ namespace Falltergeist
             return *this;
         }
 
-        void TextArea::handle(Event::Event* event)
-        {
-            Base::handle(event);
-            if (auto mouseEvent = dynamic_cast<Event::Mouse*>(event))
-            {
-                mouseEvent->setObstacle(false);
-            }
-        }
-
         const Graphics::Size& TextArea::paddingTopLeft() const
         {
             return _paddingTopLeft;

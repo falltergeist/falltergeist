@@ -6,10 +6,12 @@
 #include "../Game/DudeObject.h"
 #include "../Game/Object.h"
 #include "../Game/Timer.h"
+#include "../Game/LocationState/ScrollHandler.h"
 #include "../Graphics/Lightmap.h"
 #include "../Input/Mouse.h"
 #include "../State/State.h"
 #include "../UI/ImageButton.h"
+#include "../UI/ScrollHitBox.h"
 #include "../UI/IResourceManager.h"
 
 namespace Falltergeist
@@ -179,13 +181,10 @@ namespace Falltergeist
                 Game::Object* _actionCursorLastObject = nullptr;
                 bool _actionCursorButtonPressed = false;
                 UI::PlayerPanel* _playerPanel;
+                UI::ScrollHitBox* _scrollHitBox;
+                std::unique_ptr<Game::LocationState::ScrollHandler> _scrollHandler;
 
                 SKILL _skillInUse = SKILL::NONE;
-
-                bool _scrollLeft = false;
-                bool _scrollRight = false;
-                bool _scrollTop = false;
-                bool _scrollBottom = false;
 
                 std::list<std::shared_ptr<Game::Object>> _objects;
                 std::list<std::shared_ptr<Game::Object>> _flatObjects;
@@ -217,8 +216,6 @@ namespace Falltergeist
                 void renderTestingOutline() const;
 
                 void thinkObjects(const float &deltaTime) const;
-
-                void performScrolling(const float &deltaTime);
 
                 void firstLocationEnter(const float &deltaTime) const;
 
