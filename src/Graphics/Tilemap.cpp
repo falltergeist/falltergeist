@@ -73,7 +73,7 @@ namespace Falltergeist {
             _shader->setUniform(_uniformMVP, Game::getInstance()->renderer()->getMVP());
 
             // set camera offset
-            _shader->setUniform(_uniformOffset, glm::vec2((float) pos.x() + 1.0, (float) pos.y() + 2.0));
+            _shader->setUniform(_uniformOffset, glm::vec2((float) pos.x(), (float) pos.y()));
 
             _shader->setUniform(_uniformFade, Game::getInstance()->renderer()->fadeColor());
 

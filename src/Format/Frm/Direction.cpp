@@ -38,7 +38,7 @@ namespace Falltergeist
                     return a.width() < b.width();
                 });
 
-                return static_cast<uint16_t>((widest->width() + 2) * _frames.size());
+                return static_cast<uint16_t>(widest->width() * _frames.size());
             }
 
             uint16_t Direction::height() const
@@ -47,7 +47,7 @@ namespace Falltergeist
                 {
                     return a.height() < b.height();
                 });
-                return tallest->height() + 2;
+                return tallest->height();
             }
 
             void Direction::setDataOffset(uint32_t value)

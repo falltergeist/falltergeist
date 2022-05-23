@@ -193,7 +193,7 @@ namespace Falltergeist
 
         bool Sprite::opaque(const Point& point)
         {
-            return _texture->opaque(point.x() + 1, point.y() + 1);
+            return _texture->opaque(point.x(), point.y());
         }
 
         void Sprite::trans(Graphics::TransFlags::Trans trans)
