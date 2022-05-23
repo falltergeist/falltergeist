@@ -71,8 +71,7 @@ namespace Falltergeist
                 enum class PlayerAction {
                     DEFAULT,
                     MOVE,
-                    USE_SKILL,
-                    SCROLL
+                    USE_SKILL
                 };
 
                 Location(

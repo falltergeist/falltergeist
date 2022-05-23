@@ -182,12 +182,12 @@ namespace Falltergeist
 
             _playerPanel = makeUI<UI::PlayerPanel>(_logger);
 
-            _scrollHandler = std::make_unique<Game::LocationState::ScrollHandler>(mouse);
+            _scrollHandler = std::make_unique<Game::LocationState::ScrollHandler>(mouse());
             _scrollHandler->scrollDeltaHandler().add([=](const Graphics::Point& scrollDelta) {
                 _camera->setCenter(_camera->center() + scrollDelta);
             });
 
-            _scrollHitBox = makeUI<UI::ScrollHitBox>(renderer->size());
+            _scrollHitBox = makeUI<UI::ScrollHitBox>(_renderer->size());
             _scrollHitBox->directionChangeHandler().add([=](UI::ScrollHitBox::Direction direction){
                 _scrollHandler->onMouseScrollDirectionChanged(direction);
             });
@@ -578,7 +578,7 @@ namespace Falltergeist
             }
         }
 
-        void Location::thinkObjects(const float &deltaTime) const
+        void Location::_thinkObjects(const float &deltaTime) const
         {
             for (auto &object : _objects) {
                 object->think(deltaTime);
