@@ -27,6 +27,10 @@ namespace Falltergeist
                 void onStateActivate(Event::State* event) override;
 
             private:
+                void _onSplashScreenDelayEnded();
+
+                void _onFirstMovieEnded();
+
                 std::shared_ptr<ILogger> _logger;
 
                 std::unique_ptr<Game::Timer> _delayTimer;

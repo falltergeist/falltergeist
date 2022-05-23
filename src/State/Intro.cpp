@@ -20,8 +20,7 @@ namespace Falltergeist::State {
         setModal(true);
         setFullscreen(true);
 
-        // TODO replace raw integers with consts
-        auto firstMovie = new Movie(mouse(), 0);
+        auto firstMovie = new Movie(mouse(), 1); // TODO replace raw integers with consts
         firstMovie->deactivateHandler().add([&](Event::State* event) {
           _onFirstMovieEnded();
         });
@@ -29,7 +28,7 @@ namespace Falltergeist::State {
     }
 
     void Intro::_onFirstMovieEnded() {
-        auto secondMovie = new Movie(mouse(), 1);
+        auto secondMovie = new Movie(mouse(), 17); // TODO replace raw integers with consts
         secondMovie->deactivateHandler().add([&](Event::State* event) {
             _onSecondMovieEnded();
         });
@@ -37,14 +36,6 @@ namespace Falltergeist::State {
     }
 
     void Intro::_onSecondMovieEnded() {
-        auto thirdMovie = new Movie(mouse(), 17);
-        thirdMovie->deactivateHandler().add([&](Event::State* event) {
-            _onThirdMovieEnded();
-        });
-        Game::Game::getInstance()->pushState(thirdMovie);
-    }
-
-    void Intro::_onThirdMovieEnded() {
         Game::Game::getInstance()->setState(new MainMenu(_resourceManager, mouse(), _logger));
     }
 }

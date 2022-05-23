@@ -12,6 +12,7 @@
 #include "../State/CritterDialog.h"
 #include "../State/Location.h"
 #include "../State/MainMenu.h"
+#include "../State/Movie.h"
 #include "../State/Intro.h"
 #include "../UI/Image.h"
 #include "../UI/TextArea.h"
@@ -49,13 +50,9 @@ namespace Falltergeist
 
             addUI("splash", _resourceManager->getImage("art/splash/" + splashes.at(rand() % splashes.size())));
 
-            auto game = Game::Game::getInstance();
             _delayTimer = std::make_unique<Game::Timer>(3000);
             _delayTimer->start();
-            _delayTimer->tickHandler().add([game, this](Event::Event*) {
-                game->setState(new Intro(_resourceManager, mouse(), _logger));
-            });
-
+            _delayTimer->tickHandler().add(std::bind(&Start::_onSplashScreenDelayEnded, this));
         }
 
         void Start::think(const float &deltaTime)
@@ -77,6 +74,18 @@ namespace Falltergeist
 
         void Start::onStateActivate(Event::State* event) {
             mouse()->setCursor(Cursor::WAIT);
+        }
+
+        void Start::_onSplashScreenDelayEnded() {
+            auto firstMovie = new Movie(mouse(), 0); // TODO replace raw integers with consts
+            firstMovie->deactivateHandler().add(std::bind(&Start::_onFirstMovieEnded, this));
+            auto game = Game::Game::getInstance();
+            game->pushState(firstMovie);
+        }
+
+        void Start::_onFirstMovieEnded() {
+            auto game = Game::Game::getInstance();
+            game->setState(new Intro(_resourceManager, mouse(), _logger));
         }
     }
 }

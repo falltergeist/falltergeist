@@ -10,8 +10,8 @@
 #include "../Logger.h"
 #include "../ResourceManager.h"
 #include "../State/Credits.h"
+#include "../State/Intro.h"
 #include "../State/LoadGame.h"
-#include "../State/Movie.h"
 #include "../State/NewGame.h"
 #include "../State/SettingsMenu.h"
 #include "../UI/Animation.h"
@@ -128,23 +128,34 @@ namespace Falltergeist
         }
 
         void MainMenu::_doExit() {
+            auto game = Game::Game::getInstance();
             fadeDoneHandler().clear();
-            fadeDoneHandler().add([this](Event::Event* event){ this->onExitStart(dynamic_cast<Event::State*>(event)); });
-            Game::Game::getInstance()->renderer()->fadeOut(0,0,0,1000);
+            fadeDoneHandler().add([=](Event::Event* event){
+                fadeDoneHandler().clear();
+                game->mixer()->stopMusic();
+                game->quit();
+            });
+            game->renderer()->fadeOut(0,0,0,1000);
         }
 
         void MainMenu::_doNewGame() {
+            auto game = Game::Game::getInstance();
             fadeDoneHandler().clear();
-            fadeDoneHandler().add([this](Event::Event* event){
-                onNewGameStart(dynamic_cast<Event::State*>(event));
+            fadeDoneHandler().add([=](Event::Event* event){
+                fadeDoneHandler().clear();
+                game->pushState(new NewGame(_resourceManager, mouse(), _logger));
             });
-            Game::Game::getInstance()->renderer()->fadeOut(0,0,0,1000);
+            game->renderer()->fadeOut(0,0,0,1000);
         }
 
         void MainMenu::_doLoadGame() {
+            auto game = Game::Game::getInstance();
             fadeDoneHandler().clear();
-            fadeDoneHandler().add([this](Event::Event* event){ this->onLoadGameStart(dynamic_cast<Event::State*>(event)); });
-            Game::Game::getInstance()->renderer()->fadeOut(0,0,0,1000);
+            fadeDoneHandler().add([=](Event::Event* event){
+                fadeDoneHandler().clear();
+                game->pushState(new LoadGame(_resourceManager, mouse()));
+            });
+            game->renderer()->fadeOut(0,0,0,1000);
         }
 
         void MainMenu::_doSettings() {
@@ -152,45 +163,23 @@ namespace Falltergeist
         }
 
         void MainMenu::_doIntro() {
+            auto game = Game::Game::getInstance();
             fadeDoneHandler().clear();
-            fadeDoneHandler().add([this](Event::Event* event){
-                onIntroStart(dynamic_cast<Event::State*>(event));
+            fadeDoneHandler().add([=](Event::Event* event){
+                fadeDoneHandler().clear();
+                game->setState(new Intro(_resourceManager, mouse(), _logger));
             });
-            Game::Game::getInstance()->renderer()->fadeOut(0,0,0,1000);
+            game->renderer()->fadeOut(0,0,0,1000);
         }
 
         void MainMenu::_doCredits() {
+            auto game = Game::Game::getInstance();
             fadeDoneHandler().clear();
-            fadeDoneHandler().add([this](Event::Event* event){ this->onCreditsStart(dynamic_cast<Event::State*>(event)); });
-            Game::Game::getInstance()->renderer()->fadeOut(0,0,0,1000);
-        }
-
-        void MainMenu::onExitStart(Event::State* event) {
-            fadeDoneHandler().clear();
-            Game::Game::getInstance()->mixer()->stopMusic();
-            Game::Game::getInstance()->quit();
-        }
-
-        void MainMenu::onNewGameStart(Event::State* event) {
-            fadeDoneHandler().clear();
-            Game::Game::getInstance()->pushState(new NewGame(_resourceManager, mouse(), _logger));
-        }
-
-        void MainMenu::onLoadGameStart(Event::State* event) {
-            fadeDoneHandler().clear();
-            Game::Game::getInstance()->pushState(new LoadGame(_resourceManager, mouse()));
-        }
-
-        void MainMenu::onIntroStart(Event::State* event) {
-            fadeDoneHandler().clear();
-            // TODO replace this with Intro state
-            Game::Game::getInstance()->pushState(new Movie(mouse(), 17)); // TODO replace raw integers with consts
-            Game::Game::getInstance()->pushState(new Movie(mouse(), 1));
-        }
-
-        void MainMenu::onCreditsStart(Event::State* event) {
-            fadeDoneHandler().clear();
-            Game::Game::getInstance()->pushState(new Credits(mouse()));
+            fadeDoneHandler().add([=](Event::Event* event){
+                fadeDoneHandler().clear();
+                game->pushState(new Credits(mouse()));
+            });
+            game->renderer()->fadeOut(0,0,0,1000);
         }
 
         void MainMenu::onKeyDown(Event::Keyboard* event) {

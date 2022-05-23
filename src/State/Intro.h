@@ -19,8 +19,6 @@ namespace Falltergeist::State {
 
         void _onSecondMovieEnded();
 
-        void _onThirdMovieEnded();
-
         std::shared_ptr<UI::IResourceManager> _resourceManager;
 
         std::shared_ptr<ILogger> _logger;
