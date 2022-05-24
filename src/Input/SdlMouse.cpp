@@ -1,5 +1,10 @@
+// Project includes
 #include "../Input/SdlMouse.h"
 #include "../Exception.h"
+
+// Third-party includes
+
+// stdlib
 
 namespace Falltergeist {
     namespace Input {

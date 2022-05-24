@@ -1,6 +1,11 @@
 #pragma once
 
+// Project includes
 #include "../Graphics/Point.h"
+
+// Third-party includes
+
+// stdlib
 
 namespace Falltergeist {
     namespace Input {

@@ -1,9 +1,14 @@
 #pragma once
 
-#include <string>
-#include <vector>
+// Project includes
 #include "../../Format/Dat/Item.h"
 #include "../../Format/Enums.h"
+
+// Third-party includes
+
+// stdlib
+#include <string>
+#include <vector>
 
 namespace Falltergeist
 {

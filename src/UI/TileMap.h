@@ -1,11 +1,16 @@
 ﻿#pragma once
 
-#include <map>
-#include <memory>
+// Project includes
 #include "../Graphics/Point.h"
 #include "../Graphics/Rect.h"
 #include "../Graphics/Renderer.h"
 #include "../ILogger.h"
+
+// Third-party includes
+
+// stdlib
+#include <map>
+#include <memory>
 
 namespace Falltergeist
 {

@@ -1,7 +1,12 @@
+// Project includes
 #include "../Graphics/Texture.h"
 #include "../ResourceManager.h"
 #include "../UI/Image.h"
 #include "../UI/SmallCounter.h"
+
+// Third-party includes
+
+// stdlib
 
 namespace Falltergeist
 {

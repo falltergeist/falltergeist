@@ -1,5 +1,4 @@
-﻿#include <cmath>
-#include <memory>
+﻿// Project includes
 #include "../Format/Frm/File.h"
 #include "../Format/Frm/Direction.h"
 #include "../Format/Frm/Frame.h"
@@ -15,6 +14,12 @@
 #include "../State/Location.h"
 #include "../UI/Animation.h"
 #include "../UI/AnimationFrame.h"
+
+// Third-party includes
+
+// stdlib
+#include <cmath>
+#include <memory>
 
 namespace Falltergeist
 {

@@ -1,6 +1,11 @@
 #pragma once
 
+// Project includes
 #include "../Graphics/VertexBufferAttribute.h"
+
+// Third-party includes
+
+// stdlib
 #include <vector>
 
 namespace Falltergeist {

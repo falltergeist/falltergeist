@@ -1,8 +1,6 @@
 #pragma once
 
-#include <cstdint>
-#include <string>
-#include <vector>
+// Project includes
 #include "../Graphics/Color.h"
 #include "../Graphics/Font.h"
 #include "../Graphics/Renderer.h"
@@ -10,6 +8,13 @@
 #include "../Graphics/VertexArray.h"
 #include "../Graphics/IndexBuffer.h"
 #include "../Graphics/Shader.h"
+
+// Third-party includes
+
+// stdlib
+#include <cstdint>
+#include <string>
+#include <vector>
 
 namespace Falltergeist::Graphics {
     class TextArea final {

@@ -1,9 +1,14 @@
 #pragma once
 
-#include <cstdint>
+// Project includes
 #include "../../Base/Buffer.h"
 #include "../Dat/Item.h"
 #include "../Dat/Stream.h"
+
+// Third-party includes
+
+// stdlib
+#include <cstdint>
 
 namespace Falltergeist
 {

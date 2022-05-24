@@ -1,3 +1,4 @@
+// Project includes
 #include "../State/PlayerEditAge.h"
 #include "../functions.h"
 #include "../Game/DudeObject.h"
@@ -9,6 +10,10 @@
 #include "../UI/Image.h"
 #include "../UI/ImageButton.h"
 #include "../UI/TextArea.h"
+
+// Third-party includes
+
+// stdlib
 
 namespace Falltergeist
 {

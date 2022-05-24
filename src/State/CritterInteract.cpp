@@ -1,5 +1,4 @@
-#include <cstdio>
-#include <memory>
+// Project includes
 #include "../State/CritterInteract.h"
 #include "../Format/Lst/File.h"
 #include "../Format/Lip/File.h"
@@ -21,6 +20,12 @@
 #include "../UI/AnimationQueue.h"
 #include "../UI/Factory/ImageButtonFactory.h"
 #include "../Audio/Mixer.h"
+
+// Third-party includes
+
+// stdlib
+#include <cstdio>
+#include <memory>
 
 namespace Falltergeist
 {

@@ -1,7 +1,12 @@
-#include <algorithm>
-#include <sstream>
+// Project includes
 #include "../Ini/File.h"
 #include "../Ini/Parser.h"
+
+// Third-party includes
+
+// stdlib
+#include <algorithm>
+#include <sstream>
 
 namespace Falltergeist
 {

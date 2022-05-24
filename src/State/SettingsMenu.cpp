@@ -1,3 +1,4 @@
+// Project includes
 #include "../State/SettingsMenu.h"
 #include "../Audio/Mixer.h"
 #include "../functions.h"
@@ -13,6 +14,10 @@
 #include "../UI/MultistateImageButton.h"
 #include "../UI/Slider.h"
 #include "../UI/TextArea.h"
+
+// Third-party includes
+
+// stdlib
 
 namespace Falltergeist
 {

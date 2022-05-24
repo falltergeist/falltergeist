@@ -1,6 +1,11 @@
-#include <algorithm>
+// Project includes
 #include "../Exception.h"
 #include "../Ini/File.h"
+
+// Third-party includes
+
+// stdlib
+#include <algorithm>
 
 namespace Falltergeist
 {

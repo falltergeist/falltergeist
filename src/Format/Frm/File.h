@@ -1,10 +1,15 @@
 ﻿#pragma once
 
-#include <map>
-#include <vector>
+// Project includes
 #include "../Dat/Item.h"
 #include "../Frm/Direction.h"
 #include "../Enums.h"
+
+// Third-party includes
+
+// stdlib
+#include <map>
+#include <vector>
 
 namespace Falltergeist
 {

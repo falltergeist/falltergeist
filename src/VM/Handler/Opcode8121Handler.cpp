@@ -1,9 +1,14 @@
+// Project includes
 #include "../../VM/Handler/Opcode8121Handler.h"
 #include "../../Game/DudeObject.h"
 #include "../../Game/Game.h"
 #include "../../State/CritterDialog.h"
 #include "../../VM/Script.h"
 #include "../../VM/StackValue.h"
+
+// Third-party includes
+
+// stdlib
 
 namespace Falltergeist
 {

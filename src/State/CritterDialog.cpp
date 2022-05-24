@@ -1,3 +1,4 @@
+// Project includes
 #include "../State/CritterDialog.h"
 #include "../Exception.h"
 #include "../Format/Int/File.h"
@@ -17,6 +18,10 @@
 #include "../UI/TextArea.h"
 #include "../VM/Script.h"
 #include "../functions.h"
+
+// Third-party includes
+
+// stdlib
 #include <algorithm>
 #include <vector>
 

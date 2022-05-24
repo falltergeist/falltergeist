@@ -3,11 +3,16 @@
 // and then adapted for Falltergeist. All credit goes to the original authors.
 // Link to the plugin: https://github.com/gemrb/gemrb/tree/8e759bc6874a80d4a8d73bf79603624465b3aeb0/gemrb/plugins/ACMReader
 
+// Project includes
 #include "../Acm/File.h"
 #include "../Acm/Decoder.h"
 #include "../Acm/General.h"
 #include "../Acm/Unpacker.h"
 #include "../../Exception.h"
+
+// Third-party includes
+
+// stdlib
 
 namespace Falltergeist
 {
@@ -15,7 +20,8 @@ namespace Falltergeist
     {
         namespace Acm
         {
-            constexpr int HEADER_SIZE = 14;
+            constexpr unsigned HEADER_SIZE = 14;
+            constexpr unsigned INTERPLAY_ACM_SIGNATURE = 0x01032897;
 
             File::File(Dat::Stream&& stream) : _stream(std::move(stream))
             {
@@ -34,8 +40,7 @@ namespace Falltergeist
                 _subblocks = (int32_t) (tmpword >> 4);
                 _levels = (int32_t) (tmpword&15);
 
-                if (hdr.signature != IP_ACM_SIG)
-                {
+                if (hdr.signature != INTERPLAY_ACM_SIGNATURE) {
                     throw Exception("Not an ACM file - invalid signature");
                 }
 

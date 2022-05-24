@@ -1,8 +1,13 @@
 #pragma once
 
+// Project includes
+#include "../Dat/Item.h"
+
+// Third-party includes
+
+// stdlib
 #include <map>
 #include <vector>
-#include "../Dat/Item.h"
 
 namespace Falltergeist
 {

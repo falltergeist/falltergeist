@@ -1,6 +1,11 @@
 #pragma once
 
+// Project includes
 #include "../VFS/IFile.h"
+
+// Third-party includes
+
+// stdlib
 #include <string>
 #include <fstream>
 #include <filesystem>

@@ -1,9 +1,14 @@
 #pragma once
 
+// Project includes
 #include "../Graphics/Point.h"
 #include "../Input/IMouse.h"
 #include "../UI/IResourceManager.h"
 #include "../UI/Image.h"
+
+// Third-party includes
+
+// stdlib
 #include <memory>
 #include <vector>
 

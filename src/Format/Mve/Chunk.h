@@ -1,8 +1,13 @@
 #pragma once
 
+// Project includes
+#include "../Mve/Opcode.h"
+
+// Third-party includes
+
+// stdlib
 #include <memory>
 #include <vector>
-#include "../Mve/Opcode.h"
 
 namespace Falltergeist
 {

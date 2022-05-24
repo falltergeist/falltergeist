@@ -1,9 +1,14 @@
 #pragma once
 
+// Project includes
 #include "../../Input/Mouse.h"
 #include "../../Base/Delegate.h"
 #include "../../UI/ScrollHitBox.h"
 #include "../../Graphics/Point.h"
+
+// Third-party includes
+
+// stdlib
 
 namespace Falltergeist::Game::LocationState {
     class ScrollHandler final {

@@ -1,5 +1,10 @@
 #pragma once
 
+// Project includes
+
+// Third-party includes
+
+// stdlib
 #include <exception>
 #include <stdexcept>
 #include <string>

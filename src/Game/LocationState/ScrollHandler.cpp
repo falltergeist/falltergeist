@@ -1,4 +1,9 @@
+// Project includes
 #include "../../Game/LocationState/ScrollHandler.h"
+
+// Third-party includes
+
+// stdlib
 
 namespace Falltergeist::Game::LocationState {
 

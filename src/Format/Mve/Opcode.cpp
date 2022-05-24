@@ -1,4 +1,9 @@
+// Project includes
 #include "../Mve/Opcode.h"
+
+// Third-party includes
+
+// stdlib
 
 namespace Falltergeist
 {

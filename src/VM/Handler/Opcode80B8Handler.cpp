@@ -1,8 +1,13 @@
-#include <string>
+// Project includes
 #include "../../VM/Handler/Opcode80B8Handler.h"
 #include "../../Game/Game.h"
 #include "../../State/Location.h"
 #include "../../VM/Script.h"
+
+// Third-party includes
+
+// stdlib
+#include <string>
 
 namespace Falltergeist
 {

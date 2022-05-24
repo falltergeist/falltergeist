@@ -1,13 +1,18 @@
 #pragma once
 
-#include <memory>
-#include <vector>
-#include <GL/glew.h>
-#include <SDL.h>
-#include <SDL_opengl.h>
+// Project includes
 #include "../Graphics/Point.h"
 #include "../Graphics/Size.h"
 #include "../Graphics/Pixels.h"
+
+// Third-party includes
+#include <GL/glew.h>
+#include <SDL.h>
+#include <SDL_opengl.h>
+
+// stdlib
+#include <memory>
+#include <vector>
 
 namespace Falltergeist
 {

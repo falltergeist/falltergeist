@@ -1,6 +1,11 @@
+// Project includes
 #include "../Dat/Stream.h"
 #include "../Txt/CSVBasedFile.h"
 #include "../Txt/CSVParser.h"
+
+// Third-party includes
+
+// stdlib
 
 namespace Falltergeist
 {

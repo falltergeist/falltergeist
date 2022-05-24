@@ -1,9 +1,14 @@
+// Project includes
 #include "../Graphics/ObjectUIFactory.h"
 #include "../ResourceManager.h"
 #include "../Format/Frm/File.h"
 #include "../UI/Animation.h"
 #include "../UI/AnimationQueue.h"
 #include "../UI/Image.h"
+
+// Third-party includes
+
+// stdlib
 
 namespace Falltergeist
 {

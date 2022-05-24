@@ -1,5 +1,10 @@
-﻿#include <algorithm>
+﻿// Project includes
 #include "../Frm/Direction.h"
+
+// Third-party includes
+
+// stdlib
+#include <algorithm>
 
 namespace Falltergeist
 {

@@ -1,8 +1,13 @@
-﻿#include <algorithm>
+﻿// Project includes
 #include "../Enums.h"
 #include "../Dat/Stream.h"
 #include "../Frm/File.h"
 #include "../Pal/File.h"
+
+// Third-party includes
+
+// stdlib
+#include <algorithm>
 
 namespace Falltergeist
 {

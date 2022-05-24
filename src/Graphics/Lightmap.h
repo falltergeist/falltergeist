@@ -1,11 +1,16 @@
 #pragma once
 
+// Project includes
 #include "../Graphics/Point.h"
 #include "../Graphics/Renderer.h"
 #include "../Graphics/Shader.h"
 #include "../Graphics/IndexBuffer.h"
 #include "../Graphics/VertexBuffer.h"
 #include "../Graphics/VertexArray.h"
+
+// Third-party includes
+
+// stdlib
 
 namespace Falltergeist
 {

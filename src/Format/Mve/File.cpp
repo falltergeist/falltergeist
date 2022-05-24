@@ -1,8 +1,13 @@
-#include <cstring>
+// Project includes
 #include "../Dat/Stream.h"
 #include "../Mve/Chunk.h"
 #include "../Mve/File.h"
 #include "../../Exception.h"
+
+// Third-party includes
+
+// stdlib
+#include <cstring>
 
 namespace Falltergeist
 {

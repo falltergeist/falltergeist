@@ -1,3 +1,4 @@
+// Project includes
 #include "../UI/ImageButton.h"
 #include "../Audio/Mixer.h"
 #include "../Event/Event.h"
@@ -6,13 +7,24 @@
 #include "../Game/Game.h"
 #include "../ResourceManager.h"
 
+// Third-party includes
+
+// stdlib
+
 namespace Falltergeist {
     namespace UI {
-        ImageButton::ImageButton(const Graphics::Point& pos, std::shared_ptr<Graphics::Sprite> buttonUpSprite,
-                                 std::shared_ptr<Graphics::Sprite> buttonDownSprite, std::string buttonUpSoundFilename,
-                                 std::string buttonDownSoundFilename, bool checkBoxMode)
-            : Base(pos), _checkboxMode(checkBoxMode), _buttonDownSoundFilename(buttonDownSoundFilename),
-              _buttonUpSoundFilename(buttonUpSoundFilename), _buttonUpSprite(buttonUpSprite), _buttonDownSprite(buttonDownSprite) {
+        ImageButton::ImageButton(
+            const Graphics::Point& pos,
+            std::shared_ptr<Graphics::Sprite> buttonUpSprite,
+            std::shared_ptr<Graphics::Sprite> buttonDownSprite,
+            std::string buttonUpSoundFilename,
+            std::string buttonDownSoundFilename, bool checkBoxMode
+        ) : Base(pos),
+            _checkboxMode(checkBoxMode),
+            _buttonDownSoundFilename(buttonDownSoundFilename),
+            _buttonUpSoundFilename(buttonUpSoundFilename),
+            _buttonUpSprite(buttonUpSprite),
+            _buttonDownSprite(buttonDownSprite) {
             mouseClickHandler().add([=](Event::Mouse*) { _onMouseClick(); });
             mouseDownHandler().add([=](Event::Mouse* event) { _onMouseDown(event); });
         }

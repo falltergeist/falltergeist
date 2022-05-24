@@ -1,7 +1,12 @@
+// Project includes
 #include "../../VM/Handler/Opcode8118Handler.h"
 #include "../../Game/Game.h"
 #include "../../Game/Time.h"
 #include "../../VM/Script.h"
+
+// Third-party includes
+
+// stdlib
 
 namespace Falltergeist
 {

@@ -1,10 +1,15 @@
+// Project includes
+#include "../Game/Object.h"
+#include "../VM/ErrorException.h"
+#include "../VM/StackValue.h"
+
+// Third-party includes
+
+// stdlib
 #include <iomanip>
 #include <sstream>
 #include <stdexcept>
 #include <string>
-#include "../Game/Object.h"
-#include "../VM/ErrorException.h"
-#include "../VM/StackValue.h"
 
 namespace Falltergeist
 {

@@ -1,7 +1,12 @@
 #pragma once
 
-#include <string>
+// Project includes
 #include "../Event/IEvent.h"
+
+// Third-party includes
+
+// stdlib
+#include <string>
 
 namespace Falltergeist {
     namespace Event {

@@ -1,10 +1,15 @@
-#include <algorithm>
+// Project includes
 #include "../CrossPlatform.h"
 #include "../Event/Mouse.h"
 #include "../Game/Game.h"
 #include "../Graphics/GLCheck.h"
 #include "../Graphics/TextArea.h"
 #include "../ResourceManager.h"
+
+// Third-party includes
+
+// stdlib
+#include <algorithm>
 
 namespace Falltergeist
 {

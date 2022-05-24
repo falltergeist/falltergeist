@@ -1,9 +1,14 @@
 #pragma once
 
-#include <map>
-#include <memory>
+// Project includes
 #include "../VFS/IDriver.h"
 #include "../VFS/MemoryFile.h"
+
+// Third-party includes
+
+// stdlib
+#include <map>
+#include <memory>
 
 namespace Falltergeist {
     namespace VFS {

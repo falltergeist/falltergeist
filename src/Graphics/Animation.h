@@ -1,12 +1,17 @@
 #pragma once
 
-#include <iosfwd>
+// Project includes
 #include "../Graphics/VertexArray.h"
 #include "../Graphics/VertexBuffer.h"
 #include "../Graphics/Renderer.h"
 #include "../Graphics/Shader.h"
 #include "../Graphics/Texture.h"
 #include "../Graphics/TransFlags.h"
+
+// Third-party includes
+
+// stdlib
+#include <iosfwd>
 
 namespace Falltergeist
 {

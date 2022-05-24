@@ -1,7 +1,6 @@
 #pragma once
 
-#include <list>
-#include <memory>
+// Project includes
 #include "../Format/Map/File.h"
 #include "../Game/DudeObject.h"
 #include "../Game/Object.h"
@@ -13,6 +12,12 @@
 #include "../UI/ImageButton.h"
 #include "../UI/ScrollHitBox.h"
 #include "../UI/IResourceManager.h"
+
+// Third-party includes
+
+// stdlib
+#include <list>
+#include <memory>
 
 namespace Falltergeist
 {

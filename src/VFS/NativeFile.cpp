@@ -1,6 +1,10 @@
+// Project includes
 #include "../VFS/NativeFile.h"
 
-#include <assert.h>
+// Third-party includes
+
+// stdlib
+#include <cassert>
 
 namespace Falltergeist {
     namespace VFS {

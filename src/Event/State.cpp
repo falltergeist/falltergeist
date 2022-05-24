@@ -1,4 +1,9 @@
+// Project includes
 #include "../Event/State.h"
+
+// Third-party includes
+
+// stdlib
 
 namespace Falltergeist
 {

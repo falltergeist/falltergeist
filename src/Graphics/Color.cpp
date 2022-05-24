@@ -1,4 +1,9 @@
+// Project includes
 #include "../Graphics/Color.h"
+
+// Third-party includes
+
+// stdlib
 
 namespace Falltergeist::Graphics {
     Color::Color(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha) : _red(red), _green(green), _blue(blue), _alpha(alpha) {

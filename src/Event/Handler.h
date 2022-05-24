@@ -1,6 +1,11 @@
 #pragma once
 
+// Project includes
 #include "../Base/Delegate.h"
+
+// Third-party includes
+
+// stdlib
 
 namespace Falltergeist
 {

@@ -1,4 +1,4 @@
-﻿#include <cmath>
+﻿// Project includes
 #include "../Game/Location.h"
 #include "../Format/Gam/File.h"
 #include "../Format/Map/File.h"
@@ -9,6 +9,11 @@
 #include "../UI/Tile.h"
 #include "../UI/TileMap.h"
 #include "../VM/Script.h"
+
+// Third-party includes
+
+// stdlib
+#include <cmath>
 
 namespace Falltergeist
 {

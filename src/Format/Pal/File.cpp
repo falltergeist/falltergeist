@@ -1,6 +1,11 @@
-﻿#include "../Dat/Stream.h"
+﻿// Project includes
+#include "../Dat/Stream.h"
 #include "../Pal/Color.h"
 #include "../Pal/File.h"
+
+// Third-party includes
+
+// stdlib
 
 namespace Falltergeist
 {

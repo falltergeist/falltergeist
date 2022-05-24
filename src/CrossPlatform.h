@@ -1,8 +1,13 @@
 #pragma once
 
+// Project includes
 #include <list>
 #include <string>
 #include <vector>
+
+// Third-party includes
+
+// stdlib
 
 namespace Falltergeist
 {

@@ -1,4 +1,4 @@
-#include <memory>
+// Project includes
 #include "../Audio/Mixer.h"
 #include "../Event/Event.h"
 #include "../Event/Mouse.h"
@@ -11,6 +11,11 @@
 #include "../UI/InventoryItem.h"
 #include "../UI/ItemsList.h"
 #include "../UI/TextArea.h"
+
+// Third-party includes
+
+// stdlib
+#include <memory>
 
 namespace Falltergeist
 {

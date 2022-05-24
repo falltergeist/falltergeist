@@ -1,3 +1,4 @@
+// Project includes
 #include "../../VM/Handler/Opcode80DEHandler.h"
 #include "../../Game/CritterObject.h"
 #include "../../Game/Game.h"
@@ -5,6 +6,10 @@
 #include "../../State/CritterInteract.h"
 #include "../../UI/ResourceManager.h"
 #include "../../VM/Script.h"
+
+// Third-party includes
+
+// stdlib
 
 namespace Falltergeist
 {

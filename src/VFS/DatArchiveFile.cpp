@@ -1,4 +1,9 @@
+// Project includes
 #include "../VFS/DatArchiveFile.h"
+
+// Third-party includes
+
+// stdlib
 #include <algorithm>
 
 namespace Falltergeist {

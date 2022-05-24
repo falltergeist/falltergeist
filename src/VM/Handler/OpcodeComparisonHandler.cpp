@@ -1,6 +1,11 @@
+// Project includes
 #include "../../VM/Handler/OpcodeComparisonHandler.h"
 #include "../../VM/Script.h"
 #include "../../VM/StackValue.h"
+
+// Third-party includes
+
+// stdlib
 
 namespace Falltergeist
 {

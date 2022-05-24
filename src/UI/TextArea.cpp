@@ -1,6 +1,4 @@
-#include <algorithm>
-#include <sstream>
-#include <SDL.h>
+// Project includes
 #include "../CrossPlatform.h"
 #include "../Event/Mouse.h"
 #include "../Game/Game.h"
@@ -8,6 +6,13 @@
 #include "../Graphics/Rect.h"
 #include "../ResourceManager.h"
 #include "../UI/TextArea.h"
+
+// Third-party includes
+#include <SDL.h>
+
+// stdlib
+#include <algorithm>
+#include <sstream>
 
 namespace Falltergeist
 {

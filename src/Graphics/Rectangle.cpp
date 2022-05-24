@@ -1,5 +1,10 @@
+// Project includes
 #include "../Graphics/Rectangle.h"
-#include <assert.h>
+
+// Third-party includes
+
+// stdlib
+#include <cassert>
 
 namespace Falltergeist {
     namespace Graphics {

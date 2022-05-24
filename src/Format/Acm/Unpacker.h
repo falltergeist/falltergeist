@@ -4,9 +4,12 @@
 
 #pragma once
 
+// Project includes
 #include "../Dat/Item.h"
 
-#define UNPACKER_BUFFER_SIZE 16384
+// Third-party includes
+
+// stdlib
 
 namespace Falltergeist
 {
@@ -47,6 +50,8 @@ namespace Falltergeist
                     int getOneBlock(int *block);
 
                 protected:
+                    static constexpr unsigned UNPACKER_BUFFER_SIZE = 16384;
+
                     // Parameters of ACM stream
                     int _levels, _subblocks;
                     Dat::Stream *stream;

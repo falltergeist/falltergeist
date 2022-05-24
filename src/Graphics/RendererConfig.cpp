@@ -1,4 +1,9 @@
+// Project includes
 #include "../Graphics/RendererConfig.h"
+
+// Third-party includes
+
+// stdlib
 
 namespace Falltergeist
 {

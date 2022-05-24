@@ -1,7 +1,12 @@
 #pragma once
 
+// Project includes
 #include "../VFS/IFile.h"
 #include "../VFS/DatArchiveEntry.h"
+
+// Third-party includes
+
+// stdlib
 #include <functional>
 
 namespace Falltergeist {

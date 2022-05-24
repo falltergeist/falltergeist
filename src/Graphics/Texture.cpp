@@ -1,7 +1,12 @@
-﻿#include "../Exception.h"
+﻿// Project includes
+#include "../Exception.h"
 #include "../Game/Game.h"
 #include "../Graphics/Texture.h"
 #include "../Graphics/GLCheck.h"
+
+// Third-party includes
+
+// stdlib
 #include <stdexcept>
 
 namespace Falltergeist {

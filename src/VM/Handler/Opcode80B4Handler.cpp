@@ -1,7 +1,12 @@
-#include <cstdlib>
-#include <ctime>
+// Project includes
 #include "../../VM/Handler/Opcode80B4Handler.h"
 #include "../../VM/Script.h"
+
+// Third-party includes
+
+// stdlib
+#include <cstdlib>
+#include <ctime>
 
 namespace Falltergeist
 {

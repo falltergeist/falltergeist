@@ -1,6 +1,11 @@
+// Project includes
 #include "../Graphics/SdlDisplay.h"
 #include "../Exception.h"
-#include "SDL.h"
+
+// Third-party includes
+#include <SDL.h>
+
+// stdlib
 
 namespace Falltergeist::Graphics {
     SdlDisplay::SdlDisplay(unsigned int number, const Rectangle& boundaries) : _number(number), _boundaries(boundaries) {

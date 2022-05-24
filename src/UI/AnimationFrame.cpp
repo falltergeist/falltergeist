@@ -1,4 +1,9 @@
+// Project includes
 #include "../UI/AnimationFrame.h"
+
+// Third-party includes
+
+// stdlib
 
 namespace Falltergeist
 {

@@ -1,3 +1,12 @@
+// Project includes
+#include "CrossPlatform.h"
+#include "Exception.h"
+#include "Logger.h"
+
+// Third-party includes
+#include <SDL.h>
+
+// stdlib
 #include <algorithm>
 #include <cerrno>
 #include <cstdlib>
@@ -35,12 +44,8 @@
 #endif
 
 // Falltergeist includes
-#include "CrossPlatform.h"
-#include "Exception.h"
-#include "Logger.h"
 
 // Third party includes
-#include <SDL.h>
 
 namespace Falltergeist
 {

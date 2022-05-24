@@ -1,6 +1,11 @@
+// Project includes
 #include "../../VM/Handler/Opcode8010Handler.h"
 #include "../../VM/HaltException.h"
 #include "../../VM/Script.h"
+
+// Third-party includes
+
+// stdlib
 
 namespace Falltergeist
 {

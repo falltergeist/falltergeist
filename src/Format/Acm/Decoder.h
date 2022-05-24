@@ -5,6 +5,12 @@
 
 #pragma once
 
+// Project includes
+
+// Third-party includes
+
+// stdlib
+
 namespace Falltergeist
 {
     namespace Format

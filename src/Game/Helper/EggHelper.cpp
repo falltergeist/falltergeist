@@ -1,7 +1,12 @@
+// Project includes
 #include "../../Game/Helper/EggHelper.h"
 #include "../../Game/Object.h"
 #include "../../Game/DudeObject.h"
 #include "../../PathFinding/Hexagon.h"
+
+// Third-party includes
+
+// stdlib
 
 namespace Falltergeist
 {

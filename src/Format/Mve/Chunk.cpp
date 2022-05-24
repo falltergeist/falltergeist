@@ -1,4 +1,9 @@
+// Project includes
 #include "../Mve/Chunk.h"
+
+// Third-party includes
+
+// stdlib
 
 namespace Falltergeist
 {

@@ -1,9 +1,14 @@
 #pragma once
 
-#include <string>
+// Project includes
 #include "../Graphics/Point.h"
 #include "../Graphics/Size.h"
 #include "../Graphics/Rectangle.h"
+
+// Third-party includes
+
+// stdlib
+#include <string>
 
 namespace Falltergeist {
     namespace Graphics {

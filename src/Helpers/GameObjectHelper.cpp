@@ -1,3 +1,4 @@
+// Project includes
 #include "../Exception.h"
 #include "../Format/Map/Object.h"
 #include "../Format/Map/Script.h"
@@ -15,6 +16,10 @@
 #include "../Logger.h"
 #include "../ResourceManager.h"
 #include "../VM/Script.h"
+
+// Third-party includes
+
+// stdlib
 
 namespace Falltergeist
 {

@@ -1,4 +1,9 @@
-﻿#include "../Frm/Frame.h"
+﻿// Project includes
+#include "../Frm/Frame.h"
+
+// Third-party includes
+
+// stdlib
 
 namespace Falltergeist
 {

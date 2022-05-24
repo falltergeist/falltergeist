@@ -1,6 +1,11 @@
 #pragma once
 
+// Project includes
 #include "../Game/Object.h"
+
+// Third-party includes
+
+// stdlib
 
 namespace Falltergeist
 {

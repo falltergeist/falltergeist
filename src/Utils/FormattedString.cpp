@@ -1,4 +1,9 @@
+// Project includes
 #include "../Utils/FormattedString.h"
+
+// Third-party includes
+
+// stdlib
 
 namespace Falltergeist {
     namespace Utils {

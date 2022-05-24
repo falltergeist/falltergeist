@@ -1,8 +1,12 @@
+// Project includes
 #include "../Exception.h"
 #include "../Ini/Section.h"
-
-#include <math.h>
 #include "../Logger.h"
+
+// Third-party includes
+
+// stdlib
+#include <cmath>
 
 namespace Falltergeist
 {

@@ -1,10 +1,15 @@
 #pragma once
 
-#include <memory>
-#include <vector>
+// Project includes
 #include "../UI/Base.h"
 #include "../ILogger.h"
 #include "../UI/ImageButton.h"
+
+// Third-party includes
+
+// stdlib
+#include <memory>
+#include <vector>
 
 namespace Falltergeist
 {

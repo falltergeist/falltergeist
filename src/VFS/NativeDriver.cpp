@@ -1,6 +1,11 @@
+// Project includes
 #include "../VFS/NativeDriver.h"
 #include "../VFS/NativeFile.h"
 #include "../Utils/FormattedString.h"
+
+// Third-party includes
+
+// stdlib
 #include <filesystem>
 
 namespace Falltergeist {

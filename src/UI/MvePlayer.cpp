@@ -1,9 +1,14 @@
-﻿#include <bitset>
+﻿// Project includes
 #include "../Exception.h"
 #include "../Format/Mve/Chunk.h"
 #include "../Format/Mve/File.h"
 #include "../Game/Game.h"
 #include "../UI/MvePlayer.h"
+
+// Third-party includes
+
+// stdlib
+#include <bitset>
 
 namespace Falltergeist
 {

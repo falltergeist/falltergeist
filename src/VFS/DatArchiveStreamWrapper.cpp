@@ -1,5 +1,10 @@
+// Project includes
 #include "../VFS/DatArchiveStreamWrapper.h"
 #include "../Exception.h"
+
+// Third-party includes
+
+// stdlib
 #include <algorithm>
 
 namespace Falltergeist {

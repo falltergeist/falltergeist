@@ -1,7 +1,12 @@
 #pragma once
 
-#include <string>
+// Project includes
 #include "../../Format/Dat/Item.h"
+
+// Third-party includes
+
+// stdlib
+#include <string>
 
 namespace Falltergeist
 {

@@ -1,7 +1,12 @@
-﻿#include "../../VM/Handler/Opcode8005.h"
+﻿// Project includes
+#include "../../VM/Handler/Opcode8005.h"
 #include "../../Format/Int/File.h"
 #include "../../Format/Int/Procedure.h"
 #include "../../VM/Script.h"
+
+// Third-party includes
+
+// stdlib
 
 namespace Falltergeist
 {

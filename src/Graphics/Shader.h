@@ -1,11 +1,16 @@
 #pragma once
 
-#include <map>
-#include <string>
-#include <vector>
+// Project includes
+
+// Third-party includes
 #include <glm/glm.hpp>
 #include <GL/glew.h>
 #include <SDL.h>
+
+// stdlib
+#include <map>
+#include <string>
+#include <vector>
 
 namespace Falltergeist
 {

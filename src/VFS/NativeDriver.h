@@ -1,8 +1,13 @@
 #pragma once
 
+// Project includes
 #include "../VFS/IDriver.h"
 #include "../VFS/IFile.h"
 #include "../ILogger.h"
+
+// Third-party includes
+
+// stdlib
 #include <filesystem>
 
 namespace Falltergeist {

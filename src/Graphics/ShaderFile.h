@@ -1,6 +1,11 @@
 #pragma once
 
+// Project includes
 #include <string>
+
+// Third-party includes
+
+// stdlib
 
 namespace Falltergeist {
     namespace Graphics {

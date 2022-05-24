@@ -1,10 +1,14 @@
-#include <math.h>
+// Project includes
+#include "../Ini/File.h"
+#include "../Logger.h"
 
+// Third-party includes
+
+// stdlib
+#include <cmath>
 #include <algorithm>
 #include <functional>
 #include <sstream>
-#include "../Ini/File.h"
-#include "../Logger.h"
 
 namespace Falltergeist
 {

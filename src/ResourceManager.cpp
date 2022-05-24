@@ -1,10 +1,4 @@
-﻿#include <fstream>
-#include <sstream>
-#include <iomanip>
-#include <locale>
-#include <memory>
-#include <utility>
-#include <SDL_image.h>
+﻿// Project includes
 #include "CrossPlatform.h"
 #include "Exception.h"
 #include "Format/Acm/File.h"
@@ -42,6 +36,17 @@
 #include "VFS/DatArchiveDriver.h"
 #include "VFS/NativeDriver.h"
 #include "VFS/MemoryDriver.h"
+
+// Third-party includes
+#include <SDL_image.h>
+
+// stdlib
+#include <fstream>
+#include <sstream>
+#include <iomanip>
+#include <locale>
+#include <memory>
+#include <utility>
 
 namespace Falltergeist {
     using Size = Graphics::Size;

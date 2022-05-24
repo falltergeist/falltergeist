@@ -5,8 +5,11 @@
 
 #pragma once
 
-// Interplay ACM signature
-#define IP_ACM_SIG 0x01032897
+// Project includes
+
+// Third-party includes
+
+// stdlib
 
 namespace Falltergeist
 {

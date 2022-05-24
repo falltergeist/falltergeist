@@ -1,12 +1,14 @@
 #pragma once
 
-#include <array>
-#include <vector>
+// Project includes
 #include "../Base/Iterators.h"
 #include "../Graphics/Point.h"
 
-#define GRID_WIDTH 200
-#define GRID_HEIGHT 200
+// Third-party includes
+
+// stdlib
+#include <array>
+#include <vector>
 
 namespace Falltergeist
 {
@@ -17,6 +19,9 @@ namespace Falltergeist
         using HexagonVector = std::vector<std::unique_ptr<Hexagon>>;
 
         public:
+            static constexpr unsigned GRID_WIDTH = 200;
+            static constexpr unsigned GRID_HEIGHT = 200;
+
             HexagonGrid();
             ~HexagonGrid();
             Base::vector_ptr_decorator<Hexagon> hexagons();

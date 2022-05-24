@@ -1,4 +1,9 @@
+// Project includes
 #include "../../Format/Aaf/Glyph.h"
+
+// Third-party includes
+
+// stdlib
 
 namespace Falltergeist
 {

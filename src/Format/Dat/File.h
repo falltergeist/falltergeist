@@ -1,11 +1,16 @@
 #pragma once
 
+// Project includes
+#include "../../Format/Dat/Entry.h"
+
+// Third-party includes
+
+// stdlib
 #include <cstdint>
 #include <fstream>
 #include <memory>
 #include <string>
 #include <unordered_map>
-#include "Entry.h"
 
 namespace Falltergeist
 {

@@ -1,7 +1,11 @@
+// Project includes
 #include "../Graphics/ShaderFile.h"
 #include "../Exception.h"
 #include "../ResourceManager.h"
-#include <iostream>
+
+// Third-party includes
+
+// stdlib
 #include <sstream>
 
 namespace Falltergeist {

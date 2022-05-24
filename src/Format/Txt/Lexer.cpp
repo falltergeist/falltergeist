@@ -1,5 +1,10 @@
+// Project includes
+#include "../../Format/Txt/Lexer.h"
+
+// Third-party includes
+
+// stdlib
 #include <cctype>
-#include "Lexer.h"
 
 namespace Falltergeist
 {

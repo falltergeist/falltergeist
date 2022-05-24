@@ -1,8 +1,13 @@
 ﻿#pragma once
 
+// Project includes
+#include "../Frm/Frame.h"
+
+// Third-party includes
+
+// stdlib
 #include <cstdint>
 #include <vector>
-#include "../Frm/Frame.h"
 
 namespace Falltergeist
 {

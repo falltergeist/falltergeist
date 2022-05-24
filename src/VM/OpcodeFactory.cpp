@@ -1,6 +1,5 @@
+// Project includes
 #include "../VM/OpcodeFactory.h"
-#include <sstream>
-#include <memory>
 #include "../Exception.h"
 #include "../Logger.h"
 #include "../VM/Handler/Opcode8002.h"
@@ -184,6 +183,12 @@
 #include "../VM/Handler/OpcodeA001Handler.h"
 #include "../VM/Script.h"
 #include "../Game/Game.h"
+
+// Third-party includes
+
+// stdlib
+#include <sstream>
+#include <memory>
 
 namespace Falltergeist
 {

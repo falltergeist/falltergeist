@@ -1,4 +1,9 @@
+// Project includes
 #include "../VM/ErrorException.h"
+
+// Third-party includes
+
+// stdlib
 
 namespace Falltergeist
 {

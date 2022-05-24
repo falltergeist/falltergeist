@@ -1,8 +1,13 @@
 #pragma once
 
+// Project includes
+#include "../ILogger.h"
+
+// Third-party includes
+
+// stdlib
 #include <memory>
 #include <vector>
-#include "../ILogger.h"
 
 namespace Falltergeist
 {

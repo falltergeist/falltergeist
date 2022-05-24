@@ -1,5 +1,10 @@
+// Project includes
 #include "../Ini/Parser.h"
 #include "../../Exception.h"
+
+// Third-party includes
+
+// stdlib
 
 namespace Falltergeist
 {

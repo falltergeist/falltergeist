@@ -1,4 +1,9 @@
+// Project includes
 #include "../Fon/Glyph.h"
+
+// Third-party includes
+
+// stdlib
 
 namespace Falltergeist
 {

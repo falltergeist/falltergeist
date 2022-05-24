@@ -1,8 +1,4 @@
-﻿#include <algorithm>
-#include <cmath>
-#include <memory>
-#include <vector>
-#include <SDL_image.h>
+﻿// Project includes
 #include "../Format/Lst/File.h"
 #include "../Game/Game.h"
 #include "../Graphics/Point.h"
@@ -14,6 +10,15 @@
 #include "../State/Location.h"
 #include "../UI/Tile.h"
 #include "../UI/TileMap.h"
+
+// Third-party includes
+#include <SDL_image.h>
+
+// stdlib
+#include <algorithm>
+#include <cmath>
+#include <memory>
+#include <vector>
 
 namespace  Falltergeist
 {

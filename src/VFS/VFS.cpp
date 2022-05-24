@@ -1,5 +1,10 @@
+// Project includes
 #include "../VFS/VFS.h"
 #include "../Utils/FormattedString.h"
+
+// Third-party includes
+
+// stdlib
 
 namespace Falltergeist {
     namespace VFS {

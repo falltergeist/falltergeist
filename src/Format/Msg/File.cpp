@@ -1,7 +1,12 @@
-﻿#include <string>
+﻿// Project includes
 #include "../../Exception.h"
 #include "../../Format/Msg/File.h"
 #include "../../Format/Dat/Stream.h"
+
+// Third-party includes
+
+// stdlib
+#include <string>
 
 namespace Falltergeist
 {

@@ -1,10 +1,15 @@
-#include <memory>
+// Project includes
 #include "../../VM/Handler/Opcode810AHandler.h"
 #include "../../Game/Object.h"
 #include "../../Graphics/Color.h"
 #include "../../ResourceManager.h"
 #include "../../UI/TextArea.h"
 #include "../../VM/Script.h"
+
+// Third-party includes
+
+// stdlib
+#include <memory>
 
 namespace Falltergeist
 {

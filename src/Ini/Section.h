@@ -1,9 +1,14 @@
 #pragma once
 
+// Project includes
+#include "../Ini/Value.h"
+
+// Third-party includes
+
+// stdlib
 #include <map>
 #include <string>
 #include <vector>
-#include "../Ini/Value.h"
 
 namespace Falltergeist
 {

@@ -1,10 +1,15 @@
 ﻿#pragma once
 
+// Project includes
+#include "../../Format/Aaf/Glyph.h"
+#include "../../Format/Dat/Item.h"
+
+// Third-party includes
+
+// stdlib
 #include <cstdint>
 #include <memory>
 #include <vector>
-#include "../../Format/Aaf/Glyph.h"
-#include "../../Format/Dat/Item.h"
 
 namespace Falltergeist
 {

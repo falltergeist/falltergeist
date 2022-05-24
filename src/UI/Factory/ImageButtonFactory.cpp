@@ -1,7 +1,11 @@
-#include <map>
-
+// Project includes
 #include "../../UI/ImageButton.h"
 #include "../../UI/Factory/ImageButtonFactory.h"
+
+// Third-party includes
+
+// stdlib
+#include <map>
 
 namespace Falltergeist
 {

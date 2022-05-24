@@ -1,6 +1,11 @@
+// Project includes
 #include "../Game/ElevatorSceneryObject.h"
 #include "../UI/TextArea.h"
 #include "../VM/Script.h"
+
+// Third-party includes
+
+// stdlib
 
 namespace Falltergeist
 {

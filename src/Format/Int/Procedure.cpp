@@ -1,4 +1,9 @@
+// Project includes
 #include "../../Format/Int/Procedure.h"
+
+// Third-party includes
+
+// stdlib
 
 namespace Falltergeist
 {

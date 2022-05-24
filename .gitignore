@@ -6,10 +6,7 @@ cmake_install.cmake
 falltergeist.layout
 falltergeist
 falltergeist.cbp
-*.php
-*.bmp
-*.png
-.idea/
+/.idea/
 *.autosave
 /src/nbproject/private/
 nbproject/
@@ -17,7 +14,7 @@ ext
 .vs/
 build/
 CMakeSettings.json
-/cmake-build-debug
+/cmake-build-debug/
 *.dat
 .vscode/
 /conan.lock
@@ -25,5 +22,5 @@ CMakeSettings.json
 /conanbuildinfo.cmake
 /conanbuildinfo.txt
 /conaninfo.txt
-/graph_info.json
 /bin
+/submodules/

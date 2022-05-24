@@ -1,5 +1,10 @@
+// Project includes
 #include "../Fon/File.h"
 #include "../Dat/Stream.h"
+
+// Third-party includes
+
+// stdlib
 
 namespace Falltergeist
 {

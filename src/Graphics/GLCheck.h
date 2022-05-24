@@ -1,8 +1,13 @@
 #pragma once
 
+// Project includes
+
+// Third-party includes
+#include <GL/glew.h>
+
+// stdlib
 #include <cstdlib>
 #include <cstdio>
-#include <GL/glew.h>
 
 #define GL_CHECK(x) do { \
             x; \

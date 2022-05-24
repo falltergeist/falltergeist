@@ -1,10 +1,15 @@
 ﻿#pragma once
 
+// Project includes
+#include "../../Base/Buffer.h"
+#include "../../Format/Enums.h"
+
+// Third-party includes
+
+// stdlib
 #include <fstream>
 #include <string>
 #include <memory>
-#include "../../Base/Buffer.h"
-#include "../../Format/Enums.h"
 
 namespace Falltergeist
 {

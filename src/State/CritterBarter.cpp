@@ -1,3 +1,4 @@
+// Project includes
 #include "../State/CritterBarter.h"
 #include "../functions.h"
 #include "../Exception.h"
@@ -13,6 +14,10 @@
 #include "../UI/ImageButton.h"
 #include "../UI/ItemsList.h"
 #include "../UI/TextArea.h"
+
+// Third-party includes
+
+// stdlib
 
 namespace Falltergeist
 {

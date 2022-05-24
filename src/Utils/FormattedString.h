@@ -1,7 +1,12 @@
 #pragma once
 
+// Project includes
+
+// Third-party includes
+
+// stdlib
 #include <string>
-#include <stdarg.h>
+#include <cstdarg>
 
 namespace Falltergeist {
     namespace Utils {

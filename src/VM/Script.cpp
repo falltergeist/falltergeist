@@ -1,6 +1,4 @@
-#include <ctime>
-#include <memory>
-#include <sstream>
+// Project includes
 #include "../Exception.h"
 #include "../Format/Int/File.h"
 #include "../Format/Int/Procedure.h"
@@ -16,6 +14,13 @@
 #include "../VM/OpcodeFactory.h"
 #include "../VM/Script.h"
 #include "../VM/StackValue.h"
+
+// Third-party includes
+
+// stdlib
+#include <ctime>
+#include <memory>
+#include <sstream>
 
 namespace Falltergeist
 {

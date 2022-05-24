@@ -1,6 +1,4 @@
-#include <array>
-#include <string>
-#include <memory>
+// Project includes
 #include "../Game/CritterObject.h"
 #include "../Exception.h"
 #include "../Game/ArmorItemObject.h"
@@ -16,6 +14,13 @@
 #include "../State/Location.h"
 #include "../UI/AnimationFrame.h"
 #include "../UI/TextArea.h"
+
+// Third-party includes
+
+// stdlib
+#include <array>
+#include <string>
+#include <memory>
 
 namespace Falltergeist
 {

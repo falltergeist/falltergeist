@@ -1,7 +1,4 @@
-﻿#include <algorithm>
-#include <cstdlib>
-#include <list>
-#include <memory>
+﻿// Project includes
 #include "../State/Location.h"
 #include "../Audio/Mixer.h"
 #include "../Exception.h"
@@ -39,6 +36,14 @@
 #include "../UI/TextArea.h"
 #include "../UI/Tile.h"
 #include "../UI/TileMap.h"
+
+// Third-party includes
+
+// stdlib
+#include <algorithm>
+#include <cstdlib>
+#include <list>
+#include <memory>
 
 namespace Falltergeist
 {
@@ -1068,7 +1073,7 @@ namespace Falltergeist
 
                     auto orientation = dude->orientation() + 1;
 
-                    if (orientation >= HEX_SIDES) {
+                    if (orientation >= Hexagon::HEX_SIDES) {
                         orientation = 0;
                     }
 

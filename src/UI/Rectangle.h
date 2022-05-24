@@ -1,8 +1,13 @@
 #pragma once
 
+// Project includes
 #include "../Graphics/Color.h"
 #include "../Graphics/Point.h"
 #include "../UI/Base.h"
+
+// Third-party includes
+
+// stdlib
 
 namespace Falltergeist::UI {
     class Rectangle final : public Base {
