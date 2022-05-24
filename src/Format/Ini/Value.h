@@ -7,6 +7,7 @@
 // stdlib
 #include <ostream>
 #include <string>
+#include <vector>
 
 namespace Falltergeist
 {
