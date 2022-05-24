@@ -1,8 +1,4 @@
-﻿#include <cmath>
-#include <memory>
-
-#define GLM_FORCE_RADIANS
-
+﻿// Project includes
 #include "../Base/Buffer.h"
 #include "../CrossPlatform.h"
 #include "../Event/State.h"
@@ -22,8 +18,15 @@
 #include "../ResourceManager.h"
 #include "../Settings.h"
 #include "../State/State.h"
+
+// Third-party includes
 #include <SDL_image.h>
+#define GLM_FORCE_RADIANS
 #include <glm/gtc/matrix_transform.hpp>
+
+// stdlib
+#include <cmath>
+#include <memory>
 
 namespace Falltergeist {
     namespace Graphics {

@@ -1,4 +1,9 @@
+// Project includes
 #include "../UI/MonthCounter.h"
+
+// Third-party includes
+
+// stdlib
 
 namespace Falltergeist
 {

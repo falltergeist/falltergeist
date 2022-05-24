@@ -1,7 +1,12 @@
+// Project includes
 #include "../../Exception.h"
 #include "../../Format/Txt/MapsFile.h"
-#include "../Txt/WorldmapFile.h"
+#include "../../Format/Txt/WorldmapFile.h"
 #include "../../Format/Dat/File.h"
+
+// Third-party includes
+
+// stdlib
 
 namespace Falltergeist
 {

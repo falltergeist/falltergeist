@@ -1,6 +1,4 @@
-﻿#include <cmath>
-#include <cstdio>
-#include <memory>
+﻿// Project includes
 #include "../Exception.h"
 #include "../Format/Frm/File.h"
 #include "../Format/Msg/File.h"
@@ -26,6 +24,13 @@
 #include "../UI/Image.h"
 #include "../UI/TextArea.h"
 #include "../VM/Script.h"
+
+// Third-party includes
+
+// stdlib
+#include <cmath>
+#include <cstdio>
+#include <memory>
 
 namespace Falltergeist
 {

@@ -1,5 +1,9 @@
+// Project includes
 #include "../VFS/MemoryFile.h"
 
+// Third-party includes
+
+// stdlib
 #include <cstring>
 
 namespace Falltergeist {

@@ -1,8 +1,13 @@
+// Project includes
+#include "../Dat/Stream.h"
+#include "../Lst/File.h"
+
+// Third-party includes
+
+// stdlib
 #include <algorithm>
 #include <functional>
 #include <cctype>
-#include "../Dat/Stream.h"
-#include "../Lst/File.h"
 
 namespace Falltergeist
 {

@@ -1,4 +1,4 @@
-#include <sstream>
+// Project includes
 #include "../State/Inventory.h"
 #include "../Event/Event.h"
 #include "../Event/Mouse.h"
@@ -30,6 +30,11 @@
 #include "../UI/PlayerPanel.h"
 #include "../UI/Rectangle.h"
 #include "../UI/TextArea.h"
+
+// Third-party includes
+
+// stdlib
+#include <sstream>
 
 namespace Falltergeist
 {

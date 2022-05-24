@@ -1,5 +1,10 @@
+// Project includes
 #include "../Graphics/SdlWindow.h"
 #include "../Graphics/SdlDisplay.h"
+
+// Third-party includes
+
+// stdlib
 
 namespace Falltergeist {
     namespace Graphics {

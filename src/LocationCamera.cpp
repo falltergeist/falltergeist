@@ -1,4 +1,9 @@
+// Project includes
 #include "LocationCamera.h"
+
+// Third-party includes
+
+// stdlib
 
 namespace Falltergeist
 {

@@ -1,9 +1,14 @@
+// Project includes
 #include "../Exception.h"
 #include "../Format/Lst/File.h"
 #include "../Game/Defines.h"
 #include "../Helpers/CritterAnimationHelper.h"
 #include "../Logger.h"
 #include "../ResourceManager.h"
+
+// Third-party includes
+
+// stdlib
 
 namespace Falltergeist
 {

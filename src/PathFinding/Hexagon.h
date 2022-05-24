@@ -1,13 +1,14 @@
 #pragma once
 
-#include <array>
-#include <list>
+// Project includes
 #include "../Game/Object.h"
 #include "../Graphics/Point.h"
 
-#define HEX_SIDES 6
-#define HEX_WIDTH 16
-#define HEX_HEIGHT 12
+// Third-party includes
+
+// stdlib
+#include <array>
+#include <list>
 
 namespace Falltergeist
 {
@@ -19,6 +20,10 @@ namespace Falltergeist
     class Hexagon
     {
         public:
+            static constexpr unsigned HEX_SIDES = 6;
+            static constexpr unsigned HEX_WIDTH = 16;
+            static constexpr unsigned HEX_HEIGHT = 12;
+
             Hexagon() = default;
 
             explicit Hexagon(unsigned int number);

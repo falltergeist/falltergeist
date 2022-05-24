@@ -1,7 +1,12 @@
-#include <string>
+// Project includes
 #include "../Exception.h"
 #include "../VM/Stack.h"
 #include "../VM/StackValue.h"
+
+// Third-party includes
+
+// stdlib
+#include <string>
 
 namespace Falltergeist
 {

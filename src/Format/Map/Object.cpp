@@ -1,4 +1,9 @@
-﻿#include "../Map/Object.h"
+﻿// Project includes
+#include "../Map/Object.h"
+
+// Third-party includes
+
+// stdlib
 
 namespace Falltergeist
 {

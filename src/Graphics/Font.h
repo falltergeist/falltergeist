@@ -1,10 +1,15 @@
 #pragma once
 
+// Project includes
+#include "../Graphics/Point.h"
+#include "../Graphics/Texture.h"
+
+// Third-party includes
+
+// stdlib
 #include <memory>
 #include <string>
 #include <vector>
-#include "../Graphics/Point.h"
-#include "../Graphics/Texture.h"
 
 namespace Falltergeist
 {

@@ -1,4 +1,9 @@
-﻿#include "../Map/Elevation.h"
+﻿// Project includes
+#include "../Map/Elevation.h"
+
+// Third-party includes
+
+// stdlib
 
 namespace Falltergeist
 {

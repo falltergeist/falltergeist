@@ -1,7 +1,12 @@
 #pragma once
 
+// Project includes
 #include "../Graphics/VertexBuffer.h"
 #include "../Graphics/VertexBufferLayout.h"
+
+// Third-party includes
+
+// stdlib
 #include <memory>
 
 namespace Falltergeist {

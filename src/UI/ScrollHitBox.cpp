@@ -1,7 +1,10 @@
+// Project includes
 #include "../UI/ScrollHitBox.h"
 #include "../Event/Mouse.h"
 
-#include <iostream>
+// Third-party includes
+
+// stdlib
 
 namespace Falltergeist::UI {
 

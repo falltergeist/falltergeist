@@ -1,5 +1,10 @@
+// Project includes
 #include "../ResourceManager.h"
 #include "../UI/BigCounter.h"
+
+// Third-party includes
+
+// stdlib
 
 namespace Falltergeist
 {

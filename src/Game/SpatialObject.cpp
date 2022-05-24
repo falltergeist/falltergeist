@@ -1,7 +1,12 @@
+// Project includes
 #include "../Game/SpatialObject.h"
 #include "../PathFinding/Hexagon.h"
 #include "../UI/TextArea.h"
 #include "../VM/Script.h"
+
+// Third-party includes
+
+// stdlib
 
 namespace Falltergeist
 {

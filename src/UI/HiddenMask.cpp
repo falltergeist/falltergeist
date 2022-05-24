@@ -1,6 +1,11 @@
+// Project includes
 #include "../Graphics/Rect.h"
 #include "../Graphics/Texture.h"
 #include "../UI/HiddenMask.h"
+
+// Third-party includes
+
+// stdlib
 
 namespace Falltergeist
 {

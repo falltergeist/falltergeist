@@ -1,6 +1,4 @@
-#include <string>
-#include <vector>
-#include <memory>
+// Project includes
 #include "../State/Start.h"
 #include "../Game/DudeObject.h"
 #include "../Game/Game.h"
@@ -15,6 +13,13 @@
 #include "../State/Movie.h"
 #include "../UI/Image.h"
 #include "../UI/TextArea.h"
+
+// Third-party includes
+
+// stdlib
+#include <string>
+#include <vector>
+#include <memory>
 
 namespace Falltergeist
 {

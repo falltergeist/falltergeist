@@ -1,11 +1,6 @@
 #pragma once
 
-#include <memory>
-#include <string>
-#include <vector>
-#include <glm/glm.hpp>
-#include <GL/glew.h>
-#include <SDL.h>
+// Project includes
 #include "../Graphics/Color.h"
 #include "../Graphics/IRendererConfig.h"
 #include "../Graphics/Point.h"
@@ -14,6 +9,16 @@
 #include "../Graphics/Size.h"
 #include "../Graphics/SdlWindow.h"
 #include "../ILogger.h"
+
+// Third-party includes
+#include <glm/glm.hpp>
+#include <GL/glew.h>
+#include <SDL.h>
+
+// stdlib
+#include <memory>
+#include <string>
+#include <vector>
 
 namespace Falltergeist
 {

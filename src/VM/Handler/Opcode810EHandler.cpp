@@ -1,8 +1,13 @@
+// Project includes
 #include "../../VM/Handler/Opcode810EHandler.h"
 #include "../../Game/CritterObject.h"
 #include "../../Game/Object.h"
 #include "../../UI/AnimationQueue.h"
 #include "../../VM/Script.h"
+
+// Third-party includes
+
+// stdlib
 
 namespace Falltergeist
 {

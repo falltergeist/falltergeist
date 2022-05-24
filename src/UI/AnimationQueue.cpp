@@ -1,6 +1,11 @@
+// Project includes
 #include "../UI/AnimationQueue.h"
 #include "../Event/Event.h"
 #include "../UI/Animation.h"
+
+// Third-party includes
+
+// stdlib
 #include <memory>
 
 namespace Falltergeist {

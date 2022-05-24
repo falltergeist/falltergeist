@@ -1,10 +1,15 @@
 #pragma once
 
+// Project includes
+#include "Graphics/Size.h"
+#include "Graphics/Point.h"
+#include "ILogger.h"
+
+// Third-party includes
+
+// stdlib
 #include <iosfwd>
 #include <iostream>
-#include "Graphics/Point.h"
-#include "Graphics/Size.h"
-#include "ILogger.h"
 
 namespace Falltergeist
 {

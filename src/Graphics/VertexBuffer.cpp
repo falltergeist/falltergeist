@@ -1,5 +1,10 @@
+// Project includes
 #include "../Graphics/VertexBuffer.h"
 #include "../Graphics/GLCheck.h"
+
+// Third-party includes
+
+// stdlib
 #include <stdexcept>
 
 namespace Falltergeist {

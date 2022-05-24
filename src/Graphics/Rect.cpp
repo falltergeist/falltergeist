@@ -1,5 +1,10 @@
-#include <algorithm>
+// Project includes
 #include "../Graphics/Rect.h"
+
+// Third-party includes
+
+// stdlib
+#include <algorithm>
 
 namespace Falltergeist
 {

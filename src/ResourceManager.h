@@ -1,5 +1,12 @@
 #pragma once
 
+// Project includes
+#include "Base/Singleton.h"
+#include "VFS/VFS.h"
+
+// Third-party includes
+
+// stdlib
 #include <fstream>
 #include <functional>
 #include <string>
@@ -7,8 +14,6 @@
 #include <memory>
 #include <unordered_map>
 #include <vector>
-#include "Base/Singleton.h"
-#include "VFS/VFS.h"
 
 namespace Falltergeist
 {

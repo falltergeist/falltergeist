@@ -1,8 +1,13 @@
 ﻿#pragma once
 
+// Project includes
 #include "../../Base/Buffer.h"
 #include "../Dat/Item.h"
 #include "../Enums.h"
+
+// Third-party includes
+
+// stdlib
 
 namespace Falltergeist
 {

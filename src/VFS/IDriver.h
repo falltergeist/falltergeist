@@ -1,8 +1,13 @@
 #pragma once
 
+// Project includes
+#include "../VFS/IFile.h"
+
+// Third-party includes
+
+// stdlib
 #include <string>
 #include <memory>
-#include "../VFS/IFile.h"
 
 namespace Falltergeist {
     namespace VFS {

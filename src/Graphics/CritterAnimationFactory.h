@@ -1,8 +1,13 @@
 #pragma once
 
-#include <memory>
+// Project includes
 #include "../Game/Orientation.h"
 #include "../UI/Animation.h"
+
+// Third-party includes
+
+// stdlib
+#include <memory>
 
 namespace Falltergeist
 {

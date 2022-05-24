@@ -1,8 +1,13 @@
 #pragma once
 
+// Project includes
 #include "../State/State.h"
 #include "../Game/Timer.h"
 #include "../UI/IResourceManager.h"
+
+// Third-party includes
+
+// stdlib
 
 namespace Falltergeist
 {

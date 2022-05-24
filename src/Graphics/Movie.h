@@ -1,7 +1,12 @@
 #pragma once
 
-#include <string>
+// Project includes
 #include "../Graphics/Texture.h"
+
+// Third-party includes
+
+// stdlib
+#include <string>
 
 namespace Falltergeist
 {

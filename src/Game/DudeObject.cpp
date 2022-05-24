@@ -1,5 +1,4 @@
-#include <cmath>
-#include <functional>
+// Project includes
 #include "../Format/Gcd/File.h"
 #include "../Game/DudeObject.h"
 #include "../Game/Game.h"
@@ -9,6 +8,12 @@
 #include "../UI/Animation.h"
 #include "../UI/AnimationQueue.h"
 #include "../UI/TextArea.h"
+
+// Third-party includes
+
+// stdlib
+#include <cmath>
+#include <functional>
 
 namespace Falltergeist
 {

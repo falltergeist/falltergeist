@@ -1,6 +1,11 @@
-#include <algorithm>
+// Project includes
 #include "../../Format/Dat/Entry.h"
 #include "../../Format/Dat/File.h"
+
+// Third-party includes
+
+// stdlib
+#include <algorithm>
 
 namespace Falltergeist
 {

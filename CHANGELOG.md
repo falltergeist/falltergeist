@@ -1,6 +1,7 @@
 Under development
 =======================
 - [bugfix] Fix objects rendered with wrong offsets (alexeevdv)
+- [refactoring] Structurize header includes (alexeevdv)
 - [refactoring] Extract scroll logic from Location (alexeevdv)
 - [feature] Replace SDL_Color with Graphics::Color (alexeevdv)
 

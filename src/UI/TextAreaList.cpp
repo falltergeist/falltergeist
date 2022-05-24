@@ -1,6 +1,11 @@
+// Project includes
 #include "../Graphics/Rect.h"
 #include "../UI/TextArea.h"
 #include "../UI/TextAreaList.h"
+
+// Third-party includes
+
+// stdlib
 
 namespace Falltergeist
 {

@@ -1,4 +1,9 @@
+// Project includes
 #include "../../VM/Handler/Opcode8002.h"
+
+// Third-party includes
+
+// stdlib
 
 namespace Falltergeist
 {

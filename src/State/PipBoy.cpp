@@ -1,3 +1,4 @@
+// Project includes
 #include "../functions.h"
 #include "../State/PipBoy.h"
 #include "../Event/Keyboard.h"
@@ -13,6 +14,10 @@
 #include "../UI/MonthCounter.h"
 #include "../UI/SmallCounter.h"
 #include "../UI/TextArea.h"
+
+// Third-party includes
+
+// stdlib
 
 namespace Falltergeist
 {

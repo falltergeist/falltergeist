@@ -1,9 +1,14 @@
 #pragma once
 
-#include <ctime>
-#include <SDL.h>
+// Project includes
 #include "../Graphics/Movie.h"
 #include "../UI/Base.h"
+
+// Third-party includes
+#include <SDL.h>
+
+// stdlib
+#include <ctime>
 
 namespace Falltergeist
 {

@@ -1,4 +1,9 @@
+// Project includes
 #include "../UI/Tile.h"
+
+// Third-party includes
+
+// stdlib
 
 namespace Falltergeist
 {

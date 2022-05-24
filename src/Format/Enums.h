@@ -1,6 +1,11 @@
 #pragma once
 
-#include <stdint.h>
+// Project includes
+
+// Third-party includes
+
+// stdlib
+#include <cstdint>
 
 enum class STAT : uint32_t
 {

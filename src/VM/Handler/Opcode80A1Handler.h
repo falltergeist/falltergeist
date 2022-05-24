@@ -1,7 +1,12 @@
 #pragma once
 
+// Project includes
 #include "../../VM/OpcodeHandler.h"
 #include "../../ILogger.h"
+
+// Third-party includes
+
+// stdlib
 
 namespace Falltergeist
 {

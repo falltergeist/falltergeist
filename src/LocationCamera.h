@@ -1,7 +1,12 @@
 #pragma once
 
+// Project includes
 #include "Graphics/Point.h"
 #include "Graphics/Size.h"
+
+// Third-party includes
+
+// stdlib
 
 namespace Falltergeist
 {

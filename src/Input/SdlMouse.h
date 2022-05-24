@@ -1,8 +1,13 @@
 #pragma once
 
-#include <memory>
+// Project includes
 #include "../Graphics/SdlWindow.h"
 #include "../Input/IMouse.h"
+
+// Third-party includes
+
+// stdlib
+#include <memory>
 
 namespace Falltergeist {
     namespace Input {

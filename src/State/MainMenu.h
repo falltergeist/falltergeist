@@ -1,9 +1,14 @@
 #pragma once
 
-#include <memory>
+// Project includes
 #include "../ILogger.h"
 #include "../State/State.h"
 #include "../UI/IResourceManager.h"
+
+// Third-party includes
+
+// stdlib
+#include <memory>
 
 namespace Falltergeist
 {

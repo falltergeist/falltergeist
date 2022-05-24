@@ -1,7 +1,12 @@
+// Project includes
 #include "../Helpers/CritterHelper.h"
 #include "../Game/ArmorItemObject.h"
 #include "../Game/Defines.h"
 #include "../Game/WeaponItemObject.h"
+
+// Third-party includes
+
+// stdlib
 
 namespace Falltergeist
 {

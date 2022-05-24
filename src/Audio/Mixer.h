@@ -1,11 +1,16 @@
 #pragma once
 
+// Project includes
+#include "../ILogger.h"
+
+// Third-party includes
+#include <SDL_mixer.h>
+
+// stdlib
 #include <cstdint>
 #include <memory>
 #include <string>
 #include <unordered_map>
-#include <SDL_mixer.h>
-#include "../ILogger.h"
 
 namespace Falltergeist
 {

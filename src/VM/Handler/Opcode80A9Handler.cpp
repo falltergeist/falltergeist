@@ -1,3 +1,4 @@
+// Project includes
 #include "../../VM/Handler/Opcode80A9Handler.h"
 #include "../../Game/DudeObject.h"
 #include "../../Game/Game.h"
@@ -5,6 +6,10 @@
 #include "../../PathFinding/Hexagon.h"
 #include "../../PathFinding/HexagonGrid.h"
 #include "../../VM/Script.h"
+
+// Third-party includes
+
+// stdlib
 
 namespace Falltergeist
 {

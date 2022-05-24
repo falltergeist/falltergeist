@@ -1,11 +1,16 @@
 #pragma once
 
-#include <memory>
+// Project includes
 #include "../Event/EventTarget.h"
 #include "../Graphics/Point.h"
 #include "../Graphics/Size.h"
 #include "../Graphics/TransFlags.h"
 #include "../UI/Base.h"
+
+// Third-party includes
+
+// stdlib
+#include <memory>
 
 namespace Falltergeist
 {

@@ -1,8 +1,13 @@
+// Project includes
 #include "../Game/Game.h"
 #include "../Graphics/Movie.h"
 #include "../Graphics/Renderer.h"
 #include "../Graphics/Shader.h"
 #include "../Graphics/VertexArray.h"
+
+// Third-party includes
+
+// stdlib
 
 namespace Falltergeist
 {

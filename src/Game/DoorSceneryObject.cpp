@@ -1,3 +1,4 @@
+// Project includes
 #include "../Game/DoorSceneryObject.h"
 #include "../Audio/Mixer.h"
 #include "../Event/Event.h"
@@ -7,6 +8,10 @@
 #include "../UI/Animation.h"
 #include "../UI/AnimationQueue.h"
 #include "../UI/TextArea.h"
+
+// Third-party includes
+
+// stdlib
 
 namespace Falltergeist
 {

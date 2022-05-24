@@ -1,9 +1,14 @@
-#include <vector>
-#include <algorithm>
-#include <cctype>
+// Project includes
 #include "../../Exception.h"
 #include "../../Format/Dat/Stream.h"
 #include "../../Format/Gam/File.h"
+
+// Third-party includes
+
+// stdlib
+#include <vector>
+#include <algorithm>
+#include <cctype>
 
 namespace Falltergeist
 {

@@ -1,6 +1,11 @@
-#include <cmath>
+// Project includes
 #include "../Game/DoorSceneryObject.h"
 #include "../PathFinding/Hexagon.h"
+
+// Third-party includes
+
+// stdlib
+#include <cmath>
 
 namespace Falltergeist
 {
@@ -10,7 +15,7 @@ namespace Falltergeist
         setNumber(number);
     }
 
-    std::array<Hexagon*, HEX_SIDES>& Hexagon::neighbors()
+    std::array<Hexagon*, Hexagon::HEX_SIDES>& Hexagon::neighbors()
     {
         return _neighbors;
     }

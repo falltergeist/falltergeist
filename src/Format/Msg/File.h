@@ -1,8 +1,13 @@
 ﻿#pragma once
 
-#include <vector>
+// Project includes
 #include "../../Format/Dat/Item.h"
 #include "../../Format/Msg/Message.h"
+
+// Third-party includes
+
+// stdlib
+#include <vector>
 
 namespace Falltergeist
 {

@@ -1,10 +1,15 @@
 #pragma once
 
-#include <memory>
-#include <vector>
+// Project includes
 #include "../Input/Mouse.h"
 #include "../State/State.h"
 #include "../UI/IResourceManager.h"
+
+// Third-party includes
+
+// stdlib
+#include <memory>
+#include <vector>
 
 namespace Falltergeist
 {

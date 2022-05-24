@@ -1,5 +1,10 @@
-#include <functional>
+// Project includes
 #include "../Ini/Section.h"
+
+// Third-party includes
+
+// stdlib
+#include <functional>
 
 namespace Falltergeist
 {

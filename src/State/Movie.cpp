@@ -1,3 +1,4 @@
+// Project includes
 #include "../State/Movie.h"
 #include "../Audio/Mixer.h"
 #include "../CrossPlatform.h"
@@ -16,6 +17,10 @@
 #include "../UI/MvePlayer.h"
 #include "../UI/TextArea.h"
 #include "../Exception.h"
+
+// Third-party includes
+
+// stdlib
 
 namespace Falltergeist
 {

@@ -1,11 +1,16 @@
 #pragma once
 
+// Project includes
+#include "../Ini/Value.h"
+#include "../Txt/Parser.h"
+
+// Third-party includes
+
+// stdlib
 #include <list>
 #include <memory>
 #include <string>
 #include <vector>
-#include "../Ini/Value.h"
-#include "../Txt/Parser.h"
 
 namespace Falltergeist
 {

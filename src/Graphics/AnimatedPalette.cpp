@@ -1,4 +1,9 @@
+// Project includes
 #include "../Graphics/AnimatedPalette.h"
+
+// Third-party includes
+
+// stdlib
 
 namespace Falltergeist
 {

@@ -1,7 +1,12 @@
-#include <list>
-#include <memory>
+// Project includes
 #include "../Event/Event.h"
 #include "../Event/EventTarget.h"
+
+// Third-party includes
+
+// stdlib
+#include <list>
+#include <memory>
 
 namespace Falltergeist
 {

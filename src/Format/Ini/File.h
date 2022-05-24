@@ -1,10 +1,15 @@
 #pragma once
 
+// Project includes
+#include "../Ini/Parser.h"
+#include "../Ini/Section.h"
+
+// Third-party includes
+
+// stdlib
 #include <map>
 #include <string>
 #include <vector>
-#include "../Ini/Parser.h"
-#include "../Ini/Section.h"
 
 namespace Falltergeist
 {

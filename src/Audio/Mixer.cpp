@@ -1,5 +1,4 @@
-#include <string>
-#include <SDL.h>
+// Project includes
 #include "../Audio/Mixer.h"
 #include "../Base/Buffer.h"
 #include "../Exception.h"
@@ -8,6 +7,12 @@
 #include "../ResourceManager.h"
 #include "../Settings.h"
 #include "../UI/MvePlayer.h"
+
+// Third-party includes
+#include <SDL.h>
+
+// stdlib
+#include <string>
 
 namespace Falltergeist
 {

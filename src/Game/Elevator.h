@@ -1,5 +1,10 @@
 #pragma once
 
+// Project includes
+
+// Third-party includes
+
+// stdlib
 #include <vector>
 #include <memory>
 
@@ -36,7 +41,7 @@ namespace Falltergeist
                 uint32_t _labelsFID;
                 size_t _size;
                 std::vector<ElevatorFloor*> _floors;
-                
+
         };
 
 

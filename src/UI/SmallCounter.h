@@ -1,8 +1,13 @@
 #pragma once
 
-#include <memory>
+// Project includes
 #include "../Graphics/Sprite.h"
 #include "../UI/Base.h"
+
+// Third-party includes
+
+// stdlib
+#include <memory>
 
 namespace Falltergeist
 {

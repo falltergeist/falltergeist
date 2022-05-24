@@ -1,9 +1,14 @@
 #pragma once
 
-#include <fstream>
-#include <stdint.h>
-#include <map>
+// Project includes
 #include "../VFS/DatArchiveEntry.h"
+
+// Third-party includes
+
+// stdlib
+#include <fstream>
+#include <cstdint>
+#include <map>
 
 namespace Falltergeist {
     namespace VFS {

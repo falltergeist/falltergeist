@@ -1,8 +1,4 @@
-#include <algorithm>
-#include <sstream>
-#include <ctime>
-#include <memory>
-#include <SDL_image.h>
+// Project includes
 #include "../Audio/Mixer.h"
 #include "../CrossPlatform.h"
 #include "../Event/Dispatcher.h"
@@ -24,6 +20,15 @@
 #include "../UI/FpsCounter.h"
 #include "../UI/TextArea.h"
 #include "../Graphics/SdlWindow.h"
+
+// Third-party includes
+#include <SDL_image.h>
+
+// stdlib
+#include <algorithm>
+#include <sstream>
+#include <ctime>
+#include <memory>
 
 namespace Falltergeist
 {

@@ -1,7 +1,12 @@
 #pragma once
 
-#include <memory>
+// Project includes
 #include "../Event/Handler.h"
+
+// Third-party includes
+
+// stdlib
+#include <memory>
 
 namespace Falltergeist
 {

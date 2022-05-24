@@ -1,3 +1,4 @@
+// Project includes
 #include "../../VM/Handler/Opcode810BHandler.h"
 #include "../../Game/DudeObject.h"
 #include "../../Game/Object.h"
@@ -9,6 +10,10 @@
 #include "../../PathFinding/Hexagon.h"
 #include "../../State/ElevatorDialog.h"
 #include "../../UI/ResourceManager.h"
+
+// Third-party includes
+
+// stdlib
 
 #define PID_ELEVATOR_STUB (33555725)
 
@@ -61,12 +66,12 @@ namespace Falltergeist
                                                         Game::Game::getInstance()->pushState(elevatorDialog);
                                                     }
                                                 }
-                                            }        
+                                            }
                                         }
                                     }
                                 }
                             }
-                        } 
+                        }
 
                         result = -1;
                         break;

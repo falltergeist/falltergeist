@@ -1,9 +1,14 @@
-#include <memory>
+// Project includes
 #include "../Game/ItemObject.h"
 #include "../Graphics/ObjectUIFactory.h"
 #include "../ResourceManager.h"
 #include "../UI/TextArea.h"
 #include "../VM/Script.h"
+
+// Third-party includes
+
+// stdlib
+#include <memory>
 
 namespace Falltergeist
 {

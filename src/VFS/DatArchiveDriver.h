@@ -1,8 +1,13 @@
 #pragma once
 
+// Project includes
 #include "../VFS/IDriver.h"
 #include "../VFS/DatArchiveEntry.h"
 #include "../VFS/DatArchiveStreamWrapper.h"
+
+// Third-party includes
+
+// stdlib
 #include <map>
 #include <memory>
 

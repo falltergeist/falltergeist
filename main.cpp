@@ -1,10 +1,15 @@
-#include <memory>
+// Project includes
 #include "src/Exception.h"
 #include "src/Game/Game.h"
 #include "src/Logger.h"
 #include "src/Settings.h"
 #include "src/State/Start.h"
 #include "src/UI/ResourceManager.h"
+
+// Third-party includes
+
+// stdlib
+#include <memory>
 
 using namespace Falltergeist;
 

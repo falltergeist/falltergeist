@@ -1,7 +1,12 @@
+// Project includes
 #include "../VFS/DatArchiveDriver.h"
 #include "../VFS/DatArchiveFile.h"
 #include "../VFS/MemoryFile.h"
+
+// Third-party includes
 #include "zlib.h"
+
+// stdlib
 
 namespace Falltergeist {
     namespace VFS {

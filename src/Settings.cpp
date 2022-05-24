@@ -1,9 +1,14 @@
-#include <string>
+// Project includes
 #include "CrossPlatform.h"
 #include "Logger.h"
 #include "Ini/File.h"
 #include "Ini/Writer.h"
 #include "Settings.h"
+
+// Third-party includes
+
+// stdlib
+#include <string>
 
 namespace Falltergeist
 {

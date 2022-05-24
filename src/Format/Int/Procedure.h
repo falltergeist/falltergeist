@@ -1,8 +1,13 @@
 ﻿#pragma once
 
+// Project includes
+#include "../../Format/Enums.h"
+
+// Third-party includes
+
+// stdlib
 #include <cstdint>
 #include <string>
-#include "../../Format/Enums.h"
 
 namespace Falltergeist
 {

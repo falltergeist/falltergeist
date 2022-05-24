@@ -1,9 +1,14 @@
-#include <algorithm>
+// Project includes
 #include "../../VM/Handler/Opcode810DHandler.h"
 #include "../../Game/ContainerItemObject.h"
 #include "../../Game/CritterObject.h"
 #include "../../Game/ItemObject.h"
 #include "../../VM/Script.h"
+
+// Third-party includes
+
+// stdlib
+#include <algorithm>
 
 namespace Falltergeist
 {

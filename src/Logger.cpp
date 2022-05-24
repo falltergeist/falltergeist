@@ -1,5 +1,10 @@
-#include <sstream>
+// Project includes
 #include "Logger.h"
+
+// Third-party includes
+
+// stdlib
+#include <sstream>
 
 namespace Falltergeist
 {

@@ -1,5 +1,10 @@
 #pragma once
 
+// Project includes
+
+// Third-party includes
+
+// stdlib
 #include "../../ILogger.h"
 #include "../../VM/OpcodeHandler.h"
 

@@ -1,4 +1,4 @@
-#include <memory>
+// Project includes
 #include "../State/CursorDropdown.h"
 #include "../Audio/Mixer.h"
 #include "../Exception.h"
@@ -11,6 +11,11 @@
 #include "../State/Location.h"
 #include "../UI/HiddenMask.h"
 #include "../UI/PlayerPanel.h"
+
+// Third-party includes
+
+// stdlib
+#include <memory>
 
 namespace Falltergeist::State {
     using Point = Graphics::Point;

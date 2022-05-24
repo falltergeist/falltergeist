@@ -1,12 +1,17 @@
 #pragma once
 
-#include <string>
+// Project includes
 #include "../Format/Frm/File.h"
 #include "../Graphics/Point.h"
 #include "../Graphics/Shader.h"
 #include "../Graphics/Texture.h"
 #include "../Graphics/Rectangle.h"
 #include "../Graphics/TransFlags.h"
+
+// Third-party includes
+
+// stdlib
+#include <string>
 
 namespace Falltergeist
 {

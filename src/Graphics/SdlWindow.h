@@ -1,9 +1,14 @@
 #pragma once
 
-#include <memory>
+// Project includes
 #include "../Graphics/IWindow.h"
 #include "../ILogger.h"
-#include "SDL.h"
+
+// Third-party includes
+#include <SDL.h>
+
+// stdlib
+#include <memory>
 
 namespace Falltergeist {
     namespace Game {

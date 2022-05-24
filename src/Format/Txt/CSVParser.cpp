@@ -1,6 +1,11 @@
+// Project includes
+#include "../../Format/Txt/CSVParser.h"
+
+// Third-party includes
+
+// stdlib
 #include <algorithm>
 #include <sstream>
-#include "CSVParser.h"
 
 namespace Falltergeist
 {

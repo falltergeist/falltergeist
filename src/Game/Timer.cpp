@@ -1,5 +1,10 @@
+// Project includes
 #include "../Event/Event.h"
 #include "../Game/Timer.h"
+
+// Third-party includes
+
+// stdlib
 
 namespace Falltergeist
 {

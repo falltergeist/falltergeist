@@ -1,6 +1,11 @@
-#include <memory>
+// Project includes
 #include "../UI/Image.h"
 #include "../UI/ImageList.h"
+
+// Third-party includes
+
+// stdlib
+#include <memory>
 
 namespace Falltergeist
 {

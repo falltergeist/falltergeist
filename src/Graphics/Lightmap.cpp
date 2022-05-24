@@ -1,8 +1,13 @@
+// Project includes
 #include "../Game/Game.h"
 #include "../Graphics/GLCheck.h"
 #include "../Graphics/Lightmap.h"
 #include "../ResourceManager.h"
 #include "../State/Location.h"
+
+// Third-party includes
+
+// stdlib
 #include <stdexcept>
 
 namespace Falltergeist

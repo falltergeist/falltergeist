@@ -1,5 +1,10 @@
+// Project includes
 #include "../Game/LocationElevation.h"
 #include "../UI/TileMap.h"
+
+// Third-party includes
+
+// stdlib
 
 namespace Falltergeist
 {

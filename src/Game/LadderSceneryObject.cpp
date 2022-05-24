@@ -1,3 +1,4 @@
+// Project includes
 #include "../Game/LadderSceneryObject.h"
 #include "../UI/TextArea.h"
 #include "../VM/Script.h"
@@ -12,6 +13,10 @@
 #include "../Format/Txt/MapsFile.h"
 #include "../ResourceManager.h"
 #include "../State/WorldMap.h"
+
+// Third-party includes
+
+// stdlib
 
 namespace Falltergeist
 {
@@ -71,8 +76,8 @@ namespace Falltergeist
                 auto worldMapState = new State::WorldMap(resourceManager);
                 game->setState(worldMapState);
             }
-        }                
-        
+        }
+
         int LadderSceneryObject::exitMapNumber() const
         {
             return _exitMapNumber;

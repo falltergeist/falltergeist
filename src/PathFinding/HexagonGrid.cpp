@@ -1,10 +1,15 @@
+// Project includes
+#include "../Game/WallObject.h"
+#include "../PathFinding/Hexagon.h"
+#include "../PathFinding/HexagonGrid.h"
+
+// Third-party includes
+
+// stdlib
 #include <array>
 #include <cstdlib>
 #include <queue>
 #include <memory>
-#include "../Game/WallObject.h"
-#include "../PathFinding/Hexagon.h"
-#include "../PathFinding/HexagonGrid.h"
 
 namespace Falltergeist
 {
@@ -21,8 +26,8 @@ namespace Falltergeist
     {
         // Creating 200x200 hexagonal map
         unsigned int index = 0;
-        const unsigned int xMod = HEX_WIDTH / 2;  // x offset
-        const unsigned int yMod = HEX_HEIGHT / 2; // y offset
+        const unsigned int xMod = Hexagon::HEX_WIDTH / 2;  // x offset
+        const unsigned int yMod = Hexagon::HEX_HEIGHT / 2; // y offset
 
         for (unsigned int hy = 0; hy != GRID_HEIGHT; ++hy) // rows
         {
@@ -34,12 +39,12 @@ namespace Falltergeist
                 const bool oddCol = hx & 1;
                 const int  oddMod = hy + 1;
                 const int x = (48 * (GRID_WIDTH / 2))
-                            + (HEX_WIDTH * oddMod)
-                            - ((HEX_HEIGHT * 2) * hx)
+                            + (Hexagon::HEX_WIDTH * oddMod)
+                            - ((Hexagon::HEX_HEIGHT * 2) * hx)
                             - (xMod * oddCol);
-                const int y = (oddMod * HEX_HEIGHT)
+                const int y = (oddMod * Hexagon::HEX_HEIGHT)
                             + (yMod * hx)
-                            + HEX_HEIGHT
+                            + Hexagon::HEX_HEIGHT
                             - (yMod * oddCol);
                 hexagon->setCubeX(hy - (hx + oddCol) / 2);
                 hexagon->setCubeZ(hx);
@@ -77,7 +82,7 @@ namespace Falltergeist
             const unsigned indexTopRight  = topMod + rightMod; // index 6
 
             const unsigned gridSize = GRID_HEIGHT * GRID_WIDTH;
-            std::array<Hexagon*, HEX_SIDES>& neighbor = hexagon->neighbors();
+            std::array<Hexagon*, Hexagon::HEX_SIDES>& neighbor = hexagon->neighbors();
             // Don't get a neighbour if at the map's borders
             if (indexBot < gridSize) {
                 neighbor[0] = _hexagons.at(indexBot).get();
@@ -112,8 +117,8 @@ namespace Falltergeist
         for (auto& hexagon : _hexagons)
         {
             auto hexPos = hexagon->position();
-            if (pos.x() >= hexPos.x() - HEX_WIDTH &&
-                pos.x() <  hexPos.x() + HEX_WIDTH &&
+            if (pos.x() >= hexPos.x() - Hexagon::HEX_WIDTH &&
+                pos.x() <  hexPos.x() + Hexagon::HEX_WIDTH &&
                 pos.y() >= hexPos.y() - 8 &&
                 pos.y() <  hexPos.y() + 4)
             {
@@ -159,9 +164,9 @@ namespace Falltergeist
                 break;
             }
 
-            std::array<Hexagon*, HEX_SIDES>& neighbor = current->neighbors();
+            std::array<Hexagon*, Hexagon::HEX_SIDES>& neighbor = current->neighbors();
             // look to each adjacent hex...
-            for (int i = 0; i < HEX_SIDES; i++)
+            for (int i = 0; i < Hexagon::HEX_SIDES; i++)
             {
                 // Does the hex exist?
                 if (neighbor[i] == nullptr) {

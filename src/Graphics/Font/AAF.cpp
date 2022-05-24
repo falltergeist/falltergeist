@@ -1,8 +1,13 @@
-#include <memory>
+// Project includes
 #include "../../Format/Aaf/Glyph.h"
 #include "../../Graphics/Font/AAF.h"
 #include "../../Graphics/Pixels.h"
 #include "../../ResourceManager.h"
+
+// Third-party includes
+
+// stdlib
+#include <memory>
 
 namespace Falltergeist {
     namespace Graphics {

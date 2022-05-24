@@ -1,7 +1,12 @@
 #pragma once
 
+// Project includes
 #include "../UI/Base.h"
 #include "../UI/ImageList.h"
+
+// Third-party includes
+
+// stdlib
 #include <string>
 
 namespace Falltergeist {

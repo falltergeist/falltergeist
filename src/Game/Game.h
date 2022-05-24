@@ -1,15 +1,20 @@
 #pragma once
 
-#include <memory>
-#include <string>
-#include <vector>
-#include <SDL.h>
+// Project includes
 #include "../Game/Time.h"
 #include "../Graphics/IRendererConfig.h"
 #include "../Graphics/IWindow.h"
 #include "../ILogger.h"
 #include "../UI/IResourceManager.h"
 #include "../Input/SdlMouse.h"
+
+// Third-party includes
+#include <SDL.h>
+
+// stdlib
+#include <memory>
+#include <string>
+#include <vector>
 
 namespace Falltergeist
 {

@@ -1,9 +1,14 @@
 #pragma once
 
-#include <string>
+// Project includes
 #include "../Format/Enums.h"
 #include "../VM/Stack.h"
 #include "../VM/StackValue.h"
+
+// Third-party includes
+
+// stdlib
+#include <string>
 
 namespace Falltergeist
 {

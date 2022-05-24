@@ -1,7 +1,11 @@
 #pragma once
 
-#include <memory>
+// Project includes
 
+// Third-party includes
+
+// stdlib
+#include <memory>
 
 namespace Falltergeist
 {

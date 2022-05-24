@@ -1,3 +1,4 @@
+// Project includes
 #include "../CrossPlatform.h"
 #include "../Exception.h"
 #include "../Game/Game.h"
@@ -6,8 +7,12 @@
 #include "../Graphics/Shader.h"
 #include "../Graphics/ShaderFile.h"
 #include "../Logger.h"
+
+// Third-party includes
 #define GLM_FORCE_RADIANS
 #include <glm/gtc/type_ptr.hpp>
+
+// stdlib
 
 namespace Falltergeist
 {

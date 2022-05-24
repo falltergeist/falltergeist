@@ -1,7 +1,12 @@
 #pragma once
 
-#include <vector>
+// Project includes
 #include "../Game/ItemObject.h"
+
+// Third-party includes
+
+// stdlib
+#include <vector>
 
 namespace Falltergeist
 {

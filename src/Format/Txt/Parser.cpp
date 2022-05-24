@@ -1,6 +1,11 @@
+// Project includes
+#include "../Txt/Parser.h"
+
+// Third-party includes
+
+// stdlib
 #include <algorithm>
 #include <functional>
-#include "../Txt/Parser.h"
 
 namespace Falltergeist
 {

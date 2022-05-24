@@ -1,5 +1,10 @@
+// Project includes
 #include "../UI/ElevatorProgress.h"
 #include "../Graphics/Rectangle.h"
+
+// Third-party includes
+
+// stdlib
 
 namespace Falltergeist
 {

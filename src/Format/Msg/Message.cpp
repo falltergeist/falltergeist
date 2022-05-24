@@ -1,4 +1,9 @@
+// Project includes
 #include "../../Format/Msg/Message.h"
+
+// Third-party includes
+
+// stdlib
 
 namespace Falltergeist
 {

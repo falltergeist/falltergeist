@@ -1,9 +1,14 @@
 #pragma once
 
-#include <map>
-#include <vector>
+// Project includes
 #include "../State/State.h"
 #include "../UI/IResourceManager.h"
+
+// Third-party includes
+
+// stdlib
+#include <map>
+#include <vector>
 
 namespace Falltergeist
 {

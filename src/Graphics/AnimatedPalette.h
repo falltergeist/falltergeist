@@ -1,10 +1,15 @@
 #pragma once
 
-#include <array>
-#include <vector>
-#include <glm/glm.hpp>
+// Project includes
 #include "../Format/Enums.h"
 #include "../Graphics/Renderer.h"
+
+// Third-party includes
+#include <glm/glm.hpp>
+
+// stdlib
+#include <array>
+#include <vector>
 
 namespace Falltergeist
 {

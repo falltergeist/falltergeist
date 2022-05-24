@@ -1,4 +1,9 @@
+// Project includes
 #include "../Game/Elevator.h"
+
+// Third-party includes
+
+// stdlib
 
 namespace Falltergeist
 {

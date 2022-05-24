@@ -1,6 +1,11 @@
 #pragma once
 
+// Project includes
 #include "../UI/Base.h"
+
+// Third-party includes
+
+// stdlib
 
 namespace Falltergeist::UI {
     class ScrollHitBox final : public UI::Base {

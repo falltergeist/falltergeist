@@ -1,9 +1,14 @@
-﻿#include "../../Format/Dat/Stream.h"
-#include <string.h> // for memcpy
-#include <algorithm>
+﻿// Project includes
+#include "../../Format/Dat/Stream.h"
 #include "../../Format/Dat/Entry.h"
 #include "../../Format/Dat/File.h"
+
+// Third-party includes
 #include "zlib.h"
+
+// stdlib
+#include <cstring>
+#include <algorithm>
 
 namespace Falltergeist
 {

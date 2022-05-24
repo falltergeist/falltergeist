@@ -1,4 +1,9 @@
+// Project includes
 #include "../Graphics/VertexBufferAttribute.h"
+
+// Third-party includes
+
+// stdlib
 #include <stdexcept>
 
 namespace Falltergeist {

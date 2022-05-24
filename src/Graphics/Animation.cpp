@@ -1,4 +1,4 @@
-﻿#include <SDL_image.h>
+﻿// Project includes
 #include "../Format/Frm/File.h"
 #include "../Game/Game.h"
 #include "../Graphics/AnimatedPalette.h"
@@ -7,6 +7,11 @@
 #include "../Graphics/GLCheck.h"
 #include "../ResourceManager.h"
 #include "../State/Location.h"
+
+// Third-party includes
+#include <SDL_image.h>
+
+// stdlib
 
 namespace Falltergeist
 {

@@ -1,3 +1,4 @@
+// Project includes
 #include "../State/ElevatorDialog.h"
 #include "../functions.h"
 #include "../Game/Game.h"
@@ -20,6 +21,10 @@
 #include "../Helpers/StateLocationHelper.h"
 #include "../Format/Txt/MapsFile.h"
 #include "../PathFinding/Hexagon.h"
+
+// Third-party includes
+
+// stdlib
 
 namespace Falltergeist
 {

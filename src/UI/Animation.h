@@ -1,9 +1,14 @@
 #pragma once
 
-#include <string>
-#include <vector>
+// Project includes
 #include "../Graphics/Animation.h"
 #include "../UI/Base.h"
+
+// Third-party includes
+
+// stdlib
+#include <string>
+#include <vector>
 
 namespace Falltergeist
 {

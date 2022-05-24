@@ -1,13 +1,18 @@
 #pragma once
 
-#include <map>
-#include <memory>
-#include <vector>
+// Project includes
 #include "../Event/EventTarget.h"
 #include "../Event/Keyboard.h"
 #include "../Event/Mouse.h"
 #include "../Graphics/Point.h"
 #include "../VM/Script.h"
+
+// Third-party includes
+
+// stdlib
+#include <map>
+#include <memory>
+#include <vector>
 
 namespace Falltergeist
 {

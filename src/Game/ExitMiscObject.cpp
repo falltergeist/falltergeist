@@ -1,6 +1,11 @@
+// Project includes
 #include "../Game/ExitMiscObject.h"
 #include "../UI/TextArea.h"
 #include "../VM/Script.h"
+
+// Third-party includes
+
+// stdlib
 
 namespace Falltergeist
 {

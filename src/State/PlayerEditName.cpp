@@ -1,4 +1,4 @@
-#include <cstdint>
+// Project includes
 #include "../State/PlayerEditName.h"
 #include "../functions.h"
 #include "../Game/DudeObject.h"
@@ -10,6 +10,11 @@
 #include "../UI/ImageButton.h"
 #include "../UI/Image.h"
 #include "../UI/Rectangle.h"
+
+// Third-party includes
+
+// stdlib
+#include <cstdint>
 
 namespace Falltergeist
 {

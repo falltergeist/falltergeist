@@ -1,3 +1,4 @@
+// Project includes
 #include "../State/Skilldex.h"
 #include "../functions.h"
 #include "../Game/DudeObject.h"
@@ -16,6 +17,10 @@
 #include "../UI/Image.h"
 #include "../UI/ImageButton.h"
 #include "../UI/TextArea.h"
+
+// Third-party includes
+
+// stdlib
 
 namespace Falltergeist
 {

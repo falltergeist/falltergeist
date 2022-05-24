@@ -1,6 +1,11 @@
+// Project includes
 #include "../Dat/Stream.h"
 #include "../Ini/File.h"
 #include "../Txt/MapsFile.h"
+
+// Third-party includes
+
+// stdlib
 
 namespace Falltergeist
 {

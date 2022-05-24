@@ -1,10 +1,15 @@
-#include <type_traits>
-#include <memory>
-#include <utility>
+// Project includes
 #include "../Event/Dispatcher.h"
 #include "../Event/Keyboard.h"
 #include "../Event/Mouse.h"
 #include "../Event/State.h"
+
+// Third-party includes
+
+// stdlib
+#include <type_traits>
+#include <memory>
+#include <utility>
 
 namespace Falltergeist
 {
