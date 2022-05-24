@@ -18,21 +18,24 @@ namespace Falltergeist
         class PlayerEditAlert final : public State
         {
             public:
-                PlayerEditAlert(std::shared_ptr<UI::IResourceManager> resourceManager);
-                virtual ~PlayerEditAlert() = default;
+                PlayerEditAlert(
+                    std::shared_ptr<UI::IResourceManager> resourceManager,
+                    std::shared_ptr<Input::Mouse> mouse,
+                    const std::string& message
+                );
 
-                void setMessage(const std::string& message);
+                virtual ~PlayerEditAlert() = default;
 
                 void init() override;
 
                 void onDoneButtonClick(Event::Mouse* event);
 
-            protected:
+            private:
                 std::string _message;
 
-            private:
-                std::shared_ptr<UI::IResourceManager> resourceManager;
-                std::unique_ptr<UI::Factory::ImageButtonFactory> imageButtonFactory;
+                std::shared_ptr<UI::IResourceManager> _resourceManager;
+
+                std::unique_ptr<UI::Factory::ImageButtonFactory> _imageButtonFactory;
         };
     }
 }

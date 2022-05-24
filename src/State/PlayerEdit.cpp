@@ -27,8 +27,10 @@ namespace Falltergeist
         using ImageButtonType = UI::Factory::ImageButtonFactory::Type;
         using Point = Graphics::Point;
 
-        PlayerEdit::PlayerEdit(std::shared_ptr<UI::IResourceManager> resourceManager)
-            : State(), _resourceManager(resourceManager) {
+        PlayerEdit::PlayerEdit(
+            std::shared_ptr<UI::IResourceManager> resourceManager,
+            std::shared_ptr<Input::Mouse> mouse
+        ) : State(mouse), _resourceManager(resourceManager) {
             _imageButtonFactory = std::make_unique<UI::Factory::ImageButtonFactory>(_resourceManager);
         }
 
@@ -628,12 +630,7 @@ namespace Falltergeist
 
         void PlayerEdit::onStateActivate(Event::State* event)
         {
-            Game::Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::BIG_ARROW);
-        }
-
-        void PlayerEdit::onStateDeactivate(Event::State* event)
-        {
-            Game::Game::getInstance()->mouse()->popState();
+            mouse()->setCursor(Input::Mouse::Cursor::BIG_ARROW);
         }
 
         void PlayerEdit::onKeyDown(Event::Keyboard* event)

@@ -9,17 +9,19 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            Opcode8115::Opcode8115(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
-            {
-                this->logger = std::move(logger);
+            Opcode8115::Opcode8115(
+                VM::Script *script,
+                std::shared_ptr<ILogger> logger
+            ) : OpcodeHandler(script), _logger(logger) {
             }
 
             void Opcode8115::_run()
             {
-                logger->debug() << "[8115] [*] void playMovie(int movie)" << std::endl;
+                _logger->debug() << "[8115] [*] void playMovie(int movie)" << std::endl;
                 int movie = _script->dataStack()->popInteger();
-                auto state = new State::Movie(movie);
-                Game::Game::getInstance()->pushState(state);
+                auto game = Game::Game::getInstance();
+                auto state = new State::Movie(game->mouse(), movie);
+                game->pushState(state);
             }
         }
     }

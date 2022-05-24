@@ -15,7 +15,8 @@ namespace Falltergeist
                     Opcode8115(VM::Script *script, std::shared_ptr<ILogger> logger);
 
                 private:
-                    std::shared_ptr<ILogger> logger;
+                    std::shared_ptr<ILogger> _logger;
+
                     void _run() override;
             };
         }

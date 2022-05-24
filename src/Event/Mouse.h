@@ -7,11 +7,10 @@ namespace Falltergeist
 {
     namespace Event
     {
-        class Mouse : public Event
+        class Mouse final : public Event
         {
             public:
-                enum class Button
-                {
+                enum class Button {
                     NONE = 0,
                     LEFT,
                     RIGHT,
@@ -20,8 +19,7 @@ namespace Falltergeist
                     X2
                 };
 
-                enum class Type
-                {
+                enum class Type {
                     BUTTON_DOWN,
                     BUTTON_UP,
                     MOVE
@@ -30,8 +28,11 @@ namespace Falltergeist
                 static const char* typeToString(Type);
 
                 Mouse(Type type);
+
                 Mouse(const Mouse& event, const std::string& newName);
+
                 Mouse(const Mouse& event);
+
                 ~Mouse() override;
 
                 /**
@@ -61,34 +62,35 @@ namespace Falltergeist
                  * @brief Whether control key is pressed.
                  */
                 bool controlPressed() const;
+
                 void setControlPressed(bool value);
 
                 /**
                  * @brief Whether shift key is pressed.
                  */
                 bool shiftPressed() const;
+
                 void setShiftPressed(bool value);
 
                 /**
                  * @brief Whether alt key is pressed.
                  */
                 bool altPressed() const;
+
                 void setAltPressed(bool altPressed);
 
-            protected:
-                bool _controlPressed = false;
-
-                bool _shiftPressed = false;
-
-                bool _altPressed = false;
-
-                bool _obstacle = false;
-
+            private:
                 Button _button = Button::NONE;
 
                 Type _type;
 
                 Graphics::Point _position;
+
+                bool _controlPressed = false;
+
+                bool _shiftPressed = false;
+
+                bool _altPressed = false;
         };
     }
 }

@@ -44,14 +44,14 @@ namespace Falltergeist
                         mood = State::CritterInteract::Mood::GOOD;
                     }
                 }
-                auto interact = new State::CritterInteract(std::make_shared<UI::ResourceManager>());
+                auto game = Game::Game::getInstance();
+                auto interact = new State::CritterInteract(std::make_shared<UI::ResourceManager>(), game->mouse(), critter);
                 interact->setBackgroundID(backgroundID);
                 interact->setHeadID(headID);
                 interact->setMood(mood);
-                interact->setCritter(critter);
                 interact->setMsgFileID(msgFileID);
                 interact->setScript(_script);
-                Game::Game::getInstance()->pushState(interact);
+                game->pushState(interact);
             }
         }
     }

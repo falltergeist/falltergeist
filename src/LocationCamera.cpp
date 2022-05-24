@@ -28,6 +28,10 @@ namespace Falltergeist
         }
     }
 
+    void LocationCamera::move(const Graphics::Point& delta) {
+        setCenter(center() + delta);
+    }
+
     const Graphics::Size& LocationCamera::size() const {
         return _size;
     }

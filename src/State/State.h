@@ -7,6 +7,7 @@
 #include "../Event/Keyboard.h"
 #include "../Event/Mouse.h"
 #include "../Graphics/Point.h"
+#include "../Input/Mouse.h"
 #include "../VM/Script.h"
 
 namespace Falltergeist
@@ -32,9 +33,12 @@ namespace Falltergeist
         class State : public Event::EventTarget
         {
             public:
-                State();
+                State(std::shared_ptr<Input::Mouse> mouse);
+
                 State(const State&) = delete;
+
                 State& operator=(const State&) = delete;
+
                 virtual ~State() = default;
 
                 template <class TUi, class ...TCtorArgs>
@@ -46,14 +50,19 @@ namespace Falltergeist
                 }
 
                 UI::Base* addUI(UI::Base* ui);
+
                 UI::Base* addUI(const std::string& name, UI::Base* ui);
+
                 void addUI(const std::vector<UI::Base*>& uis);
+
                 void popUI();
 
                 UI::Base* getUI(const std::string& name);
 
                 UI::TextArea* getTextArea(const std::string& name);
+
                 UI::ImageList* getImageList(const std::string& name);
+
                 UI::SmallCounter* getSmallCounter(const std::string& name);
 
                 // @todo: remove getters/setters for x, y?
@@ -103,7 +112,9 @@ namespace Falltergeist
                 virtual void render();
 
                 virtual void onStateActivate(Event::State* event);
+
                 virtual void onStateDeactivate(Event::State* event);
+
                 virtual void onKeyDown(Event::Keyboard* event);
 
                 /**
@@ -126,7 +137,9 @@ namespace Falltergeist
                  * Invoked when Renderer has finished fadein/fadeout process.
                  */
                 Event::StateHandler& fadeDoneHandler();
+
                 Event::KeyboardHandler& keyDownHandler();
+
                 Event::KeyboardHandler& keyUpHandler();
 
                 void scriptFade(VM::Script* script, bool in);
@@ -134,19 +147,32 @@ namespace Falltergeist
 
             protected:
                 std::vector<std::unique_ptr<UI::Base>> _ui;
+
                 std::vector<std::unique_ptr<UI::Base>> _uiToDelete;
+
                 std::map<std::string, UI::Base*> _labeledUI;
 
                 Graphics::Point _position;
 
                 bool _modal = false; // prevents all states before this one to call think() method
+
                 bool _active = false;
 
                 bool _fullscreen = true; // prevents render all states before this one
+
                 bool _initialized = false;
 
                 Event::StateHandler _activateHandler, _deactivateHandler, _fadeDoneHandler, _pushHandler, _popHandler;
+
                 Event::KeyboardHandler _keyDownHandler, _keyUpHandler;
+
+            protected:
+                std::shared_ptr<Input::Mouse> mouse() const;
+
+            private:
+                Input::Mouse::Cursor _previousCursor = Input::Mouse::Cursor::NONE;
+
+                std::shared_ptr<Input::Mouse> _mouse;
         };
     }
 }

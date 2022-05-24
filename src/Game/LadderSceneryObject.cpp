@@ -68,11 +68,11 @@ namespace Falltergeist
 
             } else {
                 auto resourceManager = std::make_shared<UI::ResourceManager>();
-                auto worldMapState = new State::WorldMap(resourceManager);
+                auto worldMapState = new State::WorldMap(resourceManager, game->mouse());
                 game->setState(worldMapState);
             }
-        }                
-        
+        }
+
         int LadderSceneryObject::exitMapNumber() const
         {
             return _exitMapNumber;

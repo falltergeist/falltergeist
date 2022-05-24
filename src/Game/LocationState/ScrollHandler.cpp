@@ -13,6 +13,10 @@ namespace Falltergeist::Game::LocationState {
     }
 
     void ScrollHandler::onMouseScrollDirectionChanged(UI::ScrollHitBox::Direction direction) {
+        if (_direction == Direction::NONE && direction != Direction::NONE) {
+            _previousCursor = _mouse->cursor();
+        }
+
         _direction = direction;
         switch (direction) {
             case Direction::WEST: {
@@ -71,49 +75,10 @@ namespace Falltergeist::Game::LocationState {
     }
 
     void ScrollHandler::_restoreCursor() {
-        while (_isScrollingCursor(_mouse->state())) {
-            _mouse->popState();
-        }
+        _mouse->setCursor(_previousCursor);
     }
 
     void ScrollHandler::_setCursor(Input::Mouse::Cursor cursor) {
-        _restoreCursor();
-        _mouse->pushState(cursor);
-    }
-
-    bool ScrollHandler::_isScrollingCursor(Input::Mouse::Cursor cursor) {
-        if (cursor == Cursor::SCROLL_W || cursor == Input::Mouse::Cursor::SCROLL_W_X) {
-            return true;
-        }
-
-        if (cursor == Cursor::SCROLL_NW || cursor == Input::Mouse::Cursor::SCROLL_NW_X) {
-            return true;
-        }
-
-        if (cursor == Cursor::SCROLL_N || cursor == Input::Mouse::Cursor::SCROLL_N_X) {
-            return true;
-        }
-
-        if (cursor == Cursor::SCROLL_NE || cursor == Input::Mouse::Cursor::SCROLL_NE_X) {
-            return true;
-        }
-
-        if (cursor == Cursor::SCROLL_E || cursor == Input::Mouse::Cursor::SCROLL_E_X) {
-            return true;
-        }
-
-        if (cursor == Cursor::SCROLL_SE || cursor == Input::Mouse::Cursor::SCROLL_SE_X) {
-            return true;
-        }
-
-        if (cursor == Cursor::SCROLL_S || cursor == Input::Mouse::Cursor::SCROLL_S_X) {
-            return true;
-        }
-
-        if (cursor == Cursor::SCROLL_SW || cursor == Input::Mouse::Cursor::SCROLL_SW_X) {
-            return true;
-        }
-
-        return false;
+        _mouse->setCursor(cursor);
     }
 }

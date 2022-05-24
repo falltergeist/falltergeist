@@ -18,26 +18,37 @@ namespace Falltergeist
         class PlayerEditAge final: public State
         {
             public:
-                PlayerEditAge(std::shared_ptr<UI::IResourceManager> resourceManager);
+                PlayerEditAge(
+                    std::shared_ptr<UI::IResourceManager> resourceManager,
+                    std::shared_ptr<Input::Mouse> mouse
+                );
+
                 virtual ~PlayerEditAge() = default;
 
                 void init() override;
 
                 void onIncButtonClick(Event::Mouse* event);
+
                 void onDecButtonClick(Event::Mouse* event);
+
                 void onDoneButtonClick(Event::Mouse* event);
+
                 void doInc();
+
                 void doDec();
+
                 void doDone();
+
                 void doBack();
+
                 void onKeyDown(Event::Keyboard* event) override;
 
-            protected:
+            private:
                 UI::BigCounter* _counter = nullptr;
 
-            private:
-                std::shared_ptr<UI::IResourceManager> resourceManager;
-                std::unique_ptr<UI::Factory::ImageButtonFactory> imageButtonFactory;
+                std::shared_ptr<UI::IResourceManager> _resourceManager;
+
+                std::unique_ptr<UI::Factory::ImageButtonFactory> _imageButtonFactory;
         };
     }
 }

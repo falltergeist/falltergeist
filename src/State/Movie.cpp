@@ -22,10 +22,9 @@ namespace Falltergeist
     namespace State
     {
         using Point = Graphics::Point;
+        using Cursor = Input::Mouse::Cursor;
 
-        Movie::Movie(int id) : State()
-        {
-            _id = id;
+        Movie::Movie(std::shared_ptr<Input::Mouse> mouse, int id) : State(mouse), _id(id) {
         }
 
         Movie::~Movie()
@@ -42,7 +41,6 @@ namespace Falltergeist
             setFullscreen(true);
             setModal(true);
 
-            Game::Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::NONE);
             auto renderer = Game::Game::getInstance()->renderer();
             setPosition((renderer->size() - Point(640, 320)) / 2);
 
@@ -132,13 +130,13 @@ namespace Falltergeist
                     _nextSubLine = _subs->getSubLine(dynamic_cast<UI::MvePlayer*>(getUI("movie"))->frame());
                 }
             }
-            if (_effect_index<_effects.size() && frame>=_effects[_effect_index].frame) {
-                if (_effects[_effect_index].direction < 0) {
-                    Game::Game::getInstance()->renderer()->fadeIn(_effects[_effect_index].r, _effects[_effect_index].g, _effects[_effect_index].b, _effects[_effect_index].frames, true);
+            if (_effectIndex <_effects.size() && frame>=_effects[_effectIndex].frame) {
+                if (_effects[_effectIndex].direction < 0) {
+                    Game::Game::getInstance()->renderer()->fadeIn(_effects[_effectIndex].r, _effects[_effectIndex].g, _effects[_effectIndex].b, _effects[_effectIndex].frames, true);
                 } else {
-                    Game::Game::getInstance()->renderer()->fadeOut(_effects[_effect_index].r, _effects[_effect_index].g, _effects[_effect_index].b, _effects[_effect_index].frames, true);
+                    Game::Game::getInstance()->renderer()->fadeOut(_effects[_effectIndex].r, _effects[_effectIndex].g, _effects[_effectIndex].b, _effects[_effectIndex].frames, true);
                 }
-                _effect_index++;
+                _effectIndex++;
             }
 
             if (!_started)
@@ -175,7 +173,6 @@ namespace Falltergeist
         void Movie::onVideoFinished()
         {
             Game::Game::getInstance()->mixer()->stopMusic();
-            Game::Game::getInstance()->mouse()->popState();
 
             // without this the location will be absolutely dark if you didn't interrupted movie play
             if (Game::Game::getInstance()->locationState())
@@ -185,6 +182,15 @@ namespace Falltergeist
             }
 
             Game::Game::getInstance()->popState();
+        }
+
+        void Movie::onStateActivate(Event::State* event) {
+            _previousCursor = mouse()->cursor();
+            mouse()->setCursor(Cursor::NONE);
+        }
+
+        void Movie::onStateDeactivate(Event::State* event) {
+            mouse()->setCursor(_previousCursor);
         }
     }
 }

@@ -18,6 +18,8 @@ namespace Falltergeist
 
             void setCenter(const Graphics::Point& pos);
 
+            void move(const Graphics::Point& delta);
+
             const Graphics::Size& size() const;
 
             void setSize(const Graphics::Size& size);

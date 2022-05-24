@@ -18,7 +18,7 @@ int main(int argc, char* argv[])
         auto uiResourceManager = std::make_shared<UI::ResourceManager>();
         game->setUIResourceManager(uiResourceManager);
         game->init(std::unique_ptr<Settings>(new Settings()));
-        game->setState(new State::Start(uiResourceManager, logger));
+        game->setState(new State::Start(uiResourceManager, game->mouse(), logger));
         game->run();
         game->shutdown();
         return 0;

@@ -10,8 +10,8 @@
 #include "../Logger.h"
 #include "../ResourceManager.h"
 #include "../State/Credits.h"
+#include "../State/Intro.h"
 #include "../State/LoadGame.h"
-#include "../State/Movie.h"
 #include "../State/NewGame.h"
 #include "../State/SettingsMenu.h"
 #include "../UI/Animation.h"
@@ -27,11 +27,12 @@ namespace Falltergeist
         using ImageButtonType = UI::Factory::ImageButtonFactory::Type;
         using Point = Graphics::Point;
 
-        MainMenu::MainMenu(std::shared_ptr<UI::IResourceManager> resourceManager, std::shared_ptr<ILogger> logger) : State()
-        {
-            this->resourceManager = std::move(resourceManager);
-            this->logger = std::move(logger);
-            imageButtonFactory = std::make_unique<UI::Factory::ImageButtonFactory>(this->resourceManager);
+        MainMenu::MainMenu(
+            std::shared_ptr<UI::IResourceManager> resourceManager,
+            std::shared_ptr<Input::Mouse> mouse,
+            std::shared_ptr<ILogger> logger
+        ) : State(mouse), _logger(logger), _resourceManager(resourceManager) {
+            _imageButtonFactory = std::make_unique<UI::Factory::ImageButtonFactory>(_resourceManager);
         }
 
         MainMenu::~MainMenu()
@@ -52,31 +53,31 @@ namespace Falltergeist
             auto renderer = Game::Game::getInstance()->renderer();
             setPosition((renderer->size() - Point(640, 480)) / 2);
 
-            addUI("background", resourceManager->getImage("art/intrface/mainmenu.frm"));
+            addUI("background", _resourceManager->getImage("art/intrface/mainmenu.frm"));
 
             // intro button
-            auto introButton = addUI(imageButtonFactory->getByType(ImageButtonType::MENU_RED_CIRCLE, {30, 19}));
-            introButton->mouseClickHandler().add(std::bind(&MainMenu::onIntroButtonClick, this, std::placeholders::_1));
+            auto introButton = addUI(_imageButtonFactory->getByType(ImageButtonType::MENU_RED_CIRCLE, {30, 19}));
+            introButton->mouseClickHandler().add(std::bind(&MainMenu::_doIntro, this));
 
             // new game button
-            auto newGameButton = addUI(imageButtonFactory->getByType(ImageButtonType::MENU_RED_CIRCLE, {30, 19 + 41}));
-            newGameButton->mouseClickHandler().add(std::bind(&MainMenu::onNewGameButtonClick, this, std::placeholders::_1));
+            auto newGameButton = addUI(_imageButtonFactory->getByType(ImageButtonType::MENU_RED_CIRCLE, {30, 19 + 41}));
+            newGameButton->mouseClickHandler().add(std::bind(&MainMenu::_doNewGame, this));
 
             // load game button
-            auto loadGameButton = addUI(imageButtonFactory->getByType(ImageButtonType::MENU_RED_CIRCLE, {30, 19 + 41 * 2}));
-            loadGameButton->mouseClickHandler().add(std::bind(&MainMenu::onLoadGameButtonClick, this, std::placeholders::_1));
+            auto loadGameButton = addUI(_imageButtonFactory->getByType(ImageButtonType::MENU_RED_CIRCLE, {30, 19 + 41 * 2}));
+            loadGameButton->mouseClickHandler().add(std::bind(&MainMenu::_doLoadGame, this));
 
             // settings button
-            auto settingsButton = addUI(imageButtonFactory->getByType(ImageButtonType::MENU_RED_CIRCLE, {30, 19 + 41 * 3}));
-            settingsButton->mouseClickHandler().add(std::bind(&MainMenu::onSettingsButtonClick, this, std::placeholders::_1));
+            auto settingsButton = addUI(_imageButtonFactory->getByType(ImageButtonType::MENU_RED_CIRCLE, {30, 19 + 41 * 3}));
+            settingsButton->mouseClickHandler().add(std::bind(&MainMenu::_doSettings, this));
 
             // credits button
-            auto creditsButton = addUI(imageButtonFactory->getByType(ImageButtonType::MENU_RED_CIRCLE, {30, 19 + 41 * 4}));
-            creditsButton->mouseClickHandler().add(std::bind(&MainMenu::onCreditsButtonClick, this, std::placeholders::_1));
+            auto creditsButton = addUI(_imageButtonFactory->getByType(ImageButtonType::MENU_RED_CIRCLE, {30, 19 + 41 * 4}));
+            creditsButton->mouseClickHandler().add(std::bind(&MainMenu::_doCredits, this));
 
             // exit button
-            auto exitButton = addUI(imageButtonFactory->getByType(ImageButtonType::MENU_RED_CIRCLE, {30, 19 + 41 * 5}));
-            exitButton->mouseClickHandler().add(std::bind(&MainMenu::onExitButtonClick, this, std::placeholders::_1));
+            auto exitButton = addUI(_imageButtonFactory->getByType(ImageButtonType::MENU_RED_CIRCLE, {30, 19 + 41 * 5}));
+            exitButton->mouseClickHandler().add(std::bind(&MainMenu::_doExit, this));
 
             auto font4 = ResourceManager::getInstance()->font("font4.aaf");
             Graphics::Color color = {0xb8, 0x9c, 0x28, 0xff};
@@ -126,137 +127,87 @@ namespace Falltergeist
             addUI(exitButtonLabel);
         }
 
-        void MainMenu::doExit()
-        {
+        void MainMenu::_doExit() {
+            auto game = Game::Game::getInstance();
             fadeDoneHandler().clear();
-            fadeDoneHandler().add([this](Event::Event* event){ this->onExitStart(dynamic_cast<Event::State*>(event)); });
-            Game::Game::getInstance()->renderer()->fadeOut(0,0,0,1000);
+            fadeDoneHandler().add([=](Event::Event* event){
+                fadeDoneHandler().clear();
+                game->mixer()->stopMusic();
+                game->quit();
+            });
+            game->renderer()->fadeOut(0,0,0,1000);
         }
 
-        void MainMenu::doNewGame()
-        {
+        void MainMenu::_doNewGame() {
+            auto game = Game::Game::getInstance();
             fadeDoneHandler().clear();
-            fadeDoneHandler().add([this](Event::Event* event){ this->onNewGameStart(dynamic_cast<Event::State*>(event)); });
-            Game::Game::getInstance()->renderer()->fadeOut(0,0,0,1000);
+            fadeDoneHandler().add([=](Event::Event* event){
+                fadeDoneHandler().clear();
+                game->pushState(new NewGame(_resourceManager, mouse(), _logger));
+            });
+            game->renderer()->fadeOut(0,0,0,1000);
         }
 
-        void MainMenu::doLoadGame()
-        {
+        void MainMenu::_doLoadGame() {
+            auto game = Game::Game::getInstance();
             fadeDoneHandler().clear();
-            fadeDoneHandler().add([this](Event::Event* event){ this->onLoadGameStart(dynamic_cast<Event::State*>(event)); });
-            Game::Game::getInstance()->renderer()->fadeOut(0,0,0,1000);
+            fadeDoneHandler().add([=](Event::Event* event){
+                fadeDoneHandler().clear();
+                game->pushState(new LoadGame(_resourceManager, mouse()));
+            });
+            game->renderer()->fadeOut(0,0,0,1000);
         }
 
-        void MainMenu::doSettings()
-        {
-            Game::Game::getInstance()->pushState(new SettingsMenu(resourceManager));
+        void MainMenu::_doSettings() {
+            Game::Game::getInstance()->pushState(new SettingsMenu(_resourceManager, mouse()));
         }
 
-        void MainMenu::doIntro()
-        {
+        void MainMenu::_doIntro() {
+            auto game = Game::Game::getInstance();
             fadeDoneHandler().clear();
-            fadeDoneHandler().add([this](Event::Event* event){ this->onIntroStart(dynamic_cast<Event::State*>(event)); });
-            Game::Game::getInstance()->renderer()->fadeOut(0,0,0,1000);
+            fadeDoneHandler().add([=](Event::Event* event){
+                fadeDoneHandler().clear();
+                game->setState(new Intro(_resourceManager, mouse(), _logger));
+            });
+            game->renderer()->fadeOut(0,0,0,1000);
         }
 
-        void MainMenu::doCredits()
-        {
+        void MainMenu::_doCredits() {
+            auto game = Game::Game::getInstance();
             fadeDoneHandler().clear();
-            fadeDoneHandler().add([this](Event::Event* event){ this->onCreditsStart(dynamic_cast<Event::State*>(event)); });
-            Game::Game::getInstance()->renderer()->fadeOut(0,0,0,1000);
+            fadeDoneHandler().add([=](Event::Event* event){
+                fadeDoneHandler().clear();
+                game->pushState(new Credits(mouse()));
+            });
+            game->renderer()->fadeOut(0,0,0,1000);
         }
 
-        void MainMenu::onExitButtonClick(Event::Mouse* event)
-        {
-            doExit();
-        }
-
-        void MainMenu::onExitStart(Event::State* event)
-        {
-            fadeDoneHandler().clear();
-            Game::Game::getInstance()->mixer()->stopMusic();
-            Game::Game::getInstance()->quit();
-        }
-
-        void MainMenu::onNewGameButtonClick(Event::Mouse* event)
-        {
-            doNewGame();
-        }
-
-        void MainMenu::onNewGameStart(Event::State* event)
-        {
-            fadeDoneHandler().clear();
-            Game::Game::getInstance()->pushState(new NewGame(resourceManager, logger));
-        }
-
-        void MainMenu::onLoadGameButtonClick(Event::Mouse* event)
-        {
-            doLoadGame();
-        }
-
-        void MainMenu::onLoadGameStart(Event::State* event)
-        {
-            fadeDoneHandler().clear();
-            Game::Game::getInstance()->pushState(new LoadGame(resourceManager));
-        }
-
-        void MainMenu::onSettingsButtonClick(Event::Mouse* event)
-        {
-            doSettings();
-        }
-
-        void MainMenu::onIntroButtonClick(Event::Mouse* event)
-        {
-            doIntro();
-        }
-
-        void MainMenu::onIntroStart(Event::State* event)
-        {
-            fadeDoneHandler().clear();
-            Game::Game::getInstance()->pushState(new Movie(17));
-            Game::Game::getInstance()->pushState(new Movie(1));
-        }
-
-        void MainMenu::onCreditsButtonClick(Event::Mouse* event)
-        {
-            doCredits();
-        }
-
-        void MainMenu::onCreditsStart(Event::State* event)
-        {
-            fadeDoneHandler().clear();
-            Game::Game::getInstance()->pushState(new Credits());
-        }
-
-        void MainMenu::onKeyDown(Event::Keyboard* event)
-        {
-            switch (event->keyCode())
-            {
+        void MainMenu::onKeyDown(Event::Keyboard* event) {
+            switch (event->keyCode()) {
                 case SDLK_e:
                 case SDLK_ESCAPE:
-                    doExit();
+                    _doExit();
                     break;
                 case SDLK_n:
-                    doNewGame();
+                    _doNewGame();
                     break;
                 case SDLK_l:
-                    doLoadGame();
+                    _doLoadGame();
                     break;
                 case SDLK_i:
-                    doIntro();
+                    _doIntro();
                     break;
                 case SDLK_c:
-                    doCredits();
+                    _doCredits();
                     break;
                 case SDLK_o:
-                    doSettings();
+                    _doSettings();
                     break;
             }
         }
 
-        void MainMenu::onStateActivate(Event::State* event)
-        {
-            Game::Game::getInstance()->mouse()->setState(Input::Mouse::Cursor::BIG_ARROW);
+        void MainMenu::onStateActivate(Event::State* event) {
+            mouse()->setCursor(Input::Mouse::Cursor::BIG_ARROW);
             Game::Game::getInstance()->mixer()->playACMMusic("07desert.acm",true);
             Game::Game::getInstance()->renderer()->fadeIn(0,0,0,1000);
         }

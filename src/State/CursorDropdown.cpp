@@ -18,11 +18,11 @@ namespace Falltergeist::State {
 
     CursorDropdown::CursorDropdown(
         std::shared_ptr<UI::IResourceManager> resourceManager,
+        std::shared_ptr<Input::Mouse> mouse,
         std::vector<Input::Mouse::Icon>&& icons,
         bool onlyIcon
-    ) : State()
+    ) : State(mouse), _resourceManager(resourceManager)
     {
-        this->resourceManager = resourceManager;
         if (icons.size() == 0) {
             throw Exception("CursorDropdown::CursorDropdown() - empty icons list!");
         }
@@ -47,7 +47,7 @@ namespace Falltergeist::State {
         auto mouse = Game::Game::getInstance()->mouse();
         _initialMousePosition = mouse->position();
 
-        showMenu();
+        _showMenu();
 
         _mouseUpHandler.add([this](Event::Mouse* mouseEvent) {
             if (mouseEvent->leftButton()) {
@@ -68,7 +68,7 @@ namespace Falltergeist::State {
         });
     }
 
-    void CursorDropdown::showMenu()
+    void CursorDropdown::_showMenu()
     {
         int i = 0;
         for (auto icon : _icons) {
@@ -116,9 +116,9 @@ namespace Falltergeist::State {
                     throw Exception("CursorDropdown::init() - unknown icon type");
 
             }
-            _activeIcons.push_back(std::unique_ptr<UI::Image>(resourceManager->getImage("art/intrface/" + activeSurface)));
+            _activeIcons.push_back(std::unique_ptr<UI::Image>(_resourceManager->getImage("art/intrface/" + activeSurface)));
             _activeIcons.back()->setY(40*i);
-            _inactiveIcons.push_back(std::unique_ptr<UI::Image>(resourceManager->getImage("art/intrface/" + inactiveSurface)));
+            _inactiveIcons.push_back(std::unique_ptr<UI::Image>(_resourceManager->getImage("art/intrface/" + inactiveSurface)));
             _inactiveIcons.back()->setY(40*i);
             i++;
         }
@@ -135,10 +135,10 @@ namespace Falltergeist::State {
         int deltaY = delta.y();
         if (deltaX > 0) {
             _iconsPos.setX(_iconsPos.x() - 40 - 29 - 29);
-            _cursor = resourceManager->getImage("art/intrface/actarrom.frm");
+            _cursor = _resourceManager->getImage("art/intrface/actarrom.frm");
             _cursor->setOffset(Point(-29, 0));
         } else {
-            _cursor = resourceManager->getImage("art/intrface/actarrow.frm");
+            _cursor = _resourceManager->getImage("art/intrface/actarrow.frm");
             _cursor->setOffset(Point(0, 0));
         }
         if (deltaY > 0) {
@@ -238,30 +238,15 @@ namespace Falltergeist::State {
             return;
         }
 
-        auto mouse = Game::Game::getInstance()->mouse();
-        _initialMouseStack = static_cast<unsigned>(mouse->states().size());
-        mouse->pushState(Input::Mouse::Cursor::NONE);
+        _previousCursor = mouse()->cursor();
+        mouse()->setCursor(Input::Mouse::Cursor::NONE);
     }
 
     void CursorDropdown::onStateDeactivate(Event::State* event)
     {
         if (!_deactivated) {
-            auto game = Game::Game::getInstance();
-            auto mouse = game->mouse();
-            // workaround to get rid of cursor disappearing issues
-            std::vector<Input::Mouse::Cursor> icons;
-            while (mouse->states().size() > _initialMouseStack) {
-                icons.push_back(mouse->state());
-                mouse->popState();
-            }
-            if (icons.size() > 0) {
-                icons.pop_back(); // remove empty icon from CursorDropdown state
-                // place only new icons back in stack
-                for (auto it = icons.rbegin(); it != icons.rend(); ++it) {
-                    mouse->pushState(*it);
-                }
-            }
-            mouse->setPosition(_initialMousePosition);
+            mouse()->setCursor(_previousCursor);
+            mouse()->setPosition(_initialMousePosition);
             _deactivated = true;
         }
     }

@@ -24,11 +24,13 @@ namespace Falltergeist
         using ImageButtonType = UI::Factory::ImageButtonFactory::Type;
         using Point = Graphics::Point;
 
-        GameMenu::GameMenu(std::shared_ptr<UI::IResourceManager> resourceManager, std::shared_ptr<ILogger> logger) : State()
+        GameMenu::GameMenu(
+            std::shared_ptr<UI::IResourceManager> resourceManager,
+            std::shared_ptr<Input::Mouse> mouse,
+            std::shared_ptr<ILogger> logger
+        ) : State(mouse), _logger(logger), _resourceManager(resourceManager)
         {
-            this->resourceManager = std::move(resourceManager);
-            this->logger = std::move(logger);
-            imageButtonFactory = std::make_unique<UI::Factory::ImageButtonFactory>(this->resourceManager);
+            _imageButtonFactory = std::make_unique<UI::Factory::ImageButtonFactory>(_resourceManager);
         }
 
         void GameMenu::init()
@@ -41,18 +43,18 @@ namespace Falltergeist
             setModal(true);
             setFullscreen(false);
 
-            auto background = resourceManager->getImage("art/intrface/opbase.frm");
+            auto background = _resourceManager->getImage("art/intrface/opbase.frm");
             auto panelHeight = Game::Game::getInstance()->locationState()->playerPanel()->size().height();
 
             auto backgroundPos = (Game::Game::getInstance()->renderer()->size() - background->size() - Point(0, panelHeight)) / 2;
             int backgroundX = backgroundPos.x();
             int backgroundY = backgroundPos.y();
 
-            auto saveGameButton    = imageButtonFactory->getByType(ImageButtonType::OPTIONS_BUTTON, {backgroundX + 14, backgroundY + 18});
-            auto loadGameButton    = imageButtonFactory->getByType(ImageButtonType::OPTIONS_BUTTON, {backgroundX + 14, backgroundY + 18 + 37});
-            auto preferencesButton = imageButtonFactory->getByType(ImageButtonType::OPTIONS_BUTTON, {backgroundX + 14, backgroundY + 18 + 37 * 2});
-            auto exitGameButton    = imageButtonFactory->getByType(ImageButtonType::OPTIONS_BUTTON, {backgroundX + 14, backgroundY + 18 + 37 * 3});
-            auto doneButton        = imageButtonFactory->getByType(ImageButtonType::OPTIONS_BUTTON, {backgroundX + 14, backgroundY + 18 + 37 * 4});
+            auto saveGameButton    = _imageButtonFactory->getByType(ImageButtonType::OPTIONS_BUTTON, {backgroundX + 14, backgroundY + 18});
+            auto loadGameButton    = _imageButtonFactory->getByType(ImageButtonType::OPTIONS_BUTTON, {backgroundX + 14, backgroundY + 18 + 37});
+            auto preferencesButton = _imageButtonFactory->getByType(ImageButtonType::OPTIONS_BUTTON, {backgroundX + 14, backgroundY + 18 + 37 * 2});
+            auto exitGameButton    = _imageButtonFactory->getByType(ImageButtonType::OPTIONS_BUTTON, {backgroundX + 14, backgroundY + 18 + 37 * 3});
+            auto doneButton        = _imageButtonFactory->getByType(ImageButtonType::OPTIONS_BUTTON, {backgroundX + 14, backgroundY + 18 + 37 * 4});
 
             preferencesButton->mouseClickHandler().add([this](Event::Event* event){ this->doPreferences(); });
             exitGameButton->mouseClickHandler().add(   [this](Event::Event* event){ this->doExit(); });
@@ -110,22 +112,22 @@ namespace Falltergeist
 
         void GameMenu::doSaveGame()
         {
-            Game::Game::getInstance()->pushState(new SaveGame(resourceManager));
+            Game::Game::getInstance()->pushState(new SaveGame(_resourceManager, mouse()));
         }
 
         void GameMenu::doLoadGame()
         {
-            Game::Game::getInstance()->pushState(new LoadGame(resourceManager));
+            Game::Game::getInstance()->pushState(new LoadGame(_resourceManager, mouse()));
         }
 
         void GameMenu::doPreferences()
         {
-            Game::Game::getInstance()->pushState(new SettingsMenu(resourceManager));
+            Game::Game::getInstance()->pushState(new SettingsMenu(_resourceManager, mouse()));
         }
 
         void GameMenu::doExit()
         {
-            Game::Game::getInstance()->pushState(new ExitConfirm(resourceManager, logger));
+            Game::Game::getInstance()->pushState(new ExitConfirm(_resourceManager, mouse(), _logger));
         }
 
         void GameMenu::closeMenu()
@@ -133,14 +135,13 @@ namespace Falltergeist
             Game::Game::getInstance()->popState();
         }
 
-        void GameMenu::onStateActivate(Event::State* event)
-        {
-            Game::Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::BIG_ARROW);
+        void GameMenu::onStateActivate(Event::State* event) {
+            _previousCursor = mouse()->cursor();
+            mouse()->setCursor(Input::Mouse::Cursor::BIG_ARROW);
         }
 
-        void GameMenu::onStateDeactivate(Event::State* event)
-        {
-            Game::Game::getInstance()->mouse()->popState();
+        void GameMenu::onStateDeactivate(Event::State* event) {
+            mouse()->setCursor(_previousCursor);
         }
 
         void GameMenu::onKeyDown(Event::Keyboard* event)

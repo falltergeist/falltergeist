@@ -21,9 +21,9 @@ namespace Falltergeist::Game::LocationState {
 
         void _setCursor(Input::Mouse::Cursor cursor);
 
-        bool _isScrollingCursor(Input::Mouse::Cursor cursor);
-
         std::shared_ptr<Input::Mouse> _mouse;
+
+        Input::Mouse::Cursor _previousCursor;
 
         Base::Delegate<Graphics::Point> _scrollDeltaHandler;
 

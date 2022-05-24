@@ -21,19 +21,18 @@ namespace Falltergeist
         using ImageButtonType = UI::Factory::ImageButtonFactory::Type;
         using Point = Graphics::Point;
 
-        PipBoy::PipBoy(std::shared_ptr<UI::IResourceManager> resourceManager) : State()
-        {
-            this->resourceManager = resourceManager;
-            imageButtonFactory = std::make_unique<UI::Factory::ImageButtonFactory>(resourceManager);
+        PipBoy::PipBoy(
+            std::shared_ptr<UI::IResourceManager> resourceManager,
+            std::shared_ptr<Input::Mouse> mouse
+        ) : State(mouse), _resourceManager(resourceManager) {
+            _imageButtonFactory = std::make_unique<UI::Factory::ImageButtonFactory>(_resourceManager);
         }
 
-        PipBoy::~PipBoy()
-        {
+        PipBoy::~PipBoy() {
             Game::Game::getInstance()->mouse()->popState();
         }
 
-        void PipBoy::init()
-        {
+        void PipBoy::init() {
             if (_initialized) {
                 return;
             }
@@ -42,25 +41,23 @@ namespace Falltergeist
             setModal(true);
             setFullscreen(true);
 
-            Game::Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::BIG_ARROW);
-
             // Background
-            auto background = resourceManager->getImage("art/intrface/pip.frm");
+            auto background = _resourceManager->getImage("art/intrface/pip.frm");
             Point backgroundPos = Point((Game::Game::getInstance()->renderer()->size() - background->size()) / 2);
             int backgroundX = backgroundPos.x();
             int backgroundY = backgroundPos.y();
             background->setPosition(backgroundPos);
 
             // Pipboy logo
-            auto logo = resourceManager->getImage("art/intrface/pipx.frm");
+            auto logo = _resourceManager->getImage("art/intrface/pipx.frm");
             logo->setPosition({ backgroundX + 325, backgroundY + 165 });
 
             // Buttons
-            auto alarmButton = imageButtonFactory->getByType(ImageButtonType::PIPBOY_ALARM_BUTTON, {backgroundX + 124, backgroundY + 13});
-            auto statusButton = imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {backgroundX + 53, backgroundY + 340});
-            auto automapsButton = imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {backgroundX + 53, backgroundY + 394});
-            auto archivesButton = imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {backgroundX + 53, backgroundY + 423});
-            auto closeButton = imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {backgroundX + 53, backgroundY + 448});
+            auto alarmButton = _imageButtonFactory->getByType(ImageButtonType::PIPBOY_ALARM_BUTTON, {backgroundX + 124, backgroundY + 13});
+            auto statusButton = _imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {backgroundX + 53, backgroundY + 340});
+            auto automapsButton = _imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {backgroundX + 53, backgroundY + 394});
+            auto archivesButton = _imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {backgroundX + 53, backgroundY + 423});
+            auto closeButton = _imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {backgroundX + 53, backgroundY + 448});
             closeButton->mouseClickHandler().add(std::bind(&PipBoy::onCloseButtonClick, this, std::placeholders::_1));
             // Date and time
 
@@ -107,27 +104,23 @@ namespace Falltergeist
             addUI(closeButton);
 
             // Special date greeting
-            std::string greeting = getSpecialGreeting(gameTime->month(), gameTime->day());
+            std::string greeting = _getSpecialGreeting(gameTime->month(), gameTime->day());
             if (!greeting.empty()) {
-                addUI(new UI::TextArea(greeting, backgroundX+385, backgroundY+325));
+                addUI(new UI::TextArea(greeting, {backgroundX + 385, backgroundY + 325}));
             }
         }
 
-        void PipBoy::onCloseButtonClick(Event::Mouse* event)
-        {
+        void PipBoy::onCloseButtonClick(Event::Mouse* event) {
             Game::Game::getInstance()->popState();
         }
 
-        void PipBoy::onKeyDown(Event::Keyboard* event)
-        {
-            if (event->keyCode() == SDLK_ESCAPE)
-            {
+        void PipBoy::onKeyDown(Event::Keyboard* event) {
+            if (event->keyCode() == SDLK_ESCAPE) {
                 Game::Game::getInstance()->popState();
             }
         }
 
-        std::string PipBoy::getSpecialGreeting(int month, int day) {
-
+        std::string PipBoy::_getSpecialGreeting(int month, int day) {
             if (month == 1 && day == 1) {
                 return _t(MSG_PIPBOY, 100); // New Year
             }
@@ -154,6 +147,15 @@ namespace Falltergeist
             }
 
             return std::string();
+        }
+
+        void PipBoy::onStateActivate(Event::State* event) {
+            _previousCursor = mouse()->cursor();
+            mouse()->setCursor(Input::Mouse::Cursor::BIG_ARROW);
+        }
+
+        void PipBoy::onStateDeactivate(Event::State* event) {
+            mouse()->setCursor(_previousCursor);
         }
     }
 }

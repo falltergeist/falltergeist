@@ -13,6 +13,7 @@
 #include "../State/Location.h"
 #include "../State/MainMenu.h"
 #include "../State/Movie.h"
+#include "../State/Intro.h"
 #include "../UI/Image.h"
 #include "../UI/TextArea.h"
 
@@ -22,11 +23,13 @@ namespace Falltergeist
     {
         using Helpers::StateLocationHelper;
         using Point = Graphics::Point;
+        using Cursor = Input::Mouse::Cursor;
 
-        Start::Start(std::shared_ptr<UI::IResourceManager> resourceManager, std::shared_ptr<ILogger> logger) : State()
-        {
-            this->resourceManager = std::move(resourceManager);
-            this->logger = std::move(logger);
+        Start::Start(
+            std::shared_ptr<UI::IResourceManager> resourceManager,
+            std::shared_ptr<Input::Mouse> mouse,
+            std::shared_ptr<ILogger> logger
+        ) : State(mouse), _logger(logger), _resourceManager(resourceManager) {
         }
 
         void Start::init()
@@ -45,19 +48,11 @@ namespace Falltergeist
 
             setPosition((renderer->size() - Point(640, 480)) / 2);
 
-            addUI("splash", resourceManager->getImage("art/splash/" + splashes.at(rand() % splashes.size())));
+            addUI("splash", _resourceManager->getImage("art/splash/" + splashes.at(rand() % splashes.size())));
 
-            auto game = Game::Game::getInstance();
             _delayTimer = std::make_unique<Game::Timer>(3000);
             _delayTimer->start();
-            _delayTimer->tickHandler().add([game, this](Event::Event*) {
-                game->setState(new MainMenu(resourceManager, logger));
-                game->pushState(new Movie(17));
-                game->pushState(new Movie(1));
-                game->pushState(new Movie(0));
-            });
-
-            Game::Game::getInstance()->mouse()->setState(Input::Mouse::Cursor::WAIT);
+            _delayTimer->tickHandler().add(std::bind(&Start::_onSplashScreenDelayEnded, this));
         }
 
         void Start::think(const float &deltaTime)
@@ -71,10 +66,26 @@ namespace Falltergeist
                 player->loadFromGCDFile(ResourceManager::getInstance()->gcdFileType("premade/combat.gcd"));
                 game->setPlayer(std::move(player));
 
-                StateLocationHelper stateLocationHelper(logger);
+                StateLocationHelper stateLocationHelper(_logger);
                 game->setState(stateLocationHelper.getInitialLocationState());
                 return;
             }
+        }
+
+        void Start::onStateActivate(Event::State* event) {
+            mouse()->setCursor(Cursor::WAIT);
+        }
+
+        void Start::_onSplashScreenDelayEnded() {
+            auto firstMovie = new Movie(mouse(), 0); // TODO replace raw integers with consts
+            firstMovie->deactivateHandler().add(std::bind(&Start::_onFirstMovieEnded, this));
+            auto game = Game::Game::getInstance();
+            game->pushState(firstMovie);
+        }
+
+        void Start::_onFirstMovieEnded() {
+            auto game = Game::Game::getInstance();
+            game->setState(new Intro(_resourceManager, mouse(), _logger));
         }
     }
 }
