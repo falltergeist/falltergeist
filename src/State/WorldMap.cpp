@@ -1,6 +1,7 @@
 // Project includes
 #include "../State/WorldMap.h"
 #include "../Game/Game.h"
+#include "../Game/City.h"
 #include "../Graphics/Renderer.h"
 #include "../Input/Mouse.h"
 #include "../ResourceManager.h"
@@ -28,6 +29,12 @@ namespace Falltergeist
         {
             this->resourceManager = resourceManager;
             imageButtonFactory = std::make_unique<UI::Factory::ImageButtonFactory>(resourceManager);
+
+            auto cityFile = ResourceManager::getInstance()->cityTxt();
+            for (auto it = cityFile->cities().begin(); it != cityFile->cities().end(); ++it)
+            {
+                this->_cities.push_back(new Game::City(*it));
+            }
         }
 
         void WorldMap::init()
@@ -146,6 +153,18 @@ namespace Falltergeist
                         _tiles->images().at(y*tilesNumberX+x)->setPosition(Point(x*tileWidth-deltaX, y*tileHeight-deltaY));
                         _tiles->images().at(y*tilesNumberX+x)->render();
                     }
+                }
+            }
+
+            // cities
+            auto renderer = Game::Game::getInstance()->renderer();
+            auto green = new Graphics::Color(0, 255, 0, 255);
+            auto shift = Graphics::Point(deltaX + 22, deltaY + 21);
+            for (auto it = _cities.begin(); it != _cities.end(); ++it)
+            {
+                if ((*it)->state())
+                {
+                    renderer->drawRect((*it)->worldPos() - shift, Graphics::Size(32, 32), *green);
                 }
             }
 
