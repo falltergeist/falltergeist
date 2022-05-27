@@ -3,6 +3,8 @@
 #include "../../Game/CritterObject.h"
 #include "../../Game/Object.h"
 #include "../../VM/Script.h"
+#include "../../UI/AnimationQueue.h"
+#include "../../UI/Animation.h"
 
 // Third-party includes
 
@@ -40,7 +42,9 @@ namespace Falltergeist
                     }
                     case 1010: // ANIMATE_SET_FRAME. direction is frame number
                     {
-                        _warning("op_anim - unimplemented ANIMATE_SET_FRAME");
+                        if (auto queue = dynamic_cast<UI::AnimationQueue*>(object->ui())) {
+                            queue->currentAnimation()->setCurrentFrame(direction);
+                        }
                         break;
                     }
                     default: //  set animation? direction is forward/backward
