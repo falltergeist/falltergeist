@@ -10,6 +10,12 @@
 
 namespace Falltergeist
 {
+
+    namespace Event
+    {
+        class Event;
+    }
+
     namespace Game
     {
         /**
@@ -30,6 +36,9 @@ namespace Falltergeist
 
                 bool opened() const;
                 void setOpened(bool opened);
+
+                void onOpeningAnimationEnded(Event::Event* event);
+                void onClosingAnimationEnded(Event::Event* event);
 
             protected:
                 std::vector<ItemObject*> _inventory;
