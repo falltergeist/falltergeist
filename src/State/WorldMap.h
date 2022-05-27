@@ -49,6 +49,7 @@ namespace Falltergeist
                 UI::ImageList* _tiles = nullptr;
                 UI::ImageButton* _hotspot = nullptr;
                 std::vector<Game::City*> _cities;
+                std::vector<UI::Image*> _citySizes;
 
                 // temporary!
                 // @todo: move it to other place!

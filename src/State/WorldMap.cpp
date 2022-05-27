@@ -95,6 +95,13 @@ namespace Falltergeist
                 mapMinX = (renderWidth - 640)/2 + 22;
                 mapMinY = (renderHeight - 480)/2 + 21;
             }
+
+            // loading city size images
+            _citySizes = {
+                resourceManager->getImage("art/intrface/wrldspr0.frm"),
+                resourceManager->getImage("art/intrface/wrldspr1.frm"),
+                resourceManager->getImage("art/intrface/wrldspr2.frm"),
+            };
         }
 
         void WorldMap::render()
@@ -158,13 +165,15 @@ namespace Falltergeist
 
             // cities
             auto renderer = Game::Game::getInstance()->renderer();
-            auto green = new Graphics::Color(0, 255, 0, 255);
             auto shift = Graphics::Point(deltaX + 22, deltaY + 21);
             for (auto it = _cities.begin(); it != _cities.end(); ++it)
             {
-                if ((*it)->state())
+                Game::City* city = (*it);
+                if (city->state())
                 {
-                    renderer->drawRect((*it)->worldPos() - shift, Graphics::Size(32, 32), *green);
+                    UI::Image* citySize = _citySizes.at((int)city->size() - 1);
+                    citySize->setPosition(city->worldPos() - shift);
+                    citySize->render();
                 }
             }
 

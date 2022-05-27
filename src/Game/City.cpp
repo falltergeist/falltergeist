@@ -25,5 +25,10 @@ namespace Falltergeist
         {
             return _state;
         }
+
+        Format::Txt::City::Size City::size() const
+        {
+            return _city.size;
+        }
     }
 }

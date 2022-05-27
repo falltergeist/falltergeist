@@ -21,6 +21,8 @@ namespace Falltergeist
 
                 bool state() const;
 
+                Format::Txt::City::Size size() const;
+
             private:
                 Format::Txt::City _city;
 
