@@ -138,7 +138,7 @@ else()
         falltergeist::vfs
         falltergeist::vfs::native
         falltergeist::vfs::dat2
-	)
+    )
 endif()
 
 include(cmake/install/windows.cmake)

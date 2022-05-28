@@ -4,6 +4,7 @@ Under development
 - [refactoring] Structurize header includes (alexeevdv)
 - [refactoring] Extract scroll logic from Location (alexeevdv)
 - [feature] Replace SDL_Color with Graphics::Color (alexeevdv)
+- [feature] Include vfs as git submodule (alexeevdv)
 
 0.4.0 (2022-05-20)
 =======================
