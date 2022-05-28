@@ -89,6 +89,9 @@ if(NOT GLM_FOUND)
 endif(NOT GLM_FOUND)
 include_directories(SYSTEM ${GLM_INCLUDE_DIR})
 
+find_package(Boost COMPONENTS headers REQUIRED)
+include_directories(${Boost_INCLUDE_DIR})
+
 file(GLOB_RECURSE SOURCES  src/*.cpp)
 
 if(MSVC)
@@ -138,6 +141,7 @@ else()
         falltergeist::vfs
         falltergeist::vfs::native
         falltergeist::vfs::dat2
+        ${Boost_LIBRARIES}
     )
 endif()
 

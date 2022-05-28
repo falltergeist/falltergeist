@@ -3,6 +3,7 @@ Under development
 - [bugfix] Fix objects rendered with wrong offsets (alexeevdv)
 - [refactoring] Structurize header includes (alexeevdv)
 - [refactoring] Extract scroll logic from Location (alexeevdv)
+- [feature] boost::property_tree instead of custom ini parser (alexeevdv)
 - [feature] Replace SDL_Color with Graphics::Color (alexeevdv)
 - [feature] Include vfs as git submodule (alexeevdv)
 
