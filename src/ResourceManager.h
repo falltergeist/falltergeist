@@ -2,9 +2,9 @@
 
 // Project includes
 #include "Base/Singleton.h"
-#include "VFS/VFS.h"
 
 // Third-party includes
+#include "falltergeist/vfs/VFS.h"
 
 // stdlib
 #include <fstream>

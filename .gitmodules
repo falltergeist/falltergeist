@@ -1,0 +1,9 @@
+[submodule "submodules/falltergeist/vfs"]
+    path = submodules/falltergeist/vfs
+    url = https://github.com/falltergeist/vfs.git
+[submodule "submodules/falltergeist/vfs-dat2"]
+	path = submodules/falltergeist/vfs-dat2
+	url = https://github.com/falltergeist/vfs-dat2.git
+[submodule "submodules/falltergeist/vfs-native"]
+	path = submodules/falltergeist/vfs-native
+	url = https://github.com/falltergeist/vfs-native.git

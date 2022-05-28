@@ -12,6 +12,29 @@ if (USE_CLANG_TIDY)
 	set(CMAKE_CXX_CLANG_TIDY clang-tidy)
 endif()
 
+find_package(Git QUIET)
+if(GIT_FOUND AND EXISTS "${PROJECT_SOURCE_DIR}/.git")
+    # Update submodules as needed
+    option(GIT_SUBMODULE "Check submodules during build" ON)
+    if(GIT_SUBMODULE)
+        message(STATUS "Submodule update")
+        execute_process(COMMAND ${GIT_EXECUTABLE} submodule update --init --recursive
+                WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+                RESULT_VARIABLE GIT_SUBMOD_RESULT)
+        if(NOT GIT_SUBMOD_RESULT EQUAL "0")
+            message(FATAL_ERROR "git submodule update --init --recursive failed with ${GIT_SUBMOD_RESULT}, please checkout submodules")
+        endif()
+    endif()
+endif()
+
+if(NOT EXISTS "${PROJECT_SOURCE_DIR}/submodules")
+	message(FATAL_ERROR "The submodules were not downloaded! GIT_SUBMODULE was turned off or failed. Please update submodules and try again.")
+endif()
+
+add_subdirectory(submodules/falltergeist/vfs)
+add_subdirectory(submodules/falltergeist/vfs-native)
+add_subdirectory(submodules/falltergeist/vfs-dat2)
+
 include_directories(src)
 
 if(EXISTS ${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
@@ -112,6 +135,9 @@ else()
         ${SDL_IMAGE_LIBRARY}
         ${OPENGL_gl_LIBRARY}
         GLEW::glew
+        falltergeist::vfs
+        falltergeist::vfs::native
+        falltergeist::vfs::dat2
     )
 endif()
 
