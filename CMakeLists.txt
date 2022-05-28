@@ -27,7 +27,12 @@ if(GIT_FOUND AND EXISTS "${PROJECT_SOURCE_DIR}/.git")
     endif()
 endif()
 
+if(NOT EXISTS "${PROJECT_SOURCE_DIR}/submodules")
+	message(FATAL_ERROR "The submodules were not downloaded! GIT_SUBMODULE was turned off or failed. Please update submodules and try again.")
+endif()
+
 add_subdirectory(submodules/falltergeist/vfs)
+add_subdirectory(submodules/falltergeist/vfs-native)
 add_subdirectory(submodules/falltergeist/vfs-dat2)
 
 include_directories(src)
@@ -131,6 +136,7 @@ else()
         ${OPENGL_gl_LIBRARY}
         GLEW::glew
         falltergeist::vfs
+        falltergeist::vfs::native
         falltergeist::vfs::dat2
 	)
 endif()

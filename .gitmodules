@@ -1,8 +1,9 @@
 [submodule "submodules/falltergeist/vfs"]
     path = submodules/falltergeist/vfs
     url = https://github.com/falltergeist/vfs.git
-    tag = 0.3.0
 [submodule "submodules/falltergeist/vfs-dat2"]
 	path = submodules/falltergeist/vfs-dat2
 	url = https://github.com/falltergeist/vfs-dat2.git
-    tag = 0.1.0
+[submodule "submodules/falltergeist/vfs-native"]
+	path = submodules/falltergeist/vfs-native
+	url = https://github.com/falltergeist/vfs-native.git
