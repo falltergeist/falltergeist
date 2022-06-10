@@ -98,9 +98,9 @@ namespace Falltergeist
 
             // loading city size images
             _citySizes = {
-                resourceManager->getImage("art/intrface/wrldspr0.frm"),
-                resourceManager->getImage("art/intrface/wrldspr1.frm"),
-                resourceManager->getImage("art/intrface/wrldspr2.frm"),
+                new Graphics::TranslucentMask("art/intrface/wrldspr0.frm"),
+                new Graphics::TranslucentMask("art/intrface/wrldspr1.frm"),
+                new Graphics::TranslucentMask("art/intrface/wrldspr2.frm"),
             };
         }
 
@@ -171,9 +171,9 @@ namespace Falltergeist
                 Game::City* city = (*it);
                 if (city->state())
                 {
-                    UI::Image* citySize = _citySizes.at((int)city->size() - 1);
-                    citySize->setPosition(city->worldPos() - shift);
-                    citySize->render();
+                    auto citySize = _citySizes.at((int)city->size() - 1);
+                    citySize->setColor(0.0f, 1.0f, 0.0f, 1.0f);
+                    citySize->render(city->worldPos() - shift);
                 }
             }
 

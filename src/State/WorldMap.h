@@ -3,6 +3,7 @@
 // Project includes
 #include "../State/State.h"
 #include "../UI/IResourceManager.h"
+#include "Graphics/TranslucentMask.h"
 
 // Third-party includes
 
@@ -49,7 +50,7 @@ namespace Falltergeist
                 UI::ImageList* _tiles = nullptr;
                 UI::ImageButton* _hotspot = nullptr;
                 std::vector<Game::City*> _cities;
-                std::vector<UI::Image*> _citySizes;
+                std::vector<Graphics::TranslucentMask*> _citySizes;
 
                 // temporary!
                 // @todo: move it to other place!
