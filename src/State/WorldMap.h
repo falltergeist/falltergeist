@@ -3,10 +3,12 @@
 // Project includes
 #include "../State/State.h"
 #include "../UI/IResourceManager.h"
+#include "Graphics/TranslucentMask.h"
 
 // Third-party includes
 
 // stdlib
+#include <vector>
 
 namespace Falltergeist
 {
@@ -19,6 +21,10 @@ namespace Falltergeist
         class Image;
         class ImageButton;
         class ImageList;
+    }
+    namespace Game
+    {
+        class WorldMapCity;
     }
     namespace State
     {
@@ -43,6 +49,8 @@ namespace Falltergeist
                 UI::Image* _panel = nullptr;
                 UI::ImageList* _tiles = nullptr;
                 UI::ImageButton* _hotspot = nullptr;
+                std::vector<Game::WorldMapCity*> _cities;
+                std::vector<std::shared_ptr<Graphics::TranslucentMask>> _citySizes;
 
                 // temporary!
                 // @todo: move it to other place!

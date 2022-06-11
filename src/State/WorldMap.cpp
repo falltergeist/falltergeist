@@ -1,17 +1,16 @@
 // Project includes
 #include "../State/WorldMap.h"
 #include "../Game/Game.h"
+#include "../Game/WorldMapCity.h"
 #include "../Graphics/Renderer.h"
 #include "../Input/Mouse.h"
 #include "../ResourceManager.h"
 #include "../Settings.h"
 #include "../State/Location.h"
-#include "../State/MainMenu.h"
 #include "../UI/Factory/ImageButtonFactory.h"
 #include "../UI/Image.h"
 #include "../UI/ImageButton.h"
 #include "../UI/ImageList.h"
-#include "../UI/TextArea.h"
 
 // Third-party includes
 
@@ -28,6 +27,20 @@ namespace Falltergeist
         {
             this->resourceManager = resourceManager;
             imageButtonFactory = std::make_unique<UI::Factory::ImageButtonFactory>(resourceManager);
+
+            // loading city size images
+            _citySizes = {
+                std::make_shared<Graphics::TranslucentMask>("art/intrface/wrldspr0.frm"),
+                std::make_shared<Graphics::TranslucentMask>("art/intrface/wrldspr1.frm"),
+                std::make_shared<Graphics::TranslucentMask>("art/intrface/wrldspr2.frm"),
+            };
+
+            auto cityFile = ResourceManager::getInstance()->cityTxt();
+            for (auto it = cityFile->cities().begin(); it != cityFile->cities().end(); ++it)
+            {
+                auto city = *it;
+                this->_cities.push_back(new Game::WorldMapCity(city, _citySizes[(int)city.size - 1]));
+            }
         }
 
         void WorldMap::init()
@@ -149,6 +162,17 @@ namespace Falltergeist
                 }
             }
 
+            // cities
+            auto shift = Graphics::Point(deltaX + 22, deltaY + 21);
+            for (auto it = _cities.begin(); it != _cities.end(); ++it)
+            {
+                Game::WorldMapCity* city = (*it);
+                if (city->state())
+                {
+                    city->render(city->worldPos() - shift);
+                }
+            }
+
             // hostpot show
             _hotspot->setPosition(Point(mapMinX + worldMapX - deltaX, mapMinY + worldMapY - deltaY));
             _hotspot->render();
@@ -169,7 +193,6 @@ namespace Falltergeist
 
             _panel->setPosition(Point(panelX, panelY));
             _panel->render();
-
         }
 
         void WorldMap::handle(Event::Event* event)

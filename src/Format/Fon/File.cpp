@@ -14,6 +14,7 @@ namespace Falltergeist
         {
             File::File(Dat::Stream&& stream)
             {
+                stream.setEndianness(ENDIANNESS::LITTLE);
                 stream.setPosition(0);
 
                 _numchars = stream.uint32();
