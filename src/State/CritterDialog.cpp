@@ -28,6 +28,7 @@
 namespace Falltergeist {
     namespace State {
         using ImageButtonType = UI::Factory::ImageButtonFactory::Type;
+        using TextArea = Falltergeist::UI::TextArea;
 
         CritterDialog::CritterDialog(std::shared_ptr<UI::IResourceManager> resourceManager) : State() {
             this->resourceManager = resourceManager;
@@ -100,7 +101,7 @@ namespace Falltergeist {
 
             dialog->dialogReview()->addQuestion(std::string("  ") + value);
 
-            auto question = getTextArea("question");
+            auto question = getUI<TextArea>("question");
             question->setText(std::string("  ") + value);
             question->setLineOffset(0);
         }
@@ -141,7 +142,7 @@ namespace Falltergeist {
                 if (interact->critter()->canTrade()) {
                     interact->switchSubState(CritterInteract::SubState::BARTER);
                 } else {
-                    auto question = dynamic_cast<UI::TextArea*>(getUI("question"));
+                    auto question = getUI<UI::TextArea>("question");
                     question->setText(_t(MSG_PROTO, 903));
                 }
             }
@@ -176,7 +177,7 @@ namespace Falltergeist {
                 return;
             }
 
-            auto question = dynamic_cast<UI::TextArea*>(getUI("question"));
+            auto question = getUI<UI::TextArea>("question");
             if (key == SDLK_UP && question->lineOffset() > 0) {
                 question->setLineOffset(question->lineOffset() - 4);
             } else if (key == SDLK_DOWN && question->lineOffset() < question->numLines() - 4) {

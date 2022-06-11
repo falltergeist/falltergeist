@@ -456,30 +456,29 @@ namespace Falltergeist
         void SettingsMenu::doSave()
         {
             auto settings = Game::Game::getInstance()->settings();
-            // TODO: remove C-style casts
-            settings->setCombatDifficulty(((UI::MultistateImageButton*)getUI("combat_difficulty"))->state());
-            settings->setGameDifficulty(((UI::MultistateImageButton*)getUI("game_difficulty"))->state());
-            settings->setViolenceLevel(((UI::MultistateImageButton*)getUI("violence_level"))->state());
-            settings->setTargetHighlight(((UI::MultistateImageButton*)getUI("target_highlight"))->state());
-            settings->setCombatLooks(((UI::MultistateImageButton*)getUI("combat_looks"))->state());
-            settings->setCombatMessages(((UI::MultistateImageButton*)getUI("combat_messages"))->state());
-            settings->setCombatTaunts(((UI::MultistateImageButton*)getUI("combat_taunts"))->state());
-            settings->setLanguageFilter(((UI::MultistateImageButton*)getUI("language_filter"))->state());
-            settings->setRunning(((UI::MultistateImageButton*)getUI("running"))->state());
-            settings->setSubtitles(((UI::MultistateImageButton*)getUI("subtitles"))->state());
-            settings->setItemHighlight(((UI::MultistateImageButton*)getUI("item_highlight"))->state());
+            settings->setCombatDifficulty(getUI<UI::MultistateImageButton>("combat_difficulty")->state());
+            settings->setGameDifficulty(getUI<UI::MultistateImageButton>("game_difficulty")->state());
+            settings->setViolenceLevel(getUI<UI::MultistateImageButton>("violence_level")->state());
+            settings->setTargetHighlight(getUI<UI::MultistateImageButton>("target_highlight")->state());
+            settings->setCombatLooks(getUI<UI::MultistateImageButton>("combat_looks")->state());
+            settings->setCombatMessages(getUI<UI::MultistateImageButton>("combat_messages")->state());
+            settings->setCombatTaunts(getUI<UI::MultistateImageButton>("combat_taunts")->state());
+            settings->setLanguageFilter(getUI<UI::MultistateImageButton>("language_filter")->state());
+            settings->setRunning(getUI<UI::MultistateImageButton>("running")->state());
+            settings->setSubtitles(getUI<UI::MultistateImageButton>("subtitles")->state());
+            settings->setItemHighlight(getUI<UI::MultistateImageButton>("item_highlight")->state());
 
-            settings->setMasterVolume(((UI::Slider*)getUI("master_volume"))->value());
-            settings->setMusicVolume(((UI::Slider*)getUI("music_volume"))->value());
-            settings->setVoiceVolume(((UI::Slider*)getUI("voice_volume"))->value());
-            settings->setSfxVolume(((UI::Slider*)getUI("sfx_volume"))->value());
+            settings->setMasterVolume(getUI<UI::Slider>("master_volume")->value());
+            settings->setMusicVolume(getUI<UI::Slider>("music_volume")->value());
+            settings->setVoiceVolume(getUI<UI::Slider>("voice_volume")->value());
+            settings->setSfxVolume(getUI<UI::Slider>("sfx_volume")->value());
 
-            settings->setTextDelay(((UI::Slider*)getUI("text_delay"))->value());
-            settings->setCombatSpeed(static_cast<unsigned>(((UI::Slider*)getUI("combat_speed"))->value()));
-            settings->setBrightness(((UI::Slider*)getUI("brightness"))->value());
-            settings->setMouseSensitivity(((UI::Slider*)getUI("mouse_sensitivity"))->value());
+            settings->setTextDelay(getUI<UI::Slider>("text_delay")->value());
+            settings->setCombatSpeed(static_cast<unsigned>(getUI<UI::Slider>("combat_speed")->value()));
+            settings->setBrightness(getUI<UI::Slider>("brightness")->value());
+            settings->setMouseSensitivity(getUI<UI::Slider>("mouse_sensitivity")->value());
 
-            settings->setPlayerSpeedup(((UI::ImageButton*)getUI("player_speedup"))->checked());
+            settings->setPlayerSpeedup(getUI<UI::ImageButton>("player_speedup")->checked());
 
             settings->save();
             Game::Game::getInstance()->popState();

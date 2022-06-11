@@ -62,7 +62,7 @@ namespace Falltergeist
 
         void CritterDialogReview::onStateActivate(Event::State *event)
         {
-            auto list = dynamic_cast<UI::TextAreaList*>(getUI("list"));
+            auto list = getUI<UI::TextAreaList>("list");
             list->scrollTo(0);
         }
 
@@ -77,13 +77,13 @@ namespace Falltergeist
 
         void CritterDialogReview::onUpButtonClick(Event::Mouse *event)
         {
-            auto list = dynamic_cast<UI::TextAreaList*>(getUI("list"));
+            auto list = getUI<UI::TextAreaList>("list");
             list->scrollUp(4);
         }
 
         void CritterDialogReview::onDownButtonClick(Event::Mouse *event)
         {
-            auto list = dynamic_cast<UI::TextAreaList*>(getUI("list"));
+            auto list = getUI<UI::TextAreaList>("list");
             list->scrollDown(4);
         }
 
@@ -107,7 +107,7 @@ namespace Falltergeist
             answer->setFont("font1.aaf", {0x74,0x74, 0x74, 0xff});
             answer->setText(value);
 
-            auto list = dynamic_cast<UI::TextAreaList*>(getUI("list"));
+            auto list = getUI<UI::TextAreaList>("list");
             list->addArea(std::unique_ptr<UI::TextArea>(dudeName));
             list->addArea(std::unique_ptr<UI::TextArea>(answer));
         }
@@ -127,7 +127,7 @@ namespace Falltergeist
             question->setFont("font1.aaf", {0x00,0xa4, 0x00, 0xff});
             question->setText(value);
 
-            auto list = dynamic_cast<UI::TextAreaList*>(getUI("list"));
+            auto list = getUI<UI::TextAreaList>("list");
             list->addArea(std::unique_ptr<UI::TextArea>(crName));
             list->addArea(std::unique_ptr<UI::TextArea>(question));
         }

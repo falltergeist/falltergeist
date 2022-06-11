@@ -30,70 +30,57 @@ namespace Falltergeist
             });
         }
 
-        void State::init()
-        {
+        void State::init() {
             _initialized = true;
         }
 
-        void State::think(const float &deltaTime)
-        {
+        void State::think(const float &deltaTime) {
             for (auto& ui : _ui) {
                 ui->think(deltaTime);
             }
         }
 
-        int State::x() const
-        {
+        int State::x() const {
             return _position.x();
         }
 
-        void State::setX(int x)
-        {
+        void State::setX(int x) {
             _position.setX(x);
         }
 
-        int State::y() const
-        {
+        int State::y() const {
             return _position.y();
         }
 
-        void State::setY(int y)
-        {
+        void State::setY(int y) {
             _position.setY(y);
         }
 
-        const Graphics::Point& State::position() const
-        {
+        const Graphics::Point& State::position() const {
             return _position;
         }
 
-        void State::setPosition(const Graphics::Point& pos)
-        {
+        void State::setPosition(const Graphics::Point& pos) {
             _position = pos;
         }
 
-        bool State::initialized()
-        {
+        bool State::initialized() {
             return _initialized;
         }
 
-        bool State::fullscreen() const
-        {
+        bool State::fullscreen() const {
             return _fullscreen;
         }
 
-        void State::setFullscreen(bool value)
-        {
+        void State::setFullscreen(bool value) {
             _fullscreen = value;
         }
 
-        bool State::modal() const
-        {
+        bool State::modal() const {
             return _modal;
         }
 
-        void State::setModal(bool value)
-        {
+        void State::setModal(bool value) {
             _modal = value;
         }
 
@@ -119,29 +106,6 @@ namespace Falltergeist
             for (auto ui : uis) {
                 addUI(ui);
             }
-        }
-
-        UI::TextArea* State::getTextArea(const std::string& name)
-        {
-            return dynamic_cast<UI::TextArea*>(getUI(name));
-        }
-
-        UI::ImageList* State::getImageList(const std::string& name)
-        {
-            return dynamic_cast<UI::ImageList*>(getUI(name));
-        }
-
-        UI::SmallCounter* State::getSmallCounter(const std::string& name)
-        {
-            return dynamic_cast<UI::SmallCounter*>(getUI(name));
-        }
-
-        UI::Base* State::getUI(const std::string& name)
-        {
-            if (_labeledUI.find(name) != _labeledUI.end()) {
-                return _labeledUI.at(name);
-            }
-            return nullptr;
         }
 
         void State::handle(Event::Event* event)

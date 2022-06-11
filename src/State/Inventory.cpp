@@ -42,6 +42,7 @@ namespace Falltergeist
     {
         using ImageButtonType = UI::Factory::ImageButtonFactory::Type;
         using Point = Graphics::Point;
+        using TextArea = Falltergeist::UI::TextArea;
 
         Inventory::Inventory(std::shared_ptr<UI::IResourceManager> resourceManager, std::shared_ptr<ILogger> logger) : State()
         {
@@ -77,7 +78,7 @@ namespace Falltergeist
             setPosition((game->renderer()->size() - Point(499, 377 + panelHeight)) / 2); // 499x377 = art/intrface/invbox.frm
 
             addUI("background", resourceManager->getImage("art/intrface/invbox.frm"));
-            getUI("background")->mouseClickHandler().add(std::bind(&Inventory::backgroundRightClick, this, std::placeholders::_1));
+            getUI<UI::Image>("background")->mouseClickHandler().add(std::bind(&Inventory::backgroundRightClick, this, std::placeholders::_1));
 
             addUI("button_up",   imageButtonFactory->getByType(ImageButtonType::INVENTORY_UP_ARROW,   {128, 40}));
             addUI("button_down", imageButtonFactory->getByType(ImageButtonType::INVENTORY_DOWN_ARROW, {128, 65}));
@@ -89,9 +90,9 @@ namespace Falltergeist
             addUI("button_down_disabled", buttonDownDisabled);
             addUI("button_done", imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {438, 328}));
 
-            getUI("button_done")->mouseClickHandler().add(std::bind(&Inventory::onDoneButtonClick, this, std::placeholders::_1));
-            getUI("button_up")->mouseClickHandler().add(  std::bind(&Inventory::onScrollUpButtonClick, this, std::placeholders::_1));
-            getUI("button_down")->mouseClickHandler().add(std::bind(&Inventory::onScrollDownButtonClick, this, std::placeholders::_1));
+            getUI<UI::ImageButton>("button_done")->mouseClickHandler().add(std::bind(&Inventory::onDoneButtonClick, this, std::placeholders::_1));
+            getUI<UI::ImageButton>("button_up")->mouseClickHandler().add(  std::bind(&Inventory::onScrollUpButtonClick, this, std::placeholders::_1));
+            getUI<UI::ImageButton>("button_down")->mouseClickHandler().add(std::bind(&Inventory::onScrollDownButtonClick, this, std::placeholders::_1));
 
             // screen
             auto screenX = 300;
@@ -313,16 +314,16 @@ namespace Falltergeist
 
         void Inventory::onScrollUpButtonClick(Event::Mouse* event)
         {
-            auto inventory = dynamic_cast<UI::ItemsList*>(getUI("inventory_list"));
-            if(inventory->canScrollUp())
+            auto inventory = getUI<UI::ItemsList>("inventory_list");
+            if (inventory->canScrollUp())
             {
                 inventory->scrollUp();
                 //enable/disable scroll buttons on upward scroll
-                if(!inventory->canScrollUp())
+                if (!inventory->canScrollUp())
                 {
                     enableScrollUpButton(false);
                 }
-                if(inventory->canScrollDown())
+                if (inventory->canScrollDown())
                 {
                     enableScrollDownButton(true);
                 }
@@ -331,16 +332,16 @@ namespace Falltergeist
 
         void Inventory::onScrollDownButtonClick(Event::Mouse* event)
         {
-            auto inventory = dynamic_cast<UI::ItemsList*>(getUI("inventory_list"));
-            if(inventory->canScrollDown())
+            auto inventory = getUI<UI::ItemsList>("inventory_list");
+            if (inventory->canScrollDown())
             {
                 inventory->scrollDown();
                 //enable/disable scroll buttons on downward scroll
-                if(!inventory->canScrollDown())
+                if (!inventory->canScrollDown())
                 {
                     enableScrollDownButton(false);
                 }
-                if(inventory->canScrollUp())
+                if (inventory->canScrollUp())
                 {
                     enableScrollUpButton(true);
                 }
@@ -349,7 +350,7 @@ namespace Falltergeist
 
         void Inventory::onInventoryModified()
         {
-            auto inventory = dynamic_cast<UI::ItemsList*>(getUI("inventory_list"));
+            auto inventory = getUI<UI::ItemsList>("inventory_list");
             /*
             this would scroll up when an item is removed and you are at the bottom
             of the list to fix the gap, but a bug is causing slotOffset to be crazy number
@@ -364,16 +365,16 @@ namespace Falltergeist
 
         void Inventory::enableScrollUpButton(bool enable)
         {
-            auto scrollUpButton = dynamic_cast<UI::ImageButton*>(getUI("button_up"));
-            auto scrollUpButtonDisabled = dynamic_cast<UI::Image*>(getUI("button_up_disabled"));
+            auto scrollUpButton = getUI<UI::ImageButton>("button_up");
+            auto scrollUpButtonDisabled = getUI<UI::Image>("button_up_disabled");
             scrollUpButtonDisabled->setVisible(!enable);
             scrollUpButton->setEnabled(enable);
         }
 
         void Inventory::enableScrollDownButton(bool enable)
         {
-            auto scrollDownButton = dynamic_cast<UI::ImageButton*>(getUI("button_down"));
-            auto scrollDownButtonDisabled = dynamic_cast<UI::Image*>(getUI("button_down_disabled"));
+            auto scrollDownButton = getUI<UI::ImageButton>("button_down");
+            auto scrollDownButtonDisabled = getUI<UI::Image>("button_down_disabled");
             scrollDownButtonDisabled->setVisible(!enable);
             scrollDownButton->setEnabled(enable);
         }
@@ -426,22 +427,22 @@ namespace Falltergeist
         void Inventory::_screenShow (unsigned int PID)
         {
             auto player = Game::Game::getInstance()->player();
-            auto playerNameLabel = getTextArea("player_name");
-            auto statsLabel = getTextArea("label_stats");
-            auto statsValuesLabel = getTextArea("label_stats_values");
-            auto textLabel = getTextArea("textLabel");
-            auto hitPointsLabel = getTextArea("hitPointsLabel");
-            auto armorClassLabel = getTextArea("armorClassLabel");
-            auto damageThresholdLabel = getTextArea("damageThresholdLabel");
-            auto damageResistanceLabel = getTextArea("damageResistanceLabel");
-            auto line2 = getUI("line2");
-            auto line3 = getUI("line3");
-            auto totalWtLabel = getTextArea("totalWtLabel");
-            auto weightLabel = getTextArea("weightLabel");
-            auto weightMaxLabel = getTextArea("weightMaxLabel");
-            auto leftHandLabel = getTextArea("leftHandLabel");
-            auto rightHandLabel = getTextArea("rightHandLabel");
-            auto screenLabel = getTextArea("screenLabel");
+            auto playerNameLabel = getUI<TextArea>("player_name");
+            auto statsLabel = getUI<TextArea>("label_stats");
+            auto statsValuesLabel = getUI<TextArea>("label_stats_values");
+            auto textLabel = getUI<TextArea>("textLabel");
+            auto hitPointsLabel = getUI<TextArea>("hitPointsLabel");
+            auto armorClassLabel = getUI<TextArea>("armorClassLabel");
+            auto damageThresholdLabel = getUI<TextArea>("damageThresholdLabel");
+            auto damageResistanceLabel = getUI<TextArea>("damageResistanceLabel");
+            auto line2 = getUI<UI::Rectangle>("line2");
+            auto line3 = getUI<UI::Rectangle>("line3");
+            auto totalWtLabel = getUI<TextArea>("totalWtLabel");
+            auto weightLabel = getUI<TextArea>("weightLabel");
+            auto weightMaxLabel = getUI<TextArea>("weightMaxLabel");
+            auto leftHandLabel = getUI<TextArea>("leftHandLabel");
+            auto rightHandLabel = getUI<TextArea>("rightHandLabel");
+            auto screenLabel = getUI<TextArea>("screenLabel");
 
             if (PID == 0)
             {

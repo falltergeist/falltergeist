@@ -589,7 +589,7 @@ namespace Falltergeist
          */
         void PlayerEdit::onTabClick(Event::Mouse* event)
         {
-            auto tabs = dynamic_cast<UI::ImageList*>(getUI("tabs"));
+            auto tabs = getUI<UI::ImageList>("tabs");
             unsigned int clickX = static_cast<unsigned>(event->position().x() - tabs->position().x());
 
             for (unsigned int i = 0, tabEnd = 0; i < 3; i++) {
@@ -597,7 +597,7 @@ namespace Falltergeist
                 // selected width = 120, unselected width = 100
                 tabEnd += (i == tabs->currentImage() ? 120 : 100);
 
-                auto tab = dynamic_cast<UI::TextArea*>(getUI("tab_" + std::to_string(i)));
+                auto tab = getUI<UI::TextArea>("tab_" + std::to_string(i));
                 const auto tabsY = tabs->position().y() + 7;
 
                 // Slightly raise the selected tab and lower the others
@@ -609,10 +609,10 @@ namespace Falltergeist
                 }
             }
 
-            getUI("tab_perks")->setVisible(tabs->currentImage() == 0 ? true : false);
-            getUI("tab_karma")->setVisible(tabs->currentImage() == 1 ? true : false);
-            getUI("tab_kills_enemies")->setVisible(tabs->currentImage() == 2 ? true : false);
-            getUI("tab_kills_score")->setVisible(tabs->currentImage() == 2 ? true : false);
+            getUI<UI::TextArea>("tab_perks")->setVisible(tabs->currentImage() == 0);
+            getUI<UI::TextArea>("tab_karma")->setVisible(tabs->currentImage() == 1);
+            getUI<UI::TextAreaList>("tab_kills_enemies")->setVisible(tabs->currentImage() == 2);
+            getUI<UI::TextAreaList>("tab_kills_score")->setVisible(tabs->currentImage() == 2);
         }
 
         void PlayerEdit::doCancel()
@@ -661,7 +661,7 @@ namespace Falltergeist
         void PlayerEdit::render()
         {
             State::render();
-            auto background = getUI("bg");
+            auto background = getUI<UI::Image>("bg");
             Point backgroundPos = Point((Game::Game::getInstance()->renderer()->size() - background->size()) / 2);
             _selectedImage->setPosition(backgroundPos + Point(480, 310));
             _selectedImage->render();

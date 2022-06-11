@@ -84,10 +84,10 @@ namespace Falltergeist
             addUI("reaction", reaction);
 
             addUI("offerButton", imageButtonFactory->getByType(ImageButtonType::DIALOG_RED_BUTTON, {40, 162}));
-            getUI("offerButton")->mouseClickHandler().add(std::bind(&CritterBarter::onOfferButtonClick, this, std::placeholders::_1));
+            getUI<UI::ImageButton>("offerButton")->mouseClickHandler().add(std::bind(&CritterBarter::onOfferButtonClick, this, std::placeholders::_1));
 
             addUI("talkButton", imageButtonFactory->getByType(ImageButtonType::DIALOG_RED_BUTTON, {583, 162}));
-            getUI("talkButton")->mouseClickHandler().add(std::bind(&CritterBarter::onTalkButtonClick, this, std::placeholders::_1));
+            getUI<UI::ImageButton>("talkButton")->mouseClickHandler().add(std::bind(&CritterBarter::onTalkButtonClick, this, std::placeholders::_1));
 
             auto scrollUp = [](UI::ItemsList *list) {
                 if (list->canScrollUp()) {
@@ -186,16 +186,16 @@ namespace Falltergeist
 
         void CritterBarter::resetTransaction()
         {
-            dynamic_cast<UI::TextArea*>(getUI("sellPriceText"))->setText("$0");
-            dynamic_cast<UI::TextArea*>(getUI("buyPriceText"))->setText("$0");
+            getUI<UI::TextArea>("sellPriceText")->setText("$0");
+            getUI<UI::TextArea>("buyPriceText")->setText("$0");
 
             _itemsToSell.clear();
-            dynamic_cast<UI::ItemsList*>(getUI("mineList"))->setItems(Game::Game::getInstance()->player()->inventory());
-            dynamic_cast<UI::ItemsList*>(getUI("sellList"))->setItems(&_itemsToSell);
+            getUI<UI::ItemsList>("mineList")->setItems(Game::Game::getInstance()->player()->inventory());
+            getUI<UI::ItemsList>("sellList")->setItems(&_itemsToSell);
 
             _itemsToBuy.clear();
-            dynamic_cast<UI::ItemsList*>(getUI("theirsList"))->setItems(_trader->inventory());
-            dynamic_cast<UI::ItemsList*>(getUI("buyList"))->setItems(&_itemsToBuy);
+            getUI<UI::ItemsList>("theirsList")->setItems(_trader->inventory());
+            getUI<UI::ItemsList>("buyList")->setItems(&_itemsToBuy);
 
             _sellPriceTotal = 0;
             _buyPriceTotal = 0;
@@ -203,7 +203,7 @@ namespace Falltergeist
 
         void CritterBarter::onOfferButtonClick(Event::Mouse*)
         {
-            auto reaction = dynamic_cast<UI::TextArea*>(getUI("reaction"));
+            auto reaction = getUI<UI::TextArea>("reaction");
 
             try {
                 if (_sellPriceTotal == 0 && _buyPriceTotal == 0) {
@@ -259,7 +259,7 @@ namespace Falltergeist
                 _trader->inventory()->push_back(v);
             }
 
-            dynamic_cast<UI::TextArea*>(getUI("reaction"))->setText("");
+            getUI<UI::TextArea>("reaction")->setText("");
 
             resetTransaction();
         }
