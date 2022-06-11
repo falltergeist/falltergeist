@@ -2,7 +2,8 @@
 
 // Project includes
 #include "Format/Txt/CityFile.h"
-#include "Graphics/Point.h"
+#include "Graphics/TranslucentMask.h"
+#include "UI/TextArea.h"
 
 // Third-party includes
 
@@ -12,10 +13,10 @@ namespace Falltergeist
 {
     namespace Game
     {
-        class City
+        class WorldMapCity
         {
             public:
-                City(Format::Txt::City city);
+                WorldMapCity(Format::Txt::City city, std::shared_ptr<Graphics::TranslucentMask> sprite);
 
                 const Graphics::Point& worldPos() const;
 
@@ -23,12 +24,18 @@ namespace Falltergeist
 
                 Format::Txt::City::Size size() const;
 
+                void render(const Graphics::Point& point) const;
+
             private:
                 Format::Txt::City _city;
 
                 Graphics::Point _worldPos;
 
                 bool _state;
+
+                std::shared_ptr<Graphics::TranslucentMask> _sprite;
+
+                UI::TextArea* _name;
         };
     }
 }

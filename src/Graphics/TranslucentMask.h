@@ -1,10 +1,11 @@
 #pragma once
 
 // Project includes
-#include "../Graphics/Shader.h"
-#include "../Graphics/Texture.h"
+#include "Texture.h"
 
 // Third-party includes
+#include <GL/glew.h>
+#include <glm/vec4.hpp>
 
 // stdlib
 
@@ -12,12 +13,17 @@ namespace Falltergeist
 {
     namespace Graphics
     {
+        class Shader;
+        class Color;
+
         class TranslucentMask
         {
             public:
                 TranslucentMask(const std::string& filename);
 
-                void setColor(float r, float g, float b, float a);
+                void setColor(Color color);
+
+                const Size& size() const;
 
                 void render(const Point& point);
 

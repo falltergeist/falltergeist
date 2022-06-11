@@ -24,7 +24,7 @@ namespace Falltergeist
     }
     namespace Game
     {
-        class City;
+        class WorldMapCity;
     }
     namespace State
     {
@@ -49,8 +49,8 @@ namespace Falltergeist
                 UI::Image* _panel = nullptr;
                 UI::ImageList* _tiles = nullptr;
                 UI::ImageButton* _hotspot = nullptr;
-                std::vector<Game::City*> _cities;
-                std::vector<Graphics::TranslucentMask*> _citySizes;
+                std::vector<Game::WorldMapCity*> _cities;
+                std::vector<std::shared_ptr<Graphics::TranslucentMask>> _citySizes;
 
                 // temporary!
                 // @todo: move it to other place!

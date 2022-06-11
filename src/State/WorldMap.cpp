@@ -1,18 +1,16 @@
 // Project includes
 #include "../State/WorldMap.h"
 #include "../Game/Game.h"
-#include "../Game/City.h"
+#include "../Game/WorldMapCity.h"
 #include "../Graphics/Renderer.h"
 #include "../Input/Mouse.h"
 #include "../ResourceManager.h"
 #include "../Settings.h"
 #include "../State/Location.h"
-#include "../State/MainMenu.h"
 #include "../UI/Factory/ImageButtonFactory.h"
 #include "../UI/Image.h"
 #include "../UI/ImageButton.h"
 #include "../UI/ImageList.h"
-#include "../UI/TextArea.h"
 
 // Third-party includes
 
@@ -30,10 +28,18 @@ namespace Falltergeist
             this->resourceManager = resourceManager;
             imageButtonFactory = std::make_unique<UI::Factory::ImageButtonFactory>(resourceManager);
 
+            // loading city size images
+            _citySizes = {
+                std::make_shared<Graphics::TranslucentMask>("art/intrface/wrldspr0.frm"),
+                std::make_shared<Graphics::TranslucentMask>("art/intrface/wrldspr1.frm"),
+                std::make_shared<Graphics::TranslucentMask>("art/intrface/wrldspr2.frm"),
+            };
+
             auto cityFile = ResourceManager::getInstance()->cityTxt();
             for (auto it = cityFile->cities().begin(); it != cityFile->cities().end(); ++it)
             {
-                this->_cities.push_back(new Game::City(*it));
+                auto city = *it;
+                this->_cities.push_back(new Game::WorldMapCity(city, _citySizes[(int)city.size - 1]));
             }
         }
 
@@ -95,13 +101,6 @@ namespace Falltergeist
                 mapMinX = (renderWidth - 640)/2 + 22;
                 mapMinY = (renderHeight - 480)/2 + 21;
             }
-
-            // loading city size images
-            _citySizes = {
-                new Graphics::TranslucentMask("art/intrface/wrldspr0.frm"),
-                new Graphics::TranslucentMask("art/intrface/wrldspr1.frm"),
-                new Graphics::TranslucentMask("art/intrface/wrldspr2.frm"),
-            };
         }
 
         void WorldMap::render()
@@ -168,12 +167,10 @@ namespace Falltergeist
             auto shift = Graphics::Point(deltaX + 22, deltaY + 21);
             for (auto it = _cities.begin(); it != _cities.end(); ++it)
             {
-                Game::City* city = (*it);
+                Game::WorldMapCity* city = (*it);
                 if (city->state())
                 {
-                    auto citySize = _citySizes.at((int)city->size() - 1);
-                    citySize->setColor(0.0f, 1.0f, 0.0f, 1.0f);
-                    citySize->render(city->worldPos() - shift);
+                    city->render(city->worldPos() - shift);
                 }
             }
 
@@ -197,7 +194,6 @@ namespace Falltergeist
 
             _panel->setPosition(Point(panelX, panelY));
             _panel->render();
-
         }
 
         void WorldMap::handle(Event::Event* event)

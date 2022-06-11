@@ -29,9 +29,19 @@ namespace Falltergeist
             _attribTex = _shader->getAttrib("TexCoord");
         }
 
-        void TranslucentMask::setColor(const float r, const float g, const float b, const float a)
+        void TranslucentMask::setColor(Color color)
         {
-            _color = glm::vec4(r, g, b, a);
+            _color = glm::vec4(
+                (float)color.red() / 255,
+                (float)color.green() / 255,
+                (float)color.blue() / 255,
+                (float)color.alpha() / 255
+            );
+        }
+
+        const Size& TranslucentMask::size() const
+        {
+            return _texture->size();
         }
 
         void TranslucentMask::render(const Point& point)
