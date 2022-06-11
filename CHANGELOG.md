@@ -5,6 +5,8 @@ Under development
 - [refactoring] Extract scroll logic from Location (alexeevdv)
 - [feature] Replace SDL_Color with Graphics::Color (alexeevdv)
 - [feature] Include vfs as git submodule (alexeevdv)
+- [feature] Worldmap city rendering (MrCool92)
+- [bugfix] Fix loading .fon files (MrCool92)
 
 0.4.0 (2022-05-20)
 =======================
