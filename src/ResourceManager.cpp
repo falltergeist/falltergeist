@@ -339,18 +339,13 @@ namespace Falltergeist {
         return fontPtr;
     }
 
-
-    Graphics::Shader *ResourceManager::shader(const std::string &filename) {
-        if (_shaders.count(filename)) {
-            return _shaders.at(filename).get();
+    std::shared_ptr<Graphics::Shader>& ResourceManager::shader(const std::string &filename) {
+        if (!_shaders.count(filename)) {
+            auto shader = std::make_shared<Graphics::Shader>(filename);
+            _shaders.emplace(filename, shader);
         }
-
-        Graphics::Shader *shader = new Graphics::Shader(filename);
-
-        _shaders.emplace(filename, std::unique_ptr<Graphics::Shader>(shader));
-        return shader;
+        return _shaders.at(filename);
     }
-
 
     Format::Pro::File *ResourceManager::proFileType(unsigned int PID) {
         unsigned int typeId = PID >> 24;

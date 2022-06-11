@@ -408,7 +408,12 @@ namespace Falltergeist {
             GL_CHECK(glDrawElements(GL_TRIANGLES, indexBuffer.count(), GL_UNSIGNED_INT, nullptr));
         }
 
-        void Renderer::drawRectangle(const Rectangle& rectangle, const Texture* const texture, const Texture* const egg, const Shader* const shader) {
+        void Renderer::drawRectangle(
+            const Rectangle& rectangle,
+            const Texture* const texture,
+            const Texture* const egg,
+            const std::shared_ptr<Shader>& shader
+        ) {
             glm::vec2 vertices[4] = {glm::vec2((float)rectangle.position().x(), (float)rectangle.position().y()),
                                      glm::vec2((float)rectangle.position().x(), (float)(rectangle.position().y() + rectangle.size().height())),
                                      glm::vec2((float)(rectangle.position().x() + rectangle.size().width()), (float)rectangle.position().y()),
@@ -442,8 +447,13 @@ namespace Falltergeist {
             GL_CHECK(glDrawElements(GL_TRIANGLES, indexBuffer.count(), GL_UNSIGNED_INT, nullptr));
         }
 
-        void Renderer::drawPartialRectangle(const Point& point, const Rectangle& rectangle, const Texture* const texture, const Texture* const egg,
-                                            const Shader* const shader) {
+        void Renderer::drawPartialRectangle(
+            const Point& point,
+            const Rectangle& rectangle,
+            const Texture* const texture,
+            const Texture* const egg,
+            const std::shared_ptr<Shader> shader
+        ) {
             glm::vec2 vertices[4] = {glm::vec2((float)point.x(), (float)point.y()),
                                      glm::vec2((float)point.x(), (float)(point.y() + rectangle.size().height())),
                                      glm::vec2((float)(point.x() + rectangle.size().width()), (float)point.y()),

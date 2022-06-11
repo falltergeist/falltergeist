@@ -49,7 +49,7 @@ namespace Falltergeist
                 UI::Image* _panel = nullptr;
                 UI::ImageList* _tiles = nullptr;
                 UI::ImageButton* _hotspot = nullptr;
-                std::vector<Game::WorldMapCity*> _cities;
+                std::vector<std::unique_ptr<Game::WorldMapCity>> _cities;
                 std::vector<std::shared_ptr<Graphics::TranslucentMask>> _citySizes;
 
                 // temporary!

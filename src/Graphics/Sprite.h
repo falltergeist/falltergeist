@@ -33,22 +33,36 @@ namespace Falltergeist
 
             private:
                 GLint _uniformTex;
+
                 GLint _uniformTexSize;
+
                 GLint _uniformEggTex;
+
                 GLint _uniformFade;
+
                 GLint _uniformMVP;
+
                 GLint _uniformCnt;
+
                 GLint _uniformLight;
+
                 GLint _uniformTrans;
+
                 GLint _uniformDoEgg;
+
                 GLint _uniformEggPos;
+
                 GLint _uniformOutline;
 
                 GLint _attribPos;
+
                 GLint _attribTex;
+
                 Texture* _texture;
+
                 Graphics::TransFlags::Trans _trans = Graphics::TransFlags::Trans::NONE;
-                Graphics::Shader*_shader;
+
+                std::shared_ptr<Graphics::Shader> _shader;
         };
     }
 }

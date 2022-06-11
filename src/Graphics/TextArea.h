@@ -36,7 +36,7 @@ namespace Falltergeist::Graphics {
 
         std::unique_ptr<IndexBuffer> _indexBuffer;
 
-        Graphics::Shader*_shader;
+        std::shared_ptr<Graphics::Shader> _shader;
 
         GLint _uniformTex;
 
