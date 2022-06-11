@@ -40,7 +40,7 @@ namespace Falltergeist
 
                 glm::vec4 _color;
 
-                Shader* _shader;
+                std::shared_ptr<Shader> _shader;
         };
     }
 }

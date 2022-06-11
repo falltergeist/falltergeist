@@ -26,20 +26,30 @@ namespace Falltergeist
 
             private:
                 std::unique_ptr<VertexBuffer> _coordinatesVertexBuffer;
+
                 std::unique_ptr<VertexBuffer> _textureCoordinatesVertexBuffer;
+
                 std::unique_ptr<VertexArray> _vertexArray;
+
                 std::vector<std::unique_ptr<Texture>> _textures;
 
                 GLint _uniformTex;
+
                 GLint _uniformFade;
+
                 GLint _uniformMVP;
+
                 GLint _uniformCnt;
+
                 GLint _uniformLight;
+
                 GLint _uniformOffset;
 
                 GLint _attribPos;
+
                 GLint _attribTex;
-                Graphics::Shader*_shader;
+
+                std::shared_ptr<Graphics::Shader> _shader;
         };
     }
 }

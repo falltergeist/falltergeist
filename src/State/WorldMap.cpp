@@ -36,10 +36,8 @@ namespace Falltergeist
             };
 
             auto cityFile = ResourceManager::getInstance()->cityTxt();
-            for (auto it = cityFile->cities().begin(); it != cityFile->cities().end(); ++it)
-            {
-                auto city = *it;
-                this->_cities.push_back(new Game::WorldMapCity(city, _citySizes[(int)city.size - 1]));
+            for (auto& city : cityFile->cities()) {
+                _cities.emplace_back(std::make_unique<Game::WorldMapCity>(city, _citySizes[(int)city.size - 1]));
             }
         }
 
@@ -164,11 +162,8 @@ namespace Falltergeist
 
             // cities
             auto shift = Graphics::Point(deltaX + 22, deltaY + 21);
-            for (auto it = _cities.begin(); it != _cities.end(); ++it)
-            {
-                Game::WorldMapCity* city = (*it);
-                if (city->state())
-                {
+            for (auto& city : _cities) {
+                if (city->state()) {
                     city->render(city->worldPos() - shift);
                 }
             }

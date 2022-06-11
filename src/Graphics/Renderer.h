@@ -75,10 +75,21 @@ namespace Falltergeist
                 void drawPartialRectangle(const Point& point, const Rectangle& rectangle, const Texture* const texture);
 
                 // Draw scaled texture in the rectangle
-                void drawRectangle(const Rectangle& rectangle, const Texture* const texture, const Texture* const egg, const Shader* const shader);
+                void drawRectangle(
+                    const Rectangle& rectangle,
+                    const Texture* const texture,
+                    const Texture* const egg,
+                    const std::shared_ptr<Shader>& shader
+                );
 
                 // Draw rectangle part of the texture in the given position. unscaled
-                void drawPartialRectangle(const Point& position, const Rectangle& rectangle, const Texture* const texture, const Texture* const egg, const Shader* const shader);
+                void drawPartialRectangle(
+                    const Point& position,
+                    const Rectangle& rectangle,
+                    const Texture* const texture,
+                    const Texture* const egg,
+                    const std::shared_ptr<Shader> shader
+                );
 
                 glm::vec4 fadeColor();
 

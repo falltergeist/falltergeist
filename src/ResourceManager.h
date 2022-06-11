@@ -119,7 +119,9 @@ namespace Falltergeist
 
             Graphics::Texture* texture(const std::string& filename);
             Graphics::Font* font(const std::string& filename = "font1.aaf");
-            Graphics::Shader* shader(const std::string& filename);
+
+            std::shared_ptr<Graphics::Shader>& shader(const std::string& filename);
+
             void unloadResources();
             std::string FIDtoFrmName(unsigned int FID);
             Game::Location* gameLocation(unsigned int number);
@@ -139,7 +141,7 @@ namespace Falltergeist
 
             std::unordered_map<std::string, std::unique_ptr<Graphics::Font>> _fonts;
 
-            std::unordered_map<std::string, std::unique_ptr<Graphics::Shader>> _shaders;
+            std::unordered_map<std::string, std::shared_ptr<Graphics::Shader>> _shaders;
 
             std::unique_ptr<VFS::VFS> _vfs;
 
