@@ -163,7 +163,6 @@ namespace Falltergeist
             }
 
             // cities
-            auto renderer = Game::Game::getInstance()->renderer();
             auto shift = Graphics::Point(deltaX + 22, deltaY + 21);
             for (auto it = _cities.begin(); it != _cities.end(); ++it)
             {
