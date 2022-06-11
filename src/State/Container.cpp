@@ -66,7 +66,7 @@ namespace Falltergeist
             addUI(objectCopy->ui());
 
             addUI("button_done", imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {478, 331}));
-            getUI("button_done")->mouseClickHandler().add(std::bind(&Container::onDoneButtonClick, this, std::placeholders::_1));
+            getUI<UI::ImageButton>("button_done")->mouseClickHandler().add(std::bind(&Container::onDoneButtonClick, this, std::placeholders::_1));
 
             // TODO: disable buttons if there is nowhere to scroll
             auto scrollUp = [](UI::ItemsList *list) {

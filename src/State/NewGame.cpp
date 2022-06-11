@@ -29,6 +29,7 @@ namespace Falltergeist
         using Helpers::StateLocationHelper;
         using ImageButtonType = UI::Factory::ImageButtonFactory::Type;
         using Point = Graphics::Point;
+        using TextArea = Falltergeist::UI::TextArea;
 
         NewGame::NewGame(std::shared_ptr<UI::IResourceManager> resourceManager, std::shared_ptr<ILogger> logger) : State()
         {
@@ -80,15 +81,15 @@ namespace Falltergeist
             addUI("name", new UI::TextArea(300, 40));
 
             addUI("stats_1", new UI::TextArea(0, 70));
-            getTextArea("stats_1")->setWidth(362);
-            getTextArea("stats_1")->setHorizontalAlign(UI::TextArea::HorizontalAlign::RIGHT);
+            getUI<TextArea>("stats_1")->setWidth(362);
+            getUI<TextArea>("stats_1")->setHorizontalAlign(UI::TextArea::HorizontalAlign::RIGHT);
 
             addUI("stats_2", new UI::TextArea(374, 70));
             addUI("bio",     new UI::TextArea(437, 40));
 
             addUI("stats_3", new UI::TextArea(294, 150));
-            getTextArea("stats_3")->setWidth(85);
-            getTextArea("stats_3")->setHorizontalAlign(UI::TextArea::HorizontalAlign::RIGHT);
+            getUI<TextArea>("stats_3")->setWidth(85);
+            getUI<TextArea>("stats_3")->setHorizontalAlign(UI::TextArea::HorizontalAlign::RIGHT);
 
             addUI("stats3_values", new UI::TextArea(383, 150));
         }
@@ -174,8 +175,8 @@ namespace Falltergeist
         void NewGame::_changeCharacter()
         {
             auto& dude = _characters.at(_selectedCharacter);
-           *getTextArea("stats_1") = "";
-           *getTextArea("stats_1")
+           *getUI<TextArea>("stats_1") = "";
+           *getUI<TextArea>("stats_1")
                 << _t(MSG_STATS, 100) << " " << (dude->stat(STAT::STRENGTH)     < 10 ? "0" : "") << dude->stat(STAT::STRENGTH)     << "\n"
                 << _t(MSG_STATS, 101) << " " << (dude->stat(STAT::PERCEPTION)   < 10 ? "0" : "") << dude->stat(STAT::PERCEPTION)   << "\n"
                 << _t(MSG_STATS, 102) << " " << (dude->stat(STAT::ENDURANCE)    < 10 ? "0" : "") << dude->stat(STAT::ENDURANCE)    << "\n"
@@ -184,8 +185,8 @@ namespace Falltergeist
                 << _t(MSG_STATS, 105) << " " << (dude->stat(STAT::AGILITY)      < 10 ? "0" : "") << dude->stat(STAT::AGILITY)      << "\n"
                 << _t(MSG_STATS, 106) << " " << (dude->stat(STAT::LUCK)         < 10 ? "0" : "") << dude->stat(STAT::LUCK)         << "\n";
 
-            *getTextArea("stats_2") = "";
-            *getTextArea("stats_2")
+            *getUI<TextArea>("stats_2") = "";
+            *getUI<TextArea>("stats_2")
                 << _t(MSG_STATS, dude->stat(STAT::STRENGTH)     + 300) << "\n"
                 << _t(MSG_STATS, dude->stat(STAT::PERCEPTION)   + 300) << "\n"
                 << _t(MSG_STATS, dude->stat(STAT::ENDURANCE)    + 300) << "\n"
@@ -194,9 +195,9 @@ namespace Falltergeist
                 << _t(MSG_STATS, dude->stat(STAT::AGILITY)      + 300) << "\n"
                 << _t(MSG_STATS, dude->stat(STAT::LUCK)         + 300) << "\n";
 
-            getTextArea("bio")->setText(dude->biography());
-            getTextArea("name")->setText(dude->name());
-            getImageList("images")->setCurrentImage(_selectedCharacter);
+            getUI<TextArea>("bio")->setText(dude->biography());
+            getUI<TextArea>("name")->setText(dude->name());
+            getUI<UI::ImageList>("images")->setCurrentImage(_selectedCharacter);
 
             std::string stats3  = _t(MSG_MISC,  16)  + "\n"    // Hit Points
                                 + _t(MSG_STATS, 109) + "\n"     // Armor Class
@@ -223,8 +224,8 @@ namespace Falltergeist
                     stats3 += "\n" + _t(MSG_TRAITS, 100 + i);
                 }
             }
-            getTextArea("stats_3")->setText(stats3);
-            getTextArea("stats3_values")->setText(stats3_values);
+            getUI<TextArea>("stats_3")->setText(stats3);
+            getUI<TextArea>("stats3_values")->setText(stats3_values);
         }
 
         void NewGame::onEditButtonClick(Event::Mouse* event)

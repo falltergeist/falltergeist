@@ -667,7 +667,7 @@ namespace Falltergeist
         void PlayerCreate::render()
         {
             State::render();
-            auto background = getUI("bg");
+            auto background = getUI<UI::Image>("bg");
             Point backgroundPos = Point((Game::Game::getInstance()->renderer()->size() - background->size()) / 2);
             _selectedImage->setPosition(backgroundPos + Point(480, 310));
             _selectedImage->render();

@@ -130,11 +130,11 @@ namespace Falltergeist
                 return;
             }
 
-            unsigned int frame = dynamic_cast<UI::MvePlayer*>(getUI("movie"))->frame();
+            unsigned int frame = getUI<UI::MvePlayer>("movie")->frame();
             if (frame >= _nextSubLine.first) {
-                dynamic_cast<UI::TextArea*>(getUI("subs"))->setText(_nextSubLine.second);
+                getUI<UI::TextArea>("subs")->setText(_nextSubLine.second);
                 if (_hasSubs) {
-                    _nextSubLine = _subs->getSubLine(dynamic_cast<UI::MvePlayer*>(getUI("movie"))->frame());
+                    _nextSubLine = _subs->getSubLine(getUI<UI::MvePlayer>("movie")->frame());
                 }
             }
             if (_effect_index<_effects.size() && frame>=_effects[_effect_index].frame) {
@@ -148,10 +148,10 @@ namespace Falltergeist
 
             if (!_started)
             {
-                Game::Game::getInstance()->mixer()->playMovieMusic(dynamic_cast<UI::MvePlayer*>(getUI("movie")));
+                Game::Game::getInstance()->mixer()->playMovieMusic(getUI<UI::MvePlayer>("movie"));
                 _started = true;
             }
-            if ((dynamic_cast<UI::MvePlayer*>(getUI("movie")))->finished())
+            if (getUI<UI::MvePlayer>("movie")->finished())
             {
                 this->onVideoFinished();
             }

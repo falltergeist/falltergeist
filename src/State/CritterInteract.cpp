@@ -129,7 +129,7 @@ namespace Falltergeist
                             break;
                     }
                     headImage += "f" + std::to_string(fidget)+".frm";
-                    auto head = dynamic_cast<UI::AnimationQueue*>(getUI("head"));
+                    auto head = getUI<UI::AnimationQueue>("head");
                     head->clear();
                     head->animations().push_back(std::make_unique<UI::Animation>("art/heads/" + headImage));
 
@@ -236,7 +236,7 @@ namespace Falltergeist
             _phase = Phase::TALK;
 
             _lips = ResourceManager::getInstance()->lipFileType("sound/speech/"+_headName+"/"+speech+".lip");
-            auto head = dynamic_cast<UI::AnimationQueue*>(getUI("head"));
+            auto head = getUI<UI::AnimationQueue>("head");
             head->stop();
             head->clear();
             std::string headImage = _headName;
@@ -283,7 +283,7 @@ namespace Falltergeist
                     if (_nextIndex < _lips->phonemes().size() && SDL_GetTicks()-_startTime>=_lips->timestamps().at(_nextIndex))
                     {
                         //set frame
-                        auto head = dynamic_cast<UI::AnimationQueue*>(getUI("head"));
+                        auto head = getUI<UI::AnimationQueue>("head");
                         head->currentAnimation()->setCurrentFrame(_phonemeToFrame(_lips->phonemes().at(_nextIndex)));
                         _nextIndex++;
                     }
@@ -384,8 +384,7 @@ namespace Falltergeist
             }
             if (headID()!=-1 && newmood != _mood)
             {
-
-                auto head = dynamic_cast<UI::AnimationQueue *>(getUI("head"));
+                auto head = getUI<UI::AnimationQueue>("head");
                 std::string headImage = _headName;
                 switch (_mood)
                 {
@@ -434,7 +433,7 @@ namespace Falltergeist
 
         void CritterInteract::onMoodTransitionEnded(Event::Event *event)
         {
-            auto head = dynamic_cast<UI::AnimationQueue *>(getUI("head"));
+            auto head = getUI<UI::AnimationQueue>("head");
             head->animationEndedHandler().clear();
             script()->run();
         }
