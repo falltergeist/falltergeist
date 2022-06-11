@@ -27,6 +27,8 @@ namespace Falltergeist
 
             _attribPos = _shader->getAttrib("Position");
             _attribTex = _shader->getAttrib("TexCoord");
+
+            _color = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
         }
 
         void TranslucentMask::setColor(Color color)
@@ -44,9 +46,9 @@ namespace Falltergeist
             return _texture->size();
         }
 
-        void TranslucentMask::render(const Point& point)
+        void TranslucentMask::render(const Point& point) const
         {
-            Rectangle& rectangle = Rectangle(point, _texture->size());
+            Rectangle rectangle = Rectangle(point, _texture->size());
 
             glm::vec2 vertices[4] = {glm::vec2((float)rectangle.position().x(), (float)rectangle.position().y()),
                                      glm::vec2((float)rectangle.position().x(), (float)(rectangle.position().y() + rectangle.size().height())),

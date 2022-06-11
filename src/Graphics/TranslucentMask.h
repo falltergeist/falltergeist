@@ -25,7 +25,7 @@ namespace Falltergeist
 
                 const Size& size() const;
 
-                void render(const Point& point);
+                void render(const Point& point) const;
 
             private:
                 GLint _uniformTex;
