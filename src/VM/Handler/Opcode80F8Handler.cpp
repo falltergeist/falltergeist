@@ -29,7 +29,7 @@ namespace Falltergeist
             {
                 logger->debug() << "[80F8] [=] bool tile_is_visible (int hex)" << std::endl;
                 int hexnum = _script->dataStack()->popInteger();
-                auto hex = Game::Game::getInstance()->locationState()->hexagonGrid()->at(hexnum);
+                auto& hex = Game::Game::getInstance()->locationState()->hexagonGrid()->at(hexnum);
                 bool inrect = Graphics::Rect::inRect(
                         Point(hex->position() - Game::Game::getInstance()->locationState()->camera()->topLeft()),
                         Game::Game::getInstance()->locationState()->camera()->size());

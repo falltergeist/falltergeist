@@ -28,9 +28,9 @@ namespace Falltergeist
                 auto to_index = _script->dataStack()->popInteger();
                 auto from_index = _script->dataStack()->popInteger();
                 auto grid = Game::Game::getInstance()->locationState()->hexagonGrid();
-                auto from_hex = grid->at(from_index);
-                auto to_hex = grid->at(to_index);
-                unsigned int rotation = from_hex->orientationTo(to_hex);
+                auto& from_hex = grid->at(from_index);
+                auto& to_hex = grid->at(to_index);
+                unsigned int rotation = from_hex->orientationTo(to_hex.get());
                 _script->dataStack()->push(rotation);
             }
         }

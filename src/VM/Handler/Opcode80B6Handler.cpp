@@ -32,8 +32,8 @@ namespace Falltergeist
                 if (!object) {
                     _error("move_to: object is NULL");
                 }
-                auto hexagon = Game::Game::getInstance()->locationState()->hexagonGrid()->at(position);
-                Game::Game::getInstance()->locationState()->moveObjectToHexagon(object, hexagon);
+                auto& hexagon = Game::Game::getInstance()->locationState()->hexagonGrid()->at(position);
+                Game::Game::getInstance()->locationState()->moveObjectToHexagon(object, hexagon.get());
                 object->setElevation(elevation);
                 if (object == Game::Game::getInstance()->player().get()) {
                     Game::Game::getInstance()->locationState()->centerCameraAtHexagon(object->hexagon());

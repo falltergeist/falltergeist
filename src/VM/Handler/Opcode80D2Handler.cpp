@@ -30,7 +30,7 @@ namespace Falltergeist
                     _script->dataStack()->push(9999);
                 } else {
                     auto grid = Game::Game::getInstance()->locationState()->hexagonGrid();
-                    auto dist = grid->distance(grid->at(tile1), grid->at(tile2));
+                    auto dist = grid->distance(grid->at(tile1).get(), grid->at(tile2).get());
                     _script->dataStack()->push(dist);
                 }
             }

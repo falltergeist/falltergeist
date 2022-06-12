@@ -196,11 +196,11 @@ namespace Falltergeist
 
         Hexagon *Object::hexagon() const
         {
-            if (this->position() < 0) {
+            if (position() < 0) {
                 return nullptr;
             }
 
-            return Game::getInstance()->locationState()->hexagonGrid()->at(this->position());
+            return Game::getInstance()->locationState()->hexagonGrid()->at(position()).get();
         }
 
         void Object::setHexagon(Hexagon *hexagon)

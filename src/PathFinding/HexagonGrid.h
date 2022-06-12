@@ -30,7 +30,7 @@ namespace Falltergeist
 
             Hexagon* hexagonAt(const Graphics::Point& pos);
 
-            Hexagon* at(size_t index);
+            std::unique_ptr<Hexagon>& at(size_t index);
 
             std::vector<Hexagon*> findPath(Hexagon* from, Hexagon* to);
 

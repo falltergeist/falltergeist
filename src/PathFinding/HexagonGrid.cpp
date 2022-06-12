@@ -107,9 +107,8 @@ namespace Falltergeist
 
     HexagonGrid::~HexagonGrid() {}
 
-    Hexagon* HexagonGrid::at(size_t index)
-    {
-        return _hexagons.at(index).get();
+    std::unique_ptr<Hexagon>& HexagonGrid::at(size_t index) {
+        return _hexagons.at(index);
     }
 
     Hexagon* HexagonGrid::hexagonAt(const Graphics::Point& pos)
@@ -260,8 +259,7 @@ namespace Falltergeist
         {
             return nullptr;
         }
-        return at(index);
-
+        return at(index).get();
     }
 
     std::vector<Hexagon*> HexagonGrid::ring(Hexagon* from, unsigned int radius)

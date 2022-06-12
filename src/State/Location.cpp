@@ -108,10 +108,9 @@ namespace Falltergeist
             camera()->setCenter(hexagonGrid()->at(_location->defaultPosition())->position());
 
             // @todo remove old objects from hexagonal grid
-            for (auto &object : *elevation->objects()) {
-
-                auto hexagon = hexagonGrid()->at(object->position());
-                moveObjectToHexagon(object, hexagon, false);
+            for (auto& object : *elevation->objects()) {
+                auto& hexagon = hexagonGrid()->at(object->position());
+                moveObjectToHexagon(object, hexagon.get(), false);
 
                 if (object->ui()) {
                     object->ui()->mouseDownHandler().add(
@@ -180,9 +179,9 @@ namespace Falltergeist
                 player.get())
             );
 
-            auto hexagon = hexagonGrid()->at(_location->defaultPosition());
+            auto& hexagon = hexagonGrid()->at(_location->defaultPosition());
             _objects.emplace_back(player);
-            moveObjectToHexagon(player.get(), hexagon);
+            moveObjectToHexagon(player.get(), hexagon.get());
 
             elevation->floor()->init();
             elevation->roof()->init();
@@ -1040,7 +1039,7 @@ namespace Falltergeist
         void Location::centerCameraAtHexagon(int tileNum)
         {
             try {
-                centerCameraAtHexagon(_hexagonGrid->at((unsigned int) tileNum));
+                centerCameraAtHexagon(_hexagonGrid->at((unsigned int) tileNum).get());
             } catch (const std::out_of_range &) {
                 throw Exception(std::string("Tile number out of range: ") + std::to_string(tileNum));
             }
@@ -1200,7 +1199,7 @@ namespace Falltergeist
 
             auto object = objectFactory.createObjectByPID(PID);
             _objects.emplace_back(object);
-            moveObjectToHexagon(object, hexagonGrid()->at(position));
+            moveObjectToHexagon(object, hexagonGrid()->at(position).get());
             object->setElevation(elevation);
             return object;
         }

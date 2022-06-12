@@ -36,8 +36,8 @@ namespace Falltergeist
                 if (!critter) {
                     _error("critter_attempt_placement - invalid critter pointer");
                 }
-                auto hexagon = Game::Game::getInstance()->locationState()->hexagonGrid()->at(position);
-                Game::Game::getInstance()->locationState()->moveObjectToHexagon(critter, hexagon);
+                auto& hexagon = Game::Game::getInstance()->locationState()->hexagonGrid()->at(position);
+                Game::Game::getInstance()->locationState()->moveObjectToHexagon(critter, hexagon.get());
                 critter->setElevation(elevation);
                 _script->dataStack()->push(1);
             }

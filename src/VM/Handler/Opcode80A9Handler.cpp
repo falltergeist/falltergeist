@@ -36,8 +36,8 @@ namespace Falltergeist
                 auto position = y * 200 + x;
                 auto game = Game::Game::getInstance();
                 auto player = game->player();
-                auto hexagon = game->locationState()->hexagonGrid()->at(position);
-                Game::Game::getInstance()->locationState()->moveObjectToHexagon(player.get(), hexagon);
+                auto& hexagon = game->locationState()->hexagonGrid()->at(position);
+                Game::Game::getInstance()->locationState()->moveObjectToHexagon(player.get(), hexagon.get());
                 //player->setPosition(position);
                 player->setOrientation(orientation);
                 player->setElevation(elevation);

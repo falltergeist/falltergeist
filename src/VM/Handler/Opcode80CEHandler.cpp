@@ -38,8 +38,8 @@ namespace Falltergeist
                 auto critter = dynamic_cast<Game::CritterObject *>(object);
                 auto state = Game::Game::getInstance()->locationState();
                 if (state) {
-                    auto tileObj = state->hexagonGrid()->at(tile);
-                    auto path = state->hexagonGrid()->findPath(object->hexagon(), tileObj);
+                    auto& tileObj = state->hexagonGrid()->at(tile);
+                    auto path = state->hexagonGrid()->findPath(object->hexagon(), tileObj.get());
                     if (path.size()) {
                         critter->stopMovement();
                         critter->setRunning((speed & 1) != 0);
