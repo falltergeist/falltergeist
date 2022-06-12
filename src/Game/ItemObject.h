@@ -54,20 +54,31 @@ namespace Falltergeist
                 int inventoryFID() const;
                 void setInventoryFID(int value);
 
-                UI::Base* inventoryUi() const;
-                UI::Base* inventorySlotUi() const;
-                UI::Base* inventoryDragUi() const;
-                std::unique_ptr<UI::TextArea>& inventoryAmountUi();
+                std::shared_ptr<UI::Base> inventoryUi();
+
+                std::shared_ptr<UI::Base> inventorySlotUi();
+
+                std::shared_ptr<UI::Base> inventoryDragUi();
+
+                std::shared_ptr<UI::TextArea>& inventoryAmountUi();
 
             protected:
                 Subtype _subtype;
+
                 unsigned int _amount = 1;
+
                 unsigned int _weight = 0;
+
                 unsigned int _price = 0;
+
                 unsigned int _volume = 0;
+
                 int _inventoryFID = -1;
-                std::unique_ptr<UI::TextArea> _inventoryAmountUi;
-                std::unique_ptr<UI::Base> _inventoryUi, _inventorySlotUi, _inventoryDragUi;
+
+                std::shared_ptr<UI::TextArea> _inventoryAmountUi;
+
+                std::shared_ptr<UI::Base> _inventoryUi, _inventorySlotUi, _inventoryDragUi;
+
                 void _generateUi() override;
         };
     }

@@ -149,18 +149,17 @@ namespace Falltergeist
                     return std::dynamic_pointer_cast<T>(_ui);
                 }
 
-                // ActiveUI used to display object on screen and capture mouse events
-                std::shared_ptr<UI::Base>& ui();
-
-                void setUI(std::shared_ptr<UI::Base>& ui);
+                std::shared_ptr<UI::Base> ui() {
+                    return ui<UI::Base>();
+                }
 
                 // Hexagon of object current position
                 Hexagon* hexagon() const;
                 void setHexagon(Hexagon* hexagon);
 
                 // TextArea, currently floating above the object
-                UI::TextArea* floatMessage() const;
-                void setFloatMessage(std::unique_ptr<UI::TextArea> floatMessage);
+                std::shared_ptr<UI::TextArea> floatMessage() const;
+                void setFloatMessage(std::shared_ptr<UI::TextArea> floatMessage);
 
                 // is object currently being rendered
                 bool inRender() const;
@@ -219,31 +218,53 @@ namespace Falltergeist
 
             protected:
                 bool _canWalkThru = true;
+
                 bool _canLightThru = false;
+
                 bool _canShootThru = true;
+
                 bool _wallTransEnd = false;
+
                 bool _flat = false;
+
                 Type _type;
+
                 int _PID = -1;
+
                 int _FID = -1;
+
                 int _SID = -1;
+
                 int _elevation = 0;
+
                 Orientation _orientation;
+
                 int _position = -1;
+
                 std::string _name;
+
                 std::string _scrName;
+
                 std::string _description;
+
                 std::unique_ptr<VM::Script> _script;
 
                 std::shared_ptr<UI::Base> _ui;
 
                 virtual void _generateUi();
-                std::unique_ptr<UI::TextArea> _floatMessage;
+
+                std::shared_ptr<UI::TextArea> _floatMessage;
+
                 bool _inRender = false;
+
                 Graphics::TransFlags::Trans _trans = Graphics::TransFlags::Trans::DEFAULT;
+
                 Orientation _lightOrientation;
+
                 unsigned int _lightIntensity = 0;
+
                 unsigned int _lightRadius = 0;
+
                 unsigned int _defaultFrame;
         };
     }

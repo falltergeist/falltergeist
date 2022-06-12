@@ -146,16 +146,6 @@ namespace Falltergeist
             _script.reset(script);
         }
 
-        std::shared_ptr<UI::Base>& Object::ui()
-        {
-            return _ui;
-        }
-
-        void Object::setUI(std::shared_ptr<UI::Base>& ui)
-        {
-            _ui = ui;
-        }
-
         void Object::_generateUi()
         {
             Graphics::ObjectUIFactory uiFactory;
@@ -216,14 +206,14 @@ namespace Falltergeist
             setPosition(hexagon->number());
         }
 
-        UI::TextArea *Object::floatMessage() const
+        std::shared_ptr<UI::TextArea> Object::floatMessage() const
         {
-            return _floatMessage.get();
+            return _floatMessage;
         }
 
-        void Object::setFloatMessage(std::unique_ptr<UI::TextArea> message)
+        void Object::setFloatMessage(std::shared_ptr<UI::TextArea> message)
         {
-            _floatMessage = std::move(message);
+            _floatMessage = message;
         }
 
         void Object::renderText()
