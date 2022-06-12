@@ -270,8 +270,13 @@ namespace Falltergeist
             {
                 auto inventoryItem = std::make_shared<UI::InventoryItem>(armorSlot, Point(154, 183));
                 inventoryItem->setType(UI::InventoryItem::Type::SLOT);
-                inventoryItem->itemDragStopHandler().add([inventoryList, inventoryItem](Event::Mouse* event){ inventoryList->onItemDragStop(event, inventoryItem); });
-                inventoryList->itemDragStopHandler().add([inventoryItem, inventoryList](Event::Mouse* event){ inventoryItem->onArmorDragStop(event, inventoryList); });
+                inventoryItem->itemDragStopHandler().add([inventoryList, inventoryItem](Event::Mouse* event){
+                    inventoryList->onItemDragStop(event, inventoryItem);
+                });
+                inventoryList->itemDragStopHandler().add([inventoryItem, inventoryList](Event::Mouse* event){
+                    // TODO fix cyclic dependency hack
+                    inventoryItem->onArmorDragStop(event, inventoryList, inventoryItem);
+                });
                 addUI(inventoryItem);
             }
 
@@ -279,8 +284,13 @@ namespace Falltergeist
             {
                 auto inventoryItem = std::make_shared<UI::InventoryItem>(leftHand, Point(154, 286));
                 inventoryItem->setType(UI::InventoryItem::Type::SLOT);
-                inventoryItem->itemDragStopHandler().add([inventoryList, inventoryItem](Event::Mouse* event){ inventoryList->onItemDragStop(event, HAND::LEFT, inventoryItem); });
-                inventoryList->itemDragStopHandler().add([inventoryItem, inventoryList](Event::Mouse* event){ inventoryItem->onHandDragStop(event, HAND::LEFT, inventoryList); });
+                inventoryItem->itemDragStopHandler().add([inventoryList, inventoryItem](Event::Mouse* event){
+                    inventoryList->onItemDragStop(event, HAND::LEFT, inventoryItem);
+                });
+                inventoryList->itemDragStopHandler().add([inventoryItem, inventoryList](Event::Mouse* event){
+                    // TODO fix cyclic dependency hack
+                    inventoryItem->onHandDragStop(event, HAND::LEFT, inventoryList, inventoryItem);
+                });
                 addUI(inventoryItem);
             }
 
@@ -288,8 +298,12 @@ namespace Falltergeist
             {
                 auto inventoryItem = std::make_shared<UI::InventoryItem>(rightHand, Point(247, 286));
                 inventoryItem->setType(UI::InventoryItem::Type::SLOT);
-                inventoryItem->itemDragStopHandler().add([inventoryList, inventoryItem](Event::Mouse* event){ inventoryList->onItemDragStop(event, HAND::RIGHT, inventoryItem); });
-                inventoryList->itemDragStopHandler().add([inventoryItem, inventoryList](Event::Mouse* event){ inventoryItem->onHandDragStop(event, HAND::RIGHT, inventoryList); });
+                inventoryItem->itemDragStopHandler().add([inventoryList, inventoryItem](Event::Mouse* event){
+                    inventoryList->onItemDragStop(event, HAND::RIGHT, inventoryItem);
+                });
+                inventoryList->itemDragStopHandler().add([inventoryItem, inventoryList](Event::Mouse* event){
+                    inventoryItem->onHandDragStop(event, HAND::RIGHT, inventoryList, inventoryItem);
+                });
                 addUI(inventoryItem);
             }
 

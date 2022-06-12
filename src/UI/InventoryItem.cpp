@@ -149,7 +149,7 @@ namespace Falltergeist
             emitEvent(std::move(itemevent), itemDragStopHandler());
         }
 
-        void InventoryItem::onArmorDragStop(Event::Mouse* event, std::shared_ptr<ItemsList> target)
+        void InventoryItem::onArmorDragStop(Event::Mouse* event, std::shared_ptr<ItemsList> target, std::shared_ptr<InventoryItem> inventoryItem)
         {
             // Check if mouse is over this item
             if (!Rect::inRect(event->position(), position(), size())) {
@@ -164,8 +164,8 @@ namespace Falltergeist
             target->removeItem(draggedItem, 1);
             // place current armor back to inventory
             if (_item) {
-                // TODO fix me
-                //target->addItem(this, 1);
+                // TODO fix cyclic dependency hack
+                target->addItem(inventoryItem, 1);
             }
             this->setItem(itemObject);
             if (auto armor = dynamic_cast<Game::ArmorItemObject*>(itemObject)) {
@@ -173,7 +173,7 @@ namespace Falltergeist
             }
         }
 
-        void InventoryItem::onHandDragStop(Event::Mouse* event, HAND hand, std::shared_ptr<ItemsList> target)
+        void InventoryItem::onHandDragStop(Event::Mouse* event, HAND hand, std::shared_ptr<ItemsList> target, std::shared_ptr<InventoryItem> inventoryItem)
         {
             // Check if mouse is over this item
             if (!Rect::inRect(event->position(), position(), size()))
@@ -186,8 +186,8 @@ namespace Falltergeist
             target->removeItem(itemUi, 1);
             // place current weapon back to inventory
             if (_item) {
-                // TODO fix me
-                //target->addItem(this, 1);
+                // TODO fix cyclic dependency hack
+                target->addItem(inventoryItem, 1);
             }
             this->setItem(item);
             auto player = Game::Game::getInstance()->player();
