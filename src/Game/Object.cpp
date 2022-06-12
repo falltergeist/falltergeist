@@ -136,14 +136,16 @@ namespace Falltergeist
             _description = value;
         }
 
-        VM::Script *Object::script() const
-        {
-            return _script.get();
+        std::unique_ptr<VM::Script>& Object::script() {
+            return _script;
         }
 
-        void Object::setScript(VM::Script *script)
-        {
-            _script.reset(script);
+        void Object::setScript(std::unique_ptr<VM::Script>& script) {
+            _script = std::move(script);
+        }
+
+        void Object::setScript(std::unique_ptr<VM::Script>&& script) {
+            _script = std::move(script);
         }
 
         void Object::_generateUi()

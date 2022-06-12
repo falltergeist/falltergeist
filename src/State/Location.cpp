@@ -175,7 +175,7 @@ namespace Falltergeist
             player->setOrientation(_location->defaultOrientation());
 
             // Player script
-            player->setScript(new VM::Script(ResourceManager::getInstance()->intFileType(0), player.get()));
+            player->setScript(std::make_unique<VM::Script>(ResourceManager::getInstance()->intFileType(0), player.get()));
 
             auto hexagon = hexagonGrid()->at(_location->defaultPosition());
             _objects.emplace_back(player);
@@ -1122,7 +1122,7 @@ namespace Falltergeist
             timer.start();
             timer.tickHandler().add([obj, fixedParam](Event::Event *) {
                 if (obj) {
-                    if (auto vm = obj->script()) {
+                    if (auto& vm = obj->script()) {
                         vm->setFixedParam(fixedParam);
                         vm->call("timed_event_p_proc");
                     }

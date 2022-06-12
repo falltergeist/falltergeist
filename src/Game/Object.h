@@ -110,12 +110,15 @@ namespace Falltergeist
 
                 // object name from scrname.msg
                 virtual std::string scrName() const;
+
                 void setScrName(const std::string& value);
 
-
                 // script entity associated with the object
-                VM::Script* script() const;
-                void setScript(VM::Script* script);
+                std::unique_ptr<VM::Script>& script();
+
+                void setScript(std::unique_ptr<VM::Script>& script);
+
+                void setScript(std::unique_ptr<VM::Script>&& script);
 
                 /**
                  * @brief Handles OS events coming from the State::handle().
@@ -155,68 +158,88 @@ namespace Falltergeist
 
                 // Hexagon of object current position
                 Hexagon* hexagon() const;
+
                 void setHexagon(Hexagon* hexagon);
 
                 // TextArea, currently floating above the object
                 std::shared_ptr<UI::TextArea> floatMessage() const;
+
                 void setFloatMessage(std::shared_ptr<UI::TextArea> floatMessage);
 
                 // is object currently being rendered
                 bool inRender() const;
+
                 void setInRender(bool value);
 
                 // object translucency mode
                 Graphics::TransFlags::Trans trans() const;
+
                 // sets object translucency mode
                 void setTrans(Graphics::TransFlags::Trans value);
 
                 // request description of the object to console, may call "description_p_proc" procedure of underlying script entity
                 virtual void description_p_proc();
+
                 // call "destroy_p_proc" procedure of underlying script entity (use this just before killing critter or destroying the object)
                 virtual void destroy_p_proc();
+
                 // request brief description of the object to console, may call "look_at_p_proc" of the script
                 virtual void look_at_p_proc();
+
                 // call "map_enter_p_proc" of the script entity (use this when dude travels to another map via exit grid or worldmap)
                 virtual void map_enter_p_proc();
+
                 // call "map_exit_p_proc" of the script entity (use this when dude travels out of current map via exit grid or worldmap)
                 virtual void map_exit_p_proc();
+
                 // call "map_update_p_proc" when map is updating (once every N frames, after times skip in pipboy)
                 virtual void map_update_p_proc();
+
                 // call "pickup_p_proc" of the script entity (when picking up item object)
                 virtual void pickup_p_proc(CritterObject* pickedUpBy);
+
                 // perform "use" action, may call "use_p_proc" of the underlying script
                 virtual void use_p_proc(CritterObject* usedBy);
+
                 // perform "use object on" action, may call "use_obj_on_p_proc" procedure
                 virtual void use_obj_on_p_proc(Object* objectUsed, CritterObject* usedBy);
+
                 // perform "use skill on" action, may call "use_skill_on_p_proc" procedure
                 virtual void use_skill_on_p_proc(SKILL skill, Object* objectUsed, CritterObject* usedBy);
 
-
-
                 virtual void onUseAnimationActionFrame(Event::Event* event, CritterObject* critter);
+
                 virtual void onUseAnimationEnd(Event::Event* event, CritterObject* critter);
 
                 unsigned short lightOrientation() const;
+
                 virtual void setLightOrientation(Orientation orientation);
 
                 unsigned int lightIntensity() const;
+
                 virtual void setLightIntensity(unsigned int intensity);
 
                 unsigned int lightRadius() const;
+
                 virtual void setLightRadius(unsigned int radius);
 
                 virtual void setFlags(unsigned int flags);
 
                 bool flat() const;
+
                 virtual void setFlat(bool value);
 
                 unsigned int defaultFrame();
+
                 virtual void setDefaultFrame(unsigned int frame);
 
                 int position() const;
+
                 void setPosition(int position);
 
             protected:
+                virtual void _generateUi();
+
                 bool _canWalkThru = true;
 
                 bool _canLightThru = false;
@@ -250,8 +273,6 @@ namespace Falltergeist
                 std::unique_ptr<VM::Script> _script;
 
                 std::shared_ptr<UI::Base> _ui;
-
-                virtual void _generateUi();
 
                 std::shared_ptr<UI::TextArea> _floatMessage;
 
