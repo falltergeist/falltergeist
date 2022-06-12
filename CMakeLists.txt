@@ -89,7 +89,7 @@ if(NOT GLM_FOUND)
 endif(NOT GLM_FOUND)
 include_directories(SYSTEM ${GLM_INCLUDE_DIR})
 
-find_package(Boost COMPONENTS headers REQUIRED)
+find_package(Boost REQUIRED)
 include_directories(${Boost_INCLUDE_DIR})
 
 file(GLOB_RECURSE SOURCES  src/*.cpp)
