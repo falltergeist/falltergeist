@@ -23,7 +23,7 @@ namespace Falltergeist
             {
                 logger->debug() << "[8028] [?] int lookup_string_proc(string)" << std::endl;
                 std::string name = _script->dataStack()->popString();
-                _script->dataStack()->push((int) _script->script()->procedure(name)->bodyOffset());
+                _script->dataStack()->push((int) _script->intFile()->procedure(name)->bodyOffset());
             }
         }
     }

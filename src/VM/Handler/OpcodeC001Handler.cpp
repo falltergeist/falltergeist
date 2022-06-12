@@ -21,7 +21,7 @@ namespace Falltergeist
 
             void OpcodeC001::_run()
             {
-                int value = _script->script()->readValue();
+                int value = _script->intFile()->readValue();
 
                 // Skip 4 bytes for readed integer value
                 _script->setProgramCounter(_script->programCounter() + 4);

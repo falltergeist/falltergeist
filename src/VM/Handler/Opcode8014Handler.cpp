@@ -31,7 +31,7 @@ namespace Falltergeist
                 auto nameValue = _script->dataStack()->pop();
                 switch (nameValue.type()) {
                     case StackValue::Type::INTEGER:
-                        name = _script->script()->identifiers().at((unsigned int) nameValue.integerValue());
+                        name = _script->intFile()->identifiers().at((unsigned int) nameValue.integerValue());
                         break;
                     case StackValue::Type::STRING: {
                         name = nameValue.stringValue();

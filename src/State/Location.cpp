@@ -175,7 +175,10 @@ namespace Falltergeist
             player->setOrientation(_location->defaultOrientation());
 
             // Player script
-            player->setScript(std::make_unique<VM::Script>(ResourceManager::getInstance()->intFileType(0), player.get()));
+            player->setScript(std::make_unique<VM::Script>(
+                ResourceManager::getInstance()->intFileType(0),
+                player.get())
+            );
 
             auto hexagon = hexagonGrid()->at(_location->defaultPosition());
             _objects.emplace_back(player);

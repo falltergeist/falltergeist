@@ -26,22 +26,16 @@ namespace Falltergeist
 {
     namespace VM
     {
-        Script::Script(Format::Int::File *script, Game::Object *owner)
-        {
-            _owner = owner;
-            _script = script;
-            if (!_script) {
-                throw Exception("Script::VM() - script is null");
-            }
+        Script::Script(
+            std::unique_ptr<Format::Int::File>& intFile,
+            Game::Object *owner
+        ) : _owner(owner), _intFile(std::move(intFile)) {
         }
 
-        Script::Script(const std::string &filename, Game::Object *owner)
-        {
-            _owner = owner;
-            _script = ResourceManager::getInstance()->intFileType(filename);
-            if (!_script) {
-                throw Exception("Script::VM() - script is null: " + filename);
-            }
+        Script::Script(
+            std::unique_ptr<Format::Int::File> intFile,
+            Game::Object *owner
+        ) : _owner(owner), _intFile(std::move(intFile)) {
         }
 
         Script::~Script()
@@ -50,18 +44,18 @@ namespace Falltergeist
 
         std::string Script::filename()
         {
-            return _script->filename();
+            return _intFile->filename();
         }
 
         bool Script::hasFunction(const std::string &name)
         {
-            return _script->procedure(name) != nullptr;
+            return _intFile->procedure(name) != nullptr;
         }
 
         void Script::call(const std::string &name)
         {
             _overrides = false;
-            auto procedure = _script->procedure(name);
+            auto procedure = _intFile->procedure(name);
             if (!procedure) {
                 return;
             }
@@ -69,7 +63,7 @@ namespace Falltergeist
             _programCounter = procedure->bodyOffset();
             _dataStack.push(0); // arguments counter;
             _returnStack.push(0); // return address
-            Logger::debug("SCRIPT") << "CALLED: " << name << " [" << _script->filename() << "]" << std::endl;
+            Logger::debug("SCRIPT") << "CALLED: " << name << " [" << _intFile->filename() << "]" << std::endl;
             run();
             _dataStack.popInteger(); // remove function result
             Logger::debug("SCRIPT") << "Function ended" << std::endl;
@@ -91,13 +85,13 @@ namespace Falltergeist
 
         void Script::run()
         {
-            while (_programCounter != _script->size()) {
+            while (_programCounter != _intFile->size()) {
                 if (_programCounter == 0 && _initialized) {
                     return;
                 }
                 auto offset = _programCounter;
-                _script->setPosition(_programCounter);
-                unsigned short opcode = _script->readOpcode();
+                _intFile->setPosition(_programCounter);
+                unsigned short opcode = _intFile->readOpcode();
 
                 std::unique_ptr<OpcodeHandler> opcodeHandler(OpcodeFactory::createOpcode(opcode, this));
                 try {
@@ -106,7 +100,7 @@ namespace Falltergeist
                     return;
                 } catch (const ErrorException &e) {
                     Logger::error("SCRIPT") << e.what() << " in [" << std::hex << opcode << "] at "
-                                            << _script->filename() << ":0x" << offset << std::endl;
+                                            << _intFile->filename() << ":0x" << offset << std::endl;
                     _dataStack.values()->clear();
                     _dataStack.push(0); // to end script properly
                     return;
@@ -144,9 +138,9 @@ namespace Falltergeist
             return msg->message(msg_num)->sound();
         }
 
-        Format::Int::File *Script::script()
+        std::unique_ptr<Format::Int::File>& Script::intFile()
         {
-            return _script;
+            return _intFile;
         }
 
         unsigned int Script::programCounter()
@@ -156,7 +150,7 @@ namespace Falltergeist
 
         void Script::setProgramCounter(unsigned int value)
         {
-            if (value >= _script->size()) {
+            if (value >= _intFile->size()) {
                 std::stringstream ss;
                 ss << "Script::setProgramCounter() - address out of range: " << std::hex << value;
                 throw ErrorException(ss.str());

@@ -21,8 +21,8 @@ namespace Falltergeist
 
             void Opcode9001::_run()
             {
-                unsigned int data = _script->script()->readValue();
-                unsigned short nextOpcode = _script->script()->readOpcode();
+                unsigned int data = _script->intFile()->readValue();
+                unsigned short nextOpcode = _script->intFile()->readOpcode();
 
                 // Skip 4 readed bytes
                 _script->setProgramCounter(_script->programCounter() + 4);
@@ -32,11 +32,11 @@ namespace Falltergeist
                     case 0x8015: // set exported var value
                     case 0x8016: // export var
                     {
-                        _script->dataStack()->push(_script->script()->identifiers().at(data));
+                        _script->dataStack()->push(_script->intFile()->identifiers().at(data));
                         break;
                     }
                     default: {
-                        _script->dataStack()->push(_script->script()->strings().at(data));
+                        _script->dataStack()->push(_script->intFile()->strings().at(data));
                         break;
                     }
                 }

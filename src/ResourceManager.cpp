@@ -177,8 +177,10 @@ namespace Falltergeist {
         return _datFileItem<Format::Gcd::File>(filename);
     }
 
-    Format::Int::File *ResourceManager::intFileType(const std::string &filename) {
-        return _datFileItem<Format::Int::File>(filename);
+    std::unique_ptr<Format::Int::File> ResourceManager::intFileType(const std::string &filename) {
+        return nullptr;
+        // TODO fix me
+        //return _datFileItem<Format::Int::File>(filename);
     }
 
     Format::Msg::File *ResourceManager::msgFileType(const std::string &filename) {
@@ -415,7 +417,7 @@ namespace Falltergeist {
         return frmFileType(frmName);
     }
 
-    Format::Int::File *ResourceManager::intFileType(unsigned int SID) {
+    std::unique_ptr<Format::Int::File> ResourceManager::intFileType(unsigned int SID) {
         auto lst = lstFileType("scripts/scripts.lst");
         if (SID >= lst->strings()->size()) {
             throw Exception("ResourceManager::intFileType() - wrong SID: " + std::to_string(SID));

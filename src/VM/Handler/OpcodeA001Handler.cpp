@@ -26,7 +26,7 @@ namespace Falltergeist
                     float fValue;
                 } uValue;
 
-                uValue.iValue = _script->script()->readValue();
+                uValue.iValue = _script->intFile()->readValue();
 
                 // Skip 4 bytes for read float value
                 _script->setProgramCounter(_script->programCounter() + 4);

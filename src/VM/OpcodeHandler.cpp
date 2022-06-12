@@ -34,7 +34,7 @@ namespace Falltergeist
 
         void OpcodeHandler::_warning(const std::string &message)
         {
-            Logger::warning("SCRIPT") << message << " at " << _script->script()->filename() << ":0x" << std::hex
+            Logger::warning("SCRIPT") << message << " at " << _script->intFile()->filename() << ":0x" << std::hex
                                       << _offset << std::endl;
         }
 

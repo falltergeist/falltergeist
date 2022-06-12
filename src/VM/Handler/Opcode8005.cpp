@@ -29,7 +29,7 @@ namespace Falltergeist
                 {
                     args.push_back(_script->dataStack()->popInteger());
                 }*/
-                _script->setProgramCounter(_script->script()->procedures().at(functionIndex).bodyOffset());
+                _script->setProgramCounter(_script->intFile()->procedures().at(functionIndex).bodyOffset());
                 logger->debug()
                     << "[8005] [*] op_call(0x" << std::hex << functionIndex << ") = 0x"
                     << _script->programCounter() << std::endl

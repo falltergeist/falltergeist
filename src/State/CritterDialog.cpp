@@ -197,7 +197,7 @@ namespace Falltergeist {
 
             // @todo optimize
             auto script = dialog->script();
-            int newOffset = script->script()->procedures().at(_functions.at(i)).bodyOffset();
+            int newOffset = script->intFile()->procedures().at(_functions.at(i)).bodyOffset();
             int oldOffset = script->programCounter() - 2;
             int reaction = 50;
             if (i < _reactions.size()) {
