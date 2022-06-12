@@ -2,6 +2,7 @@
 
 // Project includes
 #include "../Format/Enums.h"
+#include "../Format/Int/File.h"
 #include "../VM/Stack.h"
 #include "../VM/StackValue.h"
 
@@ -12,14 +13,6 @@
 
 namespace Falltergeist
 {
-    namespace Format
-    {
-        namespace Int
-        {
-            class File;
-        }
-    }
-
     namespace Game
     {
         class Object;
@@ -36,11 +29,9 @@ namespace Falltergeist
         class Script final
         {
             public:
-                Script(std::unique_ptr<Format::Int::File>& intFile, Game::Object *owner);
-
                 Script(std::unique_ptr<Format::Int::File> intFile, Game::Object *owner);
 
-                virtual ~Script();
+                ~Script() = default;
 
                 void run();
 

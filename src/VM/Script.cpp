@@ -27,19 +27,9 @@ namespace Falltergeist
     namespace VM
     {
         Script::Script(
-            std::unique_ptr<Format::Int::File>& intFile,
-            Game::Object *owner
-        ) : _owner(owner), _intFile(std::move(intFile)) {
-        }
-
-        Script::Script(
             std::unique_ptr<Format::Int::File> intFile,
             Game::Object *owner
         ) : _owner(owner), _intFile(std::move(intFile)) {
-        }
-
-        Script::~Script()
-        {
         }
 
         std::string Script::filename()
