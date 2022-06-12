@@ -91,7 +91,7 @@ namespace Falltergeist
                     line = "    ";
                 }
 
-                auto tx = new UI::TextArea(line, 0, y);
+                auto tx = std::make_shared<UI::TextArea>(line, 0, y);
                 tx->setFont(cur_font, cur_color);
                 tx->setSize({640, 0});
                 tx->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);

@@ -149,14 +149,14 @@ namespace Falltergeist
             emitEvent(std::move(itemevent), itemDragStopHandler());
         }
 
-        void InventoryItem::onArmorDragStop(Event::Mouse* event, ItemsList* target)
+        void InventoryItem::onArmorDragStop(Event::Mouse* event, std::shared_ptr<ItemsList> target, std::shared_ptr<InventoryItem> inventoryItem)
         {
             // Check if mouse is over this item
             if (!Rect::inRect(event->position(), position(), size())) {
                 return;
             }
 
-            InventoryItem* draggedItem = target->draggedItem();
+            auto draggedItem = target->draggedItem();
             auto itemObject = draggedItem->item();
             if (itemObject->subtype() != Game::ItemObject::Subtype::ARMOR) {
                 return;
@@ -164,7 +164,8 @@ namespace Falltergeist
             target->removeItem(draggedItem, 1);
             // place current armor back to inventory
             if (_item) {
-                target->addItem(this, 1);
+                // TODO fix cyclic dependency hack
+                target->addItem(inventoryItem, 1);
             }
             this->setItem(itemObject);
             if (auto armor = dynamic_cast<Game::ArmorItemObject*>(itemObject)) {
@@ -172,7 +173,7 @@ namespace Falltergeist
             }
         }
 
-        void InventoryItem::onHandDragStop(Event::Mouse* event, HAND hand, ItemsList* target)
+        void InventoryItem::onHandDragStop(Event::Mouse* event, HAND hand, std::shared_ptr<ItemsList> target, std::shared_ptr<InventoryItem> inventoryItem)
         {
             // Check if mouse is over this item
             if (!Rect::inRect(event->position(), position(), size()))
@@ -180,12 +181,13 @@ namespace Falltergeist
                 return;
             }
 
-            InventoryItem* itemUi = target->draggedItem();
+            auto itemUi = target->draggedItem();
             auto item = itemUi->item();
             target->removeItem(itemUi, 1);
             // place current weapon back to inventory
             if (_item) {
-                target->addItem(this, 1);
+                // TODO fix cyclic dependency hack
+                target->addItem(inventoryItem, 1);
             }
             this->setItem(item);
             auto player = Game::Game::getInstance()->player();

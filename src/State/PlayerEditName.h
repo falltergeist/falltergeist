@@ -39,21 +39,20 @@ namespace Falltergeist
 
                 void doBack();
 
-            protected:
+            private:
+                void _onTextAreaKeyDown(Event::Keyboard* event, std::shared_ptr<UI::TextArea> target);
+
                 float _blinkingCursorMillisecondsTracked = 0;
 
-                UI::TextArea* _name = nullptr;
+                std::shared_ptr<UI::TextArea> _name = nullptr;
 
-                UI::Rectangle* _cursor = nullptr;
+                std::shared_ptr<UI::Rectangle> _cursor = nullptr;
 
                 std::map<char,char> _keyCodes;
 
-            private:
                 std::shared_ptr<UI::IResourceManager> _resourceManager;
 
                 std::unique_ptr<UI::Factory::ImageButtonFactory> _imageButtonFactory;
-
-                void _onTextAreaKeyDown(Event::Keyboard* event, UI::TextArea* target);
         };
     }
 }

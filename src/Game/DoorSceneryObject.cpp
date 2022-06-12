@@ -35,7 +35,7 @@ namespace Falltergeist
                 _opened = value;
                 setCanLightThru(_opened);
 
-                if (auto queue = dynamic_cast<UI::AnimationQueue*>(this->ui())) {
+                if (auto queue = ui<UI::AnimationQueue>()) {
                     queue->currentAnimation()->setReverse(value);
                 }
             }
@@ -60,7 +60,7 @@ namespace Falltergeist
 
             if (!_locked) {
                 if (!opened()) {
-                    if (UI::AnimationQueue* queue = dynamic_cast<UI::AnimationQueue*>(this->ui())) {
+                    if (auto queue = ui<UI::AnimationQueue>()) {
                         queue->start();
                         queue->animationEndedHandler().add([=](Event::Event*) { onOpeningAnimationEnded(queue); });
                         if (_soundId) {
@@ -68,7 +68,7 @@ namespace Falltergeist
                         }
                     }
                 } else {
-                    if (UI::AnimationQueue* queue = dynamic_cast<UI::AnimationQueue*>(this->ui())) {
+                    if (auto queue = ui<UI::AnimationQueue>()) {
                         queue->start();
                         queue->animationEndedHandler().add([=](Event::Event*) { onClosingAnimationEnded(queue); });
                         if (_soundId) {
@@ -86,7 +86,7 @@ namespace Falltergeist
             return opened();
         }
 
-        void DoorSceneryObject::onOpeningAnimationEnded(UI::AnimationQueue* target)
+        void DoorSceneryObject::onOpeningAnimationEnded(std::shared_ptr<UI::AnimationQueue> target)
         {
             setOpened(true);
             target->animationEndedHandler().clear();
@@ -96,7 +96,7 @@ namespace Falltergeist
             Logger::info("") << "Door opened: " << opened() << std::endl;
         }
 
-        void DoorSceneryObject::onClosingAnimationEnded(UI::AnimationQueue* target)
+        void DoorSceneryObject::onClosingAnimationEnded(std::shared_ptr<UI::AnimationQueue> target)
         {
             setOpened(false);
             target->animationEndedHandler().clear();

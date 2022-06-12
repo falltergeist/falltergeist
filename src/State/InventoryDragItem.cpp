@@ -25,9 +25,9 @@ namespace Falltergeist
 {
     namespace State
     {
-        InventoryDragItem::InventoryDragItem(UI::ImageList* itemUi) : State()
-        {
-            _itemUi = itemUi;
+        InventoryDragItem::InventoryDragItem(
+            std::shared_ptr<UI::ImageList>& itemUi
+        ) : State(), _itemUi(itemUi) {
         }
 
         InventoryDragItem::~InventoryDragItem()

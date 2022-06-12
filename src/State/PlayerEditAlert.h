@@ -24,6 +24,7 @@ namespace Falltergeist
         {
             public:
                 PlayerEditAlert(std::shared_ptr<UI::IResourceManager> resourceManager);
+
                 virtual ~PlayerEditAlert() = default;
 
                 void setMessage(const std::string& message);
@@ -32,12 +33,12 @@ namespace Falltergeist
 
                 void onDoneButtonClick(Event::Mouse* event);
 
-            protected:
+            private:
                 std::string _message;
 
-            private:
-                std::shared_ptr<UI::IResourceManager> resourceManager;
-                std::unique_ptr<UI::Factory::ImageButtonFactory> imageButtonFactory;
+                std::shared_ptr<UI::IResourceManager> _resourceManager;
+
+                std::unique_ptr<UI::Factory::ImageButtonFactory> _imageButtonFactory;
         };
     }
 }

@@ -49,7 +49,7 @@ namespace Falltergeist {
             auto background = resourceManager->getImage("art/intrface/di_talk.frm");
             addUI("background", background);
 
-            auto question = new UI::TextArea("question", 140, -62);
+            auto question = std::make_shared<UI::TextArea>("question", 140, -62);
             question->setSize({375, 53});
             // TODO: maybe padding properties should be removed from TextArea to simplify it. Use invisible panel for mouse interactions.
             question->setPadding({0, 5}, {0, 5});
@@ -106,11 +106,11 @@ namespace Falltergeist {
             question->setLineOffset(0);
         }
 
-        void CritterDialog::onAnswerIn(UI::TextArea* target) {
+        void CritterDialog::onAnswerIn(std::shared_ptr<UI::TextArea> target) {
             target->setFont("font1.aaf", {0xff, 0xff, 0x7f, 0xff});
         }
 
-        void CritterDialog::onAnswerOut(UI::TextArea* target) {
+        void CritterDialog::onAnswerOut(std::shared_ptr<UI::TextArea> target) {
             target->setFont("font1.aaf", {0x3f, 0xf8, 0x00, 0xff});
         }
 
@@ -223,7 +223,7 @@ namespace Falltergeist {
                 y += answer->textSize().height() + 5;
             }
 
-            auto answer = new UI::TextArea(line, 140, y);
+            auto answer = std::make_shared<UI::TextArea>(line, 140, y);
             answer->setWordWrap(true);
             answer->setSize({370, 0});
 
@@ -238,7 +238,7 @@ namespace Falltergeist {
             return _answers.size() > 0;
         }
 
-        void CritterDialog::onAnswerClick(UI::TextArea* target) {
+        void CritterDialog::onAnswerClick(std::shared_ptr<UI::TextArea> target) {
             size_t i = 0;
             for (auto answer : _answers) {
                 if (answer == target) {

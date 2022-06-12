@@ -11,11 +11,10 @@ namespace Falltergeist
 {
     namespace UI
     {
-        ImageList::ImageList(const Graphics::Point& pos, const std::vector<Image*> &imageList) : Falltergeist::UI::Base(pos)
+        ImageList::ImageList(const Graphics::Point& pos, const std::vector<std::shared_ptr<Image>>& imageList) : Falltergeist::UI::Base(pos)
         {
-            for (auto& image : imageList) {
-                auto imagePtr = std::unique_ptr<Image>(image);
-                addImage(imagePtr);
+            for (auto image : imageList) {
+                addImage(image);
             }
         }
 
@@ -29,13 +28,13 @@ namespace Falltergeist
             _currentImage = number;
         }
 
-        void ImageList::addImage(std::unique_ptr<Image> &image)
+        void ImageList::addImage(std::shared_ptr<Image>& image)
         {
             _images.push_back(std::move(image));
             _images.back()->setPosition(position());
         }
 
-        const std::vector<std::unique_ptr<Image>>& ImageList::images() const
+        const std::vector<std::shared_ptr<Image>>& ImageList::images() const
         {
             return _images;
         }

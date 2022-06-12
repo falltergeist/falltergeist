@@ -141,7 +141,7 @@ namespace Falltergeist
                 };
             }
 
-            ImageButton* ImageButtonFactory::getByType(Type type, const Graphics::Point &position)
+            std::shared_ptr<ImageButton> ImageButtonFactory::getByType(Type type, const Graphics::Point &position)
             {
                 auto buttonUpSprite = uiResourceManager->getSprite(buttonUpSpriteFilenames.at(type));
                 auto buttonDownSprite = uiResourceManager->getSprite(buttonDownSpriteFilenames.at(type));
@@ -158,7 +158,7 @@ namespace Falltergeist
 
                 bool checkboxMode = (type == Type::CHECKBOX);
 
-                return new ImageButton(
+                return std::make_shared<ImageButton>(
                     position,
                     buttonUpSprite,
                     buttonDownSprite,

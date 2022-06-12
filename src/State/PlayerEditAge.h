@@ -24,25 +24,33 @@ namespace Falltergeist
         {
             public:
                 PlayerEditAge(std::shared_ptr<UI::IResourceManager> resourceManager);
+
                 virtual ~PlayerEditAge() = default;
 
                 void init() override;
 
                 void onIncButtonClick(Event::Mouse* event);
+
                 void onDecButtonClick(Event::Mouse* event);
+
                 void onDoneButtonClick(Event::Mouse* event);
+
                 void doInc();
+
                 void doDec();
+
                 void doDone();
+
                 void doBack();
+
                 void onKeyDown(Event::Keyboard* event) override;
 
-            protected:
-                UI::BigCounter* _counter = nullptr;
-
             private:
-                std::shared_ptr<UI::IResourceManager> resourceManager;
-                std::unique_ptr<UI::Factory::ImageButtonFactory> imageButtonFactory;
+                std::shared_ptr<UI::BigCounter> _counter = nullptr;
+
+                std::shared_ptr<UI::IResourceManager> _resourceManager;
+
+                std::unique_ptr<UI::Factory::ImageButtonFactory> _imageButtonFactory;
         };
     }
 }

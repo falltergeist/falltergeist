@@ -55,7 +55,7 @@ namespace Falltergeist
             addUI(doneButton);
             addUI(upButton);
             addUI(downButton);
-            auto list = new UI::TextAreaList(Graphics::Point(88,76));
+            auto list = std::make_shared<UI::TextAreaList>(Graphics::Point(88,76));
             list->setSize(Graphics::Size(340, 340));
             addUI("list",list);
         }
@@ -94,13 +94,13 @@ namespace Falltergeist
 
         void CritterDialogReview::addAnswer(const std::string &value)
         {
-            auto dudeName = new UI::TextArea(0, 0);
+            auto dudeName = std::make_shared<UI::TextArea>(0, 0);
             dudeName->setWidth(340);
             dudeName->setWordWrap(true);
             dudeName->setFont("font1.aaf", {0xa0,0xa0, 0xa0, 0xff});
             dudeName->setText(Game::Game::getInstance()->player()->name()+":");
 
-            auto answer = new UI::TextArea(0, 0);
+            auto answer = std::make_shared<UI::TextArea>(0, 0);
             answer->setWidth(316);
             answer->setOffset(Graphics::Point(26, 0));
             answer->setWordWrap(true);
@@ -108,19 +108,19 @@ namespace Falltergeist
             answer->setText(value);
 
             auto list = getUI<UI::TextAreaList>("list");
-            list->addArea(std::unique_ptr<UI::TextArea>(dudeName));
-            list->addArea(std::unique_ptr<UI::TextArea>(answer));
+            list->addArea(dudeName);
+            list->addArea(answer);
         }
 
         void CritterDialogReview::addQuestion(const std::string &value)
         {
-            auto crName = new UI::TextArea(0, 0);
+            auto crName = std::make_shared<UI::TextArea>(0, 0);
             crName->setWidth(340);
             crName->setWordWrap(true);
             crName->setFont("font1.aaf", {0x3f,0xf8, 0x00, 0xff});
             crName->setText(_critterName + ":");
 
-            auto question = new UI::TextArea(0, 0);
+            auto question = std::make_shared<UI::TextArea>(0, 0);
             question->setWidth(316);
             question->setOffset(Graphics::Point(26, 0));
             question->setWordWrap(true);
@@ -128,8 +128,8 @@ namespace Falltergeist
             question->setText(value);
 
             auto list = getUI<UI::TextAreaList>("list");
-            list->addArea(std::unique_ptr<UI::TextArea>(crName));
-            list->addArea(std::unique_ptr<UI::TextArea>(question));
+            list->addArea(crName);
+            list->addArea(question);
         }
     }
 }

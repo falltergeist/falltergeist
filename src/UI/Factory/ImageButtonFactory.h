@@ -60,13 +60,17 @@ namespace Falltergeist
 
                     ImageButtonFactory(std::shared_ptr<IResourceManager> uiResourceManager);
 
-                    ImageButton* getByType(Type type, const Graphics::Point &position);
+                    std::shared_ptr<ImageButton> getByType(Type type, const Graphics::Point &position);
 
                 private:
                     std::shared_ptr<IResourceManager> uiResourceManager;
+
                     std::map<Type, std::string> buttonUpSpriteFilenames;
+
                     std::map<Type, std::string> buttonDownSpriteFilenames;
+
                     std::map<Type, std::string> buttonDownSoundFilenames;
+
                     std::map<Type, std::string> buttonUpSoundFilenames;
             };
         }

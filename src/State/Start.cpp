@@ -28,10 +28,10 @@ namespace Falltergeist
         using Helpers::StateLocationHelper;
         using Point = Graphics::Point;
 
-        Start::Start(std::shared_ptr<UI::IResourceManager> resourceManager, std::shared_ptr<ILogger> logger) : State()
-        {
-            this->resourceManager = std::move(resourceManager);
-            this->logger = std::move(logger);
+        Start::Start(
+            std::shared_ptr<UI::IResourceManager> resourceManager,
+            std::shared_ptr<ILogger> logger
+        ) : State(), _logger(logger), _resourceManager(resourceManager) {
         }
 
         void Start::init()
@@ -50,13 +50,13 @@ namespace Falltergeist
 
             setPosition((renderer->size() - Point(640, 480)) / 2);
 
-            addUI("splash", resourceManager->getImage("art/splash/" + splashes.at(rand() % splashes.size())));
+            addUI("splash", _resourceManager->getImage("art/splash/" + splashes.at(rand() % splashes.size())));
 
             auto game = Game::Game::getInstance();
             _delayTimer = std::make_unique<Game::Timer>(3000);
             _delayTimer->start();
             _delayTimer->tickHandler().add([game, this](Event::Event*) {
-                game->setState(new MainMenu(resourceManager, logger));
+                game->setState(new MainMenu(_resourceManager, _logger));
                 game->pushState(new Movie(17));
                 game->pushState(new Movie(1));
                 game->pushState(new Movie(0));
@@ -76,7 +76,7 @@ namespace Falltergeist
                 player->loadFromGCDFile(ResourceManager::getInstance()->gcdFileType("premade/combat.gcd"));
                 game->setPlayer(std::move(player));
 
-                StateLocationHelper stateLocationHelper(logger);
+                StateLocationHelper stateLocationHelper(_logger);
                 game->setState(stateLocationHelper.getInitialLocationState());
                 return;
             }

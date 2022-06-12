@@ -30,20 +30,26 @@ namespace Falltergeist
         {
             public:
                 LoadGame(std::shared_ptr<UI::IResourceManager> resourceManager);
+
                 virtual ~LoadGame() = default;
 
                 void init() override;
 
                 void onDoneButtonClick(Event::Mouse* event);
+
                 void doCancel();
+
                 void onCancelFadeDone(Event::State* event);
 
                 void onStateActivate(Event::State* event) override;
+
                 void onStateDeactivate(Event::State* event) override;
+
                 void onKeyDown(Event::Keyboard* event) override;
 
             private:
                 std::shared_ptr<UI::IResourceManager> resourceManager;
+
                 std::unique_ptr<UI::Factory::ImageButtonFactory> imageButtonFactory;
         };
     }

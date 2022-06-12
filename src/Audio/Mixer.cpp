@@ -158,10 +158,10 @@ namespace Falltergeist
             pmve->getAudio(stream, len);
         }
 
-        void Mixer::playMovieMusic(UI::MvePlayer* mve)
+        void Mixer::playMovieMusic(std::shared_ptr<UI::MvePlayer> mve)
         {
             musicCallback = std::bind(&Mixer::_movieCallback,this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
-            Mix_HookMusic(myMusicPlayer, reinterpret_cast<void *>(mve));
+            Mix_HookMusic(myMusicPlayer, reinterpret_cast<void *>(mve.get()));
         }
 
         void Mixer::playACMSound(const std::string& filename)

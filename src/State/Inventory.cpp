@@ -100,43 +100,43 @@ namespace Falltergeist
 
             auto player = Game::Game::getInstance()->player();
 
-            addUI("player_name", new UI::TextArea(player->name(), screenX, screenY));
+            addUI("player_name", std::make_shared<UI::TextArea>(player->name(), screenX, screenY));
 
-            auto line1 = new UI::Rectangle(Point(screenX, screenY+16), Graphics::Size(142, 1), {0x3f, 0xf8, 0x00, 0xff} );
+            auto line1 = std::make_shared<UI::Rectangle>(Point(screenX, screenY+16), Graphics::Size(142, 1), Graphics::Color(0x3f, 0xf8, 0x00, 0xff));
 
             std::string statsLabels;
             for (unsigned i = (unsigned)STAT::STRENGTH; i <= (unsigned)STAT::LUCK; i++)
             {
                 statsLabels += _t(MSG_INVENTORY, i) + "\n";
             }
-            addUI("label_stats", new UI::TextArea(statsLabels, screenX, screenY + 10*2));
+            addUI("label_stats", std::make_shared<UI::TextArea>(statsLabels, screenX, screenY + 10*2));
 
             std::string statsValues;
             for (unsigned i = (unsigned)STAT::STRENGTH; i <= (unsigned)STAT::LUCK; i++)
             {
                 statsValues += std::to_string(player->stat((STAT)i)) + "\n";
             }
-            addUI("label_stats_values", new UI::TextArea(statsValues, screenX + 22, screenY + 20));
+            addUI("label_stats_values", std::make_shared<UI::TextArea>(statsValues, screenX + 22, screenY + 20));
 
             std::stringstream ss;
             for (unsigned int i=7; i<14; i++)
             {
                 ss << _t(MSG_INVENTORY, i) << "\n";
             }
-            auto textLabel = new UI::TextArea(ss.str(), screenX+40, screenY+20);
+            auto textLabel = std::make_shared<UI::TextArea>(ss.str(), screenX+40, screenY+20);
 
             // label: hit points
             ss.str("");
             ss << player->hitPoints();
             ss << "/";
             ss << player->hitPointsMax();
-            auto hitPointsLabel = new UI::TextArea(ss.str(), screenX+94, screenY+20);
+            auto hitPointsLabel = std::make_shared<UI::TextArea>(ss.str(), screenX+94, screenY+20);
             hitPointsLabel->setWidth(46);
             hitPointsLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::RIGHT);
             // label: armor class
             ss.str("");
             ss << player->armorClass();
-            auto armorClassLabel = new UI::TextArea(ss.str(), screenX+94, screenY+30);
+            auto armorClassLabel = std::make_shared<UI::TextArea>(ss.str(), screenX+94, screenY+30);
             armorClassLabel->setWidth(46);
             armorClassLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::RIGHT);
 
@@ -164,7 +164,7 @@ namespace Falltergeist
                 ss << player->damageThreshold(DAMAGE::PLASMA) <<"/\n";
                 ss << player->damageThreshold(DAMAGE::EXPLOSIVE) <<"/";
             }
-            auto damageThresholdLabel = new UI::TextArea(ss.str(), screenX+94, screenY+40);
+            auto damageThresholdLabel = std::make_shared<UI::TextArea>(ss.str(), screenX+94, screenY+40);
             damageThresholdLabel->setWidth(26);
             damageThresholdLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::RIGHT);
 
@@ -186,10 +186,10 @@ namespace Falltergeist
                 ss << player->damageResist(DAMAGE::PLASMA) <<"%\n";
                 ss << player->damageResist(DAMAGE::EXPLOSIVE) <<"%";
             }
-            auto damageResistanceLabel = new UI::TextArea(ss.str(), screenX+120, screenY+40);
+            auto damageResistanceLabel = std::make_shared<UI::TextArea>(ss.str(), screenX+120, screenY+40);
 
-            auto line2 = new UI::Rectangle(Point(screenX, screenY+94), Graphics::Size(142, 1), {0x3f, 0xf8, 0x00, 0xff} );
-            auto line3 = new UI::Rectangle(Point(screenX, screenY+134), Graphics::Size(142, 1), {0x3f, 0xf8, 0x00, 0xff} );
+            auto line2 = std::make_shared<UI::Rectangle>(Point(screenX, screenY+94), Graphics::Size(142, 1), Graphics::Color(0x3f, 0xf8, 0x00, 0xff));
+            auto line3 = std::make_shared<UI::Rectangle>(Point(screenX, screenY+134), Graphics::Size(142, 1), Graphics::Color(0x3f, 0xf8, 0x00, 0xff));
 
             // label: Total Wt: (20)
             auto weight = player->carryWeight();
@@ -197,13 +197,13 @@ namespace Falltergeist
 
             ss.str("");
             ss << weight;
-            auto totalWtLabel = new UI::TextArea(_t(MSG_INVENTORY, 20), screenX+14, screenY+180);
-            auto weightLabel = new UI::TextArea(ss.str(), screenX+70, screenY+180);
+            auto totalWtLabel = std::make_shared<UI::TextArea>(_t(MSG_INVENTORY, 20), screenX+14, screenY+180);
+            auto weightLabel = std::make_shared<UI::TextArea>(ss.str(), screenX+70, screenY+180);
             weightLabel->setWidth(24);
             weightLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::RIGHT);
             ss.str("");
             ss << "/" << weightMax;
-            auto weightMaxLabel = new UI::TextArea(ss.str(), screenX+94, screenY+180);
+            auto weightMaxLabel = std::make_shared<UI::TextArea>(ss.str(), screenX+94, screenY+180);
             if (weight>weightMax)
             {
                 weightLabel->setFont("font1.aaf", {0xff, 0x00, 0x00, 0xff});
@@ -215,7 +215,7 @@ namespace Falltergeist
             {
                 ss << _handItemSummary(leftHand);
             }
-            auto leftHandLabel = new UI::TextArea(ss.str(), screenX, screenY+100);
+            auto leftHandLabel = std::make_shared<UI::TextArea>(ss.str(), screenX, screenY+100);
 
             // label: right hand
             ss.str("");
@@ -223,10 +223,10 @@ namespace Falltergeist
             {
                 ss << _handItemSummary(rightHand);
             }
-            auto rightHandLabel = new UI::TextArea(ss.str(), screenX, screenY+140);
+            auto rightHandLabel = std::make_shared<UI::TextArea>(ss.str(), screenX, screenY+140);
 
             // screen info
-            auto screenLabel = new UI::TextArea("", screenX, screenY+20);
+            auto screenLabel = std::make_shared<UI::TextArea>("", screenX, screenY+20);
             screenLabel->setSize({140, 168}); // screen size
             screenLabel->setVisible(false);
             screenLabel->setWordWrap(true);
@@ -247,7 +247,7 @@ namespace Falltergeist
             addUI("rightHandLabel", rightHandLabel);
             addUI("screenLabel", screenLabel);
 
-            auto inventoryList = new UI::ItemsList(Point(40, 40));
+            auto inventoryList = std::make_shared<UI::ItemsList>(Point(40, 40));
             inventoryList->setItems(game->player()->inventory());
             addUI("inventory_list", inventoryList);
 
@@ -263,33 +263,47 @@ namespace Falltergeist
                 Game::Orientation::SC
             );
             dudeCritter->setPosition({188, 52});
-            addUI(dudeCritter.release());
+            addUI(dudeCritter);
 
             // BIG ICONS
             // icon: armor
             {
-                auto inventoryItem = new UI::InventoryItem(armorSlot, {154, 183});
+                auto inventoryItem = std::make_shared<UI::InventoryItem>(armorSlot, Point(154, 183));
                 inventoryItem->setType(UI::InventoryItem::Type::SLOT);
-                inventoryItem->itemDragStopHandler().add([inventoryList, inventoryItem](Event::Mouse* event){ inventoryList->onItemDragStop(event, inventoryItem); });
-                inventoryList->itemDragStopHandler().add([inventoryItem, inventoryList](Event::Mouse* event){ inventoryItem->onArmorDragStop(event, inventoryList); });
+                inventoryItem->itemDragStopHandler().add([inventoryList, inventoryItem](Event::Mouse* event){
+                    inventoryList->onItemDragStop(event, inventoryItem);
+                });
+                inventoryList->itemDragStopHandler().add([inventoryItem, inventoryList](Event::Mouse* event){
+                    // TODO fix cyclic dependency hack
+                    inventoryItem->onArmorDragStop(event, inventoryList, inventoryItem);
+                });
                 addUI(inventoryItem);
             }
 
             // icon: left hand
             {
-                auto inventoryItem = new UI::InventoryItem(leftHand, {154, 286});
+                auto inventoryItem = std::make_shared<UI::InventoryItem>(leftHand, Point(154, 286));
                 inventoryItem->setType(UI::InventoryItem::Type::SLOT);
-                inventoryItem->itemDragStopHandler().add([inventoryList, inventoryItem](Event::Mouse* event){ inventoryList->onItemDragStop(event, HAND::LEFT, inventoryItem); });
-                inventoryList->itemDragStopHandler().add([inventoryItem, inventoryList](Event::Mouse* event){ inventoryItem->onHandDragStop(event, HAND::LEFT, inventoryList); });
+                inventoryItem->itemDragStopHandler().add([inventoryList, inventoryItem](Event::Mouse* event){
+                    inventoryList->onItemDragStop(event, HAND::LEFT, inventoryItem);
+                });
+                inventoryList->itemDragStopHandler().add([inventoryItem, inventoryList](Event::Mouse* event){
+                    // TODO fix cyclic dependency hack
+                    inventoryItem->onHandDragStop(event, HAND::LEFT, inventoryList, inventoryItem);
+                });
                 addUI(inventoryItem);
             }
 
             // icon: right hand
             {
-                auto inventoryItem = new UI::InventoryItem(rightHand, {247, 286});
+                auto inventoryItem = std::make_shared<UI::InventoryItem>(rightHand, Point(247, 286));
                 inventoryItem->setType(UI::InventoryItem::Type::SLOT);
-                inventoryItem->itemDragStopHandler().add([inventoryList, inventoryItem](Event::Mouse* event){ inventoryList->onItemDragStop(event, HAND::RIGHT, inventoryItem); });
-                inventoryList->itemDragStopHandler().add([inventoryItem, inventoryList](Event::Mouse* event){ inventoryItem->onHandDragStop(event, HAND::RIGHT, inventoryList); });
+                inventoryItem->itemDragStopHandler().add([inventoryList, inventoryItem](Event::Mouse* event){
+                    inventoryList->onItemDragStop(event, HAND::RIGHT, inventoryItem);
+                });
+                inventoryList->itemDragStopHandler().add([inventoryItem, inventoryList](Event::Mouse* event){
+                    inventoryItem->onHandDragStop(event, HAND::RIGHT, inventoryList, inventoryItem);
+                });
                 addUI(inventoryItem);
             }
 

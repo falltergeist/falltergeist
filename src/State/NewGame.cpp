@@ -31,11 +31,11 @@ namespace Falltergeist
         using Point = Graphics::Point;
         using TextArea = Falltergeist::UI::TextArea;
 
-        NewGame::NewGame(std::shared_ptr<UI::IResourceManager> resourceManager, std::shared_ptr<ILogger> logger) : State()
-        {
-            this->resourceManager = std::move(resourceManager);
-            this->logger = std::move(logger);
-            imageButtonFactory = std::make_unique<UI::Factory::ImageButtonFactory>(this->resourceManager);
+        NewGame::NewGame(
+            std::shared_ptr<UI::IResourceManager> resourceManager,
+            std::shared_ptr<ILogger> logger
+        ) : State(), _logger(logger), _resourceManager(resourceManager) {
+            _imageButtonFactory = std::make_unique<UI::Factory::ImageButtonFactory>(_resourceManager);
         }
 
         void NewGame::init()
@@ -52,46 +52,47 @@ namespace Falltergeist
 
             setPosition((renderer->size() - Point(640, 480)) / 2);
 
-            addUI("background", resourceManager->getImage("art/intrface/pickchar.frm"));
+            addUI("background", _resourceManager->getImage("art/intrface/pickchar.frm"));
 
-            auto beginGameButton = addUI(imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {81, 322}));
+            auto beginGameButton = addUI(_imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {81, 322}));
             beginGameButton->mouseClickHandler().add(std::bind(&NewGame::onBeginGameButtonClick, this, std::placeholders::_1));
 
-            auto editButton = addUI(imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {436, 319}));
+            auto editButton = addUI(_imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {436, 319}));
             editButton->mouseClickHandler().add(std::bind(&NewGame::onEditButtonClick, this, std::placeholders::_1));
 
-            auto createButton = addUI(imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {81, 424}));
+            auto createButton = addUI(_imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {81, 424}));
             createButton->mouseClickHandler().add(std::bind(&NewGame::onCreateButtonClick, this, std::placeholders::_1));
 
-            auto backButton = addUI(imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {461, 424}));
+            auto backButton = addUI(_imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {461, 424}));
             backButton->mouseClickHandler().add(std::bind(&NewGame::onBackButtonClick, this, std::placeholders::_1));
 
-            auto prevCharacterButton = addUI(imageButtonFactory->getByType(ImageButtonType::LEFT_ARROW, {292, 320}));
+            auto prevCharacterButton = addUI(_imageButtonFactory->getByType(ImageButtonType::LEFT_ARROW, {292, 320}));
             prevCharacterButton->mouseClickHandler().add(std::bind(&NewGame::onPrevCharacterButtonClick, this, std::placeholders::_1));
 
-            auto nextCharacterButton = addUI(imageButtonFactory->getByType(ImageButtonType::RIGHT_ARROW, {318, 320}));
+            auto nextCharacterButton = addUI(_imageButtonFactory->getByType(ImageButtonType::RIGHT_ARROW, {318, 320}));
             nextCharacterButton->mouseClickHandler().add(std::bind(&NewGame::onNextCharacterButtonClick, this, std::placeholders::_1));
 
-            addUI("images", new UI::ImageList({27, 23}, {
-                resourceManager->getImage("art/intrface/combat.frm"),
-                resourceManager->getImage("art/intrface/stealth.frm"),
-                resourceManager->getImage("art/intrface/diplomat.frm")
-            }));
+            std::vector<std::shared_ptr<UI::Image>> images = {
+                _resourceManager->getImage("art/intrface/combat.frm"),
+                _resourceManager->getImage("art/intrface/stealth.frm"),
+                _resourceManager->getImage("art/intrface/diplomat.frm")
+            };
+            addUI("images", std::make_shared<UI::ImageList>(Graphics::Point(27, 23), images));
 
-            addUI("name", new UI::TextArea(300, 40));
+            addUI("name", std::make_shared<UI::TextArea>(300, 40));
 
-            addUI("stats_1", new UI::TextArea(0, 70));
+            addUI("stats_1", std::make_shared<UI::TextArea>(0, 70));
             getUI<TextArea>("stats_1")->setWidth(362);
             getUI<TextArea>("stats_1")->setHorizontalAlign(UI::TextArea::HorizontalAlign::RIGHT);
 
-            addUI("stats_2", new UI::TextArea(374, 70));
-            addUI("bio",     new UI::TextArea(437, 40));
+            addUI("stats_2", std::make_shared<UI::TextArea>(374, 70));
+            addUI("bio",     std::make_shared<UI::TextArea>(437, 40));
 
-            addUI("stats_3", new UI::TextArea(294, 150));
+            addUI("stats_3", std::make_shared<UI::TextArea>(294, 150));
             getUI<TextArea>("stats_3")->setWidth(85);
             getUI<TextArea>("stats_3")->setHorizontalAlign(UI::TextArea::HorizontalAlign::RIGHT);
 
-            addUI("stats3_values", new UI::TextArea(383, 150));
+            addUI("stats3_values", std::make_shared<UI::TextArea>(383, 150));
         }
 
         void NewGame::doBeginGame()
@@ -99,7 +100,7 @@ namespace Falltergeist
             Game::Game::getInstance()->setPlayer(std::move(_characters.at(_selectedCharacter)));
             _characters.clear();
 
-            StateLocationHelper stateLocationHelper(logger);
+            StateLocationHelper stateLocationHelper(_logger);
             Game::Game::getInstance()->setState(stateLocationHelper.getInitialLocationState());
         }
 
@@ -107,7 +108,7 @@ namespace Falltergeist
         {
             Game::Game::getInstance()->setPlayer(std::move(_characters.at(_selectedCharacter)));
             _characters.clear();
-            Game::Game::getInstance()->pushState(new PlayerCreate(resourceManager, logger));
+            Game::Game::getInstance()->pushState(new PlayerCreate(_resourceManager, _logger));
         }
 
         void NewGame::doCreate()
@@ -115,7 +116,7 @@ namespace Falltergeist
             auto none = std::make_unique<Game::DudeObject>();
             none->loadFromGCDFile(ResourceManager::getInstance()->gcdFileType("premade/blank.gcd"));
             Game::Game::getInstance()->setPlayer(std::move(none));
-            Game::Game::getInstance()->pushState(new PlayerCreate(resourceManager, logger));
+            Game::Game::getInstance()->pushState(new PlayerCreate(_resourceManager, _logger));
         }
 
         void NewGame::doBack()

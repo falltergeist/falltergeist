@@ -58,7 +58,7 @@ namespace Falltergeist
             unsigned int i = 0;
             for (auto& item : _inventoryItems) {
                 Point pos = position() + Point(0, _slotHeight*i);
-                if (item.get() == _draggedItem) {
+                if (item == _draggedItem) {
                     item->render();
                     continue;
                 }
@@ -74,7 +74,7 @@ namespace Falltergeist
             }
         }
 
-        std::vector<std::unique_ptr<InventoryItem>>& ItemsList::inventoryItems()
+        std::vector<std::shared_ptr<InventoryItem>>& ItemsList::inventoryItems()
         {
             return _inventoryItems;
         }
@@ -89,7 +89,7 @@ namespace Falltergeist
             if (index < _inventoryItems.size()) {
                 Game::Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::NONE);
                 Game::Game::getInstance()->mixer()->playACMSound("sound/sfx/ipickup1.acm");
-                _draggedItem = _inventoryItems.at(index).get();
+                _draggedItem = _inventoryItems.at(index);
                 _draggedItem->setType(InventoryItem::Type::DRAG);
                 _draggedItemInitialPosition = _draggedItem->position();
                 _draggedItem->setPosition(event->position() - (_draggedItem->size() / 2.f));
@@ -117,7 +117,7 @@ namespace Falltergeist
             }
         }
 
-        void ItemsList::onItemDragStop(Event::Mouse* event, ItemsList* target)
+        void ItemsList::onItemDragStop(Event::Mouse* event, std::shared_ptr<ItemsList> target)
         {
             // check if mouse is in this item list
             if (!Rect::inRect(event->position(), position(), Size(_slotWidth, _slotHeight*_slotsNumber))) {
@@ -130,7 +130,7 @@ namespace Falltergeist
             target->update();
         }
 
-        void ItemsList::onItemDragStop(Event::Mouse* event, UI::InventoryItem* target)
+        void ItemsList::onItemDragStop(Event::Mouse* event, std::shared_ptr<UI::InventoryItem> target)
         {
             // check if mouse is in this item list
             if (!Rect::inRect(event->position(), position(), Size(_slotWidth, _slotHeight*_slotsNumber))) {
@@ -145,7 +145,7 @@ namespace Falltergeist
             target->setItem(0);
         }
 
-        void ItemsList::onItemDragStop(Event::Mouse* event, HAND hand, UI::InventoryItem* target)
+        void ItemsList::onItemDragStop(Event::Mouse* event, HAND hand, std::shared_ptr<UI::InventoryItem> target)
         {
             // check if mouse is in this item list
             if (Rect::inRect(event->position(), position(), Size(_slotWidth, _slotHeight*_slotsNumber))) {
@@ -159,19 +159,19 @@ namespace Falltergeist
             }
         }
 
-        InventoryItem* ItemsList::draggedItem()
+        std::shared_ptr<InventoryItem> ItemsList::draggedItem()
         {
             return _draggedItem;
         }
 
-        void ItemsList::addItem(InventoryItem* item, unsigned int amount)
+        void ItemsList::addItem(std::shared_ptr<InventoryItem> item, unsigned int amount)
         {
             _items->push_back(item->item());
             this->update();
             emitEvent(std::make_unique<Event::Event>("itemsListModified"), itemsListModifiedHandler());
         }
 
-        void ItemsList::removeItem(InventoryItem* item, unsigned int amount)
+        void ItemsList::removeItem(std::shared_ptr<InventoryItem> item, unsigned int amount)
         {
             for (auto it = _items->begin(); it != _items->end(); ++it) {
                 Game::ItemObject* object = *it;

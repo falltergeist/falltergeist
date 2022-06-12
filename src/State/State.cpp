@@ -84,24 +84,23 @@ namespace Falltergeist
             _modal = value;
         }
 
-        // TODO: change to accept unique_ptr
-        UI::Base* State::addUI(UI::Base* ui)
+        std::shared_ptr<UI::Base> State::addUI(std::shared_ptr<UI::Base> ui)
         {
             // Add to UI state position
             ui->setPosition(ui->position() - ui->offset() + position());
 
-            _ui.push_back(std::unique_ptr<UI::Base>(ui));
+            _ui.push_back(ui);
             return ui;
         }
 
-        UI::Base* State::addUI(const std::string& name, UI::Base* ui)
+        std::shared_ptr<UI::Base> State::addUI(const std::string& name, std::shared_ptr<UI::Base> ui)
         {
             addUI(ui);
-            _labeledUI.insert(std::pair<std::string, UI::Base*>(name, ui));
+            _labeledUI.insert(std::pair<std::string, std::shared_ptr<UI::Base>>(name, ui));
             return ui;
         }
 
-        void State::addUI(const std::vector<UI::Base*>& uis)
+        void State::addUI(const std::vector<std::shared_ptr<UI::Base>>& uis)
         {
             for (auto ui : uis) {
                 addUI(ui);

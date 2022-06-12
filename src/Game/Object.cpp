@@ -146,16 +146,6 @@ namespace Falltergeist
             _script.reset(script);
         }
 
-        UI::Base *Object::ui() const
-        {
-            return _ui.get();
-        }
-
-        void Object::setUI(UI::Base *ui)
-        {
-            _ui.reset(ui);
-        }
-
         void Object::_generateUi()
         {
             Graphics::ObjectUIFactory uiFactory;
@@ -216,14 +206,14 @@ namespace Falltergeist
             setPosition(hexagon->number());
         }
 
-        UI::TextArea *Object::floatMessage() const
+        std::shared_ptr<UI::TextArea> Object::floatMessage() const
         {
-            return _floatMessage.get();
+            return _floatMessage;
         }
 
-        void Object::setFloatMessage(std::unique_ptr<UI::TextArea> message)
+        void Object::setFloatMessage(std::shared_ptr<UI::TextArea> message)
         {
-            _floatMessage = std::move(message);
+            _floatMessage = message;
         }
 
         void Object::renderText()
@@ -410,7 +400,7 @@ namespace Falltergeist
         void Object::onUseAnimationActionFrame(Event::Event *event, CritterObject *critter)
         {
             use_p_proc(critter);
-            auto animation = dynamic_cast<UI::Animation *>(critter->ui());
+            auto animation = critter->ui<UI::Animation>();
             if (animation) {
                 animation->actionFrameHandler().clear();
                 animation->animationEndedHandler().add([this, critter](Event::Event *event) {

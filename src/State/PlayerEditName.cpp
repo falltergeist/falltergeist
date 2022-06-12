@@ -88,18 +88,18 @@ namespace Falltergeist
             auto doneBox = _resourceManager->getImage("art/intrface/donebox.frm");
             doneBox->setPosition(bgPos + Point(35, 40));
 
-            auto doneLabel = new UI::TextArea(_t(MSG_EDITOR, 100), bgX+65, bgY+43);
+            auto doneLabel = std::make_shared<UI::TextArea>(_t(MSG_EDITOR, 100), bgX+65, bgY+43);
             doneLabel->setFont("font3.aaf", {0xb8, 0x9c, 0x28, 0xff});
 
             auto doneButton = _imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {bgX + 45, bgY + 43});
             doneButton->mouseClickHandler().add(std::bind(&PlayerEditName::onDoneButtonClick, this, std::placeholders::_1));
 
-            _name = new UI::TextArea(Game::Game::getInstance()->player()->name(), bgX+43, bgY+15);
+            _name = std::make_shared<UI::TextArea>(Game::Game::getInstance()->player()->name(), bgX+43, bgY+15);
             _name->keyDownHandler().add([=](Event::Event* event){
                 _onTextAreaKeyDown(dynamic_cast<Event::Keyboard*>(event), _name);
             });
 
-            _cursor = new UI::Rectangle(bgPos + Point(83, 15) ,{5,8}, {0x3F, 0xF8, 0x00, 0xFF});
+            _cursor = std::make_shared<UI::Rectangle>(bgPos + Point(83, 15), Graphics::Size(5, 8), Graphics::Color(0x3F, 0xF8, 0x00, 0xFF));
 
             addUI(bg);
             addUI(nameBox);
@@ -110,7 +110,7 @@ namespace Falltergeist
             addUI(_cursor);
         }
 
-        void PlayerEditName::_onTextAreaKeyDown(Event::Keyboard* event, UI::TextArea* target)
+        void PlayerEditName::_onTextAreaKeyDown(Event::Keyboard* event, std::shared_ptr<UI::TextArea> target)
         {
             std::string text = target->text();
 

@@ -60,12 +60,12 @@ namespace Falltergeist
             _inventoryFID = value;
         }
 
-        UI::Base* ItemObject::inventoryDragUi() const
+        std::shared_ptr<UI::Base> ItemObject::inventoryDragUi()
         {
-            return _inventoryDragUi.get();
+            return _inventoryDragUi;
         }
 
-        std::unique_ptr<UI::TextArea>& ItemObject::inventoryAmountUi()
+        std::shared_ptr<UI::TextArea>& ItemObject::inventoryAmountUi()
         {
             return _inventoryAmountUi;
         }
@@ -80,14 +80,14 @@ namespace Falltergeist
             return _volume;
         }
 
-        UI::Base* ItemObject::inventoryUi() const
+        std::shared_ptr<UI::Base> ItemObject::inventoryUi()
         {
-            return _inventoryUi.get();
+            return _inventoryUi;
         }
 
-        UI::Base* ItemObject::inventorySlotUi() const
+        std::shared_ptr<UI::Base> ItemObject::inventorySlotUi()
         {
-            return _inventorySlotUi.get();
+            return _inventorySlotUi;
         }
 
         void ItemObject::_generateUi()

@@ -23,8 +23,8 @@ namespace Falltergeist
             public:
                 virtual ~IResourceManager() = default;
 
-                // TODO replace with smart pointer
-                virtual Image* getImage(const std::string &filename) = 0;
+                virtual std::shared_ptr<Image> getImage(const std::string &filename) = 0;
+
                 virtual std::shared_ptr<Graphics::Sprite> getSprite(const std::string &filename) = 0;
         };
     }

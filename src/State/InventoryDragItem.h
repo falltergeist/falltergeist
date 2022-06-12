@@ -18,14 +18,16 @@ namespace Falltergeist
         class InventoryDragItem final : public State
         {
             public:
-                InventoryDragItem(UI::ImageList* itemUi);
+                InventoryDragItem(std::shared_ptr<UI::ImageList>& itemUi);
+
                 ~InventoryDragItem() override;
 
                 void init() override;
+
                 void handle(Event::Event* event) override;
 
-            protected:
-                UI::ImageList* _itemUi = nullptr;
+            private:
+                std::shared_ptr<UI::ImageList> _itemUi = nullptr;
         };
     }
 }

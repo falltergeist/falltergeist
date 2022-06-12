@@ -118,7 +118,7 @@ namespace Falltergeist
                 addUI(labels);
             }
 
-            auto elevatorProgress = new UI::ElevatorProgress(
+            auto elevatorProgress = std::make_shared<UI::ElevatorProgress>(
                 static_cast<uint8_t>(elevatorPosition), // 0..12
                 backgroundPos + Point(122, 42)
             );

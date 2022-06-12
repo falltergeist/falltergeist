@@ -68,7 +68,7 @@ namespace Falltergeist
                 Game::Orientation::SC
             );
             dudeCritter->setPosition({30, 45});
-            addUI(dudeCritter.release());
+            addUI(dudeCritter);
 
             auto traderCritter = animationFactory.buildStandingAnimation(
                 critterHelper.armorFID(_trader),
@@ -76,9 +76,9 @@ namespace Falltergeist
                 Game::Orientation::SC
             );
             traderCritter->setPosition({ 580, 45 });
-            addUI(traderCritter.release());
+            addUI(traderCritter);
 
-            auto reaction = new UI::TextArea("", 140, -62);
+            auto reaction = std::make_shared<UI::TextArea>("", 140, -62);
             reaction->setSize({375, 53});
             reaction->setPadding({0, 5}, {0, 5});
             addUI("reaction", reaction);
@@ -89,18 +89,18 @@ namespace Falltergeist
             addUI("talkButton", imageButtonFactory->getByType(ImageButtonType::DIALOG_RED_BUTTON, {583, 162}));
             getUI<UI::ImageButton>("talkButton")->mouseClickHandler().add(std::bind(&CritterBarter::onTalkButtonClick, this, std::placeholders::_1));
 
-            auto scrollUp = [](UI::ItemsList *list) {
+            auto scrollUp = [](std::shared_ptr<UI::ItemsList> list) {
                 if (list->canScrollUp()) {
                     list->scrollUp();
                 }
             };
-            auto scrollDown = [](UI::ItemsList *list) {
+            auto scrollDown = [](std::shared_ptr<UI::ItemsList> list) {
                 if (list->canScrollDown()) {
                     list->scrollDown();
                 }
             };
 
-            auto mineList = new UI::ItemsList({ 104, 35 });
+            auto mineList = std::make_shared<UI::ItemsList>(Graphics::Point(104, 35));
             mineList->setSlotsNumber(3);
             mineList->setItems(Game::Game::getInstance()->player()->inventory());
             addUI("mineList", mineList);
@@ -113,7 +113,7 @@ namespace Falltergeist
             mineInventoryScrollDownButton->mouseClickHandler().add([=](...) { scrollDown(mineList); });
             addUI(mineInventoryScrollDownButton);
 
-            auto sellList = new UI::ItemsList({ 244, 20 });
+            auto sellList = std::make_shared<UI::ItemsList>(Graphics::Point(244, 20));
             sellList->setItems(&_itemsToSell);
             sellList->setSlotsNumber(3);
             addUI("sellList", sellList);
@@ -126,7 +126,7 @@ namespace Falltergeist
             sellInventoryScrollDownButton->mouseClickHandler().add([=](...) { scrollDown(sellList); });
             addUI(sellInventoryScrollDownButton);
 
-            auto theirsList = new UI::ItemsList({ 470, 35 });
+            auto theirsList = std::make_shared<UI::ItemsList>(Graphics::Point(470, 35));
             theirsList->setItems(trader()->inventory());
             theirsList->setSlotsNumber(3);
             addUI("theirsList", theirsList);
@@ -139,7 +139,7 @@ namespace Falltergeist
             theirsInventoryScrollDownButton->mouseClickHandler().add([=](...) { scrollDown(theirsList); });
             addUI(theirsInventoryScrollDownButton);
 
-            auto buyList = new UI::ItemsList({ 330, 20 });
+            auto buyList = std::make_shared<UI::ItemsList>(Graphics::Point(330, 20));
             buyList->setItems(&_itemsToBuy);
             buyList->setSlotsNumber(3);
             addUI("buyList", buyList);
@@ -152,11 +152,11 @@ namespace Falltergeist
             buyInventoryScrollDownButton->mouseClickHandler().add([=](...) { scrollDown(buyList); });
             addUI(buyInventoryScrollDownButton);
 
-            auto sellPriceText = new UI::TextArea("$0", 246, 168);
+            auto sellPriceText = std::make_shared<UI::TextArea>("$0", 246, 168);
             sellPriceText->setColor({ 255, 255, 255, 0 });
             addUI("sellPriceText", sellPriceText);
 
-            auto buyPriceText = new UI::TextArea("$0", 334, 168);
+            auto buyPriceText = std::make_shared<UI::TextArea>("$0", 334, 168);
             buyPriceText->setColor({ 255, 255, 255, 0 });
             addUI("buyPriceText", buyPriceText);
 

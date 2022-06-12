@@ -79,17 +79,17 @@ namespace Falltergeist
             Graphics::Color color = {0x90, 0x78, 0x24, 0xff};
 
             // LOAD GAME LABEL
-            auto saveGameLabel = new UI::TextArea(_t(MSG_LOAD_SAVE, 110), bgX+48, bgY+27);
+            auto saveGameLabel = std::make_shared<UI::TextArea>(_t(MSG_LOAD_SAVE, 110), bgX+48, bgY+27);
             saveGameLabel->setFont(font3_907824ff, color);
             addUI(saveGameLabel);
 
             // DONE BUTTON LABEL
-            auto doneButtonLabel = new UI::TextArea(_t(MSG_OPTIONS, 300), bgX+410, bgY+348);
+            auto doneButtonLabel = std::make_shared<UI::TextArea>(_t(MSG_OPTIONS, 300), bgX+410, bgY+348);
             doneButtonLabel->setFont(font3_907824ff, color);
             addUI(doneButtonLabel);
 
             // CANCEL BUTTON LABEL
-            auto cancelButtonLabel = new UI::TextArea(_t(MSG_OPTIONS, 121), bgX+515, bgY+348);
+            auto cancelButtonLabel = std::make_shared<UI::TextArea>(_t(MSG_OPTIONS, 121), bgX+515, bgY+348);
             cancelButtonLabel->setFont(font3_907824ff, color);
             addUI(cancelButtonLabel);
         }

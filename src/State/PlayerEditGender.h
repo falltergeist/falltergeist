@@ -25,24 +25,31 @@ namespace Falltergeist
         {
             public:
                 PlayerEditGender(std::shared_ptr<UI::IResourceManager> resourceManager);
+
                 virtual ~PlayerEditGender() = default;
 
                 void init() override;
 
                 void onFemaleButtonPress(Event::Mouse* event);
+
                 void onMaleButtonPress(Event::Mouse* event);
+
                 void onDoneButtonClick(Event::Mouse* event);
+
                 void onKeyDown(Event::Keyboard* event) override;
+
                 void setGender(GENDER gender);
 
-            protected:
-                UI::ImageList* _maleImage = nullptr;
-                UI::ImageList* _femaleImage = nullptr;
+            private:
+                std::shared_ptr<UI::ImageList> _maleImage = nullptr;
+
+                std::shared_ptr<UI::ImageList> _femaleImage = nullptr;
+
                 GENDER _gender = GENDER::MALE;
 
-            private:
-                std::shared_ptr<UI::IResourceManager> resourceManager;
-                std::unique_ptr<UI::Factory::ImageButtonFactory> imageButtonFactory;
+                std::shared_ptr<UI::IResourceManager> _resourceManager;
+
+                std::unique_ptr<UI::Factory::ImageButtonFactory> _imageButtonFactory;
         };
     }
 }

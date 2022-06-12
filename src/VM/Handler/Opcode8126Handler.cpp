@@ -34,7 +34,7 @@ namespace Falltergeist
                 }
                 */
                 auto object = _script->dataStack()->popObject();
-                auto queue = dynamic_cast<UI::AnimationQueue *>(object->ui());
+                auto queue = object->ui<UI::AnimationQueue>();
                 if (queue) {
                     queue->stop();
                     queue->setRepeat(true); // forever

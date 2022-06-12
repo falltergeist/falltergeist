@@ -21,9 +21,9 @@ namespace Falltergeist
 
                 ~TextAreaList() override;
 
-                void addArea(std::unique_ptr<TextArea> area);
+                void addArea(std::shared_ptr<TextArea> area);
 
-                const std::vector<std::unique_ptr<TextArea>>& textAreas() const;
+                const std::vector<std::shared_ptr<TextArea>>& textAreas() const;
 
                 void scrollDown(int count = 1);
 
@@ -40,7 +40,7 @@ namespace Falltergeist
             private:
                 Graphics::Size _size;
 
-                std::vector<std::unique_ptr<TextArea>> _areas;
+                std::vector<std::shared_ptr<TextArea>> _areas;
 
                 int _areaIndex = 0;
 
