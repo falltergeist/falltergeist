@@ -17,30 +17,30 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            Opcode80DE::Opcode80DE(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
+            Opcode80DE::Opcode80DE(std::shared_ptr<ILogger> logger) : OpcodeHandler(), _logger(logger)
             {
-                this->logger = std::move(logger);
+
             }
 
-            void Opcode80DE::_run()
+            void Opcode80DE::_run(VM::Script& script)
             {
-                logger->debug()
+                _logger->debug()
                     << "[80DE] [*] void start_gdialog(int msgFileID, GameCritterObject* critter, int mood, int headID, int backgroundID)"
                     << std::endl
                 ;
-                int backgroundID = _script->dataStack()->popInteger();
-                int headID = _script->dataStack()->popInteger();
-                State::CritterInteract::Mood mood = static_cast<State::CritterInteract::Mood>(_script->dataStack()->popInteger());
+                int backgroundID = script.dataStack()->popInteger();
+                int headID = script.dataStack()->popInteger();
+                State::CritterInteract::Mood mood = static_cast<State::CritterInteract::Mood>(script.dataStack()->popInteger());
 
-                auto critter = dynamic_cast<Game::CritterObject *>(_script->dataStack()->popObject());
+                auto critter = dynamic_cast<Game::CritterObject *>(script.dataStack()->popObject());
                 if (!critter) {
                     _error("start_gdialog - wrong critter pointer");
                 }
 
-                int msgFileID = _script->dataStack()->popInteger();
+                int msgFileID = script.dataStack()->popInteger();
                 if (headID > -1) {
-                    auto reaction = _script->LVARS()->at(0).integerValue();
-                    logger->debug() << "Initial reaction: " << reaction << std::endl;
+                    auto reaction = script.LVARS()->at(0).integerValue();
+                    _logger->debug() << "Initial reaction: " << reaction << std::endl;
                     if (reaction <= -10) {
                         mood = State::CritterInteract::Mood::BAD;
                     } else if (reaction <= 10) {
@@ -55,7 +55,8 @@ namespace Falltergeist
                 interact->setMood(mood);
                 interact->setCritter(critter);
                 interact->setMsgFileID(msgFileID);
-                interact->setScript(_script);
+                // TODO get rid of script dependency in state
+                interact->setScript(&script);
                 Game::Game::getInstance()->pushState(interact);
             }
         }

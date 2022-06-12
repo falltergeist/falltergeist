@@ -12,14 +12,14 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            Opcode80F9::Opcode80F9(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
+            Opcode80F9::Opcode80F9(std::shared_ptr<ILogger> logger) : OpcodeHandler(), _logger(logger)
             {
-                this->logger = std::move(logger);
+
             }
 
-            void Opcode80F9::_run()
+            void Opcode80F9::_run(VM::Script& script)
             {
-                logger->debug() << "[80F9] [=] void dialogue_system_enter()" << std::endl;
+                _logger->debug() << "[80F9] [=] void dialogue_system_enter()" << std::endl;
             }
         }
     }

@@ -13,20 +13,20 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            Opcode813C::Opcode813C(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
+            Opcode813C::Opcode813C(std::shared_ptr<ILogger> logger) : OpcodeHandler(), _logger(logger)
             {
-                this->logger = std::move(logger);
+
             }
 
-            void Opcode813C::_run()
+            void Opcode813C::_run(VM::Script& script)
             {
-                int amount = _script->dataStack()->popInteger();
-                int skill = _script->dataStack()->popInteger();
-                auto critter = static_cast<Game::CritterObject *>(_script->dataStack()->popObject());
+                int amount = script.dataStack()->popInteger();
+                int skill = script.dataStack()->popInteger();
+                auto critter = static_cast<Game::CritterObject *>(script.dataStack()->popObject());
 
                 critter->setSkillGainedValue((SKILL) skill, critter->skillGainedValue((SKILL) skill) + amount);
 
-                logger->debug()
+                _logger->debug()
                     << "[813C] void critter_mod_skill(GameCritterObject* who, int skill, int amount)" << std::endl
                     << "    skill = " << skill << std::endl
                     << "    amount = " << amount << std::endl

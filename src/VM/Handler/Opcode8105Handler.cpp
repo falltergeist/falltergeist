@@ -13,17 +13,17 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            Opcode8105::Opcode8105(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
+            Opcode8105::Opcode8105(std::shared_ptr<ILogger> logger) : OpcodeHandler(), _logger(logger)
             {
-                this->logger = std::move(logger);
+
             }
 
-            void Opcode8105::_run()
+            void Opcode8105::_run(VM::Script& script)
             {
-                logger->debug() << "[8105] [+] string message_str(int msg_list, int msg_num);" << std::endl;
-                auto msgNum = _script->dataStack()->popInteger();
-                auto msgList = _script->dataStack()->popInteger();
-                _script->dataStack()->push(_script->msgMessage(msgList, msgNum));
+                _logger->debug() << "[8105] [+] string message_str(int msg_list, int msg_num);" << std::endl;
+                auto msgNum = script.dataStack()->popInteger();
+                auto msgList = script.dataStack()->popInteger();
+                script.dataStack()->push(script.msgMessage(msgList, msgNum));
             }
         }
     }

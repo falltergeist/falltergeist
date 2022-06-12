@@ -12,20 +12,20 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            Opcode810F::Opcode810F(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
+            Opcode810F::Opcode810F(std::shared_ptr<ILogger> logger) : OpcodeHandler(), _logger(logger)
             {
-                this->logger = std::move(logger);
+
             }
 
-            void Opcode810F::_run()
+            void Opcode810F::_run(VM::Script& script)
             {
-                logger->debug()
+                _logger->debug()
                     << "[810F] [=] void reg_anim_animate(void* what, int anim, int delay) "
                     << std::endl
                 ;
-                _script->dataStack()->popInteger();
-                _script->dataStack()->popInteger();
-                _script->dataStack()->popObject();
+                script.dataStack()->popInteger();
+                script.dataStack()->popInteger();
+                script.dataStack()->popObject();
             }
         }
     }

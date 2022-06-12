@@ -14,16 +14,16 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            Opcode8028::Opcode8028(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
+            Opcode8028::Opcode8028(std::shared_ptr<ILogger> logger) : OpcodeHandler(), _logger(logger)
             {
-                this->logger = std::move(logger);
+
             }
 
-            void Opcode8028::_run()
+            void Opcode8028::_run(VM::Script& script)
             {
-                logger->debug() << "[8028] [?] int lookup_string_proc(string)" << std::endl;
-                std::string name = _script->dataStack()->popString();
-                _script->dataStack()->push((int) _script->script()->procedure(name)->bodyOffset());
+                _logger->debug() << "[8028] [?] int lookup_string_proc(string)" << std::endl;
+                std::string name = script.dataStack()->popString();
+                script.dataStack()->push((int) script.intFile()->procedure(name)->bodyOffset());
             }
         }
     }

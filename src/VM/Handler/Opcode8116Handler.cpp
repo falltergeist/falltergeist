@@ -17,20 +17,20 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            Opcode8116::Opcode8116(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
+            Opcode8116::Opcode8116(std::shared_ptr<ILogger> logger) : OpcodeHandler(), _logger(logger)
             {
-                this->logger = std::move(logger);
+
             }
 
-            void Opcode8116::_run()
+            void Opcode8116::_run(VM::Script& script)
             {
-                logger->debug()
+                _logger->debug()
                     << "[8116] [+] void add_mult_objs_to_inven(GameObject* who, GameItemObject* item, int amount)"
                     << std::endl
                 ;
-                auto amount = _script->dataStack()->popInteger();
-                auto item = dynamic_cast<Game::ItemObject *>(_script->dataStack()->popObject());
-                auto invenObj = _script->dataStack()->popObject();
+                auto amount = script.dataStack()->popInteger();
+                auto item = dynamic_cast<Game::ItemObject *>(script.dataStack()->popObject());
+                auto invenObj = script.dataStack()->popObject();
 
                 if (!item) {
                     _error("add_mult_objs_to_inven - item not instanceof GameItemObject");

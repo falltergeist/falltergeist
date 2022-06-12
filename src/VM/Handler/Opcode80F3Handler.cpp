@@ -12,15 +12,15 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            Opcode80F3::Opcode80F3(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
+            Opcode80F3::Opcode80F3(std::shared_ptr<ILogger> logger) : OpcodeHandler(), _logger(logger)
             {
-                this->logger = std::move(logger);
+
             }
 
-            void Opcode80F3::_run()
+            void Opcode80F3::_run(VM::Script& script)
             {
-                logger->debug() << "[80F3] [=] int has_trait(int type,void* who, int trait)" << std::endl;
-                auto dataStack = _script->dataStack();
+                _logger->debug() << "[80F3] [=] int has_trait(int type,void* who, int trait)" << std::endl;
+                auto dataStack = script.dataStack();
                 dataStack->popInteger();
                 dataStack->popObject();
                 dataStack->popInteger();

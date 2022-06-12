@@ -22,7 +22,7 @@ namespace Falltergeist
                 return *this;
             }
 
-            std::string Item::filename()
+            const std::string& Item::filename() const
             {
                 return _filename;
             }

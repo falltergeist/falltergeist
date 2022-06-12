@@ -12,15 +12,15 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            Opcode8128::Opcode8128(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
+            Opcode8128::Opcode8128(std::shared_ptr<ILogger> logger) : OpcodeHandler(), _logger(logger)
             {
-                this->logger = std::move(logger);
+
             }
 
-            void Opcode8128::_run()
+            void Opcode8128::_run(VM::Script& script)
             {
-                logger->debug() << "[8128] [=] int combat_is_initialized()" << std::endl;
-                _script->dataStack()->push(0);
+                _logger->debug() << "[8128] [=] int combat_is_initialized()" << std::endl;
+                script.dataStack()->push(0);
             }
         }
     }

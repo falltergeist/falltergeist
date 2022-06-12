@@ -14,17 +14,17 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            Opcode80F4::Opcode80F4(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
+            Opcode80F4::Opcode80F4(std::shared_ptr<ILogger> logger) : OpcodeHandler(), _logger(logger)
             {
-                this->logger = std::move(logger);
+
             }
 
-            void Opcode80F4::_run()
+            void Opcode80F4::_run(VM::Script& script)
             {
-                logger->debug() << "[80F4] [=] int destroy_object(void* obj)" << std::endl;
-                auto object = _script->dataStack()->popObject();
+                _logger->debug() << "[80F4] [=] int destroy_object(void* obj)" << std::endl;
+                auto object = script.dataStack()->popObject();
                 Game::Game::getInstance()->locationState()->destroyObject(object);
-                _script->dataStack()->push(0);
+                script.dataStack()->push(0);
             }
         }
     }

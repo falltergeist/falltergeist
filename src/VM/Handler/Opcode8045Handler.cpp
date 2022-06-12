@@ -12,16 +12,16 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            Opcode8045::Opcode8045(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
+            Opcode8045::Opcode8045(std::shared_ptr<ILogger> logger) : OpcodeHandler(), _logger(logger)
             {
-                this->logger = std::move(logger);
+
             }
 
-            void Opcode8045::_run()
+            void Opcode8045::_run(VM::Script& script)
             {
-                logger->debug() << "[8045] [*] op_not" << std::endl;
-                auto a = _script->dataStack()->popLogical();
-                _script->dataStack()->push((int) (!a));
+                _logger->debug() << "[8045] [*] op_not" << std::endl;
+                auto a = script.dataStack()->popLogical();
+                script.dataStack()->push((int) (!a));
             }
         }
     }

@@ -2,6 +2,7 @@
 
 // Project includes
 #include "../Format/Enums.h"
+#include "../Format/Int/File.h"
 #include "../VM/Stack.h"
 #include "../VM/StackValue.h"
 
@@ -12,14 +13,6 @@
 
 namespace Falltergeist
 {
-    namespace Format
-    {
-        namespace Int
-        {
-            class File;
-        }
-    }
-
     namespace Game
     {
         class Object;
@@ -33,14 +26,12 @@ namespace Falltergeist
          * Each operator from .INT script is handled by one of the Handler classes and it manipulates one or both stacks in some way.
          * Typical scripting command takes 0 or more arguments from the data stack and puts one return value to the same stack.
          */
-        class Script
+        class Script final
         {
             public:
-                Script(Format::Int::File *script, Game::Object *owner);
+                Script(std::unique_ptr<Format::Int::File> intFile, Game::Object *owner);
 
-                Script(const std::string &filename, Game::Object *owner);
-
-                virtual ~Script();
+                ~Script() = default;
 
                 void run();
 
@@ -59,13 +50,13 @@ namespace Falltergeist
                 std::string msgSpeech(int msg_file_num, int msg_num);
 
                 // Returns filename of an .int script file
-                std::string filename();
+                const std::string& filename() const;
 
                 bool hasFunction(const std::string &name);
 
                 void call(const std::string &name);
 
-                Format::Int::File *script();
+                std::unique_ptr<Format::Int::File>& intFile();
 
                 Game::Object *owner();
 
@@ -103,22 +94,35 @@ namespace Falltergeist
 
                 VM::Script *setUsedSkill(SKILL skill);
 
-            protected:
+            private:
                 Game::Object *_owner = nullptr;
+
                 Game::Object *_sourceObject = nullptr;
+
                 Game::Object *_targetObject = nullptr;
+
                 SKILL _usedSkill = SKILL::NONE;
 
                 int _fixedParam = 0;
+
                 int _actionUsed = 0;
-                Format::Int::File *_script = 0;
+
+                std::unique_ptr<Format::Int::File> _intFile;
+
                 bool _initialized = false;
+
                 bool _overrides = false;
+
                 Stack _dataStack;
+
                 Stack _returnStack;
+
                 std::vector<StackValue> _LVARS;
+
                 unsigned int _programCounter = 0;
+
                 size_t _DVAR_base = 0;
+
                 size_t _SVAR_base = 0;
         };
     }

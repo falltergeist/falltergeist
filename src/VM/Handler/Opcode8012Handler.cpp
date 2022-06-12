@@ -13,18 +13,18 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            Opcode8012::Opcode8012(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
+            Opcode8012::Opcode8012(std::shared_ptr<ILogger> logger) : OpcodeHandler(), _logger(logger)
             {
-                this->logger = std::move(logger);
+
             }
 
-            void Opcode8012::_run()
+            void Opcode8012::_run(VM::Script& script)
             {
-                auto number = _script->dataStack()->popInteger();
-                auto value = _script->dataStack()->values()->at(_script->SVARbase() + number);
-                _script->dataStack()->push(value);
+                auto number = script.dataStack()->popInteger();
+                auto value = script.dataStack()->values()->at(script.SVARbase() + number);
+                script.dataStack()->push(value);
 
-                logger->debug()
+                _logger->debug()
                     << "[8012] [*] value = op_fetch_global[num]" << std::endl
                     << "      num: " << number << std::endl
                     << "     type: " << value.typeName() << std::endl

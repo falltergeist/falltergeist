@@ -12,21 +12,21 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            Opcode8040::Opcode8040(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
+            Opcode8040::Opcode8040(std::shared_ptr<ILogger> logger) : OpcodeHandler(), _logger(logger)
             {
-                this->logger = std::move(logger);
+
             }
 
-            void Opcode8040::_run()
+            void Opcode8040::_run(VM::Script& script)
             {
-                logger->debug() << "[8040] [*] op_bwand" << std::endl;
-                auto bValue = _script->dataStack()->pop();
-                auto aValue = _script->dataStack()->pop();
+                _logger->debug() << "[8040] [*] op_bwand" << std::endl;
+                auto bValue = script.dataStack()->pop();
+                auto aValue = script.dataStack()->pop();
                 if (!aValue.isNumber() || !bValue.isNumber()) {
                     _error(std::string("op_bwand: invalid argument types: ") + aValue.typeName() + " bwand " +
                            bValue.typeName());
                 }
-                _script->dataStack()->push(aValue.toInteger() & bValue.toInteger());
+                script.dataStack()->push(aValue.toInteger() & bValue.toInteger());
             }
         }
     }

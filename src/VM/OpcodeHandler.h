@@ -17,23 +17,20 @@ namespace Falltergeist
         class OpcodeHandler
         {
             public:
-                OpcodeHandler(VM::Script *script);
+                OpcodeHandler() = default;
 
-                virtual ~OpcodeHandler();
+                virtual ~OpcodeHandler() = default;
 
-                void run();
+                void run(VM::Script& script);
 
             protected:
-                VM::Script *_script;
-                unsigned int _offset;
-
-                virtual void _run();
+                virtual void _run(VM::Script& script);
 
                 // print warning message to log
-                void _warning(const std::string &message);
+                void _warning(VM::Script& script, const std::string &message);
 
                 // prints error message to logs and throws VM::ErrorException
-                void _error(const std::string &message);
+                void _error(const std::string& message);
         };
     }
 }

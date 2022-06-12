@@ -13,15 +13,15 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            Opcode8044::Opcode8044(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
+            Opcode8044::Opcode8044(std::shared_ptr<ILogger> logger) : OpcodeHandler(), _logger(logger)
             {
-                this->logger = std::move(logger);
+
             }
 
-            void Opcode8044::_run()
+            void Opcode8044::_run(VM::Script& script)
             {
-                logger->debug() << "[8044] [*] op_floor" << std::endl;
-                auto value = _script->dataStack()->pop();
+                _logger->debug() << "[8044] [*] op_floor" << std::endl;
+                auto value = script.dataStack()->pop();
                 int result = 0;
                 if (value.type() == StackValue::Type::FLOAT) {
                     result = (int) value.floatValue(); // this is how "floor" originally worked..
@@ -30,7 +30,7 @@ namespace Falltergeist
                 } else {
                     _error(std::string("op_floor: invalid argument type: ") + value.typeName());
                 }
-                _script->dataStack()->push(result);
+                script.dataStack()->push(result);
             }
         }
     }

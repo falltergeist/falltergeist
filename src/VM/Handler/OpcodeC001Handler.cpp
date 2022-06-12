@@ -14,20 +14,20 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            OpcodeC001::OpcodeC001(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
+            OpcodeC001::OpcodeC001(std::shared_ptr<ILogger> logger) : OpcodeHandler(), _logger(logger)
             {
-                this->logger = std::move(logger);
+
             }
 
-            void OpcodeC001::_run()
+            void OpcodeC001::_run(VM::Script& script)
             {
-                int value = _script->script()->readValue();
+                int value = script.intFile()->readValue();
 
                 // Skip 4 bytes for readed integer value
-                _script->setProgramCounter(_script->programCounter() + 4);
-                _script->dataStack()->push(StackValue(value));
+                script.setProgramCounter(script.programCounter() + 4);
+                script.dataStack()->push(StackValue(value));
 
-                logger->debug()
+                _logger->debug()
                     << "[C001] [*] push_d integer" << std::endl
                     << "    value: " << std::to_string(value) << std::endl
                 ;

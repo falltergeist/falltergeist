@@ -16,31 +16,31 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            Opcode8106::Opcode8106(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
+            Opcode8106::Opcode8106(std::shared_ptr<ILogger> logger) : OpcodeHandler(), _logger(logger)
             {
-                this->logger = std::move(logger);
+
             }
 
-            void Opcode8106::_run()
+            void Opcode8106::_run(VM::Script& script)
             {
-                logger->debug()
+                _logger->debug()
                     << "[8106] [=] void* (int) critter_inven_obj(GameCritterObject* critter, int where)"
                     << std::endl
                 ;
-                auto where = _script->dataStack()->popInteger();
-                auto critter = dynamic_cast<Game::CritterObject *>(_script->dataStack()->popObject());
+                auto where = script.dataStack()->popInteger();
+                auto critter = dynamic_cast<Game::CritterObject *>(script.dataStack()->popObject());
                 switch (where) {
                     case 0: // ARMOR SLOT
-                        _script->dataStack()->push(critter->armorSlot());
+                        script.dataStack()->push(critter->armorSlot());
                         break;
                     case 1: // RIGHT HAND SLOT
-                        _script->dataStack()->push(critter->rightHandSlot());
+                        script.dataStack()->push(critter->rightHandSlot());
                         break;
                     case 2: // LEFT HAND SLOT
-                        _script->dataStack()->push(critter->leftHandSlot());
+                        script.dataStack()->push(critter->leftHandSlot());
                         break;
                     case -2: // INVENTORY COUNT
-                        _script->dataStack()->push((unsigned int) critter->inventory()->size());
+                        script.dataStack()->push((unsigned int) critter->inventory()->size());
                         break;
                     default:
                         _error(std::string("critter_inven_obj - invalid slot: ") + std::to_string(where));

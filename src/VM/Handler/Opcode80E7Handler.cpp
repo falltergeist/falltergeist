@@ -12,17 +12,17 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            Opcode80E7::Opcode80E7(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
+            Opcode80E7::Opcode80E7(std::shared_ptr<ILogger> logger) : OpcodeHandler(), _logger(logger)
             {
-                this->logger = std::move(logger);
+
             }
 
-            void Opcode80E7::_run()
+            void Opcode80E7::_run(VM::Script& script)
             {
-                logger->debug() << "[80E7] [=] int anim_busy(void* obj)" << std::endl;
-                _script->dataStack()->popObject();//auto object = (GameObject*)popDataPointer();
+                _logger->debug() << "[80E7] [=] int anim_busy(void* obj)" << std::endl;
+                script.dataStack()->popObject();//auto object = (GameObject*)popDataPointer();
                 //pushDataInteger(object->animationQueue()->enabled());
-                _script->dataStack()->push(1);
+                script.dataStack()->push(1);
 
             }
         }

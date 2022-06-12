@@ -16,21 +16,21 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            Opcode80CE::Opcode80CE(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
+            Opcode80CE::Opcode80CE(std::shared_ptr<ILogger> logger) : OpcodeHandler(), _logger(logger)
             {
-                this->logger = std::move(logger);
+
             }
 
             // TODO: handle ANIMATE_INTERRUPT
-            void Opcode80CE::_run()
+            void Opcode80CE::_run(VM::Script& script)
             {
-                logger->debug()
+                _logger->debug()
                     << "[80CE] [=] void animate_move_obj_to_tile(void* who, int tile, int speed)"
                     << std::endl
                 ;
-                int speed = _script->dataStack()->popInteger();
-                int tile = _script->dataStack()->popInteger();
-                auto object = _script->dataStack()->popObject();
+                int speed = script.dataStack()->popInteger();
+                int tile = script.dataStack()->popInteger();
+                auto object = script.dataStack()->popObject();
 
                 // ANIMATE_WALK      (0)
                 // ANIMATE_RUN       (1)
@@ -38,8 +38,8 @@ namespace Falltergeist
                 auto critter = dynamic_cast<Game::CritterObject *>(object);
                 auto state = Game::Game::getInstance()->locationState();
                 if (state) {
-                    auto tileObj = state->hexagonGrid()->at(tile);
-                    auto path = state->hexagonGrid()->findPath(object->hexagon(), tileObj);
+                    auto& tileObj = state->hexagonGrid()->at(tile);
+                    auto path = state->hexagonGrid()->findPath(object->hexagon(), tileObj.get());
                     if (path.size()) {
                         critter->stopMovement();
                         critter->setRunning((speed & 1) != 0);

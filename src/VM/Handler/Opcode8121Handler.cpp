@@ -16,19 +16,19 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            Opcode8121::Opcode8121(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
+            Opcode8121::Opcode8121(std::shared_ptr<ILogger> logger) : OpcodeHandler(), _logger(logger)
             {
-                this->logger = std::move(logger);
+
             }
 
-            void Opcode8121::_run()
+            void Opcode8121::_run(VM::Script& script)
             {
-                logger->debug()
+                _logger->debug()
                     << "[8121] [+] void giQ_Option(int iq_test, int msg_list, int msg_num, procedure target, int reaction)"
                     << std::endl
                 ;
 
-                auto dataStack = _script->dataStack();
+                auto dataStack = script.dataStack();
 
                 auto reaction = dataStack->popInteger();
                 auto function = dataStack->popInteger();
@@ -39,7 +39,7 @@ namespace Falltergeist
                 } else {
                     auto msg_num = dataStack->popInteger();
                     auto msg_file_num = dataStack->popInteger();
-                    text = _script->msgMessage(msg_file_num, msg_num);
+                    text = script.msgMessage(msg_file_num, msg_num);
                 }
                 auto iq = dataStack->popInteger();
                 auto game = Game::Game::getInstance();

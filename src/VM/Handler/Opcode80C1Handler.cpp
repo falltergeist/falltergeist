@@ -13,19 +13,19 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            Opcode80C1::Opcode80C1(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
+            Opcode80C1::Opcode80C1(std::shared_ptr<ILogger> logger) : OpcodeHandler(), _logger(logger)
             {
-                this->logger = std::move(logger);
+
             }
 
-            void Opcode80C1::_run()
+            void Opcode80C1::_run(VM::Script& script)
             {
-                logger->debug() << "[80C1] [*] LVAR[num]" << std::endl;
-                unsigned int num = _script->dataStack()->popInteger();
-                while (num >= _script->LVARS()->size()) {
-                    _script->LVARS()->push_back(StackValue(0));
+                _logger->debug() << "[80C1] [*] LVAR[num]" << std::endl;
+                unsigned int num = script.dataStack()->popInteger();
+                while (num >= script.LVARS()->size()) {
+                    script.LVARS()->push_back(StackValue(0));
                 }
-                _script->dataStack()->push(_script->LVARS()->at(num));
+                script.dataStack()->push(script.LVARS()->at(num));
             }
         }
     }

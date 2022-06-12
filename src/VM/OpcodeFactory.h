@@ -12,12 +12,10 @@ namespace Falltergeist
 {
     namespace VM
     {
-        class Script;
-
         class OpcodeFactory
         {
             public:
-                static std::unique_ptr<OpcodeHandler> createOpcode(unsigned int number, VM::Script *script);
+                static std::unique_ptr<OpcodeHandler> createOpcode(unsigned int number);
         };
     }
 }

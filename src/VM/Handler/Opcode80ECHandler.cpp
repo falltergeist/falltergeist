@@ -13,19 +13,19 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            Opcode80EC::Opcode80EC(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
+            Opcode80EC::Opcode80EC(std::shared_ptr<ILogger> logger) : OpcodeHandler(), _logger(logger)
             {
-                this->logger = std::move(logger);
+
             }
 
-            void Opcode80EC::_run()
+            void Opcode80EC::_run(VM::Script& script)
             {
-                logger->debug() << "[80EC] [=] int elevation(void* obj)" << std::endl;
-                auto object = _script->dataStack()->popObject();
+                _logger->debug() << "[80EC] [=] int elevation(void* obj)" << std::endl;
+                auto object = script.dataStack()->popObject();
                 if (!object) {
                     _error("elevation - object is NULL");
                 }
-                _script->dataStack()->push(object->elevation());
+                script.dataStack()->push(object->elevation());
             }
         }
     }

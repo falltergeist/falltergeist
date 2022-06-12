@@ -12,18 +12,18 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            Opcode80CF::Opcode80CF(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
+            Opcode80CF::Opcode80CF(std::shared_ptr<ILogger> logger) : OpcodeHandler(), _logger(logger)
             {
-                this->logger = std::move(logger);
+
             }
 
-            void Opcode80CF::_run()
+            void Opcode80CF::_run(VM::Script& script)
             {
-                logger->debug()
+                _logger->debug()
                     << "[80CF] [=] int tile_in_tile_rect(int tile1, int tile2, int tile3, int tile4, int tile)"
                     << std::endl
                 ;
-                auto dataStack = _script->dataStack();
+                auto dataStack = script.dataStack();
 
                 int targetHex = dataStack->popInteger();
                 int bottomRight = dataStack->popInteger();
@@ -43,7 +43,7 @@ namespace Falltergeist
 
                 bool in = (targetX <= upperLeftX && targetY >= upperLeftY && targetX >= bottomRightX &&
                            targetY <= bottomRightY);
-                _script->dataStack()->push(in);
+                script.dataStack()->push(in);
             }
         }
     }

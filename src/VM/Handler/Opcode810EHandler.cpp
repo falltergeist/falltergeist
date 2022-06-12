@@ -15,16 +15,16 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            Opcode810E::Opcode810E(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
+            Opcode810E::Opcode810E(std::shared_ptr<ILogger> logger) : OpcodeHandler(), _logger(logger)
             {
-                this->logger = std::move(logger);
+
             }
 
-            void Opcode810E::_run()
+            void Opcode810E::_run(VM::Script& script)
             {
-                logger->debug() << "[810E] [=] void reg_anim_func(int mode, int arg)" << std::endl;
-                auto arg = _script->dataStack()->pop(); // pointer or integer
-                auto p1 = _script->dataStack()->popInteger();
+                _logger->debug() << "[810E] [=] void reg_anim_func(int mode, int arg)" << std::endl;
+                auto arg = script.dataStack()->pop(); // pointer or integer
+                auto p1 = script.dataStack()->popInteger();
                 switch (p1) {
                     case 0x1: // ANIM_BEGIN
                     {

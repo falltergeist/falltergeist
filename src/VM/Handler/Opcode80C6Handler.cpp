@@ -14,17 +14,15 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            Opcode80C6::Opcode80C6(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
-            {
-                this->logger = std::move(logger);
+            Opcode80C6::Opcode80C6(std::shared_ptr<ILogger> logger) : OpcodeHandler(), _logger(logger) {
             }
 
-            void Opcode80C6::_run()
+            void Opcode80C6::_run(VM::Script& script)
             {
-                auto &debug = logger->debug();
+                auto &debug = _logger->debug();
                 debug << "[80C6] [+] GVAR[num] = value" << std::endl;
-                auto value = _script->dataStack()->popInteger();
-                auto num = _script->dataStack()->popInteger();
+                auto value = script.dataStack()->popInteger();
+                auto num = script.dataStack()->popInteger();
                 auto game = Game::Game::getInstance();
                 game->setGVAR(num, value);
                 debug << "    num = " << num << ", value = " << value << std::endl;

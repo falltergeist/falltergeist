@@ -14,19 +14,19 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            Opcode8016::Opcode8016(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
+            Opcode8016::Opcode8016(std::shared_ptr<ILogger> logger) : OpcodeHandler(), _logger(logger)
             {
-                this->logger = std::move(logger);
+
             }
 
-            void Opcode8016::_run()
+            void Opcode8016::_run(VM::Script& script)
             {
-                auto name = _script->dataStack()->popString();
+                auto name = script.dataStack()->popString();
                 auto EVARS = Game::Game::getInstance()->locationState()->EVARS();
                 if (EVARS->find(name) == EVARS->end()) {
                     EVARS->insert(std::make_pair(name, StackValue(0)));
                 }
-                logger->debug()
+                _logger->debug()
                     << "[8016] [*] op_export_var(name)" << std::endl
                     << "    name: " << name << std::endl
                 ;

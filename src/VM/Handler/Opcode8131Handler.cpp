@@ -14,15 +14,15 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            Opcode8131::Opcode8131(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
+            Opcode8131::Opcode8131(std::shared_ptr<ILogger> logger) : OpcodeHandler(), _logger(logger)
             {
-                this->logger = std::move(logger);
+
             }
 
-            void Opcode8131::_run()
+            void Opcode8131::_run(VM::Script& script)
             {
-                logger->debug() << "[8131] [+] void obj_open(GameDoorSceneryObject* object) " << std::endl;
-                auto object = _script->dataStack()->popObject();
+                _logger->debug() << "[8131] [+] void obj_open(GameDoorSceneryObject* object) " << std::endl;
+                auto object = script.dataStack()->popObject();
                 if (!object) {
                     _error("obj_open: object is NULL");
                 }

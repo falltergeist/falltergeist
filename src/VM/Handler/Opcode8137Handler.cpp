@@ -16,21 +16,22 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            Opcode8137::Opcode8137(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
+            Opcode8137::Opcode8137(std::shared_ptr<ILogger> logger) : OpcodeHandler(), _logger(logger)
             {
-                this->logger = std::move(logger);
+
             }
 
-            void Opcode8137::_run()
+            void Opcode8137::_run(VM::Script& script)
             {
-                int time = _script->dataStack()->popInteger(); // original engine ignores time
-                logger->debug()
+                int time = script.dataStack()->popInteger(); // original engine ignores time
+                _logger->debug()
                     << "[8137] [=] void gfade_in(int time)" << std::endl
                     << "    time = " << time << std::endl
                 ;
 
                 auto state = Game::Game::getInstance()->topState();
-                state->scriptFade(_script, true);
+                // TODO get rid of script dependency
+                state->scriptFade(&script, true);
                 throw HaltException();
             }
         }

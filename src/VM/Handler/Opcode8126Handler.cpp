@@ -14,18 +14,18 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            Opcode8126::Opcode8126(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
+            Opcode8126::Opcode8126(std::shared_ptr<ILogger> logger) : OpcodeHandler(), _logger(logger)
             {
-                this->logger = std::move(logger);
+
             }
 
-            void Opcode8126::_run()
+            void Opcode8126::_run(VM::Script& script)
             {
-                logger->debug()
+                _logger->debug()
                     << "[8126] [-] void reg_anim_animate_forever(GameObject* obj , int delay)"
                     << std::endl
                 ;
-                /* int delay = */ (void) _script->dataStack()->popInteger();
+                /* int delay = */ (void) script.dataStack()->popInteger();
                 /*
                 // delay - must be -1
                 if (delay != -1)
@@ -33,7 +33,7 @@ namespace Falltergeist
                     _error("Opcode8126Handler - delay must be -1");
                 }
                 */
-                auto object = _script->dataStack()->popObject();
+                auto object = script.dataStack()->popObject();
                 auto queue = object->ui<UI::AnimationQueue>();
                 if (queue) {
                     queue->stop();

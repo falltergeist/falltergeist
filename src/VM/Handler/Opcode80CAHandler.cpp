@@ -13,18 +13,18 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            Opcode80CA::Opcode80CA(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
+            Opcode80CA::Opcode80CA(std::shared_ptr<ILogger> logger) : OpcodeHandler(), _logger(logger)
             {
-                this->logger = std::move(logger);
+
             }
 
-            void Opcode80CA::_run()
+            void Opcode80CA::_run(VM::Script& script)
             {
-                auto &debug = logger->debug();
+                auto &debug = _logger->debug();
                 debug << "[80CA] [+] int value = get_critter_stat(GameCritterObject* who, int number)" << std::endl;
-                int number = _script->dataStack()->popInteger();
+                int number = script.dataStack()->popInteger();
                 debug << "    number = " << number << std::endl;
-                auto object = _script->dataStack()->popObject();
+                auto object = script.dataStack()->popObject();
                 if (!object) {
                     _error("get_critter_stat(who, stat) - who is NULL");
                 }
@@ -197,7 +197,7 @@ namespace Falltergeist
                         _error("VM::opcode80CA - unimplemented number:" + std::to_string(number));
                     }
                 }
-                _script->dataStack()->push(result);
+                script.dataStack()->push(result);
                 debug << "    value  = " << result << std::endl;
             }
         }

@@ -15,16 +15,16 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            Opcode8015::Opcode8015(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
+            Opcode8015::Opcode8015(std::shared_ptr<ILogger> logger) : OpcodeHandler(), _logger(logger)
             {
-                this->logger = std::move(logger);
+
             }
 
-            void Opcode8015::_run()
+            void Opcode8015::_run(VM::Script& script)
             {
-                logger->debug() << "[8015] [*] op_store_external(name, value)" << std::endl;
-                std::string name = _script->dataStack()->popString();
-                auto value = _script->dataStack()->pop();
+                _logger->debug() << "[8015] [*] op_store_external(name, value)" << std::endl;
+                std::string name = script.dataStack()->popString();
+                auto value = script.dataStack()->pop();
                 auto game = Game::Game::getInstance();
                 auto EVARS = game->locationState()->EVARS();
                 (*EVARS)[name] = value;

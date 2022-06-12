@@ -19,20 +19,20 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            Opcode80BB::Opcode80BB(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
+            Opcode80BB::Opcode80BB(std::shared_ptr<ILogger> logger) : OpcodeHandler(), _logger(logger)
             {
-                this->logger = std::move(logger);
+
             }
 
-            void Opcode80BB::_run()
+            void Opcode80BB::_run(VM::Script& script)
             {
-                logger->debug()
+                _logger->debug()
                     << "[80BB] [+] int tile_contains_obj_pid(int position, int elevation, int PID)"
                     << std::endl
                 ;
-                auto PID = _script->dataStack()->popInteger();
-                auto elevation = _script->dataStack()->popInteger();
-                auto position = _script->dataStack()->popInteger();
+                auto PID = script.dataStack()->popInteger();
+                auto elevation = script.dataStack()->popInteger();
+                auto position = script.dataStack()->popInteger();
                 auto game = Game::Game::getInstance();
                 int found = 0;
                 for (auto object : *game->locationState()->hexagonGrid()->at(position)->objects()) {
@@ -40,7 +40,7 @@ namespace Falltergeist
                         found = 1;
                     }
                 }
-                _script->dataStack()->push(found);
+                script.dataStack()->push(found);
             }
         }
     }

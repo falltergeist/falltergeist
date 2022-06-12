@@ -12,20 +12,20 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            Opcode80E5::Opcode80E5(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
+            Opcode80E5::Opcode80E5(std::shared_ptr<ILogger> logger) : OpcodeHandler(), _logger(logger)
             {
-                this->logger = std::move(logger);
+
             }
 
-            void Opcode80E5::_run()
+            void Opcode80E5::_run(VM::Script& script)
             {
-                logger->debug()
+                _logger->debug()
                     << "[80E5] [=] void wm_area_set_pos(int areaIdx, int xPos, int yPos)"
                     << std::endl
                 ;
-                _script->dataStack()->popInteger();
-                _script->dataStack()->popInteger();
-                _script->dataStack()->popInteger();
+                script.dataStack()->popInteger();
+                script.dataStack()->popInteger();
+                script.dataStack()->popInteger();
             }
         }
     }

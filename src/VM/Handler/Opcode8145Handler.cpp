@@ -13,23 +13,23 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            Opcode8145::Opcode8145(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
+            Opcode8145::Opcode8145(std::shared_ptr<ILogger> logger) : OpcodeHandler(), _logger(logger)
             {
-                this->logger = std::move(logger);
+
             }
 
-            void Opcode8145::_run()
+            void Opcode8145::_run(VM::Script& script)
             {
-                logger->debug() << "[8145] [=] void use_obj_on_obj(void* item, void* target)" << std::endl;
-                auto selfCritter = dynamic_cast<Game::CritterObject *>(_script->owner());
+                _logger->debug() << "[8145] [=] void use_obj_on_obj(void* item, void* target)" << std::endl;
+                auto selfCritter = dynamic_cast<Game::CritterObject *>(script.owner());
                 if (!selfCritter) {
                     _error("use_obj_on_obj: owner is not a critter!");
                 }
-                auto target = _script->dataStack()->popObject();
+                auto target = script.dataStack()->popObject();
                 if (!target) {
                     _error("use_obj_on_obj: target is null");
                 }
-                auto item = _script->dataStack()->popObject();
+                auto item = script.dataStack()->popObject();
                 if (!item) {
                     _error("use_obj_on_obj: item is null");
                 }

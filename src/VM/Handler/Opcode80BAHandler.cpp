@@ -14,16 +14,16 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            Opcode80BA::Opcode80BA(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
+            Opcode80BA::Opcode80BA(std::shared_ptr<ILogger> logger) : OpcodeHandler(), _logger(logger)
             {
-                this->logger = std::move(logger);
+
             }
 
-            void Opcode80BA::_run()
+            void Opcode80BA::_run(VM::Script& script)
             {
-                logger->debug() << "[80BA] [+] int obj_is_carrying_obj_pid(GameObject* object, int PID)" << std::endl;
-                auto PID = _script->dataStack()->popInteger();
-                auto object = _script->dataStack()->popObject();
+                _logger->debug() << "[80BA] [+] int obj_is_carrying_obj_pid(GameObject* object, int PID)" << std::endl;
+                auto PID = script.dataStack()->popInteger();
+                auto object = script.dataStack()->popObject();
 
                 int amount = 0;
                 auto critter = dynamic_cast<Game::CritterObject *>(object);
@@ -43,7 +43,7 @@ namespace Falltergeist
                 } else {
                     _error("obj_is_carrying_obj_pid - invalid object type");
                 }
-                _script->dataStack()->push(amount);
+                script.dataStack()->push(amount);
             }
         }
     }

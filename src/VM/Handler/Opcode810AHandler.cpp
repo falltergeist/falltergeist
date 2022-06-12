@@ -17,15 +17,15 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            Opcode810A::Opcode810A(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
+            Opcode810A::Opcode810A(std::shared_ptr<ILogger> logger) : OpcodeHandler(), _logger(logger)
             {
-                this->logger = std::move(logger);
+
             }
 
-            void Opcode810A::_run()
+            void Opcode810A::_run(VM::Script& script)
             {
-                logger->debug() << "[810A] [=] void float_msg(object who, string msg, int type) " << std::endl;
-                int type = _script->dataStack()->popInteger();
+                _logger->debug() << "[810A] [=] void float_msg(object who, string msg, int type) " << std::endl;
+                int type = script.dataStack()->popInteger();
                 Graphics::Color color = {0x00, 0x00, 0x00, 0xff};
                 switch (type) {
                     case -2:
@@ -74,8 +74,8 @@ namespace Falltergeist
                         _error("float_msg - wrong type: " + std::to_string(type));
                 }
 
-                auto string = _script->dataStack()->popString();
-                auto object = _script->dataStack()->popObject();
+                auto string = script.dataStack()->popString();
+                auto object = script.dataStack()->popObject();
 
                 auto floatMessage = std::make_unique<UI::TextArea>(string);
                 floatMessage->setWidth(200);

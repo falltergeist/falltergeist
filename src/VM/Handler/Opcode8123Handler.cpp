@@ -13,17 +13,17 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            Opcode8123::Opcode8123(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
+            Opcode8123::Opcode8123(std::shared_ptr<ILogger> logger) : OpcodeHandler(), _logger(logger)
             {
-                this->logger = std::move(logger);
+
             }
 
-            void Opcode8123::_run()
+            void Opcode8123::_run(VM::Script& script)
             {
-                auto critter = dynamic_cast<Game::CritterObject *>(_script->dataStack()->popObject());
+                auto critter = dynamic_cast<Game::CritterObject *>(script.dataStack()->popObject());
                 auto value = critter->poisonLevel();
-                _script->dataStack()->push(value);
-                logger->debug()
+                script.dataStack()->push(value);
+                _logger->debug()
                     << "[8123] [+] int value = GetPoison(GameCritterObject* critter)" << std::endl
                     << "    value = " << value << std::endl
                 ;

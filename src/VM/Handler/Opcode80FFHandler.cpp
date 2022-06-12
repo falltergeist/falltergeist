@@ -19,27 +19,27 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            Opcode80FF::Opcode80FF(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
+            Opcode80FF::Opcode80FF(std::shared_ptr<ILogger> logger) : OpcodeHandler(), _logger(logger)
             {
-                this->logger = std::move(logger);
+
             }
 
-            void Opcode80FF::_run()
+            void Opcode80FF::_run(VM::Script& script)
             {
-                logger->debug()
+                _logger->debug()
                     << "[80FF] [*] int critter_attempt_placement(GameCritterObject* critter, int position, int elevation)"
                     << std::endl
                 ;
-                auto elevation = _script->dataStack()->popInteger();
-                auto position = _script->dataStack()->popInteger();
-                auto critter = static_cast<Game::CritterObject *>(_script->dataStack()->popObject());
+                auto elevation = script.dataStack()->popInteger();
+                auto position = script.dataStack()->popInteger();
+                auto critter = static_cast<Game::CritterObject *>(script.dataStack()->popObject());
                 if (!critter) {
                     _error("critter_attempt_placement - invalid critter pointer");
                 }
-                auto hexagon = Game::Game::getInstance()->locationState()->hexagonGrid()->at(position);
-                Game::Game::getInstance()->locationState()->moveObjectToHexagon(critter, hexagon);
+                auto& hexagon = Game::Game::getInstance()->locationState()->hexagonGrid()->at(position);
+                Game::Game::getInstance()->locationState()->moveObjectToHexagon(critter, hexagon.get());
                 critter->setElevation(elevation);
-                _script->dataStack()->push(1);
+                script.dataStack()->push(1);
             }
         }
     }

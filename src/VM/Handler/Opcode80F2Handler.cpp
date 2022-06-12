@@ -12,17 +12,17 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            Opcode80F2::Opcode80F2(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
+            Opcode80F2::Opcode80F2(std::shared_ptr<ILogger> logger) : OpcodeHandler(), _logger(logger)
             {
-                this->logger = std::move(logger);
+
             }
 
-            void Opcode80F2::_run()
+            void Opcode80F2::_run(VM::Script& script)
             {
-                logger->debug() << "[80F2] [=] int game_ticks(int seconds)" << std::endl;
-                auto seconds = _script->dataStack()->popInteger();
+                _logger->debug() << "[80F2] [=] int game_ticks(int seconds)" << std::endl;
+                auto seconds = script.dataStack()->popInteger();
                 // one second equals 10 game ticks
-                _script->dataStack()->push(seconds * 10);
+                script.dataStack()->push(seconds * 10);
             }
         }
     }

@@ -23,9 +23,10 @@ namespace Falltergeist
                     virtual ~Item() {}
 
                     Item& setFilename(const std::string& filename);
-                    std::string filename();
 
-                protected:
+                    const std::string& filename() const;
+
+                private:
                     std::string _filename;
             };
         }

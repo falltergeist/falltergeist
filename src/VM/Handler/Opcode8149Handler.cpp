@@ -13,17 +13,17 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            Opcode8149::Opcode8149(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
+            Opcode8149::Opcode8149(std::shared_ptr<ILogger> logger) : OpcodeHandler(), _logger(logger)
             {
-                this->logger = std::move(logger);
+
             }
 
-            void Opcode8149::_run()
+            void Opcode8149::_run(VM::Script& script)
             {
                 // TODO: should it return FID of current animation?
-                logger->debug() << "[8149] [+] int obj_art_fid(void* obj)" << std::endl;
-                auto object = _script->dataStack()->popObject();
-                _script->dataStack()->push(object->FID());
+                _logger->debug() << "[8149] [+] int obj_art_fid(void* obj)" << std::endl;
+                auto object = script.dataStack()->popObject();
+                script.dataStack()->push(object->FID());
             }
         }
     }

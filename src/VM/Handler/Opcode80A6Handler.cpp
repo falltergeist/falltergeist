@@ -12,16 +12,14 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            Opcode80A6::Opcode80A6(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
-            {
-                this->logger = std::move(logger);
+            Opcode80A6::Opcode80A6(std::shared_ptr<ILogger> logger) : OpcodeHandler(), _logger(logger) {
             }
 
-            void Opcode80A6::_run()
+            void Opcode80A6::_run(VM::Script& script)
             {
-                logger->debug() << "[80A6] [=] int SkillPoints(int PCStatNum)" << std::endl;
-                _script->dataStack()->popInteger();
-                _script->dataStack()->push(0);
+                _logger->debug() << "[80A6] [=] int SkillPoints(int PCStatNum)" << std::endl;
+                script.dataStack()->popInteger();
+                script.dataStack()->push(0);
             }
         }
     }

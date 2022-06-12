@@ -14,18 +14,18 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            Opcode80E9::Opcode80E9(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
+            Opcode80E9::Opcode80E9(std::shared_ptr<ILogger> logger) : OpcodeHandler(), _logger(logger)
             {
-                this->logger = std::move(logger);
+
             }
 
-            void Opcode80E9::_run()
+            void Opcode80E9::_run(VM::Script& script)
             {
-                logger->debug() << "[80E9] [*] void set_light_level(int level)" << std::endl;
-                auto level = _script->dataStack()->popInteger();
+                _logger->debug() << "[80E9] [*] void set_light_level(int level)" << std::endl;
+                auto level = script.dataStack()->popInteger();
 
                 if (level > 100 || level < 0) {
-                    _warning("set_light_level: level should be 0-100");
+                    _warning(script, "set_light_level: level should be 0-100");
                     return;
                 }
 

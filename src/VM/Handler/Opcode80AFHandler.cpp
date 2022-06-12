@@ -12,23 +12,23 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            Opcode80AF::Opcode80AF(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
+            Opcode80AF::Opcode80AF(std::shared_ptr<ILogger> logger) : OpcodeHandler(), _logger(logger)
             {
-                this->logger = std::move(logger);
+
             }
 
-            void Opcode80AF::_run()
+            void Opcode80AF::_run(VM::Script& script)
             {
-                logger->debug() << "[80AF] [*] int is_success(int val)" << std::endl;
-                auto value = _script->dataStack()->popInteger();
+                _logger->debug() << "[80AF] [*] int is_success(int val)" << std::endl;
+                auto value = script.dataStack()->popInteger();
                 switch (value) {
                     case 0:
                     case 1:
-                        _script->dataStack()->push(0);
+                        script.dataStack()->push(0);
                         break;
                     case 2:
                     case 3:
-                        _script->dataStack()->push(1);
+                        script.dataStack()->push(1);
                         break;
                     default:
                         _error("is_success - wrong argument: " + std::to_string(value));

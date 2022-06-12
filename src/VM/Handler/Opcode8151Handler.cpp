@@ -12,16 +12,16 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            Opcode8151::Opcode8151(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
+            Opcode8151::Opcode8151(std::shared_ptr<ILogger> logger) : OpcodeHandler(), _logger(logger)
             {
-                this->logger = std::move(logger);
+
             }
 
-            void Opcode8151::_run()
+            void Opcode8151::_run(VM::Script& script)
             {
-                logger->debug() << "[8151] [=] int critter_is_fleeing(void* who)" << std::endl;
-                _script->dataStack()->popObject();
-                _script->dataStack()->push(0);
+                _logger->debug() << "[8151] [=] int critter_is_fleeing(void* who)" << std::endl;
+                script.dataStack()->popObject();
+                script.dataStack()->push(0);
             }
         }
     }

@@ -12,23 +12,23 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            Opcode802F::Opcode802F(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
+            Opcode802F::Opcode802F(std::shared_ptr<ILogger> logger) : OpcodeHandler(), _logger(logger)
             {
-                this->logger = std::move(logger);
+
             }
 
-            void Opcode802F::_run()
+            void Opcode802F::_run(VM::Script& script)
             {
-                auto condition = _script->dataStack()->popLogical();
-                auto address = _script->dataStack()->popInteger();
-                logger->debug()
+                auto condition = script.dataStack()->popLogical();
+                auto address = script.dataStack()->popInteger();
+                _logger->debug()
                     << "[802F] [*] op_if(address, condition) " << std::hex
-                    << _script->programCounter() << std::endl
+                    << script.programCounter() << std::endl
                     << "    address = " << std::hex << address << std::endl
                     << "    condition = " << std::dec << condition << std::endl
                 ;
                 if (!condition) {
-                    _script->setProgramCounter(address);
+                    script.setProgramCounter(address);
                 }
             }
         }

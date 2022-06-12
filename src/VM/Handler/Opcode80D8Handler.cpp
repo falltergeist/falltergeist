@@ -16,16 +16,16 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            Opcode80D8::Opcode80D8(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
+            Opcode80D8::Opcode80D8(std::shared_ptr<ILogger> logger) : OpcodeHandler(), _logger(logger)
             {
-                this->logger = std::move(logger);
+
             }
 
-            void Opcode80D8::_run()
+            void Opcode80D8::_run(VM::Script& script)
             {
-                logger->debug() << "[80D8] [=] void add_obj_to_inven(void* who, void* item)" << std::endl;
-                auto item = dynamic_cast<Game::ItemObject *>(_script->dataStack()->popObject());
-                auto invenObj = _script->dataStack()->popObject();
+                _logger->debug() << "[80D8] [=] void add_obj_to_inven(void* who, void* item)" << std::endl;
+                auto item = dynamic_cast<Game::ItemObject *>(script.dataStack()->popObject());
+                auto invenObj = script.dataStack()->popObject();
 
                 if (!item) {
                     _error("add_obj_to_inven - item not instanceof GameItemObject");

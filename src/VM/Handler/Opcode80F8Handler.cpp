@@ -20,20 +20,20 @@ namespace Falltergeist
         {
             using Point = Graphics::Point;
 
-            Opcode80F8::Opcode80F8(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
+            Opcode80F8::Opcode80F8(std::shared_ptr<ILogger> logger) : OpcodeHandler(), _logger(logger)
             {
-                this->logger = std::move(logger);
+
             }
 
-            void Opcode80F8::_run()
+            void Opcode80F8::_run(VM::Script& script)
             {
-                logger->debug() << "[80F8] [=] bool tile_is_visible (int hex)" << std::endl;
-                int hexnum = _script->dataStack()->popInteger();
-                auto hex = Game::Game::getInstance()->locationState()->hexagonGrid()->at(hexnum);
+                _logger->debug() << "[80F8] [=] bool tile_is_visible (int hex)" << std::endl;
+                int hexnum = script.dataStack()->popInteger();
+                auto& hex = Game::Game::getInstance()->locationState()->hexagonGrid()->at(hexnum);
                 bool inrect = Graphics::Rect::inRect(
                         Point(hex->position() - Game::Game::getInstance()->locationState()->camera()->topLeft()),
                         Game::Game::getInstance()->locationState()->camera()->size());
-                _script->dataStack()->push(inrect);
+                script.dataStack()->push(inrect);
             }
         }
     }

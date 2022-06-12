@@ -15,7 +15,7 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            class OpcodeComparison : public OpcodeHandler
+            class OpcodeComparison final : public OpcodeHandler
             {
                 public:
                     enum class Type {
@@ -27,13 +27,14 @@ namespace Falltergeist
                         GREATER_EQUAL
                     };
 
-                    OpcodeComparison(VM::Script *script, Type cmpType, std::shared_ptr<ILogger> logger);
+                    OpcodeComparison(Type cmpType, std::shared_ptr<ILogger> logger);
 
                 private:
-                    std::shared_ptr<ILogger> logger;
+                    std::shared_ptr<ILogger> _logger;
+
                     Type _cmpType;
 
-                    void _run();
+                    void _run(VM::Script& script) override;
 
                     const char *_cmpOpcodeName();
 

@@ -194,409 +194,403 @@ namespace Falltergeist
 {
     namespace VM
     {
-        std::unique_ptr<OpcodeHandler> OpcodeFactory::createOpcode(unsigned int number, VM::Script *script)
+        std::unique_ptr<OpcodeHandler> OpcodeFactory::createOpcode(unsigned int number)
         {
             auto logger = std::make_shared<Logger>();
             auto game = Game::Game::getInstance();
 
             switch (number) {
                 case 0x8000:
-                    return std::make_unique<OpcodeHandler>(script); // O_NOOP
+                    return std::make_unique<OpcodeHandler>(); // O_NOOP
                 case 0x8002:
-                    return std::make_unique<Handler::Opcode8002>(script, logger);
+                    return std::make_unique<Handler::Opcode8002>(logger);
                 case 0x8003:
-                    return std::make_unique<Handler::Opcode8003>(script, logger);
+                    return std::make_unique<Handler::Opcode8003>(logger);
                 case 0x8004:
-                    return std::make_unique<Handler::Opcode8004>(script, logger);
+                    return std::make_unique<Handler::Opcode8004>(logger);
                 case 0x8005:
-                    return std::make_unique<Handler::Opcode8005>(script, logger);
+                    return std::make_unique<Handler::Opcode8005>(logger);
                 case 0x800C:
-                    return std::make_unique<Handler::Opcode800C>(script, logger);
+                    return std::make_unique<Handler::Opcode800C>(logger);
                 case 0x800D:
-                    return std::make_unique<Handler::Opcode800D>(script, logger);
+                    return std::make_unique<Handler::Opcode800D>(logger);
                 case 0x8010:
-                    return std::make_unique<Handler::Opcode8010>(script, logger);
+                    return std::make_unique<Handler::Opcode8010>(logger);
                 case 0x8012:
-                    return std::make_unique<Handler::Opcode8012>(script, logger);
+                    return std::make_unique<Handler::Opcode8012>(logger);
                 case 0x8013:
-                    return std::make_unique<Handler::Opcode8013>(script, logger);
+                    return std::make_unique<Handler::Opcode8013>(logger);
                 case 0x8014:
-                    return std::make_unique<Handler::Opcode8014>(script, logger);
+                    return std::make_unique<Handler::Opcode8014>(logger);
                 case 0x8015:
-                    return std::make_unique<Handler::Opcode8015>(script, logger);
+                    return std::make_unique<Handler::Opcode8015>(logger);
                 case 0x8016:
-                    return std::make_unique<Handler::Opcode8016>(script, logger);
+                    return std::make_unique<Handler::Opcode8016>(logger);
                 case 0x8018:
-                    return std::make_unique<Handler::Opcode8018>(script, logger);
+                    return std::make_unique<Handler::Opcode8018>(logger);
                 case 0x8019:
-                    return std::make_unique<Handler::Opcode8019>(script, logger);
+                    return std::make_unique<Handler::Opcode8019>(logger);
                 case 0x801A:
-                    return std::make_unique<Handler::Opcode801A>(script, logger);
+                    return std::make_unique<Handler::Opcode801A>(logger);
                 case 0x801B:
-                    return std::make_unique<Handler::Opcode801B>(script, logger);
+                    return std::make_unique<Handler::Opcode801B>(logger);
                 case 0x801C:
-                    return std::make_unique<Handler::Opcode801C>(script, logger);
+                    return std::make_unique<Handler::Opcode801C>(logger);
                 case 0x8027:
-                    return std::make_unique<Handler::Opcode8027>(script, logger);
+                    return std::make_unique<Handler::Opcode8027>(logger);
                 case 0x8028:
-                    return std::make_unique<Handler::Opcode8028>(script, logger);
+                    return std::make_unique<Handler::Opcode8028>(logger);
                 case 0x8029:
-                    return std::make_unique<Handler::Opcode8029>(script, logger);
+                    return std::make_unique<Handler::Opcode8029>(logger);
                 case 0x802A:
-                    return std::make_unique<Handler::Opcode802A>(script, logger);
+                    return std::make_unique<Handler::Opcode802A>(logger);
                 case 0x802B:
-                    return std::make_unique<Handler::Opcode802B>(script, logger);
+                    return std::make_unique<Handler::Opcode802B>(logger);
                 case 0x802C:
-                    return std::make_unique<Handler::Opcode802C>(script, logger);
+                    return std::make_unique<Handler::Opcode802C>(logger);
                 case 0x802F:
-                    return std::make_unique<Handler::Opcode802F>(script, logger);
+                    return std::make_unique<Handler::Opcode802F>(logger);
                 case 0x8030:
-                    return std::make_unique<Handler::Opcode8030>(script, logger);
+                    return std::make_unique<Handler::Opcode8030>(logger);
                 case 0x8031:
-                    return std::make_unique<Handler::Opcode8031>(script, logger);
+                    return std::make_unique<Handler::Opcode8031>(logger);
                 case 0x8032:
-                    return std::make_unique<Handler::Opcode8032>(script, logger);
+                    return std::make_unique<Handler::Opcode8032>(logger);
                 case 0x8033:
                     return std::make_unique<Handler::OpcodeComparison>(
-                        script,
                         Handler::OpcodeComparison::Type::EQUAL,
                         logger
                     );
                 case 0x8034:
                     return std::make_unique<Handler::OpcodeComparison>(
-                        script,
                        Handler::OpcodeComparison::Type::NOT_EQUAL,
                        logger
                    );
                 case 0x8035:
                     return std::make_unique<Handler::OpcodeComparison>(
-                        script,
                         Handler::OpcodeComparison::Type::LESS_EQUAL,
                         logger
                     );
                 case 0x8036:
                     return std::make_unique<Handler::OpcodeComparison>(
-                        script,
                         Handler::OpcodeComparison::Type::GREATER_EQUAL,
                         logger
                     );
                 case 0x8037:
                     return std::make_unique<Handler::OpcodeComparison>(
-                        script,
                         Handler::OpcodeComparison::Type::LESS,
                         logger
                     );
                 case 0x8038:
                     return std::make_unique<Handler::OpcodeComparison>(
-                        script,
                         Handler::OpcodeComparison::Type::GREATER,
                         logger
                     );
                 case 0x8039:
-                    return std::make_unique<Handler::Opcode8039>(script, logger);
+                    return std::make_unique<Handler::Opcode8039>(logger);
                 case 0x803A:
-                    return std::make_unique<Handler::Opcode803A>(script, logger);
+                    return std::make_unique<Handler::Opcode803A>(logger);
                 case 0x803B:
-                    return std::make_unique<Handler::Opcode803B>(script, logger);
+                    return std::make_unique<Handler::Opcode803B>(logger);
                 case 0x803C:
-                    return std::make_unique<Handler::Opcode803C>(script, logger);
+                    return std::make_unique<Handler::Opcode803C>(logger);
                 case 0x803D:
-                    return std::make_unique<Handler::Opcode803D>(script, logger);
+                    return std::make_unique<Handler::Opcode803D>(logger);
                 case 0x803E:
-                    return std::make_unique<Handler::Opcode803E>(script, logger);
+                    return std::make_unique<Handler::Opcode803E>(logger);
                 case 0x803F:
-                    return std::make_unique<Handler::Opcode803F>(script, logger);
+                    return std::make_unique<Handler::Opcode803F>(logger);
                 case 0x8040:
-                    return std::make_unique<Handler::Opcode8040>(script, logger);
+                    return std::make_unique<Handler::Opcode8040>(logger);
                 case 0x8041:
-                    return std::make_unique<Handler::Opcode8041>(script, logger);
+                    return std::make_unique<Handler::Opcode8041>(logger);
                 case 0x8042:
-                    return std::make_unique<Handler::Opcode8042>(script, logger); // bwxor
+                    return std::make_unique<Handler::Opcode8042>(logger); // bwxor
                 case 0x8043:
-                    return std::make_unique<Handler::Opcode8043>(script, logger); // bwnot
+                    return std::make_unique<Handler::Opcode8043>(logger); // bwnot
                 case 0x8044:
-                    return std::make_unique<Handler::Opcode8044>(script, logger);
+                    return std::make_unique<Handler::Opcode8044>(logger);
                 case 0x8045:
-                    return std::make_unique<Handler::Opcode8045>(script, logger);
+                    return std::make_unique<Handler::Opcode8045>(logger);
                 case 0x8046:
-                    return std::make_unique<Handler::Opcode8046>(script, logger);
+                    return std::make_unique<Handler::Opcode8046>(logger);
                 case 0x80A1:
-                    return std::make_unique<Handler::Opcode80A1>(script, logger);
+                    return std::make_unique<Handler::Opcode80A1>(logger);
                 case 0x80A3:
-                    return std::make_unique<Handler::Opcode80A3>(script, logger);
+                    return std::make_unique<Handler::Opcode80A3>(logger);
                 case 0x80A4:
-                    return std::make_unique<Handler::Opcode80A4>(script, logger);
+                    return std::make_unique<Handler::Opcode80A4>(logger);
                 case 0x80A6:
-                    return std::make_unique<Handler::Opcode80A6>(script, logger);
+                    return std::make_unique<Handler::Opcode80A6>(logger);
                 case 0x80A7:
-                    return std::make_unique<Handler::Opcode80A7>(script, logger);
+                    return std::make_unique<Handler::Opcode80A7>(logger);
                 case 0x80A8:
-                    return std::make_unique<Handler::Opcode80A8>(script, logger);
+                    return std::make_unique<Handler::Opcode80A8>(logger);
                 case 0x80A9:
-                    return std::make_unique<Handler::Opcode80A9>(script, logger);
+                    return std::make_unique<Handler::Opcode80A9>(logger);
                 case 0x80AA:
-                    return std::make_unique<Handler::Opcode80AA>(script, logger);
+                    return std::make_unique<Handler::Opcode80AA>(logger);
                 case 0x80AB:
-                    return std::make_unique<Handler::Opcode80AB>(script, logger);
+                    return std::make_unique<Handler::Opcode80AB>(logger);
                 case 0x80AC:
-                    return std::make_unique<Handler::Opcode80AC>(script, logger);
+                    return std::make_unique<Handler::Opcode80AC>(logger);
                 case 0x80AE:
-                    return std::make_unique<Handler::Opcode80AE>(script, logger);
+                    return std::make_unique<Handler::Opcode80AE>(logger);
                 case 0x80AF:
-                    return std::make_unique<Handler::Opcode80AF>(script, logger);
+                    return std::make_unique<Handler::Opcode80AF>(logger);
                 case 0x80B0:
-                    return std::make_unique<Handler::Opcode80B0>(script, logger);
+                    return std::make_unique<Handler::Opcode80B0>(logger);
                 case 0x80B2:
-                    return std::make_unique<Handler::Opcode80B2>(script, logger);
+                    return std::make_unique<Handler::Opcode80B2>(logger);
                 case 0x80B4:
-                    return std::make_unique<Handler::Opcode80B4>(script, logger);
+                    return std::make_unique<Handler::Opcode80B4>(logger);
                 case 0x80B6:
-                    return std::make_unique<Handler::Opcode80B6>(script, logger);
+                    return std::make_unique<Handler::Opcode80B6>(logger);
                 case 0x80B7:
-                    return std::make_unique<Handler::Opcode80B7>(script, logger);
+                    return std::make_unique<Handler::Opcode80B7>(logger);
                 case 0x80B8:
-                    return std::make_unique<Handler::Opcode80B8>(script, logger);
+                    return std::make_unique<Handler::Opcode80B8>(logger);
                 case 0x80B9:
-                    return std::make_unique<Handler::Opcode80B9>(script, logger);
+                    return std::make_unique<Handler::Opcode80B9>(logger);
                 case 0x80BA:
-                    return std::make_unique<Handler::Opcode80BA>(script, logger);
+                    return std::make_unique<Handler::Opcode80BA>(logger);
                 case 0x80BB:
-                    return std::make_unique<Handler::Opcode80BB>(script, logger);
+                    return std::make_unique<Handler::Opcode80BB>(logger);
                 case 0x80BC:
-                    return std::make_unique<Handler::Opcode80BC>(script, logger); // self_obj
+                    return std::make_unique<Handler::Opcode80BC>(logger); // self_obj
                 case 0x80BD:
-                    return std::make_unique<Handler::Opcode80BD>(script, logger); // source_obj
+                    return std::make_unique<Handler::Opcode80BD>(logger); // source_obj
                 case 0x80BE:
-                    return std::make_unique<Handler::Opcode80BE>(script, logger); // target_obj
+                    return std::make_unique<Handler::Opcode80BE>(logger); // target_obj
                 case 0x80BF:
-                    return std::make_unique<Handler::Opcode80BF>(script, logger); // dude_obj
+                    return std::make_unique<Handler::Opcode80BF>(logger); // dude_obj
                 case 0x80C0:
                     // obj_being_used_with - uses the same code as target_obj in original
-                    return std::make_unique<Handler::Opcode80BE>(script, logger);
+                    return std::make_unique<Handler::Opcode80BE>(logger);
                 case 0x80C1:
-                    return std::make_unique<Handler::Opcode80C1>(script, logger);
+                    return std::make_unique<Handler::Opcode80C1>(logger);
                 case 0x80C2:
-                    return std::make_unique<Handler::Opcode80C2>(script, logger);
+                    return std::make_unique<Handler::Opcode80C2>(logger);
                 case 0x80C3:
-                    return std::make_unique<Handler::Opcode80C3>(script, logger);
+                    return std::make_unique<Handler::Opcode80C3>(logger);
                 case 0x80C4:
-                    return std::make_unique<Handler::Opcode80C4>(script, logger);
+                    return std::make_unique<Handler::Opcode80C4>(logger);
                 case 0x80C5:
-                    return std::make_unique<Handler::Opcode80C5>(script, logger);
+                    return std::make_unique<Handler::Opcode80C5>(logger);
                 case 0x80C6:
-                    return std::make_unique<Handler::Opcode80C6>(script, logger);
+                    return std::make_unique<Handler::Opcode80C6>(logger);
                 case 0x80C7:
-                    return std::make_unique<Handler::Opcode80C7>(script, logger);
+                    return std::make_unique<Handler::Opcode80C7>(logger);
                 case 0x80C8:
-                    return std::make_unique<Handler::Opcode80C8>(script, logger);
+                    return std::make_unique<Handler::Opcode80C8>(logger);
                 case 0x80C9:
-                    return std::make_unique<Handler::Opcode80C9>(script, logger);
+                    return std::make_unique<Handler::Opcode80C9>(logger);
                 case 0x80CA:
-                    return std::make_unique<Handler::Opcode80CA>(script, logger);
+                    return std::make_unique<Handler::Opcode80CA>(logger);
                 case 0x80CB:
-                    return std::make_unique<Handler::Opcode80CB>(script, logger);
+                    return std::make_unique<Handler::Opcode80CB>(logger);
                 case 0x80CC:
-                    return std::make_unique<Handler::Opcode80CC>(script, logger);
+                    return std::make_unique<Handler::Opcode80CC>(logger);
                 case 0x80CD:
-                    return std::make_unique<Handler::Opcode80CD>(script, logger);
+                    return std::make_unique<Handler::Opcode80CD>(logger);
                 case 0x80CE:
-                    return std::make_unique<Handler::Opcode80CE>(script, logger);
+                    return std::make_unique<Handler::Opcode80CE>(logger);
                 case 0x80CF:
-                    return std::make_unique<Handler::Opcode80CF>(script, logger);
+                    return std::make_unique<Handler::Opcode80CF>(logger);
                 case 0x80D0:
-                    return std::make_unique<Handler::Opcode80D0>(script, logger);
+                    return std::make_unique<Handler::Opcode80D0>(logger);
                 case 0x80D2:
-                    return std::make_unique<Handler::Opcode80D2>(script, logger);
+                    return std::make_unique<Handler::Opcode80D2>(logger);
                 case 0x80D3:
-                    return std::make_unique<Handler::Opcode80D3>(script, logger);
+                    return std::make_unique<Handler::Opcode80D3>(logger);
                 case 0x80D4:
-                    return std::make_unique<Handler::Opcode80D4>(script, logger);
+                    return std::make_unique<Handler::Opcode80D4>(logger);
                 case 0x80D5:
-                    return std::make_unique<Handler::Opcode80D5>(script, logger);
+                    return std::make_unique<Handler::Opcode80D5>(logger);
                 case 0x80D8:
-                    return std::make_unique<Handler::Opcode80D8>(script, logger);
+                    return std::make_unique<Handler::Opcode80D8>(logger);
                 case 0x80D9:
-                    return std::make_unique<Handler::Opcode80D9>(script, logger);
+                    return std::make_unique<Handler::Opcode80D9>(logger);
                 case 0x80DA:
-                    return std::make_unique<Handler::Opcode80DA>(script, logger);
+                    return std::make_unique<Handler::Opcode80DA>(logger);
                 case 0x80DC:
-                    return std::make_unique<Handler::Opcode80DC>(script, logger);
+                    return std::make_unique<Handler::Opcode80DC>(logger);
                 case 0x80DE:
-                    return std::make_unique<Handler::Opcode80DE>(script, logger);
+                    return std::make_unique<Handler::Opcode80DE>(logger);
                 case 0x80DF:
-                    return std::make_unique<Handler::Opcode80DF>(script, logger);
+                    return std::make_unique<Handler::Opcode80DF>(logger);
                 case 0x80E1:
-                    return std::make_unique<Handler::Opcode80E1>(script, logger);
+                    return std::make_unique<Handler::Opcode80E1>(logger);
                 case 0x80E3:
-                    return std::make_unique<Handler::Opcode80E3>(script, logger);
+                    return std::make_unique<Handler::Opcode80E3>(logger);
                 case 0x80E4:
-                    return std::make_unique<Handler::Opcode80E4>(script, logger);
+                    return std::make_unique<Handler::Opcode80E4>(logger);
                 case 0x80E5:
-                    return std::make_unique<Handler::Opcode80E6>(script, logger);
+                    return std::make_unique<Handler::Opcode80E6>(logger);
                 case 0x80E6:
-                    return std::make_unique<Handler::Opcode80E5>(script, logger);
+                    return std::make_unique<Handler::Opcode80E5>(logger);
                 case 0x80E7:
-                    return std::make_unique<Handler::Opcode80E7>(script, logger);
+                    return std::make_unique<Handler::Opcode80E7>(logger);
                 case 0x80E8:
-                    return std::make_unique<Handler::Opcode80E8>(script, logger);
+                    return std::make_unique<Handler::Opcode80E8>(logger);
                 case 0x80E9:
-                    return std::make_unique<Handler::Opcode80E9>(script, logger);
+                    return std::make_unique<Handler::Opcode80E9>(logger);
                 case 0x80EA:
-                    return std::make_unique<Handler::Opcode80EA>(script, logger, game->gameTime());
+                    return std::make_unique<Handler::Opcode80EA>(logger, game->gameTime());
                 case 0x80EC:
-                    return std::make_unique<Handler::Opcode80EC>(script, logger);
+                    return std::make_unique<Handler::Opcode80EC>(logger);
                 case 0x80EE:
-                    return std::make_unique<Handler::Opcode80EE>(script, logger);
+                    return std::make_unique<Handler::Opcode80EE>(logger);
                 case 0x80EF:
-                    return std::make_unique<Handler::Opcode80EF>(script, logger);
+                    return std::make_unique<Handler::Opcode80EF>(logger);
                 case 0x80F0:
-                    return std::make_unique<Handler::Opcode80F0>(script, logger);
+                    return std::make_unique<Handler::Opcode80F0>(logger);
                 case 0x80F1:
-                    return std::make_unique<Handler::Opcode80F1>(script, logger);
+                    return std::make_unique<Handler::Opcode80F1>(logger);
                 case 0x80F2:
-                    return std::make_unique<Handler::Opcode80F2>(script, logger);
+                    return std::make_unique<Handler::Opcode80F2>(logger);
                 case 0x80F3:
-                    return std::make_unique<Handler::Opcode80F3>(script, logger);
+                    return std::make_unique<Handler::Opcode80F3>(logger);
                 case 0x80F4:
-                    return std::make_unique<Handler::Opcode80F4>(script, logger);
+                    return std::make_unique<Handler::Opcode80F4>(logger);
                 case 0x80F6:
-                    return std::make_unique<Handler::Opcode80F6>(script, logger);
+                    return std::make_unique<Handler::Opcode80F6>(logger);
                 case 0x80F7:
-                    return std::make_unique<Handler::Opcode80F7>(script, logger);
+                    return std::make_unique<Handler::Opcode80F7>(logger);
                 case 0x80F8:
-                    return std::make_unique<Handler::Opcode80F8>(script, logger);
+                    return std::make_unique<Handler::Opcode80F8>(logger);
                 case 0x80F9:
-                    return std::make_unique<Handler::Opcode80F9>(script, logger);
+                    return std::make_unique<Handler::Opcode80F9>(logger);
                 case 0x80FA:
-                    return std::make_unique<Handler::Opcode80FA>(script, logger);
+                    return std::make_unique<Handler::Opcode80FA>(logger);
                 case 0x80FB:
-                    return std::make_unique<Handler::Opcode80FB>(script, logger);
+                    return std::make_unique<Handler::Opcode80FB>(logger);
                 case 0x80FC:
-                    return std::make_unique<Handler::Opcode80FC>(script, logger);
+                    return std::make_unique<Handler::Opcode80FC>(logger);
                 case 0x80FD:
-                    return std::make_unique<Handler::Opcode80FD>(script, logger);
+                    return std::make_unique<Handler::Opcode80FD>(logger);
                 case 0x80FE:
-                    return std::make_unique<Handler::Opcode80FE>(script, logger);
+                    return std::make_unique<Handler::Opcode80FE>(logger);
                 case 0x80FF:
-                    return std::make_unique<Handler::Opcode80FF>(script, logger);
+                    return std::make_unique<Handler::Opcode80FF>(logger);
                 case 0x8100:
-                    return std::make_unique<Handler::Opcode8100>(script, logger);
+                    return std::make_unique<Handler::Opcode8100>(logger);
                 case 0x8101:
-                    return std::make_unique<Handler::Opcode8101>(script, logger);
+                    return std::make_unique<Handler::Opcode8101>(logger);
                 case 0x8102:
-                    return std::make_unique<Handler::Opcode8102>(script, logger);
+                    return std::make_unique<Handler::Opcode8102>(logger);
                 case 0x8105:
-                    return std::make_unique<Handler::Opcode8105>(script, logger);
+                    return std::make_unique<Handler::Opcode8105>(logger);
                 case 0x8106:
-                    return std::make_unique<Handler::Opcode8106>(script, logger);
+                    return std::make_unique<Handler::Opcode8106>(logger);
                 case 0x8107:
-                    return std::make_unique<Handler::Opcode8107>(script, logger);
+                    return std::make_unique<Handler::Opcode8107>(logger);
                 case 0x810A:
-                    return std::make_unique<Handler::Opcode810A>(script, logger);
+                    return std::make_unique<Handler::Opcode810A>(logger);
                 case 0x810B:
-                    return std::make_unique<Handler::Opcode810B>(script, logger);
+                    return std::make_unique<Handler::Opcode810B>(logger);
                 case 0x810C:
-                    return std::make_unique<Handler::Opcode810C>(script, logger);
+                    return std::make_unique<Handler::Opcode810C>(logger);
                 case 0x810D:
-                    return std::make_unique<Handler::Opcode810D>(script, logger);
+                    return std::make_unique<Handler::Opcode810D>(logger);
                 case 0x810E:
-                    return std::make_unique<Handler::Opcode810E>(script, logger);
+                    return std::make_unique<Handler::Opcode810E>(logger);
                 case 0x810F:
-                    return std::make_unique<Handler::Opcode810F>(script, logger);
+                    return std::make_unique<Handler::Opcode810F>(logger);
                 case 0x8113:
-                    return std::make_unique<Handler::Opcode8113>(script, logger);
+                    return std::make_unique<Handler::Opcode8113>(logger);
                 case 0x8115:
-                    return std::make_unique<Handler::Opcode8115>(script, logger);
+                    return std::make_unique<Handler::Opcode8115>(logger);
                 case 0x8116:
-                    return std::make_unique<Handler::Opcode8116>(script, logger);
+                    return std::make_unique<Handler::Opcode8116>(logger);
                 case 0x8117:
-                    return std::make_unique<Handler::Opcode8117>(script, logger);
+                    return std::make_unique<Handler::Opcode8117>(logger);
                 case 0x8118:
-                    return std::make_unique<Handler::Opcode8118>(script, logger);
+                    return std::make_unique<Handler::Opcode8118>(logger);
                 case 0x8119:
-                    return std::make_unique<Handler::Opcode8119>(script, logger);
+                    return std::make_unique<Handler::Opcode8119>(logger);
                 case 0x811A:
-                    return std::make_unique<Handler::Opcode811A>(script, logger);
+                    return std::make_unique<Handler::Opcode811A>(logger);
                 case 0x811C:
-                    return std::make_unique<Handler::Opcode811C>(script, logger);
+                    return std::make_unique<Handler::Opcode811C>(logger);
                 case 0x811D:
-                    return std::make_unique<Handler::Opcode811D>(script, logger);
+                    return std::make_unique<Handler::Opcode811D>(logger);
                 case 0x811E:
-                    return std::make_unique<Handler::Opcode811E>(script, logger);
+                    return std::make_unique<Handler::Opcode811E>(logger);
                 case 0x8120:
-                    return std::make_unique<Handler::Opcode8120>(script, logger);
+                    return std::make_unique<Handler::Opcode8120>(logger);
                 case 0x8121:
-                    return std::make_unique<Handler::Opcode8121>(script, logger);
+                    return std::make_unique<Handler::Opcode8121>(logger);
                 case 0x8122:
-                    return std::make_unique<Handler::Opcode8122>(script, logger);
+                    return std::make_unique<Handler::Opcode8122>(logger);
                 case 0x8123:
-                    return std::make_unique<Handler::Opcode8123>(script, logger);
+                    return std::make_unique<Handler::Opcode8123>(logger);
                 case 0x8126:
-                    return std::make_unique<Handler::Opcode8126>(script, logger);
+                    return std::make_unique<Handler::Opcode8126>(logger);
                 case 0x8127:
-                    return std::make_unique<Handler::Opcode8127>(script, logger);
+                    return std::make_unique<Handler::Opcode8127>(logger);
                 case 0x8128:
-                    return std::make_unique<Handler::Opcode8128>(script, logger);
+                    return std::make_unique<Handler::Opcode8128>(logger);
                 case 0x8129:
-                    return std::make_unique<Handler::Opcode8129>(script, logger);
+                    return std::make_unique<Handler::Opcode8129>(logger);
                 case 0x812D:
-                    return std::make_unique<Handler::Opcode812D>(script, logger);
+                    return std::make_unique<Handler::Opcode812D>(logger);
                 case 0x812E:
-                    return std::make_unique<Handler::Opcode812E>(script, logger);
+                    return std::make_unique<Handler::Opcode812E>(logger);
                 case 0x812F:
-                    return std::make_unique<Handler::Opcode812F>(script, logger);
+                    return std::make_unique<Handler::Opcode812F>(logger);
                 case 0x8130:
-                    return std::make_unique<Handler::Opcode8130>(script, logger);
+                    return std::make_unique<Handler::Opcode8130>(logger);
                 case 0x8131:
-                    return std::make_unique<Handler::Opcode8131>(script, logger);
+                    return std::make_unique<Handler::Opcode8131>(logger);
                 case 0x8132:
-                    return std::make_unique<Handler::Opcode8132>(script, logger);
+                    return std::make_unique<Handler::Opcode8132>(logger);
                 case 0x8133:
-                    return std::make_unique<Handler::Opcode8133>(script, logger);
+                    return std::make_unique<Handler::Opcode8133>(logger);
                 case 0x8134:
-                    return std::make_unique<Handler::Opcode8134>(script, logger);
+                    return std::make_unique<Handler::Opcode8134>(logger);
                 case 0x8136:
-                    return std::make_unique<Handler::Opcode8136>(script, logger);
+                    return std::make_unique<Handler::Opcode8136>(logger);
                 case 0x8137:
-                    return std::make_unique<Handler::Opcode8137>(script, logger);
+                    return std::make_unique<Handler::Opcode8137>(logger);
                 case 0x8138:
-                    return std::make_unique<Handler::Opcode8138>(script, logger);
+                    return std::make_unique<Handler::Opcode8138>(logger);
                 case 0x8139:
-                    return std::make_unique<Handler::Opcode8139>(script, logger);
+                    return std::make_unique<Handler::Opcode8139>(logger);
                 case 0x813C:
-                    return std::make_unique<Handler::Opcode813C>(script, logger);
+                    return std::make_unique<Handler::Opcode813C>(logger);
                 case 0x8143:
-                    return std::make_unique<Handler::Opcode8143>(script, logger);
+                    return std::make_unique<Handler::Opcode8143>(logger);
                 case 0x8145:
-                    return std::make_unique<Handler::Opcode8145>(script, logger);
+                    return std::make_unique<Handler::Opcode8145>(logger);
                 case 0x8147:
-                    return std::make_unique<Handler::Opcode8147>(script, logger);
+                    return std::make_unique<Handler::Opcode8147>(logger);
                 case 0x8149:
-                    return std::make_unique<Handler::Opcode8149>(script, logger);
+                    return std::make_unique<Handler::Opcode8149>(logger);
                 case 0x814A:
-                    return std::make_unique<Handler::Opcode814A>(script, logger);
+                    return std::make_unique<Handler::Opcode814A>(logger);
                 case 0x814B:
-                    return std::make_unique<Handler::Opcode814B>(script, logger);
+                    return std::make_unique<Handler::Opcode814B>(logger);
                 case 0x814C:
-                    return std::make_unique<Handler::Opcode814C>(script, logger);
+                    return std::make_unique<Handler::Opcode814C>(logger);
                 case 0x814E:
-                    return std::make_unique<Handler::Opcode814E>(script, logger);
+                    return std::make_unique<Handler::Opcode814E>(logger);
                 case 0x8150:
-                    return std::make_unique<Handler::Opcode8150>(script, logger);
+                    return std::make_unique<Handler::Opcode8150>(logger);
                 case 0x8151:
-                    return std::make_unique<Handler::Opcode8151>(script, logger);
+                    return std::make_unique<Handler::Opcode8151>(logger);
                 case 0x8152:
-                    return std::make_unique<Handler::Opcode8152>(script, logger);
+                    return std::make_unique<Handler::Opcode8152>(logger);
                 case 0x8153:
-                    return std::make_unique<Handler::Opcode8153>(script, logger);
+                    return std::make_unique<Handler::Opcode8153>(logger);
                 case 0x8154:
-                    return std::make_unique<Handler::Opcode8154>(script, logger);
+                    return std::make_unique<Handler::Opcode8154>(logger);
                 case 0x9001:
-                    return std::make_unique<Handler::Opcode9001>(script, logger);
+                    return std::make_unique<Handler::Opcode9001>(logger);
                 case 0xC001:
-                    return std::make_unique<Handler::OpcodeC001>(script, logger);
+                    return std::make_unique<Handler::OpcodeC001>(logger);
                 case 0xA001:
-                    return std::make_unique<Handler::OpcodeA001>(script, logger);
+                    return std::make_unique<Handler::OpcodeA001>(logger);
                 default: {
                     std::stringstream ss;
                     ss << "OpcodeFactory::createOpcode() - unimplemented opcode: " << std::hex << number;

@@ -14,18 +14,18 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            Opcode810C::Opcode810C(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
+            Opcode810C::Opcode810C(std::shared_ptr<ILogger> logger) : OpcodeHandler(), _logger(logger)
             {
-                this->logger = std::move(logger);
+
             }
 
-            void Opcode810C::_run()
+            void Opcode810C::_run(VM::Script& script)
             {
-                int direction = _script->dataStack()->popInteger();
-                int animation = _script->dataStack()->popInteger();
-                auto object = static_cast<Game::Object *>(_script->dataStack()->popObject());
+                int direction = script.dataStack()->popInteger();
+                int animation = script.dataStack()->popInteger();
+                auto object = static_cast<Game::Object *>(script.dataStack()->popObject());
 
-                logger->debug()
+                _logger->debug()
                     << "[810C] [*] void anim(GameCritterObject* who, int animation, int direction)"
                     << std::endl
                     << "    direction = 0x" << std::hex << direction << std::endl
@@ -40,12 +40,12 @@ namespace Falltergeist
                     }
                     case 1010: // ANIMATE_SET_FRAME. direction is frame number
                     {
-                        _warning("op_anim - unimplemented ANIMATE_SET_FRAME");
+                        _warning(script, "op_anim - unimplemented ANIMATE_SET_FRAME");
                         break;
                     }
                     default: //  set animation? direction is forward/backward
                     {
-                        _warning("op_anim - unimplemented animation: " + std::to_string(animation));
+                        _warning(script, "op_anim - unimplemented animation: " + std::to_string(animation));
                         break;
                     }
                 }

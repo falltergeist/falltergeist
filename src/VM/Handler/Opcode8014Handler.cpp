@@ -16,22 +16,22 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            Opcode8014::Opcode8014(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
+            Opcode8014::Opcode8014(std::shared_ptr<ILogger> logger) : OpcodeHandler(), _logger(logger)
             {
-                this->logger = std::move(logger);
+
             }
 
-            void Opcode8014::_run()
+            void Opcode8014::_run(VM::Script& script)
             {
-                auto &debug = logger->debug();
+                auto &debug = _logger->debug();
                 debug << "[8014] [+] value = op_fetch_external(name)" << std::endl;
                 auto game = Game::Game::getInstance();
                 auto EVARS = game->locationState()->EVARS();
                 std::string name;
-                auto nameValue = _script->dataStack()->pop();
+                auto nameValue = script.dataStack()->pop();
                 switch (nameValue.type()) {
                     case StackValue::Type::INTEGER:
-                        name = _script->script()->identifiers().at((unsigned int) nameValue.integerValue());
+                        name = script.intFile()->identifiers().at((unsigned int) nameValue.integerValue());
                         break;
                     case StackValue::Type::STRING: {
                         name = nameValue.stringValue();
@@ -46,7 +46,7 @@ namespace Falltergeist
                 }
                 auto value = EVARS->at(name);
                 debug << ", type = " << value.typeName() << ", value = " << value.toString() << std::endl;
-                _script->dataStack()->push(value);
+                script.dataStack()->push(value);
             }
 
         }

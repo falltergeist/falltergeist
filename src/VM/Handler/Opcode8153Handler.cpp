@@ -12,14 +12,14 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            Opcode8153::Opcode8153(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
+            Opcode8153::Opcode8153(std::shared_ptr<ILogger> logger) : OpcodeHandler(), _logger(logger)
             {
-                this->logger = std::move(logger);
+
             }
 
-            void Opcode8153::_run()
+            void Opcode8153::_run(VM::Script& script)
             {
-                logger->debug() << "[8153] [=] void terminate_combat()" << std::endl;
+                _logger->debug() << "[8153] [=] void terminate_combat()" << std::endl;
             }
         }
     }

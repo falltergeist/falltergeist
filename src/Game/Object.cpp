@@ -136,14 +136,16 @@ namespace Falltergeist
             _description = value;
         }
 
-        VM::Script *Object::script() const
-        {
-            return _script.get();
+        std::unique_ptr<VM::Script>& Object::script() {
+            return _script;
         }
 
-        void Object::setScript(VM::Script *script)
-        {
-            _script.reset(script);
+        void Object::setScript(std::unique_ptr<VM::Script>& script) {
+            _script = std::move(script);
+        }
+
+        void Object::setScript(std::unique_ptr<VM::Script>&& script) {
+            _script = std::move(script);
         }
 
         void Object::_generateUi()
@@ -194,11 +196,11 @@ namespace Falltergeist
 
         Hexagon *Object::hexagon() const
         {
-            if (this->position() < 0) {
+            if (position() < 0) {
                 return nullptr;
             }
 
-            return Game::getInstance()->locationState()->hexagonGrid()->at(this->position());
+            return Game::getInstance()->locationState()->hexagonGrid()->at(position()).get();
         }
 
         void Object::setHexagon(Hexagon *hexagon)

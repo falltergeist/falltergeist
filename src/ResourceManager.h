@@ -2,6 +2,7 @@
 
 // Project includes
 #include "Base/Singleton.h"
+#include "Format/Int/File.h"
 
 // Third-party includes
 #include "falltergeist/vfs/VFS.h"
@@ -34,7 +35,6 @@ namespace Falltergeist
         namespace Gam { class File; }
         namespace Gcd { class File; }
         namespace Pal { class File; }
-        namespace Int { class File; }
         namespace Lip { class File; }
         namespace Lst { class File; }
         namespace Map { class File; }
@@ -95,8 +95,8 @@ namespace Falltergeist
             Format::Gam::File* gamFileType(const std::string& filename);
             Format::Gcd::File* gcdFileType(const std::string& filename);
             Format::Pal::File* palFileType(const std::string& filename);
-            Format::Int::File* intFileType(const std::string& filename);
-            Format::Int::File* intFileType(unsigned int SID);
+            std::unique_ptr<Format::Int::File> intFileType(const std::string& filename);
+            std::unique_ptr<Format::Int::File> intFileType(unsigned int SID);
             Format::Lip::File* lipFileType(const std::string& filename);
             Format::Lst::File* lstFileType(const std::string& filename);
             Format::Map::File* mapFileType(const std::string& filename);
@@ -155,6 +155,9 @@ namespace Falltergeist
             // All items are cached after being requested for the first time.
             template <class T>
             T* _datFileItem(std::string filename);
+
+            template<typename T>
+            std::unique_ptr<T> _datFileItemUniquePtr(std::string filename);
 
             // Searches for a given file within virtual "file system" and calls the given callback with Dat::Stream created from that file.
             void _loadStreamForFile(std::string filename, std::function<void(Format::Dat::Stream&&)> callback);

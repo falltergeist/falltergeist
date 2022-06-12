@@ -12,19 +12,19 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            Opcode811A::Opcode811A(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
+            Opcode811A::Opcode811A(std::shared_ptr<ILogger> logger) : OpcodeHandler(), _logger(logger)
             {
-                this->logger = std::move(logger);
+
             }
 
-            void Opcode811A::_run()
+            void Opcode811A::_run(VM::Script& script)
             {
-                logger->debug() << "[811A] [=] int explosion(int where, int elevation, int damage)" << std::endl;
-                auto damageRadius = _script->dataStack()->popInteger();
-                auto elevation = _script->dataStack()->popInteger();
-                auto tile = _script->dataStack()->popInteger();
-                logger->debug() << "Triggered explosion on elevation " << elevation << " on tile " << tile << " with damage radius " << damageRadius << std::endl;
-                _script->dataStack()->push(0);
+                _logger->debug() << "[811A] [=] int explosion(int where, int elevation, int damage)" << std::endl;
+                auto damageRadius = script.dataStack()->popInteger();
+                auto elevation = script.dataStack()->popInteger();
+                auto tile = script.dataStack()->popInteger();
+                _logger->debug() << "Triggered explosion on elevation " << elevation << " on tile " << tile << " with damage radius " << damageRadius << std::endl;
+                script.dataStack()->push(0);
             }
         }
     }
