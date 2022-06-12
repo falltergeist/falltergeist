@@ -312,11 +312,11 @@ namespace Falltergeist
         void Location::initializeLightmap()
         {
             std::vector<glm::vec2> _vertices;
-            for (auto hex : _hexagonGrid->hexagons()) {
+            for (auto& hex : _hexagonGrid->hexagons()) {
                 _vertices.push_back(glm::vec2(hex->position().x(), hex->position().y()));
             }
             std::vector<GLuint> indexes;
-            for (auto hexagon : _hexagonGrid->hexagons()) {
+            for (auto& hexagon : _hexagonGrid->hexagons()) {
                 bool doup = true;
                 bool dodown = true;
                 if (hexagon->number() % 200 == 0) {
@@ -1168,16 +1168,16 @@ namespace Falltergeist
 
         void Location::initLight()
         {
-            for (auto hex: _hexagonGrid->hexagons()) {
+            for (auto& hex: _hexagonGrid->hexagons()) {
                 hex->setLight(655);
             }
 
-            for (auto hex: _hexagonGrid->hexagons()) {
-                _hexagonGrid->initLight(hex);
+            for (auto& hex: _hexagonGrid->hexagons()) {
+                _hexagonGrid->initLight(hex.get());
             }
 
             std::vector<float> lights;
-            for (auto hex: _hexagonGrid->hexagons()) {
+            for (auto& hex: _hexagonGrid->hexagons()) {
                 int lightLevel = 0;
 
                 unsigned int light = hex->light();

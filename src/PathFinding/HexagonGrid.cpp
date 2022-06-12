@@ -128,9 +128,8 @@ namespace Falltergeist
         return nullptr;
     }
 
-    Base::vector_ptr_decorator<Hexagon> HexagonGrid::hexagons()
-    {
-        return Base::vector_ptr_decorator<Hexagon>(_hexagons);
+    std::vector<std::unique_ptr<Hexagon>>& HexagonGrid::hexagons() {
+        return _hexagons;
     }
 
     std::vector<Hexagon*> HexagonGrid::findPath(Hexagon* from, Hexagon* to)

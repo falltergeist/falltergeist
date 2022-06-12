@@ -50,7 +50,7 @@ namespace Falltergeist
                 std::string msgSpeech(int msg_file_num, int msg_num);
 
                 // Returns filename of an .int script file
-                std::string filename();
+                const std::string& filename() const;
 
                 bool hasFunction(const std::string &name);
 

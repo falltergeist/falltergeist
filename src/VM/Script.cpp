@@ -32,7 +32,7 @@ namespace Falltergeist
         ) : _owner(owner), _intFile(std::move(intFile)) {
         }
 
-        std::string Script::filename()
+        const std::string& Script::filename() const
         {
             return _intFile->filename();
         }
