@@ -58,9 +58,9 @@ namespace Falltergeist
 
                 void onMouseDragStop(Event::Mouse* event);
 
-                void onArmorDragStop(Event::Mouse* event, ItemsList* target);
+                void onArmorDragStop(Event::Mouse* event, std::shared_ptr<ItemsList> target);
 
-                void onHandDragStop(Event::Mouse* event, HAND hand, ItemsList* target);
+                void onHandDragStop(Event::Mouse* event, HAND hand, std::shared_ptr<ItemsList> target);
 
                 Event::MouseHandler& itemDragStopHandler();
 

@@ -45,30 +45,6 @@ namespace Falltergeist
 
                 virtual ~State() = default;
 
-                template <class TUi, class ...TCtorArgs>
-                TUi* makeUI(TCtorArgs&&... args)
-                {
-                    TUi* ptr = new TUi(std::forward<TCtorArgs>(args)...);
-                    _ui.emplace_back(ptr);
-                    return ptr;
-                }
-
-                UI::Base* addUI(UI::Base* ui);
-
-                UI::Base* addUI(const std::string& name, UI::Base* ui);
-
-                void addUI(const std::vector<UI::Base*>& uis);
-
-                void popUI();
-
-                template<typename T>
-                T* getUI(const std::string& name) {
-                    if (_labeledUI.find(name) != _labeledUI.end()) {
-                        return dynamic_cast<T*>(_labeledUI.at(name));
-                    }
-                    return nullptr;
-                };
-
                 // @todo: remove getters/setters for x, y?
                 virtual int x() const;
 
@@ -155,11 +131,27 @@ namespace Falltergeist
                 void scriptFade(VM::Script* script, bool in);
 
             protected:
-                std::vector<std::unique_ptr<UI::Base>> _ui;
+                std::shared_ptr<UI::Base> addUI(std::shared_ptr<UI::Base> ui);
 
-                std::vector<std::unique_ptr<UI::Base>> _uiToDelete;
+                std::shared_ptr<UI::Base> addUI(const std::string& name, std::shared_ptr<UI::Base> ui);
 
-                std::map<std::string, UI::Base*> _labeledUI;
+                void addUI(const std::vector<std::shared_ptr<UI::Base>>& uis);
+
+                void popUI();
+
+                template<typename T>
+                std::shared_ptr<T> getUI(const std::string& name) {
+                    if (_labeledUI.find(name) != _labeledUI.end()) {
+                        return std::dynamic_pointer_cast<T>(_labeledUI.at(name));
+                    }
+                    return nullptr;
+                };
+
+                std::vector<std::shared_ptr<UI::Base>> _ui;
+
+                std::vector<std::shared_ptr<UI::Base>> _uiToDelete;
+
+                std::map<std::string, std::shared_ptr<UI::Base>> _labeledUI;
 
                 Graphics::Point _position;
 

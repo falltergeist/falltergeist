@@ -36,8 +36,9 @@ namespace Falltergeist
 
                 void use_p_proc(CritterObject* usedBy) override;
 
-                void onOpeningAnimationEnded(UI::AnimationQueue* target);
-                void onClosingAnimationEnded(UI::AnimationQueue* target);
+                void onOpeningAnimationEnded(std::shared_ptr<UI::AnimationQueue> target);
+
+                void onClosingAnimationEnded(std::shared_ptr<UI::AnimationQueue> target);
 
             private:
                 std::shared_ptr<ILogger> logger;

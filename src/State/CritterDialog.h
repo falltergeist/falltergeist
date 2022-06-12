@@ -59,7 +59,7 @@ namespace Falltergeist
 
                 std::vector<int> _reactions;
 
-                std::vector<UI::TextArea*> _answers;
+                std::vector<std::shared_ptr<UI::TextArea>> _answers;
 
                 void _selectAnswer(size_t i);
 
@@ -68,11 +68,11 @@ namespace Falltergeist
 
                 std::unique_ptr<UI::Factory::ImageButtonFactory> imageButtonFactory;
 
-                void onAnswerIn(UI::TextArea* target);
+                void onAnswerIn(std::shared_ptr<UI::TextArea> target);
 
-                void onAnswerOut(UI::TextArea* target);
+                void onAnswerOut(std::shared_ptr<UI::TextArea> target);
 
-                void onAnswerClick(UI::TextArea* target);
+                void onAnswerClick(std::shared_ptr<UI::TextArea> target);
         };
     }
 }

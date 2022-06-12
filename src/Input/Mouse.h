@@ -80,14 +80,14 @@ namespace Falltergeist {
 
             void think(const float& deltaTime);
 
-            UI::Base* ui();
+            std::shared_ptr<UI::Base>& ui();
 
         private:
             std::shared_ptr<UI::IResourceManager> _resourceManager;
 
             std::vector<Cursor> _states;
 
-            std::unique_ptr<UI::Base> _ui;
+            std::shared_ptr<UI::Base> _ui;
 
             // It will wrap mouse for now. Until cursor render and state management refactoring
             std::shared_ptr<IMouse> _mouse;

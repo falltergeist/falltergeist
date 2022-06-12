@@ -26,13 +26,13 @@ namespace Falltergeist
             _size=size;
         }
 
-        void TextAreaList::addArea(std::unique_ptr<TextArea> area)
+        void TextAreaList::addArea(std::shared_ptr<TextArea> area)
         {
             _areas.push_back(std::move(area));
             _recalculatePositions();
         }
 
-        const std::vector<std::unique_ptr<TextArea>> &TextAreaList::textAreas() const
+        const std::vector<std::shared_ptr<TextArea>> &TextAreaList::textAreas() const
         {
             return _areas;
         }

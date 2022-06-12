@@ -25,20 +25,23 @@ namespace Falltergeist
         {
             public:
                 Skilldex(std::shared_ptr<UI::IResourceManager> resourceManager);
+
                 virtual ~Skilldex() = default;
 
                 void init() override;
 
-
                 void onKeyDown(Event::Keyboard* event) override;
+
                 void onStateActivate(Event::State* event) override;
 
                 void onCancelButtonClick();
+
                 void onSkillButtonClick(SKILL skill);
 
             private:
-                std::shared_ptr<UI::IResourceManager> resourceManager;
-                std::unique_ptr<UI::Factory::ImageButtonFactory> imageButtonFactory;
+                std::shared_ptr<UI::IResourceManager> _resourceManager;
+
+                std::unique_ptr<UI::Factory::ImageButtonFactory> _imageButtonFactory;
         };
     }
 }

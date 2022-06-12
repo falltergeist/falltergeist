@@ -146,14 +146,14 @@ namespace Falltergeist
             _script.reset(script);
         }
 
-        UI::Base *Object::ui() const
+        std::shared_ptr<UI::Base>& Object::ui()
         {
-            return _ui.get();
+            return _ui;
         }
 
-        void Object::setUI(UI::Base *ui)
+        void Object::setUI(std::shared_ptr<UI::Base>& ui)
         {
-            _ui.reset(ui);
+            _ui = ui;
         }
 
         void Object::_generateUi()
@@ -410,7 +410,7 @@ namespace Falltergeist
         void Object::onUseAnimationActionFrame(Event::Event *event, CritterObject *critter)
         {
             use_p_proc(critter);
-            auto animation = dynamic_cast<UI::Animation *>(critter->ui());
+            auto animation = critter->ui<UI::Animation>();
             if (animation) {
                 animation->actionFrameHandler().clear();
                 animation->animationEndedHandler().add([this, critter](Event::Event *event) {

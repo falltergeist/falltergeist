@@ -57,7 +57,7 @@ namespace Falltergeist
                 Game::Orientation::SC
             );
             dudeCritter->setPosition({56, 47});
-            addUI(dudeCritter.release());
+            addUI(dudeCritter);
 
             // FIXME: chests and lockers should be shown opened and centered vertically
             auto objectCopy = new Game::Object();
@@ -69,18 +69,18 @@ namespace Falltergeist
             getUI<UI::ImageButton>("button_done")->mouseClickHandler().add(std::bind(&Container::onDoneButtonClick, this, std::placeholders::_1));
 
             // TODO: disable buttons if there is nowhere to scroll
-            auto scrollUp = [](UI::ItemsList *list) {
+            auto scrollUp = [](std::shared_ptr<UI::ItemsList> list) {
                 if (list->canScrollUp()) {
                     list->scrollUp();
                 }
             };
-            auto scrollDown = [](UI::ItemsList *list) {
+            auto scrollDown = [](std::shared_ptr<UI::ItemsList> list) {
                 if (list->canScrollDown()) {
                     list->scrollDown();
                 }
             };
 
-            auto dudeList = new UI::ItemsList({174, 35});
+            auto dudeList = std::make_shared<UI::ItemsList>(Graphics::Point(174, 35));
             dudeList->setItems(Game::Game::getInstance()->player()->inventory());
             addUI(dudeList);
 
@@ -92,7 +92,7 @@ namespace Falltergeist
             dudeListScrollDownButton->mouseClickHandler().add([=](...) { scrollDown(dudeList); });
             addUI(dudeListScrollDownButton);
 
-            auto containerList = new UI::ItemsList({292, 35});
+            auto containerList = std::make_shared<UI::ItemsList>(Graphics::Point(292, 35));
             containerList->setItems(object()->inventory());
             addUI(containerList);
 

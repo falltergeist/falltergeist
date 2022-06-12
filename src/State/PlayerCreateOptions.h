@@ -24,20 +24,27 @@ namespace Falltergeist
         {
             public:
                 PlayerCreateOptions(std::shared_ptr<UI::IResourceManager> resourceManager);
+
                 virtual ~PlayerCreateOptions() = default;
 
                 void init() override;
 
                 void onSaveButtonClick(Event::Mouse* event);
+
                 void onLoadButtonClick(Event::Mouse* event);
+
                 void onPrintToFileButtonClick(Event::Mouse* event);
+
                 void onEraseButtonClick(Event::Mouse* event);
+
                 void onDoneButtonClick(Event::Mouse* event);
+
                 void onKeyDown(Event::Keyboard* event) override;
 
             private:
-                std::shared_ptr<UI::IResourceManager> resourceManager;
-                std::unique_ptr<UI::Factory::ImageButtonFactory> imageButtonFactory;
+                std::shared_ptr<UI::IResourceManager> _resourceManager;
+
+                std::unique_ptr<UI::Factory::ImageButtonFactory> _imageButtonFactory;
         };
     }
 }

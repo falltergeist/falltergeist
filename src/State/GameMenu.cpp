@@ -67,33 +67,33 @@ namespace Falltergeist
             Graphics::Color color = {0xb8, 0x9c, 0x28, 0xff};
 
             // label: save game
-            auto saveGameButtonLabel = new UI::TextArea(_t(MSG_OPTIONS, 0), backgroundX+8, backgroundY+26);
+            auto saveGameButtonLabel = std::make_shared<UI::TextArea>(_t(MSG_OPTIONS, 0), backgroundX+8, backgroundY+26);
             saveGameButtonLabel->setFont(font, color);
             saveGameButtonLabel->setSize({150, 0});
             saveGameButtonLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
             saveGameButton->mouseClickHandler().add([this](Event::Event* event){ this->doSaveGame(); });
 
             // label: load game
-            auto loadGameButtonLabel = new UI::TextArea(_t(MSG_OPTIONS, 1), backgroundX+8, backgroundY+26+37);
+            auto loadGameButtonLabel = std::make_shared<UI::TextArea>(_t(MSG_OPTIONS, 1), backgroundX+8, backgroundY+26+37);
             loadGameButtonLabel->setFont(font, color);
             loadGameButtonLabel->setSize({150, 0});
             loadGameButtonLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
             loadGameButton->mouseClickHandler().add([this](Event::Event* event){ this->doLoadGame(); });
 
             // label: preferences
-            auto preferencesButtonLabel = new UI::TextArea(_t(MSG_OPTIONS, 2), backgroundX+8, backgroundY+26+37*2);
+            auto preferencesButtonLabel = std::make_shared<UI::TextArea>(_t(MSG_OPTIONS, 2), backgroundX+8, backgroundY+26+37*2);
             preferencesButtonLabel->setFont(font, color);
             preferencesButtonLabel->setSize({150, 0});
             preferencesButtonLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
 
             // label: exit game
-            auto exitGameButtonLabel = new UI::TextArea(_t(MSG_OPTIONS, 3), backgroundX+8, backgroundY+26+37*3);
+            auto exitGameButtonLabel = std::make_shared<UI::TextArea>(_t(MSG_OPTIONS, 3), backgroundX+8, backgroundY+26+37*3);
             exitGameButtonLabel->setFont(font, color);
             exitGameButtonLabel->setSize({150, 0});
             exitGameButtonLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
 
             // label: done
-            auto doneButtonLabel = new UI::TextArea(_t(MSG_OPTIONS, 4), backgroundX+8, backgroundY+26+37*4);
+            auto doneButtonLabel = std::make_shared<UI::TextArea>(_t(MSG_OPTIONS, 4), backgroundX+8, backgroundY+26+37*4);
             doneButtonLabel->setFont(font, color);
             doneButtonLabel->setSize({150, 0});
             doneButtonLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);

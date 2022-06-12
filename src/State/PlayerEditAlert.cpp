@@ -20,10 +20,10 @@ namespace Falltergeist
         using ImageButtonType = UI::Factory::ImageButtonFactory::Type;
         using Point = Graphics::Point;
 
-        PlayerEditAlert::PlayerEditAlert(std::shared_ptr<UI::IResourceManager> resourceManager) : State()
-        {
-            this->resourceManager = resourceManager;
-            imageButtonFactory = std::make_unique<UI::Factory::ImageButtonFactory>(resourceManager);
+        PlayerEditAlert::PlayerEditAlert(
+            std::shared_ptr<UI::IResourceManager> resourceManager
+        ) : State(), _resourceManager(resourceManager) {
+            _imageButtonFactory = std::make_unique<UI::Factory::ImageButtonFactory>(_resourceManager);
         }
 
         void PlayerEditAlert::setMessage(const std::string& message)
@@ -41,7 +41,7 @@ namespace Falltergeist
             setFullscreen(false);
             setModal(true);
 
-            auto bg = resourceManager->getImage("art/intrface/lgdialog.frm");
+            auto bg = _resourceManager->getImage("art/intrface/lgdialog.frm");
 
             Point bgPos = Point((Game::Game::getInstance()->renderer()->size() - Point(640, 480)) / 2);
             int bgX = bgPos.x();
@@ -50,21 +50,21 @@ namespace Falltergeist
             bg->setPosition(bgPos + Point(164, 173));
 
 
-            auto message = new UI::TextArea(_message.c_str(), bgPos + Point(194, 213));
+            auto message = std::make_shared<UI::TextArea>(_message.c_str(), bgPos + Point(194, 213));
             message->setWidth(250);
             message->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
             message->setFont("font1.aaf", {0xff, 0x9f, 0x48, 0xff});
 
-            auto doneBox = resourceManager->getImage("art/intrface/donebox.frm");
+            auto doneBox = _resourceManager->getImage("art/intrface/donebox.frm");
             doneBox->setPosition(bgPos + Point(254, 270));
 
-            auto doneButton = imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {bgX + 264, bgY + 273});
+            auto doneButton = _imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {bgX + 264, bgY + 273});
             doneButton->mouseClickHandler().add([this](Event::Mouse* event)
             {
                 this->onDoneButtonClick(event);
             });
 
-            auto doneLabel = new UI::TextArea(_t(MSG_EDITOR, 100), bgX + 284, bgY + 273);
+            auto doneLabel = std::make_shared<UI::TextArea>(_t(MSG_EDITOR, 100), bgX + 284, bgY + 273);
             doneLabel->setFont("font3.aaf", {0xb8, 0x9c, 0x28, 0xff});
 
             addUI(bg);

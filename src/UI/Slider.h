@@ -16,7 +16,7 @@ namespace Falltergeist {
     namespace UI {
         class Slider : public Falltergeist::UI::Base {
         public:
-            Slider(const Graphics::Point& pos, std::unique_ptr<Image> imageOn, std::unique_ptr<Image> imageOff);
+            Slider(const Graphics::Point& pos, std::shared_ptr<Image> imageOn, std::shared_ptr<Image> imageOff);
 
             virtual ~Slider() = default;
 
@@ -47,9 +47,9 @@ namespace Falltergeist {
 
             Graphics::Size _thumbSize = Graphics::Size(21, 14);
 
-            std::unique_ptr<Image> _imageOn;
+            std::shared_ptr<Image> _imageOn;
 
-            std::unique_ptr<Image> _imageOff;
+            std::shared_ptr<Image> _imageOff;
 
             double _minValue = 0.0;
 

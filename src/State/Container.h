@@ -32,22 +32,28 @@ namespace Falltergeist
         {
             public:
                 Container(std::shared_ptr<UI::IResourceManager> resourceManager);
+
                 virtual ~Container() = default;
 
                 void init() override;
 
                 Game::ContainerItemObject* object();
+
                 void setObject(Game::ContainerItemObject* object);
 
                 void onDoneButtonClick(Event::Mouse* event);
 
                 void onStateActivate(Event::State* event) override;
+
                 void onStateDeactivate(Event::State* event) override;
+
                 void onKeyDown(Event::Keyboard* event) override;
 
             protected:
                 Game::ContainerItemObject* _object = nullptr;
+
                 std::shared_ptr<UI::IResourceManager> resourceManager;
+
                 std::unique_ptr<UI::Factory::ImageButtonFactory> imageButtonFactory;
         };
     }

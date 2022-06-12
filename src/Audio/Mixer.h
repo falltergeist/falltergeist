@@ -30,7 +30,7 @@ namespace Falltergeist
                 void playACMMusic(const std::string& filename, bool loop = false);
                 void playACMSpeech(const std::string& filename);
                 void playACMSound(const std::string& filename);
-                void playMovieMusic(UI::MvePlayer* mve);
+                void playMovieMusic(std::shared_ptr<UI::MvePlayer> mve);
                 void pauseMusic();
                 void resumeMusic();
                 std::string& lastMusic();

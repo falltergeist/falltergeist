@@ -15,8 +15,11 @@ namespace Falltergeist {
     namespace UI {
         using Point = Graphics::Point;
 
-        Slider::Slider(const Graphics::Point& pos, std::unique_ptr<Image> imageOn, std::unique_ptr<Image> imageOff)
-            : Base(pos), _imageOn(std::move(imageOn)), _imageOff(std::move(imageOff)) {
+        Slider::Slider(
+            const Graphics::Point& pos,
+            std::shared_ptr<Image> imageOn,
+            std::shared_ptr<Image> imageOff
+        ) : Base(pos), _imageOn(imageOn), _imageOff(imageOff) {
             mouseDragHandler().add([=](Event::Mouse* event) { _onDrag(event); });
             mouseDownHandler().add([=](Event::Mouse* event) { _onMouseDown(event); });
             mouseUpHandler().add([=](Event::Mouse* event) { _onMouseUp(event); });

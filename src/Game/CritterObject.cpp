@@ -528,7 +528,7 @@ namespace Falltergeist
                     _ui = move(animation);
                 }
             } else {
-                auto anim = (UI::Animation*)ui();
+                auto anim = ui<UI::Animation>();
                 if (!_moving && (!anim || !anim->playing())) {
                     if (SDL_GetTicks() > _nextIdleAnim) {
                         setActionAnimation("aa");
@@ -559,7 +559,7 @@ namespace Falltergeist
         // for different animation cycles.
         void CritterObject::onMovementAnimationFrame(Event::Event* event)
         {
-            auto animation = dynamic_cast<UI::Animation*>(ui());
+            auto animation = ui<UI::Animation>();
             auto curFrameOfs = animation->frameOffset();
             if (isOutsideOfHexForDirection(curFrameOfs, _orientation)) {
                 // if we stepped too much away from current hex center, switch to the next hex
@@ -594,8 +594,8 @@ namespace Falltergeist
                         newAnimation->frameHandler().add(std::bind(&CritterObject::onMovementAnimationFrame, this, std::placeholders::_1));
                         newAnimation->animationEndedHandler().add(std::bind(&CritterObject::onMovementAnimationEnded, this, std::placeholders::_1));
                         newAnimation->play();
-                        animation = newAnimation.get();
-                        _ui = move(newAnimation);
+                        animation = newAnimation;
+                        _ui = newAnimation;
                         curFrameOfs = animation->frameOffset();
 
                         // on turns, center frames on current hex
@@ -610,7 +610,7 @@ namespace Falltergeist
 
         void CritterObject::onMovementAnimationEnded(Event::Event* event)
         {
-            auto animation = dynamic_cast<UI::Animation*>(ui());
+            auto animation = ui<UI::Animation>();
             if (!animation) {
                 throw Exception("UI::Animation expected!");
             }
@@ -621,7 +621,7 @@ namespace Falltergeist
             animation->play();
         }
 
-        std::unique_ptr<UI::Animation> CritterObject::_generateMovementAnimation()
+        std::shared_ptr<UI::Animation> CritterObject::_generateMovementAnimation()
         {
             Graphics::CritterAnimationFactory animationFactory;
             Helpers::CritterHelper critterHelper;
@@ -641,7 +641,7 @@ namespace Falltergeist
             );
         }
 
-        UI::Animation* CritterObject::setActionAnimation(const std::string& action)
+        std::shared_ptr<UI::Animation> CritterObject::setActionAnimation(const std::string& action)
         {
             Graphics::CritterAnimationFactory animationFactory;
             Helpers::CritterHelper critterHelper;
@@ -654,7 +654,7 @@ namespace Falltergeist
             );
             animation->play();
             _ui.reset(animation.get());
-            return animation.release();
+            return animation;
         }
 
         bool CritterObject::canTrade() const
@@ -767,7 +767,7 @@ namespace Falltergeist
             _canKnockdown = knockdown;
         }
 
-        UI::Animation* CritterObject::setWeaponAnimation(unsigned animationId)
+        std::shared_ptr<UI::Animation> CritterObject::setWeaponAnimation(unsigned animationId)
         {
             Helpers::CritterHelper critterHelper;
             Graphics::CritterAnimationFactory animationFactory;
@@ -777,7 +777,7 @@ namespace Falltergeist
                 animationId,
                 orientation()
             );
-            return animation.release();
+            return animation;
         }
 
         void CritterObject::_generateUi()
@@ -863,9 +863,8 @@ namespace Falltergeist
             _age = value;
         }
 
-        UI::Animation* CritterObject::animation()
-        {
-            return dynamic_cast<UI::Animation*>(ui());
+        std::shared_ptr<UI::Animation> CritterObject::animation() {
+            return std::dynamic_pointer_cast<UI::Animation>(ui());
         }
     }
 }

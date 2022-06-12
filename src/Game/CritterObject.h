@@ -137,10 +137,11 @@ namespace Falltergeist
 
                 virtual void stopMovement();
 
-                virtual UI::Animation* setActionAnimation(const std::string& action);
-                UI::Animation* setWeaponAnimation(unsigned animationId);
+                virtual std::shared_ptr<UI::Animation> setActionAnimation(const std::string& action);
 
-                UI::Animation* animation();
+                std::shared_ptr<UI::Animation> setWeaponAnimation(unsigned animationId);
+
+                std::shared_ptr<UI::Animation> animation();
 
                 bool canTrade() const;
                 void setCanTrade(bool canTrade);
@@ -224,8 +225,10 @@ namespace Falltergeist
                 ItemObject* _leftHandSlot = 0;
                 ItemObject* _rightHandSlot = 0;
 
-                virtual std::unique_ptr<UI::Animation> _generateMovementAnimation();
+                virtual std::shared_ptr<UI::Animation> _generateMovementAnimation();
+
                 void _setupNextIdleAnim();
+
                 void _generateUi() override;
         };
     }

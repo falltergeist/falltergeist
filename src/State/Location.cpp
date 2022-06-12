@@ -188,14 +188,16 @@ namespace Falltergeist
 
             initLight();
 
-            _playerPanel = makeUI<UI::PlayerPanel>(logger);
+            _playerPanel = std::make_shared<UI::PlayerPanel>(logger);
+            addUI(_playerPanel);
 
             _scrollHandler = std::make_unique<Game::LocationState::ScrollHandler>(mouse);
             _scrollHandler->scrollDeltaHandler().add([=](const Graphics::Point& scrollDelta) {
                 _camera->setCenter(_camera->center() + scrollDelta);
             });
 
-            _scrollHitBox = makeUI<UI::ScrollHitBox>(renderer->size());
+            _scrollHitBox = std::make_shared<UI::ScrollHitBox>(renderer->size());
+            addUI(_scrollHitBox);
             _scrollHitBox->directionChangeHandler().add([=](UI::ScrollHitBox::Direction direction){
                 _scrollHandler->onMouseScrollDirectionChanged(direction);
             });
@@ -1109,7 +1111,7 @@ namespace Falltergeist
             return _hexagonGrid.get();
         }
 
-        UI::PlayerPanel *Location::playerPanel()
+        std::shared_ptr<UI::PlayerPanel>& Location::playerPanel()
         {
             return _playerPanel;
         }

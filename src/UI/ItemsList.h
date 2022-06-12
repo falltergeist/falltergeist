@@ -30,9 +30,9 @@ namespace Falltergeist
 
                 std::vector<Game::ItemObject*>* items();
 
-                std::vector<std::unique_ptr<InventoryItem>>& inventoryItems();
+                std::vector<std::shared_ptr<InventoryItem>>& inventoryItems();
 
-                InventoryItem* draggedItem();
+                std::shared_ptr<InventoryItem> draggedItem();
 
                 void update();
 
@@ -61,15 +61,15 @@ namespace Falltergeist
 
                 void onMouseDragStop(Event::Mouse* event);
 
-                void onItemDragStop(Event::Mouse* event, HAND hand, UI::InventoryItem* target);
+                void onItemDragStop(Event::Mouse* event, HAND hand, std::shared_ptr<UI::InventoryItem> target);
 
-                void onItemDragStop(Event::Mouse* event, ItemsList* target);
+                void onItemDragStop(Event::Mouse* event, std::shared_ptr<ItemsList> target);
 
-                void onItemDragStop(Event::Mouse* event, UI::InventoryItem* target);
+                void onItemDragStop(Event::Mouse* event, std::shared_ptr<UI::InventoryItem> target);
 
-                void addItem(InventoryItem* item, unsigned int ammount);
+                void addItem(std::shared_ptr<InventoryItem> item, unsigned int ammount);
 
-                void removeItem(InventoryItem* item, unsigned int ammount);
+                void removeItem(std::shared_ptr<InventoryItem> item, unsigned int ammount);
 
                 Event::MouseHandler& itemDragStopHandler();
 
@@ -80,11 +80,11 @@ namespace Falltergeist
             private:
                 std::vector<Game::ItemObject*>* _items = nullptr;
 
-                InventoryItem* _draggedItem = nullptr;
+                std::shared_ptr<InventoryItem> _draggedItem = nullptr;
 
                 Graphics::Point _draggedItemInitialPosition;
 
-                std::vector<std::unique_ptr<InventoryItem>> _inventoryItems;
+                std::vector<std::shared_ptr<InventoryItem>> _inventoryItems;
 
                 InventoryItem::Type _type = InventoryItem::Type::INVENTORY;
 

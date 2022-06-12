@@ -144,9 +144,15 @@ namespace Falltergeist
                  */
                 virtual void renderText();
 
+                template<typename T>
+                std::shared_ptr<T> ui() {
+                    return std::dynamic_pointer_cast<T>(_ui);
+                }
+
                 // ActiveUI used to display object on screen and capture mouse events
-                UI::Base* ui() const;
-                void setUI(UI::Base* ui);
+                std::shared_ptr<UI::Base>& ui();
+
+                void setUI(std::shared_ptr<UI::Base>& ui);
 
                 // Hexagon of object current position
                 Hexagon* hexagon() const;
@@ -228,7 +234,9 @@ namespace Falltergeist
                 std::string _scrName;
                 std::string _description;
                 std::unique_ptr<VM::Script> _script;
-                std::unique_ptr<UI::Base> _ui;
+
+                std::shared_ptr<UI::Base> _ui;
+
                 virtual void _generateUi();
                 std::unique_ptr<UI::TextArea> _floatMessage;
                 bool _inRender = false;

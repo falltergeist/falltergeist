@@ -133,7 +133,7 @@ namespace Falltergeist
 
                 unsigned int currentMapIndex();
 
-                UI::PlayerPanel* playerPanel();
+                std::shared_ptr<UI::PlayerPanel>& playerPanel();
 
                 void initLight();
 
@@ -161,46 +161,68 @@ namespace Falltergeist
                 };
 
                 static const int KEYBOARD_SCROLL_STEP;
+
                 static const int DROPDOWN_DELAY;
 
                 // Timers
                 Game::Timer _locationScriptTimer;
+
                 Game::Timer _actionCursorTimer;
+
                 Game::Timer _ambientSfxTimer;
+
                 // for VM opcode add_timer_event
                 std::list<TimerEvent> _timerEvents;
+
                 // TODO: move to Game::Location class?
                 std::map<std::string, unsigned char> _ambientSfx;
 
                 std::unique_ptr<HexagonGrid> _hexagonGrid;
+
                 std::unique_ptr<LocationCamera> _camera;
+
                 std::map<std::string, VM::StackValue> _EVARS;
 
                 std::shared_ptr<Falltergeist::Game::Location> _location;
+
                 unsigned int _elevation = 0;
 
                 bool _locationEnter = true;
+
                 unsigned int _currentMap = 0;
+
                 unsigned int _lastClickedTile = 0;
+
                 Game::Object* _objectUnderCursor = nullptr;
+
                 Game::Object* _actionCursorLastObject = nullptr;
+
                 bool _actionCursorButtonPressed = false;
-                UI::PlayerPanel* _playerPanel;
-                UI::ScrollHitBox* _scrollHitBox;
+
+                std::shared_ptr<UI::PlayerPanel> _playerPanel;
+
+                std::shared_ptr<UI::ScrollHitBox> _scrollHitBox;
+
                 std::unique_ptr<Game::LocationState::ScrollHandler> _scrollHandler;
 
                 SKILL _skillInUse = SKILL::NONE;
 
                 std::list<std::shared_ptr<Game::Object>> _objects;
+
                 std::list<std::shared_ptr<Game::Object>> _flatObjects;
 
                 std::unique_ptr<UI::TextArea> _hexagonInfo;
 
-                Event::MouseHandler _mouseDownHandler, _mouseUpHandler, _mouseMoveHandler;
+                Event::MouseHandler _mouseDownHandler;
+
+                Event::MouseHandler _mouseUpHandler;
+
+                Event::MouseHandler _mouseMoveHandler;
 
                 std::vector<Input::Mouse::Icon> getCursorIconsForObject(Game::Object* object);
 
                 unsigned int _lightLevel = 0x10000;
+
                 Falltergeist::Graphics::Lightmap* _lightmap;
 
                 std::vector<Game::SpatialObject*> _spatials;
@@ -214,6 +236,7 @@ namespace Falltergeist
                 void renderCursor() const;
 
                 void renderObjects() const;
+
                 void renderObjectsText() const;
 
                 void renderCursorOutline() const;

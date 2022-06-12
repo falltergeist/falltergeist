@@ -27,10 +27,10 @@ namespace Falltergeist
         using ImageButtonType = UI::Factory::ImageButtonFactory::Type;
         using Point = Graphics::Point;
 
-        PlayerCreateOptions::PlayerCreateOptions(std::shared_ptr<UI::IResourceManager> resourceManager) : State()
-        {
-            this->resourceManager = resourceManager;
-            imageButtonFactory = std::make_unique<UI::Factory::ImageButtonFactory>(resourceManager);
+        PlayerCreateOptions::PlayerCreateOptions(
+            std::shared_ptr<UI::IResourceManager> resourceManager
+        ) : State(), _resourceManager(resourceManager) {
+            _imageButtonFactory = std::make_unique<UI::Factory::ImageButtonFactory>(_resourceManager);
         }
 
         void PlayerCreateOptions::init()
@@ -43,17 +43,17 @@ namespace Falltergeist
             setModal(true);
             setFullscreen(false);
 
-            auto background = resourceManager->getImage("art/intrface/opbase.frm");
+            auto background = _resourceManager->getImage("art/intrface/opbase.frm");
 
             Point backgroundPos = Point((Game::Game::getInstance()->renderer()->size() - background->size()) / 2);
             int backgroundX = backgroundPos.x();
             int backgroundY = backgroundPos.y();
 
-            auto saveButton = imageButtonFactory->getByType(ImageButtonType::OPTIONS_BUTTON, {backgroundX + 14, backgroundY + 18});
-            auto loadButton = imageButtonFactory->getByType(ImageButtonType::OPTIONS_BUTTON, {backgroundX + 14, backgroundY + 18 + 37});
-            auto printToFileButton = imageButtonFactory->getByType(ImageButtonType::OPTIONS_BUTTON, {backgroundX + 14, backgroundY + 18 + 37 * 2});
-            auto eraseButton = imageButtonFactory->getByType(ImageButtonType::OPTIONS_BUTTON, {backgroundX + 14, backgroundY + 18 + 37 * 3});
-            auto doneButton = imageButtonFactory->getByType(ImageButtonType::OPTIONS_BUTTON, {backgroundX + 14, backgroundY + 18 + 37 * 4});
+            auto saveButton = _imageButtonFactory->getByType(ImageButtonType::OPTIONS_BUTTON, {backgroundX + 14, backgroundY + 18});
+            auto loadButton = _imageButtonFactory->getByType(ImageButtonType::OPTIONS_BUTTON, {backgroundX + 14, backgroundY + 18 + 37});
+            auto printToFileButton = _imageButtonFactory->getByType(ImageButtonType::OPTIONS_BUTTON, {backgroundX + 14, backgroundY + 18 + 37 * 2});
+            auto eraseButton = _imageButtonFactory->getByType(ImageButtonType::OPTIONS_BUTTON, {backgroundX + 14, backgroundY + 18 + 37 * 3});
+            auto doneButton = _imageButtonFactory->getByType(ImageButtonType::OPTIONS_BUTTON, {backgroundX + 14, backgroundY + 18 + 37 * 4});
 
             saveButton->mouseClickHandler().add(   std::bind(&PlayerCreateOptions::onSaveButtonClick, this, std::placeholders::_1));
             loadButton->mouseClickHandler().add(   std::bind(&PlayerCreateOptions::onLoadButtonClick, this, std::placeholders::_1));
@@ -65,31 +65,31 @@ namespace Falltergeist
             Graphics::Color color = {0xb8, 0x9c, 0x28, 0xff};
 
             // label: save
-            auto saveButtonLabel = new UI::TextArea(_t(MSG_EDITOR, 600), backgroundX+8, backgroundY+26);
+            auto saveButtonLabel = std::make_shared<UI::TextArea>(_t(MSG_EDITOR, 600), backgroundX+8, backgroundY+26);
             saveButtonLabel->setFont(font, color);
             saveButtonLabel->setWidth(150);
             saveButtonLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
 
             // label: load
-            auto loadButtonLabel = new UI::TextArea(_t(MSG_EDITOR, 601), backgroundX+8, backgroundY+26+37);
+            auto loadButtonLabel = std::make_shared<UI::TextArea>(_t(MSG_EDITOR, 601), backgroundX+8, backgroundY+26+37);
             loadButtonLabel->setFont(font, color);
             loadButtonLabel->setWidth(150);
             loadButtonLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
 
             // label: print to file
-            auto printToFileButtonLabel = new UI::TextArea(_t(MSG_EDITOR, 602), backgroundX+8, backgroundY+26+37*2);
+            auto printToFileButtonLabel = std::make_shared<UI::TextArea>(_t(MSG_EDITOR, 602), backgroundX+8, backgroundY+26+37*2);
             printToFileButtonLabel->setFont(font, color);
             printToFileButtonLabel->setWidth(150);
             printToFileButtonLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
 
             // label: erase
-            auto eraseButtonLabel = new UI::TextArea(_t(MSG_EDITOR, 603), backgroundX+8, backgroundY+26+37*3);
+            auto eraseButtonLabel = std::make_shared<UI::TextArea>(_t(MSG_EDITOR, 603), backgroundX+8, backgroundY+26+37*3);
             eraseButtonLabel->setFont(font, color);
             eraseButtonLabel->setWidth(150);
             eraseButtonLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);
 
             // label: done
-            auto doneButtonLabel = new UI::TextArea(_t(MSG_EDITOR, 604), backgroundX+8, backgroundY+26+37*4);
+            auto doneButtonLabel = std::make_shared<UI::TextArea>(_t(MSG_EDITOR, 604), backgroundX+8, backgroundY+26+37*4);
             doneButtonLabel->setFont(font, color);
             doneButtonLabel->setWidth(150);
             doneButtonLabel->setHorizontalAlign(UI::TextArea::HorizontalAlign::CENTER);

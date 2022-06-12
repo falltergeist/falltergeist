@@ -26,10 +26,10 @@ namespace Falltergeist
         using ImageButtonType = UI::Factory::ImageButtonFactory::Type;
         using Point = Graphics::Point;
 
-        SettingsMenu::SettingsMenu(std::shared_ptr<UI::IResourceManager> resourceManager) : State()
-        {
-            this->resourceManager = resourceManager;
-            imageButtonFactory = std::make_unique<UI::Factory::ImageButtonFactory>(resourceManager);
+        SettingsMenu::SettingsMenu(
+            std::shared_ptr<UI::IResourceManager> resourceManager
+        ) : State(), _resourceManager(resourceManager) {
+            _imageButtonFactory = std::make_unique<UI::Factory::ImageButtonFactory>(_resourceManager);
         }
 
         void SettingsMenu::init()
@@ -43,7 +43,7 @@ namespace Falltergeist
             setFullscreen(true);
 
             // background
-            auto background = resourceManager->getImage("art/intrface/prefscrn.frm");
+            auto background = _resourceManager->getImage("art/intrface/prefscrn.frm");
             Point backgroundPos = Point((Game::Game::getInstance()->renderer()->size() - background->size()) / 2);
             int backgroundX = backgroundPos.x();
             int backgroundY = backgroundPos.y();
@@ -53,52 +53,52 @@ namespace Falltergeist
             auto settings = Game::Game::getInstance()->settings();
 
             // Switches (big)
-            auto combatDifficultySwitch = new UI::MultistateImageButton(UI::MultistateImageButton::Type::BIG_SWITCH, {backgroundX + 76, backgroundY + 149});
+            auto combatDifficultySwitch = std::make_shared<UI::MultistateImageButton>(UI::MultistateImageButton::Type::BIG_SWITCH, Graphics::Point(backgroundX + 76, backgroundY + 149));
             combatDifficultySwitch->setMaxState(3);
             combatDifficultySwitch->setState(settings->combatDifficulty());
             addUI("combat_difficulty",combatDifficultySwitch);
 
-            auto gameDifficultySwitch = new UI::MultistateImageButton(UI::MultistateImageButton::Type::BIG_SWITCH, {backgroundX + 76, backgroundY + 71});
+            auto gameDifficultySwitch = std::make_shared<UI::MultistateImageButton>(UI::MultistateImageButton::Type::BIG_SWITCH, Graphics::Point(backgroundX + 76, backgroundY + 71));
             gameDifficultySwitch->setMaxState(3);
             gameDifficultySwitch->setState(settings->gameDifficulty());
             addUI("game_difficulty",gameDifficultySwitch);
 
-            auto violenceLevelSwitch = new UI::MultistateImageButton(UI::MultistateImageButton::Type::BIG_SWITCH, {backgroundX + 76, backgroundY + 227});
+            auto violenceLevelSwitch = std::make_shared<UI::MultistateImageButton>(UI::MultistateImageButton::Type::BIG_SWITCH, Graphics::Point(backgroundX + 76, backgroundY + 227));
             violenceLevelSwitch->setState(settings->violenceLevel());
             addUI("violence_level",violenceLevelSwitch);
 
-            auto targetHighlightSwitch = new UI::MultistateImageButton(UI::MultistateImageButton::Type::BIG_SWITCH, {backgroundX + 76, backgroundY + 309});
+            auto targetHighlightSwitch = std::make_shared<UI::MultistateImageButton>(UI::MultistateImageButton::Type::BIG_SWITCH, Graphics::Point(backgroundX + 76, backgroundY + 309));
             targetHighlightSwitch->setMaxState(3);
             targetHighlightSwitch->setState(settings->targetHighlight());
             addUI("target_highlight",targetHighlightSwitch);
 
-            auto combatLooksSwitch = new UI::MultistateImageButton(UI::MultistateImageButton::Type::BIG_SWITCH, {backgroundX + 76, backgroundY + 387});
+            auto combatLooksSwitch = std::make_shared<UI::MultistateImageButton>(UI::MultistateImageButton::Type::BIG_SWITCH, Graphics::Point(backgroundX + 76, backgroundY + 387));
             combatLooksSwitch->setMaxState(2);
             combatLooksSwitch->setState(settings->combatLooks());
             addUI("combat_looks",combatLooksSwitch);
 
             // Switches (small)
-            auto combatMessagesSwitch = new UI::MultistateImageButton(UI::MultistateImageButton::Type::SMALL_SWITCH, {backgroundX + 299, backgroundY + 74});
+            auto combatMessagesSwitch = std::make_shared<UI::MultistateImageButton>(UI::MultistateImageButton::Type::SMALL_SWITCH, Graphics::Point(backgroundX + 299, backgroundY + 74));
             combatMessagesSwitch->setState(settings->combatMessages());
             addUI("combat_messages",combatMessagesSwitch);
 
-            auto combatTauntsSwitch = new UI::MultistateImageButton(UI::MultistateImageButton::Type::SMALL_SWITCH, {backgroundX + 299, backgroundY + 74 + 66});
+            auto combatTauntsSwitch = std::make_shared<UI::MultistateImageButton>(UI::MultistateImageButton::Type::SMALL_SWITCH, Graphics::Point(backgroundX + 299, backgroundY + 74 + 66));
             combatTauntsSwitch->setState(settings->combatTaunts());
             addUI("combat_taunts",combatTauntsSwitch);
 
-            auto languageFilterSwitch = new UI::MultistateImageButton(UI::MultistateImageButton::Type::SMALL_SWITCH, {backgroundX+299, backgroundY + 74 + 66 * 2});
+            auto languageFilterSwitch = std::make_shared<UI::MultistateImageButton>(UI::MultistateImageButton::Type::SMALL_SWITCH, Graphics::Point(backgroundX+299, backgroundY + 74 + 66 * 2));
             languageFilterSwitch->setState(settings->languageFilter());
             addUI("language_filter",languageFilterSwitch);
 
-            auto runningSwitch = new UI::MultistateImageButton(UI::MultistateImageButton::Type::SMALL_SWITCH, {backgroundX + 299, backgroundY + 74 + 66 * 3});
+            auto runningSwitch = std::make_shared<UI::MultistateImageButton>(UI::MultistateImageButton::Type::SMALL_SWITCH, Graphics::Point(backgroundX + 299, backgroundY + 74 + 66 * 3));
             runningSwitch->setState(settings->running());
             addUI("running",runningSwitch);
 
-            auto subtitlesSwitch = new UI::MultistateImageButton(UI::MultistateImageButton::Type::SMALL_SWITCH, {backgroundX + 299, backgroundY + 74 + 66 * 4});
+            auto subtitlesSwitch = std::make_shared<UI::MultistateImageButton>(UI::MultistateImageButton::Type::SMALL_SWITCH, Graphics::Point(backgroundX + 299, backgroundY + 74 + 66 * 4));
             subtitlesSwitch->setState(settings->subtitles());
             addUI("subtitles",subtitlesSwitch);
 
-            auto itemHightlightSwitch = new UI::MultistateImageButton(UI::MultistateImageButton::Type::SMALL_SWITCH, {backgroundX + 299, backgroundY + 74 + 66 * 5});
+            auto itemHightlightSwitch = std::make_shared<UI::MultistateImageButton>(UI::MultistateImageButton::Type::SMALL_SWITCH, Graphics::Point(backgroundX + 299, backgroundY + 74 + 66 * 5));
             itemHightlightSwitch->setState(settings->itemHighlight());
             addUI("item_highlight",itemHightlightSwitch);
 
@@ -297,31 +297,31 @@ namespace Falltergeist
             // BUTTONS
 
             // button: Default
-            auto defaultButton = imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {backgroundX + 23, backgroundY + 450});
+            auto defaultButton = _imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {backgroundX + 23, backgroundY + 450});
             defaultButton->mouseClickHandler().add(std::bind(&SettingsMenu::onDefaultButtonClick, this, std::placeholders::_1));
             addUI(defaultButton);
 
             // button: Done
-            auto doneButton = imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {backgroundX + 148, backgroundY + 450});
+            auto doneButton = _imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {backgroundX + 148, backgroundY + 450});
             doneButton->mouseClickHandler().add([this](Event::Event* event){ this->doSave(); });
             addUI(doneButton);
 
             // button: Cancel
-            auto cancelButton = imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {backgroundX + 263, backgroundY + 450});
+            auto cancelButton = _imageButtonFactory->getByType(ImageButtonType::SMALL_RED_CIRCLE, {backgroundX + 263, backgroundY + 450});
             cancelButton->mouseClickHandler().add([this](Event::Event* event){ this->doCancel(); });
             addUI(cancelButton);
 
             // button: Affect player speed
-            auto affectPlayerSpeedCheckBox = imageButtonFactory->getByType(ImageButtonType::CHECKBOX, {backgroundX + 383, backgroundY + 68});
+            auto affectPlayerSpeedCheckBox = _imageButtonFactory->getByType(ImageButtonType::CHECKBOX, {backgroundX + 383, backgroundY + 68});
             affectPlayerSpeedCheckBox->setChecked(settings->playerSpeedup());
             addUI("player_speedup", affectPlayerSpeedCheckBox);
 
             // SLIDERS
             // COMBAT SPEED SLIDER
-            auto combatSpeedSlider = new UI::Slider(
-                {backgroundX + 384, backgroundY + 50},
-                std::unique_ptr<UI::Image>(resourceManager->getImage("art/intrface/prfsldon.frm")),
-                std::unique_ptr<UI::Image>(resourceManager->getImage("art/intrface/prfsldof.frm"))
+            auto combatSpeedSlider = std::make_shared<UI::Slider>(
+                Graphics::Point(backgroundX + 384, backgroundY + 50),
+                _resourceManager->getImage("art/intrface/prfsldon.frm"),
+                _resourceManager->getImage("art/intrface/prfsldof.frm")
             );
             combatSpeedSlider->setMinValue(0.0);
             combatSpeedSlider->setMaxValue(50.0);
@@ -329,28 +329,28 @@ namespace Falltergeist
             addUI("combat_speed",combatSpeedSlider);
 
             // TEXT DELAY SLIDER
-            auto textDelaySlider = new UI::Slider(
-                {backgroundX + 384, backgroundY + 125},
-                std::unique_ptr<UI::Image>(resourceManager->getImage("art/intrface/prfsldon.frm")),
-                std::unique_ptr<UI::Image>(resourceManager->getImage("art/intrface/prfsldof.frm"))
+            auto textDelaySlider = std::make_shared<UI::Slider>(
+                Graphics::Point(backgroundX + 384, backgroundY + 125),
+                _resourceManager->getImage("art/intrface/prfsldon.frm"),
+                _resourceManager->getImage("art/intrface/prfsldof.frm")
             );
             textDelaySlider->setValue(settings->textDelay());
             addUI("text_delay",textDelaySlider);
 
             // MASTER AUDIO VOLUME SLIDER
-            auto masterAudioVolumeSlider = new UI::Slider(
-                {backgroundX + 384, backgroundY + 196},
-                std::unique_ptr<UI::Image>(resourceManager->getImage("art/intrface/prfsldon.frm")),
-                std::unique_ptr<UI::Image>(resourceManager->getImage("art/intrface/prfsldof.frm"))
+            auto masterAudioVolumeSlider = std::make_shared<UI::Slider>(
+                Graphics::Point(backgroundX + 384, backgroundY + 196),
+                _resourceManager->getImage("art/intrface/prfsldon.frm"),
+                _resourceManager->getImage("art/intrface/prfsldof.frm")
             );
             masterAudioVolumeSlider->setValue(settings->masterVolume());
             addUI("master_volume", masterAudioVolumeSlider);
 
             // MUSIC VOLUME SLIDER
-            auto musicVolumeSlider = new UI::Slider(
-                {backgroundX + 384, backgroundY + 196 + 51},
-                std::unique_ptr<UI::Image>(resourceManager->getImage("art/intrface/prfsldon.frm")),
-                std::unique_ptr<UI::Image>(resourceManager->getImage("art/intrface/prfsldof.frm"))
+            auto musicVolumeSlider = std::make_shared<UI::Slider>(
+                Graphics::Point(backgroundX + 384, backgroundY + 196 + 51),
+                _resourceManager->getImage("art/intrface/prfsldon.frm"),
+                _resourceManager->getImage("art/intrface/prfsldof.frm")
             );
             musicVolumeSlider->setValue(settings->musicVolume());
             addUI("music_volume", musicVolumeSlider);
@@ -360,37 +360,37 @@ namespace Falltergeist
             });
 
             // SOUND EFFECTS VOLUME SLIDER
-            auto soundEffectsVolumeSlider = new UI::Slider(
-                {backgroundX + 384, backgroundY + 196 + 51 * 2},
-                std::unique_ptr<UI::Image>(resourceManager->getImage("art/intrface/prfsldon.frm")),
-                std::unique_ptr<UI::Image>(resourceManager->getImage("art/intrface/prfsldof.frm"))
+            auto soundEffectsVolumeSlider = std::make_shared<UI::Slider>(
+                Graphics::Point(backgroundX + 384, backgroundY + 196 + 51 * 2),
+                _resourceManager->getImage("art/intrface/prfsldon.frm"),
+                _resourceManager->getImage("art/intrface/prfsldof.frm")
             );
             soundEffectsVolumeSlider->setValue(settings->sfxVolume());
             addUI("sfx_volume", soundEffectsVolumeSlider);
 
             // SPEECH VOLUME SLIDER
-            auto speechVolumeSlider = new UI::Slider(
-                {backgroundX + 384, backgroundY + 196 + 51 * 3},
-                std::unique_ptr<UI::Image>(resourceManager->getImage("art/intrface/prfsldon.frm")),
-                std::unique_ptr<UI::Image>(resourceManager->getImage("art/intrface/prfsldof.frm"))
+            auto speechVolumeSlider = std::make_shared<UI::Slider>(
+                Graphics::Point(backgroundX + 384, backgroundY + 196 + 51 * 3),
+                _resourceManager->getImage("art/intrface/prfsldon.frm"),
+                _resourceManager->getImage("art/intrface/prfsldof.frm")
             );
             speechVolumeSlider->setValue(settings->voiceVolume());
             addUI("voice_volume", speechVolumeSlider);
 
             // BRIGHTNESS LEVEL SLIDER
-            auto brightnessLevelSlider = new UI::Slider(
-                {backgroundX + 384, backgroundY + 196 + 51 * 4},
-                std::unique_ptr<UI::Image>(resourceManager->getImage("art/intrface/prfsldon.frm")),
-                std::unique_ptr<UI::Image>(resourceManager->getImage("art/intrface/prfsldof.frm"))
+            auto brightnessLevelSlider = std::make_shared<UI::Slider>(
+                Graphics::Point(backgroundX + 384, backgroundY + 196 + 51 * 4),
+                _resourceManager->getImage("art/intrface/prfsldon.frm"),
+                _resourceManager->getImage("art/intrface/prfsldof.frm")
             );
             brightnessLevelSlider->setValue(settings->brightness());
             addUI("brightness", brightnessLevelSlider);
 
             // MOUSE SENSITIVITY SLIDER
-            auto mouseSensitivitySlider = new UI::Slider(
-                {backgroundX + 384, backgroundY + 196 + 51 * 5},
-                std::unique_ptr<UI::Image>(resourceManager->getImage("art/intrface/prfsldon.frm")),
-                std::unique_ptr<UI::Image>(resourceManager->getImage("art/intrface/prfsldof.frm"))
+            auto mouseSensitivitySlider = std::make_shared<UI::Slider>(
+                Graphics::Point(backgroundX + 384, backgroundY + 196 + 51 * 5),
+                _resourceManager->getImage("art/intrface/prfsldon.frm"),
+                _resourceManager->getImage("art/intrface/prfsldof.frm")
             );
             mouseSensitivitySlider->setValue(settings->mouseSensitivity());
             addUI("mouse_sensitivity",mouseSensitivitySlider);
@@ -427,22 +427,22 @@ namespace Falltergeist
         //    });
         //}
 
-        UI::TextArea* SettingsMenu::_addLabel(const std::string& name, UI::TextArea* label)
+        std::shared_ptr<UI::TextArea> SettingsMenu::_addLabel(const std::string& name, std::shared_ptr<UI::TextArea> label)
         {
             _labels.insert(std::make_pair(name, label));
             return label;
         }
 
-        UI::TextArea* SettingsMenu::_addTextArea(const std::string& message, unsigned int x, unsigned int y)
+        std::shared_ptr<UI::TextArea> SettingsMenu::_addTextArea(const std::string& message, unsigned int x, unsigned int y)
         {
-            auto textArea = new UI::TextArea(message, x, y);
+            auto textArea = std::make_shared<UI::TextArea>(message, x, y);
             addUI(textArea);
             return textArea;
         }
 
-        UI::TextArea* SettingsMenu::_addTextArea(UI::TextArea* parent, unsigned int x, unsigned int y)
+        std::shared_ptr<UI::TextArea> SettingsMenu::_addTextArea(std::shared_ptr<UI::TextArea> parent, unsigned int x, unsigned int y)
         {
-            auto textArea = new UI::TextArea(*parent, Point(x, y));
+            auto textArea = std::make_shared<UI::TextArea>(*parent, Point(x, y));
             addUI(textArea);
             return textArea;
         }
