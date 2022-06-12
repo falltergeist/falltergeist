@@ -15,19 +15,19 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            Opcode80D3::Opcode80D3(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
+            Opcode80D3::Opcode80D3(std::shared_ptr<ILogger> logger) : OpcodeHandler(), _logger(logger)
             {
-                this->logger = std::move(logger);
+
             }
 
-            void Opcode80D3::_run()
+            void Opcode80D3::_run(VM::Script& script)
             {
-                logger->debug() << "[80D3] int tile_distance_objs(void* p2, void* p1)" << std::endl;
-                auto obj1 = _script->dataStack()->popObject();
-                auto obj2 = _script->dataStack()->popObject();
+                _logger->debug() << "[80D3] int tile_distance_objs(void* p2, void* p1)" << std::endl;
+                auto obj1 = script.dataStack()->popObject();
+                auto obj2 = script.dataStack()->popObject();
                 int distance = Game::Game::getInstance()->locationState()->hexagonGrid()->distance(obj1->hexagon(),
                                                                                              obj2->hexagon());
-                _script->dataStack()->push(distance);
+                script.dataStack()->push(distance);
             }
         }
     }

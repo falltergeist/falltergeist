@@ -14,15 +14,15 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            Opcode8118::Opcode8118(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
+            Opcode8118::Opcode8118(std::shared_ptr<ILogger> logger) : OpcodeHandler(), _logger(logger)
             {
-                this->logger = std::move(logger);
+
             }
 
-            void Opcode8118::_run()
+            void Opcode8118::_run(VM::Script& script)
             {
-                logger->debug() << "[8118] [*] int get_month" << std::endl;
-                _script->dataStack()->push(Game::Game::getInstance()->gameTime()->month());
+                _logger->debug() << "[8118] [*] int get_month" << std::endl;
+                script.dataStack()->push(Game::Game::getInstance()->gameTime()->month());
             }
         }
     }

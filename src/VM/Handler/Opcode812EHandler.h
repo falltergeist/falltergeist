@@ -14,14 +14,14 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            class Opcode812E : public OpcodeHandler
+            class Opcode812E final : public OpcodeHandler
             {
                 public:
-                    Opcode812E(VM::Script *script, std::shared_ptr<ILogger> logger);
+                    Opcode812E(std::shared_ptr<ILogger> logger);
 
                 private:
-                    std::shared_ptr<ILogger> logger;
-                    void _run() override;
+                    std::shared_ptr<ILogger> _logger;
+                    void _run(VM::Script& script) override;
             };
         }
     }

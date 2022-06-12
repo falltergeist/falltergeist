@@ -13,14 +13,14 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            Opcode80DF::Opcode80DF(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
+            Opcode80DF::Opcode80DF(std::shared_ptr<ILogger> logger) : OpcodeHandler(), _logger(logger)
             {
-                this->logger = std::move(logger);
+
             }
 
-            void Opcode80DF::_run()
+            void Opcode80DF::_run(VM::Script& script)
             {
-                logger->debug() << "[80DF] [?] end_dialogue" << std::endl;
+                _logger->debug() << "[80DF] [?] end_dialogue" << std::endl;
                 auto game = Game::Game::getInstance();
                 game->popState(); // interact state
             }

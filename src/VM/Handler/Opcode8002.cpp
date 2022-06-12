@@ -11,14 +11,14 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            Opcode8002::Opcode8002(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
+            Opcode8002::Opcode8002(std::shared_ptr<ILogger> logger) : OpcodeHandler(), _logger(logger)
             {
-                this->logger = std::move(logger);
+
             }
 
-            void Opcode8002::_run()
+            void Opcode8002::_run(VM::Script& script)
             {
-                logger->debug() << "[8002] op_critical_start" << std::endl;
+                _logger->debug() << "[8002] op_critical_start" << std::endl;
             }
         }
     }

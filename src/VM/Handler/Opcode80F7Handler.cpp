@@ -12,15 +12,15 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            Opcode80F7::Opcode80F7(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
+            Opcode80F7::Opcode80F7(std::shared_ptr<ILogger> logger) : OpcodeHandler(), _logger(logger)
             {
-                this->logger = std::move(logger);
+
             }
 
-            void Opcode80F7::_run()
+            void Opcode80F7::_run(VM::Script& script)
             {
-                logger->debug() << "[80F7] [=] int fixed_param()" << std::endl;
-                _script->dataStack()->push(_script->fixedParam());
+                _logger->debug() << "[80F7] [=] int fixed_param()" << std::endl;
+                script.dataStack()->push(script.fixedParam());
             }
         }
     }

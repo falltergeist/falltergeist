@@ -12,15 +12,15 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            Opcode8019::Opcode8019(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
+            Opcode8019::Opcode8019(std::shared_ptr<ILogger> logger) : OpcodeHandler(), _logger(logger)
             {
-                this->logger = std::move(logger);
+
             }
 
-            void Opcode8019::_run()
+            void Opcode8019::_run(VM::Script& script)
             {
-                logger->debug() << "[8019] [*] op_swapa" << std::endl;
-                _script->returnStack()->swap();
+                _logger->debug() << "[8019] [*] op_swapa" << std::endl;
+                script.returnStack()->swap();
             }
         }
     }

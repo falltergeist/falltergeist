@@ -12,19 +12,19 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            Opcode8004::Opcode8004(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
+            Opcode8004::Opcode8004(std::shared_ptr<ILogger> logger) : OpcodeHandler(), _logger(logger)
             {
-                this->logger = std::move(logger);
+
             }
 
-            void Opcode8004::_run()
+            void Opcode8004::_run(VM::Script& script)
             {
-                auto address = _script->dataStack()->popInteger();
-                logger->debug()
+                auto address = script.dataStack()->popInteger();
+                _logger->debug()
                     << "[8004] [*] op_jmp(address)" << std::endl
                     << "    address: " << std::hex << address << std::endl
                 ;
-                _script->setProgramCounter(address);
+                script.setProgramCounter(address);
             }
         }
     }

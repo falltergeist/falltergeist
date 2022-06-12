@@ -14,17 +14,17 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            Opcode80B4::Opcode80B4(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
+            Opcode80B4::Opcode80B4(std::shared_ptr<ILogger> logger) : OpcodeHandler(), _logger(logger)
             {
-                this->logger = std::move(logger);
+
             }
 
-            void Opcode80B4::_run()
+            void Opcode80B4::_run(VM::Script& script)
             {
-                logger->debug() << "[80B4] [+] int rand(int min, int max)" << std::endl;
-                auto max = _script->dataStack()->popInteger();
-                auto min = _script->dataStack()->popInteger();
-                _script->dataStack()->push(rand() % (max - min + 1) + min);
+                _logger->debug() << "[80B4] [+] int rand(int min, int max)" << std::endl;
+                auto max = script.dataStack()->popInteger();
+                auto min = script.dataStack()->popInteger();
+                script.dataStack()->push(rand() % (max - min + 1) + min);
             }
         }
     }

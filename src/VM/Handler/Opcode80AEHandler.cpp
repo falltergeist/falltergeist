@@ -12,15 +12,15 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            Opcode80AE::Opcode80AE(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
+            Opcode80AE::Opcode80AE(std::shared_ptr<ILogger> logger) : OpcodeHandler(), _logger(logger)
             {
-                this->logger = std::move(logger);
+
             }
 
-            void Opcode80AE::_run()
+            void Opcode80AE::_run(VM::Script& script)
             {
-                logger->debug() << "[80AE] [=] int do_check(ObjectPtr who, int check, int modifier)" << std::endl;
-                auto dataStack = _script->dataStack();
+                _logger->debug() << "[80AE] [=] int do_check(ObjectPtr who, int check, int modifier)" << std::endl;
+                auto dataStack = script.dataStack();
                 dataStack->popInteger();
                 dataStack->popInteger();
                 dataStack->popObject();

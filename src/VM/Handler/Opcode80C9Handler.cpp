@@ -21,31 +21,31 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            Opcode80C9::Opcode80C9(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
+            Opcode80C9::Opcode80C9(std::shared_ptr<ILogger> logger) : OpcodeHandler(), _logger(logger)
             {
-                this->logger = std::move(logger);
+
             }
 
-            void Opcode80C9::_run()
+            void Opcode80C9::_run(VM::Script& script)
             {
-                logger->debug() << "[80C9] [+] int obj_item_subtype(GameItemObject* object)" << std::endl;
-                auto object = _script->dataStack()->popObject();
+                _logger->debug() << "[80C9] [+] int obj_item_subtype(GameItemObject* object)" << std::endl;
+                auto object = script.dataStack()->popObject();
                 if (dynamic_cast<Game::ArmorItemObject *>(object)) {
-                    _script->dataStack()->push(0);
+                    script.dataStack()->push(0);
                 } else if (dynamic_cast<Game::ContainerItemObject *>(object)) {
-                    _script->dataStack()->push(1);
+                    script.dataStack()->push(1);
                 } else if (dynamic_cast<Game::DrugItemObject *>(object)) {
-                    _script->dataStack()->push(2);
+                    script.dataStack()->push(2);
                 } else if (dynamic_cast<Game::WeaponItemObject *>(object)) {
-                    _script->dataStack()->push(3);
+                    script.dataStack()->push(3);
                 } else if (dynamic_cast<Game::AmmoItemObject *>(object)) {
-                    _script->dataStack()->push(4);
+                    script.dataStack()->push(4);
                 } else if (dynamic_cast<Game::MiscItemObject *>(object)) {
-                    _script->dataStack()->push(5);
+                    script.dataStack()->push(5);
                 } else if (dynamic_cast<Game::KeyItemObject *>(object)) {
-                    _script->dataStack()->push(6);
+                    script.dataStack()->push(6);
                 } else {
-                    _script->dataStack()->push(-1);
+                    script.dataStack()->push(-1);
                 }
             }
         }

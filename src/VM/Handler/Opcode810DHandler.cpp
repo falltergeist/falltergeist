@@ -16,16 +16,16 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            Opcode810D::Opcode810D(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
+            Opcode810D::Opcode810D(std::shared_ptr<ILogger> logger) : OpcodeHandler(), _logger(logger)
             {
-                this->logger = std::move(logger);
+
             }
 
-            void Opcode810D::_run()
+            void Opcode810D::_run(VM::Script& script)
             {
-                logger->debug() << "[810D] [=] void* obj_carrying_pid_obj(void* who, int pid)" << std::endl;
-                const int pid = _script->dataStack()->popInteger();
-                auto who = _script->dataStack()->popObject();
+                _logger->debug() << "[810D] [=] void* obj_carrying_pid_obj(void* who, int pid)" << std::endl;
+                const int pid = script.dataStack()->popInteger();
+                auto who = script.dataStack()->popObject();
 
                 auto findItem = [&](std::vector<Game::ItemObject *> *container) -> Game::ItemObject* {
                     auto iterator = std::find_if(container->begin(), container->end(),
@@ -38,13 +38,13 @@ namespace Falltergeist
                 };
 
                 if (auto critter = dynamic_cast<Game::CritterObject *>(who)) {
-                    _script->dataStack()->push(findItem(critter->inventory()));
+                    script.dataStack()->push(findItem(critter->inventory()));
                 } else if (auto container = dynamic_cast<Game::ContainerItemObject *>(who)) {
-                    _script->dataStack()->push(findItem(container->inventory()));
+                    script.dataStack()->push(findItem(container->inventory()));
                 } else {
-                    _warning(std::string("obj_carrying_pid_obj: 'who' is not valid GameCritterObject, nor ContainerItemObject. It is ") +
+                    _warning(script, std::string("obj_carrying_pid_obj: 'who' is not valid GameCritterObject, nor ContainerItemObject. It is ") +
                              typeid(who).name());
-                    _script->dataStack()->push(nullptr);
+                    script.dataStack()->push(nullptr);
                 }
             }
         }

@@ -12,16 +12,16 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            Opcode8150::Opcode8150(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
+            Opcode8150::Opcode8150(std::shared_ptr<ILogger> logger) : OpcodeHandler(), _logger(logger)
             {
-                this->logger = std::move(logger);
+
             }
 
-            void Opcode8150::_run()
+            void Opcode8150::_run(VM::Script& script)
             {
-                logger->debug() << "[8150] [=] int obj_on_screen(void* obj)" << std::endl;
-                _script->dataStack()->popObject();
-                _script->dataStack()->push(1);
+                _logger->debug() << "[8150] [=] int obj_on_screen(void* obj)" << std::endl;
+                script.dataStack()->popObject();
+                script.dataStack()->push(1);
             }
         }
     }

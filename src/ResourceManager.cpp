@@ -140,6 +140,18 @@ namespace Falltergeist {
         return itemPtr;
     }
 
+    template<typename T>
+    std::unique_ptr<T> ResourceManager::_datFileItemUniquePtr(std::string filename) {
+        std::transform(filename.begin(), filename.end(), filename.begin(), ::tolower);
+
+        std::unique_ptr<T> itemPtr = nullptr;
+        _loadStreamForFile(filename, [&itemPtr](Format::Dat::Stream &&stream) {
+            itemPtr = std::make_unique<T>(std::move(stream));
+        });
+
+        return itemPtr;
+    }
+
     Format::Frm::File *ResourceManager::frmFileType(const std::string &filename) {
         // TODO: Maybe get rid of all wrappers like this and call template function directly from outside.
         return _datFileItem<Format::Frm::File>(filename);
@@ -178,9 +190,7 @@ namespace Falltergeist {
     }
 
     std::unique_ptr<Format::Int::File> ResourceManager::intFileType(const std::string &filename) {
-        return nullptr;
-        // TODO fix me
-        //return _datFileItem<Format::Int::File>(filename);
+        return _datFileItemUniquePtr<Format::Int::File>(filename);
     }
 
     Format::Msg::File *ResourceManager::msgFileType(const std::string &filename) {

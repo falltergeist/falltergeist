@@ -12,16 +12,16 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            Opcode801C::Opcode801C(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
+            Opcode801C::Opcode801C(std::shared_ptr<ILogger> logger) : OpcodeHandler(), _logger(logger)
             {
-                this->logger = std::move(logger);
+
             }
 
-            void Opcode801C::_run()
+            void Opcode801C::_run(VM::Script& script)
             {
-                _script->setProgramCounter(_script->returnStack()->popInteger());
-                logger->debug()
-                    << "[801C] [*] op_pop_return 0x" << std::hex << _script->programCounter()
+                script.setProgramCounter(script.returnStack()->popInteger());
+                _logger->debug()
+                    << "[801C] [*] op_pop_return 0x" << std::hex << script.programCounter()
                     << std::endl
                 ;
             }

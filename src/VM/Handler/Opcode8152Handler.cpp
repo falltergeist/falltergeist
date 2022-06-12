@@ -12,20 +12,20 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            Opcode8152::Opcode8152(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
+            Opcode8152::Opcode8152(std::shared_ptr<ILogger> logger) : OpcodeHandler(), _logger(logger)
             {
-                this->logger = std::move(logger);
+
             }
 
-            void Opcode8152::_run()
+            void Opcode8152::_run(VM::Script& script)
             {
-                logger->debug()
+                _logger->debug()
                     << "[8152] [=] void op_critter_set_flee_state(critter who, boolean flag)"
                     << std::endl
                 ;
                 // @TODO: add implementation
-                _script->dataStack()->popLogical();
-                _script->dataStack()->popObject();
+                script.dataStack()->popLogical();
+                script.dataStack()->popObject();
             }
         }
     }

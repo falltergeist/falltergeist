@@ -14,18 +14,18 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            Opcode80F6::Opcode80F6(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
+            Opcode80F6::Opcode80F6(std::shared_ptr<ILogger> logger) : OpcodeHandler(), _logger(logger)
             {
-                this->logger = std::move(logger);
+
             }
 
-            void Opcode80F6::_run()
+            void Opcode80F6::_run(VM::Script& script)
             {
-                logger->debug() << "[80F6] [*] int game_time_hour" << std::endl;
+                _logger->debug() << "[80F6] [*] int game_time_hour" << std::endl;
                 unsigned int hours = Game::Game::getInstance()->gameTime()->hours();
                 unsigned int minutes = Game::Game::getInstance()->gameTime()->minutes();
 
-                _script->dataStack()->push(hours * 100 + minutes);
+                script.dataStack()->push(hours * 100 + minutes);
             }
         }
     }

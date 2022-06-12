@@ -14,16 +14,16 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            Opcode80E1::Opcode80E1(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
+            Opcode80E1::Opcode80E1(std::shared_ptr<ILogger> logger) : OpcodeHandler(), _logger(logger)
             {
-                this->logger = std::move(logger);
+
             }
 
-            void Opcode80E1::_run()
+            void Opcode80E1::_run(VM::Script& script)
             {
                 // @TODO: add implementation
-                logger->debug() << "[80E1] [*] int metarule3(int meta, int p1, int p2, int p3)" << std::endl;
-                auto dataStack = _script->dataStack();
+                _logger->debug() << "[80E1] [*] int metarule3(int meta, int p1, int p2, int p3)" << std::endl;
+                auto dataStack = script.dataStack();
 
                 auto arg3 = dataStack->pop();
                 auto arg2 = dataStack->pop();

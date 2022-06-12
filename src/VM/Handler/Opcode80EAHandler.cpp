@@ -9,13 +9,15 @@
 namespace Falltergeist {
     namespace VM {
         namespace Handler {
-            Opcode80EA::Opcode80EA(VM::Script* script, std::shared_ptr<ILogger> logger, std::shared_ptr<Game::Time> time)
-                : OpcodeHandler(script), _logger(logger), _time(time) {
+            Opcode80EA::Opcode80EA(
+                std::shared_ptr<ILogger> logger,
+                std::shared_ptr<Game::Time> time
+            ) : OpcodeHandler(), _logger(logger), _time(time) {
             }
 
-            void Opcode80EA::_run() {
+            void Opcode80EA::_run(VM::Script& script) {
                 _logger->debug() << "[80EA] [*] int gameTime()" << std::endl;
-                _script->dataStack()->push((int)_time->ticks());
+                script.dataStack()->push((int)_time->ticks());
             }
         }
     }

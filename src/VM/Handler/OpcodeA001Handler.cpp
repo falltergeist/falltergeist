@@ -14,25 +14,25 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            OpcodeA001::OpcodeA001(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
+            OpcodeA001::OpcodeA001(std::shared_ptr<ILogger> logger) : OpcodeHandler(), _logger(logger)
             {
-                this->logger = std::move(logger);
+
             }
 
-            void OpcodeA001::_run()
+            void OpcodeA001::_run(VM::Script& script)
             {
                 union {
                     unsigned int iValue;
                     float fValue;
                 } uValue;
 
-                uValue.iValue = _script->intFile()->readValue();
+                uValue.iValue = script.intFile()->readValue();
 
                 // Skip 4 bytes for read float value
-                _script->setProgramCounter(_script->programCounter() + 4);
-                _script->dataStack()->push(StackValue(uValue.fValue));
+                script.setProgramCounter(script.programCounter() + 4);
+                script.dataStack()->push(StackValue(uValue.fValue));
 
-                logger->debug()
+                _logger->debug()
                     << "[A001] [*] push_d float" << std::endl
                     << "    value: " << std::to_string(uValue.fValue) << std::endl
                 ;

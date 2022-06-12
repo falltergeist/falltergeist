@@ -12,20 +12,20 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            Opcode8031::Opcode8031(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
+            Opcode8031::Opcode8031(std::shared_ptr<ILogger> logger) : OpcodeHandler(), _logger(logger)
             {
-                this->logger = std::move(logger);
+
             }
 
-            void Opcode8031::_run()
+            void Opcode8031::_run(VM::Script& script)
             {
-                auto num = _script->dataStack()->popInteger();
-                auto value = _script->dataStack()->pop();
-                logger->debug()
+                auto num = script.dataStack()->popInteger();
+                auto value = script.dataStack()->pop();
+                _logger->debug()
                     << "[8031] [*] op_store " << "var" << std::hex << num << " type = "
                     << value.typeName() << std::endl
                 ;
-                _script->dataStack()->values()->at(_script->DVARbase() + num) = value;
+                script.dataStack()->values()->at(script.DVARbase() + num) = value;
             }
         }
     }

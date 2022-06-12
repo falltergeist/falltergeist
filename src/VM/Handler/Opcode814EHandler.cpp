@@ -12,15 +12,15 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            Opcode814E::Opcode814E(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
+            Opcode814E::Opcode814E(std::shared_ptr<ILogger> logger) : OpcodeHandler(), _logger(logger)
             {
-                this->logger = std::move(logger);
+
             }
 
-            void Opcode814E::_run()
+            void Opcode814E::_run(VM::Script& script)
             {
-                logger->debug() << "[814E] [=] void gdialog_set_barter_mod(int mod)" << std::endl;
-                _script->dataStack()->popInteger();
+                _logger->debug() << "[814E] [=] void gdialog_set_barter_mod(int mod)" << std::endl;
+                script.dataStack()->popInteger();
             }
         }
     }

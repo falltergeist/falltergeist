@@ -12,17 +12,17 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            Opcode802B::Opcode802B(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
+            Opcode802B::Opcode802B(std::shared_ptr<ILogger> logger) : OpcodeHandler(), _logger(logger)
             {
-                this->logger = std::move(logger);
+
             }
 
-            void Opcode802B::_run()
+            void Opcode802B::_run(VM::Script& script)
             {
-                auto argumentsCounter = _script->dataStack()->popInteger();
-                _script->returnStack()->push(static_cast<unsigned>(_script->DVARbase()));
-                _script->setDVARBase(_script->dataStack()->size() - argumentsCounter);
-                logger->debug() << "[802B] [*] op_push_base = " << _script->DVARbase() << std::endl;
+                auto argumentsCounter = script.dataStack()->popInteger();
+                script.returnStack()->push(static_cast<unsigned>(script.DVARbase()));
+                script.setDVARBase(script.dataStack()->size() - argumentsCounter);
+                _logger->debug() << "[802B] [*] op_push_base = " << script.DVARbase() << std::endl;
             }
 
         }

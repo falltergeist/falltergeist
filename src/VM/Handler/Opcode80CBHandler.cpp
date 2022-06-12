@@ -14,23 +14,23 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            Opcode80CB::Opcode80CB(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
+            Opcode80CB::Opcode80CB(std::shared_ptr<ILogger> logger) : OpcodeHandler(), _logger(logger)
             {
-                this->logger = std::move(logger);
+
             }
 
-            void Opcode80CB::_run()
+            void Opcode80CB::_run(VM::Script& script)
             {
-                logger->debug()
+                _logger->debug()
                     << "[80CB] [+] int set_critter_stat(GameCritterObject* who, int number, int value)"
                     << std::endl
                 ;
-                int value = _script->dataStack()->popInteger();
-                int number = _script->dataStack()->popInteger();
+                int value = script.dataStack()->popInteger();
+                int number = script.dataStack()->popInteger();
                 if (number > 6) {
                     _error("set_critter_stat - number out of range:" + std::to_string(number));
                 }
-                auto object = _script->dataStack()->popObject();
+                auto object = script.dataStack()->popObject();
                 if (!object) {
                     _error("set_critter_stat(who, num, value) - who is null");
                 }
@@ -40,9 +40,9 @@ namespace Falltergeist
                 }
                 critter->setStat((STAT) number, value);
                 if (dynamic_cast<Game::DudeObject *>(critter)) {
-                    _script->dataStack()->push(3); // for dude
+                    script.dataStack()->push(3); // for dude
                 } else {
-                    _script->dataStack()->push(-1); // for critter
+                    script.dataStack()->push(-1); // for critter
                 }
             }
         }

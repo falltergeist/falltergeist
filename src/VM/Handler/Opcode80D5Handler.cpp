@@ -16,19 +16,19 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            Opcode80D5::Opcode80D5(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
+            Opcode80D5::Opcode80D5(std::shared_ptr<ILogger> logger) : OpcodeHandler(), _logger(logger)
             {
-                this->logger = std::move(logger);
+
             }
 
-            void Opcode80D5::_run()
+            void Opcode80D5::_run(VM::Script& script)
             {
-                logger->debug()
+                _logger->debug()
                     << "[80D5] [*] int tile_num_in_direction(int start_tile, int dir, int distance)"
                     << std::endl
                 ;
 
-                auto dataStack = _script->dataStack();
+                auto dataStack = script.dataStack();
 
                 auto distance = dataStack->popInteger();
                 auto dir = dataStack->popInteger();

@@ -12,17 +12,17 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            Opcode8139::Opcode8139(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
+            Opcode8139::Opcode8139(std::shared_ptr<ILogger> logger) : OpcodeHandler(), _logger(logger)
             {
-                this->logger = std::move(logger);
+
             }
 
-            void Opcode8139::_run()
+            void Opcode8139::_run(VM::Script& script)
             {
-                logger->debug() << "[8139] [=] int item_caps_adjust(void* obj, int amount)" << std::endl;
-                _script->dataStack()->popInteger();
-                _script->dataStack()->popObject();
-                _script->dataStack()->push(0);
+                _logger->debug() << "[8139] [=] int item_caps_adjust(void* obj, int amount)" << std::endl;
+                script.dataStack()->popInteger();
+                script.dataStack()->popObject();
+                script.dataStack()->push(0);
             }
         }
     }

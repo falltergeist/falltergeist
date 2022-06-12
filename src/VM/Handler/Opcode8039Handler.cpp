@@ -13,16 +13,16 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            Opcode8039::Opcode8039(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
+            Opcode8039::Opcode8039(std::shared_ptr<ILogger> logger) : OpcodeHandler(), _logger(logger)
             {
-                this->logger = std::move(logger);
+
             }
 
-            void Opcode8039::_run() {
-                auto &debug = logger->debug();
+            void Opcode8039::_run(VM::Script& script) {
+                auto &debug = _logger->debug();
                 debug << "[8039] [*] op_add(aValue, bValue)" << std::endl;
-                auto bValue = _script->dataStack()->pop();
-                auto aValue = _script->dataStack()->pop();
+                auto bValue = script.dataStack()->pop();
+                auto aValue = script.dataStack()->pop();
                 debug << "    types: " << aValue.typeName() << " + " << bValue.typeName() << std::endl;
                 switch (bValue.type()) {
                     case StackValue::Type::INTEGER: // INTEGER
@@ -31,18 +31,18 @@ namespace Falltergeist
                         switch (aValue.type()) {
                             case StackValue::Type::INTEGER: // INTEGER + INTEGER
                             {
-                                _script->dataStack()->push(aValue.integerValue() + arg2);
+                                script.dataStack()->push(aValue.integerValue() + arg2);
                                 break;
                             }
                             case StackValue::Type::FLOAT: // FLOAT + INTEGER
                             {
-                                _script->dataStack()->push(aValue.floatValue() + (float) arg2);
+                                script.dataStack()->push(aValue.floatValue() + (float) arg2);
                                 break;
                             }
                             case StackValue::Type::STRING: // STRING + INTEGER
                             {
                                 std::string arg1 = aValue.stringValue();
-                                _script->dataStack()->push(arg1 + bValue.toString());
+                                script.dataStack()->push(arg1 + bValue.toString());
                                 break;
                             }
                             default: {
@@ -56,7 +56,7 @@ namespace Falltergeist
                         switch (aValue.type()) {
                             case StackValue::Type::STRING: // STRING + STRING
                             {
-                                _script->dataStack()->push(aValue.stringValue() + arg2);
+                                script.dataStack()->push(aValue.stringValue() + arg2);
                                 break;
                             }
                             case StackValue::Type::FLOAT: // FLOAT + STRING
@@ -81,18 +81,18 @@ namespace Falltergeist
                         switch (aValue.type()) {
                             case StackValue::Type::INTEGER: // INTEGER + FLOAT
                             {
-                                _script->dataStack()->push((float) aValue.integerValue() + arg2);
+                                script.dataStack()->push((float) aValue.integerValue() + arg2);
                                 break;
                             }
                             case StackValue::Type::FLOAT: // FLOAT + FLOAT
                             {
-                                _script->dataStack()->push(aValue.floatValue() + arg2);
+                                script.dataStack()->push(aValue.floatValue() + arg2);
                                 break;
                             }
                             case StackValue::Type::STRING: // STRING + FLOAT
                             {
                                 auto arg1 = aValue.stringValue();
-                                _script->dataStack()->push(arg1 + bValue.toString());
+                                script.dataStack()->push(arg1 + bValue.toString());
                                 break;
                             }
                             default: {

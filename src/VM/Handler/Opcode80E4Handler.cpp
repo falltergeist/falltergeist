@@ -12,16 +12,16 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            Opcode80E4::Opcode80E4(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
+            Opcode80E4::Opcode80E4(std::shared_ptr<ILogger> logger) : OpcodeHandler(), _logger(logger)
             {
-                this->logger = std::move(logger);
+
             }
 
-            void Opcode80E4::_run()
+            void Opcode80E4::_run(VM::Script& script)
             {
-                logger->debug() << "[80E4] [=] void load_map(string* map, int param)" << std::endl;
-                _script->dataStack()->popInteger();
-                _script->dataStack()->popObject();
+                _logger->debug() << "[80E4] [=] void load_map(string* map, int param)" << std::endl;
+                script.dataStack()->popInteger();
+                script.dataStack()->popObject();
             }
         }
     }

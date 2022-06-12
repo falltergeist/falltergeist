@@ -13,28 +13,28 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            Opcode80C8::Opcode80C8(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
+            Opcode80C8::Opcode80C8(std::shared_ptr<ILogger> logger) : OpcodeHandler(), _logger(logger)
             {
-                this->logger = std::move(logger);
+
             }
 
-            void Opcode80C8::_run()
+            void Opcode80C8::_run(VM::Script& script)
             {
                 // @TODO: implement
-                logger->debug() << "[80C8] [=] int obj_type(void* obj)" << std::endl;
-                auto object = _script->dataStack()->popObject();
+                _logger->debug() << "[80C8] [=] int obj_type(void* obj)" << std::endl;
+                auto object = script.dataStack()->popObject();
                 Game::Object::Type type = object->type();
                 switch (type) {
                     case Game::Object::Type::CRITTER:
                     case Game::Object::Type::DUDE:
-                        _script->dataStack()->push(1);
+                        script.dataStack()->push(1);
                         break;
                     default:
-                        _script->dataStack()->push((int) type);
+                        script.dataStack()->push((int) type);
                         break;
 
                 }
-                //_script->dataStack()->push(object);
+                //script.dataStack()->push(object);
             }
         }
     }

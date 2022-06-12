@@ -14,25 +14,25 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            Opcode8005::Opcode8005(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
+            Opcode8005::Opcode8005(std::shared_ptr<ILogger> logger) : OpcodeHandler(), _logger(logger)
             {
-                this->logger = std::move(logger);
+
             }
 
-            void Opcode8005::_run()
+            void Opcode8005::_run(VM::Script& script)
             {
-                auto functionIndex = _script->dataStack()->popInteger();
+                auto functionIndex = script.dataStack()->popInteger();
                 // @TODO: pass arguments and call external procedures
-                /*auto argumentCount = _script->dataStack()->popInteger();
+                /*auto argumentCount = script.dataStack()->popInteger();
                 std::vector<int> args;
                 for (int i = 0; i < argumentCount; i++)
                 {
-                    args.push_back(_script->dataStack()->popInteger());
+                    args.push_back(script.dataStack()->popInteger());
                 }*/
-                _script->setProgramCounter(_script->intFile()->procedures().at(functionIndex).bodyOffset());
-                logger->debug()
+                script.setProgramCounter(script.intFile()->procedures().at(functionIndex).bodyOffset());
+                _logger->debug()
                     << "[8005] [*] op_call(0x" << std::hex << functionIndex << ") = 0x"
-                    << _script->programCounter() << std::endl
+                    << script.programCounter() << std::endl
                 ;
             }
         }

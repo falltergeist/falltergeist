@@ -17,17 +17,17 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            Opcode811C::Opcode811C(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
+            Opcode811C::Opcode811C(std::shared_ptr<ILogger> logger) : OpcodeHandler(), _logger(logger)
             {
-                this->logger = std::move(logger);
+
             }
 
-            void Opcode811C::_run()
+            void Opcode811C::_run(VM::Script& script)
             {
-                logger->debug() << "[811C] [?] gsay_start" << std::endl;
+                _logger->debug() << "[811C] [?] gsay_start" << std::endl;
 
                 if (auto interact = dynamic_cast<Falltergeist::State::CritterInteract *>(Game::Game::getInstance()->topState())) {
-                    interact->dialogReview()->setCritterName(_script->owner()->scrName());
+                    interact->dialogReview()->setCritterName(script.owner()->scrName());
                     interact->switchSubState(State::CritterInteract::SubState::DIALOG);
                 }
             }

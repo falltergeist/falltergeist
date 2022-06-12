@@ -13,16 +13,16 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            Opcode812D::Opcode812D(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
+            Opcode812D::Opcode812D(std::shared_ptr<ILogger> logger) : OpcodeHandler(), _logger(logger)
             {
-                this->logger = std::move(logger);
+
             }
 
-            void Opcode812D::_run()
+            void Opcode812D::_run(VM::Script& script)
             {
-                logger->debug() << "[812D] [+] int is_locked(GameDoorSceneryObject* object)" << std::endl;
-                auto object = dynamic_cast<Game::DoorSceneryObject *>(_script->dataStack()->popObject());
-                _script->dataStack()->push(object->locked());
+                _logger->debug() << "[812D] [+] int is_locked(GameDoorSceneryObject* object)" << std::endl;
+                auto object = dynamic_cast<Game::DoorSceneryObject *>(script.dataStack()->popObject());
+                script.dataStack()->push(object->locked());
             }
         }
     }

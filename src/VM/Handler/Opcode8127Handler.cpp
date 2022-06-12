@@ -12,16 +12,16 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            Opcode8127::Opcode8127(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
+            Opcode8127::Opcode8127(std::shared_ptr<ILogger> logger) : OpcodeHandler(), _logger(logger)
             {
-                this->logger = std::move(logger);
+
             }
 
-            void Opcode8127::_run()
+            void Opcode8127::_run(VM::Script& script)
             {
-                logger->debug() << "[8127] [*] void critter_injure(ObjectPtr who, int how)" << std::endl;
-                _script->dataStack()->popInteger();
-                _script->dataStack()->popObject();
+                _logger->debug() << "[8127] [*] void critter_injure(ObjectPtr who, int how)" << std::endl;
+                script.dataStack()->popInteger();
+                script.dataStack()->popObject();
             }
         }
     }

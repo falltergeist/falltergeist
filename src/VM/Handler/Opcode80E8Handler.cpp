@@ -13,20 +13,20 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            Opcode80E8::Opcode80E8(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
+            Opcode80E8::Opcode80E8(std::shared_ptr<ILogger> logger) : OpcodeHandler(), _logger(logger)
             {
-                this->logger = std::move(logger);
+
             }
 
-            void Opcode80E8::_run()
+            void Opcode80E8::_run(VM::Script& script)
             {
-                auto &debug = logger->debug()
+                auto &debug = _logger->debug()
                     << "[80E8] [+] void critter_heal(ObjectPtr who, int amount)"
                     << std::endl
                 ;
-                int amount = _script->dataStack()->popInteger();
+                int amount = script.dataStack()->popInteger();
                 debug << "    amount = " << amount << std::endl;
-                auto critter = dynamic_cast<Game::CritterObject *>(_script->dataStack()->popObject());
+                auto critter = dynamic_cast<Game::CritterObject *>(script.dataStack()->popObject());
                 if (!critter) {
                     _error("VM::critter_heal - invalid critter pointer");
                 }

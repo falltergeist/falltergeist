@@ -13,17 +13,17 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            Opcode80FE::Opcode80FE(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
+            Opcode80FE::Opcode80FE(std::shared_ptr<ILogger> logger) : OpcodeHandler(), _logger(logger)
             {
-                this->logger = std::move(logger);
+
             }
 
-            void Opcode80FE::_run() {
-                auto &debug = logger->debug();
+            void Opcode80FE::_run(VM::Script& script) {
+                auto &debug = _logger->debug();
                 debug << "[80FE] [+] void radiation_dec(GameObject* who, int amount)" << std::endl;
-                int amount = _script->dataStack()->popInteger();
+                int amount = script.dataStack()->popInteger();
                 debug << "    amount = " << amount << std::endl;
-                auto object = _script->dataStack()->popObject();
+                auto object = script.dataStack()->popObject();
                 if (!object) {
                     _error("radiation_dec - object is NULL");
                 }
@@ -31,7 +31,7 @@ namespace Falltergeist
                 if (critter) {
                     critter->setRadiationLevel(critter->radiationLevel() - amount);
                 } else {
-                    _warning("radiation_dec - object is not critter");
+                    _warning(script, "radiation_dec - object is not critter");
                 }
             }
         }

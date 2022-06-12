@@ -13,16 +13,16 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            Opcode8027::Opcode8027(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
+            Opcode8027::Opcode8027(std::shared_ptr<ILogger> logger) : OpcodeHandler(), _logger(logger)
             {
-                this->logger = std::move(logger);
+
             }
 
-            void Opcode8027::_run()
+            void Opcode8027::_run(VM::Script& script)
             {
-                logger->debug() << "[8027] [?] op_check_arg_count" << std::endl;
-                _script->dataStack()->pop(); // number of actual arguments
-                _script->dataStack()->pop(); // procedure index
+                _logger->debug() << "[8027] [?] op_check_arg_count" << std::endl;
+                script.dataStack()->pop(); // number of actual arguments
+                script.dataStack()->pop(); // procedure index
                 // @TODO: compare number of arguments with procedure info and throw script exception if they are not equal
             }
         }

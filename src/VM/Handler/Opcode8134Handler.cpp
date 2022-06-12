@@ -12,14 +12,14 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            Opcode8134::Opcode8134(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
+            Opcode8134::Opcode8134(std::shared_ptr<ILogger> logger) : OpcodeHandler(), _logger(logger)
             {
-                this->logger = std::move(logger);
+
             }
 
-            void Opcode8134::_run()
+            void Opcode8134::_run(VM::Script& script)
             {
-                logger->debug() << "[8134] [=] void game_ui_enable()" << std::endl;
+                _logger->debug() << "[8134] [=] void game_ui_enable()" << std::endl;
             }
         }
     }

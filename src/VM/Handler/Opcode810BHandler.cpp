@@ -23,29 +23,29 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            Opcode810B::Opcode810B(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
+            Opcode810B::Opcode810B(std::shared_ptr<ILogger> logger) : OpcodeHandler(), _logger(logger)
             {
-                this->logger = std::move(logger);
+
             }
 
-            void Opcode810B::_run()
+            void Opcode810B::_run(VM::Script& script)
             {
-                logger->debug() << "[810B] [*] int metarule(int type, value)" << std::endl;
-                auto value = _script->dataStack()->pop();
-                auto type = _script->dataStack()->popInteger();
+                _logger->debug() << "[810B] [*] int metarule(int type, value)" << std::endl;
+                auto value = script.dataStack()->pop();
+                auto type = script.dataStack()->popInteger();
 
                 int result = 0;
-                auto object = (Game::Object*)_script->sourceObject();
+                auto object = (Game::Object*)script.sourceObject();
 
                 switch (type) {
                     case 14: // METARULE_TEST_FIRSTRUN
                         result = 1;
                         break;
                     case 15: // METARULE_ELEVATOR
-                        logger->info() << "[ELEVATOR] metarule value = " << value.toString() << std::endl;
+                        _logger->info() << "[ELEVATOR] metarule value = " << value.toString() << std::endl;
 
                         if (auto critter = dynamic_cast<Game::CritterObject *>(object)) {
-                            logger->info() << "Triggered critter PID = " << critter->PID() << std::endl;
+                            _logger->info() << "Triggered critter PID = " << critter->PID() << std::endl;
 
                             bool found = false;
                             for (int i = 1; i < 6; i++) {
@@ -60,9 +60,9 @@ namespace Falltergeist
                                             for (auto object : *objects) {
                                                 if (object->type() == Game::Object::Type::SCENERY && object->PID() == PID_ELEVATOR_STUB) {
                                                     if (auto elevatorStub = dynamic_cast<Game::ElevatorSceneryObject *>(object)) {
-                                                        logger->info() << "[ELEVATOR] stub found: type = " << (uint32_t)elevatorStub->elevatorType() << " level = " << (uint32_t)elevatorStub->elevatorLevel() << std::endl;
+                                                        _logger->info() << "[ELEVATOR] stub found: type = " << (uint32_t)elevatorStub->elevatorType() << " level = " << (uint32_t)elevatorStub->elevatorLevel() << std::endl;
                                                         found = true;
-                                                        auto elevatorDialog = new State::ElevatorDialog(std::make_shared<UI::ResourceManager>(), this->logger, elevatorStub->elevatorType(), elevatorStub->elevatorLevel());
+                                                        auto elevatorDialog = new State::ElevatorDialog(std::make_shared<UI::ResourceManager>(), _logger, elevatorStub->elevatorType(), elevatorStub->elevatorLevel());
                                                         Game::Game::getInstance()->pushState(elevatorDialog);
                                                     }
                                                 }
@@ -109,7 +109,7 @@ namespace Falltergeist
                         _error("metarule - unimplemented type: " + std::to_string(type));
                 }
 
-                _script->dataStack()->push(result);
+                script.dataStack()->push(result);
             }
         }
     }

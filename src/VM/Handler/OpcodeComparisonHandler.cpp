@@ -14,12 +14,9 @@ namespace Falltergeist
         namespace Handler
         {
             OpcodeComparison::OpcodeComparison(
-                VM::Script *script,
                 Type cmpType,
                 std::shared_ptr<ILogger> logger
-            ) : OpcodeHandler(script) {
-                _cmpType = cmpType;
-                this->logger = std::move(logger);
+            ) : OpcodeHandler(), _logger(logger), _cmpType(cmpType) {
             }
 
             const char *OpcodeComparison::_cmpOpcodeName() {
@@ -41,11 +38,11 @@ namespace Falltergeist
                 }
             }
 
-            void OpcodeComparison::_run()
+            void OpcodeComparison::_run(VM::Script& script)
             {
-                logger->debug() << "[8033-8038] [*] " << _cmpOpcodeName() << std::endl;
-                auto bValue = _script->dataStack()->pop();
-                auto aValue = _script->dataStack()->pop();
+                _logger->debug() << "[8033-8038] [*] " << _cmpOpcodeName() << std::endl;
+                auto bValue = script.dataStack()->pop();
+                auto aValue = script.dataStack()->pop();
                 int result = 0;
                 switch (aValue.type()) {
                     case StackValue::Type::INTEGER: {
@@ -156,7 +153,7 @@ namespace Falltergeist
                         _error(std::string() + _cmpOpcodeName() + ": invalid left argument type: " + aValue.typeName());
                     }
                 }
-                _script->dataStack()->push(result);
+                script.dataStack()->push(result);
             }
         }
     }

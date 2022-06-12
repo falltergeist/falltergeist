@@ -83,7 +83,7 @@ namespace Falltergeist
                 _intFile->setPosition(_programCounter);
                 unsigned short opcode = _intFile->readOpcode();
 
-                std::unique_ptr<OpcodeHandler> opcodeHandler(OpcodeFactory::createOpcode(opcode, this));
+                std::unique_ptr<OpcodeHandler> opcodeHandler(OpcodeFactory::createOpcode(opcode));
                 try {
                     opcodeHandler->run(*this);
                 } catch (const HaltException &) {

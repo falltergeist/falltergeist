@@ -14,15 +14,15 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            Opcode80FC::Opcode80FC(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
+            Opcode80FC::Opcode80FC(std::shared_ptr<ILogger> logger) : OpcodeHandler(), _logger(logger)
             {
-                this->logger = std::move(logger);
+
             }
 
-            void Opcode80FC::_run()
+            void Opcode80FC::_run(VM::Script& script)
             {
-                int amount = _script->dataStack()->popInteger();
-                logger->debug()
+                int amount = script.dataStack()->popInteger();
+                _logger->debug()
                     << "[80FC] [=] void game_time_advance(int amount)" << std::endl
                     << "    amount = " << amount << std::endl
                 ;

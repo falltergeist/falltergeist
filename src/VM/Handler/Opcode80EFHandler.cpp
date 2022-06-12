@@ -12,20 +12,20 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            Opcode80EF::Opcode80EF(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
+            Opcode80EF::Opcode80EF(std::shared_ptr<ILogger> logger) : OpcodeHandler(), _logger(logger)
             {
-                this->logger = std::move(logger);
+
             }
 
-            void Opcode80EF::_run()
+            void Opcode80EF::_run(VM::Script& script)
             {
-                logger->debug()
+                _logger->debug()
                     << "[80EF] void critter_dmg(ObjectPtr who, int dmg_amount, int dmg_type)"
                     << std::endl
                 ;
-                _script->dataStack()->popInteger();
-                _script->dataStack()->popInteger();
-                _script->dataStack()->popObject();
+                script.dataStack()->popInteger();
+                script.dataStack()->popInteger();
+                script.dataStack()->popObject();
             }
         }
     }

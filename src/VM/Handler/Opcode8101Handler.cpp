@@ -14,15 +14,15 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            Opcode8101::Opcode8101(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
+            Opcode8101::Opcode8101(std::shared_ptr<ILogger> logger) : OpcodeHandler(), _logger(logger)
             {
-                this->logger = std::move(logger);
+
             }
 
-            void Opcode8101::_run()
+            void Opcode8101::_run(VM::Script& script)
             {
-                logger->debug() << "[8101] [=] int cur_map_index()" << std::endl;
-                _script->dataStack()->push(Game::Game::getInstance()->locationState()->currentMapIndex());
+                _logger->debug() << "[8101] [=] int cur_map_index()" << std::endl;
+                script.dataStack()->push(Game::Game::getInstance()->locationState()->currentMapIndex());
             }
         }
     }

@@ -12,17 +12,17 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            Opcode8030::Opcode8030(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
+            Opcode8030::Opcode8030(std::shared_ptr<ILogger> logger) : OpcodeHandler(), _logger(logger)
             {
-                this->logger = std::move(logger);
+
             }
 
-            void Opcode8030::_run()
+            void Opcode8030::_run(VM::Script& script)
             {
-                logger->debug() << "[8030] [*] op_while(address, condition)" << std::endl;
-                auto condition = _script->dataStack()->popLogical();
+                _logger->debug() << "[8030] [*] op_while(address, condition)" << std::endl;
+                auto condition = script.dataStack()->popLogical();
                 if (!condition) {
-                    _script->setProgramCounter(_script->dataStack()->popInteger());
+                    script.setProgramCounter(script.dataStack()->popInteger());
                 }
             }
         }

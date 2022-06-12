@@ -16,22 +16,22 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            Opcode80D2::Opcode80D2(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
+            Opcode80D2::Opcode80D2(std::shared_ptr<ILogger> logger) : OpcodeHandler(), _logger(logger)
             {
-                this->logger = std::move(logger);
+
             }
 
-            void Opcode80D2::_run()
+            void Opcode80D2::_run(VM::Script& script)
             {
-                logger->debug() << "[80D2] [=] int tile_distance(int tile1, int tile2)" << std::endl;
-                auto tile1 = _script->dataStack()->popInteger();
-                auto tile2 = _script->dataStack()->popInteger();
+                _logger->debug() << "[80D2] [=] int tile_distance(int tile1, int tile2)" << std::endl;
+                auto tile1 = script.dataStack()->popInteger();
+                auto tile2 = script.dataStack()->popInteger();
                 if (tile1 < 0 || tile1 >= 200 * 200 || tile2 < 0 || tile2 >= 200 * 200) {
-                    _script->dataStack()->push(9999);
+                    script.dataStack()->push(9999);
                 } else {
                     auto grid = Game::Game::getInstance()->locationState()->hexagonGrid();
                     auto dist = grid->distance(grid->at(tile1).get(), grid->at(tile2).get());
-                    _script->dataStack()->push(dist);
+                    script.dataStack()->push(dist);
                 }
             }
         }

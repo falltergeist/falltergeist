@@ -15,16 +15,16 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            Opcode80C4::Opcode80C4(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
+            Opcode80C4::Opcode80C4(std::shared_ptr<ILogger> logger) : OpcodeHandler(), _logger(logger)
             {
-                this->logger = std::move(logger);
+
             }
 
-            void Opcode80C4::_run()
+            void Opcode80C4::_run(VM::Script& script)
             {
-                logger->debug() << "[80C4] [+] MVAR[num] = value" << std::endl;
-                auto value = _script->dataStack()->popInteger();
-                auto num = _script->dataStack()->popInteger();
+                _logger->debug() << "[80C4] [+] MVAR[num] = value" << std::endl;
+                auto value = script.dataStack()->popInteger();
+                auto num = script.dataStack()->popInteger();
                 auto game = Game::Game::getInstance();
                 game->locationState()->setMVAR(num, value);
             }

@@ -13,17 +13,17 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            Opcode814A::Opcode814A(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
+            Opcode814A::Opcode814A(std::shared_ptr<ILogger> logger) : OpcodeHandler(), _logger(logger)
             {
-                this->logger = std::move(logger);
+
             }
 
-            void Opcode814A::_run()
+            void Opcode814A::_run(VM::Script& script)
             {
                 // @TODO
-                logger->debug() << "[814A] [*] int art_anim(int fid)" << std::endl;
-                _script->dataStack()->popInteger();
-                _script->dataStack()->push(0);
+                _logger->debug() << "[814A] [*] int art_anim(int fid)" << std::endl;
+                script.dataStack()->popInteger();
+                script.dataStack()->push(0);
             }
         }
     }

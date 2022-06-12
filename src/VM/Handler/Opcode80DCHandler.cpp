@@ -12,20 +12,20 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            Opcode80DC::Opcode80DC(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
+            Opcode80DC::Opcode80DC(std::shared_ptr<ILogger> logger) : OpcodeHandler(), _logger(logger)
             {
-                this->logger = std::move(logger);
+
             }
 
-            void Opcode80DC::_run()
+            void Opcode80DC::_run(VM::Script& script)
             {
-                logger->debug()
+                _logger->debug()
                     << "[80DC] [=] int obj_can_see_obj(GameObject* src_obj, GameObject* dst_obj)"
                     << std::endl
                 ;
-                _script->dataStack()->popObject();
-                _script->dataStack()->popObject();
-                _script->dataStack()->push(1);
+                script.dataStack()->popObject();
+                script.dataStack()->popObject();
+                script.dataStack()->push(1);
             }
         }
     }

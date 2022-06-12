@@ -14,20 +14,20 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            Opcode80F0::Opcode80F0(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
+            Opcode80F0::Opcode80F0(std::shared_ptr<ILogger> logger) : OpcodeHandler(), _logger(logger)
             {
-                this->logger = std::move(logger);
+
             }
 
-            void Opcode80F0::_run()
+            void Opcode80F0::_run(VM::Script& script)
             {
-                logger->debug()
+                _logger->debug()
                     << "[80F0] [=] void add_timer_event(void* obj, int time, int info)"
                     << std::endl
                 ;
-                int fixedParam = _script->dataStack()->popInteger();
-                int delay = _script->dataStack()->popInteger();
-                Game::Object *object = _script->dataStack()->popObject();
+                int fixedParam = script.dataStack()->popInteger();
+                int delay = script.dataStack()->popInteger();
+                Game::Object *object = script.dataStack()->popObject();
                 auto state = Game::Game::getInstance()->locationState();
                 if (state) {
                     state->addTimerEvent(object, delay, fixedParam);

@@ -13,15 +13,15 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            Opcode8010::Opcode8010(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
+            Opcode8010::Opcode8010(std::shared_ptr<ILogger> logger) : OpcodeHandler(), _logger(logger)
             {
-                this->logger = std::move(logger);
+
             }
 
-            void Opcode8010::_run()
+            void Opcode8010::_run(VM::Script& script)
             {
-                logger->debug() << "[8010] [*] op_exit_prog" << std::endl;
-                _script->setInitialized(true);
+                _logger->debug() << "[8010] [*] op_exit_prog" << std::endl;
+                script.setInitialized(true);
                 throw VM::HaltException();
             }
         }

@@ -12,15 +12,15 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            Opcode80EE::Opcode80EE(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
+            Opcode80EE::Opcode80EE(std::shared_ptr<ILogger> logger) : OpcodeHandler(), _logger(logger)
             {
-                this->logger = std::move(logger);
+
             }
 
-            void Opcode80EE::_run()
+            void Opcode80EE::_run(VM::Script& script)
             {
-                logger->debug() << "[80EE] [=] void kill_critter_type(int pid)" << std::endl;
-                _script->dataStack()->popInteger();
+                _logger->debug() << "[80EE] [=] void kill_critter_type(int pid)" << std::endl;
+                script.dataStack()->popInteger();
             }
         }
     }
