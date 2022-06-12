@@ -17,19 +17,17 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            Opcode80A7::Opcode80A7(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
-            {
-                this->logger = std::move(logger);
+            Opcode80A7::Opcode80A7(std::shared_ptr<ILogger> logger) : OpcodeHandler(), _logger(logger) {
             }
 
-            void Opcode80A7::_run()
+            void Opcode80A7::_run(VM::Script& script)
             {
-                logger->debug()
+                _logger->debug()
                         << "[80A7] [+] GameObject* tile_contains_pid_obj(int position, int elevation, int PID)"
                         << std::endl;
-                auto PID = _script->dataStack()->popInteger();
-                auto elevation = _script->dataStack()->popInteger();
-                auto position = _script->dataStack()->popInteger();
+                auto PID = script.dataStack()->popInteger();
+                auto elevation = script.dataStack()->popInteger();
+                auto position = script.dataStack()->popInteger();
                 auto game = Game::Game::getInstance();
                 Game::Object *found = nullptr;
                 for (auto object : *game->locationState()->hexagonGrid()->at(position)->objects()) {
@@ -38,7 +36,7 @@ namespace Falltergeist
                         break;
                     }
                 }
-                _script->dataStack()->push(found);
+                script.dataStack()->push(found);
             }
         }
     }

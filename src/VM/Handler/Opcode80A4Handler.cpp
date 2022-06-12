@@ -15,16 +15,14 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            Opcode80A4::Opcode80A4(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
-            {
-                this->logger = std::move(logger);
+            Opcode80A4::Opcode80A4(std::shared_ptr<ILogger> logger) : OpcodeHandler(), _logger(logger) {
             }
 
-            void Opcode80A4::_run()
+            void Opcode80A4::_run(VM::Script& script)
             {
-                logger->debug() << "[80A4] [+] std::string* obj_name(GameCritterObject* who)" << std::endl;
-                auto object = _script->dataStack()->popObject();
-                _script->dataStack()->push(object->name());
+                _logger->debug() << "[80A4] [+] std::string* obj_name(GameCritterObject* who)" << std::endl;
+                auto object = script.dataStack()->popObject();
+                script.dataStack()->push(object->name());
             }
         }
     }

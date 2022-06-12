@@ -85,7 +85,7 @@ namespace Falltergeist
 
                 std::unique_ptr<OpcodeHandler> opcodeHandler(OpcodeFactory::createOpcode(opcode, this));
                 try {
-                    opcodeHandler->run();
+                    opcodeHandler->run(*this);
                 } catch (const HaltException &) {
                     return;
                 } catch (const ErrorException &e) {

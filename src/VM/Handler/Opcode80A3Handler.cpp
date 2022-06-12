@@ -14,15 +14,13 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            Opcode80A3::Opcode80A3(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
-            {
-                this->logger = std::move(logger);
+            Opcode80A3::Opcode80A3(std::shared_ptr<ILogger> logger) : OpcodeHandler(), _logger(logger) {
             }
 
-            void Opcode80A3::_run()
+            void Opcode80A3::_run(VM::Script& script)
             {
-                logger->debug() << "[80A3] [=] void play_sfx(string* p1)" << std::endl;
-                auto name = _script->dataStack()->popString();
+                _logger->debug() << "[80A3] [=] void play_sfx(string* p1)" << std::endl;
+                auto name = script.dataStack()->popString();
                 Game::Game::getInstance()->mixer()->playACMSound("sound/sfx/" + name + ".acm");
             }
         }

@@ -14,15 +14,13 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            Opcode80A1::Opcode80A1(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
-            {
-                this->logger = std::move(logger);
+            Opcode80A1::Opcode80A1(std::shared_ptr<ILogger> logger) : OpcodeHandler(), _logger(logger) {
             }
 
-            void Opcode80A1::_run()
+            void Opcode80A1::_run(VM::Script& script)
             {
-                logger->debug() << "[80A1] [+] void give_exp_points(int points)" << std::endl;
-                auto points = _script->dataStack()->popInteger();
+                _logger->debug() << "[80A1] [+] void give_exp_points(int points)" << std::endl;
+                auto points = script.dataStack()->popInteger();
                 auto game = Game::Game::getInstance();
                 game->player()->setExperience(game->player()->experience() + points);
             }

@@ -12,18 +12,15 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            Opcode80AB::Opcode80AB(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
-            {
-                this->logger = std::move(logger);
+            Opcode80AB::Opcode80AB(std::shared_ptr<ILogger> logger) : OpcodeHandler(), _logger(logger) {
             }
 
-            void Opcode80AB::_run()
-            {
+            void Opcode80AB::_run(VM::Script& script) {
                 // @TODO: implement
-                logger->debug() << "[80AB] [=] int using_skill(GameCritterObject* who, int skill)" << std::endl;
-                _script->dataStack()->popInteger();
-                _script->dataStack()->popObject();
-                _script->dataStack()->push(0);
+                _logger->debug() << "[80AB] [=] int using_skill(GameCritterObject* who, int skill)" << std::endl;
+                script.dataStack()->popInteger();
+                script.dataStack()->popObject();
+                script.dataStack()->push(0);
             }
         }
     }

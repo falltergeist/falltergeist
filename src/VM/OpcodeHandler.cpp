@@ -13,29 +13,20 @@ namespace Falltergeist
 {
     namespace VM
     {
-        OpcodeHandler::OpcodeHandler(VM::Script *script) : _script(script)
+        void OpcodeHandler::run(VM::Script& script)
         {
-            _offset = script->programCounter();
+            script.setProgramCounter(script.programCounter() + 2);
+            _run(script);
         }
 
-        OpcodeHandler::~OpcodeHandler()
-        {
-        }
-
-        void OpcodeHandler::run()
-        {
-            _script->setProgramCounter(_script->programCounter() + 2);
-            _run();
-        }
-
-        void OpcodeHandler::_run()
+        void OpcodeHandler::_run(VM::Script& script)
         {
         }
 
-        void OpcodeHandler::_warning(const std::string &message)
+        void OpcodeHandler::_warning(VM::Script& script, const std::string &message)
         {
-            Logger::warning("SCRIPT") << message << " at " << _script->intFile()->filename() << ":0x" << std::hex
-                                      << _offset << std::endl;
+            Logger::warning("SCRIPT") << message << " at " << script.intFile()->filename() << ":0x" << std::hex
+                                      << script.programCounter() << std::endl;
         }
 
         void OpcodeHandler::_error(const std::string &message)

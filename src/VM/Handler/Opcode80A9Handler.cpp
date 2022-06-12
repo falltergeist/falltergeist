@@ -17,17 +17,15 @@ namespace Falltergeist
     {
         namespace Handler
         {
-            Opcode80A9::Opcode80A9(VM::Script *script, std::shared_ptr<ILogger> logger) : OpcodeHandler(script)
-            {
-                this->logger = std::move(logger);
+            Opcode80A9::Opcode80A9(std::shared_ptr<ILogger> logger) : OpcodeHandler(), _logger(logger) {
             }
 
-            void Opcode80A9::_run()
+            void Opcode80A9::_run(VM::Script& script)
             {
-                logger->debug()
+                _logger->debug()
                         << "[80A9] [+] void override_map_start(int x, int y, int elevation, int orientation)"
                         << std::endl;
-                auto dataStack = _script->dataStack();
+                auto dataStack = script.dataStack();
 
                 auto orientation = dataStack->popInteger();
                 auto elevation = dataStack->popInteger();
