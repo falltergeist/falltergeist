@@ -653,7 +653,7 @@ namespace Falltergeist
                 orientation()
             );
             animation->play();
-            _ui.reset(animation.get());
+            _ui = animation;
             return animation;
         }
 
