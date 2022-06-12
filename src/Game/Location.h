@@ -41,7 +41,7 @@ namespace Falltergeist
                 Location(std::shared_ptr<ILogger> logger);
                 ~Location();
 
-                void loadFromMapFile(Falltergeist::Format::Map::File *file);
+                void loadFromMapFile(std::unique_ptr<Format::Map::File>& mapFile);
 
                 std::vector<int32_t>* MVARS();
 

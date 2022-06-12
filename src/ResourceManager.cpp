@@ -76,7 +76,7 @@ namespace Falltergeist {
         return Base::Singleton<ResourceManager>::get();
     }
 
-    void ResourceManager::_loadStreamForFile(std::string filename, std::function<void(Format::Dat::Stream &&)> callback) {
+    Format::Dat::Stream&& ResourceManager::_loadStreamForFile(std::string filename) {
         // Searching file in Fallout data directory
         {
             std::string path = CrossPlatform::findFalloutDataPath() + "/" + filename;
@@ -95,9 +95,9 @@ namespace Falltergeist {
             }
 
             if (stream.is_open()) {
-                callback(Format::Dat::Stream(stream));
+                auto datStream = Format::Dat::Stream(stream);
                 stream.close();
-                return;
+                return std::move(datStream);
             }
         }
 
@@ -107,8 +107,7 @@ namespace Falltergeist {
             if (entry != nullptr) {
                 Logger::debug("RESOURCE MANAGER") << "Loading file: " << filename << " [FROM " << datfile->filename()
                                                   << "]" << std::endl;
-                callback(Format::Dat::Stream(*entry));
-                return;
+                return std::move(Format::Dat::Stream(*entry));
             }
         }
         Logger::error("RESOURCE MANAGER") << "Loading file: " << filename << " [ NOT FOUND]" << std::endl;
@@ -130,26 +129,28 @@ namespace Falltergeist {
         }
 
         T *itemPtr = nullptr;
-        _loadStreamForFile(filename, [this, &filename, &itemPtr](Format::Dat::Stream &&stream) {
-            auto item = std::make_unique<T>(std::move(stream));
-            itemPtr = item.get();
-            item->setFilename(filename);
-            _datItems.emplace(filename, std::move(item));
-        });
+        auto stream = _loadStreamForFile(filename);
+
+        // TODO throw exception if stream null
+
+        auto item = std::make_unique<T>(std::move(stream));
+        itemPtr = item.get();
+        item->setFilename(filename);
+        _datItems.emplace(filename, std::move(item));
 
         return itemPtr;
     }
 
-    template<typename T>
-    std::unique_ptr<T> ResourceManager::_datFileItemUniquePtr(std::string filename) {
+    template<class T, typename... Args>
+    std::unique_ptr<T> ResourceManager::_datFileItemUniquePtr(std::string filename, Args... args) {
         std::transform(filename.begin(), filename.end(), filename.begin(), ::tolower);
 
         std::unique_ptr<T> itemPtr = nullptr;
-        _loadStreamForFile(filename, [&itemPtr](Format::Dat::Stream &&stream) {
-            itemPtr = std::make_unique<T>(std::move(stream));
-        });
+        auto stream = _loadStreamForFile(filename);
 
-        return itemPtr;
+        // TODO throw exception if stream null
+
+        return std::make_unique<T>(std::move(stream), args...);
     }
 
     Format::Frm::File *ResourceManager::frmFileType(const std::string &filename) {
@@ -189,8 +190,17 @@ namespace Falltergeist {
         return _datFileItem<Format::Gcd::File>(filename);
     }
 
-    std::unique_ptr<Format::Int::File> ResourceManager::intFileType(const std::string &filename) {
-        return _datFileItemUniquePtr<Format::Int::File>(filename);
+    template<class T>
+    std::unique_ptr<T> ResourceManager::get(std::string filename) {
+        return _datFileItemUniquePtr<T>(filename);
+    }
+
+    template<>
+    std::unique_ptr<Format::Map::File> ResourceManager::get<Format::Map::File>(std::string filename) {
+        Format::Map::File::SubtypeIdProvider subtypeIdProvider = [](uint32_t PID) -> uint32_t {
+            return 0;
+        };
+        return _datFileItemUniquePtr<Format::Map::File>(filename, subtypeIdProvider);
     }
 
     Format::Msg::File *ResourceManager::msgFileType(const std::string &filename) {
@@ -203,14 +213,6 @@ namespace Falltergeist {
 
     Format::Bio::File *ResourceManager::bioFileType(const std::string &filename) {
         return _datFileItem<Format::Bio::File>(filename);
-    }
-
-    Format::Map::File *ResourceManager::mapFileType(const std::string &filename) {
-        auto item = _datFileItem<Format::Map::File>(filename);
-        if (item) {
-            item->init(&fetchProFileType);
-        }
-        return item;
     }
 
     Format::Pro::File *ResourceManager::proFileType(const std::string &filename) {
@@ -433,7 +435,7 @@ namespace Falltergeist {
             throw Exception("ResourceManager::intFileType() - wrong SID: " + std::to_string(SID));
         }
 
-        return intFileType("scripts/" + lst->strings()->at(SID));
+        return get<Format::Int::File>("scripts/" + lst->strings()->at(SID));
     }
 
     std::string ResourceManager::FIDtoFrmName(unsigned int FID) {

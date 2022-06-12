@@ -95,7 +95,10 @@ namespace Falltergeist
             Format::Gam::File* gamFileType(const std::string& filename);
             Format::Gcd::File* gcdFileType(const std::string& filename);
             Format::Pal::File* palFileType(const std::string& filename);
-            std::unique_ptr<Format::Int::File> intFileType(const std::string& filename);
+
+            template<class T>
+            std::unique_ptr<T> get(std::string filename);
+
             std::unique_ptr<Format::Int::File> intFileType(unsigned int SID);
             Format::Lip::File* lipFileType(const std::string& filename);
             Format::Lst::File* lstFileType(const std::string& filename);
@@ -156,10 +159,13 @@ namespace Falltergeist
             template <class T>
             T* _datFileItem(std::string filename);
 
-            template<typename T>
-            std::unique_ptr<T> _datFileItemUniquePtr(std::string filename);
+            template<class T, typename... Args>
+            std::unique_ptr<T> _datFileItemUniquePtr(std::string filename, Args...);
 
             // Searches for a given file within virtual "file system" and calls the given callback with Dat::Stream created from that file.
-            void _loadStreamForFile(std::string filename, std::function<void(Format::Dat::Stream&&)> callback);
+            Format::Dat::Stream&& _loadStreamForFile(std::string filename);
     };
+
+    template<>
+    std::unique_ptr<Format::Map::File> ResourceManager::get<Format::Map::File>(std::string filename);
 }

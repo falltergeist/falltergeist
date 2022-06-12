@@ -28,7 +28,7 @@ namespace Falltergeist
         {
         }
 
-        void Location::loadFromMapFile(Falltergeist::Format::Map::File* mapFile)
+        void Location::loadFromMapFile(std::unique_ptr<Format::Map::File>& mapFile)
         {
             setName(mapFile->name().substr(0, mapFile->name().find(".")));
             setDefaultElevationIndex(mapFile->defaultElevation());

@@ -14,11 +14,11 @@ namespace Falltergeist
     {
         namespace Map
         {
-            File::File(Dat::Stream&& stream) : _stream(std::move(stream))
-            {
+            File::File(Dat::Stream&& stream, SubtypeIdProvider subtypeIdProvider) : _stream(std::move(stream)), _subtypeIdProvider(subtypeIdProvider) {
+                _init();
             }
 
-            void File::init(ProFileTypeLoaderCallback callback)
+            void File::_init()
             {
                 if (_initialized) {
                     return;
@@ -168,13 +168,13 @@ namespace Falltergeist
                     auto objectsOnElevation = stream.uint32();
                     for (size_t j = 0; j != objectsOnElevation; ++j)
                     {
-                        auto object = _readObject(stream, callback);
+                        auto object = _readObject(stream);
                         if (object->inventorySize() > 0)
                         {
                             for (size_t i = 0; i < object->inventorySize(); ++i)
                             {
                                 uint32_t amount = stream.uint32();
-                                auto subobject = _readObject(stream, callback);
+                                auto subobject = _readObject(stream);
                                 subobject->setAmmount(amount);
                                 object->children().emplace_back(std::move(subobject));
                             }
@@ -184,7 +184,7 @@ namespace Falltergeist
                 }
             }
 
-            std::unique_ptr<Object> File::_readObject(Dat::Stream& stream, ProFileTypeLoaderCallback callback)
+            std::unique_ptr<Object> File::_readObject(Dat::Stream& stream)
             {
                 auto object = std::make_unique<Object>();
                 object->setOID(stream.uint32());
@@ -235,7 +235,7 @@ namespace Falltergeist
                 switch ((OBJECT_TYPE)object->objectTypeId())
                 {
                     case OBJECT_TYPE::ITEM:
-                        object->setObjectSubtypeId(callback(PID)->subtypeId());
+                        object->setObjectSubtypeId(_subtypeIdProvider(PID));
                         switch((ITEM_TYPE)object->objectSubtypeId())
                         {
                             case ITEM_TYPE::AMMO:
@@ -279,7 +279,7 @@ namespace Falltergeist
                         object->setObjectID3((FID & 0xF0000000) >> 28);
                         break;
                     case OBJECT_TYPE::SCENERY: {
-                        object->setObjectSubtypeId(callback(PID)->subtypeId());
+                        object->setObjectSubtypeId(_subtypeIdProvider(PID));
                         uint32_t elevhex = 0;  // elev+hex
                         uint32_t hex = 0;
                         uint32_t elev = 0;
