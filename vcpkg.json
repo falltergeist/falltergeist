@@ -8,6 +8,6 @@
     "zlib",
     "glew",
     "glm",
-    "boost-property-tree"
+    "boost"
   ]
 }
