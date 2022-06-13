@@ -9,6 +9,7 @@
 // Third-party includes
 
 // stdlib
+#include <functional>
 #include <string>
 #include <vector>
 
@@ -33,7 +34,7 @@ namespace Falltergeist
             class File : public Dat::Item
             {
                 public:
-                    typedef uint32_t (*SubtypeIdProvider)(uint32_t);
+                    typedef std::function<uint32_t(uint32_t pid)> SubtypeIdProvider;
 
                     File(Dat::Stream&& stream, SubtypeIdProvider subtypeIdProvider);
 

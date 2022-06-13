@@ -163,7 +163,7 @@ namespace Falltergeist
             std::unique_ptr<T> _datFileItemUniquePtr(std::string filename, Args...);
 
             // Searches for a given file within virtual "file system" and calls the given callback with Dat::Stream created from that file.
-            Format::Dat::Stream&& _loadStreamForFile(std::string filename);
+            std::unique_ptr<Format::Dat::Stream> _loadStreamForFile(std::string filename);
     };
 
     template<>
