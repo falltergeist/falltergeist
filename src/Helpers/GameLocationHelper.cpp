@@ -1,4 +1,5 @@
 // Project includes
+#include "../Format/Map/File.h"
 #include "../Game/Game.h"
 #include "../Game/Location.h"
 #include "../Helpers/GameLocationHelper.h"
@@ -35,7 +36,7 @@ namespace Falltergeist
         std::shared_ptr<Game::Location> GameLocationHelper::getByName(const std::string& name) const
         {
             std::string mapFileName = "maps/" + name + ".map";
-            auto mapFile = ResourceManager::getInstance()->mapFileType(mapFileName);
+            auto mapFile = ResourceManager::getInstance()->get<Format::Map::File>(mapFileName);
             if (mapFile == nullptr) {
                 return nullptr;
             }
