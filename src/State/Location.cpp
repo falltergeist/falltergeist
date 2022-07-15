@@ -360,12 +360,6 @@ namespace Falltergeist
         {
             Game::ObjectFactory objectFactory(logger);
 
-            static bool equipped;
-            if (equipped) {
-                return;
-            }
-
-            equipped = true;
             player->setArmorSlot(nullptr);
             auto powerArmor = (Game::ItemObject*) objectFactory.createObjectByPID(PID_POWERED_ARMOR);
             auto leatherJacket = (Game::ItemObject*) objectFactory.createObjectByPID(PID_LEATHER_JACKET);
