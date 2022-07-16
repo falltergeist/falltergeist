@@ -1,11 +1,10 @@
 // Project includes
 #include "CrossPlatform.h"
 #include "Logger.h"
-#include "Ini/File.h"
-#include "Ini/Writer.h"
 #include "Settings.h"
 
 // Third-party includes
+#include <boost/property_tree/ini_parser.hpp>
 
 // stdlib
 #include <string>
@@ -37,57 +36,51 @@ namespace Falltergeist
             return false;
         }
 
-        Ini::File file;
+        boost::property_tree::ptree data;
 
-        auto video = file.section("video");
-        video->setPropertyInt("width", _screenWidth);
-        video->setPropertyInt("height", _screenHeight);
-        video->setPropertyInt("x", _screenX);
-        video->setPropertyInt("y", _screenY);
-        video->setPropertyInt("scale", _scale);
-        video->setPropertyBool("fullscreen", _fullscreen);
-        video->setPropertyBool("always_on_top", _alwaysOnTop);
+        data.put<int>("video.width", _screenWidth);
+        data.put<int>("video.height", _screenHeight);
+        data.put<int>("video.x", _screenX);
+        data.put<int>("video.y", _screenY);
+        data.put<int>("video.scale", _scale);
+        data.put<bool>("video.fullscreen", _fullscreen);
+        data.put<bool>("video.always_on_top", _alwaysOnTop);
 
-        auto audio = file.section("audio");
-        audio->setPropertyBool("enabled", _audioEnabled);
-        audio->setPropertyDouble("master_volume", _masterVolume);
-        audio->setPropertyDouble("music_volume", _musicVolume);
-        audio->setPropertyDouble("voice_volume", _voiceVolume);
-        audio->setPropertyDouble("sfx_volume", _sfxVolume);
-        audio->setPropertyString("music_path", _musicPath);
-        audio->setPropertyInt("buffer_size", _audioBufferSize);
+        data.put<bool>("audio.enabled", _audioEnabled);
+        data.put<double>("audio.master_volume", _masterVolume);
+        data.put<double>("audio.music_volume", _musicVolume);
+        data.put<double>("audio.voice_volume", _voiceVolume);
+        data.put<double>("audio.sfx_volume", _sfxVolume);
+        data.put<std::string>("audio.music_path", _musicPath);
+        data.put<int>("audio.buffer_size", _audioBufferSize);
 
-        auto logger = file.section("logger");
-        logger->setPropertyString("level", _loggerLevel);
-        logger->setPropertyBool("colors", _loggerColors);
+        data.put<std::string>("logger.level", _loggerLevel);
+        data.put<bool>("logger.colors", _loggerColors);
 
-        auto game = file.section("game");
-        game->setPropertyString("init_location", _initLocation);
-        game->setPropertyBool("force_location", _forceLocation);
-        game->setPropertyBool("display_fps", _displayFps);
-        game->setPropertyBool("worldmap_fullscreen", _worldMapFullscreen);
-        game->setPropertyBool("display_mouse_position", _displayMousePosition);
+        data.put<std::string>("game.init_location", _initLocation);
+        data.put<bool>("game.force_location", _forceLocation);
+        data.put<bool>("game.display_fps", _displayFps);
+        data.put<bool>("game.worldmap_fullscreen", _worldMapFullscreen);
+        data.put<bool>("game.display_mouse_position", _displayMousePosition);
 
-        auto preferences = file.section("preferences");
-        preferences->setPropertyDouble("brightness", _brightness);
-        preferences->setPropertyInt("game_difficulty", _gameDifficulty);
-        preferences->setPropertyInt("combat_difficulty", _combatDifficulty);
-        preferences->setPropertyBool("combat_looks", _combatLooks);
-        preferences->setPropertyBool("combat_messages", _combatMessages);
-        preferences->setPropertyBool("combat_taunts", _combatTaunts);
-        preferences->setPropertyInt("combat_speed", _combatSpeed);
-        preferences->setPropertyBool("item_highlight", _itemHighlight);
-        preferences->setPropertyBool("language_filter", _languageFilter);
-        preferences->setPropertyDouble("mouse_sensitivity", _mouseSensitivity);
-        preferences->setPropertyBool("player_speedup", _playerSpeedup);
-        preferences->setPropertyBool("running", _running);
-        preferences->setPropertyBool("subtitles", _subtitles);
-        preferences->setPropertyBool("target_highlight", _targetHighlight);
-        preferences->setPropertyDouble("text_delay", _textDelay);
-        preferences->setPropertyInt("violence_level", _violenceLevel);
+        data.put<double>("preferences.brightness", _brightness);
+        data.put<int>("preferences.game_difficulty", _gameDifficulty);
+        data.put<int>("preferences.combat_difficulty", _combatDifficulty);
+        data.put<bool>("preferences.combat_looks", _combatLooks);
+        data.put<bool>("preferences.combat_messages", _combatMessages);
+        data.put<bool>("preferences.combat_taunts", _combatTaunts);
+        data.put<int>("preferences.combat_speed", _combatSpeed);
+        data.put<bool>("preferences.item_highlight", _itemHighlight);
+        data.put<bool>("preferences.language_filter", _languageFilter);
+        data.put<double>("preferences.mouse_sensitivity", _mouseSensitivity);
+        data.put<bool>("preferences.player_speedup", _playerSpeedup);
+        data.put<bool>("preferences.running", _running);
+        data.put<bool>("preferences.subtitles", _subtitles);
+        data.put<bool>("preferences.target_highlight", _targetHighlight);
+        data.put<double>("preferences.text_delay", _textDelay);
+        data.put<int>("preferences.violence_level", _violenceLevel);
 
-        Ini::Writer writer(file);
-        writer.write(stream);
+        boost::property_tree::ini_parser::write_ini(stream, data);
 
         return true;
     }
@@ -140,71 +133,51 @@ namespace Falltergeist
             return false;
         }
 
-        Ini::Parser parser(stream);
-        auto file = parser.parse();
+        boost::property_tree::ptree data;
+        boost::property_tree::ini_parser::read_ini(stream, data);
 
-        auto video = file->section("video");
-        if (video)
-        {
-            _screenWidth = video->propertyInt("width", _screenWidth);
-            _screenHeight = video->propertyInt("height", _screenHeight);
-            _screenX = video->propertyInt("x", _screenX);
-            _screenY = video->propertyInt("y", _screenY);
-            _scale = video->propertyInt("scale", _scale);
-            _fullscreen = video->propertyBool("fullscreen", _fullscreen);
-            _alwaysOnTop = video->propertyBool("always_on_top", _alwaysOnTop);
-        }
+        _screenWidth = data.get<int>("video.width", _screenWidth);
+        _screenHeight = data.get<int>("video.height", _screenHeight);
+        _screenX = data.get<int>("video.x", _screenX);
+        _screenY = data.get<int>("video.y", _screenY);
+        _scale = data.get<int>("video.scale", _scale);
+        _fullscreen = data.get<bool>("video.fullscreen", _fullscreen);
+        _alwaysOnTop = data.get<bool>("video.always_on_top", _alwaysOnTop);
 
-        auto audio = file->section("audio");
-        if (audio)
-        {
-            _audioEnabled = audio->propertyBool("enabled", _audioEnabled);
-            _masterVolume = audio->propertyDouble("master_volume", _masterVolume);
-            _musicVolume = audio->propertyDouble("music_volume", _musicVolume);
-            _voiceVolume = audio->propertyDouble("voice_volume", _voiceVolume);
-            _sfxVolume = audio->propertyDouble("sfx_volume", _sfxVolume);
-            _musicPath = audio->propertyString("music_path", _musicPath);
-            _audioBufferSize = audio->propertyInt("buffer_size", _audioBufferSize);
-        }
+        _audioEnabled = data.get<bool>("audio.enabled", _audioEnabled);
+        _masterVolume = data.get<double>("audio.master_volume", _masterVolume);
+        _musicVolume = data.get<double>("audio.music_volume", _musicVolume);
+        _voiceVolume = data.get<double>("audio.voice_volume", _voiceVolume);
+        _sfxVolume = data.get<double>("audio.sfx_volume", _sfxVolume);
+        _musicPath = data.get<std::string>("audio.music_path", _musicPath);
+        _audioBufferSize = data.get<int>("audio.buffer_size", _audioBufferSize);
 
-        auto logger = file->section("logger");
-        if (logger)
-        {
-            _loggerLevel = logger->propertyString("level", _loggerLevel);
-            Logger::setLevel(_loggerLevel);
-            _loggerColors = logger->propertyBool("colors", _loggerColors);
-        }
+        _loggerLevel = data.get<std::string>("logger.level", _loggerLevel);
+        Logger::setLevel(_loggerLevel);
+        _loggerColors = data.get<bool>("logger.colors", _loggerColors);
 
-        auto game = file->section("game");
-        if (game)
-        {
-            _initLocation = game->propertyString("init_location", _initLocation);
-            _forceLocation = game->propertyBool("force_location", _forceLocation);
-            _displayFps = game->propertyBool("display_fps", _displayFps);
-            _worldMapFullscreen = game->propertyBool("worldmap_fullscreen", _worldMapFullscreen);
-            _displayMousePosition = game->propertyBool("display_mouse_position", _displayMousePosition);
-        }
+        _initLocation = data.get<std::string>("game.init_location", _initLocation);
+        _forceLocation = data.get<bool>("game.force_location", _forceLocation);
+        _displayFps = data.get<bool>("game.display_fps", _displayFps);
+        _worldMapFullscreen = data.get<bool>("game.worldmap_fullscreen", _worldMapFullscreen);
+        _displayMousePosition = data.get<bool>("game.display_mouse_position", _displayMousePosition);
 
-        auto preferences = file->section("preferences");
-        if (preferences)
-        {
-            _brightness = preferences->propertyDouble("brightness", _brightness);
-            _gameDifficulty = preferences->propertyInt("game_difficulty", _gameDifficulty);
-            _combatDifficulty = preferences->propertyInt("combat_difficulty", _combatDifficulty);
-            _combatLooks = preferences->propertyBool("combat_looks", _combatLooks);
-            _combatMessages = preferences->propertyBool("combat_messages", _combatMessages);
-            _combatTaunts = preferences->propertyBool("combat_taunts", _combatTaunts);
-            _combatSpeed = preferences->propertyInt("combat_speed", _combatSpeed);
-            _itemHighlight = preferences->propertyBool("item_highlight", _itemHighlight);
-            _languageFilter = preferences->propertyBool("language_filter", _languageFilter);
-            _mouseSensitivity = preferences->propertyDouble("mouse_sensitivity", _mouseSensitivity);
-            _playerSpeedup = preferences->propertyBool("player_speedup", _playerSpeedup);
-            _running = preferences->propertyBool("running", _running);
-            _subtitles = preferences->propertyBool("subtitles", _subtitles);
-            _targetHighlight = preferences->propertyBool("target_highlight", _targetHighlight);
-            _textDelay = preferences->propertyDouble("text_delay", _textDelay);
-            _violenceLevel = preferences->propertyInt("violence_level", _violenceLevel);
-        }
+        _brightness = data.get<double>("preferences.brightness", _brightness);
+        _gameDifficulty = data.get<int>("preferences.game_difficulty", _gameDifficulty);
+        _combatDifficulty = data.get<int>("preferences.combat_difficulty", _combatDifficulty);
+        _combatLooks = data.get<bool>("preferences.combat_looks", _combatLooks);
+        _combatMessages = data.get<bool>("preferences.combat_messages", _combatMessages);
+        _combatTaunts = data.get<bool>("preferences.combat_taunts", _combatTaunts);
+        _combatSpeed = data.get<int>("preferences.combat_speed", _combatSpeed);
+        _itemHighlight = data.get<bool>("preferences.item_highlight", _itemHighlight);
+        _languageFilter = data.get<bool>("preferences.language_filter", _languageFilter);
+        _mouseSensitivity = data.get<double>("preferences.mouse_sensitivity", _mouseSensitivity);
+        _playerSpeedup = data.get<bool>("preferences.player_speedup", _playerSpeedup);
+        _running = data.get<bool>("preferences.running", _running);
+        _subtitles = data.get<bool>("preferences.subtitles", _subtitles);
+        _targetHighlight = data.get<bool>("preferences.target_highlight", _targetHighlight);
+        _textDelay = data.get<double>("preferences.text_delay", _textDelay);
+        _violenceLevel = data.get<int>("preferences.violence_level", _violenceLevel);
 
         return true;
     }

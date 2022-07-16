@@ -15,6 +15,7 @@ https://falltergeist.org/
 - [falltergeist/vfs](https://github.com/falltergeist/vfs) ^0.4.0
 - [falltergeist/vfs-native](https://github.com/falltergeist/vfs-native) ^0.1.0
 - [falltergeist/vfs-dat2](https://github.com/falltergeist/vfs-dat2) ^0.2.0
+- [boost/property_tree](https://github.com/boostorg/property_tree)
 
 ## Compilation
 
