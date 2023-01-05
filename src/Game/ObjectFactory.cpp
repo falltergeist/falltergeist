@@ -16,6 +16,7 @@
 #include "../Game/LadderSceneryObject.h"
 #include "../Game/MiscItemObject.h"
 #include "../Game/StairsSceneryObject.h"
+#include "../Game/TraitCollection.h"
 #include "../Game/WallObject.h"
 #include "../Game/WeaponItemObject.h"
 #include "../Exception.h"
@@ -120,7 +121,7 @@ namespace Falltergeist
                 }
                 case OBJECT_TYPE::CRITTER:
                 {
-                    object = new CritterObject();
+                    object = new CritterObject(std::make_shared<TraitCollection>());
                     auto msg = ResourceManager::getInstance()->msgFileType("text/english/game/pro_crit.msg");
                     try
                     {

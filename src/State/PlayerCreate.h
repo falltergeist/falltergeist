@@ -1,6 +1,7 @@
 #pragma once
 
 // Project includes
+#include "../Game/ITraitCollection.h"
 #include "../ILogger.h"
 #include "../State/State.h"
 #include "../UI/IResourceManager.h"

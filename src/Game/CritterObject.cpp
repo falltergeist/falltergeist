@@ -26,8 +26,9 @@ namespace Falltergeist
 {
     namespace Game
     {
-        CritterObject::CritterObject() : Object()
-        {
+        CritterObject::CritterObject(
+            std::shared_ptr<ITraitCollection> traitCollection
+        ) : Object(), _traitCollection(traitCollection) {
             _type = Type::CRITTER;
             _setupNextIdleAnim();
         }
@@ -120,18 +121,18 @@ namespace Falltergeist
                 throw Exception("CritterObject::statBonus(num) - num out of range:" + std::to_string((unsigned)num));
             }
             int bonus = 0;
-            if (hasTrait(TRAIT::GIFTED)) {
+            if (traitCollection()->hasTrait(TRAIT::GIFTED)) {
                 bonus += 1;
             }
             switch(num)
             {
                 case STAT::STRENGTH:
-                    if (hasTrait(TRAIT::BRUISER)) {
+                    if (traitCollection()->hasTrait(TRAIT::BRUISER)) {
                         bonus += 2;
                     }
                     break;
                 case STAT::AGILITY:
-                    if (hasTrait(TRAIT::SMALL_FRAME)) {
+                    if (traitCollection()->hasTrait(TRAIT::SMALL_FRAME)) {
                         bonus += 1;
                     }
                     break;
@@ -175,49 +176,49 @@ namespace Falltergeist
             {
                 case SKILL::SMALL_GUNS:
                     value += 5 + 4 * statTotal(STAT::AGILITY);
-                    if (hasTrait(TRAIT::GOOD_NATURED)) {
+                    if (traitCollection()->hasTrait(TRAIT::GOOD_NATURED)) {
                         value -= 10;
                     }
                     break;
                 case SKILL::BIG_GUNS:
                     value += 2*statTotal(STAT::AGILITY);
-                    if (hasTrait(TRAIT::GOOD_NATURED)) {
+                    if (traitCollection()->hasTrait(TRAIT::GOOD_NATURED)) {
                         value -= 10;
                     }
                     break;
                 case SKILL::ENERGY_WEAPONS:
                     value += 2*statTotal(STAT::AGILITY);
-                    if (hasTrait(TRAIT::GOOD_NATURED)) {
+                    if (traitCollection()->hasTrait(TRAIT::GOOD_NATURED)) {
                         value -= 10;
                     }
                     break;
                 case SKILL::UNARMED:
                     value += 30 + 2*(statTotal(STAT::AGILITY) + statTotal(STAT::STRENGTH));
-                    if (hasTrait(TRAIT::GOOD_NATURED)) {
+                    if (traitCollection()->hasTrait(TRAIT::GOOD_NATURED)) {
                         value -= 10;
                     }
                     break;
                 case SKILL::MELEE_WEAPONS:
                     value += 20 + 2*(statTotal(STAT::AGILITY) + statTotal(STAT::STRENGTH));
-                    if (hasTrait(TRAIT::GOOD_NATURED)) {
+                    if (traitCollection()->hasTrait(TRAIT::GOOD_NATURED)) {
                         value -= 10;
                     }
                     break;
                 case SKILL::THROWING:
                     value += 4*statTotal(STAT::AGILITY);
-                    if (hasTrait(TRAIT::GOOD_NATURED)) {
+                    if (traitCollection()->hasTrait(TRAIT::GOOD_NATURED)) {
                         value -= 10;
                     }
                     break;
                 case SKILL::FIRST_AID:
                     value += 20 + 2*(statTotal(STAT::PERCEPTION) + statTotal(STAT::INTELLIGENCE));
-                    if (hasTrait(TRAIT::GOOD_NATURED)) {
+                    if (traitCollection()->hasTrait(TRAIT::GOOD_NATURED)) {
                         value += 15;
                     }
                     break;
                 case SKILL::DOCTOR:
                     value += 20 + 5 + (statTotal(STAT::PERCEPTION) + statTotal(STAT::INTELLIGENCE));
-                    if (hasTrait(TRAIT::GOOD_NATURED)) {
+                    if (traitCollection()->hasTrait(TRAIT::GOOD_NATURED)) {
                         value += 15;
                     }
                     break;
@@ -241,13 +242,13 @@ namespace Falltergeist
                     break;
                 case SKILL::SPEECH:
                     value += 20 + 5*statTotal(STAT::CHARISMA);
-                    if (hasTrait(TRAIT::GOOD_NATURED)) {
+                    if (traitCollection()->hasTrait(TRAIT::GOOD_NATURED)) {
                         value += 15;
                     }
                     break;
                 case SKILL::BARTER:
                     value += 20 + 4*statTotal(STAT::CHARISMA);
-                    if (hasTrait(TRAIT::GOOD_NATURED)) {
+                    if (traitCollection()->hasTrait(TRAIT::GOOD_NATURED)) {
                         value += 15;
                     }
                     break;
@@ -261,7 +262,7 @@ namespace Falltergeist
                     break;
             }
 
-            if (hasTrait(TRAIT::GIFTED)) {
+            if (traitCollection()->hasTrait(TRAIT::GIFTED)) {
                 value -= 10;
             }
 
@@ -272,25 +273,8 @@ namespace Falltergeist
             return value;
         }
 
-        bool CritterObject::hasTrait(TRAIT trait) const {
-            if (trait > TRAIT::GIFTED) {
-                throw Exception("CritterObject::traitTagged(num) - num out of range:" + std::to_string((unsigned)trait));
-            }
-            return _traitsTagged.at((unsigned) trait);
-        }
-
-        void CritterObject::addTrait(TRAIT trait) {
-            if (trait > TRAIT::GIFTED) {
-                throw Exception("CritterObject::setTraitTagged(num, value) - num out of range:" + std::to_string((unsigned)trait));
-            }
-            _traitsTagged.at((unsigned)trait) = true;
-        }
-
-        void CritterObject::removeTrait(TRAIT trait) {
-            if (trait > TRAIT::GIFTED) {
-                throw Exception("CritterObject::setTraitTagged(num, value) - num out of range:" + std::to_string((unsigned)trait));
-            }
-            _traitsTagged.at((unsigned)trait) = false;
+        std::shared_ptr<ITraitCollection> CritterObject::traitCollection() const {
+            return _traitCollection;
         }
 
         void CritterObject::setCritterFlags(unsigned int flags)
@@ -530,7 +514,7 @@ namespace Falltergeist
                     animation->frameHandler().add(std::bind(&CritterObject::onMovementAnimationFrame, this, std::placeholders::_1));
                     animation->animationEndedHandler().add(std::bind(&CritterObject::onMovementAnimationEnded, this, std::placeholders::_1));
                     animation->play();
-                    _ui = move(animation);
+                    _ui = std::move(animation);
                 }
             } else {
                 auto anim = ui<UI::Animation>();

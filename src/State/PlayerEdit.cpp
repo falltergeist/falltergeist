@@ -302,7 +302,7 @@ namespace Falltergeist
 
             for (unsigned i = static_cast<unsigned>(TRAIT::FAST_METABOLISM); i <= static_cast<unsigned>(TRAIT::GIFTED); i++)
             {
-                if (player->hasTrait(static_cast<TRAIT>(i)))
+                if (player->traitCollection()->hasTrait(static_cast<TRAIT>(i)))
                 {
                     perksAndTraits->addArea(std::make_shared<UI::TextArea>(_t(MSG_TRAITS, 100 + i), Graphics::Point(0, 0)));
                 }

@@ -25,7 +25,7 @@ namespace Falltergeist
         class DudeObject : public CritterObject
         {
             public:
-                DudeObject();
+                DudeObject(std::shared_ptr<ITraitCollection> traitCollection);
                 ~DudeObject() = default;
 
                 void loadFromGCDFile(Format::Gcd::File* gcd);

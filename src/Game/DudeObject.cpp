@@ -19,8 +19,9 @@ namespace Falltergeist
 {
     namespace Game
     {
-        DudeObject::DudeObject() : CritterObject()
-        {
+        DudeObject::DudeObject(
+            std::shared_ptr<ITraitCollection> traitCollection
+        ) : CritterObject(traitCollection) {
             _type = Type::DUDE;
             setLightIntensity(65536);
             setLightRadius(4);
@@ -41,10 +42,10 @@ namespace Falltergeist
             _hitPoints = _hitPointsMax;
 
             if ((signed)gcd->firstTrait() >= 0) {
-                CritterObject::addTrait(gcd->firstTrait());
+                traitCollection()->addTrait(gcd->firstTrait());
             }
             if ((signed)gcd->secondTrait() >= 0) {
-                CritterObject::addTrait(gcd->secondTrait());
+                traitCollection()->addTrait(gcd->secondTrait());
             }
 
             if ((signed)gcd->firstTaggedSkill() >= 0) {
@@ -126,7 +127,7 @@ namespace Falltergeist
         int DudeObject::armorClass() const
         {
             unsigned int value = 0;
-            if (!hasTrait(TRAIT::KAMIKAZE)) {
+            if (!traitCollection()->hasTrait(TRAIT::KAMIKAZE)) {
                 value += statTotal(STAT::AGILITY) > 10 ? 10 : statTotal(STAT::AGILITY);
             }
             return value;
@@ -137,7 +138,7 @@ namespace Falltergeist
         {
             unsigned int value = 0;
             value += 5 + static_cast<int>(ceil(statTotal(STAT::AGILITY) / 2));
-            if (hasTrait(TRAIT::BRUISER)) {
+            if (traitCollection()->hasTrait(TRAIT::BRUISER)) {
                 value -= 2;
             }
             return value;
@@ -148,9 +149,9 @@ namespace Falltergeist
             unsigned int value = 0;
             unsigned int st = statTotal(STAT::STRENGTH);
 
-            if (hasTrait(TRAIT::SMALL_FRAME)) {
+            if (traitCollection()->hasTrait(TRAIT::SMALL_FRAME)) {
                 value += 25 + 15*(st > 10 ? 10 : st);
-                if (hasTrait(TRAIT::GIFTED) && st <= 10) {
+                if (traitCollection()->hasTrait(TRAIT::GIFTED) && st <= 10) {
                     value += 10;
                 }
             } else {
@@ -167,7 +168,7 @@ namespace Falltergeist
                 st = 10;
             }
             value += st > 5 ? st - 5 : 1;
-            if (hasTrait(TRAIT::HEAVY_HANDED)) {
+            if (traitCollection()->hasTrait(TRAIT::HEAVY_HANDED)) {
                 value += 4;
             }
             return value;
@@ -186,7 +187,7 @@ namespace Falltergeist
         int DudeObject::poisonResistance() const
         {
             int value = 0;
-            if (!hasTrait(TRAIT::FAST_METABOLISM)) {
+            if (!traitCollection()->hasTrait(TRAIT::FAST_METABOLISM)) {
                 value += 5*statTotal(STAT::ENDURANCE);
             }
             return value;
@@ -197,7 +198,7 @@ namespace Falltergeist
             unsigned int value = 0;
             unsigned int pe = statTotal(STAT::PERCEPTION);
             value += 2*(pe > 10 ? 10 : pe);
-            if (hasTrait(TRAIT::KAMIKAZE)) {
+            if (traitCollection()->hasTrait(TRAIT::KAMIKAZE)) {
                 value += 5;
             }
             return value;
@@ -212,7 +213,7 @@ namespace Falltergeist
                 value = 1;
             }
 
-            if (hasTrait(TRAIT::FAST_METABOLISM)) {
+            if (traitCollection()->hasTrait(TRAIT::FAST_METABOLISM)) {
                 value += 2;
             }
             return value;
@@ -223,7 +224,7 @@ namespace Falltergeist
             unsigned int value = 0;
             unsigned int lk = statTotal(STAT::LUCK);
             value += lk > 10 ? 10 : lk;
-            if (hasTrait(TRAIT::FINESSE)) {
+            if (traitCollection()->hasTrait(TRAIT::FINESSE)) {
                 value += 10;
             }
             return value;
