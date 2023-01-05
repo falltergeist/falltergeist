@@ -24,7 +24,7 @@ namespace Falltergeist
                 int skill = script.dataStack()->popInteger();
                 auto critter = static_cast<Game::CritterObject *>(script.dataStack()->popObject());
 
-                critter->setSkillGainedValue((SKILL) skill, critter->skillGainedValue((SKILL) skill) + amount);
+                critter->skillCollection()->setSkillGainedValue((SKILL) skill, critter->skillCollection()->skillGainedValue((SKILL) skill) + amount);
 
                 _logger->debug()
                     << "[813C] void critter_mod_skill(GameCritterObject* who, int skill, int amount)" << std::endl

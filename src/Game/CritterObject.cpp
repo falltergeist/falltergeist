@@ -26,8 +26,11 @@ namespace Falltergeist
 {
     namespace Game
     {
-        CritterObject::CritterObject() : Object()
-        {
+        CritterObject::CritterObject(
+            std::shared_ptr<ISkillCollection> skillCollection,
+            std::shared_ptr<IStatCollection> statCollection,
+            std::shared_ptr<ITraitCollection> traitCollection
+        ) : Object(), _skillCollection(skillCollection), _statCollection(statCollection), _traitCollection(traitCollection) {
             _type = Type::CRITTER;
             _setupNextIdleAnim();
         }
@@ -90,202 +93,16 @@ namespace Falltergeist
             _gender = value;
         }
 
-        int CritterObject::stat(STAT num) const
-        {
-            if (num > STAT::LUCK) {
-                throw Exception("CritterObject::stat(num) - num out of range:" + std::to_string((unsigned)num));
-            }
-            return _stats.at((unsigned)num);
+        std::shared_ptr<ISkillCollection> CritterObject::skillCollection() const {
+            return _skillCollection;
         }
 
-        void CritterObject::setStat(STAT num, int value)
-        {
-            if (num > STAT::LUCK) {
-                throw Exception("CritterObject::setStat(num, value) - num out of range:" + std::to_string((unsigned)num));
-            }
-            _stats.at((unsigned)num) = value;
+        std::shared_ptr<IStatCollection> CritterObject::statCollection() const {
+            return _statCollection;
         }
 
-        int CritterObject::statTotal(STAT num) const
-        {
-            if (num > STAT::LUCK) {
-                throw Exception("CritterObject::statTotal(num) - num out of range:" + std::to_string((unsigned)num));
-            }
-            return stat(num) + statBonus(num);
-        }
-
-        int CritterObject::statBonus(STAT num) const
-        {
-            if (num > STAT::LUCK) {
-                throw Exception("CritterObject::statBonus(num) - num out of range:" + std::to_string((unsigned)num));
-            }
-            int bonus = 0;
-            if (traitTagged(TRAIT::GIFTED)) {
-                bonus += 1;
-            }
-            switch(num)
-            {
-                case STAT::STRENGTH:
-                    if (traitTagged(TRAIT::BRUISER)) {
-                        bonus += 2;
-                    }
-                    break;
-                case STAT::AGILITY:
-                    if (traitTagged(TRAIT::SMALL_FRAME)) {
-                        bonus += 1;
-                    }
-                    break;
-                default:
-                    break;
-            }
-            return _statsBonus.at((unsigned)num) + bonus;
-        }
-
-        void CritterObject::setStatBonus(STAT num, int value)
-        {
-            if (num > STAT::LUCK) {
-                throw Exception("CritterObject::setStatBonus(num, value) - num out of range:" + std::to_string((unsigned)num));
-            }
-            _statsBonus.at((unsigned)num) = value;
-        }
-
-        int CritterObject::skillTagged(SKILL num) const
-        {
-            if (num > SKILL::OUTDOORSMAN) {
-                throw Exception("CritterObject::skillTagged(num) - num out of range:" + std::to_string((unsigned)num));
-            }
-            return _skillsTagged.at((unsigned)num);
-        }
-
-        void CritterObject::setSkillTagged(SKILL num, int value)
-        {
-            if (num > SKILL::OUTDOORSMAN) {
-                throw Exception("CritterObject::setSkillTagged(num, value) - num out of range:" + std::to_string((unsigned)num));
-            }
-            _skillsTagged.at((unsigned)num) = value;
-        }
-
-        int CritterObject::skillBaseValue(SKILL skill) const
-        {
-            if (skill > SKILL::OUTDOORSMAN) {
-                throw Exception("CritterObject::skillBaseValue(num) - num out of range:" + std::to_string((unsigned)skill));
-            }
-            int value = 0;
-            switch(skill)
-            {
-                case SKILL::SMALL_GUNS:
-                    value += 5 + 4 * statTotal(STAT::AGILITY);
-                    if (traitTagged(TRAIT::GOOD_NATURED)) {
-                        value -= 10;
-                    }
-                    break;
-                case SKILL::BIG_GUNS:
-                    value += 2*statTotal(STAT::AGILITY);
-                    if (traitTagged(TRAIT::GOOD_NATURED)) {
-                        value -= 10;
-                    }
-                    break;
-                case SKILL::ENERGY_WEAPONS:
-                    value += 2*statTotal(STAT::AGILITY);
-                    if (traitTagged(TRAIT::GOOD_NATURED)) {
-                        value -= 10;
-                    }
-                    break;
-                case SKILL::UNARMED:
-                    value += 30 + 2*(statTotal(STAT::AGILITY) + statTotal(STAT::STRENGTH));
-                    if (traitTagged(TRAIT::GOOD_NATURED)) {
-                        value -= 10;
-                    }
-                    break;
-                case SKILL::MELEE_WEAPONS:
-                    value += 20 + 2*(statTotal(STAT::AGILITY) + statTotal(STAT::STRENGTH));
-                    if (traitTagged(TRAIT::GOOD_NATURED)) {
-                        value -= 10;
-                    }
-                    break;
-                case SKILL::THROWING:
-                    value += 4*statTotal(STAT::AGILITY);
-                    if (traitTagged(TRAIT::GOOD_NATURED)) {
-                        value -= 10;
-                    }
-                    break;
-                case SKILL::FIRST_AID:
-                    value += 20 + 2*(statTotal(STAT::PERCEPTION) + statTotal(STAT::INTELLIGENCE));
-                    if (traitTagged(TRAIT::GOOD_NATURED)) {
-                        value += 15;
-                    }
-                    break;
-                case SKILL::DOCTOR:
-                    value += 20 + 5 + (statTotal(STAT::PERCEPTION) + statTotal(STAT::INTELLIGENCE));
-                    if (traitTagged(TRAIT::GOOD_NATURED)) {
-                        value += 15;
-                    }
-                    break;
-                case SKILL::SNEAK:
-                    value += 20 + 5 + 3*statTotal(STAT::AGILITY);
-                    break;
-                case SKILL::LOCKPICK:
-                    value += 20 + 10 + (statTotal(STAT::PERCEPTION) + statTotal(STAT::AGILITY));
-                    break;
-                case SKILL::STEAL:
-                    value += 20 + 3*statTotal(STAT::AGILITY);
-                    break;
-                case SKILL::TRAPS:
-                    value += 20 + 10 + (statTotal(STAT::PERCEPTION) + statTotal(STAT::AGILITY));
-                    break;
-                case SKILL::SCIENCE:
-                    value += 20 + 4*statTotal(STAT::INTELLIGENCE);
-                    break;
-                case SKILL::REPAIR:
-                    value += 20 + 3*statTotal(STAT::INTELLIGENCE);
-                    break;
-                case SKILL::SPEECH:
-                    value += 20 + 5*statTotal(STAT::CHARISMA);
-                    if (traitTagged(TRAIT::GOOD_NATURED)) {
-                        value += 15;
-                    }
-                    break;
-                case SKILL::BARTER:
-                    value += 20 + 4*statTotal(STAT::CHARISMA);
-                    if (traitTagged(TRAIT::GOOD_NATURED)) {
-                        value += 15;
-                    }
-                    break;
-                case SKILL::GAMBLING:
-                    value += 20 + 5*statTotal(STAT::LUCK);
-                    break;
-                case SKILL::OUTDOORSMAN:
-                    value += 20 + 2*(statTotal(STAT::ENDURANCE) + statTotal(STAT::INTELLIGENCE));
-                    break;
-                default:
-                    break;
-            }
-
-            if (traitTagged(TRAIT::GIFTED)) {
-                value -= 10;
-            }
-
-            if (skillTagged(skill)) {
-                value += 20;
-            }
-
-            return value;
-        }
-
-        int CritterObject::traitTagged(TRAIT num) const
-        {
-            if (num > TRAIT::GIFTED) {
-                throw Exception("CritterObject::traitTagged(num) - num out of range:" + std::to_string((unsigned)num));
-            }
-            return _traitsTagged.at((unsigned)num);
-        }
-
-        void CritterObject::setTraitTagged(TRAIT num, int value)
-        {
-            if (num > TRAIT::GIFTED) {
-                throw Exception("CritterObject::setTraitTagged(num, value) - num out of range:" + std::to_string((unsigned)num));
-            }
-            _traitsTagged.at((unsigned)num) = value;
+        std::shared_ptr<ITraitCollection> CritterObject::traitCollection() const {
+            return _traitCollection;
         }
 
         void CritterObject::setCritterFlags(unsigned int flags)
@@ -525,7 +342,7 @@ namespace Falltergeist
                     animation->frameHandler().add(std::bind(&CritterObject::onMovementAnimationFrame, this, std::placeholders::_1));
                     animation->animationEndedHandler().add(std::bind(&CritterObject::onMovementAnimationEnded, this, std::placeholders::_1));
                     animation->play();
-                    _ui = move(animation);
+                    _ui = std::move(animation);
                 }
             } else {
                 auto anim = ui<UI::Animation>();
@@ -803,30 +620,6 @@ namespace Falltergeist
         void CritterObject::setPoisonLevel(int value)
         {
             _poisonLevel = value;
-        }
-
-        int CritterObject::skillValue(SKILL skill) const
-        {
-            if (skill > SKILL::OUTDOORSMAN) {
-                throw Exception("CritterObject::skillValue(skill) - skill out of range:" + std::to_string((unsigned)skill));
-            }
-            return skillBaseValue(skill) + skillGainedValue(skill);
-        }
-
-        int CritterObject::skillGainedValue(SKILL skill) const
-        {
-            if (skill > SKILL::OUTDOORSMAN) {
-                throw Exception("CritterObject::skillGainedValue(skill) - skill out of range:" + std::to_string((unsigned)skill));
-            }
-            return _skillsGainedValue.at((unsigned)skill);
-        }
-
-        void CritterObject::setSkillGainedValue(SKILL skill, int value)
-        {
-            if (skill > SKILL::OUTDOORSMAN) {
-                throw Exception("CritterObject::setSkillGainedCalue(skill) - skill out of range:" + std::to_string((unsigned)skill));
-            }
-            _skillsGainedValue.at((unsigned)skill) = value;
         }
 
         bool CritterObject::running() const

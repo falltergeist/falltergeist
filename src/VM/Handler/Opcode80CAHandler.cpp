@@ -42,7 +42,7 @@ namespace Falltergeist
                     case 5: // AG
                     case 6: // LU
                     {
-                        result = critter->statTotal((STAT) number);
+                        result = critter->statCollection()->statTotal((STAT) number);
                         break;
                     }
                     case 7: // max hit points

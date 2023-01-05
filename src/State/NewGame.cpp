@@ -5,6 +5,9 @@
 #include "../Format/Bio/File.h"
 #include "../Game/DudeObject.h"
 #include "../Game/Game.h"
+#include "../Game/SkillCollection.h"
+#include "../Game/StatCollection.h"
+#include "../Game/TraitCollection.h"
 #include "../Graphics/Renderer.h"
 #include "../Helpers/StateLocationHelper.h"
 #include "../ResourceManager.h"
@@ -113,7 +116,11 @@ namespace Falltergeist
 
         void NewGame::doCreate()
         {
-            auto none = std::make_unique<Game::DudeObject>();
+            // TODO extract player creation to some kind of factory
+            auto blankTraitCollection = std::make_shared<Game::TraitCollection>();
+            auto blankStatCollection = std::make_shared<Game::StatCollection>(blankTraitCollection);
+            auto blankSkillCollection = std::make_shared<Game::SkillCollection>(blankStatCollection, blankTraitCollection);
+            auto none = std::make_unique<Game::DudeObject>(blankSkillCollection, blankStatCollection, blankTraitCollection);
             none->loadFromGCDFile(ResourceManager::getInstance()->gcdFileType("premade/blank.gcd"));
             Game::Game::getInstance()->setPlayer(std::move(none));
             Game::Game::getInstance()->pushState(new PlayerCreate(_resourceManager, _logger));
@@ -176,25 +183,28 @@ namespace Falltergeist
         void NewGame::_changeCharacter()
         {
             auto& dude = _characters.at(_selectedCharacter);
+
+            auto statCollection = dude->statCollection();
+
            *getUI<TextArea>("stats_1") = "";
            *getUI<TextArea>("stats_1")
-                << _t(MSG_STATS, 100) << " " << (dude->stat(STAT::STRENGTH)     < 10 ? "0" : "") << dude->stat(STAT::STRENGTH)     << "\n"
-                << _t(MSG_STATS, 101) << " " << (dude->stat(STAT::PERCEPTION)   < 10 ? "0" : "") << dude->stat(STAT::PERCEPTION)   << "\n"
-                << _t(MSG_STATS, 102) << " " << (dude->stat(STAT::ENDURANCE)    < 10 ? "0" : "") << dude->stat(STAT::ENDURANCE)    << "\n"
-                << _t(MSG_STATS, 103) << " " << (dude->stat(STAT::CHARISMA)     < 10 ? "0" : "") << dude->stat(STAT::CHARISMA)     << "\n"
-                << _t(MSG_STATS, 104) << " " << (dude->stat(STAT::INTELLIGENCE) < 10 ? "0" : "") << dude->stat(STAT::INTELLIGENCE) << "\n"
-                << _t(MSG_STATS, 105) << " " << (dude->stat(STAT::AGILITY)      < 10 ? "0" : "") << dude->stat(STAT::AGILITY)      << "\n"
-                << _t(MSG_STATS, 106) << " " << (dude->stat(STAT::LUCK)         < 10 ? "0" : "") << dude->stat(STAT::LUCK)         << "\n";
+                << _t(MSG_STATS, 100) << " " << (statCollection->stat(STAT::STRENGTH)     < 10 ? "0" : "") << statCollection->stat(STAT::STRENGTH)     << "\n"
+                << _t(MSG_STATS, 101) << " " << (statCollection->stat(STAT::PERCEPTION)   < 10 ? "0" : "") << statCollection->stat(STAT::PERCEPTION)   << "\n"
+                << _t(MSG_STATS, 102) << " " << (statCollection->stat(STAT::ENDURANCE)    < 10 ? "0" : "") << statCollection->stat(STAT::ENDURANCE)    << "\n"
+                << _t(MSG_STATS, 103) << " " << (statCollection->stat(STAT::CHARISMA)     < 10 ? "0" : "") << statCollection->stat(STAT::CHARISMA)     << "\n"
+                << _t(MSG_STATS, 104) << " " << (statCollection->stat(STAT::INTELLIGENCE) < 10 ? "0" : "") << statCollection->stat(STAT::INTELLIGENCE) << "\n"
+                << _t(MSG_STATS, 105) << " " << (statCollection->stat(STAT::AGILITY)      < 10 ? "0" : "") << statCollection->stat(STAT::AGILITY)      << "\n"
+                << _t(MSG_STATS, 106) << " " << (statCollection->stat(STAT::LUCK)         < 10 ? "0" : "") << statCollection->stat(STAT::LUCK)         << "\n";
 
             *getUI<TextArea>("stats_2") = "";
             *getUI<TextArea>("stats_2")
-                << _t(MSG_STATS, dude->stat(STAT::STRENGTH)     + 300) << "\n"
-                << _t(MSG_STATS, dude->stat(STAT::PERCEPTION)   + 300) << "\n"
-                << _t(MSG_STATS, dude->stat(STAT::ENDURANCE)    + 300) << "\n"
-                << _t(MSG_STATS, dude->stat(STAT::CHARISMA)     + 300) << "\n"
-                << _t(MSG_STATS, dude->stat(STAT::INTELLIGENCE) + 300) << "\n"
-                << _t(MSG_STATS, dude->stat(STAT::AGILITY)      + 300) << "\n"
-                << _t(MSG_STATS, dude->stat(STAT::LUCK)         + 300) << "\n";
+                << _t(MSG_STATS, statCollection->stat(STAT::STRENGTH)     + 300) << "\n"
+                << _t(MSG_STATS, statCollection->stat(STAT::PERCEPTION)   + 300) << "\n"
+                << _t(MSG_STATS, statCollection->stat(STAT::ENDURANCE)    + 300) << "\n"
+                << _t(MSG_STATS, statCollection->stat(STAT::CHARISMA)     + 300) << "\n"
+                << _t(MSG_STATS, statCollection->stat(STAT::INTELLIGENCE) + 300) << "\n"
+                << _t(MSG_STATS, statCollection->stat(STAT::AGILITY)      + 300) << "\n"
+                << _t(MSG_STATS, statCollection->stat(STAT::LUCK)         + 300) << "\n";
 
             getUI<TextArea>("bio")->setText(dude->biography());
             getUI<TextArea>("name")->setText(dude->name());
@@ -212,15 +222,15 @@ namespace Falltergeist
 
             for (unsigned i = (unsigned)SKILL::SMALL_GUNS; i <= (unsigned)SKILL::OUTDOORSMAN; i++)
             {
-                if (dude->skillTagged((SKILL)i))
+                if (dude->skillCollection()->skillTagged((SKILL)i))
                 {
                     stats3 += "\n" + _t(MSG_SKILLS, 100 + i);
-                    stats3_values += "\n" + std::to_string(dude->skillValue((SKILL)i)) + "%";
+                    stats3_values += "\n" + std::to_string(dude->skillCollection()->skillValue((SKILL)i)) + "%";
                 }
             }
             for (unsigned i = (unsigned)TRAIT::FAST_METABOLISM; i <= (unsigned)TRAIT::GIFTED; i++)
             {
-                if (dude->traitTagged((TRAIT)i))
+                if (dude->traitCollection()->hasTrait((TRAIT)i))
                 {
                     stats3 += "\n" + _t(MSG_TRAITS, 100 + i);
                 }
@@ -272,17 +282,29 @@ namespace Falltergeist
 
         void NewGame::onStateActivate(Event::State* event)
         {
-            auto combat = std::make_unique<Game::DudeObject>();
+            // TODO extract player creation to some kind of factory
+            auto combatTraitCollection = std::make_shared<Game::TraitCollection>();
+            auto combatStatCollection = std::make_shared<Game::StatCollection>(combatTraitCollection);
+            auto combatSkillCollection = std::make_shared<Game::SkillCollection>(combatStatCollection, combatTraitCollection);
+            auto combat = std::make_unique<Game::DudeObject>(combatSkillCollection, combatStatCollection, combatTraitCollection);
             combat->loadFromGCDFile(ResourceManager::getInstance()->gcdFileType("premade/combat.gcd"));
             combat->setBiography(ResourceManager::getInstance()->bioFileType("premade/combat.bio")->text());
             _characters.emplace_back(std::move(combat));
 
-            auto stealth = std::make_unique<Game::DudeObject>();
+            // TODO extract player creation to some kind of factory
+            auto stealthTraitCollection = std::make_shared<Game::TraitCollection>();
+            auto stealthStatCollection = std::make_shared<Game::StatCollection>(stealthTraitCollection);
+            auto stealthSkillCollection = std::make_shared<Game::SkillCollection>(stealthStatCollection, stealthTraitCollection);
+            auto stealth = std::make_unique<Game::DudeObject>(stealthSkillCollection, stealthStatCollection, stealthTraitCollection);
             stealth->loadFromGCDFile(ResourceManager::getInstance()->gcdFileType("premade/stealth.gcd"));
             stealth->setBiography(ResourceManager::getInstance()->bioFileType("premade/stealth.bio")->text());
             _characters.emplace_back(std::move(stealth));
 
-            auto diplomat = std::make_unique<Game::DudeObject>();
+            // TODO extract player creation to some kind of factory
+            auto diplomatTraitCollection = std::make_shared<Game::TraitCollection>();
+            auto diplomatStatCollection = std::make_shared<Game::StatCollection>(diplomatTraitCollection);
+            auto diplomatSkillCollection = std::make_shared<Game::SkillCollection>(diplomatStatCollection, diplomatTraitCollection);
+            auto diplomat = std::make_unique<Game::DudeObject>(diplomatSkillCollection, diplomatStatCollection, diplomatTraitCollection);
             diplomat->loadFromGCDFile(ResourceManager::getInstance()->gcdFileType("premade/diplomat.gcd"));
             diplomat->setBiography(ResourceManager::getInstance()->bioFileType("premade/diplomat.bio")->text());
             _characters.emplace_back(std::move(diplomat));

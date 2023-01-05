@@ -2,6 +2,9 @@
 
 // Project includes
 #include "../Format/Enums.h"
+#include "../Game/ISkillCollection.h"
+#include "../Game/IStatCollection.h"
+#include "../Game/ITraitCollection.h"
 #include "../Game/Object.h"
 
 // Third-party includes
@@ -24,11 +27,14 @@ namespace Falltergeist
         /**
          * Critter refers to player, all NPCs, creatures, robots, etc - all movable and shootable objects.
          */
-        class CritterObject : public Object
-        {
+        class CritterObject : public Object {
             public:
 
-                CritterObject();
+                CritterObject(
+                    std::shared_ptr<ISkillCollection> skillCollection,
+                    std::shared_ptr<IStatCollection> statCollection,
+                    std::shared_ptr<ITraitCollection> traitCollection
+                );
                 ~CritterObject() = default;
 
                 std::vector<ItemObject*>* inventory(); // critter's own inventory
@@ -53,25 +59,9 @@ namespace Falltergeist
                 unsigned age() const;
                 void setAge(unsigned value);
 
-                int stat(STAT stat) const;
-                void setStat(STAT stat, int value);
-
-                int statBonus(STAT stat) const;
-                void setStatBonus(STAT stat, int value);
-
-                // returns total stat value (with bonuses)
-                int statTotal(STAT num) const;
-
-                int skillTagged(SKILL skill) const;
-                void setSkillTagged(SKILL skill, int value);
-
-                int skillBaseValue(SKILL skill) const;
-                int skillGainedValue(SKILL skill) const;
-                void setSkillGainedValue(SKILL skill, int value);
-                int skillValue(SKILL skill) const;
-
-                int traitTagged(TRAIT num) const;
-                void setTraitTagged(TRAIT num, int value);
+                std::shared_ptr<ISkillCollection> skillCollection() const;
+                std::shared_ptr<IStatCollection> statCollection() const;
+                std::shared_ptr<ITraitCollection> traitCollection() const;
 
                 void setCritterFlags(unsigned int flags);
 
@@ -211,15 +201,14 @@ namespace Falltergeist
                 HAND _currentHand = HAND::RIGHT;
                 unsigned int _carryWeightMax = 0;
 
-                std::vector<int> _stats = {0, 0, 0, 0, 0, 0, 0};
-                std::vector<int> _statsBonus = {0, 0, 0, 0, 0, 0, 0};
-                std::vector<int> _skillsTagged = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-                std::vector<int> _skillsGainedValue = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-                std::vector<int> _traitsTagged = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
                 std::vector<int> _damageResist = {0, 0, 0, 0, 0, 0, 0, 0, 0};
                 std::vector<int> _damageThreshold = {0, 0, 0, 0, 0, 0, 0, 0, 0};
                 std::vector<ItemObject*> _inventory;
                 std::vector<Hexagon*> _movementQueue;
+
+                std::shared_ptr<ISkillCollection> _skillCollection;
+                std::shared_ptr<IStatCollection> _statCollection;
+                std::shared_ptr<ITraitCollection> _traitCollection;
 
                 ArmorItemObject* _armorSlot = 0;
                 ItemObject* _leftHandSlot = 0;

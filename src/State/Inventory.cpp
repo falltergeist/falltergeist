@@ -114,7 +114,7 @@ namespace Falltergeist
             std::string statsValues;
             for (unsigned i = (unsigned)STAT::STRENGTH; i <= (unsigned)STAT::LUCK; i++)
             {
-                statsValues += std::to_string(player->stat((STAT)i)) + "\n";
+                statsValues += std::to_string(player->statCollection()->stat((STAT)i)) + "\n";
             }
             addUI("label_stats_values", std::make_shared<UI::TextArea>(statsValues, screenX + 22, screenY + 20));
 

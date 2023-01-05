@@ -2,6 +2,9 @@
 #include "../State/Start.h"
 #include "../Game/DudeObject.h"
 #include "../Game/Game.h"
+#include "../Game/SkillCollection.h"
+#include "../Game/StatCollection.h"
+#include "../Game/TraitCollection.h"
 #include "../Graphics/Renderer.h"
 #include "../Helpers/StateLocationHelper.h"
 #include "../Input/Mouse.h"
@@ -72,7 +75,11 @@ namespace Falltergeist
             auto game = Game::Game::getInstance();
             State::think(deltaTime);
             if (game->settings()->forceLocation()) {
-                auto player = std::make_unique<Game::DudeObject>();
+                // TODO extract player creation to some kind of factory
+                auto combatTraitCollection = std::make_shared<Game::TraitCollection>();
+                auto combatStatCollection = std::make_shared<Game::StatCollection>(combatTraitCollection);
+                auto combatSkillCollection = std::make_shared<Game::SkillCollection>(combatStatCollection, combatTraitCollection);
+                auto player = std::make_unique<Game::DudeObject>(combatSkillCollection, combatStatCollection, combatTraitCollection);
                 player->loadFromGCDFile(ResourceManager::getInstance()->gcdFileType("premade/combat.gcd"));
                 game->setPlayer(std::move(player));
 
