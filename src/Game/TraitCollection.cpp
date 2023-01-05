@@ -10,21 +10,21 @@
 namespace Falltergeist::Game {
     bool TraitCollection::hasTrait(TRAIT trait) const {
         if (trait > TRAIT::GIFTED) {
-            throw Exception("CritterObject::traitTagged(num) - num out of range:" + std::to_string((unsigned)trait));
+            throw Exception("Trait out of range:" + std::to_string((unsigned)trait));
         }
         return _traitsTagged.at((unsigned) trait);
     }
 
     void TraitCollection::addTrait(TRAIT trait) {
         if (trait > TRAIT::GIFTED) {
-            throw Exception("CritterObject::setTraitTagged(num, value) - num out of range:" + std::to_string((unsigned)trait));
+            throw Exception("Trait out of range:" + std::to_string((unsigned)trait));
         }
         _traitsTagged.at((unsigned)trait) = true;
     }
 
     void TraitCollection::removeTrait(TRAIT trait) {
         if (trait > TRAIT::GIFTED) {
-            throw Exception("CritterObject::setTraitTagged(num, value) - num out of range:" + std::to_string((unsigned)trait));
+            throw Exception("Trait out of range:" + std::to_string((unsigned)trait));
         }
         _traitsTagged.at((unsigned)trait) = false;
     }

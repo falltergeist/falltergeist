@@ -38,7 +38,7 @@ namespace Falltergeist
                 if (!critter) {
                     _error("set_critter_stat(who, num, value) - who is not a critter");
                 }
-                critter->setStat((STAT) number, value);
+                critter->statCollection()->setStat((STAT) number, value);
                 if (dynamic_cast<Game::DudeObject *>(critter)) {
                     script.dataStack()->push(3); // for dude
                 } else {

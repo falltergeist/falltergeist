@@ -444,7 +444,7 @@ namespace Falltergeist
             {
                 std::stringstream ss;
                 ss << "stats_" << (i+1);
-                unsigned int val = player->statTotal((STAT)i);
+                unsigned int val = player->statCollection()->statTotal((STAT)i);
                 _counters.at(ss.str())->setNumber(val);
                 _counters.at(ss.str())->setColor(UI::BigCounter::Color::WHITE);
                 if (val > 10)

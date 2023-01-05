@@ -45,14 +45,14 @@ namespace Falltergeist
                 auto game = Game::Game::getInstance();
                 auto dialog = dynamic_cast<State::CritterDialog *>(game->topState());
                 if (iq >= 0) {
-                    if (game->player()->stat(STAT::INTELLIGENCE) >= iq) {
+                    if (game->player()->statCollection()->stat(STAT::INTELLIGENCE) >= iq) {
                         dialog->reactions()->push_back(reaction);
                         dialog->functions()->push_back(function);
                         dialog->addAnswer(text);
                     }
                 }
                 if (iq < 0) {
-                    if (game->player()->stat(STAT::INTELLIGENCE) <= abs(iq)) {
+                    if (game->player()->statCollection()->stat(STAT::INTELLIGENCE) <= abs(iq)) {
                         dialog->reactions()->push_back(reaction);
                         dialog->functions()->push_back(function);
                         dialog->addAnswer(text);

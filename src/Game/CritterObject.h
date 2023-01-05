@@ -2,6 +2,7 @@
 
 // Project includes
 #include "../Format/Enums.h"
+#include "../Game/IStatCollection.h"
 #include "../Game/ITraitCollection.h"
 #include "../Game/Object.h"
 
@@ -29,6 +30,7 @@ namespace Falltergeist
             public:
 
                 CritterObject(
+                    std::shared_ptr<IStatCollection> statCollection,
                     std::shared_ptr<ITraitCollection> traitCollection
                 );
                 ~CritterObject() = default;
@@ -55,15 +57,6 @@ namespace Falltergeist
                 unsigned age() const;
                 void setAge(unsigned value);
 
-                int stat(STAT stat) const;
-                void setStat(STAT stat, int value);
-
-                int statBonus(STAT stat) const;
-                void setStatBonus(STAT stat, int value);
-
-                // returns total stat value (with bonuses)
-                int statTotal(STAT num) const;
-
                 int skillTagged(SKILL skill) const;
                 void setSkillTagged(SKILL skill, int value);
 
@@ -72,6 +65,7 @@ namespace Falltergeist
                 void setSkillGainedValue(SKILL skill, int value);
                 int skillValue(SKILL skill) const;
 
+                std::shared_ptr<IStatCollection> statCollection() const;
                 std::shared_ptr<ITraitCollection> traitCollection() const;
 
                 void setCritterFlags(unsigned int flags);
@@ -212,8 +206,6 @@ namespace Falltergeist
                 HAND _currentHand = HAND::RIGHT;
                 unsigned int _carryWeightMax = 0;
 
-                std::vector<int> _stats = {0, 0, 0, 0, 0, 0, 0};
-                std::vector<int> _statsBonus = {0, 0, 0, 0, 0, 0, 0};
                 std::vector<int> _skillsTagged = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
                 std::vector<int> _skillsGainedValue = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
                 std::vector<int> _damageResist = {0, 0, 0, 0, 0, 0, 0, 0, 0};
@@ -221,6 +213,7 @@ namespace Falltergeist
                 std::vector<ItemObject*> _inventory;
                 std::vector<Hexagon*> _movementQueue;
 
+                std::shared_ptr<IStatCollection> _statCollection;
                 std::shared_ptr<ITraitCollection> _traitCollection;
 
                 ArmorItemObject* _armorSlot = 0;

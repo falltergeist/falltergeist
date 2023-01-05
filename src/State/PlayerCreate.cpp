@@ -319,7 +319,7 @@ namespace Falltergeist
             {
                 std::stringstream ss;
                 ss << "stats_" << (i+1);
-                unsigned int val = player->statTotal((STAT)i);
+                unsigned int val = player->statCollection()->statTotal((STAT)i);
                 _counters.at(ss.str())->setNumber(val);
                 _counters.at(ss.str())->setColor(UI::BigCounter::Color::WHITE);
                 if (val > 10)
@@ -420,11 +420,11 @@ namespace Falltergeist
         bool PlayerCreate::_statDecrease(unsigned int num)
         {
             auto player = Game::Game::getInstance()->player();
-            if (player->stat((STAT)num) <= 1) {
+            if (player->statCollection()->stat((STAT)num) <= 1) {
                 return false;
             }
 
-            player->setStat((STAT)num, player->stat((STAT)num) - 1);
+            player->statCollection()->setStat((STAT)num, player->statCollection()->stat((STAT)num) - 1);
             player->setStatsPoints(player->statsPoints() + 1);
             return true;
         }
@@ -436,11 +436,12 @@ namespace Falltergeist
                 return false;
             }
 
-            if (player->stat((STAT)num) + player->statBonus((STAT)num) >= 10) {
+            // TODO statTotal ?
+            if (player->statCollection()->stat((STAT)num) + player->statCollection()->statBonus((STAT)num) >= 10) {
                 return false;
             }
 
-            player->setStat((STAT)num, player->stat((STAT)num) + 1);
+            player->statCollection()->setStat((STAT)num, player->statCollection()->stat((STAT)num) + 1);
             player->setStatsPoints(player->statsPoints() - 1);
             return true;
         }

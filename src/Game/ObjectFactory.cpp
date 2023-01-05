@@ -16,6 +16,7 @@
 #include "../Game/LadderSceneryObject.h"
 #include "../Game/MiscItemObject.h"
 #include "../Game/StairsSceneryObject.h"
+#include "../Game/StatCollection.h"
 #include "../Game/TraitCollection.h"
 #include "../Game/WallObject.h"
 #include "../Game/WeaponItemObject.h"
@@ -121,7 +122,9 @@ namespace Falltergeist
                 }
                 case OBJECT_TYPE::CRITTER:
                 {
-                    object = new CritterObject(std::make_shared<TraitCollection>());
+                    auto traitCollection = std::make_shared<TraitCollection>();
+                    auto statCollection = std::make_shared<StatCollection>(traitCollection);
+                    object = new CritterObject(statCollection, traitCollection);
                     auto msg = ResourceManager::getInstance()->msgFileType("text/english/game/pro_crit.msg");
                     try
                     {
@@ -132,8 +135,8 @@ namespace Falltergeist
 
                     for (unsigned i = (unsigned)STAT::STRENGTH; i <= (unsigned)STAT::LUCK; i++)
                     {
-                        ((CritterObject*)object)->setStat((STAT)i, proto->critterStats()->at(i));
-                        ((CritterObject*)object)->setStatBonus((STAT)i, proto->critterStatsBonus()->at(i));
+                        statCollection->setStat((STAT)i, proto->critterStats()->at(i));
+                        statCollection->setStatBonus((STAT)i, proto->critterStatsBonus()->at(i));
                     }
                     for (unsigned i = (unsigned)SKILL::SMALL_GUNS; i <= (unsigned)SKILL::OUTDOORSMAN; i++)
                     {

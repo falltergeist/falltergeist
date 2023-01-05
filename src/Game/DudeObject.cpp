@@ -20,8 +20,9 @@ namespace Falltergeist
     namespace Game
     {
         DudeObject::DudeObject(
+            std::shared_ptr<IStatCollection> statCollection,
             std::shared_ptr<ITraitCollection> traitCollection
-        ) : CritterObject(traitCollection) {
+        ) : CritterObject(statCollection, traitCollection) {
             _type = Type::DUDE;
             setLightIntensity(65536);
             setLightRadius(4);
@@ -30,8 +31,8 @@ namespace Falltergeist
         void DudeObject::loadFromGCDFile(Format::Gcd::File* gcd)
         {
             for (unsigned i = (unsigned)STAT::STRENGTH; i <= (unsigned)STAT::LUCK; i++) {
-                setStat((STAT)i, gcd->stat((STAT)i));
-                setStatBonus((STAT)i, gcd->statBonus((STAT)i));
+                statCollection()->setStat((STAT)i, gcd->stat((STAT)i));
+                statCollection()->setStatBonus((STAT)i, gcd->statBonus((STAT)i));
             }
 
             _statsPoints = gcd->characterPoints();
@@ -108,9 +109,9 @@ namespace Falltergeist
         int DudeObject::hitPointsMax() const
         {
             int value = 15;
-            value += statTotal(STAT::ENDURANCE) * 2;
-            value += statTotal(STAT::STRENGTH);
-            value += (2 + static_cast<int>(ceil(statTotal(STAT::ENDURANCE)/2))) * (level() - 1);
+            value += statCollection()->statTotal(STAT::ENDURANCE) * 2;
+            value += statCollection()->statTotal(STAT::STRENGTH);
+            value += (2 + static_cast<int>(ceil(statCollection()->statTotal(STAT::ENDURANCE)/2))) * (level() - 1);
             return value;
         }
 
@@ -128,7 +129,7 @@ namespace Falltergeist
         {
             unsigned int value = 0;
             if (!traitCollection()->hasTrait(TRAIT::KAMIKAZE)) {
-                value += statTotal(STAT::AGILITY) > 10 ? 10 : statTotal(STAT::AGILITY);
+                value += statCollection()->statTotal(STAT::AGILITY) > 10 ? 10 : statCollection()->statTotal(STAT::AGILITY);
             }
             return value;
 
@@ -137,7 +138,7 @@ namespace Falltergeist
         int DudeObject::actionPointsMax() const
         {
             unsigned int value = 0;
-            value += 5 + static_cast<int>(ceil(statTotal(STAT::AGILITY) / 2));
+            value += 5 + static_cast<int>(ceil(statCollection()->statTotal(STAT::AGILITY) / 2));
             if (traitCollection()->hasTrait(TRAIT::BRUISER)) {
                 value -= 2;
             }
@@ -147,7 +148,7 @@ namespace Falltergeist
         unsigned int DudeObject::carryWeightMax() const
         {
             unsigned int value = 0;
-            unsigned int st = statTotal(STAT::STRENGTH);
+            unsigned int st = statCollection()->statTotal(STAT::STRENGTH);
 
             if (traitCollection()->hasTrait(TRAIT::SMALL_FRAME)) {
                 value += 25 + 15*(st > 10 ? 10 : st);
@@ -163,7 +164,7 @@ namespace Falltergeist
         int DudeObject::meleeDamage() const
         {
             unsigned int value = 0;
-            unsigned int st = statTotal(STAT::STRENGTH);
+            unsigned int st = statCollection()->statTotal(STAT::STRENGTH);
             if (st > 10) {
                 st = 10;
             }
@@ -188,7 +189,7 @@ namespace Falltergeist
         {
             int value = 0;
             if (!traitCollection()->hasTrait(TRAIT::FAST_METABOLISM)) {
-                value += 5*statTotal(STAT::ENDURANCE);
+                value += 5 * statCollection()->statTotal(STAT::ENDURANCE);
             }
             return value;
         }
@@ -196,7 +197,7 @@ namespace Falltergeist
         int DudeObject::sequence() const
         {
             unsigned int value = 0;
-            unsigned int pe = statTotal(STAT::PERCEPTION);
+            unsigned int pe = statCollection()->statTotal(STAT::PERCEPTION);
             value += 2*(pe > 10 ? 10 : pe);
             if (traitCollection()->hasTrait(TRAIT::KAMIKAZE)) {
                 value += 5;
@@ -207,7 +208,7 @@ namespace Falltergeist
         int DudeObject::healingRate() const
         {
             int value = 0;
-            int en = statTotal(STAT::ENDURANCE);
+            int en = statCollection()->statTotal(STAT::ENDURANCE);
             value += static_cast<int>(ceil((en > 10 ? 10 : en) / 3));
             if (value == 0) {
                 value = 1;
@@ -222,7 +223,7 @@ namespace Falltergeist
         int DudeObject::criticalChance() const
         {
             unsigned int value = 0;
-            unsigned int lk = statTotal(STAT::LUCK);
+            unsigned int lk = statCollection()->statTotal(STAT::LUCK);
             value += lk > 10 ? 10 : lk;
             if (traitCollection()->hasTrait(TRAIT::FINESSE)) {
                 value += 10;
