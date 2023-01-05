@@ -220,7 +220,7 @@ namespace Falltergeist
             }
             for (unsigned i = (unsigned)TRAIT::FAST_METABOLISM; i <= (unsigned)TRAIT::GIFTED; i++)
             {
-                if (dude->traitTagged((TRAIT)i))
+                if (dude->hasTrait((TRAIT)i))
                 {
                     stats3 += "\n" + _t(MSG_TRAITS, 100 + i);
                 }

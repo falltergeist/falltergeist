@@ -2,6 +2,7 @@
 
 // Project includes
 #include "../Format/Enums.h"
+#include "../Game/ITrait.h"
 #include "../Game/Object.h"
 
 // Third-party includes
@@ -24,7 +25,7 @@ namespace Falltergeist
         /**
          * Critter refers to player, all NPCs, creatures, robots, etc - all movable and shootable objects.
          */
-        class CritterObject : public Object
+        class CritterObject : public Object, public ITrait
         {
             public:
 
@@ -70,8 +71,9 @@ namespace Falltergeist
                 void setSkillGainedValue(SKILL skill, int value);
                 int skillValue(SKILL skill) const;
 
-                int traitTagged(TRAIT num) const;
-                void setTraitTagged(TRAIT num, int value);
+                bool hasTrait(TRAIT trait) const override;
+                void addTrait(TRAIT trait) override;
+                void removeTrait(TRAIT trait) override;
 
                 void setCritterFlags(unsigned int flags);
 
@@ -215,7 +217,7 @@ namespace Falltergeist
                 std::vector<int> _statsBonus = {0, 0, 0, 0, 0, 0, 0};
                 std::vector<int> _skillsTagged = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
                 std::vector<int> _skillsGainedValue = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-                std::vector<int> _traitsTagged = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+                std::vector<bool> _traitsTagged = {false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false};
                 std::vector<int> _damageResist = {0, 0, 0, 0, 0, 0, 0, 0, 0};
                 std::vector<int> _damageThreshold = {0, 0, 0, 0, 0, 0, 0, 0, 0};
                 std::vector<ItemObject*> _inventory;

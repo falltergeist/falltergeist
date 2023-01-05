@@ -120,18 +120,18 @@ namespace Falltergeist
                 throw Exception("CritterObject::statBonus(num) - num out of range:" + std::to_string((unsigned)num));
             }
             int bonus = 0;
-            if (traitTagged(TRAIT::GIFTED)) {
+            if (hasTrait(TRAIT::GIFTED)) {
                 bonus += 1;
             }
             switch(num)
             {
                 case STAT::STRENGTH:
-                    if (traitTagged(TRAIT::BRUISER)) {
+                    if (hasTrait(TRAIT::BRUISER)) {
                         bonus += 2;
                     }
                     break;
                 case STAT::AGILITY:
-                    if (traitTagged(TRAIT::SMALL_FRAME)) {
+                    if (hasTrait(TRAIT::SMALL_FRAME)) {
                         bonus += 1;
                     }
                     break;
@@ -175,49 +175,49 @@ namespace Falltergeist
             {
                 case SKILL::SMALL_GUNS:
                     value += 5 + 4 * statTotal(STAT::AGILITY);
-                    if (traitTagged(TRAIT::GOOD_NATURED)) {
+                    if (hasTrait(TRAIT::GOOD_NATURED)) {
                         value -= 10;
                     }
                     break;
                 case SKILL::BIG_GUNS:
                     value += 2*statTotal(STAT::AGILITY);
-                    if (traitTagged(TRAIT::GOOD_NATURED)) {
+                    if (hasTrait(TRAIT::GOOD_NATURED)) {
                         value -= 10;
                     }
                     break;
                 case SKILL::ENERGY_WEAPONS:
                     value += 2*statTotal(STAT::AGILITY);
-                    if (traitTagged(TRAIT::GOOD_NATURED)) {
+                    if (hasTrait(TRAIT::GOOD_NATURED)) {
                         value -= 10;
                     }
                     break;
                 case SKILL::UNARMED:
                     value += 30 + 2*(statTotal(STAT::AGILITY) + statTotal(STAT::STRENGTH));
-                    if (traitTagged(TRAIT::GOOD_NATURED)) {
+                    if (hasTrait(TRAIT::GOOD_NATURED)) {
                         value -= 10;
                     }
                     break;
                 case SKILL::MELEE_WEAPONS:
                     value += 20 + 2*(statTotal(STAT::AGILITY) + statTotal(STAT::STRENGTH));
-                    if (traitTagged(TRAIT::GOOD_NATURED)) {
+                    if (hasTrait(TRAIT::GOOD_NATURED)) {
                         value -= 10;
                     }
                     break;
                 case SKILL::THROWING:
                     value += 4*statTotal(STAT::AGILITY);
-                    if (traitTagged(TRAIT::GOOD_NATURED)) {
+                    if (hasTrait(TRAIT::GOOD_NATURED)) {
                         value -= 10;
                     }
                     break;
                 case SKILL::FIRST_AID:
                     value += 20 + 2*(statTotal(STAT::PERCEPTION) + statTotal(STAT::INTELLIGENCE));
-                    if (traitTagged(TRAIT::GOOD_NATURED)) {
+                    if (hasTrait(TRAIT::GOOD_NATURED)) {
                         value += 15;
                     }
                     break;
                 case SKILL::DOCTOR:
                     value += 20 + 5 + (statTotal(STAT::PERCEPTION) + statTotal(STAT::INTELLIGENCE));
-                    if (traitTagged(TRAIT::GOOD_NATURED)) {
+                    if (hasTrait(TRAIT::GOOD_NATURED)) {
                         value += 15;
                     }
                     break;
@@ -241,13 +241,13 @@ namespace Falltergeist
                     break;
                 case SKILL::SPEECH:
                     value += 20 + 5*statTotal(STAT::CHARISMA);
-                    if (traitTagged(TRAIT::GOOD_NATURED)) {
+                    if (hasTrait(TRAIT::GOOD_NATURED)) {
                         value += 15;
                     }
                     break;
                 case SKILL::BARTER:
                     value += 20 + 4*statTotal(STAT::CHARISMA);
-                    if (traitTagged(TRAIT::GOOD_NATURED)) {
+                    if (hasTrait(TRAIT::GOOD_NATURED)) {
                         value += 15;
                     }
                     break;
@@ -261,7 +261,7 @@ namespace Falltergeist
                     break;
             }
 
-            if (traitTagged(TRAIT::GIFTED)) {
+            if (hasTrait(TRAIT::GIFTED)) {
                 value -= 10;
             }
 
@@ -272,20 +272,25 @@ namespace Falltergeist
             return value;
         }
 
-        int CritterObject::traitTagged(TRAIT num) const
-        {
-            if (num > TRAIT::GIFTED) {
-                throw Exception("CritterObject::traitTagged(num) - num out of range:" + std::to_string((unsigned)num));
+        bool CritterObject::hasTrait(TRAIT trait) const {
+            if (trait > TRAIT::GIFTED) {
+                throw Exception("CritterObject::traitTagged(num) - num out of range:" + std::to_string((unsigned)trait));
             }
-            return _traitsTagged.at((unsigned)num);
+            return _traitsTagged.at((unsigned) trait);
         }
 
-        void CritterObject::setTraitTagged(TRAIT num, int value)
-        {
-            if (num > TRAIT::GIFTED) {
-                throw Exception("CritterObject::setTraitTagged(num, value) - num out of range:" + std::to_string((unsigned)num));
+        void CritterObject::addTrait(TRAIT trait) {
+            if (trait > TRAIT::GIFTED) {
+                throw Exception("CritterObject::setTraitTagged(num, value) - num out of range:" + std::to_string((unsigned)trait));
             }
-            _traitsTagged.at((unsigned)num) = value;
+            _traitsTagged.at((unsigned)trait) = true;
+        }
+
+        void CritterObject::removeTrait(TRAIT trait) {
+            if (trait > TRAIT::GIFTED) {
+                throw Exception("CritterObject::setTraitTagged(num, value) - num out of range:" + std::to_string((unsigned)trait));
+            }
+            _traitsTagged.at((unsigned)trait) = false;
         }
 
         void CritterObject::setCritterFlags(unsigned int flags)

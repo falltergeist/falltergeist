@@ -354,7 +354,7 @@ namespace Falltergeist
 
                 if (name.find("traits_") == 0) {
                     unsigned number = atoi(name.substr(7).c_str()) - 1;
-                    it->second->setColor(player->traitTagged((TRAIT)number) ? font1_a0a0a0ff : font1_3ff800ff);
+                    it->second->setColor(player->hasTrait((TRAIT)number) ? font1_a0a0a0ff : font1_3ff800ff);
                 }
 
                 if (name.find("skills_") == 0) {
@@ -399,7 +399,7 @@ namespace Falltergeist
                 if (name.find("traits_") == 0)
                 {
                     unsigned number = atoi(name.substr(7).c_str()) - 1;
-                    it->second->setColor(player->traitTagged((TRAIT)number) ? font1_ffffffff : font1_ffff7fff);
+                    it->second->setColor(player->hasTrait((TRAIT)number) ? font1_ffffffff : font1_ffff7fff);
                 }
 
                 if (name.find("skills_") == 0)
@@ -448,9 +448,9 @@ namespace Falltergeist
         bool PlayerCreate::_traitToggle(unsigned int num)
         {
             auto player = Game::Game::getInstance()->player();
-            if (player->traitTagged((TRAIT)num))
+            if (player->hasTrait((TRAIT)num))
             {
-                player->setTraitTagged((TRAIT)num, 0);
+                player->removeTrait((TRAIT)num);
                 return true;
             }
             else
@@ -458,13 +458,13 @@ namespace Falltergeist
                 unsigned int selectedTraits = 0;
                 for (unsigned i = (unsigned)TRAIT::FAST_METABOLISM; i <= (unsigned)TRAIT::GIFTED; i++)
                 {
-                    if (player->traitTagged((TRAIT)i)) {
+                    if (player->hasTrait((TRAIT)i)) {
                         selectedTraits++;
                     }
                 }
                 if (selectedTraits < 2)
                 {
-                    player->setTraitTagged((TRAIT)num, 1);
+                    player->addTrait((TRAIT)num);
                     return true;
                 }
             }
