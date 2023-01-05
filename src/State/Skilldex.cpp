@@ -82,28 +82,28 @@ namespace Falltergeist
 
             // counters
             auto sneakCounter    = std::make_shared<UI::BigCounter>(Graphics::Point(backgroundX + 111, backgroundY + 48), 3);
-            sneakCounter->setNumber(Game::Game::getInstance()->player()->skillValue(SKILL::SNEAK));
+            sneakCounter->setNumber(Game::Game::getInstance()->player()->skillCollection()->skillValue(SKILL::SNEAK));
 
             auto lockpickCounter = std::make_shared<UI::BigCounter>(Graphics::Point(backgroundX + 111, backgroundY + 48 + 36), 3);
-            lockpickCounter->setNumber(Game::Game::getInstance()->player()->skillValue(SKILL::LOCKPICK));
+            lockpickCounter->setNumber(Game::Game::getInstance()->player()->skillCollection()->skillValue(SKILL::LOCKPICK));
 
             auto stealCounter    = std::make_shared<UI::BigCounter>(Graphics::Point(backgroundX + 111, backgroundY + 48 + 36 * 2), 3);
-            stealCounter->setNumber(Game::Game::getInstance()->player()->skillValue(SKILL::STEAL));
+            stealCounter->setNumber(Game::Game::getInstance()->player()->skillCollection()->skillValue(SKILL::STEAL));
 
             auto trapsCounter    = std::make_shared<UI::BigCounter>(Graphics::Point(backgroundX + 111, backgroundY + 48 + 36 * 3), 3);
-            trapsCounter->setNumber(Game::Game::getInstance()->player()->skillValue(SKILL::TRAPS));
+            trapsCounter->setNumber(Game::Game::getInstance()->player()->skillCollection()->skillValue(SKILL::TRAPS));
 
             auto firstAidCounter = std::make_shared<UI::BigCounter>(Graphics::Point(backgroundX + 111, backgroundY + 48 + 36 * 4), 3);
-            firstAidCounter->setNumber(Game::Game::getInstance()->player()->skillValue(SKILL::FIRST_AID));
+            firstAidCounter->setNumber(Game::Game::getInstance()->player()->skillCollection()->skillValue(SKILL::FIRST_AID));
 
             auto doctorCounter   = std::make_shared<UI::BigCounter>(Graphics::Point(backgroundX + 111, backgroundY + 48 + 36 * 5), 3);
-            doctorCounter->setNumber(Game::Game::getInstance()->player()->skillValue(SKILL::DOCTOR));
+            doctorCounter->setNumber(Game::Game::getInstance()->player()->skillCollection()->skillValue(SKILL::DOCTOR));
 
             auto scienceCounter  = std::make_shared<UI::BigCounter>(Graphics::Point(backgroundX + 111, backgroundY + 48 + 36 * 6), 3);
-            scienceCounter->setNumber(Game::Game::getInstance()->player()->skillValue(SKILL::SCIENCE));
+            scienceCounter->setNumber(Game::Game::getInstance()->player()->skillCollection()->skillValue(SKILL::SCIENCE));
 
             auto repairCounter   = std::make_shared<UI::BigCounter>(Graphics::Point(backgroundX + 111, backgroundY + 48 + 36 * 7), 3);
-            repairCounter->setNumber(Game::Game::getInstance()->player()->skillValue(SKILL::REPAIR));
+            repairCounter->setNumber(Game::Game::getInstance()->player()->skillCollection()->skillValue(SKILL::REPAIR));
 
             // LABELS
             std::string font = "font3.aaf";

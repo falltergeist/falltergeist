@@ -26,6 +26,7 @@ namespace Falltergeist
         {
             public:
                 DudeObject(
+                    std::shared_ptr<ISkillCollection> skillCollection,
                     std::shared_ptr<IStatCollection> statCollection,
                     std::shared_ptr<ITraitCollection> traitCollection
                 );

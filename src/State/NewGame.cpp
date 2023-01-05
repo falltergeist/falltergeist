@@ -5,6 +5,7 @@
 #include "../Format/Bio/File.h"
 #include "../Game/DudeObject.h"
 #include "../Game/Game.h"
+#include "../Game/SkillCollection.h"
 #include "../Game/StatCollection.h"
 #include "../Game/TraitCollection.h"
 #include "../Graphics/Renderer.h"
@@ -115,9 +116,11 @@ namespace Falltergeist
 
         void NewGame::doCreate()
         {
+            // TODO extract player creation to some kind of factory
             auto blankTraitCollection = std::make_shared<Game::TraitCollection>();
             auto blankStatCollection = std::make_shared<Game::StatCollection>(blankTraitCollection);
-            auto none = std::make_unique<Game::DudeObject>(blankStatCollection, blankTraitCollection);
+            auto blankSkillCollection = std::make_shared<Game::SkillCollection>(blankStatCollection, blankTraitCollection);
+            auto none = std::make_unique<Game::DudeObject>(blankSkillCollection, blankStatCollection, blankTraitCollection);
             none->loadFromGCDFile(ResourceManager::getInstance()->gcdFileType("premade/blank.gcd"));
             Game::Game::getInstance()->setPlayer(std::move(none));
             Game::Game::getInstance()->pushState(new PlayerCreate(_resourceManager, _logger));
@@ -219,10 +222,10 @@ namespace Falltergeist
 
             for (unsigned i = (unsigned)SKILL::SMALL_GUNS; i <= (unsigned)SKILL::OUTDOORSMAN; i++)
             {
-                if (dude->skillTagged((SKILL)i))
+                if (dude->skillCollection()->skillTagged((SKILL)i))
                 {
                     stats3 += "\n" + _t(MSG_SKILLS, 100 + i);
-                    stats3_values += "\n" + std::to_string(dude->skillValue((SKILL)i)) + "%";
+                    stats3_values += "\n" + std::to_string(dude->skillCollection()->skillValue((SKILL)i)) + "%";
                 }
             }
             for (unsigned i = (unsigned)TRAIT::FAST_METABOLISM; i <= (unsigned)TRAIT::GIFTED; i++)
@@ -279,23 +282,29 @@ namespace Falltergeist
 
         void NewGame::onStateActivate(Event::State* event)
         {
+            // TODO extract player creation to some kind of factory
             auto combatTraitCollection = std::make_shared<Game::TraitCollection>();
             auto combatStatCollection = std::make_shared<Game::StatCollection>(combatTraitCollection);
-            auto combat = std::make_unique<Game::DudeObject>(combatStatCollection, combatTraitCollection);
+            auto combatSkillCollection = std::make_shared<Game::SkillCollection>(combatStatCollection, combatTraitCollection);
+            auto combat = std::make_unique<Game::DudeObject>(combatSkillCollection, combatStatCollection, combatTraitCollection);
             combat->loadFromGCDFile(ResourceManager::getInstance()->gcdFileType("premade/combat.gcd"));
             combat->setBiography(ResourceManager::getInstance()->bioFileType("premade/combat.bio")->text());
             _characters.emplace_back(std::move(combat));
 
+            // TODO extract player creation to some kind of factory
             auto stealthTraitCollection = std::make_shared<Game::TraitCollection>();
             auto stealthStatCollection = std::make_shared<Game::StatCollection>(stealthTraitCollection);
-            auto stealth = std::make_unique<Game::DudeObject>(stealthStatCollection, stealthTraitCollection);
+            auto stealthSkillCollection = std::make_shared<Game::SkillCollection>(stealthStatCollection, stealthTraitCollection);
+            auto stealth = std::make_unique<Game::DudeObject>(stealthSkillCollection, stealthStatCollection, stealthTraitCollection);
             stealth->loadFromGCDFile(ResourceManager::getInstance()->gcdFileType("premade/stealth.gcd"));
             stealth->setBiography(ResourceManager::getInstance()->bioFileType("premade/stealth.bio")->text());
             _characters.emplace_back(std::move(stealth));
 
+            // TODO extract player creation to some kind of factory
             auto diplomatTraitCollection = std::make_shared<Game::TraitCollection>();
             auto diplomatStatCollection = std::make_shared<Game::StatCollection>(diplomatTraitCollection);
-            auto diplomat = std::make_unique<Game::DudeObject>(diplomatStatCollection, diplomatTraitCollection);
+            auto diplomatSkillCollection = std::make_shared<Game::SkillCollection>(diplomatStatCollection, diplomatTraitCollection);
+            auto diplomat = std::make_unique<Game::DudeObject>(diplomatSkillCollection, diplomatStatCollection, diplomatTraitCollection);
             diplomat->loadFromGCDFile(ResourceManager::getInstance()->gcdFileType("premade/diplomat.gcd"));
             diplomat->setBiography(ResourceManager::getInstance()->bioFileType("premade/diplomat.bio")->text());
             _characters.emplace_back(std::move(diplomat));

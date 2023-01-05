@@ -28,7 +28,7 @@ namespace Falltergeist
                 auto object = script.dataStack()->popObject();
                 int value = 0;
                 if (auto critter = dynamic_cast<Game::CritterObject *>(object)) {
-                    value = critter->skillValue((SKILL) skill);
+                    value = critter->skillCollection()->skillValue((SKILL) skill);
                     script.dataStack()->push(value);
                 } else {
                     _error("get_skill_value(who, skill): who is not critter");

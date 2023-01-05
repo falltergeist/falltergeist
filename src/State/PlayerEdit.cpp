@@ -460,7 +460,7 @@ namespace Falltergeist
             {
                 std::stringstream ss;
                 ss << "skills_" << (i + 1) << "_value";
-                *_labels.at(ss.str()) = player->skillValue((SKILL)i);
+                *_labels.at(ss.str()) = player->skillCollection()->skillValue((SKILL)i);
                 *_labels.at(ss.str())+= "%";
             }
 
@@ -479,7 +479,7 @@ namespace Falltergeist
 
                 if (name.find("skills_") == 0) {
                     unsigned number = atoi(name.substr(7).c_str()) - 1;
-                    it->second->setColor(player->skillTagged((SKILL)number) ? font1_a0a0a0ff : font1_3ff800ff);
+                    it->second->setColor(player->skillCollection()->skillTagged((SKILL)number) ? font1_a0a0a0ff : font1_3ff800ff);
                 }
 
                 if (name.find("health_") == 0) {
@@ -521,8 +521,8 @@ namespace Falltergeist
 
                 if (name.find("skills_") == 0) {
                     unsigned number = atoi(name.substr(7).c_str()) - 1;
-                    it->second->setColor(player->skillTagged((SKILL)number) ? font1_ffffffff : font1_ffff7fff);
-                    _labels.at(name+"_value")->setColor(player->skillTagged((SKILL)number) ? font1_ffffffff : font1_ffff7fff);
+                    it->second->setColor(player->skillCollection()->skillTagged((SKILL)number) ? font1_ffffffff : font1_ffff7fff);
+                    _labels.at(name+"_value")->setColor(player->skillCollection()->skillTagged((SKILL)number) ? font1_ffffffff : font1_ffff7fff);
                 }
 
                 if (name.find("health_") == 0) {

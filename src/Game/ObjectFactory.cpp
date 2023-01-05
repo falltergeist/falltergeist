@@ -16,6 +16,7 @@
 #include "../Game/LadderSceneryObject.h"
 #include "../Game/MiscItemObject.h"
 #include "../Game/StairsSceneryObject.h"
+#include "../Game/SkillCollection.h"
 #include "../Game/StatCollection.h"
 #include "../Game/TraitCollection.h"
 #include "../Game/WallObject.h"
@@ -122,9 +123,11 @@ namespace Falltergeist
                 }
                 case OBJECT_TYPE::CRITTER:
                 {
+                    // TODO extract player creation to some kind of factory
                     auto traitCollection = std::make_shared<TraitCollection>();
                     auto statCollection = std::make_shared<StatCollection>(traitCollection);
-                    object = new CritterObject(statCollection, traitCollection);
+                    auto skillCollection = std::make_shared<SkillCollection>(statCollection, traitCollection);
+                    object = new CritterObject(skillCollection, statCollection, traitCollection);
                     auto msg = ResourceManager::getInstance()->msgFileType("text/english/game/pro_crit.msg");
                     try
                     {
@@ -140,7 +143,7 @@ namespace Falltergeist
                     }
                     for (unsigned i = (unsigned)SKILL::SMALL_GUNS; i <= (unsigned)SKILL::OUTDOORSMAN; i++)
                     {
-                        ((CritterObject*)object)->setSkillTagged((SKILL)i, proto->critterSkills()->at(i));
+                        skillCollection->setSkillTagged((SKILL)i, proto->critterSkills()->at(i));
                     }
                     ((CritterObject*)object)->setActionPoints(proto->critterActionPoints());
                     ((CritterObject*)object)->setActionPointsMax(proto->critterActionPoints());

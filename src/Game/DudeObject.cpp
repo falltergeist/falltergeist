@@ -20,14 +20,16 @@ namespace Falltergeist
     namespace Game
     {
         DudeObject::DudeObject(
+            std::shared_ptr<ISkillCollection> skillCollection,
             std::shared_ptr<IStatCollection> statCollection,
             std::shared_ptr<ITraitCollection> traitCollection
-        ) : CritterObject(statCollection, traitCollection) {
+        ) : CritterObject(skillCollection, statCollection, traitCollection) {
             _type = Type::DUDE;
             setLightIntensity(65536);
             setLightRadius(4);
         }
 
+        // TODO extract method
         void DudeObject::loadFromGCDFile(Format::Gcd::File* gcd)
         {
             for (unsigned i = (unsigned)STAT::STRENGTH; i <= (unsigned)STAT::LUCK; i++) {
@@ -50,15 +52,15 @@ namespace Falltergeist
             }
 
             if ((signed)gcd->firstTaggedSkill() >= 0) {
-                setSkillTagged(gcd->firstTaggedSkill(), 1);
+                skillCollection()->setSkillTagged(gcd->firstTaggedSkill(), 1);
                 _skillsPoints--;
             }
             if ((signed)gcd->secondTaggedSkill() >= 0) {
-                setSkillTagged(gcd->secondTaggedSkill(), 1);
+                skillCollection()->setSkillTagged(gcd->secondTaggedSkill(), 1);
                 _skillsPoints--;
             }
             if ((signed)gcd->thirdTaggedSkill() >= 0) {
-                setSkillTagged(gcd->thirdTaggedSkill(), 1);
+                skillCollection()->setSkillTagged(gcd->thirdTaggedSkill(), 1);
                 _skillsPoints--;
             }
 

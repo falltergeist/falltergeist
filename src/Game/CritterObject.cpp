@@ -27,9 +27,10 @@ namespace Falltergeist
     namespace Game
     {
         CritterObject::CritterObject(
+            std::shared_ptr<ISkillCollection> skillCollection,
             std::shared_ptr<IStatCollection> statCollection,
             std::shared_ptr<ITraitCollection> traitCollection
-        ) : Object(), _statCollection(statCollection), _traitCollection(traitCollection) {
+        ) : Object(), _skillCollection(skillCollection), _statCollection(statCollection), _traitCollection(traitCollection) {
             _type = Type::CRITTER;
             _setupNextIdleAnim();
         }
@@ -92,127 +93,8 @@ namespace Falltergeist
             _gender = value;
         }
 
-        int CritterObject::skillTagged(SKILL num) const
-        {
-            if (num > SKILL::OUTDOORSMAN) {
-                throw Exception("CritterObject::skillTagged(num) - num out of range:" + std::to_string((unsigned)num));
-            }
-            return _skillsTagged.at((unsigned)num);
-        }
-
-        void CritterObject::setSkillTagged(SKILL num, int value)
-        {
-            if (num > SKILL::OUTDOORSMAN) {
-                throw Exception("CritterObject::setSkillTagged(num, value) - num out of range:" + std::to_string((unsigned)num));
-            }
-            _skillsTagged.at((unsigned)num) = value;
-        }
-
-        int CritterObject::skillBaseValue(SKILL skill) const
-        {
-            if (skill > SKILL::OUTDOORSMAN) {
-                throw Exception("CritterObject::skillBaseValue(num) - num out of range:" + std::to_string((unsigned)skill));
-            }
-            int value = 0;
-            switch(skill)
-            {
-                case SKILL::SMALL_GUNS:
-                    value += 5 + 4 * statCollection()->statTotal(STAT::AGILITY);
-                    if (traitCollection()->hasTrait(TRAIT::GOOD_NATURED)) {
-                        value -= 10;
-                    }
-                    break;
-                case SKILL::BIG_GUNS:
-                    value += 2 * statCollection()->statTotal(STAT::AGILITY);
-                    if (traitCollection()->hasTrait(TRAIT::GOOD_NATURED)) {
-                        value -= 10;
-                    }
-                    break;
-                case SKILL::ENERGY_WEAPONS:
-                    value += 2 * statCollection()->statTotal(STAT::AGILITY);
-                    if (traitCollection()->hasTrait(TRAIT::GOOD_NATURED)) {
-                        value -= 10;
-                    }
-                    break;
-                case SKILL::UNARMED:
-                    value += 30 + 2 * (statCollection()->statTotal(STAT::AGILITY) + statCollection()->statTotal(STAT::STRENGTH));
-                    if (traitCollection()->hasTrait(TRAIT::GOOD_NATURED)) {
-                        value -= 10;
-                    }
-                    break;
-                case SKILL::MELEE_WEAPONS:
-                    value += 20 + 2 * (statCollection()->statTotal(STAT::AGILITY) + statCollection()->statTotal(STAT::STRENGTH));
-                    if (traitCollection()->hasTrait(TRAIT::GOOD_NATURED)) {
-                        value -= 10;
-                    }
-                    break;
-                case SKILL::THROWING:
-                    value += 4 * statCollection()->statTotal(STAT::AGILITY);
-                    if (traitCollection()->hasTrait(TRAIT::GOOD_NATURED)) {
-                        value -= 10;
-                    }
-                    break;
-                case SKILL::FIRST_AID:
-                    value += 20 + 2*(statCollection()->statTotal(STAT::PERCEPTION) + statCollection()->statTotal(STAT::INTELLIGENCE));
-                    if (traitCollection()->hasTrait(TRAIT::GOOD_NATURED)) {
-                        value += 15;
-                    }
-                    break;
-                case SKILL::DOCTOR:
-                    value += 20 + 5 + (statCollection()->statTotal(STAT::PERCEPTION) + statCollection()->statTotal(STAT::INTELLIGENCE));
-                    if (traitCollection()->hasTrait(TRAIT::GOOD_NATURED)) {
-                        value += 15;
-                    }
-                    break;
-                case SKILL::SNEAK:
-                    value += 20 + 5 + 3 * statCollection()->statTotal(STAT::AGILITY);
-                    break;
-                case SKILL::LOCKPICK:
-                    value += 20 + 10 + (statCollection()->statTotal(STAT::PERCEPTION) + statCollection()->statTotal(STAT::AGILITY));
-                    break;
-                case SKILL::STEAL:
-                    value += 20 + 3 * statCollection()->statTotal(STAT::AGILITY);
-                    break;
-                case SKILL::TRAPS:
-                    value += 20 + 10 + (statCollection()->statTotal(STAT::PERCEPTION) + statCollection()->statTotal(STAT::AGILITY));
-                    break;
-                case SKILL::SCIENCE:
-                    value += 20 + 4 * statCollection()->statTotal(STAT::INTELLIGENCE);
-                    break;
-                case SKILL::REPAIR:
-                    value += 20 + 3 * statCollection()->statTotal(STAT::INTELLIGENCE);
-                    break;
-                case SKILL::SPEECH:
-                    value += 20 + 5 * statCollection()->statTotal(STAT::CHARISMA);
-                    if (traitCollection()->hasTrait(TRAIT::GOOD_NATURED)) {
-                        value += 15;
-                    }
-                    break;
-                case SKILL::BARTER:
-                    value += 20 + 4 * statCollection()->statTotal(STAT::CHARISMA);
-                    if (traitCollection()->hasTrait(TRAIT::GOOD_NATURED)) {
-                        value += 15;
-                    }
-                    break;
-                case SKILL::GAMBLING:
-                    value += 20 + 5 * statCollection()->statTotal(STAT::LUCK);
-                    break;
-                case SKILL::OUTDOORSMAN:
-                    value += 20 + 2 * (statCollection()->statTotal(STAT::ENDURANCE) + statCollection()->statTotal(STAT::INTELLIGENCE));
-                    break;
-                default:
-                    break;
-            }
-
-            if (traitCollection()->hasTrait(TRAIT::GIFTED)) {
-                value -= 10;
-            }
-
-            if (skillTagged(skill)) {
-                value += 20;
-            }
-
-            return value;
+        std::shared_ptr<ISkillCollection> CritterObject::skillCollection() const {
+            return _skillCollection;
         }
 
         std::shared_ptr<IStatCollection> CritterObject::statCollection() const {
@@ -738,30 +620,6 @@ namespace Falltergeist
         void CritterObject::setPoisonLevel(int value)
         {
             _poisonLevel = value;
-        }
-
-        int CritterObject::skillValue(SKILL skill) const
-        {
-            if (skill > SKILL::OUTDOORSMAN) {
-                throw Exception("CritterObject::skillValue(skill) - skill out of range:" + std::to_string((unsigned)skill));
-            }
-            return skillBaseValue(skill) + skillGainedValue(skill);
-        }
-
-        int CritterObject::skillGainedValue(SKILL skill) const
-        {
-            if (skill > SKILL::OUTDOORSMAN) {
-                throw Exception("CritterObject::skillGainedValue(skill) - skill out of range:" + std::to_string((unsigned)skill));
-            }
-            return _skillsGainedValue.at((unsigned)skill);
-        }
-
-        void CritterObject::setSkillGainedValue(SKILL skill, int value)
-        {
-            if (skill > SKILL::OUTDOORSMAN) {
-                throw Exception("CritterObject::setSkillGainedCalue(skill) - skill out of range:" + std::to_string((unsigned)skill));
-            }
-            _skillsGainedValue.at((unsigned)skill) = value;
         }
 
         bool CritterObject::running() const
