@@ -1,6 +1,8 @@
 #pragma once
 
 // Project includes
+#include "../Game/IClosable.h"
+#include "../Game/ILockable.h"
 #include "../Game/SceneryObject.h"
 #include "../ILogger.h"
 
@@ -20,17 +22,18 @@ namespace Falltergeist
         /**
          * Doors. Can be opened, closed, locked and unlocked.
          */
-        class DoorSceneryObject : public SceneryObject
-        {
+        class DoorSceneryObject : public SceneryObject, public IClosable, public ILockable {
             public:
                 DoorSceneryObject(std::shared_ptr<ILogger> logger);
                 ~DoorSceneryObject() = default;
 
-                bool opened() const;
-                void setOpened(bool value);
+                bool closed() const override;
+                void close() override;
+                void open() override;
 
-                bool locked() const;
-                void setLocked(bool value);
+                bool locked() const override;
+                void lock() override;
+                void unlock() override;
 
                 bool canWalkThru() const override;
 
@@ -42,7 +45,7 @@ namespace Falltergeist
 
             private:
                 std::shared_ptr<ILogger> logger;
-                bool _opened = false;
+                bool _closed = true;
                 bool _locked = false;
         };
     }

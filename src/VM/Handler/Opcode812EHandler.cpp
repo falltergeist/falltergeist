@@ -1,7 +1,7 @@
 // Project includes
 #include "../../VM/Handler/Opcode812EHandler.h"
-#include "../../Game/ContainerItemObject.h"
-#include "../../Game/DoorSceneryObject.h"
+#include "../../Game/ILockable.h"
+#include "../../Game/Object.h"
 #include "../../VM/Script.h"
 
 // Third-party includes
@@ -24,13 +24,10 @@ namespace Falltergeist
                 auto &debug = _logger->debug() << "[812E] [+] void obj_lock(GameObject* object)" << std::endl;
                 auto object = script.dataStack()->popObject();
                 if (object) {
-                    debug << "    PID: 0x" << std::hex << (object ? object->PID() : 0) << std::endl;
-                    if (auto door = dynamic_cast<Game::DoorSceneryObject *>(object)) {
-                        door->setLocked(true);
-                    } else if (auto container = dynamic_cast<Game::ContainerItemObject *>(object)) {
-                        container->setLocked(true);
+                    if (auto lockable = dynamic_cast<Game::ILockable*>(object)) {
+                        lockable->lock();
                     } else {
-                        _warning(script, "obj_lock: object is not door or container");
+                        _warning(script, "obj_lock: object is not Lockable");
                     }
                 } else {
                     _warning(script, "obj_lock: object is null");

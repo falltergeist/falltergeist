@@ -30,24 +30,31 @@ namespace Falltergeist
             Game::getInstance()->pushState(state);
         }
 
-        void ContainerItemObject::setLocked(bool locked)
-        {
-            this->_locked = locked;
-        }
-
-        bool ContainerItemObject::locked() const
-        {
+        bool ContainerItemObject::locked() const {
             return _locked;
         }
 
-        void ContainerItemObject::setOpened(bool opened)
-        {
-            this->_opened = opened;
+        void ContainerItemObject::lock() {
+            _locked = true;
         }
 
-        bool ContainerItemObject::opened() const
+        void ContainerItemObject::unlock() {
+            _locked = false;
+        }
+
+        bool ContainerItemObject::closed() const
         {
-            return _opened;
+            return _closed;
+        }
+
+        void ContainerItemObject::close()
+        {
+            _closed = true;
+        }
+
+        void ContainerItemObject::open()
+        {
+            _closed = false;
         }
     }
 }

@@ -1,6 +1,8 @@
 #pragma once
 
 // Project includes
+#include "../Game/IClosable.h"
+#include "../Game/ILockable.h"
 #include "../Game/ItemObject.h"
 
 // Third-party includes
@@ -15,8 +17,7 @@ namespace Falltergeist
         /**
          * Items able to hold other items in their inventory.
          */
-        class ContainerItemObject : public ItemObject
-        {
+        class ContainerItemObject : public ItemObject, public IClosable, public ILockable {
             public:
                 ContainerItemObject();
                 ~ContainerItemObject() = default;
@@ -25,15 +26,17 @@ namespace Falltergeist
 
                 void use_p_proc(CritterObject* usedBy) override;
 
-                bool locked() const;
-                void setLocked(bool locked);
+                bool locked() const override;
+                void lock() override;
+                void unlock() override;
 
-                bool opened() const;
-                void setOpened(bool opened);
+                bool closed() const override;
+                void close() override;
+                void open() override;
 
             protected:
                 std::vector<ItemObject*> _inventory;
-                bool _opened = false;
+                bool _closed = true;
                 bool _locked = false;
         };
     }
