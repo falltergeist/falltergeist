@@ -74,7 +74,7 @@ namespace Falltergeist
             }
 
             if (auto door = dynamic_cast<Game::DoorSceneryObject *>(object)) {
-                door->setOpened(mapObject->opened());
+                mapObject->opened() ? door->open() : door->close();
             }
 
             if (auto elevator = dynamic_cast<Game::ElevatorSceneryObject *>(object)) {

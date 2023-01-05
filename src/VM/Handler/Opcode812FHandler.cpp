@@ -1,7 +1,7 @@
 // Project includes
 #include "../../VM/Handler/Opcode812FHandler.h"
-#include "../../Game/ContainerItemObject.h"
-#include "../../Game/DoorSceneryObject.h"
+#include "../../Game/ILockable.h"
+#include "../../Game/Object.h"
 #include "../../VM/Script.h"
 
 // Third-party includes
@@ -24,12 +24,10 @@ namespace Falltergeist
                 _logger->debug() << "[812F] [+] void obj_unlock(GameObject* object)" << std::endl;
                 auto object = script.dataStack()->popObject();
                 if (object) {
-                    if (auto door = dynamic_cast<Game::DoorSceneryObject *>(object)) {
-                        door->setLocked(false);
-                    } else if (auto container = dynamic_cast<Game::ContainerItemObject *>(object)) {
-                        container->setLocked(false);
+                    if (auto lockable = dynamic_cast<Game::ILockable*>(object)) {
+                        lockable->unlock();
                     } else {
-                        _warning(script, "obj_unlock: object is not door or container");
+                        _warning(script, "obj_unlock: object is not Lockable");
                     }
                 } else {
                     _warning(script, "obj_unlock: object is null");

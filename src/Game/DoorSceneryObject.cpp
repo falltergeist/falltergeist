@@ -23,32 +23,48 @@ namespace Falltergeist
             _subtype = Subtype::DOOR;
         }
 
-        bool DoorSceneryObject::opened() const
+        bool DoorSceneryObject::closed() const
         {
-            return _opened;
+            return _closed;
         }
 
-        void DoorSceneryObject::setOpened(bool value)
-        {
-            // Don't change if door is locked.
-            if (!_locked) {
-                _opened = value;
-                setCanLightThru(_opened);
+        void DoorSceneryObject::open() {
+            if (locked()) {
+                return;
+            }
 
-                if (auto queue = ui<UI::AnimationQueue>()) {
-                    queue->currentAnimation()->setReverse(value);
-                }
+            _closed = false;
+            setCanLightThru(!closed());
+
+            if (auto queue = ui<UI::AnimationQueue>()) {
+                queue->currentAnimation()->setReverse(!closed());
             }
         }
 
-        bool DoorSceneryObject::locked() const
+        void DoorSceneryObject::close()
         {
+            if (locked()) {
+                return;
+            }
+
+            _closed = true;
+            setCanLightThru(!closed());
+
+            if (auto queue = ui<UI::AnimationQueue>()) {
+                queue->currentAnimation()->setReverse(!closed());
+            }
+        }
+
+        bool DoorSceneryObject::locked() const {
             return _locked;
         }
 
-        void DoorSceneryObject::setLocked(bool value)
-        {
-            _locked = value;
+        void DoorSceneryObject::lock() {
+            _locked = true;
+        }
+
+        void DoorSceneryObject::unlock() {
+            _locked = false;
         }
 
         void DoorSceneryObject::use_p_proc(CritterObject* usedBy)
@@ -58,8 +74,8 @@ namespace Falltergeist
                 return;
             }
 
-            if (!_locked) {
-                if (!opened()) {
+            if (!locked()) {
+                if (closed()) {
                     if (auto queue = ui<UI::AnimationQueue>()) {
                         queue->start();
                         queue->animationEndedHandler().add([=](Event::Event*) { onOpeningAnimationEnded(queue); });
@@ -83,27 +99,27 @@ namespace Falltergeist
 
         bool DoorSceneryObject::canWalkThru() const
         {
-            return opened();
+            return !closed();
         }
 
         void DoorSceneryObject::onOpeningAnimationEnded(std::shared_ptr<UI::AnimationQueue> target)
         {
-            setOpened(true);
+            open();
             target->animationEndedHandler().clear();
             target->stop();
             target->currentAnimation()->setReverse(true);
             Game::getInstance()->locationState()->initLight();
-            Logger::info("") << "Door opened: " << opened() << std::endl;
+            Logger::info("") << "Door closed: " << closed() << std::endl;
         }
 
         void DoorSceneryObject::onClosingAnimationEnded(std::shared_ptr<UI::AnimationQueue> target)
         {
-            setOpened(false);
+            close();
             target->animationEndedHandler().clear();
             target->stop();
             target->currentAnimation()->setReverse(false);
             Game::getInstance()->locationState()->initLight();
-            Logger::info("") << "Door opened: " << opened() << std::endl;
+            Logger::info("") << "Door closed: " << closed() << std::endl;
         }
     }
 }

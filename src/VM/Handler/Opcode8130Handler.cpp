@@ -1,7 +1,7 @@
 // Project includes
 #include "../../VM/Handler/Opcode8130Handler.h"
-#include "../../Game/ContainerItemObject.h"
-#include "../../Game/DoorSceneryObject.h"
+#include "../../Game/IClosable.h"
+#include "../../Game/Object.h"
 #include "../../VM/Script.h"
 
 // Third-party includes
@@ -16,7 +16,6 @@ namespace Falltergeist
         {
             Opcode8130::Opcode8130(std::shared_ptr<ILogger> logger) : OpcodeHandler(), _logger(logger)
             {
-
             }
 
             void Opcode8130::_run(VM::Script& script)
@@ -26,13 +25,10 @@ namespace Falltergeist
                 if (!object) {
                     _error("obj_is_open: object is NULL");
                 }
-                // @TODO: need some refactoring to get rid of this ugly if-elses
-                if (auto door = dynamic_cast<Game::DoorSceneryObject *>(object)) {
-                    script.dataStack()->push(door->opened());
-                } else if (auto container = dynamic_cast<Game::ContainerItemObject *>(object)) {
-                    script.dataStack()->push(container->opened());
+                if (auto closable = dynamic_cast<Game::IClosable *>(object)) {
+                    script.dataStack()->push(!closable->closed());
                 } else {
-                    _error("obj_is_open: object is not openable type!");
+                    _error("obj_is_open: object is not Closable type!");
                 }
             }
         }
